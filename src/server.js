@@ -1,21 +1,14 @@
-require("dotenv").config();
-const express = require("express");
-const cors = require("cors");
-const bodyParser = require("body-parser");
+const dotenv = require("dotenv");
 
-const routes = require("./routes");
-const { routeNotFound, errorHandler } = require("./middlewares");
+const app = require("./app");
 
-const port = process.env.PORT || 3000;
-const app = express();
+if(process.env.NODE_ENV) {
+	dotenv.config({path: `.env.${process.env.NODE_ENV}`});
+} else {
+	dotenv.config();
+}
 
-app.use(cors());
-app.use(bodyParser.json());
-
-app.use("/", routes);
-
-app.use(routeNotFound);
-app.use(errorHandler);
+const port = process.env.PORT;
 
 app.listen({ port }, () => {
   console.log(`[Server] ready 🚀: http://localhost:${port}`);

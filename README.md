@@ -1,62 +1,34 @@
 # DO NOT DIRECTLY MAKE CHANGES TO THE MAIN BRANCH
 
-# Introduction
+## Introduction
 
-We're building a website that will be hosted on **logoexecutive.in** (though this might change). This site will give you logos of big companies (from 32px to 256px) when you use API keys.
+Logo Executive is your partner in logo exploration. Our platform boasts a
+collection of APIs designed to simplify the process of obtaining company logos.
+Generate API keys and access logos in various sizes and formats, all while
+staying in control of your budget. Elevate your brand with Logo Executive!
 
-You can find a similar website at this link: [HERE](https://brandfetch.com/). Upon accessing the pricing section, it becomes evident that the costs are considerably high, while the allocation of API calls is limited. In our application, our aim is to optimize expenses and enhance the availability of API calls.
-
-## Backend options
+## Made with
 
 ![NodeJS](https://img.shields.io/badge/node.js-6DA55F?style=for-the-badge&logo=node.js&logoColor=white)
+![Code](https://img.shields.io/badge/Visual_Studio_Code-0078D4?style=for-the-badge&logo=visual%20studio%20code&logoColor=white)
+![Firebase](https://img.shields.io/badge/firebase-%23039BE5.svg?style=for-the-badge&logo=firebase)
+![AWS](https://img.shields.io/badge/AWS-%23FF9900.svg?style=for-the-badge&logo=amazon-aws&logoColor=white)
+<img src="https://devicons.railway.app/i/railway-light.svg" width="30" height="30">
 
-## Database options
+## How to run this project
 
-![Firebase](https://img.shields.io/badge/firebase-%23039BE5.svg?style=for-the-badge&logo=firebase) ![AWS](https://img.shields.io/badge/AWS-%23FF9900.svg?style=for-the-badge&logo=amazon-aws&logoColor=white)
+Follow the commands below in order to run this project locally:
 
-## Others
+- `git clone https://github.com/FrontendArmy/logoexecutive-backend.git`
+- `cd logoexecutive-backend`
+- `npm install`
+- `npm run start`
 
-1. Razor pay integration.
-2. CloudFare integration.
-3. CI/CD
+## Before Pull request
 
-## API
+The below command will run automatically when you commit any code, to avoid common problems,
+such as syntax errors, formatting issues, code style violations, and potential
+bugs:
 
-1. Sign Up
-2. Sign In
-3. Forgot password
-4. Password reset
-5. create API key
-6. Email verification
-7. get API for logo and more
-
-## What we need for now ?
-
-1. Brand name (brandname should not indicate that we only provide fortune 500 logos, as we might have modification to add more things)
-2. Logos of all fortune 500 companies (In high quality). We will be following [THIS LIST](https://www.50pros.com/fortune500)
-
-## Installation
-
-- Clone repository.
-
-```bash
-git clone https://github.com/FrontendArmy/logoexecutive-backend.git
-```
-
-- Change directory.
-
-```bash
-cd logoexecutive-backend
-```
-
-- Install dependencies.
-
-```bash
-yarn
-```
-
-- Start the server.
-
-```bash
-yarn dev
-```
+- `npm run lint` - will check and alert on potential errors syntax errors,
+  formatting issues

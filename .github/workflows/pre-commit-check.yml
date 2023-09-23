@@ -1,0 +1,29 @@
+name: Pre-commit check
+
+on:
+  workflow_dispatch:
+  pull_request:
+
+jobs:
+  pre-commit:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository content
+        uses: actions/checkout@v3
+
+      - name: Install run dependencies
+        run: npm install
+
+      - name: Checking build
+        run: npm run start
+
+  comment-on-pull-request:
+    needs: pre-commit
+    runs-on: ubuntu-latest
+    if: failure()
+    steps:
+      - name: Send message to pull request
+        uses: thollander/actions-comment-pull-request@v2
+        with:
+          message: "Build failed: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"

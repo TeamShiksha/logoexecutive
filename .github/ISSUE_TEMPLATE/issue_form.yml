@@ -1,0 +1,114 @@
+name: Issue Form
+description: Use this form to report an issue
+labels: ["needs-triage"]
+body:
+  - type: dropdown
+    id: issue-type
+    attributes:
+      label: What is this issue related to?
+      description: Please select the type of issue you're reporting.
+      options:
+        - Feature
+        - Bug
+        - Performance
+        - Documentation
+        - Enhancement
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: Please enter an explicit description of your issue.
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected-behavior
+    attributes:
+      label: Expected Behavior
+      description: Describe what should happen when this issue is resolved.
+
+  - type: textarea
+    id: current-behavior
+    attributes:
+      label: Current Behavior
+      description: Explain what currently happens when this issue is encountered.
+
+  - type: textarea
+    id: reprod
+    attributes:
+      label: "Reproduction steps"
+      description: Please enter an explicit description of your issue
+      value: |
+        1. Go to '...'
+        2. Click on '....'
+        3. Scroll down to '....'
+        4. See error
+      render: bash
+
+  - type: dropdown
+    id: browsers
+    attributes:
+      label: Browsers
+      description: What browsers are you seeing the problem on?
+      multiple: true
+      options:
+        - Chrome
+        - Firefox
+        - Safari
+        - Edge
+        - Other
+
+  - type: input
+    id: other-browser
+    attributes:
+      label: Other Browser (optional)
+      description: If you selected "Other" in the Browsers field, please specify the browser here.
+
+  - type: dropdown
+    id: os
+    attributes:
+      label: OS
+      description: What is the impacted environment?
+      multiple: true
+      options:
+        - Windows
+        - macOS
+        - Linux
+        - iOS
+        - Android
+        - Other
+
+  - type: input
+    id: other-os
+    attributes:
+      label: Other OS (optional)
+      description: If you selected "Other" in the OS field, please specify the operating system here.
+
+  - type: input
+    id: reference-links
+    attributes:
+      label: Reference Links (optional)
+      description: If applicable, provide any reference links or materials.
+
+  - type: textarea
+    id: proof
+    attributes:
+      label: Screenshots or Recordings (optional)
+      description: If this is a bug or performance issue, please provide any screenshots or recordings that can help demonstrate the problem.
+
+  - type: textarea
+    id: additional-info
+    attributes:
+      label: Additional Information (optional)
+      description: Please add any additional context, logs, or details that might be helpful in addressing the issue here.
+
+  - type: checkboxes
+    id : confirmation-checklist
+    attributes :
+       label : Confirmation Checklist
+       options :
+         - label : I have searched for similar issues before creating this one.
+         - label : I have provided all the necessary information to understand and reproduce the issue.

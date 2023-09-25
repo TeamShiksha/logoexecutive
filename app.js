@@ -13,3 +13,5 @@ app.use("/", routes);
 
 app.use(routeNotFound);
 app.use(errorHandler);
+
+module.exports = app;

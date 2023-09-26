@@ -48,57 +48,6 @@ body:
         4. See error
       render: bash
 
-  - type: dropdown
-    id: browsers
-    attributes:
-      label: Browsers
-      description: What browsers are you seeing the problem on?
-      multiple: true
-      options:
-        - Chrome
-        - Firefox
-        - Safari
-        - Edge
-        - Other
-
-  - type: input
-    id: other-browser
-    attributes:
-      label: Other Browser (optional)
-      description: If you selected "Other" in the Browsers field, please specify the browser here.
-
-  - type: dropdown
-    id: os
-    attributes:
-      label: OS
-      description: What is the impacted environment?
-      multiple: true
-      options:
-        - Windows
-        - macOS
-        - Linux
-        - iOS
-        - Android
-        - Other
-
-  - type: input
-    id: other-os
-    attributes:
-      label: Other OS (optional)
-      description: If you selected "Other" in the OS field, please specify the operating system here.
-
-  - type: input
-    id: reference-links
-    attributes:
-      label: Reference Links (optional)
-      description: If applicable, provide any reference links or materials.
-
-  - type: textarea
-    id: proof
-    attributes:
-      label: Screenshots or Recordings (optional)
-      description: If this is a bug or performance issue, please provide any screenshots or recordings that can help demonstrate the problem.
-
   - type: textarea
     id: additional-info
     attributes:

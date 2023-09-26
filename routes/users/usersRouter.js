@@ -1,5 +1,5 @@
 const { fetchUsers } = require("../../services/User");
-const router = require("express").Router;
+const router = require("express").Router();
 
 router.get("/", async (_, res) => {
 	try {
@@ -23,3 +23,5 @@ router.get("/", async (_, res) => {
 		throw err;
 	}
 });
+
+module.exports = router;

@@ -1,5 +1,3 @@
-# DO NOT DIRECTLY MAKE CHANGES TO THE MAIN BRANCH
-
 ## Introduction
 
 Logo Executive is your partner in logo exploration. Our platform boasts a
@@ -15,20 +13,8 @@ staying in control of your budget. Elevate your brand with Logo Executive!
 ![AWS](https://img.shields.io/badge/AWS-%23FF9900.svg?style=for-the-badge&logo=amazon-aws&logoColor=white)
 <img src="https://devicons.railway.app/i/railway-light.svg" width="30" height="30">
 
-## How to run this project
+## Run or setup this project locally
+Follow [DEVELOPMENT Guide](DEVELOPMENT.md)
 
-Follow the commands below in order to run this project locally:
-
-- `git clone https://github.com/FrontendArmy/logoexecutive-backend.git`
-- `cd logoexecutive-backend`
-- `npm install`
-- `npm run start`
-
-## Before Pull request
-
-The below command will run automatically when you commit any code, to avoid common problems,
-such as syntax errors, formatting issues, code style violations, and potential
-bugs:
-
-- `npm run lint` - will check and alert on potential errors syntax errors,
-  formatting issues
+## Before pull request
+Before pull request make sure to follow proper procedure mentioned in [CONTRIBUTING](CONTRIBUTING.md)

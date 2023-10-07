@@ -5,7 +5,7 @@
   "repository": "https://github.com/FrontendArmy/logoexecutive-backend.git",
   "license": "MIT",
   "scripts": {
-    "dev": "NODE_ENV=development nodemon server.js",
+    "dev": "cross-env NODE_ENV=development nodemon server.js",
     "start": "node server.js",
     "lint": "eslint .",
     "lint:fix": "eslint --fix",

@@ -14,8 +14,8 @@ class User {
 		this.#password = params.password;
 		this.firstName = params.firstName;
 		this.lastName = params.lastName;
-		this.createdAt = new Date(params.createdAt);
-		this.updatedAt = new Date(params.updatedAt);
+		this.createdAt = new Date.now();
+		this.updatedAt = new Date.now();
 	}
 
 	getUserData() {

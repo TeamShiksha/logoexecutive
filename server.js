@@ -1,8 +1,7 @@
 const dotenv = require("dotenv");
+const joi = require("joi");
 
 const app = require("./app");
-
-const joi = require('joi');
 
 if (process.env.NODE_ENV) {
 	dotenv.config({ path: `.env.${process.env.NODE_ENV}` });
@@ -18,6 +17,7 @@ const envSchema = joi
 			.valid("production", "development")
 			.required(),
 		PORT: joi.number().positive().required(),
+		JWT_SECRET: joi.string().required(),
 	})
 	.unknown();
 

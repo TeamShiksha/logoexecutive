@@ -1,0 +1,32 @@
+name: Deploy to railway
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Use Node 18.x
+        uses: actions/setup-node@v1
+        with:
+          node-version: 18.x
+
+      - name: Install packages
+        run: yarn install --frozen-lockfile
+
+      - name: Install Railway
+        run: npm i -g @railway/cli
+
+
+      - name: Deploy
+        run: railway up
+        env:
+          PORT: 80
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+

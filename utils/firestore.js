@@ -15,8 +15,7 @@ if (!process.env.NODE_ENV || process.env.NODE_ENV === "production") {
   } = process.env;
 
   admin.initializeApp({
-    credential: admin.credential.cert(
-      JSON.stringify({
+    credential: admin.credential.cert({
         type: "service_account",
         project_id: FIRESTORE_PROJECT_ID,
         private_key_id: FIRESTORE_PRIVATE_ID,
@@ -28,7 +27,7 @@ if (!process.env.NODE_ENV || process.env.NODE_ENV === "production") {
         auth_provider_x509_cert_url: FIRESTORE_AUTH_PROVIDER,
         client_x509_cert_url: FIRESTORE_CLIENT_CERT,
         universe_domain: UNIVERSE_DOMAIN,
-      }),
+      },
     ),
   });
 } else {

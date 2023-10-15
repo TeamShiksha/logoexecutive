@@ -1,8 +1,7 @@
 name: Docker Build
 
-on: 
+on:
   pull_request:
-    type: [opened]
 
 jobs:
   docker-build:
@@ -10,13 +9,7 @@ jobs:
 
     steps:
       - name: Checkout repository content
-        uses: actions/checkout@v4
-
-      - name: Decrypt service account key
-        uses: ./decrypt.sh
-        run: ./decryptAccountKey.sh
-        env:
-          DECRYPT_KEY: ${{ secrets.DECRYPT_KEY }}
+        uses: actions/checkout@v3
 
       - name: Build docker image
         run: docker compose up --build

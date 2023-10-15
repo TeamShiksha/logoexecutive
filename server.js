@@ -1,14 +1,14 @@
 const dotenv = require("dotenv");
 
-const app = require("./app");
-
-const joi = require("joi");
-
-if (process.env.NODE_ENV && process.env.NODE_ENV != "production") {
+if (process.env.NODE_ENV !== "production") {
 	dotenv.config({ path: `.env.${process.env.NODE_ENV}` });
 } else {
 	dotenv.config();
 }
+
+const app = require("./app");
+const joi = require("joi");
+
 
 const envSchema = joi
 	.object()

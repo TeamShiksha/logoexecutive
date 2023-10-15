@@ -2,7 +2,7 @@ const dotenv = require("dotenv");
 
 const app = require("./app");
 
-const joi = require('joi');
+const joi = require("joi");
 
 if (process.env.NODE_ENV) {
 	dotenv.config({ path: `.env.${process.env.NODE_ENV}` });

@@ -16,6 +16,32 @@ async function fetchUsers () {
 	}
 }
 
+/**
+ * fetchUserByUsername - Fetches user from provided key
+ * @param {string} username - username of the user
+ **/
+async function fetchUserByUsername(username) {
+  try {
+    const userRef = await db
+      .collection("Users")
+      .where("username", "==", username)
+      .limit(1)
+      .get();
+
+    if (userRef.empty) {
+      return null;
+    }
+
+		const user = new User(userRef.docs[0].data());
+
+		return user;
+  } catch (e) {
+    console.log(err);
+    throw err;
+  }
+}
+
 module.exports = {
-	fetchUsers
+  fetchUsers,
+	fetchUserByUsername
 };

@@ -4,9 +4,9 @@ const { validateEnv } = require("./utils/scripts/envSchema");
 const path = require("path");
 
 if (process.env.NODE_ENV !== "production") {
-  dotenv.config({ path: `.env.${process.env.NODE_ENV}` });
+	dotenv.config({ path: `.env.${process.env.NODE_ENV}` });
 } else {
-  dotenv.config();
+	dotenv.config();
 }
 
 const serviceKeyPath = path.join(process.cwd(), "serviceAccountKey.json");
@@ -23,7 +23,7 @@ if (error) {
 
 const app = require("./app");
 
-const {PORT} = value;
+const { PORT } = value;
 app.listen(PORT, () => {
 	console.log(`[Server] running 🚀: http://localhost:${PORT}`);
 });

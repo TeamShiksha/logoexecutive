@@ -23,7 +23,8 @@ describe("Login Controller", () => {
 
 			expect(response.status).toBe(422);
 			expect(response.body).toEqual({
-				error: "\"username\" can only contain alphanumeric letters and symbols _,-",
+				error:
+					"\"username\" can only contain alphanumeric letters and symbols _,-",
 				message: "Invalid payload",
 				status: 422,
 			});

@@ -1,12 +1,12 @@
 class Keys {
-    keyId;
+	keyId;
 	userId;
 	key;
-    usageCount;
+	usageCount;
 	createdAt;
 
 	constructor(params) {
-        this.keyId = params.keyId;
+		this.keyId = params.keyId;
 		this.userId = params.userId;
 		this.key = params.key;
 		this.usageCount = params.usageCount || 0;

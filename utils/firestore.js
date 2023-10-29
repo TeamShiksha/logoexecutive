@@ -29,5 +29,6 @@ admin.initializeApp({
 });
 
 const db = admin.firestore();
+const UserCollection = db.collection("Users");
 
-module.exports = { db };
+module.exports = { db, UserCollection };

@@ -13,19 +13,19 @@ const serviceKeyPath = path.join(process.cwd(), "serviceAccountKey.json");
 const serviceAccountKeyExists = fs.existsSync(serviceKeyPath);
 
 const { error, value } = validateEnv(process.env, {
-	serviceAccountKey: serviceAccountKeyExists,
+  serviceAccountKey: serviceAccountKeyExists,
 });
 
 if (error) {
-	console.log("\x1b[41m%s\x1b[0m", `Config validation error: ${error.message}`);
-	process.exit(1);
+  console.log("\x1b[41m%s\x1b[0m", `Config validation error: ${error.message}`);
+  process.exit(1);
 }
 
 const app = require("./app");
 
-const {PORT} = value;
+const { PORT } = value;
 app.listen(PORT, () => {
-	console.log(`[Server] running 🚀: http://localhost:${PORT}`);
+  console.log(`[Server] running 🚀: http://localhost:${PORT}`);
 });
 
 module.exports = app;

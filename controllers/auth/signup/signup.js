@@ -3,8 +3,19 @@ const { emailRecordExists } = require("../../../services/Auth");
 const { createUser } = require("../../../services/User");
 
 const signupPayloadSchema = Joi.object().keys({
-  name: Joi.string().trim().required().min(1).max(20),
-  email: Joi.string().trim().required().max(50).regex(/^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/),
+  firstName: Joi.string()
+    .trim()
+    .required()
+    .min(1)
+    .max(20)
+    .regex(/^[^!@#$%^&*(){}\[\]\\\.;'",.<>/?`~|0-9]*$/)
+    .message("firstName should not contain any special character or number"),
+  lastName: Joi.string().trim().optional().min(1).max(20),
+  email: Joi.string()
+    .trim()
+    .required()
+    .max(50)
+    .regex(/^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/),
   password: Joi.string().trim().required().min(8).max(30),
   confirmPassword: Joi.any().required().equal(Joi.ref("password")),
 });
@@ -15,10 +26,10 @@ async function signupController(req, res) {
   const { error, value } = signupPayloadSchema.validate(payload);
 
   if (!!error) {
-    return res.status(401).json({
+    return res.status(422).json({
       message: error.message,
-      error: "Bad Request",
-      status: 400,
+      error: "unprocessable content",
+      statusCode: 422,
     });
   }
 
@@ -29,16 +40,16 @@ async function signupController(req, res) {
   if (emailExists) {
     return res.status(400).json({
       message: "Email already exists",
-      error: "Bad Request",
+      error: "bad request",
       status: 400,
     });
   }
 
   const result = await createUser(value);
   if (!result) {
-    return res.status(401).json({
-      message: "Unable to create user",
-      error: "Bad Request",
+    return res.status(500).json({
+      message: "Unexpected error while creating user",
+      error: "internal server error",
       status: 400,
     });
   }

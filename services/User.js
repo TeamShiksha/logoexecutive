@@ -7,18 +7,18 @@ const bcrypt = require("bcrypt");
  * Fetches all the users
  **/
 async function fetchUsers() {
-	try {
-		const usersRef = await UserCollection.get();
+  try {
+    const usersRef = await UserCollection.get();
 
-		const users = usersRef.docs.map((doc) => new User({ ...doc.data(), id: doc.id }));
+    const users = usersRef.docs.map((doc) => new User({ ...doc.data(), id: doc.id }));
 
-		return {
-			data: users,
-		};
-	} catch (err) {
-		console.log(err);
-		throw err;
-	}
+    return {
+      data: users,
+    };
+  } catch (err) {
+    console.log(err);
+    throw err;
+  }
 }
 
 /**
@@ -26,22 +26,22 @@ async function fetchUsers() {
  * @param {string} email - email of the user
  **/
 async function fetchUserByEmail(email) {
-	try {
-		const userRef = await UserCollection.where("email", "==", email)
-			.limit(1)
-			.get();
+  try {
+    const userRef = await UserCollection.where("email", "==", email)
+      .limit(1)
+      .get();
 
-		if (userRef.empty) {
-			return null;
-		}
+    if (userRef.empty) {
+      return null;
+    }
 
-		const user = new User({ ...userRef.docs[0].data(), id: userRef.docs[0].id });
+    const user = new User({ ...userRef.docs[0].data(), id: userRef.docs[0].id });
 
-		return user;
-	} catch (e) {
-		console.log(err);
-		throw err;
-	}
+    return user;
+  } catch (e) {
+    console.log(err);
+    throw err;
+  }
 }
 
 /**
@@ -52,36 +52,36 @@ async function fetchUserByEmail(email) {
  * @param {string} user.password - password of the user
  */
 async function createUser(user) {
-	try {
-		const { email, name, password } = user;
+  try {
+    const { email, name, password } = user;
 
-		const result = await UserCollection.add({
-			email,
-			name,
-			password: await bcrypt.hash(password, 10),
-			createdAt: Timestamp.now(),
-			updatedAt: Timestamp.now(),
-		});
+    const result = await UserCollection.add({
+      email,
+      name,
+      password: await bcrypt.hash(password, 10),
+      createdAt: Timestamp.now(),
+      updatedAt: Timestamp.now(),
+    });
 
-		const userRef = await result.get();
-		const createdUser = new User(userRef.data());
+    const userRef = await result.get();
+    const createdUser = new User(userRef.data());
 
-		const jwt = createdUser.generateJWT();
+    const jwt = createdUser.generateJWT();
 
-		return {
-			data: {
-				user: createdUser.data,
-				token: jwt,
-			},
-		};
-	} catch (err) {
-		console.log(err);
-		throw err;
-	}
+    return {
+      data: {
+        user: createdUser.data,
+        token: jwt,
+      },
+    };
+  } catch (err) {
+    console.log(err);
+    throw err;
+  }
 }
 
 module.exports = {
-	fetchUsers,
-	fetchUserByEmail,
-	createUser,
+  fetchUsers,
+  fetchUserByEmail,
+  createUser,
 };

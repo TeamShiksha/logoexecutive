@@ -24,9 +24,16 @@ else {
   };
 }
 
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccountDetails),
-});
+if(process.env.NODE_ENV === "development" || process.env.NODE_ENV === "test") {
+  process.env.FIRESTORE_EMULATOR_HOST = "localhost:8080";
+  admin.initializeApp({
+    projectId: process.env.FIRESTORE_PROJECT_ID
+  });
+} else {
+  admin.initializeApp({
+    credential: admin.credential.cert(serviceAccountDetails),
+  });
+}
 
 const db = admin.firestore();
 const UserCollection = db.collection("Users");

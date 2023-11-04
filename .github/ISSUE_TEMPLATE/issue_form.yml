@@ -37,18 +37,6 @@ body:
       description: Explain what currently happens when this issue is encountered.
 
   - type: textarea
-    id: reprod
-    attributes:
-      label: "Reproduction steps"
-      description: Please enter an explicit description of your issue
-      value: |
-        1. Go to '...'
-        2. Click on '....'
-        3. Scroll down to '....'
-        4. See error
-      render: bash
-
-  - type: textarea
     id: additional-info
     attributes:
       label: Additional Information (optional)

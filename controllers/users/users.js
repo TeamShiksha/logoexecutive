@@ -1,7 +1,7 @@
 const { fetchUsers } = require("../../services/User");
 const serializer = require("../../utils/serializer/serializer");
 
-async function getUsers(req, res) {
+async function getUsers(_, res) {
   try {
     const { data } = await fetchUsers();
 
@@ -13,7 +13,6 @@ async function getUsers(req, res) {
       });
     }
 
-    console.log(data);
     serializer.serialize("users", data, function (err, payload) {
       if (err) {
         return res.status(500).json({

@@ -53,11 +53,12 @@ async function fetchUserByEmail(email) {
  */
 async function createUser(user) {
   try {
-    const { email, name, password } = user;
+    const { email, firstName, lastName = "", password } = user;
 
     const result = await UserCollection.add({
       email,
-      name,
+      firstName,
+      lastName,
       password: await bcrypt.hash(password, 10),
       createdAt: Timestamp.now(),
       updatedAt: Timestamp.now(),

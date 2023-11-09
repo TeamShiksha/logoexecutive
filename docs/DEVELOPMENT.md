@@ -72,6 +72,9 @@ Firebase emulator makes it very convinient to get responses quickly during devel
 - Select `firestore emulator.
 - Link your project you setup on firebase.
 
+**Using emulator in project**
+- To use emulator in project a flag named `EMULATED_FIRESTORE` needs to be set in the respective environment file that you're using. You can set the value of flag to `1`.
+
 ## All set!
 Now you should be able to run the project! Happy Coding :)
 

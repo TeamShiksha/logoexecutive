@@ -1,5 +1,6 @@
 const Joi = require("joi");
 const { fetchUserByEmail } = require("../../../services/User");
+const jwt = require("jsonwebtoken");
 
 const signinPayloadSchema = Joi.object().keys({
   email: Joi.string()
@@ -16,13 +17,11 @@ async function signinController(req, res) {
 
     const { error, value } = signinPayloadSchema.validate(payload);
     if (!!error) {
-      return res
-        .status(422)
-        .json({
-          message: error.message,
-          statusCode: 422,
-          error: "unprocessable content"
-        });
+      return res.status(422).json({
+        message: error.message,
+        statusCode: 422,
+        error: "unprocessable content",
+      });
     }
 
     const { email, password } = value;
@@ -45,10 +44,20 @@ async function signinController(req, res) {
       });
     }
 
+    res.cookie(
+      "jwt",
+      jwt.sign({ email: user.email }, process.env.JWT_SECRET, {
+        expiresIn: "1d",
+      }),
+    );
+
     return res.status(200).json({
-      user: user.data,
-      token: user.generateJWT(),
-      expires_in: 24 * 60 * 60,
+      data: {
+        email: user.data.email,
+        firstName: user.data.firstName,
+        lastName: user.data.lastName,
+      },
+      message: "Succesfully signed in",
     });
   } catch (err) {
     console.log(err);

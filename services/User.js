@@ -67,12 +67,9 @@ async function createUser(user) {
     const userRef = await result.get();
     const createdUser = new User(userRef.data());
 
-    const jwt = createdUser.generateJWT();
-
     return {
       data: {
         user: createdUser.data,
-        token: jwt,
       },
     };
   } catch (err) {

@@ -10,7 +10,9 @@ async function fetchUsers() {
   try {
     const usersRef = await UserCollection.get();
 
-    const users = usersRef.docs.map((doc) => new User({ ...doc.data(), id: doc.id }));
+    const users = usersRef.docs.map(
+      (doc) => new User({ ...doc.data(), id: doc.id })
+    );
 
     return {
       data: users,
@@ -35,8 +37,10 @@ async function fetchUserByEmail(email) {
       return null;
     }
 
-    const user = new User({ ...userRef.docs[0].data(), id: userRef.docs[0].id });
-
+    const user = new User({
+      ...userRef.docs[0].data(),
+      id: userRef.docs[0].id,
+    });
     return user;
   } catch (e) {
     console.log(err);
@@ -81,8 +85,41 @@ async function createUser(user) {
   }
 }
 
+/**
+ * Updates user details in the DB
+ * @param {string} curr_email - current email address of the user
+ * @param {string} new_name - new name of the user
+ * @param {string} new_email - new email address of the user
+ */
+async function updateUserDetails(curr_email, first_Name,last_Name, new_email) {
+  try {
+    const userSnapshot = await UserCollection.where("email", "==", curr_email)
+      .limit(1)
+      .get();
+
+    if (userSnapshot.empty) {
+      return null;
+    }
+
+    const userRef = UserCollection.doc(userSnapshot.docs[0].id);
+    await userRef.update({
+      firstName: first_Name,
+      lastName: last_Name,
+      email: new_email,
+      updatedAt: Timestamp.now(),
+    });
+
+    return {
+      message: "User details updated successfully",
+    };
+  } catch (err) {
+    console.log(err);
+    throw err;
+  }
+}
 module.exports = {
   fetchUsers,
   fetchUserByEmail,
   createUser,
+  updateUserDetails,
 };

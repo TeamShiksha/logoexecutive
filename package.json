@@ -21,7 +21,8 @@
     "firebase-admin": "^11.10.1",
     "joi": "^17.11.0",
     "json-api-ify": "^1.1.1",
-    "jsonwebtoken": "^9.0.2"
+    "jsonwebtoken": "^9.0.2",
+    "nodemailer": "^6.9.7"
   },
   "devDependencies": {
     "@types/jest": "^29.5.6",

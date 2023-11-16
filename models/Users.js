@@ -4,7 +4,8 @@ const jwt = require("jsonwebtoken");
 class User {
   id;
   email;
-  name;
+  firstName;
+  lastName;
   createdAt;
   updatedAt;
 
@@ -14,7 +15,8 @@ class User {
     this.id = params.id;
     this.email = params.email;
     this.#password = params.password;
-    this.name = params.name;
+    this.firstName = params.firstName;
+    this.lastName = params.lastName ?? "";
     this.createdAt = params.createdAt;
     this.updatedAt = params.updatedAt;
   }
@@ -22,7 +24,8 @@ class User {
   get data() {
     return {
       id: this.id,
-      name: this.name,
+      firstName: this.firstName,
+      lastName: this.lastName,
       email: this.email,
       timeStamps: {
         created: this.createdAt.toDate(),
@@ -32,9 +35,9 @@ class User {
   }
 
   /**
-	 * Returns true or false if the password provided matches the user's password
-	 * @param {string} password - password to match
-	 **/
+   * Returns true or false if the password provided matches the user's password
+   * @param {string} password - password to match
+   **/
   async matchPassword(password) {
     const match = await bcrypt.compare(password, this.#password);
 
@@ -42,8 +45,8 @@ class User {
   }
 
   /**
-	 * Signs and returns jwt token with user data
-	 **/
+   * Signs and returns jwt token with user data
+   **/
   generateJWT() {
     return jwt.sign(
       {

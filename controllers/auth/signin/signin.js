@@ -29,16 +29,24 @@ async function signinController(req, res) {
     const user = await fetchUserByEmail(email);
     if (!user) {
       return res.status(400).json({
-        error: "Bad Request",
+        error: "bad request",
         message: "Email or Password incorrect",
         status: 400,
+      });
+    }
+
+    if(user.token) {
+      return res.status(401).json({
+        error: "unauthorized access",
+        message: "Email is not verified",
+        status: 401
       });
     }
 
     const matchPassword = await user.matchPassword(password);
     if (!matchPassword) {
       return res.status(400).json({
-        error: "Bad Request",
+        error: "bad request",
         message: "Email or Password incorrect",
         status: 400,
       });

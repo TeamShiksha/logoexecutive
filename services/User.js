@@ -62,6 +62,7 @@ async function createUser(user) {
       password: await bcrypt.hash(password, 10),
       createdAt: Timestamp.now(),
       updatedAt: Timestamp.now(),
+      token: crypto.randomUUID(),
     });
 
     const userRef = await result.get();

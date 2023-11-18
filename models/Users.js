@@ -8,7 +8,7 @@ class User {
   lastName;
   createdAt;
   updatedAt;
-  token;
+  #token;
 
   #password;
 
@@ -20,7 +20,7 @@ class User {
     this.lastName = params.lastName ?? "";
     this.createdAt = params.createdAt;
     this.updatedAt = params.updatedAt;
-    this.token = params?.token;
+    this.#token = params?.token;
   }
 
   get data() {
@@ -40,7 +40,7 @@ class User {
    * Returns a boolean, true if the user is verified and false if the user is not
    **/
   isUserVerified() {
-    return !this.token;
+    return !this.#token;
   }
 
   /**

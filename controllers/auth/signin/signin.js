@@ -31,15 +31,15 @@ async function signinController(req, res) {
       return res.status(400).json({
         error: "bad request",
         message: "Email or Password incorrect",
-        status: 400,
+        statusCode: 400,
       });
     }
 
-    if(user.token) {
+    if(user.isUserVerified()) {
       return res.status(401).json({
         error: "unauthorized access",
         message: "Email is not verified",
-        status: 401
+        statusCode: 401
       });
     }
 
@@ -48,7 +48,7 @@ async function signinController(req, res) {
       return res.status(400).json({
         error: "bad request",
         message: "Email or Password incorrect",
-        status: 400,
+        statusCode: 400,
       });
     }
 

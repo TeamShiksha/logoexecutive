@@ -8,6 +8,7 @@ class User {
   lastName;
   createdAt;
   updatedAt;
+  #token;
 
   #password;
 
@@ -19,6 +20,7 @@ class User {
     this.lastName = params.lastName ?? "";
     this.createdAt = params.createdAt;
     this.updatedAt = params.updatedAt;
+    this.#token = params?.token;
   }
 
   get data() {
@@ -29,9 +31,16 @@ class User {
       email: this.email,
       timeStamps: {
         created: this.createdAt.toDate(),
-        modified: this.updatedAt.toDate()
+        modified: this.updatedAt.toDate(),
       },
     };
+  }
+
+  /**
+   * Returns a boolean, true if the user is verified and false if the user is not
+   **/
+  isUserVerified() {
+    return !this.#token;
   }
 
   /**

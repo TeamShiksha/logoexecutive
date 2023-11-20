@@ -65,6 +65,11 @@ class User {
       process.env.JWT_SECRET,
     );
   }
+
+  generateURLWithToken() {
+    const url = `${process.env.BASE_URL}/auth/verify?token=${encodeURIComponent(this.#token)}`;
+    return url;
+  }
 }
 
 module.exports = User;

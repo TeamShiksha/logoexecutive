@@ -2,6 +2,7 @@ const User = require("../models/Users");
 const { UserCollection } = require("../utils/firestore");
 const { Timestamp } = require("firebase-admin/firestore");
 const bcrypt = require("bcrypt");
+const crypto = require("crypto");
 
 /**
  * Fetches all the users
@@ -62,7 +63,8 @@ async function createUser(user) {
       password: await bcrypt.hash(password, 10),
       createdAt: Timestamp.now(),
       updatedAt: Timestamp.now(),
-      token: crypto.randomUUID(),
+      //generate the token in hex format
+      token: crypto.randomBytes(16).toString("hex"),
     });
 
     const userRef = await result.get();
@@ -79,8 +81,33 @@ async function createUser(user) {
   }
 }
 
+/**
+ * fetchUserByToken - Fetches user from provided token
+ * @param {string} token - token of the user
+ **/
+async function fetchUserByToken(token) {
+  try {
+    const userSnapshot = await UserCollection.where("token", "==", token)
+      .limit(1)
+      .get();
+
+    if (userSnapshot.empty) {
+      return null;
+    }
+
+    const user = userSnapshot.docs[0].data();
+    const userRef = UserCollection.doc(userSnapshot.docs[0].id);
+
+    return {userRef, user};
+  } catch (err) {
+    console.log(err);
+    throw err;
+  }
+}
+
 module.exports = {
   fetchUsers,
   fetchUserByEmail,
   createUser,
+  fetchUserByToken,
 };

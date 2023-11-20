@@ -1,6 +1,7 @@
 const Joi = require("joi");
 const { emailRecordExists } = require("../../../services/Auth");
-const { createUser } = require("../../../services/User");
+const { createUser,fetchUserByEmail } = require("../../../services/User");
+const  sendEmail  = require("../../../services/sendEmail"); 
 
 const signupPayloadSchema = Joi.object().keys({
   firstName: Joi.string()
@@ -59,6 +60,13 @@ async function signupController(req, res) {
       status: 500,
     });
   }
+
+
+  const user = await fetchUserByEmail(email);
+
+  const url = await user.generateURLWithToken();
+
+  await sendEmail(user.email, "Please Verify email", url);
 
   return res.status(201).json({
     message: "Successfully created user",

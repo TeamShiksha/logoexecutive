@@ -1,15 +1,8 @@
 const Joi = require("joi");
 const ContactUs = require("../../models/ContactUs");
-const {checkFormByEmail} = require("../../services/ContactUs");
+const {formExists} = require("../../services/ContactUs");
 const {ContactUsCollection} = require("../../utils/firestore");
 
-/**
- * Joi schema for validating the payload when submitting a contact us form.
- * @typedef {Object} ContactUsPayloadSchema
- * @property {string} name - The name (required, max 50 "alpabet" characters only).
- * @property {string} email - The email address (required, valid email format).
- * @property {string} message - The message (required, max 500 characters).
- */
 const contactUsPayloadSchema = Joi.object().keys({
   name: Joi.string()
     .trim()
@@ -30,16 +23,6 @@ const contactUsPayloadSchema = Joi.object().keys({
     .max(500),
 });
 
-
-/**
- * Submits a contact us form with the provided payload, only after validating the payload and checking for duplicate form in database
- * @async
- * @function
- * @param {Object} req - The Express request object.
- * @param {Object} res - The Express response object.
- * @returns {Promise<void>} A Promise that resolves once the form submission is complete.
- */
-
 async function submitContactUs(req , res){
   try {   
     const payload = req.body;
@@ -56,7 +39,7 @@ async function submitContactUs(req , res){
     }
     const {email} = value;
 
-    const form = await checkFormByEmail(email);
+    const form = await formExists(email);
     if (!!form){
       res
         .status(400)
@@ -81,7 +64,8 @@ async function submitContactUs(req , res){
       });
     }
 
-  }catch (error) {
+  }
+  catch (error) {
     console.log(error);
     throw error;
   }

@@ -7,6 +7,8 @@ yarn-error.log*
 lerna-debug.log*
 .pnpm-debug.log*
 .env.*
+package-lock.json
+yarn.lock
 
 # Diagnostic reports (https://nodejs.org/api/report.html)
 report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
@@ -130,6 +132,5 @@ dist
 .yarn/install-state.gz
 .pnp.*
 serviceAccountKey.json
-
 .firebaserc
 package-lock.json

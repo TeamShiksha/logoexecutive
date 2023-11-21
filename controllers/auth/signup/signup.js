@@ -10,7 +10,13 @@ const signupPayloadSchema = Joi.object().keys({
     .max(20)
     .regex(/^[^!@#$%^&*(){}\[\]\\\.;'",.<>/?`~|0-9]*$/)
     .message("firstName should not contain any special character or number"),
-  lastName: Joi.string().trim().optional().min(1).max(20),
+  lastName: Joi.string()
+    .trim()
+    .required()
+    .min(1)
+    .max(20)
+    .regex(/^[^!@#$%^&*(){}\[\]\\\.;'",.<>/?`~|0-9]*$/)
+    .message("lastName should not contain any special character or number"),
   email: Joi.string()
     .trim()
     .required()
@@ -50,7 +56,7 @@ async function signupController(req, res) {
     return res.status(500).json({
       message: "Unexpected error while creating user",
       error: "internal server error",
-      status: 400,
+      status: 500,
     });
   }
 

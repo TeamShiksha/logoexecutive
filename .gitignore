@@ -132,3 +132,4 @@ dist
 serviceAccountKey.json
 
 .firebaserc
+package-lock.json

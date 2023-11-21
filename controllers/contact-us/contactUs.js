@@ -30,11 +30,11 @@ async function submitContactUs(req , res){
     const {error, value} = contactUsPayloadSchema.validate(payload);
     if (error){
       return res
-        .status(400)
+        .status(422)
         .json({
           message: error.message,
-          statusCode: 400,
-          error: "Invalid Payload"
+          statusCode: 422,
+          error: "Unprocessable payload"
         });
     }
     const {email} = value;

@@ -37,5 +37,6 @@ if(process.env.NODE_ENV === "test" || process.env.EMULATED_FIRESTORE) {
 
 const db = admin.firestore();
 const UserCollection = db.collection("Users");
+const ContactUsCollection = db.collection("Contact-us");
 
-module.exports = { db, UserCollection };
+module.exports = { db, UserCollection, ContactUsCollection };

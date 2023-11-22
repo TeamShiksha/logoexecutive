@@ -79,8 +79,25 @@ async function createUser(user) {
   }
 }
 
+async function updateUserPassword(user, hashNewPassword){
+  try {
+    // const userDoc = await user.get();
+    // console.log(userDoc);
+    await user.ref.update({
+      password: hashNewPassword,
+      updatedAt: Timestamp.now(),
+    });
+    return true;
+  }
+  catch(err){
+    console.log(err);
+    throw err;
+  }
+}
+
 module.exports = {
   fetchUsers,
   fetchUserByEmail,
   createUser,
+  updateUserPassword,
 };

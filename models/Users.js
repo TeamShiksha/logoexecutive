@@ -1,6 +1,6 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const { URL } = require('url');
+const { URL } = require("url");
 
 class User {
   id;
@@ -68,8 +68,8 @@ class User {
   }
 
   generateURLWithToken() {
-    const url = new URL(`/auth/verify`, process.env.EMAIL_BASE_URL);
-    url.searchParams.append('token', this.#token);
+    const url = new URL("/auth/verify", process.env.EMAIL_BASE_URL);
+    url.searchParams.append("token", this.#token);
     return url.toString();
   }
 }

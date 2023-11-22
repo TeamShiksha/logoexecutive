@@ -1,7 +1,7 @@
 const Joi = require("joi");
 const { emailRecordExists } = require("../../../services/Auth");
-const { createUser,fetchUserByEmail } = require("../../../services/User");
-const  sendEmail  = require("../../../services/sendEmail"); 
+const { createUser, fetchUserByEmail } = require("../../../services/User");
+const sendEmail = require("../../../services/sendEmail");
 
 const signupPayloadSchema = Joi.object().keys({
   firstName: Joi.string()
@@ -61,12 +61,25 @@ async function signupController(req, res) {
     });
   }
 
+  try {
+    const user = await fetchUserByEmail(email);
 
-  const user = await fetchUserByEmail(email);
+    if (!user) {
+      console.log("User not found");
+      return;
+    }
 
-  const url = await user.generateURLWithToken();
+    const url = await user.generateURLWithToken();
 
-  await sendEmail(user.email, "Please Verify email", url);
+    if (!url) {
+      console.log("Failed to generate URL with token");
+      return;
+    }
+
+    await sendEmail(user.email, "Please Verify email", url);
+  } catch (error) {
+    console.error("An error occurred:", error);
+  }
 
   return res.status(201).json({
     message: "Successfully created user",

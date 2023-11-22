@@ -2,7 +2,7 @@ const User = require("../models/Users");
 const { UserCollection } = require("../utils/firestore");
 const { Timestamp } = require("firebase-admin/firestore");
 const bcrypt = require("bcrypt");
-const crypto = require("crypto");
+
 
 /**
  * Fetches all the users
@@ -64,7 +64,7 @@ async function createUser(user) {
       createdAt: Timestamp.now(),
       updatedAt: Timestamp.now(),
       //generate the token in hex format
-      token: crypto.randomBytes(16).toString("hex"),
+      token: crypto.randomUUID().replace(/-/g, ""),
     });
 
     const userRef = await result.get();
@@ -96,9 +96,33 @@ async function fetchUserByToken(token) {
     }
 
     const user = userSnapshot.docs[0].data();
-    const userRef = UserCollection.doc(userSnapshot.docs[0].id);
+    return {user};
+  } catch (err) {
+    console.log(err);
+    throw err;
+  }
+}
 
-    return {userRef, user};
+/**
+ * deleteUserToken - Fetches user from provided token
+ * @param {string} token - token of the user
+ **/
+async function deleteUserToken(token) {
+  try {
+    const userSnapshot = await UserCollection.where("token", "==", token)
+      .limit(1)
+      .get();
+
+    if (userSnapshot.empty) {
+      return null;
+    }
+
+    const userRef = UserCollection.doc(userSnapshot.docs[0].id);
+    await userRef.update({
+      token: null,
+    });
+
+    return { message: "Token deleted successfully" };
   } catch (err) {
     console.log(err);
     throw err;
@@ -110,4 +134,5 @@ module.exports = {
   fetchUserByEmail,
   createUser,
   fetchUserByToken,
+  deleteUserToken,
 };

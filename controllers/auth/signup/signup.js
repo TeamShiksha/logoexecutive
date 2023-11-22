@@ -2,6 +2,7 @@ const Joi = require("joi");
 const { emailRecordExists } = require("../../../services/Auth");
 const { createUser, fetchUserByEmail } = require("../../../services/User");
 const sendEmail = require("../../../services/sendEmail");
+const e = require("express");
 
 const signupPayloadSchema = Joi.object().keys({
   firstName: Joi.string()
@@ -61,24 +62,31 @@ async function signupController(req, res) {
     });
   }
 
-  try {
-    const user = await fetchUserByEmail(email);
+  const user = await fetchUserByEmail(email);
+  if (!user) {
+    return res.status(404).json({
+      message: "User not found",
+      error: "not found",
+      status: 404,
+    });
+  }
 
-    if (!user) {
-      console.log("User not found");
-      return;
-    }
+  const url = user.getVerificationUrl();
+  if (!url) {
+    return res.status(500).json({
+      message: "Failed to generate URL with token",
+      error: "internal server error",
+      status: 500,
+    });
+  }
 
-    const url = await user.generateURLWithToken();
-
-    if (!url) {
-      console.log("Failed to generate URL with token");
-      return;
-    }
-
-    await sendEmail(user.email, "Please Verify email", url);
-  } catch (error) {
-    console.error("An error occurred:", error);
+  const emailRes=await sendEmail(user.email, "Please Verify email", url.href);
+  if (!emailRes.success) {
+    return res.status(500).json({
+      message: "Failed to send verification email",
+      error: emailRes.error,
+      status: 500,
+    });
   }
 
   return res.status(201).json({

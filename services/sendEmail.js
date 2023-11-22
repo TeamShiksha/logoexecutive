@@ -6,10 +6,10 @@ const nodemailer = require("nodemailer");
  * @param {string} email - The email address to send the email to.
  * @param {string} subject - The subject of the email.
  * @param {string} text - The body of the email.
- * @returns {Promise} - A Promise that resolves when the email has been sent, or rejects with an error.
+ * @returns {Promise} - A Promise that resolves with a success message when the email has been sent, or rejects with an error.
  */
 
-module.exports = async (email, subject, text) => {
+async function sendEmail(email, subject, text) {
   try {
     const transporter = nodemailer.createTransport({
       host: process.env.EMAIL_HOST,
@@ -28,8 +28,12 @@ module.exports = async (email, subject, text) => {
       subject: subject,
       text: text,
     });
+
+    return { success: true };
   } catch (error) {
-    console.log(error);
-    return error;
+    console.error(error);
+    return { success: false, error: error };
   }
-};
+}
+
+module.exports = sendEmail;

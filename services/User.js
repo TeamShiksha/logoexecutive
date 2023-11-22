@@ -63,7 +63,6 @@ async function createUser(user) {
       password: await bcrypt.hash(password, 10),
       createdAt: Timestamp.now(),
       updatedAt: Timestamp.now(),
-      //generate the token in hex format
       token: crypto.randomUUID().replace(/-/g, ""),
     });
 
@@ -117,15 +116,13 @@ async function deleteUserToken(token) {
       return null;
     }
 
-    const userRef = UserCollection.doc(userSnapshot.docs[0].id);
-    await userRef.update({
+    await userSnapshot.docs[0].ref.update({
       token: null,
     });
 
-    return { message: "Token deleted successfully" };
+    return {success: true};
   } catch (err) {
-    console.log(err);
-    throw err;
+    return {error: err, success: false};
   }
 }
 

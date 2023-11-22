@@ -63,14 +63,19 @@ class User {
         exp: Math.floor(Date.now() / 1000) + 60 * 60 * 24,
         data: this.data,
       },
-      process.env.JWT_SECRET,
+      process.env.JWT_SECRET
     );
   }
 
-  generateURLWithToken() {
-    const url = new URL("/auth/verify", process.env.EMAIL_BASE_URL);
+  /**
+   * Generates a verification URL for the user.
+   *
+   * @returns {URL} - The verification URL with the user's token as a query parameter.
+   */
+  getVerificationUrl() {
+    const url = new URL("/auth/verify", process.env.BASE_URL);
     url.searchParams.append("token", this.#token);
-    return url.toString();
+    return url;
   }
 }
 

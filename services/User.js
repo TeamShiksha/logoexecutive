@@ -38,7 +38,7 @@ async function fetchUserByEmail(email) {
     const user = new User({ ...userRef.docs[0].data(), id: userRef.docs[0].id });
 
     return user;
-  } catch (e) {
+  } catch (err) {
     console.log(err);
     throw err;
   }
@@ -79,25 +79,8 @@ async function createUser(user) {
   }
 }
 
-async function updateUserPassword(user, hashNewPassword){
-  try {
-    // const userDoc = await user.get();
-    // console.log(userDoc);
-    await user.ref.update({
-      password: hashNewPassword,
-      updatedAt: Timestamp.now(),
-    });
-    return true;
-  }
-  catch(err){
-    console.log(err);
-    throw err;
-  }
-}
-
 module.exports = {
   fetchUsers,
   fetchUserByEmail,
   createUser,
-  updateUserPassword,
 };

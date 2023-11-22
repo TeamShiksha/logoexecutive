@@ -3,7 +3,7 @@ const serializer = require("../../utils/serializer/serializer");
 const bcrypt = require("bcrypt");
 const Joi = require("joi");
 const {fetchUserByEmail} = require("../../services/User");
-const {updateUserPassword} = require("../../services/User");
+const {UserCollection} = require("../../utils/firestore");
 
 async function getUsers(_, res) {
   try {
@@ -38,17 +38,11 @@ async function getUsers(_, res) {
 }
 
 const updatePasswordPayloadSchema = Joi.object().keys({
-  email: Joi.string()
-    .trim()
-    .required()
-    .regex(/^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/)
-    .message("Email is not valid"),
-
   currPassword: Joi.string()
     .trim()
     .required()
     .min(8)
-    .max(500)
+    .max(30)
     .message("Current password is not valid"),
 
   newPassword: Joi.string()
@@ -70,7 +64,7 @@ const updatePasswordPayloadSchema = Joi.object().keys({
 
 async function updatePassword(req, res){
   try{
-    const payload = req.body;
+    const {payload} = req.body;
     const {error, value} = updatePasswordPayloadSchema.validate(payload);
     if (error){
       return res
@@ -82,24 +76,11 @@ async function updatePassword(req, res){
         });
     }
 
-    const {email} = req.body;
-    // console.log(email);
+    const {currPassword} = req.body.payload;
+    const {email} = req.body.userData;
     const user = await fetchUserByEmail(email);
-    if (!user){
-      return res
-        .status(400)
-        .json({
-          message: "Email is incorrect",
-          statusCode: 400,
-          error: "Bad Request",
-        });
-    }
 
-    const {currPassword}= req.body;
-    // const hashCurrPassword = await bcrypt.hash(currPassword, 10);
-    // console.log (hashCurrPassword);
     const matchPassword = await user.matchPassword(currPassword);
-    console.log(matchPassword);
     if (!matchPassword){
       return res
         .status(400)
@@ -110,19 +91,37 @@ async function updatePassword(req, res){
         });
     }
 
-    const {newPassword} = req.body;
+    const {newPassword} = req.body.payload;
     const hashNewPassword = await bcrypt.hash(newPassword, 10);
-    const updateStatus = await updateUserPassword(user.id, hashNewPassword);
-    if(!updateStatus){
+
+    const {id} = req.body.userData;
+
+    // userDocRef is a pointer to the location where the document with the specified userId would be if it existed. 
+    // If the document doesn't exist, the reference still points to that theoretical location.
+    const userDocRef = UserCollection.doc(id);
+    const userDoc = await userDocRef.get();
+
+    // When user is not found in database .get() still returns a snapshot but userDoc.exists property is set to false
+    if (!userDoc.exists){
       return res
-        .status(500)
+        .status(404)
         .json({
-          message: "Error in updateUser Service",
-          statusCode: 500,
-          error: "Internal Server Error",
+          message:"User not found in database",
+          statusCode: 404,
+          error: "Not found",
         });
     }
-    return updateStatus;
+    else {
+      await userDocRef.update({
+        password: hashNewPassword,
+      });
+
+      return res
+        .status(200)
+        .json({
+          message:"Password updated successfully!"
+        });
+    }
   }
   catch(err){
     console.log("Location: updatePassword controller", err);

@@ -21,25 +21,14 @@ async function verifyTokenController(req, res) {
       });
     }
 
-    const delTokeRes=await deleteUserToken(token);
-    if (!delTokeRes.success) {
-      return res.status(500).json({
-        error: "internal server error",
-        message: "Failed to delete token",
-        statusCode: 500,
-      });
-    }
-
+    await deleteUserToken(token);
+    
     return res.status(200).json({
       message: "User verified",
     });
   } 
   catch (err) {
-    return res.status(500).json({
-      error: "internal server error",
-      message: "Failed to verify user",
-      statusCode: 500,
-    });
+    throw err;
   }
 }
 

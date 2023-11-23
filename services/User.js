@@ -122,7 +122,8 @@ async function deleteUserToken(token) {
 
     return {success: true};
   } catch (err) {
-    return {error: err, success: false};
+    console.log(err);
+    throw err;
   }
 }
 

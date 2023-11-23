@@ -73,9 +73,9 @@ class User {
    * @returns {URL} - The verification URL with the user's token as a query parameter.
    */
   getVerificationUrl() {
-    const url = new URL("/auth/verify", process.env.BASE_URL);
-    url.searchParams.append("token", this.#token);
-    return url;
+    const userVerificationUrl = new URL("/auth/verify", process.env.BASE_URL);
+    userVerificationUrl.searchParams.append("token", this.#token);
+    return userVerificationUrl;
   }
 }
 

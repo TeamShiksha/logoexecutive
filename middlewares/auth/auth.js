@@ -24,7 +24,7 @@ module.exports = function (req, res, next) {
         statusCode: 403
       });
 
-    Object.assign(res, { userData: decodedData.data });
+    Object.assign(req, { userData: decodedData.data });
     next();
   } catch (err) {
     console.log(err);

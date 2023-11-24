@@ -6,9 +6,7 @@ const cookieParser = require("cookie-parser");
 const User = require("../../models/Users");
 const { Timestamp } = require("firebase-admin/firestore");
 
-const mockFn = jest.fn().mockImplementation((_, res) => {
-  return res.end("success");
-});
+const mockFn = jest.fn();
 const mockUser = new User({
   id: "1",
   email: "john@email.com",
@@ -26,17 +24,14 @@ describe("Auth middleware", () => {
   beforeAll(() => {
     process.env.JWT_SECRET = "mysecret";
     app.use(cookieParser());
-    app.get("/", auth, mockFn);
+    app.get("/", auth, (req, res) => mockFn(req, res));
+    app.get("/error", auth, (req, res) => mockFn());
   });
 
-  it("should return error 401", async () => {
-    const response = await request(app).get("/");
-
-    expect(response.status).toBe(401);
-    expect(response.body.message).toBe("User not signed in");
-  });
-
-  it("should trigger mockFn if jwt is present", async () => {
+  it("Success - If user is signed in", async () => {
+    mockFn.mockImplementation((req, res) => {
+      return res.status(200).json(req.userData);
+    });
     const mockJWT = mockUser.generateJWT();
     const response = await request(app)
       .get("/")
@@ -44,9 +39,19 @@ describe("Auth middleware", () => {
 
     expect(mockFn).toHaveBeenCalledTimes(1);
     expect(response.status).toBe(200);
+    expect(JSON.stringify(response.body)).toEqual(
+      JSON.stringify(mockUser.data),
+    );
   });
 
-  it("should return with 403 error if jwt is invalid", async () => {
+  it("401 - If user is not signed in / JWT not present", async () => {
+    const response = await request(app).get("/");
+
+    expect(response.status).toBe(401);
+    expect(response.body.message).toBe("User not signed in");
+  });
+
+  it("403 - if JWT is invalid", async () => {
     const mockJWT = jwt.sign({ data: "hello" }, process.env.JWT_SECRET);
     const response = await request(app)
       .get("/")
@@ -57,7 +62,7 @@ describe("Auth middleware", () => {
     expect(response.body.error).toBe("Forbidden");
   });
 
-  it("should return error 500 for unexpected errors", async () => {
+  it("500 - For unexpected errors", async () => {
     jest.spyOn(jwt, "verify").mockImplementation(() => {
       throw Error("test");
     });
@@ -68,5 +73,6 @@ describe("Auth middleware", () => {
       .set("Cookie", `jwt=${mockJWT}`);
 
     expect(response.status).toBe(500);
+    expect(response.success).toBeFalsy();
   });
 });

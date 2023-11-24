@@ -12,6 +12,17 @@ class User {
 
   #password;
 
+  /**
+   * @param {Object} params
+   * @param {string} params.id
+   * @param {string} params.email
+   * @param {string} params.password
+   * @param {string} params.firstName
+   * @param {string} params.lastName
+   * @param {Date} params.createdAt
+   * @param {Date} params.updatedAt
+   * @param {string|undefined|null} params.token
+   **/
   constructor(params) {
     this.id = params.id;
     this.email = params.email;
@@ -20,7 +31,7 @@ class User {
     this.lastName = params.lastName ?? "";
     this.createdAt = params.createdAt;
     this.updatedAt = params.updatedAt;
-    this.#token = params?.token;
+    this.#token = params.token || null;
   }
 
   get data() {
@@ -57,13 +68,9 @@ class User {
    * Signs and returns jwt token with user data
    **/
   generateJWT() {
-    return jwt.sign(
-      {
-        exp: Math.floor(Date.now() / 1000) + 60 * 60 * 24,
-        data: this.data,
-      },
-      process.env.JWT_SECRET,
-    );
+    return jwt.sign({ data: this.data }, process.env.JWT_SECRET, {
+      expiresIn: "1d",
+    });
   }
 }
 

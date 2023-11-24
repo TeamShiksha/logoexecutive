@@ -52,12 +52,7 @@ async function signinController(req, res) {
       });
     }
 
-    res.cookie(
-      "jwt",
-      jwt.sign({ email: user.email }, process.env.JWT_SECRET, {
-        expiresIn: "1d",
-      }),
-    );
+    res.cookie("jwt", user.generateJWT());
 
     return res.status(200).json({
       data: {

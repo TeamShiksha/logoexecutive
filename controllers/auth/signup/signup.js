@@ -53,15 +53,15 @@ async function signupController(req, res) {
   }
 
   const result = await createUser(value);
-
-  const user = await fetchUserByEmail(email);
-  if (!user) {
-    return res.status(404).json([{
-      message: "User not found",
-      error: "not found",
-      status: 404,
+  if (!result) {
+    return res.status(500).json([{
+      message: "Unexpected error while creating user",
+      error: "internal server error",
+      status: 500,
     }]);
   }
+
+  const user = await fetchUserByEmail(email);
 
   const userVerificationUrl = user.getVerificationUrl();
 

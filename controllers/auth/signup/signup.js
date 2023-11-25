@@ -53,13 +53,6 @@ async function signupController(req, res) {
   }
 
   const result = await createUser(value);
-  if (!result) {
-    return res.status(500).json([{
-      message: "Unexpected error while creating user",
-      error: "internal server error",
-      status: 500,
-    }]);
-  }
 
   const user = await fetchUserByEmail(email);
   if (!user) {

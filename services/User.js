@@ -3,6 +3,7 @@ const { UserCollection } = require("../utils/firestore");
 const { Timestamp } = require("firebase-admin/firestore");
 const bcrypt = require("bcrypt");
 
+
 /**
  * Fetches all the users
  **/
@@ -62,17 +63,61 @@ async function createUser(user) {
       password: await bcrypt.hash(password, 10),
       createdAt: Timestamp.now(),
       updatedAt: Timestamp.now(),
-      token: crypto.randomUUID(),
+      token: crypto.randomUUID().replace(/-/g, ""),
     });
 
     const userRef = await result.get();
     const createdUser = new User(userRef.data());
 
-    return {
-      data: {
-        user: createdUser.data,
-      },
-    };
+    return createdUser;
+  } catch (err) {
+    console.log(err);
+    throw err;
+  }
+}
+
+/**
+ * fetchUserByToken - Fetches user from provided token
+ * @param {string} token - token of the user
+ **/
+async function fetchUserByToken(token) {
+  try {
+    const userSnapshot = await UserCollection.where("token", "==", token)
+      .limit(1)
+      .get();
+
+    if (userSnapshot.empty) {
+      return null;
+    }
+
+    const user = new User({...userSnapshot.docs[0].data(), id: userSnapshot.docs[0].id});
+    
+    return user;
+  } catch (err) {
+    console.log(err);
+    throw err;
+  }
+}
+
+/**
+ * deleteUserToken - Fetches user from provided token
+ * @param {string} token - token of the user
+ **/
+async function deleteUserToken(token) {
+  try {
+    const userSnapshot = await UserCollection.where("token", "==", token)
+      .limit(1)
+      .get();
+
+    if (userSnapshot.empty) {
+      return null;
+    }
+
+    await userSnapshot.docs[0].ref.update({
+      token: null,
+    });
+
+    return {success: true};
   } catch (err) {
     console.log(err);
     throw err;
@@ -83,4 +128,6 @@ module.exports = {
   fetchUsers,
   fetchUserByEmail,
   createUser,
+  fetchUserByToken,
+  deleteUserToken,
 };

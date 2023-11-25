@@ -1,6 +1,7 @@
 const Joi = require("joi");
 const { emailRecordExists } = require("../../../services/Auth");
 const { createUser } = require("../../../services/User");
+const sendEmail = require("../../../services/sendEmail");
 
 const signupPayloadSchema = Joi.object().keys({
   firstName: Joi.string()
@@ -32,11 +33,13 @@ async function signupController(req, res) {
   const { error, value } = signupPayloadSchema.validate(payload);
 
   if (!!error) {
-    return res.status(422).json({
-      message: error.message,
-      error: "unprocessable content",
-      statusCode: 422,
-    });
+    return res.status(422).json([
+      {
+        message: error.message,
+        error: "unprocessable content",
+        statusCode: 422,
+      },
+    ]);
   }
 
   const { email } = value;
@@ -44,26 +47,59 @@ async function signupController(req, res) {
   const emailExists = await emailRecordExists(email);
 
   if (emailExists) {
-    return res.status(400).json({
-      message: "Email already exists",
-      error: "bad request",
-      status: 400,
-    });
+    return res.status(400).json([
+      {
+        message: "Email already exists",
+        error: "bad request",
+        status: 400,
+      },
+    ]);
   }
 
-  const result = await createUser(value);
-  if (!result) {
-    return res.status(500).json({
-      message: "Unexpected error while creating user",
-      error: "internal server error",
-      status: 500,
-    });
+  const newUser = await createUser(value);
+  if (!newUser) {
+    return res.status(500).json([
+      {
+        message: "Unexpected error while creating user",
+        error: "internal server error",
+        status: 500,
+      },
+    ]);
   }
 
-  return res.status(201).json({
-    message: "Successfully created user",
-    data: result.data,
-  });
+  const userVerificationUrl = newUser.getVerificationUrl();
+
+  const emailRes = await sendEmail(
+    newUser.email,
+    "Please Verify email",
+    userVerificationUrl.href
+  );
+  if (!emailRes.success) {
+    return res.status(206).json([
+      {
+        message: "Failed to send verification email",
+        error: emailRes.error,
+        status: 500,
+      },
+      {
+        message: "Successfully created user",
+        data: newUser.data,
+        status: 201,
+      },
+    ]);
+  }
+
+  return res.status(201).json([
+    {
+      message: "Successfully created user",
+      data: newUser.data,
+      status: 201,
+    },
+    {
+      message: "Verification email sent successfully",
+      status: 200,
+    },
+  ]);
 }
 
 module.exports = signupController;

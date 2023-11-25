@@ -10,7 +10,9 @@
     "lint": "eslint .",
     "lint:fix": "eslint --fix",
     "lint:fix-all": "eslint --fix .",
-    "test": "jest"
+    "test": "jest",
+    "test:silent": "jest --silent",
+    "test:coverage": "jest --coverage"
   },
   "dependencies": {
     "bcrypt": "^5.1.1",

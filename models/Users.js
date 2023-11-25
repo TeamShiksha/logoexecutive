@@ -83,17 +83,6 @@ class User {
     userVerificationUrl.searchParams.append("token", this.#token);
     return userVerificationUrl;
   }
-
-  /**
-   * Generates a verification URL for the user.
-   *
-   * @returns {URL} - The verification URL with the user's token as a query parameter.
-   */
-  getVerificationUrl() {
-    const userVerificationUrl = new URL("/auth/verify", process.env.BASE_URL);
-    userVerificationUrl.searchParams.append("token", this.#token);
-    return userVerificationUrl;
-  }
 }
 
 module.exports = User;

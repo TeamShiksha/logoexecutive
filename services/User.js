@@ -69,11 +69,7 @@ async function createUser(user) {
     const userRef = await result.get();
     const createdUser = new User(userRef.data());
 
-    return {
-      data: {
-        user: createdUser.data,
-      },
-    };
+    return createdUser;
   } catch (err) {
     console.log(err);
     throw err;
@@ -94,8 +90,9 @@ async function fetchUserByToken(token) {
       return null;
     }
 
-    const user = userSnapshot.docs[0].data();
-    return {user};
+    const user = new User({...userSnapshot.docs[0].data(), id: userSnapshot.docs[0].id});
+    
+    return user;
   } catch (err) {
     console.log(err);
     throw err;

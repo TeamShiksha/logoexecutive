@@ -39,7 +39,7 @@ async function fetchUserByEmail(email) {
     const user = new User({ ...userRef.docs[0].data(), id: userRef.docs[0].id });
 
     return user;
-  } catch (e) {
+  } catch (err) {
     console.log(err);
     throw err;
   }

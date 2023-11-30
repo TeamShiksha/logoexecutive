@@ -3,7 +3,7 @@ const { DocumentReference } = require("firebase-admin/firestore");
 const jwt = require("jsonwebtoken");
 
 class User {
-  id;
+  userId;
   email;
   firstName;
   lastName;
@@ -16,7 +16,7 @@ class User {
 
   /**
    * @param {Object} params
-   * @param {string} params.id
+   * @param {string} params.userId
    * @param {string} params.email
    * @param {string} params.password
    * @param {string} params.firstName

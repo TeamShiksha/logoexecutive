@@ -1,6 +1,7 @@
 class ContactUs {
   email;
   name;
+  contactId;
   message;
   activityStatus;
   assignedTo;
@@ -11,6 +12,7 @@ class ContactUs {
    * @param {Object} params
    * @param {string} params.name
    * @param {string} params.email
+   * @param {string} params.contactId
    * @param {string} params.message
    * @param {string} params.activityStatus
    * @param {string} params.assignedTo
@@ -20,6 +22,7 @@ class ContactUs {
   constructor(params) {
     this.name = params.name;
     this.email = params.email;
+    this.contactId = params.contactId;
     this.message = params.message;
     this.assignedTo = params.assignedTo;
     this.createdAt = params.createdAt;

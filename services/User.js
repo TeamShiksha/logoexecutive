@@ -38,7 +38,7 @@ async function fetchUserByEmail(email) {
 
     const user = new User({
       ...userRef.docs[0].data(),
-      id: userRef.docs[0].id,
+      userId: userRef.docs[0].id,
       userRef: userRef.docs[0].ref,
     });
 

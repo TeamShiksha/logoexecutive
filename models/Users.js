@@ -1,4 +1,5 @@
 const bcrypt = require("bcrypt");
+const { DocumentReference } = require("firebase-admin/firestore");
 const jwt = require("jsonwebtoken");
 
 class User {
@@ -8,8 +9,9 @@ class User {
   lastName;
   createdAt;
   updatedAt;
-  #token;
+  userRef;
 
+  #token;
   #password;
 
   /**
@@ -21,7 +23,8 @@ class User {
    * @param {string} params.lastName
    * @param {Date} params.createdAt
    * @param {Date} params.updatedAt
-   * @param {string|undefined|null} params.token
+   * @param {DocumentReference} [params.userRef] - Firebase document reference of the user
+   * @param {string} [params.token]
    **/
   constructor(params) {
     this.id = params.id;
@@ -31,6 +34,7 @@ class User {
     this.lastName = params.lastName ?? "";
     this.createdAt = params.createdAt;
     this.updatedAt = params.updatedAt;
+    this.userRef = params.userRef ?? null;
     this.#token = params.token || null;
   }
 

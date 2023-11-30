@@ -27,7 +27,7 @@ class User {
    * @param {string} [params.token]
    **/
   constructor(params) {
-    this.id = params.id;
+    this.userId = params.userId;
     this.email = params.email;
     this.#password = params.password;
     this.firstName = params.firstName;
@@ -40,7 +40,7 @@ class User {
 
   get data() {
     return {
-      id: this.id,
+      userId: this.userId,
       firstName: this.firstName,
       lastName: this.lastName,
       email: this.email,

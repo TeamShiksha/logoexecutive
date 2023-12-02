@@ -35,7 +35,7 @@ class ContactUs {
    * Firebase database methods requires objects not created using "new" keyword
    * @returns {Object} An object containing form data.
    */
-  get formData() {
+  get data() {
     return {
       name: this.name,
       email: this.email,

@@ -2,8 +2,6 @@ const User = require("../models/Users");
 const { UserCollection } = require("../utils/firestore");
 const { Timestamp } = require("firebase-admin/firestore");
 const bcrypt = require("bcrypt");
-const crypto = require("crypto");
-
 
 /**
  * Fetches all the users
@@ -30,21 +28,17 @@ async function fetchUsers() {
 async function fetchUserByEmail(email) {
   try {
     const userRef = await UserCollection.where("email", "==", email)
-      .limit(1)
-      .get();
-
+      .limit(1).get();
     if (userRef.empty) {
       return null;
     }
-
+    
     const user = new User({
       ...userRef.docs[0].data(),
-      userId: userRef.docs[0].id,
       userRef: userRef.docs[0].ref,
     });
-
     return user;
-  } catch (e) {
+  } catch (err) {
     console.log(err);
     throw err;
   }

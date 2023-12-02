@@ -42,5 +42,7 @@ const KeyCollection = db.collection("keys");
 const SubscriptionCollection = db.collection("Subscriptions");
 const ImageCollection = db.collection("Images");
 const ImageLogCollection = db.collection("ImageLogs");
+const UserTokenCollection = db.collection("UserTokens");
 
-module.exports = { db, UserCollection, ContactUsCollection, KeyCollection, SubscriptionCollection, ImageCollection, ImageLogCollection };
+module.exports = { db, UserTokenCollection, UserCollection, ContactUsCollection, 
+                KeyCollection, SubscriptionCollection, ImageCollection, ImageLogCollection };

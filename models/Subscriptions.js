@@ -31,13 +31,16 @@ class Subscriptions {
     this.updatedAt = params.updatedAt;
   }
 
-  getSubscriptionData() {
+  get data() {
     return {
       userId: this.userId,
       subscriptionId: this.subscriptionId,
       subscriptionType: this.subscriptionType,
+      keyLimit: this.keyLimit,
+      usageLimit: this.usageLimit,
       isActive: this.isActive,
       createdAt: this.createdAt,
+      updatedAt: this.updatedAt,
     };
   }
 }

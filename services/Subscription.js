@@ -2,8 +2,6 @@ const Subscription = require("../models/Subscriptions");
 const { SubscriptionCollection } = require("../utils/firestore");
 const { Timestamp } = require("firebase-admin/firestore");
 
-
-
 async function createSubscription(userId) {
   try {
     const subscriptionData = {
@@ -24,7 +22,25 @@ async function createSubscription(userId) {
     throw err;
   }
 }
-  
+ 
+async function fetchSubscriptionByuserid(userId) {
+  try {
+    const subscriptionRef = await SubscriptionCollection.where("userId", "==", userId)
+      .limit(1).get();
+    if (subscriptionRef.empty) {
+      return null;
+    }
+    
+    const subscription = new Subscription({
+      ...subscriptionRef.docs[0].data(),
+    });
+    return subscription;
+  } catch (err) {
+    console.log(err);
+    throw err;
+  }
+}
+
 module.exports = {
-  createSubscription
+  createSubscription, fetchSubscriptionByuserid
 };

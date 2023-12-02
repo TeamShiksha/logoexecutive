@@ -25,11 +25,14 @@ class Keys {
     this.updatedAt = params.updatedAt;
   }
 
-  getKeyData() {
+  get data() {
     return {
+      keyId: this.keyId,
+      userId: this.userId,
       key: this.key,
       usageCount: this.usageCount,
       createdAt: this.createdAt,
+      updatedAt: this.updatedAt,
     };
   }
 }

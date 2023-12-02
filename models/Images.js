@@ -21,10 +21,13 @@ class Images {
     this.updatedAt = params.updatedAt;
   }
 
-  getSubscriptionData() {
+  get data() {
     return {
+      imageId: this.imageId,
       imageUrl: this.imageUrl,
-      usageCount: this.usageCount,
+      imageUsageCount: this.imageUsageCount,
+      createdAt: this.createdAt,
+      updatedAt: this.updatedAt,
     };
   }
 }

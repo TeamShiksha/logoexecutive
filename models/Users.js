@@ -39,14 +39,9 @@ class User {
 
   get data() {
     return {
-      userId: this.userId,
       firstName: this.firstName,
       lastName: this.lastName,
       email: this.email,
-      timeStamps: {
-        created: this.createdAt.toDate(),
-        modified: this.updatedAt.toDate(),
-      },
     };
   }
 
@@ -54,7 +49,7 @@ class User {
    * Returns a boolean, true if the user is verified and false if the user is not
    **/
   isUserVerified() {
-    return !this.#token;
+    return this.#token;
   }
 
   /**

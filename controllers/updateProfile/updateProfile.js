@@ -4,10 +4,9 @@ const {
   updateUserName,
   updateUserEmail,
   generateEmailUpdateToken,
-  deleteUserToken,
 } = require("../../services/updateUser");
-const { fetchUserByEmail, fetchUserByToken } = require("../../services/User");
-const e = require("express");
+const { fetchUserByEmail} = require("../../services/User");
+
 
 const changeNameEmailSchema = Joi.object().keys({
   firstName: Joi.string()
@@ -17,12 +16,19 @@ const changeNameEmailSchema = Joi.object().keys({
     .max(20)
     .regex(/^[^!@#$%^&*(){}\[\]\\\.;'",.<>/?`~|0-9]*$/)
     .message("firstName should not contain any special character or number"),
-  lastName: Joi.string().trim().optional().min(1).max(20),
+  lastName: Joi.string()
+    .trim()
+    .optional()
+    .min(1)
+    .max(20)
+    .regex(/^[^!@#$%^&*(){}\[\]\\\.;'",.<>/?`~|0-9]*$/)
+    .message("lastName should not contain any special character or number"),
   email: Joi.string()
     .trim()
     .required()
     .max(50)
-    .regex(/^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/),
+    .regex(/^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/)
+    .message("email must be a valid email address"),
 });
 
 async function updateProfileController(req, res) {
@@ -95,7 +101,7 @@ async function updateProfileController(req, res) {
       const token = await generateEmailUpdateToken(currEmail);
 
       const emailUpdateVerificationURL = new URL(
-        "/updateProfile/verifyAndUpdateEmail",
+        "/update-profile/verifyAndUpdateEmail",
         process.env.BASE_URL
       );
       emailUpdateVerificationURL.searchParams.append("token", token);

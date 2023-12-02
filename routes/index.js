@@ -13,6 +13,6 @@ router.get("/", (_req, res) =>
 router.use("/auth", authRouter);
 router.use("/users", userRouter);
 router.use("/contact-us", contactUsRouter);
-router.use("/updateProfile",updateProfileRouter);
+router.use("/update-profile",updateProfileRouter);
 
 module.exports = router;

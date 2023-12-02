@@ -5,7 +5,7 @@ describe("UpdateProfile Controller", () => {
   describe("Payload", () => {
     it("should return 400 when email is missing", async () => {
       const response = await request(app)
-        .post("/updateProfile/?currEmail=oldEmail@example.com")
+        .post("/update-profile/?currEmail=oldEmail@example.com")
         .send({
           name: "Ghosty",
         });
@@ -18,7 +18,7 @@ describe("UpdateProfile Controller", () => {
 
     it("should return 400 when name is missing", async () => {
       const response = await request(app)
-        .post("/updateProfile/?currEmail=oldEmail@example.com")
+        .post("/update-profile/?currEmail=oldEmail@example.com")
         .send({
           email: "ghostidergod@gmail.com",
         });
@@ -31,7 +31,7 @@ describe("UpdateProfile Controller", () => {
 
     it("should return 400 when name contains special characters or numbers", async () => {
       const response = await request(app)
-        .post("/updateProfile/?currEmail=oldEmail@example.com")
+        .post("/update-profile/?currEmail=oldEmail@example.com")
         .send({
           name: "Ghosty123!",
           email: "ghostidergod@gmail.com",
@@ -45,15 +45,15 @@ describe("UpdateProfile Controller", () => {
 
     it("should return 400 when email is not in a valid format", async () => {
       const response = await request(app)
-        .post("/updateProfile/?currEmail=oldEmail@example.com")
+        .post("/update-profile/?currEmail=oldEmail@example.com")
         .send({
-          name: "Ghosty",
+          name: "Ghosty rider",
           email: "ghostidergod@gmail",
         });
 
       expect(response.status).toBe(400);
       expect(response.body).toEqual({
-        message: "\"lastName\" is not allowed to be empty",
+        message: "email must be a valid email address",
       });
     }, 5000);
   });
@@ -61,7 +61,7 @@ describe("UpdateProfile Controller", () => {
   describe("Query Parameter", () => {
     it("should return 400 when currEmail is missing", async () => {
       const response = await request(app)
-        .post("/updateProfile/")
+        .post("/update-profile/")
         .send({
           name: "Ghosty",
           email: "ghostidergod@gmail.com",

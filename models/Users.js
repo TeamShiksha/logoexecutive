@@ -10,7 +10,6 @@ class User {
   createdAt;
   updatedAt;
   userRef;
-
   #token;
   #password;
 
@@ -31,7 +30,7 @@ class User {
     this.email = params.email;
     this.#password = params.password;
     this.firstName = params.firstName;
-    this.lastName = params.lastName ?? "";
+    this.lastName = params.lastName;
     this.createdAt = params.createdAt;
     this.updatedAt = params.updatedAt;
     this.userRef = params.userRef ?? null;

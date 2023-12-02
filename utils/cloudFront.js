@@ -14,12 +14,11 @@ function cloudFrontSignedURL(path) {
       }),
       success: true,
     };
-  } else {
-    return {
-      message: "image path is not defined",
-      success: false,
-    };
   }
+  return {
+    message: "image path is not defined",
+    success: false,
+  };
 }
 
 module.exports = { cloudFrontSignedURL };

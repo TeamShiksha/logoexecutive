@@ -45,4 +45,4 @@ const ImageLogCollection = db.collection("ImageLogs");
 const UserTokenCollection = db.collection("UserTokens");
 
 module.exports = { db, UserTokenCollection, UserCollection, ContactUsCollection, 
-                KeyCollection, SubscriptionCollection, ImageCollection, ImageLogCollection };
+  KeyCollection, SubscriptionCollection, ImageCollection, ImageLogCollection };

@@ -28,6 +28,16 @@ Copy `.env_example` into your environment variable file.
 
 Replace the right hand value of the environment variable with the appropriate value(you can get this values by following the next step of the documentation).
 
+## Gmail setup
+- Create a gmail account, if you don't have any.
+- Open your Gmail account and select `Manage your Google Account`
+- Navigate to the `Security` tab in the left panel.
+- Turn on 2-step verification if not enabled.
+- Scroll down to the `App passwords` section and create a new app password.
+- Save this generated password somewhere safe.
+
+## AWS setup
+
 ## Firebase setup
 - Login to [firebase](https://firebase.google.com/) with your google account and navigate to firebase console.
 - Click on add project

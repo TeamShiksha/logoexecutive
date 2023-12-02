@@ -1,11 +1,16 @@
 const Joi = require("joi");
 
-const EnvSchema = Joi.object().keys({
-  PORT: Joi.alternatives(
-    Joi.string().regex(/^\d+$/).message("PORT should be a number"),
-    Joi.number(),
-  ).required(),
-}).unknown(true);
+const EnvSchema = Joi.object()
+  .keys({
+    PORT: Joi.alternatives(
+      Joi.string().regex(/^\d+$/).message("PORT should be a number"),
+      Joi.number()
+    ).required(),
+    CLOUD_FRONT_KEYPAIR_ID: Joi.string().required(),
+    CLOUD_FRONT_PRIVATE_KEY: Joi.string().required(),
+    DISTRIBUTION_DOMAIN: Joi.string().required(),
+  })
+  .unknown(true);
 
 const EnvSchemaExtended = EnvSchema.append({
   FIRESTORE_PROJECT_ID: Joi.string().required(),

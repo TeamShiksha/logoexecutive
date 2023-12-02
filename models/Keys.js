@@ -20,16 +20,19 @@ class Keys {
     this.keyId = params.keyId;
     this.userId = params.userId;
     this.key = params.key;
-    this.usageCount = params.usageCount || 0;
+    this.usageCount = params.usageCount;
     this.createdAt = params.createdAt;
     this.updatedAt = params.updatedAt;
   }
 
-  getKeyData() {
+  get data() {
     return {
+      keyId: this.keyId,
+      userId: this.userId,
       key: this.key,
       usageCount: this.usageCount,
       createdAt: this.createdAt,
+      updatedAt: this.updatedAt,
     };
   }
 }

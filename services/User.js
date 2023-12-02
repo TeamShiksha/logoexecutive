@@ -3,7 +3,6 @@ const { UserCollection } = require("../utils/firestore");
 const { Timestamp } = require("firebase-admin/firestore");
 const bcrypt = require("bcrypt");
 
-
 /**
  * Fetches all the users
  **/
@@ -29,21 +28,17 @@ async function fetchUsers() {
 async function fetchUserByEmail(email) {
   try {
     const userRef = await UserCollection.where("email", "==", email)
-      .limit(1)
-      .get();
-
+      .limit(1).get();
     if (userRef.empty) {
       return null;
     }
-
+    
     const user = new User({
       ...userRef.docs[0].data(),
-      userId: userRef.docs[0].id,
       userRef: userRef.docs[0].ref,
     });
-
     return user;
-  } catch (e) {
+  } catch (err) {
     console.log(err);
     throw err;
   }
@@ -58,21 +53,18 @@ async function fetchUserByEmail(email) {
  */
 async function createUser(user) {
   try {
-    const { email, firstName, lastName = "", password } = user;
-
-    const result = await UserCollection.add({
-      email,
-      firstName,
-      lastName,
-      password: await bcrypt.hash(password, 10),
+    const userData = {
+      userId: crypto.randomUUID(),
+      email: user.email,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      password: await bcrypt.hash(user.password, 10),
+      token: crypto.randomUUID().replace(/-/g, ""),
       createdAt: Timestamp.now(),
       updatedAt: Timestamp.now(),
-      token: crypto.randomUUID().replace(/-/g, ""),
-    });
-
-    const userRef = await result.get();
-    const createdUser = new User(userRef.data());
-
+    };
+    const result = await UserCollection.add(userData);
+    const createdUser = new User(userData);
     return createdUser;
   } catch (err) {
     console.log(err);

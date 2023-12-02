@@ -21,12 +21,13 @@ class ImageLogs {
     this.lastAccessed = params.lastAccessed;
   }
 
-  getSubscriptionData() {
+  get data() {
     return {
       logId: this.logId,
       imageId: this.imageId,
-      apiKeyId: this.apiKeyId,
+      keyId: this.keyId,
       createdAt: this.createdAt,
+      lastAccessed: this.lastAccessed,
     };
   }
 }

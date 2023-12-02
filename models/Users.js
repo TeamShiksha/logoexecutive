@@ -10,7 +10,6 @@ class User {
   createdAt;
   updatedAt;
   userRef;
-
   #token;
   #password;
 
@@ -31,7 +30,7 @@ class User {
     this.email = params.email;
     this.#password = params.password;
     this.firstName = params.firstName;
-    this.lastName = params.lastName ?? "";
+    this.lastName = params.lastName;
     this.createdAt = params.createdAt;
     this.updatedAt = params.updatedAt;
     this.userRef = params.userRef ?? null;
@@ -40,14 +39,9 @@ class User {
 
   get data() {
     return {
-      userId: this.userId,
       firstName: this.firstName,
       lastName: this.lastName,
       email: this.email,
-      timeStamps: {
-        created: this.createdAt.toDate(),
-        modified: this.updatedAt.toDate(),
-      },
     };
   }
 
@@ -55,7 +49,7 @@ class User {
    * Returns a boolean, true if the user is verified and false if the user is not
    **/
   isUserVerified() {
-    return !this.#token;
+    return this.#token;
   }
 
   /**

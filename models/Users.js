@@ -1,49 +1,47 @@
 const bcrypt = require("bcrypt");
+const { DocumentReference } = require("firebase-admin/firestore");
 const jwt = require("jsonwebtoken");
 
 class User {
-  id;
+  userId;
   email;
   firstName;
   lastName;
   createdAt;
   updatedAt;
+  userRef;
   #token;
-
   #password;
 
   /**
    * @param {Object} params
-   * @param {string} params.id
+   * @param {string} params.userId
    * @param {string} params.email
    * @param {string} params.password
    * @param {string} params.firstName
    * @param {string} params.lastName
    * @param {Date} params.createdAt
    * @param {Date} params.updatedAt
-   * @param {string|undefined|null} params.token
+   * @param {DocumentReference} [params.userRef] - Firebase document reference of the user
+   * @param {string} [params.token]
    **/
   constructor(params) {
-    this.id = params.id;
+    this.userId = params.userId;
     this.email = params.email;
     this.#password = params.password;
     this.firstName = params.firstName;
-    this.lastName = params.lastName ?? "";
+    this.lastName = params.lastName;
     this.createdAt = params.createdAt;
     this.updatedAt = params.updatedAt;
+    this.userRef = params.userRef ?? null;
     this.#token = params.token || null;
   }
 
   get data() {
     return {
-      id: this.id,
       firstName: this.firstName,
       lastName: this.lastName,
       email: this.email,
-      timeStamps: {
-        created: this.createdAt.toDate(),
-        modified: this.updatedAt.toDate(),
-      },
     };
   }
 
@@ -51,7 +49,7 @@ class User {
    * Returns a boolean, true if the user is verified and false if the user is not
    **/
   isUserVerified() {
-    return !this.#token;
+    return this.#token;
   }
 
   /**

@@ -22,7 +22,6 @@ async function verifyTokenController(req, res) {
     }
 
     await deleteUserToken(token);
-    
     return res.status(200).json({
       message: "User verified",
     });

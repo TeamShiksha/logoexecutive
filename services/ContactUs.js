@@ -1,4 +1,4 @@
-const {ContactUsCollection} = require("../utils/firestore");
+const { ContactUsCollection } = require("../utils/firestore");
 
 /**
  * formExists - Checks if form exists in database by searching for provided email
@@ -7,15 +7,11 @@ const {ContactUsCollection} = require("../utils/firestore");
  **/
 async function formExists(email){
   try {
-    const formQuery = await ContactUsCollection.where("email", "==", email)
-      .limit(1)
-      .get();
-
+    const formQuery = await ContactUsCollection.where("email", "==", email).limit(1).get();
     if (formQuery.empty){
       return false;
     }
     return true;
-
   } 
   catch (error){
     throw error;

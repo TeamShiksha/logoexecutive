@@ -37,7 +37,7 @@ Replace the right hand value of the environment variable with the appropriate va
 - Save this generated password somewhere safe.
 
 ## AWS setup
-- Contacts others in the backend team for help. (CloudFormation template will be provided soon for easy access) 
+- This setup is only requried if you are using the business APIs.
 
 ## Firebase setup
 - Login to [firebase](https://firebase.google.com/) with your google account and navigate to firebase console.
@@ -59,24 +59,10 @@ After setting up the firestore, generate the service account credentials:
 - Click on `Generate new private key`
 - This will prompt you to download the file, name the file as `serviceAccountKey.json` and make sure to match the formatting.
 
-#### Firebase emulator setup
-Firebase emulator makes it very convinient to get responses quickly during development environment. Emulator is also used to run our test scripts.
-**Pre-requisites**
-- Java
-- Firebase CLI. [Follow this](https://firebase.google.com/docs/cli).
-
-**Installing firebase emulators**
-- Install firebase emulator, follow [firebase official docs](https://firebase.google.com/docs/emulator-suite/install_and_configure). 
-- Run `firebase init` command in terminal.
-- Select `firestore emulator.
-- Link your project you setup on firebase.
-
-**Using emulator in project**
-- To use emulator in project a flag named `EMULATED_FIRESTORE` needs to be set in the respective environment file that you're using. You can set the value of flag to `1`.
-
 ## Firebase emulator setup
-To run the firebase emulator you must have Java 11 or above. I suggest [Java 19](https://www.oracle.com/java/technologies/javase/jdk19-archive-downloads.html)
-Go inside the project directory and run the command one by one given below in order to install and run the firebase emulator. Message given in the square bracket are for your help.
+- To use emulator in project a flag named `EMULATED_FIRESTORE` needs to be set in the respective environment file that you're using. You can set the value of flag to `1`.
+- To run the firebase emulator you must have Java 11 or above. We suggest [Java 19](https://www.oracle.com/java/technologies/javase/jdk19-archive-downloads.html)
+- Go inside the project directory and run the command one by one given below in order to install and run the firebase emulator. Message given in the square bracket are for your help and need not be run with the commands.
 ```sh
 npm install -g firebase-tools
 firebase login

@@ -37,7 +37,7 @@ Replace the right hand value of the environment variable with the appropriate va
 - Save this generated password somewhere safe.
 
 ## AWS setup
-- This setup is only requried if you are using the business APIs.
+- This setup is only requried if you are working with the business APIs. If you, you can just keep the example values.
 
 ## Firebase setup
 - Login to [firebase](https://firebase.google.com/) with your google account and navigate to firebase console.
@@ -84,10 +84,6 @@ firebase emulators:start
 
 ## All set!
 Now you should be able to run the project! Happy Coding :)
-
-## Run command
 ```sh
 yarn dev
 ```
-
-### My Multi Word Header

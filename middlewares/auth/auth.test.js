@@ -8,12 +8,12 @@ const { Timestamp } = require("firebase-admin/firestore");
 
 const mockFn = jest.fn();
 const mockUser = new User({
-  id: "1",
+  userId: "1",
   email: "john@email.com",
   firstName: "firstName",
   lastName: "lastName",
-  updatedAt: Timestamp.now(),
-  createdAt: Timestamp.now(),
+  updatedAt: Timestamp.now().toDate(),
+  createdAt: Timestamp.now().toDate(),
 });
 
 describe("Auth middleware", () => {

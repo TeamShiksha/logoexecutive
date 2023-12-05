@@ -62,21 +62,23 @@ After setting up the firestore, generate the service account credentials:
 ## Firebase emulator setup
 - To use emulator in project a flag named `EMULATED_FIRESTORE` needs to be set in the respective environment file that you're using. You can set the value of flag to `1`.
 - To run the firebase emulator you must have Java 11 or above. We suggest [Java 19](https://www.oracle.com/java/technologies/javase/jdk19-archive-downloads.html)
-- Go inside the project directory and run the command one by one given below in order to install and run the firebase emulator. Message given in the square bracket are for your help and need not be run with the commands.
+- Go inside the project directory and run the command one by one given below in order to install and run the firebase emulator. Message starting with # are for your help and need not be run with the commands.
 ```sh
 npm install -g firebase-tools
 firebase login
-[Allow Firebase to collect CLI and Emulator Suite usage and error reporting information? (Y/n) n]
-[Now, you will be redirected on your default browser. Select the Google account which you used to create the firebase account]
-[Select allow in next window]
-firebase use {project_id} [you can get the project id from the service account file you create earlier]
+# Allow Firebase to collect CLI and Emulator Suite usage and error reporting information? (Y/n) n
+# Now, you will be redirected on your default browser. Select the Google account which you used to create the firebase account
+# Select allow in next window
+firebase use {project_id}
+# You can get the project id from the service account file you create earlier
 firebase init
-[Are you ready to proceed? Y]
-[Select "Emulators: Set up local emulators for Firebase products" from the options provided]
-[Select "Firestore Emulator" from the next set of options]
-[Would you like to download the emulators now? (Y/n) Y]
-[Once done you will see a message "Firebase initialization complete!"]
-firebase emulators:start [To start the emulator]
+# Are you ready to proceed? Y
+# Select "Emulators: Set up local emulators for Firebase products" from the options provided
+# Select "Firestore Emulator" from the next set of options
+# Would you like to download the emulators now? (Y/n) Y
+# Once done you will see a message "Firebase initialization complete!"
+firebase emulators:start
+# To start the emulator
 ```
 
 

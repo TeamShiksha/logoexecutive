@@ -1,12 +1,12 @@
 const request = require("supertest");
-const auth = require("./auth");
+const auth = require("../../../middlewares/auth");
 const app = require("express")();
 const jwt = require("jsonwebtoken");
 const cookieParser = require("cookie-parser");
-const User = require("../../models/Users");
+const User = require("../../../models/Users");
 const { Timestamp } = require("firebase-admin/firestore");
 
-const mockFn = jest.fn();
+const mockCtrl = jest.fn();
 const mockUser = new User({
   userId: "1",
   email: "john@email.com",
@@ -20,16 +20,14 @@ describe("Auth middleware", () => {
   afterEach(() => {
     jest.clearAllMocks();
   });
-
   beforeAll(() => {
     process.env.JWT_SECRET = "mysecret";
     app.use(cookieParser());
-    app.get("/", auth, (req, res) => mockFn(req, res));
-    app.get("/error", auth, (req, res) => mockFn());
+    app.get("/", auth, (req, res) => mockCtrl(req, res));
   });
 
   it("Success - If user is signed in", async () => {
-    mockFn.mockImplementation((req, res) => {
+    mockCtrl.mockImplementation((req, res) => {
       return res.status(200).json(req.userData);
     });
     const mockJWT = mockUser.generateJWT();
@@ -37,7 +35,7 @@ describe("Auth middleware", () => {
       .get("/")
       .set("Cookie", `jwt=${mockJWT}`);
 
-    expect(mockFn).toHaveBeenCalledTimes(1);
+    expect(mockCtrl).toHaveBeenCalledTimes(1);
     expect(response.status).toBe(200);
     expect(JSON.stringify(response.body)).toEqual(
       JSON.stringify(mockUser.data),

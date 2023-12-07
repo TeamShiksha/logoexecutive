@@ -42,6 +42,7 @@ class User {
       firstName: this.firstName,
       lastName: this.lastName,
       email: this.email,
+      userId: this.userId,
     };
   }
 

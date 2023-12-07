@@ -17,7 +17,7 @@ module.exports = function (req, res, next) {
     const decodedData = JWT.verify(jwt, process.env.JWT_SECRET);
 
     const { data } = decodedData;
-    if(!data || !data.email || !data.id)
+    if(!data || !data.email || !data.userId)
       return res.status(403).json({
         error: http.STATUS_CODES[403],
         message: "Invalid credentials",

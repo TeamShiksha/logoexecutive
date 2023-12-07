@@ -37,7 +37,7 @@ Replace the right hand value of the environment variable with the appropriate va
 - Save this generated password somewhere safe.
 
 ## AWS setup
-- This setup is only requried if you are working with the business APIs. If you, you can just keep the example values.
+- This setup is only requried if you are working with the business APIs. If not, you can just keep the example values.
 
 ## Firebase setup
 - Login to [firebase](https://firebase.google.com/) with your google account and navigate to firebase console.

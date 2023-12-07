@@ -2,8 +2,7 @@ const { fetchUsers } = require("../../services/User");
 const serializer = require("../../utils/serializer/serializer");
 const bcrypt = require("bcrypt");
 const Joi = require("joi");
-const {fetchUserByEmail} = require("../../services/User");
-const {UserCollection} = require("../../utils/firestore");
+const {fetchUserByEmail, updatePasswordService} = require("../../services/User");
 
 async function getUsers(_, res) {
   try {
@@ -50,9 +49,7 @@ const updatePasswordPayloadSchema = Joi.object().keys({
     .required()
     .min(8)
     .max(30)
-    // atleast one lowercase, one uppercase, one special character, one digit
-    .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_])[A-Za-z\d\W_]+$/)
-    .message("New password does not include atleast one lowercase, uppercase, digit, special character"),
+    .message("New password has invalid format"),
 
   confirmPassword: Joi.any()
     .required()
@@ -77,7 +74,7 @@ async function updatePassword(req, res){
     }
 
     const {currPassword} = req.body.payload;
-    const {email} = req.body.userData;
+    const {email} = req.userData;
     const user = await fetchUserByEmail(email);
 
     const matchPassword = await user.matchPassword(currPassword);
@@ -93,33 +90,24 @@ async function updatePassword(req, res){
 
     const {newPassword} = req.body.payload;
     const hashNewPassword = await bcrypt.hash(newPassword, 10);
-
-    const {id} = req.body.userData;
-
-    // userDocRef is a pointer to the location where the document with the specified userId would be if it existed. 
-    // If the document doesn't exist, the reference still points to that theoretical location.
-    const userDocRef = UserCollection.doc(id);
-    const userDoc = await userDocRef.get();
-
-    // When user is not found in database .get() still returns a snapshot but userDoc.exists property is set to false
-    if (!userDoc.exists){
-      return res
-        .status(404)
-        .json({
-          message:"User not found in database",
-          statusCode: 404,
-          error: "Not found",
-        });
-    }
-    else {
-      await userDocRef.update({
-        password: hashNewPassword,
-      });
-
+    const {userId} = req.userData;
+    const result = updatePasswordService(userId, hashNewPassword);
+    if (result){
       return res
         .status(200)
         .json({
-          message:"Password updated successfully!"
+          message: "Password updated successfully",
+          statusCode: 200,
+          error: "OK"
+        });
+    }
+    else{
+      return res
+        .status(500)
+        .json({
+          message: "Unexpected error occured while updating password",
+          statusCode: 500,
+          error: "Internal server error",
         });
     }
   }

@@ -120,10 +120,32 @@ async function deleteUserToken(token) {
   }
 }
 
+async function updatePasswordService(userId, hashNewPassword){
+  try {
+    const userSnapshot = await UserCollection.where("userId", "==", userId)
+      .limit(1)
+      .get();
+
+    if (userSnapshot.empty) {
+      return null;
+    }
+
+    await userSnapshot.docs[0].ref.update({
+      password: hashNewPassword,
+    });
+    return true;
+
+  } catch (err){
+    console.log(err);
+    throw err;
+  }
+}
+
 module.exports = {
   fetchUsers,
   fetchUserByEmail,
   createUser,
   fetchUserByToken,
   deleteUserToken,
+  updatePasswordService, 
 };

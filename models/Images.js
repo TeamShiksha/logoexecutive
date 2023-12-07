@@ -1,20 +1,33 @@
 class Images {
   imageId;
   imageUrl;
-  usageCount;
   createdAt;
+  updatedAt;
+  imageUsageCount;
 
+  /**
+   * @param {Object} params
+   * @param {string} params.imageId
+   * @param {string} params.imageUrl
+   * @param {number} params.imageUsageCount
+   * @param {Date} params.createdAt
+   * @param {Date} params.updatedAt
+   **/
   constructor(params) {
     this.imageId = params.imageId;
     this.imageUrl = params.imageUrl;
-    this.usageCount = params.usageCount;
-    this.createdAt = new Date.now();
+    this.imageUsageCount = params.imageUsageCount;
+    this.createdAt = params.createdAt;
+    this.updatedAt = params.updatedAt;
   }
 
-  getSubscriptionData() {
+  get data() {
     return {
+      imageId: this.imageId,
       imageUrl: this.imageUrl,
-      usageCount: this.usageCount,
+      imageUsageCount: this.imageUsageCount,
+      createdAt: this.createdAt,
+      updatedAt: this.updatedAt,
     };
   }
 }

@@ -90,8 +90,8 @@ async function updatePassword(req, res){
 
     const {newPassword} = req.body.payload;
     const hashNewPassword = await bcrypt.hash(newPassword, 10);
-    const {userId} = req.userData;
-    const result = updatePasswordService(userId, hashNewPassword);
+
+    const result = updatePasswordService(user, hashNewPassword);
     if (result){
       return res
         .status(200)

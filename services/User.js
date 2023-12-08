@@ -120,10 +120,24 @@ async function deleteUserToken(token) {
   }
 }
 
+async function updatePasswordService(user, hashNewPassword){
+  try {
+    await user.userRef.update({
+      password: hashNewPassword,
+    });
+    return true;
+
+  } catch (err){
+    console.log(err);
+    throw err;
+  }
+}
+
 module.exports = {
   fetchUsers,
   fetchUserByEmail,
   createUser,
   fetchUserByToken,
   deleteUserToken,
+  updatePasswordService, 
 };

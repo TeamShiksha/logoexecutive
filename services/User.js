@@ -133,11 +133,73 @@ async function updatePasswordService(user, hashNewPassword){
   }
 }
 
+
+/**
+   * Generates a UUID token, stores it in the DB, and returns it
+   * @param {string} currEmail - email address of the user
+   */
+async function generateEmailUpdateToken(user) {
+  try {
+    const userRef = user.userRef;
+
+    const token =crypto.randomUUID().replace(/-/g, "");
+  
+    await userRef.update({
+      token,
+      updatedAt: Timestamp.now(),
+    });
+  
+    return token;
+  } catch (err) {
+    console.log(err);
+    throw err;
+  }
+}
+
+
+/**
+ * Updates user's first name and last name in the DB
+ * @param {string} email - email address of the user
+ * @param {string} firstName - new first name of the user
+ * @param {string} lastName - new last name of the user
+ */
+async function updateUser(inputArray,user) {
+  try {
+    const [firstName, lastName, newEmail] = inputArray;
+    const userRef = user.userRef;
+
+    const update = {
+      updatedAt: Timestamp.now(),
+    };
+
+    if (firstName !== null) {
+      update.firstName = firstName;
+    }
+
+    if (lastName !== null) {
+      update.lastName = lastName;
+    }
+
+    if (newEmail !== null) {
+      update.email = newEmail;
+    }
+
+    await userRef.update(update);
+
+    return { success: true };
+  } catch (err) {
+    console.log(err);
+    throw err;
+  }
+}
+
 module.exports = {
   fetchUsers,
   fetchUserByEmail,
   createUser,
   fetchUserByToken,
   deleteUserToken,
-  updatePasswordService, 
+  updatePasswordService,
+  generateEmailUpdateToken,
+  updateUser, 
 };

@@ -1,12 +1,11 @@
 const Joi = require("joi");
 const sendEmail = require("../../services/sendEmail");
 const {
-  updateUserName,
-  updateUserEmail,
+  fetchUserByEmail,
+  deleteUserToken,
+  updateUser,
   generateEmailUpdateToken,
-} = require("../../services/updateUser");
-const { fetchUserByEmail} = require("../../services/User");
-
+} = require("../../services/User");
 
 const changeNameEmailSchema = Joi.object().keys({
   firstName: Joi.string()
@@ -18,12 +17,12 @@ const changeNameEmailSchema = Joi.object().keys({
     .message("firstName should not contain any special character or number"),
   lastName: Joi.string()
     .trim()
-    .optional()
+    .required()
     .min(1)
     .max(20)
     .regex(/^[^!@#$%^&*(){}\[\]\\\.;'",.<>/?`~|0-9]*$/)
     .message("lastName should not contain any special character or number"),
-  email: Joi.string()
+  newEmail: Joi.string()
     .trim()
     .required()
     .max(50)
@@ -33,45 +32,26 @@ const changeNameEmailSchema = Joi.object().keys({
 
 async function updateProfileController(req, res) {
   try {
-    const { currEmail } = req.query;
-    const { name, email } = req.body;
-
-    if (!currEmail) {
-      return res
-        .status(400)
-        .json({ message: "Bad Request: currEmail is required" });
-    }
-
-    if (!name || !email) {
-      return res
-        .status(400)
-        .json({
-          message: "Bad Request: name and email are required in the payload",
-        });
-    }
-
-    const nameArr = name.split(" ");
-    const firstName = nameArr[0];
-    const lastName = nameArr.slice(1).join(" ");
-
+    const { firstName, lastName, newEmail } = req.body;
+    const { email } = req.userData;
     const { error } = changeNameEmailSchema.validate({
       firstName,
       lastName,
-      email,
+      newEmail,
     });
 
     if (error) {
       return res.status(400).json({ message: error.details[0].message });
     }
 
-    const user = await fetchUserByEmail(currEmail);
+    const user = await fetchUserByEmail(email);
 
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
 
     if (
-      user.email === email &&
+      user.email === newEmail &&
       user.firstName === firstName &&
       user.lastName === lastName
     ) {
@@ -86,29 +66,31 @@ async function updateProfileController(req, res) {
     } else {
       changes.push(null);
     }
-
     if (user.lastName !== lastName) {
       changes.push(lastName);
     } else {
       changes.push(null);
     }
-    changes.push(currEmail);
+    if (user.email !== newEmail) {
+      changes.push(newEmail);
+    } else {
+      changes.push(null);
+    }
 
-    await updateUserName(changes);
-    successRes.push("Username updated successfully");
+    await updateUser(changes, user);
+    successRes.push("Profile updated successfully");
 
-    if (user.email !== email) {
-      const token = await generateEmailUpdateToken(currEmail);
+    if (user.email !== newEmail) {
+      const token = await generateEmailUpdateToken(user);
 
       const emailUpdateVerificationURL = new URL(
         "/update-profile/verifyAndUpdateEmail",
         process.env.BASE_URL
       );
       emailUpdateVerificationURL.searchParams.append("token", token);
-      emailUpdateVerificationURL.searchParams.append("newEmail", email);
 
       await sendEmail(
-        email,
+        newEmail,
         "Change email and name",
         emailUpdateVerificationURL.href
       );
@@ -126,7 +108,7 @@ async function updateProfileController(req, res) {
 
 async function verifyAndUpdateEmailController(req, res) {
   try {
-    const { token, newEmail } = req.query;
+    const { token } = req.query;
     if (!token) {
       return res.status(400).json({
         error: "Bad Request",
@@ -134,10 +116,10 @@ async function verifyAndUpdateEmailController(req, res) {
       });
     }
 
-    await updateUserEmail(token, newEmail);
+    await deleteUserToken(token);
 
     return res.status(200).json({
-      message: "Email changed successfully",
+      message: "New Email verified successfully",
     });
   } catch (err) {
     console.error(err);

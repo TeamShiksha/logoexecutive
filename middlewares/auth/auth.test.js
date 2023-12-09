@@ -5,6 +5,7 @@ const jwt = require("jsonwebtoken");
 const cookieParser = require("cookie-parser");
 const User = require("../../models/Users");
 const { Timestamp } = require("firebase-admin/firestore");
+const expressBang = require("express-bang");
 
 const mockFn = jest.fn();
 const mockUser = new User({
@@ -24,6 +25,7 @@ describe("Auth middleware", () => {
   beforeAll(() => {
     process.env.JWT_SECRET = "mysecret";
     app.use(cookieParser());
+    app.use(expressBang());
     app.get("/", auth, (req, res) => mockFn(req, res));
     app.get("/error", auth, (req, res) => mockFn());
   });

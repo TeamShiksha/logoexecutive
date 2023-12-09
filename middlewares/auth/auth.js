@@ -6,23 +6,14 @@ module.exports = function (req, res, next) {
   try {
     const { jwt } = req.cookies;
 
-    if(!jwt) {
-      return res.status(401).json({
-        error: "Unauthorized",
-        message: "User not signed in",
-        statusCode: 401
-      });
-    }
+    if(!jwt)
+      return res.bang.unauthorized("User not signed in");
 
     const decodedData = JWT.verify(jwt, process.env.JWT_SECRET);
 
     const { data } = decodedData;
     if(!data || !data.email || !data.userId)
-      return res.status(403).json({
-        error: http.STATUS_CODES[403],
-        message: "Invalid credentials",
-        statusCode: 403
-      });
+      return res.bang.forbidden("Invalid credentials");
 
     Object.assign(req, { userData: decodedData.data });
     next();

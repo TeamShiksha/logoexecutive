@@ -17,39 +17,21 @@ async function signinController(req, res) {
   try {
     const { body: payload } = req;
     const { error, value } = signinPayloadSchema.validate(payload);
-    if (!!error) {
-      return res.status(422).json({
-        message: error.message,
-        statusCode: 422,
-        error: "unprocessable content",
-      });
-    }
+    if (!!error)
+      return res.bang.unprocessableEntity(error.message);
 
     const { email, password } = value;
     const user = await fetchUserByEmail(email);
-    if (!user) {
-      return res.status(400).json({
-        error: "bad request",
-        message: "Email or Password incorrect",
-        statusCode: 400,
-      });
-    }
-    if(user.isUserVerified()) {
-      return res.status(401).json({
-        error: "unauthorized access",
-        message: "Email is not verified",
-        statusCode: 401
-      });
-    }
+    if (!user)
+      return res.bang.badRequest("Email or Password incorrect");
+
+    if(user.isUserVerified())
+      return res.bang.unauthorized("Email is not verified");
 
     const matchPassword = await user.matchPassword(password);
-    if (!matchPassword) {
-      return res.status(400).json({
-        error: "bad request",
-        message: "Email or Password incorrect",
-        statusCode: 400,
-      });
-    }
+    if (!matchPassword)
+      return res.bang.badRequest("Email or Password incorrect");
+
     const subscription = await fetchSubscriptionByuserid(user.userId);
     const keys = await fetchKeyByuserid(user.userId);
 

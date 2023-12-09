@@ -12,7 +12,7 @@ describe("Signin Controller", () => {
       expect(response.body).toEqual({
         message: "\"email\" is required",
         statusCode: 422,
-        error: "unprocessable content"
+        error: "Unprocessable Entity"
       });
     });
 
@@ -25,7 +25,7 @@ describe("Signin Controller", () => {
       expect(response.body).toEqual({
         message: "Email is not valid",
         statusCode: 422,
-        error: "unprocessable content"
+        error: "Unprocessable Entity"
       });
     });
   });

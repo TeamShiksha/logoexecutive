@@ -24,7 +24,7 @@ else {
   };
 }
 
-if(process.env.NODE_ENV === "test" || process.env.EMULATED_FIRESTORE) {
+if(process.env.NODE_ENV === "test" || +process.env.EMULATED_FIRESTORE) {
   process.env.FIRESTORE_EMULATOR_HOST = "localhost:8080";
   admin.initializeApp({
     projectId: process.env.FIRESTORE_PROJECT_ID

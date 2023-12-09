@@ -3,18 +3,9 @@ const auth = require("../../../middlewares/auth");
 const app = require("express")();
 const jwt = require("jsonwebtoken");
 const cookieParser = require("cookie-parser");
-const User = require("../../../models/Users");
-const { Timestamp } = require("firebase-admin/firestore");
+const { mockUserModel } = require("../../../utils/mocks/Users");
 
 const mockCtrl = jest.fn();
-const mockUser = new User({
-  userId: "1",
-  email: "john@email.com",
-  firstName: "firstName",
-  lastName: "lastName",
-  updatedAt: Timestamp.now().toDate(),
-  createdAt: Timestamp.now().toDate(),
-});
 
 describe("Auth middleware", () => {
   afterEach(() => {
@@ -30,7 +21,7 @@ describe("Auth middleware", () => {
     mockCtrl.mockImplementation((req, res) => {
       return res.status(200).json(req.userData);
     });
-    const mockJWT = mockUser.generateJWT();
+    const mockJWT = mockUserModel.generateJWT();
     const response = await request(app)
       .get("/")
       .set("Cookie", `jwt=${mockJWT}`);
@@ -38,7 +29,7 @@ describe("Auth middleware", () => {
     expect(mockCtrl).toHaveBeenCalledTimes(1);
     expect(response.status).toBe(200);
     expect(JSON.stringify(response.body)).toEqual(
-      JSON.stringify(mockUser.data),
+      JSON.stringify(mockUserModel.data),
     );
   });
 
@@ -65,7 +56,7 @@ describe("Auth middleware", () => {
       throw Error("test");
     });
 
-    const mockJWT = mockUser.generateJWT();
+    const mockJWT = mockUserModel.generateJWT();
     const response = await request(app)
       .get("/")
       .set("Cookie", `jwt=${mockJWT}`);

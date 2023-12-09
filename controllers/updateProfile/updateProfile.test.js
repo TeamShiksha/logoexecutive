@@ -1,40 +1,85 @@
 const request = require("supertest");
 const app = require("../../app");
+const jwt = require("jsonwebtoken");
+const User = require("../../models/Users");
+const { Timestamp } = require("firebase-admin/firestore");
+
+const mockUser = new User({
+  userId: "1",
+  email: "johnDoe@email.com",
+  firstName: "firstName",
+  lastName: "lastName",
+  updatedAt: Timestamp.now().toDate(),
+  createdAt: Timestamp.now().toDate(),
+});
 
 describe("UpdateProfile Controller", () => {
   describe("Payload", () => {
-    it("should return 400 when email is missing", async () => {
+    beforeAll(() => {
+      process.env.JWT_SECRET = "my_secret";
+    });
+
+    it("should return 400 when newEmail is missing", async () => {
+      const mockToken = mockUser.generateJWT();
+
       const response = await request(app)
-        .post("/update-profile/?currEmail=oldEmail@example.com")
+        .post("/update-profile")
+        .set("cookie", `jwt=${mockToken}`)
         .send({
-          name: "Ghosty",
+          firstName: "Ghosty",
+          lastName: "Rider",
         });
 
       expect(response.status).toBe(400);
       expect(response.body).toEqual({
-        message: "Bad Request: name and email are required in the payload",
+        message: "\"newEmail\" is required",
       });
     }, 5000);
 
-    it("should return 400 when name is missing", async () => {
+    it("should return 400 when firstName is missing", async () => {
+      const mockToken = mockUser.generateJWT();
+
       const response = await request(app)
-        .post("/update-profile/?currEmail=oldEmail@example.com")
+        .post("/update-profile")
+        .set("cookie", `jwt=${mockToken}`)
         .send({
-          email: "ghostidergod@gmail.com",
+          lastName: "Rider",
+          newEmail: "ghosty@rider.com",
         });
 
       expect(response.status).toBe(400);
       expect(response.body).toEqual({
-        message: "Bad Request: name and email are required in the payload",
+        message: "\"firstName\" is required",
       });
     }, 5000);
 
-    it("should return 400 when name contains special characters or numbers", async () => {
+    it("should return 400 when lastName is missing", async () => {
+      const mockToken = mockUser.generateJWT();
+
       const response = await request(app)
-        .post("/update-profile/?currEmail=oldEmail@example.com")
+        .post("/update-profile")
+        .set("cookie", `jwt=${mockToken}`)
         .send({
-          name: "Ghosty123!",
-          email: "ghostidergod@gmail.com",
+          firstName: "Ghosty",
+          newEmail: "ghosty@rider.com",
+        });
+
+      expect(response.status).toBe(400);
+      expect(response.body).toEqual({
+        message: "\"lastName\" is required",
+      });
+    }, 5000);
+
+    it("should return 400 when firstName or lastName contains special characters or numbers", async () => {
+      const mockToken = mockUser.generateJWT();
+
+      const response = await request(app)
+        .post("/update-profile")
+        .set("cookie", `jwt=${mockToken}`)
+        .send({
+          firstName: "Ghosty1",
+          lastName: "Rider@",
+          newEmail: "ghostidergod@gmail.com",
         });
 
       expect(response.status).toBe(400);
@@ -43,12 +88,16 @@ describe("UpdateProfile Controller", () => {
       });
     }, 5000);
 
-    it("should return 400 when email is not in a valid format", async () => {
+    it("should return 400 when newEmail is not in a valid format", async () => {
+      const mockToken = mockUser.generateJWT();
+
       const response = await request(app)
-        .post("/update-profile/?currEmail=oldEmail@example.com")
+        .post("/update-profile")
+        .set("cookie", `jwt=${mockToken}`)
         .send({
-          name: "Ghosty rider",
-          email: "ghostidergod@gmail",
+          firstName: "Ghosty",
+          lastName: "Rider",
+          newEmail: "ghostidergod@gmail",
         });
 
       expect(response.status).toBe(400);
@@ -57,22 +106,4 @@ describe("UpdateProfile Controller", () => {
       });
     }, 5000);
   });
-
-  describe("Query Parameter", () => {
-    it("should return 400 when currEmail is missing", async () => {
-      const response = await request(app)
-        .post("/update-profile/")
-        .send({
-          name: "Ghosty",
-          email: "ghostidergod@gmail.com",
-        })
-        .query({ currEmail: "" });
-
-      expect(response.status).toBe(400);
-      expect(response.body).toEqual({
-        message: "Bad Request: currEmail is required",
-      });
-    }, 5000);
-  });
 });
-

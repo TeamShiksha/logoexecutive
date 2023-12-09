@@ -60,7 +60,8 @@ After setting up the firestore, generate the service account credentials:
 - This will prompt you to download the file, name the file as `serviceAccountKey.json` and make sure to match the formatting.
 
 ## Firebase emulator setup
-- To use emulator in project a flag named `EMULATED_FIRESTORE` needs to be set in the respective environment file that you're using. You can set the value of flag to `1`.
+- To use emulator in project, `EMULATED_FIRESTORE` environmental variable should be `1`.
+- You must also put correct firebase project id in  `FIRESTORE_PROJECT_ID` environmental variable.
 - To run the firebase emulator you must have Java 11 or above. We suggest [Java 19](https://www.oracle.com/java/technologies/javase/jdk19-archive-downloads.html)
 - Go inside the project directory and run the command one by one given below in order to install and run the firebase emulator. Message starting with # are for your help and need not be run with the commands.
 ```sh
@@ -79,11 +80,12 @@ firebase init
 # Once done you will see a message "Firebase initialization complete!"
 firebase emulators:start
 # To start the emulator
+# You can view the firebase UI on http://localhost:4040
 ```
 
-
-## All set!
-Now you should be able to run the project! Happy Coding :)
+## All set! 
+In a new terminal, run the command below to run the development environment.
 ```sh
 yarn dev
 ```
+**NOTE**: If you using the emulator, you need to run `firebase emulators:start` to start the firebase emulator before starting the nodejs server, otherwise you might get errors.

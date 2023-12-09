@@ -9,7 +9,7 @@ This document provides step-by-step instructions for cloning and running the pro
 ### [Firebase emulator setup](#firebase-emulator-setup)
 
 ## Clone and install dependencies
-Run the commands below one by one to clone and install all the dependencies of the project:
+Execute the following commands sequentially to clone the project and install all its dependencies:
 ```sh
 git clone https://github.com/FrontendArmy/logoexecutive-backend.git
 cd logoexecutive-backend
@@ -17,75 +17,83 @@ yarn install
 ```
 
 ## Enironmental variable
-The repository currently includes three environments. Create the environmental file according to the specific environment you are running.
+The repository currently comprises three environments. Please create the environment file based on the specific environment you are operating.
 | Environment   | Environmental File     | Run Command        |
 |---------------|------------------------|--------------------|
 | Production    | .env                   | npm start          |
 | Development   | .env.development       | npm run dev          |
 | Test          | .env.test              | npm run test       |
 
-Copy `.env_example` into your environment variable file.
+Duplicate the `.env_example` file into your environment variable file.
 
-Replace the right hand value of the environment variable with the appropriate value(you can get this values by following the next step of the documentation).
+Substitute the right-hand value of each environment variable with the corresponding value (you can obtain these values by following the next step in the documentation).
 
 ## Gmail setup
-- Create a gmail account, if you don't have any.
-- Open your Gmail account and select `Manage your Google Account`
-- Navigate to the `Security` tab in the left panel.
-- Turn on 2-step verification if not enabled.
-- Scroll down to the `App passwords` section and create a new app password.
-- Save this generated password somewhere safe.
+- Establish a Gmail account if you don't already have one.
+- Log in to your Gmail account and choose "Manage your Google Account".
+- Head to the Security tab on the left panel.
+- Enable 2-step verification if it's not already activated.
+- Scroll down to the App passwords section and generate a new app password.
+- Securely store this generated password in a safe location for use.
 
 ## AWS setup
-- This setup is only requried if you are working with the business APIs. If not, you can just keep the example values.
+- This setup is necessary only when working with the business APIs. Otherwise, you can simply retain the example values.
 
 ## Firebase setup
-- Login to [firebase](https://firebase.google.com/) with your google account and navigate to firebase console.
-- Click on add project
-- Enter project's name
-- Analytics are optional, you can disable them.
+- Sign in to [firebase](https://firebase.google.com/)  using your Google account and go to the Firebase console.
+- Select `Add Project`.
+- Enter the `project name`.
+- Analytics are optional, and you can disable them if you prefer.
 
-After you've created your project, create a firestore instance.
-- Click on `cloud firestore` card on your project dashboard.
-- Click on `Create database`
-- You can start your project in either of the modes i.e `production` or `test`. 
-- Select location, ideally your nearest location for better latency.
+Once you have set up your project, proceed to create a Firestore instance.
+- Navigate to the project dashboard and click on the `Cloud Firestore` card.
+- Select `Create database` to initiate the database creation process.
+- You have the option to commence your project in either `production` or `test` mode.
+- Choose a `location`, ideally the one nearest to you, to ensure better latency.
 
-After setting up the firestore, generate the service account credentials:
-- In your project dashboard sidebar, click on settings icon.
-- Select `Project Settings`
-- Choose `Service Account` tab.
-- Select the relevant sdk in our case it is `nodejs`
-- Click on `Generate new private key`
-- This will prompt you to download the file, name the file as `serviceAccountKey.json` and make sure to match the formatting.
+Once you've configured Firestore, proceed to generate the service account credentials:
+- Navigate to the `settings icon` in the sidebar of your project dashboard.
+- Choose `Project Settings` from the options available in the settings menu.
+- Navigate to the `Service Account` tab in the Project Settings.
+- Choose the appropriate SDK, in our case, it is `Node.js`.
+- Select `Generate new private key` to generate the necessary credentials.
+- Upon selection, a file download prompt will appear. Save the file as `serviceAccountKey.json` and ensure the formatting is matched accurately.
 
 ## Firebase emulator setup
-- To use emulator in project, `EMULATED_FIRESTORE` environmental variable should be `1`.
-- You must also put correct firebase project id in  `FIRESTORE_PROJECT_ID` environmental variable.
-- To run the firebase emulator you must have Java 11 or above. We suggest [Java 19](https://www.oracle.com/java/technologies/javase/jdk19-archive-downloads.html)
-- Go inside the project directory and run the command one by one given below in order to install and run the firebase emulator. Message starting with # are for your help and need not be run with the commands.
+- To utilize the emulator in the project, set the `EMULATED_FIRESTORE` environmental variable to `1`.
+- Additionally, ensure that you provide the correct Firebase `project ID` in the `FIRESTORE_PROJECT_ID` environmental variable.
+- Ensure you have Java 11 or a later version installed to run the Firebase emulator. We suggest [Java 19](https://www.oracle.com/java/technologies/javase/jdk19-archive-downloads.html)
+- Enter the project directory and execute the commands below one by one to install and launch the Firebase emulator. Messages starting with `#` are provided for your assistance and do not need to be executed along with the commands.
 ```sh
+# Install Firebase CLI globally
 npm install -g firebase-tools
+
+# Log in to Firebase
 firebase login
-# Allow Firebase to collect CLI and Emulator Suite usage and error reporting information? (Y/n) n
-# Now, you will be redirected on your default browser. Select the Google account which you used to create the firebase account
-# Select allow in next window
+# When prompted to allow data collection, type 'n'
+# Follow the redirection in your default browser, select your Google account, and click 'allow'
+
+# Set the project ID
 firebase use {project_id}
-# You can get the project id from the service account file you create earlier
+# Replace {project_id} with the project ID obtained from the service account file
+
+# Initialize Firebase
 firebase init
-# Are you ready to proceed? Y
-# Select "Emulators: Set up local emulators for Firebase products" from the options provided
-# Select "Firestore Emulator" from the next set of options
-# Would you like to download the emulators now? (Y/n) Y
-# Once done you will see a message "Firebase initialization complete!"
+# When prompted, type 'Y'
+# Choose "Emulators: Set up local emulators for Firebase products"
+# Select "Firestore Emulator"
+# When asked if you want to download the emulators, type 'Y'
+
+# Once initialization is complete
 firebase emulators:start
 # To start the emulator
-# You can view the firebase UI on http://localhost:4040
+
+# You can access the Firebase UI at http://localhost:4040
 ```
 
 ## All set! 
-In a new terminal, run the command below to run the development environment.
+In a new terminal, execute the following command to initiate the development environment.
 ```sh
 yarn dev
 ```
-**NOTE**: If you using the emulator, you need to run `firebase emulators:start` to start the firebase emulator before starting the nodejs server, otherwise you might get errors.
+**NOTE**: If you are utilizing the emulator, make sure to run `firebase emulators:start` before starting the Node.js server. Failure to do so might result in errors.

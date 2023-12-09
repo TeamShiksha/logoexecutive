@@ -47,8 +47,6 @@ describe("Env Schema Validation", () => {
 
     it("should return value if port exists", () => {
       const env = { ...validEnv };
-      delete env.PORT;
-      env.PORT = "3000";
       const result = validateEnv(env, { serviceAccountKey: true });
       expect(result.error).toBeFalsy();
       expect(result).toHaveProperty("value");
@@ -141,7 +139,7 @@ describe("Env Schema Validation", () => {
 
       expect(result).toHaveProperty("error");
       expect(result.error.message).toMatch(
-        "\"DISTRIBUTION_DOMAIN\" must be a valid hostname"
+        "DISTRIBUTION_DOMAIN must be a valid hostname"
       );
     });
 
@@ -152,7 +150,7 @@ describe("Env Schema Validation", () => {
 
       expect(result).toHaveProperty("error");
       expect(result.error.message).toMatch(
-        "\"DISTRIBUTION_DOMAIN\" is a required field"
+        "\"DISTRIBUTION_DOMAIN\" is required"
       );
     });
 

@@ -11,21 +11,20 @@ const EnvSchema = Joi.object()
     EMAIL_SERVICE: Joi.string().required(),
     EMAIL_PORT: Joi.alternatives(
       Joi.string().regex(/^\d+$/).message("EMAIL_PORT should be a number"),
-      Joi.number()),
+      Joi.number()
+    ),
     EMAIL_SECURE: Joi.boolean().required(),
     EMAIL_USER: Joi.string().email().required(),
     EMAIL_PASS: Joi.string().required(),
-    CLOUD_FRONT_KEYPAIR_ID: Joi.string().regex(/^[A-Z0-9]+$/).required().messages({
-      "string.pattern.base": "CLOUD_FRONT_KEYPAIR_ID can only contain uppercase letters and digits",
-    }),
+    CLOUD_FRONT_KEYPAIR_ID: Joi.string()
+      .regex(/^[A-Z0-9]+$/)
+      .message("CLOUD_FRONT_KEYPAIR_ID can only contain uppercase letters and digits")
+      .required(),
     CLOUD_FRONT_PRIVATE_KEY: Joi.string().required(),
     DISTRIBUTION_DOMAIN: Joi.string()
-      .regex(/^([a-z0-9]+(-[a-z0-9]+)*\.)+[a-z]{2,}$/)
       .required()
-      .messages({
-        "string.pattern.base": "\"DISTRIBUTION_DOMAIN\" must be a valid hostname",
-        "any.required": "\"DISTRIBUTION_DOMAIN\" is a required field",
-      }),
+      .regex(/^([a-z0-9]+(-[a-z0-9]+)*\.)+[a-z]{2,}$/)
+      .message("DISTRIBUTION_DOMAIN must be a valid hostname"),
   })
   .unknown(true);
 

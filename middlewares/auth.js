@@ -27,7 +27,6 @@ module.exports = function (req, res, next) {
     Object.assign(req, { userData: decodedData.data });
     next();
   } catch (err) {
-    console.log(err);
-    throw err;
+    next(err);
   }
 };

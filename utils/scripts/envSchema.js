@@ -26,6 +26,7 @@ const EnvSchema = Joi.object()
     DISTRIBUTION_DOMAIN: Joi.string()
       .uri({ scheme: ["https"] })
       .regex(/^https:\/\/[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/)
+      .required()
       .message("DISTRIBUTION_DOMAIN must be a valid hostname"),
   })
   .unknown(true);

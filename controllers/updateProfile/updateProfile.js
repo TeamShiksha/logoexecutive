@@ -22,7 +22,7 @@ const changeNameEmailSchema = Joi.object().keys({
     .max(20)
     .regex(/^[^!@#$%^&*(){}\[\]\\\.;'",.<>/?`~|0-9]*$/)
     .message("lastName should not contain any special character or number"),
-  newEmail: Joi.string()
+  email: Joi.string()
     .trim()
     .required()
     .max(50)
@@ -32,55 +32,39 @@ const changeNameEmailSchema = Joi.object().keys({
 
 async function updateProfileController(req, res) {
   try {
-    const { firstName, lastName, newEmail } = req.body;
-    const { email } = req.userData;
+    const { firstName, lastName, email } = req.body;
     const { error } = changeNameEmailSchema.validate({
       firstName,
       lastName,
-      newEmail,
+      email,
     });
 
     if (error) {
       return res.status(400).json({ message: error.details[0].message });
     }
 
-    const user = await fetchUserByEmail(email);
+    const user = await fetchUserByEmail(req.userData.email);
 
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
 
     if (
-      user.email === newEmail &&
-      user.firstName === firstName &&
-      user.lastName === lastName
+      user.email === req.body["email"] &&
+      user.firstName === req.body["firstName"] &&
+      user.lastName === req.body["lastName"]
     ) {
       return res.status(200).json({ message: "Profile updated successfully" });
     }
+    
+    const fields = ["firstName", "lastName", "email"];
+    const changes = fields.map(field => user[field] !== req.body[field] ? req.body[field] : user[field]);
 
-    const changes = [];
     const successRes = [];
-
-    if (user.firstName !== firstName) {
-      changes.push(firstName);
-    } else {
-      changes.push(null);
-    }
-    if (user.lastName !== lastName) {
-      changes.push(lastName);
-    } else {
-      changes.push(null);
-    }
-    if (user.email !== newEmail) {
-      changes.push(newEmail);
-    } else {
-      changes.push(null);
-    }
-
     await updateUser(changes, user);
     successRes.push("Profile updated successfully");
 
-    if (user.email !== newEmail) {
+    if (user.email !== req.body["email"]) {
       const token = await generateEmailUpdateToken(user);
 
       const emailUpdateVerificationURL = new URL(
@@ -90,12 +74,20 @@ async function updateProfileController(req, res) {
       emailUpdateVerificationURL.searchParams.append("token", token);
 
       await sendEmail(
-        newEmail,
+        req.body["email"],
         "Change email and name",
         emailUpdateVerificationURL.href
       );
 
       successRes.push("Verification link on new email sent successfully");
+
+      await sendEmail(
+        user.email,
+        "Verfication Link Sent to new email",
+        " Please verify your new email address by clicking on the link sent to your new email address"
+      );
+
+      successRes.push("Confirmation mail on old email sent successfully");
 
       return res.status(200).json({ message: successRes });
     }

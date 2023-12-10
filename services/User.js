@@ -10,7 +10,9 @@ async function fetchUsers() {
   try {
     const usersRef = await UserCollection.get();
 
-    const users = usersRef.docs.map((doc) => new User({ ...doc.data(), id: doc.id }));
+    const users = usersRef.docs.map(
+      (doc) => new User({ ...doc.data(), id: doc.id })
+    );
 
     return {
       data: users,
@@ -28,11 +30,12 @@ async function fetchUsers() {
 async function fetchUserByEmail(email) {
   try {
     const userRef = await UserCollection.where("email", "==", email)
-      .limit(1).get();
+      .limit(1)
+      .get();
     if (userRef.empty) {
       return null;
     }
-    
+
     const user = new User({
       ...userRef.docs[0].data(),
       userRef: userRef.docs[0].ref,
@@ -86,8 +89,11 @@ async function fetchUserByToken(token) {
       return null;
     }
 
-    const user = new User({...userSnapshot.docs[0].data(), id: userSnapshot.docs[0].id});
-    
+    const user = new User({
+      ...userSnapshot.docs[0].data(),
+      id: userSnapshot.docs[0].id,
+    });
+
     return user;
   } catch (err) {
     console.log(err);
@@ -113,42 +119,40 @@ async function deleteUserToken(token) {
       token: null,
     });
 
-    return {success: true};
+    return { success: true };
   } catch (err) {
     console.log(err);
     throw err;
   }
 }
 
-async function updatePasswordService(user, hashNewPassword){
+async function updatePasswordService(user, hashNewPassword) {
   try {
     await user.userRef.update({
       password: hashNewPassword,
     });
     return true;
-
-  } catch (err){
+  } catch (err) {
     console.log(err);
     throw err;
   }
 }
 
-
 /**
-   * Generates a UUID token, stores it in the DB, and returns it
-   * @param {string} currEmail - email address of the user
-   */
+ * Generates a UUID token, stores it in the DB, and returns it
+ * @param {string} currEmail - email address of the user
+ */
 async function generateEmailUpdateToken(user) {
   try {
     const userRef = user.userRef;
 
-    const token =crypto.randomUUID().replace(/-/g, "");
-  
+    const token = crypto.randomUUID().replace(/-/g, "");
+
     await userRef.update({
       token,
       updatedAt: Timestamp.now(),
     });
-  
+
     return token;
   } catch (err) {
     console.log(err);
@@ -156,34 +160,22 @@ async function generateEmailUpdateToken(user) {
   }
 }
 
-
 /**
  * Updates user's first name and last name in the DB
  * @param {string} email - email address of the user
  * @param {string} firstName - new first name of the user
  * @param {string} lastName - new last name of the user
  */
-async function updateUser(inputArray,user) {
+async function updateUser(inputArray, user) {
   try {
-    const [firstName, lastName, newEmail] = inputArray;
+    const [firstName, lastName, email] = inputArray;
     const userRef = user.userRef;
-
     const update = {
+      firstName: firstName,
+      lastName: lastName,
+      email: email,
       updatedAt: Timestamp.now(),
     };
-
-    if (firstName !== null) {
-      update.firstName = firstName;
-    }
-
-    if (lastName !== null) {
-      update.lastName = lastName;
-    }
-
-    if (newEmail !== null) {
-      update.email = newEmail;
-    }
-
     await userRef.update(update);
 
     return { success: true };
@@ -201,5 +193,5 @@ module.exports = {
   deleteUserToken,
   updatePasswordService,
   generateEmailUpdateToken,
-  updateUser, 
+  updateUser,
 };

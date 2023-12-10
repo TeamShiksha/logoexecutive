@@ -18,12 +18,15 @@ const EnvSchema = Joi.object()
     EMAIL_PASS: Joi.string().required(),
     CLOUD_FRONT_KEYPAIR_ID: Joi.string()
       .regex(/^[A-Z0-9]+$/)
-      .message("CLOUD_FRONT_KEYPAIR_ID can only contain uppercase letters and digits")
+      .message(
+        "CLOUD_FRONT_KEYPAIR_ID can only contain uppercase letters and digits"
+      )
       .required(),
     CLOUD_FRONT_PRIVATE_KEY: Joi.string().required(),
     DISTRIBUTION_DOMAIN: Joi.string()
+      .uri({ scheme: ["https"] })
+      .regex(/^https:\/\/[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/)
       .required()
-      .regex(/^([a-z0-9]+(-[a-z0-9]+)*\.)+[a-z]{2,}$/)
       .message("DISTRIBUTION_DOMAIN must be a valid hostname"),
   })
   .unknown(true);

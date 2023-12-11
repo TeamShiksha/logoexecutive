@@ -1,8 +1,8 @@
-const { fetchUsers } = require("../../services/User");
-const serializer = require("../../utils/serializer/serializer");
+const { fetchUsers } = require("../services/User");
+const serializer = require("../utils/serializer/serializer");
 const bcrypt = require("bcrypt");
 const Joi = require("joi");
-const {fetchUserByEmail, updatePasswordService} = require("../../services/User");
+const {fetchUserByEmail, updatePasswordService} = require("../services/User");
 
 async function getUsers(_, res) {
   try {

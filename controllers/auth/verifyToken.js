@@ -1,4 +1,4 @@
-const { fetchUserByToken,deleteUserToken } = require("../../../services/User");
+const { fetchUserByToken,deleteUserToken } = require("../../services/User");
 
 async function verifyTokenController(req, res) {
   try {

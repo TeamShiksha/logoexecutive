@@ -1,8 +1,8 @@
 const request = require("supertest");
-const auth = require("../../../middlewares/auth");
 const app = require("express")();
 const jwt = require("jsonwebtoken");
 const cookieParser = require("cookie-parser");
+const auth = require("../../../middlewares/auth");
 const { mockUserModel } = require("../../../utils/mocks/Users");
 
 const mockCtrl = jest.fn();

@@ -1,4 +1,4 @@
-const { validateEnv } = require("./envSchema");
+const { validateEnv } = require("../../../../utils/scripts/envSchema");
 
 const validEnv = {
   PORT: 3000,

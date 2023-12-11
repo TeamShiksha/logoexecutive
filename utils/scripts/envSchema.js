@@ -2,32 +2,23 @@ const Joi = require("joi");
 
 const EnvSchema = Joi.object()
   .keys({
-    PORT: Joi.alternatives(
-      Joi.string().regex(/^\d+$/).message("PORT should be a number"),
-      Joi.number()
-    ).required(),
+    PORT: Joi.alternatives(Joi.string().regex(/^\d+$/),
+      Joi.number()).required(),
     BASE_URL: Joi.string().uri().required(),
     EMAIL_HOST: Joi.string().hostname().required(),
     EMAIL_SERVICE: Joi.string().required(),
-    EMAIL_PORT: Joi.alternatives(
-      Joi.string().regex(/^\d+$/).message("EMAIL_PORT should be a number"),
-      Joi.number()
-    ),
+    EMAIL_PORT: Joi.alternatives(Joi.string().regex(/^\d+$/),
+      Joi.number()).required(),
     EMAIL_SECURE: Joi.boolean().required(),
     EMAIL_USER: Joi.string().email().required(),
     EMAIL_PASS: Joi.string().required(),
-    CLOUD_FRONT_KEYPAIR_ID: Joi.string()
-      .regex(/^[A-Z0-9]+$/)
-      .message(
-        "CLOUD_FRONT_KEYPAIR_ID can only contain uppercase letters and digits"
-      )
+    CLOUD_FRONT_KEYPAIR_ID: Joi.string().regex(/^[A-Z0-9]+$/)
       .required(),
     CLOUD_FRONT_PRIVATE_KEY: Joi.string().required(),
     DISTRIBUTION_DOMAIN: Joi.string()
       .uri({ scheme: ["https"] })
       .regex(/^https:\/\/[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/)
-      .required()
-      .message("DISTRIBUTION_DOMAIN must be a valid hostname"),
+      .required(),
   })
   .unknown(true);
 

@@ -1,7 +1,7 @@
 const Joi = require("joi");
-const ContactUs = require("../../models/ContactUs");
-const {formExists} = require("../../services/ContactUs");
-const {ContactUsCollection} = require("../../utils/firestore");
+const ContactUs = require("../models/ContactUs");
+const {formExists} = require("../services/ContactUs");
+const {ContactUsCollection} = require("../utils/firestore");
 
 const contactUsPayloadSchema = Joi.object().keys({
   name: Joi.string()

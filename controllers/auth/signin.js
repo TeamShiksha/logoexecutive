@@ -1,7 +1,7 @@
 const Joi = require("joi");
-const { fetchUserByEmail } = require("../../../services/User");
-const { fetchSubscriptionByuserid } = require("../../../services/Subscription");
-const { fetchKeyByuserid } = require("../../../services/Key");
+const { fetchUserByEmail } = require("../../services/User");
+const { fetchSubscriptionByuserid } = require("../../services/Subscription");
+const { fetchKeyByuserid } = require("../../services/Key");
 const jwt = require("jsonwebtoken");
 
 const signinPayloadSchema = Joi.object().keys({

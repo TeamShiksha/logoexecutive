@@ -19,6 +19,7 @@ class Keys {
   constructor(params) {
     this.keyId = params.keyId;
     this.userId = params.userId;
+    this.keyDescription = params.keyDescription;
     this.key = params.key;
     this.usageCount = params.usageCount;
     this.createdAt = params.createdAt;
@@ -27,12 +28,9 @@ class Keys {
 
   get data() {
     return {
-      keyId: this.keyId,
-      userId: this.userId,
+      keyDescription: this.keyDescription,
       key: this.key,
-      usageCount: this.usageCount,
       createdAt: this.createdAt,
-      updatedAt: this.updatedAt,
     };
   }
 }

@@ -42,6 +42,17 @@ async function generateKey(req, res){
         });
     }
 
+    const duplicateKeyDescription = keysObject.every(keys => req.body.keyDescription.includes(keys.keyDescription));
+    if (duplicateKeyDescription){
+      return res
+        .status(422)
+        .json({
+          message: "The provided key description already exists in the database.",
+          statusCode: 422,
+          error: "Unprocessable payload",
+        });
+    }
+
     const data = {
       userId: req.userData.userId,
       keyDescription: req.body.keyDescription,

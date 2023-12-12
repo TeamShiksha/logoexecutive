@@ -28,6 +28,7 @@ class Keys {
 
   get data() {
     return {
+      keyId: this.keyId,
       keyDescription: this.keyDescription,
       key: this.key,
       createdAt: this.createdAt,

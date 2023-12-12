@@ -47,7 +47,7 @@ async function generateKey(req, res){
       return res
         .status(422)
         .json({
-          message: "The provided key description already exists in the database.",
+          message: "Please provide a different key description",
           statusCode: 422,
           error: "Unprocessable payload",
         });
@@ -65,7 +65,6 @@ async function generateKey(req, res){
         .json({
           message: "Key generated successfully!",
           statusCode: 200,
-          error: "OK",
           data: userKeyData
         });
     }

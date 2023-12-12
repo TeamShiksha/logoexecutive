@@ -28,13 +28,9 @@ class Keys {
 
   get data() {
     return {
-      keyId: this.keyId,
-      userId: this.userId,
       keyDescription: this.keyDescription,
       key: this.key,
-      usageCount: this.usageCount,
       createdAt: this.createdAt,
-      updatedAt: this.updatedAt,
     };
   }
 }

@@ -48,23 +48,29 @@ async function fetchUserByEmail(email) {
  * Creates user in the DB
  * @param {Object} user - User Object
  * @param {string} user.email - email address of the user
- * @param {string} user.name - name of the user
+ * @param {string} user.firstName - First name of the user
+ * @param {string} user.lastName - Last name of the user
  * @param {string} user.password - password of the user
  */
 async function createUser(user) {
   try {
-    const userData = {
-      userId: crypto.randomUUID(),
-      email: user.email,
-      firstName: user.firstName,
-      lastName: user.lastName,
-      password: await bcrypt.hash(user.password, 10),
-      token: crypto.randomUUID().replace(/-/g, ""),
-      createdAt: Timestamp.now(),
-      updatedAt: Timestamp.now(),
-    };
-    const result = await UserCollection.add(userData);
-    const createdUser = new User(userData);
+    const { email, firstName, lastName, password } = user;
+
+    const newUser = await User.NewUser({
+      email,
+      firstName,
+      lastName,
+      password,
+    });
+    if (!newUser)
+      return null;
+
+    const result = await UserCollection.doc(newUser.userId).set({ newUser, isVerified: false });
+
+    if (!result)
+      return null;
+
+    const createdUser = new User(newUser);
     return createdUser;
   } catch (err) {
     console.log(err);

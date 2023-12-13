@@ -2,7 +2,9 @@ const Joi = require("joi");
 const { emailRecordExists } = require("../../services/Auth");
 const { createUser } = require("../../services/User");
 const { createSubscription } = require("../../services/Subscription");
-const sendEmail = require("../../services/sendEmail");
+const { sendEmail } = require("../../services/sendEmail");
+const { STATUS_CODES } = require("http");
+const { createVerifyToken } = require("../../services/UserToken");
 
 const signupPayloadSchema = Joi.object().keys({
   firstName: Joi.string()
@@ -23,19 +25,19 @@ const signupPayloadSchema = Joi.object().keys({
     .trim()
     .required()
     .max(50)
-    .regex(/^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/),
+    .regex(/^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/)
+    .message("email should be valid"),
   password: Joi.string().trim().required().min(8).max(30),
-  confirmPassword: Joi.any().required().equal(Joi.ref("password")),
+  confirmPassword: Joi.any().required().equal(Joi.ref("password")).messages({"any.only": "Confirm Password should match password"}),
 });
 
 async function signupController(req, res) {
-  const { body: payload } = req;
-  const { error, value } = signupPayloadSchema.validate(payload);
+  const { error, value } = signupPayloadSchema.validate(req.body);
   if (!!error) {
     return res.status(422).json([
       {
         message: error.message,
-        error: "unprocessable content",
+        error: STATUS_CODES[422],
         statusCode: 422,
       },
     ]);
@@ -47,8 +49,8 @@ async function signupController(req, res) {
     return res.status(400).json([
       {
         message: "Email already exists",
-        error: "bad request",
-        status: 400,
+        error: STATUS_CODES[400],
+        statusCode: 400,
       },
     ]);
   }
@@ -58,40 +60,56 @@ async function signupController(req, res) {
     return res.status(500).json([
       {
         message: "Unexpected error while creating user",
-        error: "internal server error",
-        status: 500,
+        error: STATUS_CODES[500],
+        statusCode: 500,
       },
     ]);
   }
 
   const newsubcription = await createSubscription(newUser.userId);
   if (!newsubcription) {
-    return res.status(500).json([
+    return res.status(206).json([
       {
         message: "Unexpected error while creating subscription",
-        error: "internal server error",
-        status: 500,
+        error: STATUS_CODES[500],
+        statusCode: 500,
+      },
+      {
+        message: "Successfully created user",
+        data: newUser.data,
+        statusCode: 201,
       },
     ]);
   }
 
-  const userVerificationUrl = newUser.getVerificationUrl();
+  const verificationToken = await createVerifyToken(newUser.userId);
+  if(!verificationToken)
+    return res.status(206).json([{
+      message: "Failed to create email verification token",
+      error: STATUS_CODES[500],
+      statusCode: 500
+    }, {
+      message: "Successfully created user",
+      data: newUser.data,
+      statusCode: 201,
+    }]);
+
   const emailRes = await sendEmail(
     newUser.email,
     "Please Verify email",
-    userVerificationUrl.href
+    verificationToken.tokenURL.href
   );
   if (!emailRes.success) {
     return res.status(206).json([
       {
         message: "Failed to send verification email",
-        error: emailRes.error,
-        status: 500,
+        error: STATUS_CODES[500],
+        statusCode: 500,
       },
       {
         message: "Successfully created user",
         data: newUser.data,
-        status: 201,
+        statusCode: 201,
       },
     ]);
   }
@@ -99,11 +117,12 @@ async function signupController(req, res) {
   return res.status(201).json([
     {
       message: "Successfully created user",
-      status: 201,
+      data: newUser.data,
+      statusCode: 201,
     },
     {
       message: "Verification email sent successfully",
-      status: 200,
+      statusCode: 200,
     },
   ]);
 }

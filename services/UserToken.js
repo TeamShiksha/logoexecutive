@@ -51,7 +51,31 @@ async function deleteUserToken(userToken) {
   };
 }
 
+/**
+ * Creates user token with type Verify in "UserTokens" collection
+ * @param {string} userId - userId associate with token
+ **/
+async function createVerifyToken(userId) {
+  try {
+    const newUserToken = UserToken.createUserToken({
+      userId,
+      type: UserTokenTypes.VERIFY,
+    });
+    const result = await UserTokenCollection.doc(newUserToken.token).set(
+      newUserToken,
+    );
+
+    if (!result) return null;
+
+    return new UserToken(newUserToken);
+  } catch (err) {
+    console.log(err);
+    throw err;
+  }
+}
+
 module.exports = {
   createForgotToken,
-  deleteUserToken
+  deleteUserToken,
+  createVerifyToken,
 };

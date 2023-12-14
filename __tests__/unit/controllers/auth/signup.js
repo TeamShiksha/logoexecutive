@@ -33,6 +33,7 @@ const SendEmailService = require("../../../../services/sendEmail");
 
 const { mockUserModel } = require("../../../../utils/mocks/Users");
 const { mockUserTokenVerify } = require("../../../../utils/mocks/UserToken");
+const exp = require("constants");
 
 describe("Signup Controller", () => {
   beforeAll(() => {
@@ -287,5 +288,13 @@ describe("Signup Controller", () => {
       message: "Verification email sent successfully",
       statusCode: 200
     });
+  });
+
+  it("Error 500 - Unexpected error", async () => {
+    jest.spyOn(AuthService, "emailRecordExists").mockImplementation(() => {throw new Error("Unexpected error");});
+
+    const response = await request(app).post("/auth/signup").send(mockValidPayload);
+
+    expect(response.status).toBe(500);
   });
 });

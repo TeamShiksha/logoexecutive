@@ -79,47 +79,18 @@ async function createUser(user) {
 }
 
 /**
- * fetchUserByToken - Fetches user from provided token
- * @param {string} token - token of the user
- **/
-async function fetchUserByToken(token) {
+	* Fetches user by document id
+	* @param {string} userId - User Id of user
+	**/
+async function fetchUserFromId(userId) {
   try {
-    const userSnapshot = await UserCollection.where("token", "==", token)
-      .limit(1)
-      .get();
+    const userSnapshot = await UserCollection.where("userId", "==", userId).limit(1).get();
 
-    if (userSnapshot.empty) {
+    if(userSnapshot.empty)
       return null;
-    }
 
-    const user = new User({...userSnapshot.docs[0].data(), id: userSnapshot.docs[0].id});
-    
-    return user;
-  } catch (err) {
-    console.log(err);
-    throw err;
-  }
-}
-
-/**
- * deleteUserToken - Fetches user from provided token
- * @param {string} token - token of the user
- **/
-async function deleteUserToken(token) {
-  try {
-    const userSnapshot = await UserCollection.where("token", "==", token)
-      .limit(1)
-      .get();
-
-    if (userSnapshot.empty) {
-      return null;
-    }
-
-    await userSnapshot.docs[0].ref.update({
-      token: null,
-    });
-
-    return {success: true};
+    const userDoc = userSnapshot.docs[0];
+    return new User({ ...userDoc.data(), userRef: userDoc.ref });
   } catch (err) {
     console.log(err);
     throw err;
@@ -143,7 +114,6 @@ module.exports = {
   fetchUsers,
   fetchUserByEmail,
   createUser,
-  fetchUserByToken,
-  deleteUserToken,
-  updatePasswordService, 
+  updatePasswordService,
+  fetchUserFromId
 };

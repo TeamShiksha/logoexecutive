@@ -1,7 +1,5 @@
 const User = require("../models/Users");
 const { UserCollection } = require("../utils/firestore");
-const { Timestamp } = require("firebase-admin/firestore");
-const bcrypt = require("bcrypt");
 
 /**
  * Fetches all the users
@@ -110,10 +108,22 @@ async function updatePasswordService(user, hashNewPassword){
   }
 }
 
+/**
+ * @param {User} user
+ **/
+async function verifyUser(user) {
+  const result = await user.userRef.update({ isVerified: true });
+  if (!result) return { success: false, message: "Failed to verify the user" };
+
+  user.isVerified = true;
+  return { success: true, message: "Successfully verified the user" };
+}
+
 module.exports = {
   fetchUsers,
   fetchUserByEmail,
   createUser,
   updatePasswordService,
-  fetchUserFromId
+  fetchUserFromId,
+  verifyUser
 };

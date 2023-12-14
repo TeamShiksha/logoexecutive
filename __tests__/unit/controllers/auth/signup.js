@@ -296,5 +296,10 @@ describe("Signup Controller", () => {
     const response = await request(app).post("/auth/signup").send(mockValidPayload);
 
     expect(response.status).toBe(500);
+    expect(response.body).toEqual({
+      message: "Unexpected error",
+      error: STATUS_CODES[500],
+      statusCode: 500
+    });
   });
 });

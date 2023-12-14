@@ -1,30 +1,34 @@
 const { STATUS_CODES } = require("http");
-const { fetchTokenFromId, deleteUserToken } = require("../../services/UserToken");
+const {
+  fetchTokenFromId,
+  deleteUserToken,
+} = require("../../services/UserToken");
+const { verifyUser, fetchUserFromId } = require("../../services/User");
 
 async function verifyTokenController(req, res, next) {
   try {
     const { token } = req.query;
     if (!token) {
-      return res.status(400).json({
-        error: STATUS_CODES[400],
+      return res.status(422).json({
+        error: STATUS_CODES[422],
         message: "No token provided",
-        statusCode: 400,
+        statusCode: 422,
       });
     }
 
     const userToken = await fetchTokenFromId(token);
-    if(!userToken)
+    if (!userToken)
       return res.status(400).json({
         error: STATUS_CODES[400],
         message: "Token does not exists",
-        statusCode: 400
+        statusCode: 400,
       });
 
-    if(userToken.isExpired())
+    if (userToken.isExpired())
       return res.status(403).json({
         error: STATUS_CODES[403],
         message: "User token expired",
-        statusCode: 403
+        statusCode: 403,
       });
 
     const user = await fetchUserFromId(userToken.userId);
@@ -35,13 +39,22 @@ async function verifyTokenController(req, res, next) {
         statusCode: 400,
       });
 
-    const result = await deleteUserToken(token);
-    if(!result.success)
-      return res.status(500).json(result.data);
+    const verifyResult = await verifyUser(user);
+    if (!verifyResult.success)
+      return res.status(500).json({
+        error: STATUS_CODES[500],
+        message: verifyResult.message,
+        statusCode: 500,
+      });
 
-    return res.status(200).json({message: "User verified succesfully"});
-  }
-  catch (err) {
+    deleteUserToken(token).then((result) => {
+      if (result.success) console.log("Token deleted succesfully");
+      if (!result.success)
+        console.error(`Token id:${userToken.token} not deleted`);
+    });
+
+    return res.status(200).json({ message: "User verified successfully" });
+  } catch (err) {
     next(err);
   }
 }

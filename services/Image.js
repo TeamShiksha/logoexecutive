@@ -1,23 +1,27 @@
-const firestore = require("firebase-admin").firestore();
+const { Timestamp } = require("firebase-admin/firestore");
+const Images = require("../models/Images");
 const { ImageCollection } = require("../utils/firestore");
 
-const createImageData = async (req) => {
+async function createImageData(file) {
   const imageData = {
-    imageURL: req.file.originalname,
+    imageURL: file,
     imageUsageCount: 0,
     imageId: crypto.randomUUID(),
-    createAt: new Date().getTime(),
-    updatedAt: new Date().getTime(),
+    createAt: Timestamp,
+    updatedAt: Timestamp,
   };
-  const collectionRef = await firestore.collection("Images");
-  const result = await collectionRef
-    .where("imageURL", "==", firstoreData.imageURL)
-    .get();
+
+  const result = await ImageCollection.where(
+    "imageURL",
+    "==",
+    firstoreData.imageURL
+  ).get();
   if (result.size > 0) {
     return false;
   }
-  await ImageCollection.add(imageData);
+  const imagesDataCreated = new Images(imageData);
+  await ImageCollection.add(imagesDataCreated);
   return true;
-};
+}
 
 module.exports = { createImageData };

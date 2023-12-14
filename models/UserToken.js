@@ -10,7 +10,7 @@ class UserToken {
   token;
   type;
 
-  #userTokenRef;
+  userTokenRef;
 
   /**
    * @param {Object} params

@@ -74,8 +74,24 @@ async function createVerifyToken(userId) {
   }
 }
 
+async function fetchTokenFromId(tokenId) {
+  try {
+    const tokenSnapshot = await UserTokenCollection.where("tokenId", "==", tokenId).limit(1).get();
+
+    if(tokenSnapshot.empty)
+      return null;
+
+    const userTokenDoc = tokenSnapshot.docs[0];
+    return new UserToken({...userTokenDoc.data(), userTokenRef: userTokenDoc.ref});
+  } catch (err) {
+    console.log(err);
+    throw err;
+  }
+}
+
 module.exports = {
   createForgotToken,
   deleteUserToken,
   createVerifyToken,
+  fetchTokenFromId
 };

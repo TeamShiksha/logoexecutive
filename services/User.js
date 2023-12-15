@@ -77,15 +77,16 @@ async function createUser(user) {
 }
 
 /**
-	* Fetches user by document id
-	* @param {string} userId - User Id of user
-	**/
+ * Fetches user by document id
+ * @param {string} userId - User Id of user
+ **/
 async function fetchUserFromId(userId) {
   try {
-    const userSnapshot = await UserCollection.where("userId", "==", userId).limit(1).get();
+    const userSnapshot = await UserCollection.where("userId", "==", userId)
+      .limit(1)
+      .get();
 
-    if(userSnapshot.empty)
-      return null;
+    if (userSnapshot.empty) return null;
 
     const userDoc = userSnapshot.docs[0];
     return new User({ ...userDoc.data(), userRef: userDoc.ref });

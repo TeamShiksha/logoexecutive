@@ -33,7 +33,6 @@ const SendEmailService = require("../../../../services/sendEmail");
 
 const { mockUserModel } = require("../../../../utils/mocks/Users");
 const { mockUserTokenVerify } = require("../../../../utils/mocks/UserToken");
-const exp = require("constants");
 
 describe("Signup Controller", () => {
   beforeAll(() => {

@@ -63,4 +63,4 @@ const imageProcessing = () => {
   }
 };
 
-module.exports = imageProcessing;
+

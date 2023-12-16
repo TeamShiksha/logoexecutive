@@ -19,6 +19,8 @@ const EnvSchema = Joi.object()
       .uri({ scheme: ["https"] })
       .regex(/^https:\/\/[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/)
       .required(),
+    GIT_USER_NAME: Joi.string().required(),
+    GIT_USER_EMAIL: Joi.string().email().required(),
   })
   .unknown(true);
 

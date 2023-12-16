@@ -1,0 +1,32 @@
+name: Load image files to s3 and image data to ImagesCollection
+
+on: 
+  schedule: 
+    - cron: 0 22 */5 * *
+
+jobs: 
+  run-script:
+    runs-on: ubuntu-latest
+  
+  steps: 
+  - name: Checkout repository 
+    uses: actions/checkout@v2
+
+  - name: Setup node.js
+    uses: actions/setup-node@v1
+    with: 
+      node-version: 12.x
+
+  - name: Install dependencies
+    run: npm install 
+
+  - name: Run script
+    run: node utils/scripts/imageProcessing.js
+
+  - name: Commit and push changes 
+    run: |
+      git config --local user.email "${GIT_USER_EMAIL}"
+      git config --local user.name "${GIT_USER_NAME}"
+      git add .
+      git commit -m "Auto-commit after image processing"
+      git push 

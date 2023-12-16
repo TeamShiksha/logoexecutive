@@ -12,6 +12,8 @@ const validEnv = {
   EMAIL_SECURE: true,
   EMAIL_USER: "ghosty@gmail.com",
   EMAIL_PASS: "randomText",
+  GIT_USER_NAME:"jamesbond",
+  GIT_USER_EMAIL: "example@gmail.com"
 };
 
 const extendedValidEnv = {
@@ -30,6 +32,12 @@ const extendedValidEnv = {
 
 describe("Env Schema Validation", () => {
   describe("If service account key exists", () => {
+
+    it("All environment variables are valid", () =>{
+      const result = validateEnv(validEnv, {serviceAccountKey: true});
+      expect(result.error).toBeUndefined();
+    });
+
     it("should return error message if port doesn't exists", () => {
       const env = {};
       const result = validateEnv(env, { serviceAccountKey: true });
@@ -122,7 +130,7 @@ describe("Env Schema Validation", () => {
       const env = { ...validEnv };
       delete env.CLOUD_FRONT_PRIVATE_KEY;
 
-      const result = validateEnv(env, { serviceAccountKey: false });
+      const result = validateEnv(env, { serviceAccountKey: true });
 
       expect(result).toHaveProperty("error");
       expect(result.error.message).toMatch(
@@ -135,7 +143,7 @@ describe("Env Schema Validation", () => {
       delete env.DISTRIBUTION_DOMAIN;
       env.DISTRIBUTION_DOMAIN = "randomText";
 
-      const result = validateEnv(env, { serviceAccountKey: false });
+      const result = validateEnv(env, { serviceAccountKey: true });
 
       expect(result).toHaveProperty("error");
       expect(result.error.message).toMatch(
@@ -146,7 +154,7 @@ describe("Env Schema Validation", () => {
     it("should return error message if DISTRIBUTION_DOMAIN does not exist", () => {
       const env = { ...validEnv };
       delete env.DISTRIBUTION_DOMAIN;
-      const result = validateEnv(env, { serviceAccountKey: false });
+      const result = validateEnv(env, { serviceAccountKey: true });
 
       expect(result).toHaveProperty("error");
       expect(result.error.message).toMatch(
@@ -154,34 +162,78 @@ describe("Env Schema Validation", () => {
       );
     });
 
-    describe("If service account key does not exists", () => {
-      it("should validate with extended schema", () => {
-        const env = { ...validEnv };
+    it("Missing GIT_USER_NAME", ()=>{
+      const env = {...validEnv};
+      delete env.GIT_USER_NAME;
+      const result = validateEnv(env, {serviceAccountKey: true });
 
-        const result = validateEnv(env);
+      expect(result.error).toBeDefined();
+      expect(result.error.message).toMatch(
+        "\"GIT_USER_NAME\" is required"
+      )
+    });
 
-        expect(result).toHaveProperty("error");
-        expect(result.error.message).toMatch(
-          /\"FIRESTORE_PROJECT_ID\" is required/gi
-        );
-      });
+    it("Missing GIT_USER_NAME", ()=>{
+      const env = {...validEnv};
+      env.GIT_USER_NAME = 12345;
+      const result = validateEnv(env, {serviceAccountKey: true });
 
-      it("should return error if port does not exists", () => {
-        const env = { ...extendedValidEnv };
-        delete env.PORT;
+      expect(result.error).toBeDefined();
+      expect(result.error.message).toMatch(
+        "\"GIT_USER_NAME\" must be a string"
+      )
+    });
 
-        const result = validateEnv(env);
+    it("Missing GIT_USER_EMAIL", ()=>{
+      const env = {...validEnv};
+      delete env.GIT_USER_EMAIL;
+      const result = validateEnv(env, {serviceAccountKey: true });
 
-        expect(result).toHaveProperty("error");
-        expect(result.error.message).toMatch(/\"PORT\" is required/gi);
-      });
+      expect(result.error).toBeDefined();
+      expect(result.error.message).toMatch(
+        "\"GIT_USER_EMAIL\" is required"
+      )
+    });
 
-      it("should return value for valid schema", () => {
-        const result = validateEnv(extendedValidEnv);
+    it("Missing GIT_USER_EMAIL", ()=>{
+      const env = {...validEnv};
+      env.GIT_USER_EMAIL = "example@email"
+      const result = validateEnv(env, {serviceAccountKey: true });
 
-        expect(result).toHaveProperty("value");
-        expect(result.value).toStrictEqual(extendedValidEnv);
-      });
+      expect(result.error).toBeDefined();
+      expect(result.error.message).toMatch(
+        "\"GIT_USER_EMAIL\" must be a valid email"
+      )
+    });
+  });
+
+  describe("If service account key does not exists", () => {
+    it("should validate with extended schema", () => {
+      const env = { ...validEnv };
+
+      const result = validateEnv(env);
+
+      expect(result).toHaveProperty("error");
+      expect(result.error.message).toMatch(
+        /\"FIRESTORE_PROJECT_ID\" is required/gi
+      );
+    });
+
+    it("should return error if port does not exists", () => {
+      const env = { ...extendedValidEnv };
+      delete env.PORT;
+
+      const result = validateEnv(env);
+
+      expect(result).toHaveProperty("error");
+      expect(result.error.message).toMatch(/\"PORT\" is required/gi);
+    });
+
+    it("should return value for valid schema", () => {
+      const result = validateEnv(extendedValidEnv);
+
+      expect(result).toHaveProperty("value");
+      expect(result.value).toStrictEqual(extendedValidEnv);
     });
   });
 });

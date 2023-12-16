@@ -1,0 +1,31 @@
+name: Test IMAGE_PROCESSING.yml workflow 
+
+on: 
+  workflow_run: 
+    workflows: IMAGE_PROCESSING.yml
+    types: 
+      - completed
+
+jobs: 
+  test:
+    runs-on: ubuntu-latest
+
+    steps: 
+  - name: Checkout repository 
+    uses: actions/checkout@v2
+
+  - name: Setup node.js
+    uses: actions/setup-node@v1
+    with: 
+      node-version: 12.x
+
+  - name: Install dependencies
+    run: npm install 
+
+  - name: Check if workflow succeeded 
+    run: |
+      echo "Workflow Status: ${{ github.event.workflow_run.conclusion }}"
+      if [ "${{ github.event.workflow_run.conclusion }}" != "success" ]; then 
+        echo "Workflow failed"
+        exit 1
+      fi

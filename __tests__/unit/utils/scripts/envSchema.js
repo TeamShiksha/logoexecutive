@@ -170,7 +170,7 @@ describe("Env Schema Validation", () => {
       expect(result.error).toBeDefined();
       expect(result.error.message).toMatch(
         "\"GIT_USER_NAME\" is required"
-      )
+      );
     });
 
     it("Missing GIT_USER_NAME", ()=>{
@@ -181,7 +181,7 @@ describe("Env Schema Validation", () => {
       expect(result.error).toBeDefined();
       expect(result.error.message).toMatch(
         "\"GIT_USER_NAME\" must be a string"
-      )
+      );
     });
 
     it("Missing GIT_USER_EMAIL", ()=>{
@@ -192,18 +192,18 @@ describe("Env Schema Validation", () => {
       expect(result.error).toBeDefined();
       expect(result.error.message).toMatch(
         "\"GIT_USER_EMAIL\" is required"
-      )
+      );
     });
 
     it("Missing GIT_USER_EMAIL", ()=>{
       const env = {...validEnv};
-      env.GIT_USER_EMAIL = "example@email"
+      env.GIT_USER_EMAIL = "example@email";
       const result = validateEnv(env, {serviceAccountKey: true });
 
       expect(result.error).toBeDefined();
       expect(result.error.message).toMatch(
         "\"GIT_USER_EMAIL\" must be a valid email"
-      )
+      );
     });
   });
 

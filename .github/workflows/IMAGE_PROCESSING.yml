@@ -1,0 +1,39 @@
+name: Image Processing
+
+on: 
+  push:
+    paths:
+      - assets/**
+
+  workflow_dispatch:
+
+jobs: 
+  run-imageProcessing-script:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps: 
+    - name: Checkout repository 
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+        ref: main
+        token: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Setup node.js
+      uses: actions/setup-node@v4
+      with: 
+        node-version: "18.x"
+
+    - name: Install dependencies 
+      run: npm install 
+
+    - name: Run script
+      run: node utils/scripts/imageProcessing.js
+
+    - name: Commit and push changes 
+      run: |
+        git config --local user.email "${{ github.actor }}@users.noreply.github.com"
+        git config --local user.name "${{ github.actor }}"
+        git add -A
+        git commit -m "Auto-commit after image processing from github actions"
+        git push 

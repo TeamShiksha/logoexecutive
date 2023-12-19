@@ -22,27 +22,6 @@ class Images {
     this.updatedAt = params.updatedAt;
   }
 
-  static NewImage = (imageData) => {
-    try {
-      const { imageId, imageUrl, imageUsageCount } = imageData;
-      if (!imageId || !imageUrl) {
-        return null;
-      } else {
-        return {
-          id: crypto.randomUUID(/-/g, ""),
-          imageId,
-          imageUrl,
-          createdAt: Timestamp.now(),
-          updatedAt: Timestamp.now(),
-          imageUsageCount,
-        };
-      }
-    } catch (error) {
-      console.log(error);
-      return null;
-    }
-  };
-
   get data() {
     return {
       imageId: this.imageId,

@@ -18,7 +18,7 @@ async function createImageData(file) {
   if (result.size > 0) {
     return false;
   }
-  await ImageCollection.add(newImagesData);
+  await ImageCollection.add(imageData);
   return true;
 }
 

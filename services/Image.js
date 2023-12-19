@@ -7,20 +7,20 @@ async function createImageData(file) {
     imageURL: file,
     imageUsageCount: 0,
     imageId: crypto.randomUUID(),
-    createAt: Timestamp,
-    updatedAt: Timestamp,
+    createAt: Timestamp.now(),
+    updatedAt: Timestamp.now(),
   };
 
   const result = await ImageCollection.where(
     "imageURL",
     "==",
-    firstoreData.imageURL
+    imageData.imageURL
   ).get();
   if (result.size > 0) {
     return false;
   }
-  const imagesDataCreated = new Images(imageData);
-  await ImageCollection.add(imagesDataCreated);
+  const newImagesData = new Images.NewImage(imageData);
+  await ImageCollection.doc(newImagesData.id).set(newImagesData);
   return true;
 }
 

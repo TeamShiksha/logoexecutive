@@ -3,7 +3,7 @@ const { ImageCollection } = require("../utils/firestore");
 
 async function createImageData(file) {
   const imageData = {
-    imageURL: file,
+    imageUrl: file,
     imageUsageCount: 0,
     imageId: crypto.randomUUID(),
     createAt: Timestamp.now(),
@@ -11,9 +11,9 @@ async function createImageData(file) {
   };
 
   const result = await ImageCollection.where(
-    "imageURL",
+    "imageUrl",
     "==",
-    imageData.imageURL
+    imageData.imageUrl
   ).get();
   if (result.size > 0) {
     return false;

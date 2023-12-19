@@ -7,8 +7,8 @@ async function createImageData(file) {
     imageURL: file,
     imageUsageCount: 0,
     imageId: crypto.randomUUID(),
-    createAt: Timestamp,
-    updatedAt: Timestamp,
+    createAt: Timestamp.now(),
+    updatedAt: Timestamp.now(),
   };
 
   const result = await ImageCollection.where(

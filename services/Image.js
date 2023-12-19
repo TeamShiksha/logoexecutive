@@ -19,8 +19,7 @@ async function createImageData(file) {
   if (result.size > 0) {
     return false;
   }
-  const newImagesData = new Images.NewImage(imageData);
-  await ImageCollection.doc(newImagesData.id).set(newImagesData);
+  await ImageCollection.add(newImagesData);
   return true;
 }
 

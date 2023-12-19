@@ -1,5 +1,4 @@
 const { Timestamp } = require("firebase-admin/firestore");
-const Images = require("../models/Images");
 const { ImageCollection } = require("../utils/firestore");
 
 async function createImageData(file) {

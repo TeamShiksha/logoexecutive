@@ -29,8 +29,8 @@ jobs:
   
     - name: Commit and push changes 
       run: |
-        git config --local user.email "FrontendArmy@users.noreply.github.com"
-        git config --local user.name "FrontendArmy"
+        git config --local user.email "${{ github.actor }}@users.noreply.github.com"
+        git config --local user.name "${{ github.actor }}"
         git add -A
         git commit -m "Auto-commit after image processing from github actions"
         git push 

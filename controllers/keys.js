@@ -1,14 +1,14 @@
-const { createKey, fetchKeyByuserid } = require("../services/Key");
-const { fetchSubscriptionByuserid } = require("../services/Subscription");
+const {createKey, fetchKeyByuserid} = require("../services/Key");
+const {fetchSubscriptionByuserid} = require("../services/Subscription");
 const Joi = require("joi");
-const { deleteKey, getKeyDocumentRef } = require("../services/Key");
+const {deleteKey, getKeyDocumentRef} = require("../services/Key");
 
 const generateKeyPayloadSchema = Joi.object().keys({
   keyDescription: Joi.string()
     .trim()
     .required()
     .regex(/^[a-zA-Z\s]+$/u)
-    .message("keyDescription must contain only alphabets"),
+    .message("keyDescription must contain only alphabets")
 });
 
 const deleteKeyPayloadSchema = Joi.object({

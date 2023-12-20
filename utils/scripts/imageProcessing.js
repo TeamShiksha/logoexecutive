@@ -6,39 +6,38 @@ const dotenv = require("dotenv");
 dotenv.config();
 
 const bucketName = process.env.BUCKET_NAME;
-const buckeRegion = process.env.BUCKET_REGION;
-const accessKey = process.env.ACCESS_KEY;
-const secretAccesskey = process.env.SECRET_ACCESS_KEY;
-
 const imagePath = path.resolve(process.cwd(), "assets/");
+const s3Client = new S3Client({
+        credentials: {
+          accessKeyId: process.env.ACCESS_KEY,
+          secretAccessKey: process.env.SECRET_ACCESS_KEY,
+        },
+        region: process.env.BUCKET_REGION,
+      });
 
 (async () => {
   if (fs.existsSync(imagePath)) {
     const files = fs.readdirSync(imagePath);
+    for (file in files){
+      
+    }
     const imageFilePromise = files.map((image) => firestoreImageData2(image));
     const results = await Promise.all(imageFilePromise);
 
     if (!results) process.exit(1);
     for (const result of results) {
-      if (!result) continue;
-      const s3 = new S3Client({
-        credentials: {
-          accessKeyId: accessKey,
-          secretAccessKey: secretAccesskey,
-        },
-        region: buckeRegion,
-      });
-
-      for (const file of files) {
-        const imagePaths = `${imagePath}/${file}`;
+      if (!result){
+        continue
+      } else {
+       const imagePaths = `${imagePath}/${file}`;
         console.log(imagePaths);
         const params = {
           Bucket: bucketName,
-          Key: file,
+          Key: `production/assets/${file}`,
           Body: fs.readFileSync(imagePaths),
         };
         const command = new PutObjectCommand(params);
-        await s3.send(command);
+        await s3Client.send(command); 
       }
       console.log("uploading of images was successful");
       process.exit(0);

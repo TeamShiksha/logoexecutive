@@ -1,3 +1,4 @@
+const { Timestamp } = require("firebase-admin/firestore");
 class Images {
   imageId;
   imageUrl;

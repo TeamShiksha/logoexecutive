@@ -12,6 +12,10 @@ const validEnv = {
   EMAIL_SECURE: true,
   EMAIL_USER: "ghosty@gmail.com",
   EMAIL_PASS: "randomText",
+  BUCKET_NAME: "logoexecutive",
+  BUCKET_REGION: "ap-south-1",
+  ACCESS_KEY: "GH67BTYLTNVVQEC6",
+  SECRET_ACCESS_KEY: "Z1Ydwv8gcywVpcwJGYWy3cDEYUOlFoiI6Aw0E",
 };
 
 const extendedValidEnv = {
@@ -42,7 +46,9 @@ describe("Env Schema Validation", () => {
       const env = { PORT: "abc" };
       const result = validateEnv(env, { serviceAccountKey: true });
       expect(result.error).toBeTruthy();
-      expect(result.error.message).toBe("PORT should be a number");
+      expect(result.error.message).toBe(
+        "\"PORT\" with value \"abc\" fails to match the required pattern: /^\\d+$/"
+      );
     });
 
     it("should return value if port exists", () => {
@@ -81,7 +87,9 @@ describe("Env Schema Validation", () => {
       const result = validateEnv(env, { serviceAccountKey: true });
 
       expect(result).toHaveProperty("error");
-      expect(result.error.message).toMatch("EMAIL_PORT should be a number");
+      expect(result.error.message).toMatch(
+        "\"EMAIL_PORT\" with value \"randomText\" fails to match the required pattern: /^\\d+$/"
+      );
     });
 
     it("should return error message if EMAIL_USER is not a valid email", () => {
@@ -114,7 +122,7 @@ describe("Env Schema Validation", () => {
       const result = validateEnv(env, { serviceAccountKey: true });
       expect(result).toHaveProperty("error");
       expect(result.error.message).toMatch(
-        "CLOUD_FRONT_KEYPAIR_ID can only contain uppercase letters and digits"
+        "\"CLOUD_FRONT_KEYPAIR_ID\" with value \"R134a\" fails to match the required pattern: /^[A-Z0-9]+$/"
       );
     });
 
@@ -139,7 +147,7 @@ describe("Env Schema Validation", () => {
 
       expect(result).toHaveProperty("error");
       expect(result.error.message).toMatch(
-        "DISTRIBUTION_DOMAIN must be a valid hostname"
+        "\"DISTRIBUTION_DOMAIN\" must be a valid uri with a scheme matching the https pattern"
       );
     });
 
@@ -149,39 +157,71 @@ describe("Env Schema Validation", () => {
       const result = validateEnv(env, { serviceAccountKey: false });
 
       expect(result).toHaveProperty("error");
+      expect(result.error.message).toMatch("\"DISTRIBUTION_DOMAIN\" is required");
+    });
+
+    it("should return error message if BUCKET NAME does not exist", () => {
+      const env = { ...validEnv };
+      delete env.BUCKET_NAME;
+      const result = validateEnv(env, { serviceAccountKey: false });
+
+      expect(result).toHaveProperty("error");
+      expect(result.error.message).toMatch("\"BUCKET_NAME\" is required");
+    });
+
+    it("should return error message if BUCKET_REGION does not exist", () => {
+      const env = { ...validEnv };
+      delete env.BUCKET_REGION;
+      const result = validateEnv(env, { serviceAccountKey: false });
+
+      expect(result).toHaveProperty("error");
+      expect(result.error.message).toMatch("\"BUCKET_REGION\" is required");
+    });
+    it("should return error message if ACCESS_KEY does not exist", () => {
+      const env = { ...validEnv };
+      delete env.ACCESS_KEY;
+      const result = validateEnv(env, { serviceAccountKey: false });
+
+      expect(result).toHaveProperty("error");
+      expect(result.error.message).toMatch("\"ACCESS_KEY\" is required");
+    });
+
+    it("should return error message ifSECRET_ACCESS_KEY does not exist", () => {
+      const env = { ...validEnv };
+      delete env.SECRET_ACCESS_KEY;
+      const result = validateEnv(env, { serviceAccountKey: false });
+
+      expect(result).toHaveProperty("error");
+      expect(result.error.message).toMatch("\"SECRET_ACCESS_KEY\" is required");
+    });
+  });
+  describe("If service account key does not exists", () => {
+    it("should validate with extended schema", () => {
+      const env = { ...validEnv };
+
+      const result = validateEnv(env);
+
+      expect(result).toHaveProperty("error");
       expect(result.error.message).toMatch(
-        "\"DISTRIBUTION_DOMAIN\" is required"
+        /\"FIRESTORE_PROJECT_ID\" is required/gi
       );
     });
 
-    describe("If service account key does not exists", () => {
-      it("should validate with extended schema", () => {
-        const env = { ...validEnv };
+    it("should return error if port does not exists", () => {
+      const env = { ...extendedValidEnv };
+      delete env.PORT;
 
-        const result = validateEnv(env);
+      const result = validateEnv(env);
 
-        expect(result).toHaveProperty("error");
-        expect(result.error.message).toMatch(
-          /\"FIRESTORE_PROJECT_ID\" is required/gi
-        );
-      });
+      expect(result).toHaveProperty("error");
+      expect(result.error.message).toMatch(/\"PORT\" is required/gi);
+    });
 
-      it("should return error if port does not exists", () => {
-        const env = { ...extendedValidEnv };
-        delete env.PORT;
+    it("should return value for valid schema", () => {
+      const result = validateEnv(extendedValidEnv);
 
-        const result = validateEnv(env);
-
-        expect(result).toHaveProperty("error");
-        expect(result.error.message).toMatch(/\"PORT\" is required/gi);
-      });
-
-      it("should return value for valid schema", () => {
-        const result = validateEnv(extendedValidEnv);
-
-        expect(result).toHaveProperty("value");
-        expect(result.value).toStrictEqual(extendedValidEnv);
-      });
+      expect(result).toHaveProperty("value");
+      expect(result.value).toStrictEqual(extendedValidEnv);
     });
   });
 });

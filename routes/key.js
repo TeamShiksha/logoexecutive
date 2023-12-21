@@ -1,9 +1,9 @@
 const router = require("express").Router();
 const {generateKey} = require("../controllers/keys");
 const authMiddleware = require("../middlewares/auth");
-const {deleteKeyController} = require("../controllers/keys");
+const {destroyKeyController} = require("../controllers/keys");
 
 router.post("/generate", authMiddleware, generateKey);
-router.delete("/delete", authMiddleware, deleteKeyController);
+router.delete("/destroy", authMiddleware, destroyKeyController);
 
 module.exports = router;

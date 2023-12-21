@@ -1,7 +1,7 @@
 const { createKey, fetchKeyByuserid } = require("../services/Key");
 const { fetchSubscriptionByuserid } = require("../services/Subscription");
 const Joi = require("joi");
-const { deleteKey, getKeyDocumentRef } = require("../services/Key");
+const { destroyKey } = require("../services/Key");
 
 const generateKeyPayloadSchema = Joi.object().keys({
   keyDescription: Joi.string()
@@ -11,7 +11,7 @@ const generateKeyPayloadSchema = Joi.object().keys({
     .message("keyDescription must contain only alphabets"),
 });
 
-const deleteKeyPayloadSchema = Joi.object({
+const destroyKeyPayloadSchema = Joi.object({
   keyId: Joi.string().guid({ version: "uuidv4" }).required().messages({
     "string.guid": "\"keyId\" must be a valid UUID",
     "any.required": "\"keyId\" is a required field"
@@ -81,9 +81,9 @@ async function generateKey(req, res) {
   }
 }
 
-async function deleteKeyController(req, res) {
+async function destroyKeyController(req, res) {
   try {
-    const { error, value } = deleteKeyPayloadSchema.validate(req.query);
+    const { error, value } = destroyKeyPayloadSchema.validate(req.query);
     if (error) {
       return res.status(422).json({
         message: error.message,
@@ -93,19 +93,10 @@ async function deleteKeyController(req, res) {
     }
 
     const { keyId } = value;
-    const { keysObject, keyDocumentRef } = await getKeyDocumentRef(keyId);
 
-    if (!keysObject) {
-      return res.status(404).json({
-        message: "Key not found",
-        statusCode: 404,
-        error: "Not Found",
-      });
-    }
+    const destroyed = await destroyKey(keyId);
 
-    const deleted = await deleteKey(keyDocumentRef);
-
-    if (deleted) {
+    if (destroyed) {
       return res.status(200).json({
         message: "Key deleted successfully!",
         statusCode: 200,
@@ -119,5 +110,5 @@ async function deleteKeyController(req, res) {
 
 module.exports = {
   generateKey,
-  deleteKeyController,
+  destroyKeyController,
 };

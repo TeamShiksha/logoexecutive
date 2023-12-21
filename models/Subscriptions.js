@@ -24,7 +24,7 @@ class Subscriptions {
     this.userId = params.userId;
     this.subscriptionId = params.subscriptionId;
     this.subscriptionType = params.subscriptionType;
-    this.keyLimit = params.KeyLimit;
+    this.keyLimit = params.keyLimit;
     this.usageLimit = params.usageLimit;
     this.isActive = params.isActive;
     this.createdAt = params.createdAt;

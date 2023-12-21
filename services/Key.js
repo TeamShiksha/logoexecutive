@@ -38,6 +38,22 @@ async function fetchKeyByuserid(userId) {
   }
 }
 
+async function destroyKey(keyId) {
+  try {
+    const keyRef = await KeyCollection.where("keyId", "==", keyId).get();
+    if (keyRef.empty) {
+      return null;
+    }
+    await keyRef.docs[0].ref.delete();
+    return true;
+  } catch (err) {
+    console.log(err);
+    throw err;
+  }
+}
+
 module.exports = {
-  createKey, fetchKeyByuserid
+  createKey,
+  fetchKeyByuserid,
+  destroyKey,
 };

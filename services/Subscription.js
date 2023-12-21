@@ -8,7 +8,7 @@ async function createSubscription(userId) {
       subscriptionId: crypto.randomUUID(),
       userId: userId,
       subscriptionType: "free",
-      KeyLimit: 2,
+      keyLimit: 2,
       usageLimit: 500,
       isActive: false,
       createdAt: Timestamp.now(),

@@ -39,4 +39,34 @@ describe("generate-key controller", () =>{
       });
     });
   });
+
+  it("Should return 422 response if keyId format is invalid", async () => {
+    const mockToken = mockUser.generateJWT();
+    const response = await request(app)
+      .delete("/keys/destroy")
+      .query({ keyId: "90" }) 
+      .set("cookie", `jwt=${mockToken}`);
+    expect(response.status).toBe(422);
+    expect(response.body).toEqual({
+      message: "\"keyId\" must be a valid UUID",
+      statusCode: 422,
+      error: "Unprocessable payload",
+    });
+  });
+
+  it("Should return 422 response if keyId format is invalid", async () => {
+    const mockToken = mockUser.generateJWT();
+    console.log(mockToken);
+    const response = await request(app)
+      .delete("/keys/destroy")
+      .query({ keyId: 90 }) 
+      .set("cookie", `jwt=${mockToken}`);
+    expect(response.status).toBe(422);
+    expect(response.body).toEqual({
+      message: "\"keyId\" must be a valid UUID",
+      statusCode: 422,
+      error: "Unprocessable payload",
+    });
+  });
+  
 });

@@ -31,13 +31,6 @@ const s3Client = new S3Client({
           const command = new PutObjectCommand(params);
           await s3Client.send(command);
           console.log(`Data inserted for ${image}`);
-          fs.unlink(imagePaths, (err) => {
-            if (err) {
-              console.error("Error deleting file:", imagePaths, err);
-            } else {
-              console.log("Deleted file:", imagePaths);
-            }
-          });
         } else {
           console.log(`Data already present for ${image}`);
         }

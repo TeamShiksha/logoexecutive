@@ -2,10 +2,6 @@ const Key = require("../models/Keys");
 const { KeyCollection } = require("../utils/firestore");
 const {Timestamp} = require("firebase-admin/firestore");
 
-/**
- * Creates a new key.
- * @param {Object} data - The data for the new key.
- */
 async function createKey(data) {
   try {
     const keyData = {
@@ -26,10 +22,6 @@ async function createKey(data) {
   }
 }
 
-/**
- * Fetches keys by user ID.
- * @param {string} userId - The ID of the user to fetch keys for.
- */
 async function fetchKeyByuserid(userId) {
   try {
     const keyRef = await KeyCollection.where("userId", "==", userId).get();

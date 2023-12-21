@@ -21,8 +21,8 @@ const s3Client = new S3Client({
     } else {
       for (let image of files) {
         const ImageData = await createImageData(image);
+        const imagePaths = `${imagePath}/${image}`;
         if (ImageData) {
-          const imagePaths = `${imagePath}/${image}`;
           const params = {
             Bucket: bucketName,
             Key: image,
@@ -31,15 +31,23 @@ const s3Client = new S3Client({
           const command = new PutObjectCommand(params);
           await s3Client.send(command);
           console.log(`Data inserted for ${image}`);
-          fs.unlink(imagePaths, err => {
-          if (err) {
-            console.error('Error deleting file:', imagePaths, err);
-          } else {
-            console.log('Deleted file:', imagePaths);
-          }});
+          fs.unlink(imagePaths, (err) => {
+            if (err) {
+              console.error("Error deleting file:", imagePaths, err);
+            } else {
+              console.log("Deleted file:", imagePaths);
+            }
+          });
         } else {
           console.log(`Data already present for ${image}`);
         }
+        fs.unlink(imagePaths, (err) => {
+          if (err) {
+            console.error("Error deleting file:", imagePaths, err);
+          } else {
+            console.log("Deleted file:", imagePaths);
+          }
+        });
       }
     }
   });

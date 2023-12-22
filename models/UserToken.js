@@ -4,11 +4,12 @@ const { UserTokenTypes } = require("../utils/constants");
 const dayjs = require("dayjs");
 
 class UserToken {
-  userId;
   createdAt;
   expireAt;
   token;
   type;
+  userId;
+  userTokenId;
 
   userTokenRef;
 
@@ -16,6 +17,7 @@ class UserToken {
    * @param {Object} params
    * @param {string} params.token
    * @param {string} params.userId
+   * @param {string} params.userTokenId
    * @param {string} params.type
    * @param {Date|Timestamp} params.createdAt
    * @param {Date|Timestamp} params.expireAt
@@ -24,6 +26,7 @@ class UserToken {
   constructor(params) {
     this.token = params.token;
     this.userId = params.userId;
+    this.userTokenId = params.userTokenId;
     this.type = params.type;
     this.createdAt = normalizeDate(params.createdAt);
     this.expireAt = normalizeDate(params.expireAt);
@@ -43,18 +46,12 @@ class UserToken {
 
     return {
       userId: params.userId,
-      token: UserToken.newToken,
+      token: crypto.randomUUID().replaceAll("-", ""),
+      userTokenId: crypto.randomUUID().replaceAll("-", ""),
       type: params.type,
       createdAt: Timestamp.now(),
       expireAt: Timestamp.fromDate(expireAt),
     };
-  }
-
-  /**
-   * Returns a UserToken collection's token
-   **/
-  static get newToken() {
-    return crypto.randomUUID().replace(/-/g, "");
   }
 
   /**
@@ -81,7 +78,7 @@ class UserToken {
     if (this.type === UserTokenTypes.VERIFY) path = "/auth/verify";
 
     const url = new URL(path, process.env.BASE_URL);
-    url.searchParams.append("tokenId", this.token);
+    url.searchParams.append("token", this.token);
 
     return url;
   }

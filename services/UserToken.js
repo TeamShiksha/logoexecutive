@@ -61,9 +61,7 @@ async function createVerifyToken(userId) {
       userId,
       type: UserTokenTypes.VERIFY,
     });
-    const result = await UserTokenCollection.doc(newUserToken.token).set(
-      newUserToken,
-    );
+    const result = await UserTokenCollection.doc(newUserToken.userTokenId).set(newUserToken);
 
     if (!result) return null;
 
@@ -74,9 +72,9 @@ async function createVerifyToken(userId) {
   }
 }
 
-async function fetchTokenFromId(tokenId) {
+async function fetchTokenFromId(token) {
   try {
-    const tokenSnapshot = await UserTokenCollection.where("tokenId", "==", tokenId).limit(1).get();
+    const tokenSnapshot = await UserTokenCollection.where("token", "==", token).limit(1).get();
 
     if(tokenSnapshot.empty)
       return null;

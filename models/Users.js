@@ -65,7 +65,7 @@ class User {
       const hashedPassword = await bcrypt.hash(password, 10);
 
       return {
-        userId: crypto.randomUUID(/-/g, ""),
+        userId: crypto.randomUUID().replace(/-/g, ""),
         email,
         firstName,
         lastName,

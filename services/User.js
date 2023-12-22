@@ -63,7 +63,7 @@ async function createUser(user) {
     if (!newUser)
       return null;
 
-    const result = await UserCollection.doc(newUser.userId).set({ newUser, isVerified: false });
+    const result = await UserCollection.doc(newUser.userId).set({ ...newUser, isVerified: false });
 
     if (!result)
       return null;

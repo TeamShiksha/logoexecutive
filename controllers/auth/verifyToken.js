@@ -47,7 +47,7 @@ async function verifyTokenController(req, res, next) {
         statusCode: 500,
       });
 
-    deleteUserToken(token).then((result) => {
+    deleteUserToken(userToken).then((result) => {
       if (result.success) console.log("Token deleted succesfully");
       if (!result.success)
         console.error(`Token id:${userToken.token} not deleted`);

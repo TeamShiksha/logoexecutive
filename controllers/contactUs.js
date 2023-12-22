@@ -1,7 +1,7 @@
 const Joi = require("joi");
-const ContactUs = require("../models/ContactUs");
-const {formExists} = require("../services/ContactUs");
+const {formExists, createForm} = require("../services/ContactUs");
 const {ContactUsCollection} = require("../utils/firestore");
+const { STATUS_CODES } = require("http");
 
 const contactUsPayloadSchema = Joi.object().keys({
   name: Joi.string()
@@ -20,10 +20,11 @@ const contactUsPayloadSchema = Joi.object().keys({
   message: Joi.string()
     .trim()
     .required()
-    .max(500),
+    .max(500)
+    .message("Message is invalid (too long)"),
 });
 
-async function submitContactUs(req , res){
+async function submitContactForm(req , res){
   try {   
     const payload = req.body;
 
@@ -34,36 +35,36 @@ async function submitContactUs(req , res){
         .json({
           message: error.message,
           statusCode: 422,
-          error: "Unprocessable payload"
+          error: STATUS_CODES[422],
         });
     }
     const {email} = value;
 
     const form = await formExists(email);
     if (!!form){
-      res
+      return res
         .status(400)
         .json({
           message: "Form is previously submitted. We will contact you soon!",
           statusCode: 400,
-          error: "Bad Request"
+          error: STATUS_CODES[400],
         });
     }
-    else {
-      const contactUsDoc= new ContactUs(value);
-      const contactUsObject = contactUsDoc.formData;
-      const newContactDocRef = await ContactUsCollection.add(contactUsObject);
-      const contactId = newContactDocRef.id;
-      await newContactDocRef.update({
-        contactId: contactId,
-      });
-
-      res.status(200).json({
-        message: "Form is submitted",
-        statusCode: 200
-      });
+    const newForm = await createForm(value);
+    if (!newForm){
+      return res
+        .status(500)
+        .json({
+          message: "Unexpected error while creating form",
+          statusCode: 500,
+          error: STATUS_CODES[500],
+        });
     }
 
+    return res.status(200).json({
+      message: "Form is submitted",
+      statusCode: 200,
+    });
   }
   catch (error) {
     console.log(error);
@@ -72,5 +73,5 @@ async function submitContactUs(req , res){
 }
 
 module.exports = {
-  submitContactUs,
+  submitContactForm,
 };

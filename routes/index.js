@@ -11,7 +11,7 @@ router.get("/", (_req, res) =>
 
 router.use("/auth", authRouter);
 router.use("/users", userRouter);
-router.use("/contact-us", contactUsRouter);
+router.use("/contact", contactUsRouter);
 router.use("/keys", keyRouter);
 
 module.exports = router;

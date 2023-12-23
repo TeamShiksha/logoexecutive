@@ -55,7 +55,7 @@ class User {
    * @param {string} userData.lastName
    * @param {string} userData.password
    **/
-  static NewUser = async (userData) => {
+  static async NewUser (userData) {
     try {
       const { email, firstName, lastName, password } = userData;
       if (!email || !firstName || !lastName || !password) {

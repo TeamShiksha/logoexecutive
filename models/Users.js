@@ -1,5 +1,5 @@
 const bcrypt = require("bcrypt");
-const { DocumentReference } = require("firebase-admin/firestore");
+const { DocumentReference, Timestamp } = require("firebase-admin/firestore");
 const jwt = require("jsonwebtoken");
 
 class User {
@@ -10,7 +10,7 @@ class User {
   createdAt;
   updatedAt;
   userRef;
-  #token;
+
   #password;
 
   /**
@@ -34,7 +34,6 @@ class User {
     this.createdAt = params.createdAt;
     this.updatedAt = params.updatedAt;
     this.userRef = params.userRef ?? null;
-    this.#token = params.token || null;
   }
 
   get data() {
@@ -47,11 +46,38 @@ class User {
   }
 
   /**
-   * Returns a boolean, true if the user is verified and false if the user is not
+   * Creates a firestore compatible object with current time for createdAt
+   * and updatedAt using Firebase Timestamp
+   *
+   * @param {Object} userData
+   * @param {string} userData.email
+   * @param {string} userData.firstName
+   * @param {string} userData.lastName
+   * @param {string} userData.password
    **/
-  isUserVerified() {
-    return this.#token;
-  }
+  static async NewUser (userData) {
+    try {
+      const { email, firstName, lastName, password } = userData;
+      if (!email || !firstName || !lastName || !password) {
+        return null;
+      }
+
+      const hashedPassword = await bcrypt.hash(password, 10);
+
+      return {
+        userId: crypto.randomUUID().replace(/-/g, ""),
+        email,
+        firstName,
+        lastName,
+        password: hashedPassword,
+        createdAt: Timestamp.now(),
+        updatedAt: Timestamp.now(),
+      };
+    } catch (err) {
+      console.log(err);
+      return null;
+    }
+  };
 
   /**
    * Returns true or false if the password provided matches the user's password
@@ -70,17 +96,6 @@ class User {
     return jwt.sign({ data: this.data }, process.env.JWT_SECRET, {
       expiresIn: "1d",
     });
-  }
-
-  /**
-   * Generates a verification URL for the user.
-   *
-   * @returns {URL} - The verification URL with the user's token as a query parameter.
-   */
-  getVerificationUrl() {
-    const userVerificationUrl = new URL("/auth/verify", process.env.BASE_URL);
-    userVerificationUrl.searchParams.append("token", this.#token);
-    return userVerificationUrl;
   }
 }
 

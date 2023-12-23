@@ -1,7 +1,5 @@
 const User = require("../models/Users");
 const { UserCollection } = require("../utils/firestore");
-const { Timestamp } = require("firebase-admin/firestore");
-const bcrypt = require("bcrypt");
 
 /**
  * Fetches all the users
@@ -48,23 +46,29 @@ async function fetchUserByEmail(email) {
  * Creates user in the DB
  * @param {Object} user - User Object
  * @param {string} user.email - email address of the user
- * @param {string} user.name - name of the user
+ * @param {string} user.firstName - First name of the user
+ * @param {string} user.lastName - Last name of the user
  * @param {string} user.password - password of the user
  */
 async function createUser(user) {
   try {
-    const userData = {
-      userId: crypto.randomUUID(),
-      email: user.email,
-      firstName: user.firstName,
-      lastName: user.lastName,
-      password: await bcrypt.hash(user.password, 10),
-      token: crypto.randomUUID().replace(/-/g, ""),
-      createdAt: Timestamp.now(),
-      updatedAt: Timestamp.now(),
-    };
-    const result = await UserCollection.add(userData);
-    const createdUser = new User(userData);
+    const { email, firstName, lastName, password } = user;
+
+    const newUser = await User.NewUser({
+      email,
+      firstName,
+      lastName,
+      password,
+    });
+    if (!newUser)
+      return null;
+
+    const result = await UserCollection.doc(newUser.userId).set({ ...newUser, isVerified: false });
+
+    if (!result)
+      return null;
+
+    const createdUser = new User(newUser);
     return createdUser;
   } catch (err) {
     console.log(err);
@@ -73,47 +77,19 @@ async function createUser(user) {
 }
 
 /**
- * fetchUserByToken - Fetches user from provided token
- * @param {string} token - token of the user
+ * Fetches user by document id
+ * @param {string} userId - User Id of user
  **/
-async function fetchUserByToken(token) {
+async function fetchUserFromId(userId) {
   try {
-    const userSnapshot = await UserCollection.where("token", "==", token)
+    const userSnapshot = await UserCollection.where("userId", "==", userId)
       .limit(1)
       .get();
 
-    if (userSnapshot.empty) {
-      return null;
-    }
+    if (userSnapshot.empty) return null;
 
-    const user = new User({...userSnapshot.docs[0].data(), id: userSnapshot.docs[0].id});
-    
-    return user;
-  } catch (err) {
-    console.log(err);
-    throw err;
-  }
-}
-
-/**
- * deleteUserToken - Fetches user from provided token
- * @param {string} token - token of the user
- **/
-async function deleteUserToken(token) {
-  try {
-    const userSnapshot = await UserCollection.where("token", "==", token)
-      .limit(1)
-      .get();
-
-    if (userSnapshot.empty) {
-      return null;
-    }
-
-    await userSnapshot.docs[0].ref.update({
-      token: null,
-    });
-
-    return {success: true};
+    const userDoc = userSnapshot.docs[0];
+    return new User({ ...userDoc.data(), userRef: userDoc.ref });
   } catch (err) {
     console.log(err);
     throw err;
@@ -133,11 +109,22 @@ async function updatePasswordService(user, hashNewPassword){
   }
 }
 
+/**
+ * @param {User} user
+ **/
+async function verifyUser(user) {
+  const result = await user.userRef.update({ isVerified: true });
+  if (!result) return { success: false, message: "Failed to verify the user" };
+
+  user.isVerified = true;
+  return { success: true, message: "Successfully verified the user" };
+}
+
 module.exports = {
   fetchUsers,
   fetchUserByEmail,
   createUser,
-  fetchUserByToken,
-  deleteUserToken,
-  updatePasswordService, 
+  updatePasswordService,
+  fetchUserFromId,
+  verifyUser
 };

@@ -157,4 +157,20 @@ describe("contactUs controller", () =>{
       message: "Form is submitted",
     });
   });
+
+  it("500 - createForm service throws error", async () => {
+    jest.spyOn(ContactUsService, "formExists").mockImplementation(() => false);
+    jest.spyOn(ContactUsService, "createForm").mockImplementation(() => {
+      throw new Error("Mocked error message");
+    });
+
+    const response = await request(app).post("/contact").send(mockValidPayload);
+
+    expect(response.status).toBe(500);
+    expect(response.body).toEqual({
+      statusCode: 500,
+      error: STATUS_CODES[500],
+      message: "Mocked error message",
+    });
+  });
 });

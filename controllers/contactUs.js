@@ -24,7 +24,7 @@ const contactUsPayloadSchema = Joi.object().keys({
     .message("Message is invalid (too long)"),
 });
 
-async function submitContactForm(req , res){
+async function submitContactForm(req , res, next){
   try {   
     const payload = req.body;
 
@@ -68,7 +68,7 @@ async function submitContactForm(req , res){
   }
   catch (error) {
     console.log(error);
-    throw error;
+    next(error);
   }
 }
 

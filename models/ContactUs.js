@@ -44,9 +44,9 @@ class ContactUs {
       email: this.email,
       message: this.message,
       assignedTo: this.assignedTo,
-      activityStatus: new Date(this.activityStatus),
+      activityStatus: this.activityStatus,
       createdAt: new Date(this.createdAt),
-      updatedAt: this.updatedAt,
+      updatedAt: new Date(this.updatedAt),
     };
   }
 
@@ -55,9 +55,9 @@ class ContactUs {
    * and updatedAt using Firebase Timestamp
    *
    * @param {Object} formData
-   * @param {String} formData.name
-   * @param {String} formData.email
-   * @param {String} formData.message
+   * @param {string} formData.name
+   * @param {string} formData.email
+   * @param {string} formData.message
    **/
   static NewForm (formData){
     try {

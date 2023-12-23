@@ -38,7 +38,7 @@ async function createForm(formData){
       return null;
     }
 
-    const result = await ContactUsCollection.doc(newForm.contactId).set({newForm});
+    const result = await ContactUsCollection.doc(newForm.contactId).set(newForm);
     if (!result){
       return null;
     }

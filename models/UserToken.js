@@ -47,7 +47,7 @@ class UserToken {
     return {
       userId: params.userId,
       token: crypto.randomUUID().replaceAll("-", ""),
-      userTokenId: crypto.randomUUID().replaceAll("-", ""),
+      userTokenId: crypto.randomUUID(),
       type: params.type,
       createdAt: Timestamp.now(),
       expireAt: Timestamp.fromDate(expireAt),

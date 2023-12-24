@@ -1,6 +1,8 @@
 const UserToken = require("../models/UserToken");
+const { Timestamp } = require("firebase-admin/firestore");
 const { UserTokenTypes } = require("../utils/constants");
 const { UserTokenCollection } = require("../utils/firestore");
+const dayjs = require("dayjs");
 
 /**
  * Creates user token in "UserTokens" collection
@@ -50,11 +52,16 @@ async function deleteUserToken(userToken) {
  * @param {string} userId - userId associate with token
  **/
 async function createVerifyToken(userId) {
+  const expireAt = dayjs().add(1, "day").toDate();
   try {
-    const newUserToken = UserToken.createUserToken({
-      userId,
+    const newUserToken = {
+      userId: userId,
       type: UserTokenTypes.VERIFY,
-    });
+      userTokenId: crypto.randomUUID(),
+      token: crypto.randomUUID().replaceAll("-", ""),
+      createdAt: Timestamp.now(),
+      expireAt: Timestamp.fromDate(expireAt),
+    };
     const result = await UserTokenCollection.doc(newUserToken.userTokenId).set(newUserToken);
     if (!result) return null;
     return new UserToken(newUserToken);

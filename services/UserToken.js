@@ -9,16 +9,19 @@ const dayjs = require("dayjs");
  * @param {string} userId - userId associate with token
  **/
 async function createForgotToken(userId) {
+  const expireAt = dayjs().add(1, "day").toDate();
   try {
-    const result = await UserTokenCollection.add(
-      UserToken.createUserToken({ userId, type: UserTokenTypes.FORGOT }),
-    );
-    const createdToken = await result.get();
-    if (!createdToken.exists) return null;
-    return new UserToken({
-      ...createdToken.data(),
-      userTokenRef: createdToken.ref,
-    });
+    const newUserForgotToken = {
+      userId: userId,
+      type: UserTokenTypes.FORGOT,
+      userTokenId: crypto.randomUUID(),
+      token: crypto.randomUUID().replaceAll("-", ""),
+      createdAt: Timestamp.now(),
+      expireAt: Timestamp.fromDate(expireAt),
+    };
+    const result = await UserTokenCollection.doc(newUserForgotToken.userTokenId).set(newUserForgotToken);
+    if (!result) return null;
+    return new UserToken(newUserForgotToken);
   } catch (err) {
     console.log(err);
     throw err;
@@ -54,7 +57,7 @@ async function deleteUserToken(userToken) {
 async function createVerifyToken(userId) {
   const expireAt = dayjs().add(1, "day").toDate();
   try {
-    const newUserToken = {
+    const newUserVerifyToken = {
       userId: userId,
       type: UserTokenTypes.VERIFY,
       userTokenId: crypto.randomUUID(),
@@ -62,9 +65,9 @@ async function createVerifyToken(userId) {
       createdAt: Timestamp.now(),
       expireAt: Timestamp.fromDate(expireAt),
     };
-    const result = await UserTokenCollection.doc(newUserToken.userTokenId).set(newUserToken);
+    const result = await UserTokenCollection.doc(newUserVerifyToken.userTokenId).set(newUserVerifyToken);
     if (!result) return null;
-    return new UserToken(newUserToken);
+    return new UserToken(newUserVerifyToken);
   } catch (err) {
     console.log(err);
     throw err;

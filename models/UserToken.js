@@ -10,7 +10,6 @@ class UserToken {
   type;
   userId;
   userTokenId;
-
   userTokenRef;
 
   /**
@@ -30,7 +29,6 @@ class UserToken {
     this.type = params.type;
     this.createdAt = normalizeDate(params.createdAt);
     this.expireAt = normalizeDate(params.expireAt);
-
     this.userTokenRef = params.userTokenRef;
   }
 
@@ -43,7 +41,6 @@ class UserToken {
    **/
   static createUserToken(params) {
     const expireAt = params.expireAt ?? dayjs().add(1, "day").toDate();
-
     return {
       userId: params.userId,
       token: crypto.randomUUID().replaceAll("-", ""),
@@ -73,13 +70,10 @@ class UserToken {
    */
   get tokenURL() {
     let path;
-
     if (this.type === UserTokenTypes.FORGOT) path = "/auth/change-password";
     if (this.type === UserTokenTypes.VERIFY) path = "/auth/verify";
-
     const url = new URL(path, process.env.BASE_URL);
     url.searchParams.append("token", this.token);
-
     return url;
   }
 

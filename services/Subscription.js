@@ -14,7 +14,7 @@ async function createSubscription(userId) {
       createdAt: Timestamp.now(),
       updatedAt: Timestamp.now(),
     };
-    const result = await SubscriptionCollection.add(subscriptionData);
+    const result = await SubscriptionCollection.doc(subscriptionData.subscriptionId).set(subscriptionData);
     const UserSubscription = new Subscription(subscriptionData);
     return UserSubscription;
   } catch (err) {
@@ -27,10 +27,7 @@ async function fetchSubscriptionByuserid(userId) {
   try {
     const subscriptionRef = await SubscriptionCollection.where("userId", "==", userId)
       .limit(1).get();
-    if (subscriptionRef.empty) {
-      return null;
-    }
-    
+    if (subscriptionRef.empty) return null;
     const subscription = new Subscription({
       ...subscriptionRef.docs[0].data(),
     });

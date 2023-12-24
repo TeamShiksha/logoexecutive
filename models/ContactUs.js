@@ -1,4 +1,3 @@
-const { Timestamp } = require("firebase-admin/firestore");
 const {normalizeDate} = require("../utils/date");
 
 class ContactUs {
@@ -49,35 +48,6 @@ class ContactUs {
       updatedAt: new Date(this.updatedAt),
     };
   }
-
-  /**
-   * Creates a firestore compatible object with current time for createdAt
-   * and updatedAt using Firebase Timestamp
-   *
-   * @param {Object} formData
-   * @param {string} formData.name
-   * @param {string} formData.email
-   * @param {string} formData.message
-   **/
-  static NewForm (formData){
-    try {
-      const {name, email, message}= formData;
-      return {
-        name,
-        email, 
-        message,
-        contactId: crypto.randomUUID(),
-        assignedTo: null,
-        createdAt: Timestamp.now(),
-        updatedAt: Timestamp.now(),
-        activityStatus: true,
-      };
-    }
-    catch(error){
-      console.log(error);
-      return null;
-    }
-  };
 }
 
 

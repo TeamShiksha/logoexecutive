@@ -9,16 +9,13 @@ async function createImageData(file) {
     createAt: Timestamp.now(),
     updatedAt: Timestamp.now(),
   };
-
   const result = await ImageCollection.where(
     "imageUrl",
     "==",
     imageData.imageUrl
   ).get();
-  if (result.size > 0) {
-    return false;
-  }
-  await ImageCollection.add(imageData);
+  if (result.size > 0) return false;
+  await ImageCollection.doc(imageData.imageId).set(imageData);
   return true;
 }
 

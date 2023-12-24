@@ -7,9 +7,7 @@ const { UserCollection } = require("../utils/firestore");
 async function fetchUsers() {
   try {
     const usersRef = await UserCollection.get();
-
     const users = usersRef.docs.map((doc) => new User({ ...doc.data(), id: doc.id }));
-
     return {
       data: users,
     };
@@ -27,10 +25,7 @@ async function fetchUserByEmail(email) {
   try {
     const userRef = await UserCollection.where("email", "==", email)
       .limit(1).get();
-    if (userRef.empty) {
-      return null;
-    }
-    
+    if (userRef.empty) return null;
     const user = new User({
       ...userRef.docs[0].data(),
       userRef: userRef.docs[0].ref,
@@ -53,21 +48,15 @@ async function fetchUserByEmail(email) {
 async function createUser(user) {
   try {
     const { email, firstName, lastName, password } = user;
-
     const newUser = await User.NewUser({
       email,
       firstName,
       lastName,
       password,
     });
-    if (!newUser)
-      return null;
-
+    if (!newUser) return null;
     const result = await UserCollection.doc(newUser.userId).set({ ...newUser, isVerified: false });
-
-    if (!result)
-      return null;
-
+    if (!result) return null;
     const createdUser = new User(newUser);
     return createdUser;
   } catch (err) {
@@ -85,9 +74,7 @@ async function fetchUserFromId(userId) {
     const userSnapshot = await UserCollection.where("userId", "==", userId)
       .limit(1)
       .get();
-
     if (userSnapshot.empty) return null;
-
     const userDoc = userSnapshot.docs[0];
     return new User({ ...userDoc.data(), userRef: userDoc.ref });
   } catch (err) {
@@ -102,7 +89,6 @@ async function updatePasswordService(user, hashNewPassword){
       password: hashNewPassword,
     });
     return true;
-
   } catch (err){
     console.log(err);
     throw err;
@@ -114,8 +100,11 @@ async function updatePasswordService(user, hashNewPassword){
  **/
 async function verifyUser(user) {
   const result = await user.userRef.update({ isVerified: true });
-  if (!result) return { success: false, message: "Failed to verify the user" };
-
+  if (!result) 
+    return { 
+      success: false, 
+      message: "Failed to verify the user" 
+    };
   user.isVerified = true;
   return { success: true, message: "Successfully verified the user" };
 }

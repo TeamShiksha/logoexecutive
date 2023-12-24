@@ -21,14 +21,12 @@ async function sendEmail(email, subject, text) {
         pass: process.env.EMAIL_PASS,
       },
     });
-
     await transporter.sendMail({
       from: process.env.EMAIL_USER,
       to: email,
       subject: subject,
       text: text,
     });
-
     return { success: true };
   } catch (error) {
     console.error(error);

@@ -1,3 +1,4 @@
+const { Timestamp } = require("firebase-admin/firestore");
 const { ContactUsCollection } = require("../utils/firestore");
 const ContactUs = require("../models/ContactUs");
 
@@ -9,9 +10,7 @@ const ContactUs = require("../models/ContactUs");
 async function formExists(email){
   try {
     const formQuery = await ContactUsCollection.where("email", "==", email).limit(1).get();
-    if (formQuery.empty){
-      return false;
-    }
+    if (formQuery.empty) return false;
     return true;
   } 
   catch (error){
@@ -28,21 +27,18 @@ async function formExists(email){
  **/
 async function createForm(formData){
   try{    
-    const {name, email, message} = formData;
-    const newForm = await ContactUs.NewForm({
-      name,
-      email,
-      message,
-    });
-    if (!newForm){
-      return null;
-    }
-
+    const newForm = {
+      name: formData.name,
+      email: formData.email,
+      message: formData.message,
+      contactId: crypto.randomUUID(),
+      assignedTo: null,
+      createdAt: Timestamp.now(),
+      updatedAt: Timestamp.now(),
+      activityStatus: true,
+    };
     const result = await ContactUsCollection.doc(newForm.contactId).set(newForm);
-    if (!result){
-      return null;
-    }
-
+    if (!result) return null;
     const createdForm = new ContactUs(newForm);
     return createdForm;
   }

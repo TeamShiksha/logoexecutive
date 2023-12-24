@@ -13,7 +13,7 @@ async function createKey(data) {
       createdAt: Timestamp.now(),
       updatedAt: Timestamp.now(),
     };
-    const result = await KeyCollection.add(keyData);
+    const result = await KeyCollection.doc(keyData.keyId).set(keyData);
     const UserKey = new Key(keyData);
     return UserKey;
   } catch (err) {
@@ -25,9 +25,7 @@ async function createKey(data) {
 async function fetchKeyByuserid(userId) {
   try {
     const keyRef = await KeyCollection.where("userId", "==", userId).get();
-    if (keyRef.empty) {
-      return null;
-    }
+    if (keyRef.empty) return null;
     const keysObject = keyRef.docs.map(doc => new Key({
       ...doc.data(),
     }));
@@ -40,11 +38,7 @@ async function fetchKeyByuserid(userId) {
 
 async function destroyKey(keyId) {
   try {
-    const keyRef = await KeyCollection.where("keyId", "==", keyId).get();
-    if (keyRef.empty) {
-      return null;
-    }
-    await keyRef.docs[0].ref.delete();
+    const keyRef = await KeyCollection.doc(keyId).delete();
     return true;
   } catch (err) {
     console.log(err);

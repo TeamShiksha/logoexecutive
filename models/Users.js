@@ -10,7 +10,6 @@ class User {
   createdAt;
   updatedAt;
   userRef;
-
   #password;
 
   /**
@@ -61,11 +60,9 @@ class User {
       if (!email || !firstName || !lastName || !password) {
         return null;
       }
-
       const hashedPassword = await bcrypt.hash(password, 10);
-
       return {
-        userId: crypto.randomUUID().replace(/-/g, ""),
+        userId: crypto.randomUUID(),
         email,
         firstName,
         lastName,
@@ -85,7 +82,6 @@ class User {
    **/
   async matchPassword(password) {
     const match = await bcrypt.compare(password, this.#password);
-
     return !!match ?? false;
   }
 

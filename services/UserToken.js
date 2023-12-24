@@ -11,12 +11,8 @@ async function createForgotToken(userId) {
     const result = await UserTokenCollection.add(
       UserToken.createUserToken({ userId, type: UserTokenTypes.FORGOT }),
     );
-
     const createdToken = await result.get();
-    if (!createdToken.exists) {
-      return null;
-    }
-
+    if (!createdToken.exists) return null;
     return new UserToken({
       ...createdToken.data(),
       userTokenRef: createdToken.ref,
@@ -33,7 +29,6 @@ async function createForgotToken(userId) {
  **/
 async function deleteUserToken(userToken) {
   const result = await userToken.userTokenRef.delete();
-
   if (!result)
     return {
       success: false,
@@ -41,7 +36,6 @@ async function deleteUserToken(userToken) {
         message: "Failed to delete token",
       },
     };
-
   return {
     success: true,
     data: {
@@ -62,9 +56,7 @@ async function createVerifyToken(userId) {
       type: UserTokenTypes.VERIFY,
     });
     const result = await UserTokenCollection.doc(newUserToken.userTokenId).set(newUserToken);
-
     if (!result) return null;
-
     return new UserToken(newUserToken);
   } catch (err) {
     console.log(err);
@@ -75,10 +67,7 @@ async function createVerifyToken(userId) {
 async function fetchTokenFromId(token) {
   try {
     const tokenSnapshot = await UserTokenCollection.where("token", "==", token).limit(1).get();
-
-    if(tokenSnapshot.empty)
-      return null;
-
+    if(tokenSnapshot.empty) return null;
     const userTokenDoc = tokenSnapshot.docs[0];
     return new UserToken({...userTokenDoc.data(), userTokenRef: userTokenDoc.ref});
   } catch (err) {

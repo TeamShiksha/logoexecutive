@@ -1,5 +1,6 @@
 const User = require("../models/Users");
 const { UserCollection } = require("../utils/firestore");
+const { Timestamp } = require("firebase-admin/firestore");
 
 /**
  * Fetches all the users
@@ -109,11 +110,33 @@ async function verifyUser(user) {
   return { success: true, message: "Successfully verified the user" };
 }
 
+async function updateUser(updateProfile, user) {
+  try {
+    const [firstName, lastName, email] = updateProfile;
+    const userRef = user.userRef;
+    const update = {
+      firstName: firstName,
+      lastName: lastName,
+      email: email,
+      updatedAt: Timestamp.now(),
+    };
+    await userRef.update(update);
+  
+    return { success: true };
+  } catch (err) {
+    console.log(err);
+    throw err;
+  }  
+}
+
 module.exports = {
   fetchUsers,
   fetchUserByEmail,
   createUser,
   updatePasswordService,
   fetchUserFromId,
-  verifyUser
+  verifyUser,
+  updateUser,
 };
+
+

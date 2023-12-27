@@ -86,9 +86,28 @@ async function fetchTokenFromId(token) {
   }
 }
 
+async function fetchTokenFromUserid(userid) {
+  try {
+    let getTokenDoc = {};
+    const userTokenRef = await UserTokenCollection.where(
+      "userId",
+      "==",
+      userid
+    ).get();
+
+    userTokenRef.forEach((doc) => {
+      getTokenDoc = { ...doc.data(), userTokenRef: doc.ref };
+    });
+    return getTokenDoc;
+  } catch (err) {
+    return err;
+  }
+}
+
 module.exports = {
   createForgotToken,
   deleteUserToken,
   createVerifyToken,
-  fetchTokenFromId
+  fetchTokenFromId,
+  fetchTokenFromUserid,
 };

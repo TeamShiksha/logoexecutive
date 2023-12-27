@@ -5,11 +5,13 @@ const signupController = require("../controllers/auth/signup");
 const verifyTokenController = require("../controllers/auth/verifyToken");
 const forgotPasswordController = require("../controllers/auth/forgotPassword");
 const signoutController = require("../controllers/auth/signout");
+const resetPasswordController = require("../controllers/auth/resetPassword");
 
 router.post("/signin", signinController);
 router.post("/signup", signupController);
 router.get("/signout", signoutController);
 router.get("/verify", verifyTokenController);
 router.post("/forgot-password", forgotPasswordController);
+router.patch("/reset-password", resetPasswordController);
 
 module.exports = router;

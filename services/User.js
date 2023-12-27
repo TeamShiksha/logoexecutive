@@ -1,3 +1,4 @@
+const { Timestamp } = require("firebase-admin/firestore");
 const User = require("../models/Users");
 const { UserCollection } = require("../utils/firestore");
 
@@ -87,6 +88,7 @@ async function updatePasswordService(user, hashNewPassword){
   try {
     await user.userRef.update({
       password: hashNewPassword,
+      updatedAt: Timestamp.now(),
     });
     return true;
   } catch (err){

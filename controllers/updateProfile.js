@@ -8,6 +8,7 @@ const {
   createVerifyToken,
   deleteUserToken,
 } = require("../services/UserToken");
+const { STATUS_CODES } = require("http");
 
 const changeNameEmailSchema = Joi.object().keys({
   firstName: Joi.string()
@@ -45,7 +46,7 @@ async function updateProfileController(req, res) {
       return res.status(422).json({
         status: 422,
         error: error.details[0].message,
-        message: "Validation failed",
+        message: STATUS_CODES[422],
       });
     }
 
@@ -54,8 +55,8 @@ async function updateProfileController(req, res) {
     if (!user) {
       return res.status(404).json({
         status: 404,
-        error: "User not found",
-        message: "User not found",
+        error: STATUS_CODES[404],
+        message: STATUS_CODES[404],
       });
     }
 
@@ -66,7 +67,7 @@ async function updateProfileController(req, res) {
     ) {
       return res
         .status(200)
-        .json({ status: 200, message: "Profile updated successfully" });
+        .json({ status: 200, message: STATUS_CODES[200] });
     }
 
     const changes = ["firstName", "lastName", "email"].map((field) =>
@@ -75,12 +76,12 @@ async function updateProfileController(req, res) {
 
     const successRes = [];
     await updateUser(changes, user);
-    successRes.push("Profile updated successfully");
+    successRes.push(STATUS_CODES[200]);
 
     if (user.email !== req.body.email) {
       const verificationToken = await createVerifyToken(user.userId);
       if (!verificationToken)
-        return res.status(206).json([
+        return res.status(500).json([
           {
             message: "Failed to create email verification token",
             error: STATUS_CODES[500],
@@ -112,12 +113,7 @@ async function updateProfileController(req, res) {
     }
     return res.status(200).json({ status: 200, message: successRes });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({
-      status: 500,
-      error: error.message,
-      message: "Internal server error",
-    });
+    next(error);
   }
 }
 

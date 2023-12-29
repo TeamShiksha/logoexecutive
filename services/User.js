@@ -121,8 +121,6 @@ async function updateUser(updateProfile, user) {
       updatedAt: Timestamp.now(),
     };
     await userRef.update(update);
-  
-    return { success: true };
   } catch (err) {
     console.log(err);
     throw err;

@@ -14,6 +14,6 @@ router.use("/auth", authRouter);
 router.use("/users", userRouter);
 router.use("/contact", contactUsRouter);
 router.use("/keys", keyRouter);
-router.use("/update-profile",updateProfileRouter);
+router.use("/user/update",updateProfileRouter);
 
 module.exports = router;

@@ -35,12 +35,11 @@ async function getResetPasswordController(req, res, next) {
 
     res.cookie("reset-password-session", jwt.sign({ userId: userToken.userId, token: userToken.token }, process.env.JWT_SECRET));
 		
-    const redirectURL = new URL(CLIENT_URL, "/reset-password");
+    const redirectURL = new URL("/reset-password", process.env.CLIENT_URL);
     redirectURL.searchParams.append("userId", userToken.userId);
     redirectURL.searchParams.append("token", userToken.token);
 
-    res.status(301);
-    return res.redirect(redirectURL.href);
+    return res.redirect(301, redirectURL.href);
   } catch (err) {
     next(err);
   }

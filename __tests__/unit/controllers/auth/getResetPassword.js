@@ -6,13 +6,16 @@ jest.mock("../../../../services/UserToken", () => ({
   fetchTokenFromId: jest.fn()
 }));
 const UserTokenService = require("../../../../services/UserToken");
+const UserToken = require("../../../../models/UserToken");
 
 describe("GET /reset-password", () => {
   beforeAll(() => {
     process.env.CLIENT_URL = "https://clienturl.com";
+    process.env.JWT_SECRET = "mysecret";
   });
   afterAll(() => {
     delete process.env.CLIENT_URL;
+    delete process.env.JWT_SECRET;
   });
 
   it("422 - token missing", async () => {
@@ -39,5 +42,53 @@ describe("GET /reset-password", () => {
     });
   });
 
-  it("403 - User Token is expired", async () => {});
+  it("403 - User Token is expired", async () => {
+    jest.spyOn(UserTokenService, "fetchTokenFromId").mockImplementation(() => new UserToken({
+      createdAt: new Date("01-01-2001"),
+      expireAt: new Date("01-01-2001"),
+      token: "123",
+      type: "FORGOT",
+      userId: "12342",
+      userTokenId: "241254",
+    }));
+
+    const response = await request(app).get("/auth/reset-password").query({ token: "1235" });
+
+    expect(response.status).toBe(403);
+    expect(response.body).toEqual({
+      error: STATUS_CODES[403],
+      message: "User Token is expired",
+      statusCode: 403
+    });
+  });
+
+  it("301 - User Token is valid", async () => {
+    jest.spyOn(UserTokenService, "fetchTokenFromId").mockImplementation(() => new UserToken({
+      createdAt: new Date("01-01-2001"),
+      expireAt: new Date("02-01-20075"),
+      token: "123",
+      type: "FORGOT",
+      userId: "12342",
+      userTokenId: "241254",
+    }));
+
+    const response = await request(app).get("/auth/reset-password").query({ token: "1235" });
+
+    expect(response.status).toBe(301);
+    expect(response.header.location).toBe("https://clienturl.com/reset-password?userId=12342&token=123");
+    expect(response.header["set-cookie"][0]).toMatch(/reset-password-session=/);
+  });
+
+  it("500 - Unexpected errors", async () => {
+    jest.spyOn(UserTokenService, "fetchTokenFromId").mockImplementation(() => {throw new Error("Unexpected error");});
+
+    const response = await request(app).get("/auth/reset-password").query({ token: "1235" });
+
+    expect(response.status).toBe(500);
+    expect(response.body).toEqual({
+      error: STATUS_CODES[500],
+      message: "Unexpected error",
+      statusCode: 500
+    });
+  });
 });

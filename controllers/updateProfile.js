@@ -45,8 +45,8 @@ async function updateProfileController(req, res) {
     if (error) {
       return res.status(422).json({
         status: 422,
-        error: error.details[0].message,
-        message: STATUS_CODES[422],
+        message: error.details[0].message,
+        error: STATUS_CODES[422],
       });
     }
 
@@ -56,7 +56,7 @@ async function updateProfileController(req, res) {
       return res.status(404).json({
         status: 404,
         error: STATUS_CODES[404],
-        message: STATUS_CODES[404],
+        message: "User not found",
       });
     }
 
@@ -67,7 +67,7 @@ async function updateProfileController(req, res) {
     ) {
       return res
         .status(200)
-        .json({ status: 200, message: STATUS_CODES[200] });
+        .json({ status: 200, message: "Profile updated successfully" });
     }
 
     const changes = ["firstName", "lastName", "email"].map((field) =>
@@ -88,8 +88,7 @@ async function updateProfileController(req, res) {
             statusCode: 500,
           },
         ]);
-      const userRef = user.userRef;
-      await userRef.update({
+      await user.userRef.update({
         isVerified: false,
       });
       

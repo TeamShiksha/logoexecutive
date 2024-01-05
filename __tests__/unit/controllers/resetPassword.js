@@ -31,7 +31,7 @@ const userService = require("../../../services/User");
 const userTokenService = require("../../../services/UserToken");
 const { mockUserModel } = require("../../../utils/mocks/Users");
 
-describe.only("resetPassword controller", () => {
+describe("resetPassword controller", () => {
   beforeAll(() => {
     process.env.BASE_URL = "https://example.com";
   });

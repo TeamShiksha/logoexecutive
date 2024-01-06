@@ -12,11 +12,12 @@ class Subscriptions {
 
   /**
    * @param {Object} params
-   * @param {string} params.subscriptionId
+   * @param {string} params.userId
    * @param {string} params.subscriptionType
    * @param {string} params.subscriptionId
    * @param {number} params.keyLimit
    * @param {number} params.usageLimit
+   * @param {boolean} params.isActive
    * @param {Date} params.createdAt
    * @param {Date} params.updatedAt
    **/

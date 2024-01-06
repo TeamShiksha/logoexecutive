@@ -76,7 +76,8 @@ async function fetchUserFromId(userId) {
       .get();
     if (userSnapshot.empty) return null;
     const userDoc = userSnapshot.docs[0];
-    return new User({ ...userDoc.data(), userRef: userDoc.ref });
+    const user = {...new User({ ...userDoc.data(), userRef: userDoc.ref })};
+    return user;
   } catch (err) {
     console.log(err);
     throw err;

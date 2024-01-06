@@ -1,37 +1,81 @@
-const { fetchUsers } = require("../services/User");
-const serializer = require("../utils/serializer/serializer");
 const bcrypt = require("bcrypt");
 const Joi = require("joi");
-const {fetchUserByEmail, updatePasswordService} = require("../services/User");
+const { STATUS_CODES } = require("http");
+const { fetchUserByEmail, fetchUserFromId, updatePasswordService } = require("../services/User");
+const {fetchSubscriptionByuserid} = require("../services/Subscription");
+const {fetchKeyByuserid} = require("../services/Key");
 
-async function getUsers(_, res) {
+async function getUser(req, res, next) {
   try {
-    const { data } = await fetchUsers();
+    const {userId} = req.userData;
 
-    if (!data) {
-      return res.status(404).json({
-        error: "Not Found",
-        statusCode: 404,
-        message: "No user found",
-      });
+    const userData = await fetchUserFromId(userId);
+    if (!userData) {
+      return res
+        .status(404)
+        .json({
+          statusCode: 404,
+          error: STATUS_CODES[404],
+          message: "User document not found",
+        });
     }
 
-    serializer.serialize("users", data, function (err, payload) {
-      if (err) {
-        return res.status(500).json({
-          errors: [
-            {
-              status: 500,
-              detail: err.message,
-              title: "Failed to serialize data",
-            },
-          ],
+    const subscriptionData = await fetchSubscriptionByuserid(userId);
+    if (!subscriptionData) {
+      return res
+        .status(404)
+        .json({
+          statusCode: 404,
+          error: STATUS_CODES[404],
+          message: "Subscription document of user not found",
         });
-      }
-      return res.status(200).json(payload);
+    }
+    userData.subscription = {...subscriptionData};
+    console.log(userData.subscription);
+
+    const keyData = await fetchKeyByuserid(userId);
+    if (!keyData) {
+      return res
+        .status(404)
+        .json({
+          statusCode: 404,
+          error: STATUS_CODES[404],
+          message: "Key document of user not found",
+        });
+    }
+    const keysToRemove = ["keyId", "userId", "updatedAt"];
+    const filteredKeyData = keyData.map((keyObject) => {
+      keysToRemove.forEach((keyToRemove) => {
+        delete keyObject[keyToRemove];
+      });
+      return keyObject;
     });
-  } catch (err) {
-    console.log("Location: getUsers", err);
+
+    console.log(filteredKeyData);
+    userData.key = {...filteredKeyData};
+
+    const result = {
+      "email": userData.email,
+      "firstName": userData.firstName,
+      "lastName": userData.lastName,
+
+      "subscriptionId": userData.subscription.subscriptionId,
+      "subscriptionType":userData.subscription.subscriptionType,
+      "keyLimit": userData.subscription.keyLimit,
+      "usageLimit": userData.subscription.usageLimit,
+
+      "allKey": userData.key
+    };
+
+    return res
+      .status(200)
+      .json({
+        statusCode: 200,
+        success: STATUS_CODES[200],
+        data: result
+      });
+  } 
+  catch (err) {
     throw err;
   }
 }
@@ -118,6 +162,6 @@ async function updatePassword(req, res){
 }
 
 module.exports = {
-  getUsers,
+  getUser,
   updatePassword,
 };

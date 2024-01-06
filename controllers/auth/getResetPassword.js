@@ -39,7 +39,7 @@ async function getResetPasswordController(req, res, next) {
     redirectURL.searchParams.append("userId", userToken.userId);
     redirectURL.searchParams.append("token", userToken.token);
 
-    return res.redirect(301, redirectURL.href);
+    return res.redirect(302, redirectURL.href);
   } catch (err) {
     next(err);
   }

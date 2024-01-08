@@ -1,37 +1,69 @@
-const { fetchUsers } = require("../services/User");
-const serializer = require("../utils/serializer/serializer");
 const bcrypt = require("bcrypt");
 const Joi = require("joi");
-const {fetchUserByEmail, updatePasswordService} = require("../services/User");
+const { STATUS_CODES } = require("http");
+const { fetchUserByEmail, fetchUserFromId, updatePasswordService } = require("../services/User");
+const {fetchSubscriptionByuserid} = require("../services/Subscription");
+const {fetchKeyByuserid} = require("../services/Key");
 
-async function getUsers(_, res) {
+async function getUser(req, res, next) {
   try {
-    const { data } = await fetchUsers();
+    const {userId} = req.userData;
 
-    if (!data) {
-      return res.status(404).json({
-        error: "Not Found",
-        statusCode: 404,
-        message: "No user found",
-      });
-    }
-
-    serializer.serialize("users", data, function (err, payload) {
-      if (err) {
-        return res.status(500).json({
-          errors: [
-            {
-              status: 500,
-              detail: err.message,
-              title: "Failed to serialize data",
-            },
-          ],
+    const user = await fetchUserFromId(userId);
+    if (!user) {
+      return res
+        .status(404)
+        .json({
+          statusCode: 404,
+          error: STATUS_CODES[404],
+          message: "User document not found",
         });
-      }
-      return res.status(200).json(payload);
+    }
+    const userData = {...user};
+
+    const subscriptionData = await fetchSubscriptionByuserid(userId);
+    if (!subscriptionData) {
+      return res
+        .status(404)
+        .json({
+          statusCode: 404,
+          error: STATUS_CODES[404],
+          message: "Subscription document of user not found",
+        });
+    }
+    userData.subscription = {...subscriptionData};
+
+    const keyData = await fetchKeyByuserid(userId);
+    const keysToRemove = ["keyId", "userId", "updatedAt"];
+    const filteredKeyData = keyData.map((keyObject) => {
+      keysToRemove.forEach((keyToRemove) => {
+        delete keyObject[keyToRemove];
+      });
+      return keyObject;
     });
-  } catch (err) {
-    console.log("Location: getUsers", err);
+
+    userData.key = {...filteredKeyData};
+
+    const result = {
+      "email": userData.email,
+      "firstName": userData.firstName,
+      "lastName": userData.lastName,
+      "subscriptionId": userData.subscription.subscriptionId,
+      "subscriptionType":userData.subscription.subscriptionType,
+      "usageLimit": userData.subscription.usageLimit,
+      "isActive": userData.subscription.isActive,
+      "keys": userData.key
+    };
+
+    return res
+      .status(200)
+      .json({
+        statusCode: 200,
+        success: STATUS_CODES[200],
+        data: result
+      });
+  } 
+  catch (err) {
     throw err;
   }
 }
@@ -118,6 +150,6 @@ async function updatePassword(req, res){
 }
 
 module.exports = {
-  getUsers,
+  getUser,
   updatePassword,
 };

@@ -26,6 +26,7 @@ const mockData = {
   "subscriptionType": "free",
   "keyLimit": "2",
   "usageLimit": "500",
+  "isActive": true,
   "allKey": {
     "0": {
       "key": crypto.randomUUID(),
@@ -201,7 +202,7 @@ describe("getUser controller", ()=>{
         "subscriptionType":mockSubscriptionModel.subscriptionType,
         "keyLimit": mockSubscriptionModel.keyLimit,
         "usageLimit": mockSubscriptionModel.usageLimit,
-
+        "isActive": mockSubscriptionModel.isActive,
         "allKey": {
           "0": { ...filteredKeyData[0]},
           "1": { ...filteredKeyData[1]},

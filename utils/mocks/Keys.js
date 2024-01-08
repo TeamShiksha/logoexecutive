@@ -7,8 +7,8 @@ const keysObj = {
   key: crypto.randomUUID(),
   keyDescription: "this is key description",
   usageCount: 9999,
-  createdAt: Timestamp.now(),
-  updatedAt: Timestamp.now(),
+  createdAt: "Timestamp.now().toDate()",
+  updatedAt: "Timestamp.now().toDate()",
 };
 
 const mockKeyModel = new Keys(keysObj);

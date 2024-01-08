@@ -9,8 +9,8 @@ async function getUser(req, res, next) {
   try {
     const {userId} = req.userData;
 
-    const userData = {...await fetchUserFromId(userId)};
-    if (!userData) {
+    const user = await fetchUserFromId(userId);
+    if (!user) {
       return res
         .status(404)
         .json({
@@ -19,6 +19,7 @@ async function getUser(req, res, next) {
           message: "User document not found",
         });
     }
+    const userData = {...user};
 
     const subscriptionData = await fetchSubscriptionByuserid(userId);
     if (!subscriptionData) {

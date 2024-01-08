@@ -8,8 +8,8 @@ const subscriptionObj = {
   keyLimit: "2",
   usageLimit: "500",
   isActive: "true",
-  createdAt: Timestamp.now(),
-  updatedAt: Timestamp.now(),
+  createdAt: "Timestamp.now().toDate()",
+  updatedAt: "Timestamp.now().toDate()",
 };
 
 const mockSubscriptionModel = new Subscriptions(subscriptionObj);

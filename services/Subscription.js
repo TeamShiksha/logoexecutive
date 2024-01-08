@@ -31,6 +31,8 @@ async function fetchSubscriptionByuserid(userId) {
     const subscription = new Subscription({
       ...subscriptionRef.docs[0].data(),
     });
+    subscription.createdAt = subscription.createdAt.toDate();
+    subscription.updatedAt = subscription.updatedAt.toDate();
     return subscription;
   } catch (err) {
     console.log(err);

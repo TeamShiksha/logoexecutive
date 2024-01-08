@@ -9,7 +9,7 @@ async function getUser(req, res, next) {
   try {
     const {userId} = req.userData;
 
-    const userData = await fetchUserFromId(userId);
+    const userData = {...await fetchUserFromId(userId)};
     if (!userData) {
       return res
         .status(404)
@@ -31,7 +31,6 @@ async function getUser(req, res, next) {
         });
     }
     userData.subscription = {...subscriptionData};
-    console.log(userData.subscription);
 
     const keyData = await fetchKeyByuserid(userId);
     if (!keyData) {
@@ -51,7 +50,6 @@ async function getUser(req, res, next) {
       return keyObject;
     });
 
-    console.log(filteredKeyData);
     userData.key = {...filteredKeyData};
 
     const result = {
@@ -63,6 +61,7 @@ async function getUser(req, res, next) {
       "subscriptionType":userData.subscription.subscriptionType,
       "keyLimit": userData.subscription.keyLimit,
       "usageLimit": userData.subscription.usageLimit,
+      "isActive": userData.subscription.isActive,
 
       "allKey": userData.key
     };

@@ -34,15 +34,6 @@ async function getUser(req, res, next) {
     userData.subscription = {...subscriptionData};
 
     const keyData = await fetchKeyByuserid(userId);
-    if (!keyData) {
-      return res
-        .status(404)
-        .json({
-          statusCode: 404,
-          error: STATUS_CODES[404],
-          message: "Key document of user not found",
-        });
-    }
     const keysToRemove = ["keyId", "userId", "updatedAt"];
     const filteredKeyData = keyData.map((keyObject) => {
       keysToRemove.forEach((keyToRemove) => {

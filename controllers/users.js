@@ -57,14 +57,11 @@ async function getUser(req, res, next) {
       "email": userData.email,
       "firstName": userData.firstName,
       "lastName": userData.lastName,
-
       "subscriptionId": userData.subscription.subscriptionId,
       "subscriptionType":userData.subscription.subscriptionType,
-      "keyLimit": userData.subscription.keyLimit,
       "usageLimit": userData.subscription.usageLimit,
       "isActive": userData.subscription.isActive,
-
-      "allKey": userData.key
+      "keys": userData.key
     };
 
     return res

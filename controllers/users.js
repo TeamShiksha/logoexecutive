@@ -8,7 +8,6 @@ const {fetchKeyByuserid} = require("../services/Key");
 async function getUser(req, res, next) {
   try {
     const {userId} = req.userData;
-
     const user = await fetchUserFromId(userId);
     if (!user) {
       return res
@@ -20,7 +19,6 @@ async function getUser(req, res, next) {
         });
     }
     const userData = {...user};
-
     const subscriptionData = await fetchSubscriptionByuserid(userId);
     if (!subscriptionData) {
       return res
@@ -32,18 +30,18 @@ async function getUser(req, res, next) {
         });
     }
     userData.subscription = {...subscriptionData};
-
     const keyData = await fetchKeyByuserid(userId);
     const keysToRemove = ["keyId", "userId", "updatedAt"];
-    const filteredKeyData = keyData.map((keyObject) => {
-      keysToRemove.forEach((keyToRemove) => {
-        delete keyObject[keyToRemove];
-      });
-      return keyObject;
-    });
-
+    let filteredKeyData = null;
+    if (keyData){
+        const filteredKeyData = keyData.map((keyObject) => {
+        keysToRemove.forEach((keyToRemove) => {
+          delete keyObject[keyToRemove];
+        });
+        return keyObject;
+      }); 
+    }
     userData.key = {...filteredKeyData};
-
     const result = {
       "email": userData.email,
       "firstName": userData.firstName,

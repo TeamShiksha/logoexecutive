@@ -33,7 +33,7 @@ async function getResetPasswordController(req, res, next) {
         statusCode: 403,
       });
 
-    res.cookie("reset-password-session", jwt.sign({ userId: userToken.userId, token: userToken.token }, process.env.JWT_SECRET));
+    res.cookie("resetPasswordSession", jwt.sign({ userId: userToken.userId, token: userToken.token }, process.env.JWT_SECRET));
 		
     const redirectURL = new URL("/reset-password", process.env.CLIENT_URL);
     redirectURL.searchParams.append("userId", userToken.userId);

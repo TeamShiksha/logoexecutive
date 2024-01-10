@@ -4,7 +4,7 @@ const app = require("../../../app");
 const resetPasswordPayload = {
   newPassword: "@Rtyu678KMh",
   confirmPassword: "@Rtyu678KMh",
-  userId: "123",
+  token: "6dc1ff1a95e04dcdb347269ed15575bc",
 };
 
 const userTokenObj = {
@@ -16,14 +16,13 @@ const userTokenObj = {
   userTokenId: "069290e9-a26d-4211-8753-881ed5067399",
 };
 
-
 jest.mock("../../../services/User", () => ({
   fetchUserFromId: jest.fn(),
   updatePasswordService: jest.fn(),
 }));
 
 jest.mock("../../../services/UserToken", () => ({
-  fetchTokenFromUserid: jest.fn(),
+  fetchTokenFromId: jest.fn(),
   deleteUserToken: jest.fn(),
 }));
 
@@ -34,6 +33,7 @@ const { mockUserModel } = require("../../../utils/mocks/Users");
 describe("resetPassword controller", () => {
   beforeAll(() => {
     process.env.BASE_URL = "https://example.com";
+    process.env.JWT_SECRET = "my_secret";
   });
   afterAll(() => {
     delete process.env.BASE_URL;
@@ -43,6 +43,8 @@ describe("resetPassword controller", () => {
     jest.restoreAllMocks();
   });
   it("should reset the existing password", async () => {
+    const mockToken = mockUserModel.generateJWT();
+    
     jest
       .spyOn(userService, "fetchUserFromId")
       .mockImplementation(() => mockUserModel);
@@ -50,14 +52,17 @@ describe("resetPassword controller", () => {
       .spyOn(userService, "updatePasswordService")
       .mockImplementation(() => mockUserModel);
     jest
-      .spyOn(userTokenService, "fetchTokenFromUserid")
+      .spyOn(userTokenService, "fetchTokenFromId")
       .mockImplementation(() => userTokenObj);
     jest
       .spyOn(userTokenService, "deleteUserToken")
       .mockImplementation(() => userTokenObj);
+    
     const response = await request(app)
       .patch("/auth/reset-password")
+      .set("cookie", `resetPasswordSession=${mockToken}`)
       .send(resetPasswordPayload);
+
     expect(response.status).toBe(200);
     expect(response.body).toEqual({ message: "Password updated Successfully" });
   });

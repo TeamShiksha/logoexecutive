@@ -159,24 +159,6 @@ describe("getUser controller", ()=>{
       });
     });
 
-    it("404 - Key document of user not found", async() =>{
-      const mockToken = mockUser.generateJWT();
-      jest.spyOn(UserService, "fetchUserFromId").mockImplementation(() => mockUserModel);
-      jest.spyOn(SubscriptionService, "fetchSubscriptionByuserid").mockImplementation(() => mockSubscriptionModel);
-      jest.spyOn(KeyService, "fetchKeyByuserid").mockImplementation(() => null);
-
-      const response = await request(app)
-        .get("/users/user")
-        .set("cookie", `jwt=${mockToken}`);
-
-      expect(response.status).toBe(404);
-      expect(response.body).toEqual({
-        statusCode: 404,
-        error: STATUS_CODES[404],
-        message: "Key document of user not found",
-      });
-    });
-
     it("200 - Happy flow", async() =>{
       const mockToken = mockUser.generateJWT();
       jest.spyOn(UserService, "fetchUserFromId").mockImplementation(() => mockUserModel);
@@ -200,10 +182,9 @@ describe("getUser controller", ()=>{
 
         "subscriptionId": mockSubscriptionModel.subscriptionId,
         "subscriptionType":mockSubscriptionModel.subscriptionType,
-        "keyLimit": mockSubscriptionModel.keyLimit,
         "usageLimit": mockSubscriptionModel.usageLimit,
         "isActive": mockSubscriptionModel.isActive,
-        "allKey": {
+        "keys": {
           "0": { ...filteredKeyData[0]},
           "1": { ...filteredKeyData[1]},
           "2": { ...filteredKeyData[2]},

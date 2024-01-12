@@ -19,7 +19,9 @@ async function createForgotToken(userId) {
       createdAt: Timestamp.now(),
       expireAt: Timestamp.fromDate(expireAt),
     };
-    const result = await UserTokenCollection.doc(newUserForgotToken.userTokenId).set(newUserForgotToken);
+    const result = await UserTokenCollection.doc(
+      newUserForgotToken.userTokenId
+    ).set(newUserForgotToken);
     if (!result) return null;
     return new UserToken(newUserForgotToken);
   } catch (err) {
@@ -65,7 +67,9 @@ async function createVerifyToken(userId) {
       createdAt: Timestamp.now(),
       expireAt: Timestamp.fromDate(expireAt),
     };
-    const result = await UserTokenCollection.doc(newUserVerifyToken.userTokenId).set(newUserVerifyToken);
+    const result = await UserTokenCollection.doc(
+      newUserVerifyToken.userTokenId
+    ).set(newUserVerifyToken);
     if (!result) return null;
     return new UserToken(newUserVerifyToken);
   } catch (err) {
@@ -76,10 +80,34 @@ async function createVerifyToken(userId) {
 
 async function fetchTokenFromId(token) {
   try {
-    const tokenSnapshot = await UserTokenCollection.where("token", "==", token).limit(1).get();
-    if(tokenSnapshot.empty) return null;
+    const tokenSnapshot = await UserTokenCollection.where("token", "==", token)
+      .limit(1)
+      .get();
+    if (tokenSnapshot.empty) return null;
     const userTokenDoc = tokenSnapshot.docs[0];
-    return new UserToken({...userTokenDoc.data(), userTokenRef: userTokenDoc.ref});
+    return new UserToken({
+      ...userTokenDoc.data(),
+      userTokenRef: userTokenDoc.ref,
+    });
+  } catch (err) {
+    console.log(err);
+    throw err;
+  }
+}
+
+async function fetchTokenFromUserid(userid) {
+  try {
+    let getTokenDoc = null;
+    const userTokenRef = await UserTokenCollection.where(
+      "userId",
+      "==",
+      userid
+    ).get();
+
+    userTokenRef.forEach((doc) => {
+      getTokenDoc = { ...doc.data(), userTokenRef: doc.ref };
+    });
+    return getTokenDoc;
   } catch (err) {
     console.log(err);
     throw err;
@@ -90,5 +118,6 @@ module.exports = {
   createForgotToken,
   deleteUserToken,
   createVerifyToken,
-  fetchTokenFromId
+  fetchTokenFromId,
+  fetchTokenFromUserid,
 };

@@ -1,6 +1,7 @@
 const Joi = require("joi");
 const bcrypt = require("bcrypt");
 const JWT = require("jsonwebtoken");
+const http = require("http");
 const {
   fetchUserFromId,
   updatePasswordService,
@@ -46,20 +47,20 @@ const resetPasswordController = async (req, res, next) => {
       const result = await updatePasswordService(userRef, hashedPassword);
       if (result) {
         let deleteTokenRef = await fetchTokenFromId(value.token);
-        if (deleteTokenRef.token === value.token) {
-          await deleteUserToken(deleteTokenRef);
-          return res
-            .status(200)
-            .json({ message: "Password updated Successfully" });
+        if (deleteTokenRef === null || deleteTokenRef.token !== value.token) {
+          return res.status(403).json({
+            error: http.STATUS_CODES[403],
+            message: "Invalid credentials",
+            statusCode: 403,
+          });
         }
-        return res.status(403).json({
-          error: http.STATUS_CODES[403],
-          message: "Invalid credentials",
-          statusCode: 403,
-        });
+        await deleteUserToken(deleteTokenRef);
+        return res
+          .status(200)
+          .json({ message: "Password updated Successfully" });
       } else {
         return res.status(400).json({
-          error: STATUS_CODES[400],
+          error: http.STATUS_CODES[400],
           message: "Failed to update password",
           statusCode: 400,
         });

@@ -77,7 +77,10 @@ async function fetchUserFromId(userId) {
       .get();
     if (userSnapshot.empty) return null;
     const userDoc = userSnapshot.docs[0];
-    return new User({ ...userDoc.data(), userRef: userDoc.ref });
+    const user = new User({ ...userDoc.data(), userRef: userDoc.ref });
+    user.createdAt = user.createdAt.toDate();
+    user.updatedAt = user.updatedAt.toDate();
+    return user;
   } catch (err) {
     console.log(err);
     throw err;
@@ -111,11 +114,31 @@ async function verifyUser(user) {
   return { success: true, message: "Successfully verified the user" };
 }
 
+async function updateUser(updateProfile, user) {
+  try {
+    const [firstName, lastName, email] = updateProfile;
+    const userRef = user.userRef;
+    const update = {
+      firstName: firstName,
+      lastName: lastName,
+      email: email,
+      updatedAt: Timestamp.now(),
+    };
+    await userRef.update(update);
+  } catch (err) {
+    console.log(err);
+    throw err;
+  }  
+}
+
 module.exports = {
   fetchUsers,
   fetchUserByEmail,
   createUser,
   updatePasswordService,
   fetchUserFromId,
-  verifyUser
+  verifyUser,
+  updateUser,
 };
+
+

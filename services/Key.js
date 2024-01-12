@@ -26,9 +26,14 @@ async function fetchKeyByuserid(userId) {
   try {
     const keyRef = await KeyCollection.where("userId", "==", userId).get();
     if (keyRef.empty) return null;
-    const keysObject = keyRef.docs.map(doc => new Key({
-      ...doc.data(),
-    }));
+    const keysObject = keyRef.docs.map(doc => {
+      const keyData = doc.data();
+      keyData.createdAt = keyData.createdAt.toDate();
+      keyData.updatedAt = keyData.updatedAt.toDate();
+      return new Key({
+        ...keyData,
+      });
+    });
     return keysObject;
   } catch (err) {
     console.log(err);

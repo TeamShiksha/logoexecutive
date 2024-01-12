@@ -31,7 +31,7 @@ describe("UpdateProfile Controller", () => {
       const mockToken = mockUserModel.generateJWT();
 
       const response = await request(app)
-        .post("/update-profile")
+        .patch("/user/update")
         .set("cookie", `jwt=${mockToken}`)
         .send({
           firstName: "Ghosty",
@@ -40,8 +40,8 @@ describe("UpdateProfile Controller", () => {
 
       expect(response.status).toBe(422);
       expect(response.body).toEqual({
-        error: "\"email\" is required",
-        message: "Unprocessable Entity",
+        error: "Unprocessable Entity",
+        message: "\"email\" is required",
         status: 422,
       });
     }, 5000);
@@ -50,7 +50,7 @@ describe("UpdateProfile Controller", () => {
       const mockToken = mockUserModel.generateJWT();
 
       const response = await request(app)
-        .post("/update-profile")
+        .patch("/user/update")
         .set("cookie", `jwt=${mockToken}`)
         .send({
           lastName: "Rider",
@@ -59,8 +59,8 @@ describe("UpdateProfile Controller", () => {
 
       expect(response.status).toBe(422);
       expect(response.body).toEqual({
-        error: "\"firstName\" is required",
-        message: "Unprocessable Entity",
+        error: "Unprocessable Entity",
+        message: "\"firstName\" is required",
         status: 422,
       });
     }, 5000);
@@ -69,7 +69,7 @@ describe("UpdateProfile Controller", () => {
       const mockToken = mockUserModel.generateJWT();
 
       const response = await request(app)
-        .post("/update-profile")
+        .patch("/user/update")
         .set("cookie", `jwt=${mockToken}`)
         .send({
           firstName: "Ghosty",
@@ -78,8 +78,8 @@ describe("UpdateProfile Controller", () => {
 
       expect(response.status).toBe(422);
       expect(response.body).toEqual({
-        error: "\"lastName\" is required",
-        message: "Unprocessable Entity",
+        error: "Unprocessable Entity",
+        message: "\"lastName\" is required",
         status: 422,
       });
     }, 5000);
@@ -88,7 +88,7 @@ describe("UpdateProfile Controller", () => {
       const mockToken = mockUserModel.generateJWT();
 
       const response = await request(app)
-        .post("/update-profile")
+        .patch("/user/update")
         .set("cookie", `jwt=${mockToken}`)
         .send({
           firstName: "Ghosty1",
@@ -98,8 +98,8 @@ describe("UpdateProfile Controller", () => {
 
       expect(response.status).toBe(422);
       expect(response.body).toEqual({
-        error: "firstName should not contain any special character or number",
-        message: "Unprocessable Entity",
+        error: "Unprocessable Entity",
+        message: "firstName should not contain any special character or number",
         status: 422,
       });
     }, 5000);
@@ -108,7 +108,7 @@ describe("UpdateProfile Controller", () => {
       const mockToken = mockUserModel.generateJWT();
 
       const response = await request(app)
-        .post("/update-profile")
+        .patch("/user/update")
         .set("cookie", `jwt=${mockToken}`)
         .send({
           firstName: "Ghosty",
@@ -118,8 +118,8 @@ describe("UpdateProfile Controller", () => {
 
       expect(response.status).toBe(422);
       expect(response.body).toEqual({
-        error: "\"email\" is required",
-        message: "Unprocessable Entity",
+        error: "Unprocessable Entity",
+        message: "\"email\" is required",
         status: 422,
       });
     }, 5000);
@@ -130,7 +130,7 @@ describe("UpdateProfile Controller", () => {
       const mockToken = mockUserModel.generateJWT();
   
       const response = await request(app)
-        .post("/update-profile")
+        .patch("/user/update")
         .set("cookie", `jwt=${mockToken}`)
         .send({
           firstName: "Ghosty",
@@ -142,7 +142,7 @@ describe("UpdateProfile Controller", () => {
       expect(response.body).toEqual({
         status: 404,
         error: STATUS_CODES[404],
-        message: STATUS_CODES[404],
+        message: "User not found",
       });
     });
 
@@ -153,7 +153,7 @@ describe("UpdateProfile Controller", () => {
       const mockToken = mockUserModel.generateJWT();
   
       const response = await request(app)
-        .post("/update-profile")
+        .patch("/user/update")
         .set("cookie", `jwt=${mockToken}`)
         .send({
           firstName: "Ghosty",

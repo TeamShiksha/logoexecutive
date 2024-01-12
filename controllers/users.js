@@ -34,7 +34,7 @@ async function getUser(req, res, next) {
     const keysToRemove = ["keyId", "userId", "updatedAt"];
     let filteredKeyData = null;
     if (keyData){
-        const filteredKeyData = keyData.map((keyObject) => {
+      filteredKeyData = keyData.map((keyObject) => {
         keysToRemove.forEach((keyToRemove) => {
           delete keyObject[keyToRemove];
         });

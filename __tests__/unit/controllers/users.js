@@ -54,7 +54,7 @@ jest.mock("../../../services/Subscription", ()=>({
 
 const KeyService = require("../../../services/Key");
 jest.mock("../../../services/Key", ()=> ({
-  fetchKeyByuserid: jest.fn(),
+  fetchKeysByuserid: jest.fn(),
 }));
 
 
@@ -165,7 +165,7 @@ describe("getUser controller", ()=>{
       jest.spyOn(SubscriptionService, "fetchSubscriptionByuserid").mockImplementation(() => mockSubscriptionModel);
 
       const keyArray = Array(3).fill({ ...mockKeyModel });
-      jest.spyOn(KeyService, "fetchKeyByuserid").mockImplementation(() => keyArray);
+      jest.spyOn(KeyService, "fetchKeysByuserid").mockImplementation(() => keyArray);
 
       const keysToRemove = ["keyId", "userId", "updatedAt"];
       const filteredKeyData = keyArray.map((keyObject) => {

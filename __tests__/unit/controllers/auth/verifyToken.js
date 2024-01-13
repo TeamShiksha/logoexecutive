@@ -15,11 +15,15 @@ jest.mock("../../../../services/User", () => ({
 }));
 const UserService = require("../../../../services/User");
 
-const { mockUserTokenVerify } = require("../../../../utils/mocks/UserToken");
+const { mockUserTokens } = require("../../../../utils/mocks/UserToken");
 const UserToken = require("../../../../models/UserToken");
-const { mockUserModel } = require("../../../../utils/mocks/Users");
+const { mockUsers } = require("../../../../utils/mocks/Users");
+const User = require("../../../../models/Users");
 
-describe("VerifyTokenController", () => {
+const mockUserModel = new User(mockUsers[0]);
+const mockUserTokenVerify = new UserToken(mockUserTokens[0]);
+
+describe("GET /auth/verify", () => {
   afterEach(() => {
     jest.clearAllMocks();
     jest.restoreAllMocks();

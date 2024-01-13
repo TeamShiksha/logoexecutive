@@ -1,13 +1,13 @@
 const request = require("supertest");
 const app = require("../../../app");
-const jwt = require("jsonwebtoken");
 const User = require("../../../models/Users");
 const { Timestamp } = require("firebase-admin/firestore");
 const { STATUS_CODES } = require("http");
-const {mockUserModel} = require("../../../utils/mocks/Users");
-const {mockSubscriptionModel} = require("../../../utils/mocks/Subscription");
+const {mockUsers} = require("../../../utils/mocks/Users");
+const {mockSubscriptionModel} = require("../../../utils/mocks/Subscriptions");
 const {mockKeyModel} = require("../../../utils/mocks/Keys");
 
+const mockUserModel = new User(mockUsers[0]);
 const mockUser = new User({
   userId: "1",
   email: "john@email.com",

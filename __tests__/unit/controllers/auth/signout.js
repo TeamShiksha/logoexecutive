@@ -1,8 +1,9 @@
-const { mockUserModel } = require("../../../../utils/mocks/Users.js");
+const { mockUsers } = require("../../../../utils/mocks/Users.js");
 
 const request = require("supertest");
 const { STATUS_CODES } = require("http");
 const app = require("../../../../app");
+const User = require("../../../../models/Users.js");
 
 describe("/signout", () => {
   beforeAll(() => {
@@ -23,7 +24,7 @@ describe("/signout", () => {
   });
 
   it("205 - Successful signout", async () => {
-    const mockJWT = mockUserModel.generateJWT();
+    const mockJWT = new User(mockUsers[0]).generateJWT();
     const response = await request(app).get("/auth/signout").set("Cookie", `jwt=${mockJWT}`);
 
     expect(response.status).toBe(205);

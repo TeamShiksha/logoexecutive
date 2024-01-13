@@ -62,7 +62,7 @@ describe("GET /reset-password", () => {
     });
   });
 
-  it("301 - User Token is valid", async () => {
+  it("302 - User Token is valid", async () => {
     jest.spyOn(UserTokenService, "fetchTokenFromId").mockImplementation(() => new UserToken({
       createdAt: new Date("01-01-2001"),
       expireAt: new Date("02-01-20075"),
@@ -74,9 +74,9 @@ describe("GET /reset-password", () => {
 
     const response = await request(app).get("/auth/reset-password").query({ token: "1235" });
 
-    expect(response.status).toBe(301);
-    expect(response.header.location).toBe("https://clienturl.com/reset-password?userId=12342&token=123");
-    expect(response.header["set-cookie"][0]).toMatch(/reset-password-session=/);
+    expect(response.status).toBe(302);
+    expect(response.header.location).toBe("https://clienturl.com/reset-password?token=123");
+    expect(response.header["set-cookie"][0]).toMatch(/resetPasswordSession=/);
   });
 
   it("500 - Unexpected errors", async () => {

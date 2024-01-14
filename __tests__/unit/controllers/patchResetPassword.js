@@ -2,13 +2,16 @@ const request = require("supertest");
 const app = require("../../../app");
 const userService = require("../../../services/User");
 const userTokenService = require("../../../services/UserToken");
-const { mockUserModel, userMockModel } = require("../../../utils/mocks/Users");
+const { mockUsers } = require("../../../utils/mocks/Users");
+const User = require("../../../models/Users");
 
 const resetPasswordPayload = {
   newPassword: "@Rtyu678KMh",
   confirmPassword: "@Rtyu678KMh",
   token: "6dc1ff1a95e04dcdb347269ed15575bc",
 };
+
+const mockUserModel = new User(mockUsers[0]);
 
 const userTokenObj = {
   createdAt: "29 December 2023 at 17:04:18 UTC+5:30",

@@ -8,10 +8,6 @@ Parameters:
       Default: "prod"
       AllowedPattern: ^[a-zA-Z0-9]*$
       Description: "The S3 bucket name must be globally unique. This template will utilize your GitHub username to form the S3 bucket name and other services"
-     SNSSubscriberEmail:
-      Type: String
-      Default: "Enter first email subscriber of SNS"
-      Description: "For Adding first subscriber to the SNS. You can add others manually"
      EncodedRSAPublicKey:
       Type: String
       Default: "Paste the public key value in PEM format, including -----BEGIN PUBLIC KEY----- and -----END PUBLIC KEY-----. Follow https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/private-content-trusted-signers.html"
@@ -22,50 +18,8 @@ Parameters:
       Description: "Provide the S3 path where your object are present without the bucket name. Do not start or end the path with `/`"
       AllowedPattern: ^[a-zA-Z0-9]+(/[a-zA-Z0-9]+)*$
 Resources:
-     SNSTopic:
-      Type: AWS::SNS::Topic
-      Properties:
-        DisplayName: !Sub "teamshiksha-${AWS::Region}"
-        TopicName: !Sub "teamshiksha-${AWS::Region}"
-        Tags:
-             - Key: use
-               Value: sending notification for incidents
-             - Key: community-project
-               Value: teamshiksha-logoexecutive
-             - Key: frontend-deployment
-               Value: reactjs-netlify
-             - Key: backend-deployment
-               Value: nodejs-railway-app
-             - Key: Database
-               Value: firebase
-     SNSTopicPermission:
-      Type: AWS::SNS::TopicPolicy
-      Properties:
-        PolicyDocument:
-          Version: 2012-10-17
-          Statement:
-            - Effect: Allow
-              Principal:
-                Service: s3.amazonaws.com
-              Action: sns:Publish
-              Resource: !Ref SNSTopic
-              Condition:
-                ArnEquals:
-                  aws:SourceArn: !Sub arn:${AWS::Partition}:s3:::teamshiksha-logoexecutive-${UserName}-${AWS::Region}
-        Topics:
-             - !Ref SNSTopic
-     SNSSubscribers:
-      DependsOn:
-           - SNSTopic
-      Type: AWS::SNS::Subscription
-      Properties:
-           TopicArn: !Ref SNSTopic
-           Protocol: email
-           Endpoint: !Ref SNSSubscriberEmail
      S3bucket:
       Type: AWS::S3::Bucket
-      DependsOn:
-           - SNSTopicPermission
       Properties:
         BucketName: !Sub "teamshiksha-logoexecutive-${UserName}-${AWS::Region}"
         AccessControl: Private
@@ -229,11 +183,6 @@ Resources:
            Users:
                 - !Ref IAMUser
 Outputs:
-     CreatedSNSTopic:
-      Value: !Ref SNSTopic
-      Description: "SNS Topic created in this stack"
-      Export:
-        Name: !Sub "${AWS::StackName}SNS"
      CreatedS3Bucket:
       Value: !Ref S3bucket
       Description: "S3 bucket created in this stack"

@@ -23,10 +23,6 @@ Resources:
       Properties:
         BucketName: !Sub "teamshiksha-logoexecutive-${UserName}-${AWS::Region}"
         AccessControl: Private
-        NotificationConfiguration:
-          TopicConfigurations:
-             - Topic: !Ref SNSTopic
-               Event: s3:ObjectRemoved:*
         Tags:
              - Key: use
                Value: storing objects for CDN

@@ -1,0 +1,261 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: "Template is responsible for creating all the relevant resources for logoexecutive project. Services created are CloudFront for CDN, S3 for object storage and Service role for accessing S3 and CloudFront"
+Parameters:
+     UserName:
+      Type: String
+      MinLength: "3"
+      MaxLength: "10"
+      Default: "prod"
+      AllowedPattern: ^[a-zA-Z0-9]*$
+      Description: "The S3 bucket name must be globally unique. This template will utilize your GitHub username to form the S3 bucket name and other services"
+     SNSSubscriberEmail:
+      Type: String
+      Default: "Enter first email subscriber of SNS"
+      Description: "For Adding first subscriber to the SNS. You can add others manually"
+     EncodedRSAPublicKey:
+      Type: String
+      Default: "Paste the public key value in PEM format, including -----BEGIN PUBLIC KEY----- and -----END PUBLIC KEY-----. Follow https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/private-content-trusted-signers.html"
+      Description: "Public Key will be used for verifying the signed URL created using the private key"
+     CDNPathInS3:
+      Type: String
+      Default: "path/to/object"
+      Description: "Provide the S3 path where your object are present without the bucket name. Do not start or end the path with `/`"
+      AllowedPattern: ^[a-zA-Z0-9]+(/[a-zA-Z0-9]+)*$
+Resources:
+     SNSTopic:
+      Type: AWS::SNS::Topic
+      Properties:
+        DisplayName: !Sub "teamshiksha-${AWS::Region}"
+        TopicName: !Sub "teamshiksha-${AWS::Region}"
+        Tags:
+             - Key: use
+               Value: sending notification for incidents
+             - Key: community-project
+               Value: teamshiksha-logoexecutive
+             - Key: frontend-deployment
+               Value: reactjs-netlify
+             - Key: backend-deployment
+               Value: nodejs-railway-app
+             - Key: Database
+               Value: firebase
+     SNSTopicPermission:
+      Type: AWS::SNS::TopicPolicy
+      Properties:
+        PolicyDocument:
+          Version: 2012-10-17
+          Statement:
+            - Effect: Allow
+              Principal:
+                Service: s3.amazonaws.com
+              Action: sns:Publish
+              Resource: !Ref SNSTopic
+              Condition:
+                ArnEquals:
+                  aws:SourceArn: !Sub arn:${AWS::Partition}:s3:::teamshiksha-logoexecutive-${UserName}-${AWS::Region}
+        Topics:
+             - !Ref SNSTopic
+     SNSSubscribers:
+      DependsOn:
+           - SNSTopic
+      Type: AWS::SNS::Subscription
+      Properties:
+           TopicArn: !Ref SNSTopic
+           Protocol: email
+           Endpoint: !Ref SNSSubscriberEmail
+     S3bucket:
+      Type: AWS::S3::Bucket
+      DependsOn:
+           - SNSTopicPermission
+      Properties:
+        BucketName: !Sub "teamshiksha-logoexecutive-${UserName}-${AWS::Region}"
+        AccessControl: Private
+        NotificationConfiguration:
+          TopicConfigurations:
+             - Topic: !Ref SNSTopic
+               Event: s3:ObjectRemoved:*
+        Tags:
+             - Key: use
+               Value: storing objects for CDN
+             - Key: community-project
+               Value: teamshiksha-logoexecutive
+             - Key: frontend-deployment
+               Value: reactjs-netlify
+             - Key: backend-deployment
+               Value: nodejs-railway-app
+             - Key: Database
+               Value: firebase
+     S3BucketPolicy:
+      Type: AWS::S3::BucketPolicy
+      DependsOn:
+           - S3bucket
+           - CloudFrontOAI
+      Properties:
+           Bucket: !Ref S3bucket
+           PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Resource: !Join ["", [!GetAtt S3bucket.Arn, !Sub "/${CDNPathInS3}/*"]]
+                Action:
+                  - s3:GetObject
+                Principal:
+                  AWS:
+                    !Join [
+                      "",
+                      [
+                        "arn:aws:iam::cloudfront:user/CloudFront Origin Access Identity ",
+                        !Ref CloudFrontOAI
+                      ],
+                    ]
+     CloudFrontOAI:
+      Type: AWS::CloudFront::CloudFrontOriginAccessIdentity
+      Properties:
+           CloudFrontOriginAccessIdentityConfig:
+                Comment: "Legacy origin access identity for cloudfront CDN"
+     CloudFrontPublicKey:
+      Type: AWS::CloudFront::PublicKey
+      DependsOn:
+           - CloudFrontOAI
+      Properties:
+           PublicKeyConfig:
+                Comment: "Public key for verifying the signed URL"
+                CallerReference: "LOGOEXECUTIVE"
+                EncodedKey: !Sub ${EncodedRSAPublicKey}
+                Name: LOGOEXECUTIVE_PUBLIC_KEY
+     CloudFrontKeyGroup:
+      Type: AWS::CloudFront::KeyGroup
+      DependsOn:
+           - CloudFrontPublicKey
+      Properties:
+           KeyGroupConfig:
+                Comment: "Key group for verifying the signed URL"
+                Items:
+                     - !Ref CloudFrontPublicKey
+                Name: LOGOEXECUTIVE_KEY_GROUP
+     CloudFrontCDN:
+      Type: AWS::CloudFront::Distribution
+      DependsOn:
+           - CloudFrontKeyGroup
+           - S3BucketPolicy
+           - S3bucket
+      Properties:
+           DistributionConfig:
+                IPV6Enabled: true
+                Comment: "Global CloudFront CDN for logoexecutive"
+                Origins:
+                     - DomainName: !GetAtt S3bucket.DomainName
+                       Id: !Ref S3bucket
+                       OriginPath:
+                          !Join [
+                            "",
+                            [
+                              /,
+                              !Sub "${CDNPathInS3}"
+                            ]
+                          ]
+                       S3OriginConfig:
+                            OriginAccessIdentity: 
+                              !Join [
+                                "",
+                                [
+                                "origin-access-identity/cloudfront/",
+                                !Ref CloudFrontOAI,
+                                ],
+                              ]
+                Enabled: true
+                HttpVersion: http2
+                DefaultCacheBehavior:
+                     AllowedMethods:
+                          - GET
+                          - HEAD
+                     Compress: true
+                     DefaultTTL: 5000
+                     TargetOriginId: !Ref S3bucket
+                     ViewerProtocolPolicy: https-only
+                     ForwardedValues:
+                      QueryString: true
+                      Cookies:
+                        Forward: none
+                     TrustedKeyGroups:
+                          - !Ref CloudFrontKeyGroup
+           Tags:
+                - Key: use
+                  Value: Global CDN for fast delivery of images
+                - Key: community-project
+                  Value: teamshiksha-logoexecutive
+                - Key: frontend-deployment
+                  Value: reactjs-netlify
+                - Key: backend-deployment
+                  Value: nodejs-railway-app
+                - Key: Database
+                  Value: firebase
+     IAMUser:
+      Type: AWS::IAM::User
+      Properties:
+           UserName: LogoexecutiveServiceUser
+           Tags:
+                - Key: use
+                  Value: Service user for backend secrets
+                - Key: community-project
+                  Value: teamshiksha-logoexecutive
+                - Key: frontend-deployment
+                  Value: reactjs-netlify
+                - Key: backend-deployment
+                  Value: nodejs-railway-app
+                - Key: Database
+                  Value: firebase 
+     IAMManagedPolicy:
+      Type: AWS::IAM::ManagedPolicy
+      DependsOn:
+           - S3bucket
+           - CloudFrontCDN
+           - IAMUser
+      Properties:
+           Description: User for generating AWS_SECRET and AWS_KEY having access to CloudFront CDN and S3
+           ManagedPolicyName: logoexecutiveCDNS3Policy
+           PolicyDocument:
+                Version: "2012-10-17"
+                Statement:
+                  - Effect: Allow
+                    Resource: !Sub "arn:aws:cloudfront::${AWS::AccountId}:distribution/${CloudFrontCDN}"
+                    Action:
+                      - 'cloudformation:Describe*'
+                      - 'cloudformation:List*'
+                      - 'cloudformation:Get*'
+                  - Effect: Allow
+                    Resource: !Sub "${S3bucket.Arn}/${CDNPathInS3}/*"
+                    Action:
+                      - 's3:Put*'
+           Users:
+                - !Ref IAMUser
+Outputs:
+     CreatedSNSTopic:
+      Value: !Ref SNSTopic
+      Description: "SNS Topic created in this stack"
+      Export:
+        Name: !Sub "${AWS::StackName}SNS"
+     CreatedS3Bucket:
+      Value: !Ref S3bucket
+      Description: "S3 bucket created in this stack"
+      Export:
+        Name: !Sub "${AWS::StackName}S3"
+     EnteredUserName:
+      Value: !Ref UserName
+      Description: "Username entered in this stack"
+      Export:
+        Name: !Sub "${AWS::StackName}USERNAME"
+     CreateKeyGroup:
+      Value: !Ref CloudFrontKeyGroup
+      Description: "CloudFront Key Group created in this stack"
+      Export:
+        Name: !Sub "${AWS::StackName}KEYGROUP"
+     CreatedCDN:
+      Value: !Ref CloudFrontCDN
+      Description: "Distribution created in this stack"
+      Export:
+        Name: !Sub "${AWS::StackName}DISTRIBUTION"
+     CreatedUser:
+      Value: !Ref IAMUser
+      Description: "User created in this stack"
+      Export:
+        Name: !Sub "${AWS::StackName}IAMUser"

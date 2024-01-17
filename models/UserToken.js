@@ -1,6 +1,7 @@
 const { Timestamp, DocumentReference } = require("firebase-admin/firestore");
 const { normalizeDate } = require("../utils/date");
 const { UserTokenTypes } = require("../utils/constants");
+const dayjs = require("dayjs");
 
 class UserToken {
   createdAt;
@@ -29,6 +30,25 @@ class UserToken {
     this.createdAt = normalizeDate(params.createdAt);
     this.expireAt = normalizeDate(params.expireAt);
     this.userTokenRef = params.userTokenRef;
+  }
+
+  /**
+   * Creates a firebase compatible userToken
+   * @param {Object} params
+   * @param {string} params.userId - userId for the token is being created
+   * @param {UserTokenTypes} params.type
+   * @param {Date} [params.expireAt] - expiry date of token (Default value is 24 hours after creation)
+   **/
+  static NewUserToken(params) {
+    const expireAt = params.expireAt ? normalizeDate(params.expireAt) : dayjs().add(1, "day").toDate();
+    return {
+      userId: params.userId,
+      token: crypto.randomUUID().replaceAll("-", ""),
+      userTokenId: crypto.randomUUID(),
+      type: params.type,
+      createdAt: Timestamp.now(),
+      expireAt: Timestamp.fromDate(expireAt),
+    };
   }
 
   /**

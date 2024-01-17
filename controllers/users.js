@@ -3,7 +3,7 @@ const Joi = require("joi");
 const { STATUS_CODES } = require("http");
 const { fetchUserByEmail, fetchUserFromId, updatePasswordService } = require("../services/User");
 const {fetchSubscriptionByuserid} = require("../services/Subscription");
-const {fetchKeyByuserid} = require("../services/Key");
+const { fetchKeysByuserid } = require("../services/Key");
 
 async function getUser(req, res, next) {
   try {
@@ -30,7 +30,7 @@ async function getUser(req, res, next) {
         });
     }
     userData.subscription = {...subscriptionData};
-    const keyData = await fetchKeyByuserid(userId);
+    const keyData = await fetchKeysByuserid(userId);
     const keysToRemove = ["keyId", "userId", "updatedAt"];
     let filteredKeyData = null;
     if (keyData){

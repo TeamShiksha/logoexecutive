@@ -1,10 +1,11 @@
 const request = require("supertest");
 const app = require("../../../app");
-const { mockUserModel } = require("../../../utils/mocks/Users");
+const { mockUsers } = require("../../../utils/mocks/Users");
 const { STATUS_CODES } = require("http");
 
 const UsersService = require("../../../services/User");
 const UserTokenService = require("../../../services/UserToken");
+const User = require("../../../models/Users");
 
 jest.mock("../../../services/User", () =>({
   fetchUserByEmail: jest.fn(),
@@ -15,7 +16,7 @@ jest.mock("../../../services/UserToken", () =>({
   createVerifyToken: jest.fn(),
 }));
 
-
+const mockUserModel = new User(mockUsers[1]);
 
 
 describe("UpdateProfile Controller", () => {

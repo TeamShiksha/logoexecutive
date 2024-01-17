@@ -1,4 +1,4 @@
-const { createKey, fetchKeyByuserid } = require("../services/Key");
+const { createKey, fetchKeysByuserid } = require("../services/Key");
 const { fetchSubscriptionByuserid } = require("../services/Subscription");
 const Joi = require("joi");
 const { destroyKey } = require("../services/Key");
@@ -34,7 +34,7 @@ async function generateKey(req, res) {
     const keyLimit = subscription.keyLimit;
 
     var keyCount = 1;
-    const keysObject = (await fetchKeyByuserid(userId)) || [];
+    const keysObject = (await fetchKeysByuserid(userId)) || [];
     if (keysObject != null) {
       keyCount = keysObject.length;
     }

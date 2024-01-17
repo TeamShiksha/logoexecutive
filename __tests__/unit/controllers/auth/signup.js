@@ -31,8 +31,13 @@ jest.mock("../../../../services/sendEmail", () => ({
 }));
 const SendEmailService = require("../../../../services/sendEmail");
 
-const { mockUserModel } = require("../../../../utils/mocks/Users");
-const { mockUserTokenVerify } = require("../../../../utils/mocks/UserToken");
+const { mockUsers } = require("../../../../utils/mocks/Users");
+const { mockUserTokens } = require("../../../../utils/mocks/UserToken");
+const User = require("../../../../models/Users");
+const UserToken = require("../../../../models/UserToken");
+
+const mockUserModel = new User(mockUsers[0]);
+const mockUserTokenVerify = new UserToken(mockUserTokens[0]);
 
 describe("Signup Controller", () => {
   beforeAll(() => {

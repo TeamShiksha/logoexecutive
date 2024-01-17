@@ -19,7 +19,9 @@ const SendEmailService = require("../../../../services/sendEmail");
 
 const UserToken = require("../../../../models/UserToken");
 const { UserTokenTypes } = require("../../../../utils/constants");
-const { mockUserModel } = require("../../../../utils/mocks/Users");
+const { mockUsers } = require("../../../../utils/mocks/Users");
+const User = require("../../../../models/Users");
+const { mockUserTokens } = require("../../../../utils/mocks/UserToken");
 
 
 const mockPayload = { email: "johndoe@example.com" };
@@ -97,7 +99,7 @@ describe("/forgot-password", () => {
   });
 
   it("503 - if unable to create forgot token", async () => {
-    fetchUserByEmailSpy.mockImplementation(() => mockUserModel);
+    fetchUserByEmailSpy.mockImplementation(() => new User(mockUsers[1]));
     createForgotTokenSpy.mockImplementation(() => null);
 
     const response = await request(app)
@@ -112,17 +114,9 @@ describe("/forgot-password", () => {
     });
   });
 
-  it("500 - if unable to create forgot token", async () => {
-    fetchUserByEmailSpy.mockImplementation(() => mockUserModel);
-    createForgotTokenSpy.mockImplementation(
-      () =>
-        new UserToken(
-          UserToken.createUserToken({
-            userId: mockUserModel.userId,
-            type: UserTokenTypes.FORGOT,
-          }),
-        ),
-    );
+  it("500 - if unable to send forgot token via mail", async () => {
+    fetchUserByEmailSpy.mockImplementation(() => new User(mockUsers[1]));
+    createForgotTokenSpy.mockImplementation(() => new UserToken(mockUserTokens[2]));
     SendEmailSpy.mockImplementation(() => ({ success: false }));
 
     const response = await request(app)
@@ -138,16 +132,8 @@ describe("/forgot-password", () => {
   });
 
   it("200 - everything works fine", async () => {
-    fetchUserByEmailSpy.mockImplementation(() => mockUserModel);
-    createForgotTokenSpy.mockImplementation(
-      () =>
-        new UserToken(
-          UserToken.createUserToken({
-            userId: mockUserModel.userId,
-            type: UserTokenTypes.FORGOT,
-          }),
-        ),
-    );
+    fetchUserByEmailSpy.mockImplementation(() => new User(mockUsers[1]));
+    createForgotTokenSpy.mockImplementation(() =>new UserToken(mockUserTokens[2]));
     SendEmailSpy.mockImplementation(() => ({ success: true }));
 
     const response = await request(app)

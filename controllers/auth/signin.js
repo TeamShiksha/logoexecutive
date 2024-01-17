@@ -1,7 +1,5 @@
 const Joi = require("joi");
 const { fetchUserByEmail } = require("../../services/User");
-const { fetchSubscriptionByuserid } = require("../../services/Subscription");
-const { fetchKeysByuserid } = require("../../services/Key");
 const { STATUS_CODES } = require("http");
 const dayjs = require("dayjs");
 
@@ -50,31 +48,8 @@ async function signinController(req, res, next) {
       });
     }
 
-    const [subscription, keys] = await Promise.all([fetchSubscriptionByuserid(user.userId), fetchKeysByuserid(user.userId)]);
-
-    const subscriptionData = subscription && {
-      subscriptionType: subscription.subscriptionType,
-      usageLimit: subscription.usageLimit,
-      isActive: subscription.isActive,
-      keyLimit: subscription.keyLimit
-    };
-
-    if(!subscription)
-      res.status(206);
-    else
-      res.status(200);
-
     res.cookie("jwt", user.generateJWT(), { expires: dayjs().add(1, "day").toDate() });
-    return res.json({
-      data: {
-        email: user.data.email,
-        firstName: user.data.firstName,
-        lastName: user.data.lastName,
-        subscription: subscriptionData,
-        keys: keys || null,
-      },
-      message: "Succesfully signed in",
-    });
+    return res.status(200).json({ message: "Succesfully signed in" });
   } catch (err) {
     next(err);
   }

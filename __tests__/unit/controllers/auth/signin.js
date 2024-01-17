@@ -11,11 +11,6 @@ const UserService = require("../../../../services/User");
 jest.mock("../../../../services/Subscription", () => ({
   fetchSubscriptionByuserid: jest.fn(),
 }));
-const SubscriptionService = require("../../../../services/Subscription");
-jest.mock("../../../../services/Key", () => ({
-  fetchKeysByuserid: jest.fn()
-}));
-const UserKeysService = require("../../../../services/Key");
 
 const { mockKeyModel } = require("../../../../utils/mocks/Keys.js");
 const { mockUsers } = require("../../../../utils/mocks/Users");
@@ -161,78 +156,9 @@ describe("Signin Controller", () => {
     });
   });
 
-  it("206 - When failed to get subscription data (keys and subscription not present)", async () => {
-    jest.spyOn(UserService, "fetchUserByEmail").mockImplementation(() => new User(mockUsers[1]));
-    jest.spyOn(SubscriptionService, "fetchSubscriptionByuserid").mockImplementation(() => null);
-    jest.spyOn(UserKeysService, "fetchKeysByuserid").mockImplementation(() => null);
-
-    const response = await request(app).post("/auth/signin").send({
-      email: "johndoe@example.com",
-      password: "password123"
-    });
-
-    expect(response.status).toBe(206);
-    expect(response.body.message).toBe("Succesfully signed in");
-    expect(response.body.data).toEqual({
-      email: "johndoe@example.com",
-      firstName: "John",
-      lastName: "Doe",
-      keys: null,
-      subscription: null
-    });
-  });
-
-  it("200 - Succesfully fetched user without keys", async () => {
-    jest.spyOn(UserService, "fetchUserByEmail").mockImplementation(() => new User(mockUsers[1]));
-    jest.spyOn(SubscriptionService, "fetchSubscriptionByuserid").mockImplementation(() => mockSubscriptionModel);
-    jest.spyOn(UserKeysService, "fetchKeysByuserid").mockImplementation(() => null);
-
-    const response = await request(app).post("/auth/signin").send({
-      email: "johndoe@example.com",
-      password: "password123"
-    });
-
-    expect(response.status).toBe(200);
-    expect(response.body.message).toBe("Succesfully signed in");
-    expect(response.body.data).toEqual({
-      email: "johndoe@example.com",
-      firstName: "John",
-      lastName: "Doe",
-      keys: null,
-      subscription: {
-        isActive: true,
-        keyLimit: 2,
-        usageLimit: 500,
-        subscriptionType: "free"
-      }
-    });
-  });
-
-  it("206 - When failed to get subscription data (subscription not present)", async () => {
-    jest.spyOn(UserService, "fetchUserByEmail").mockImplementation(() => new User(mockUsers[1]));
-    jest.spyOn(SubscriptionService, "fetchSubscriptionByuserid").mockImplementation(() => null);
-    jest.spyOn(UserKeysService, "fetchKeysByuserid").mockImplementation(() => [mockKeyModel]);
-
-    const response = await request(app).post("/auth/signin").send({
-      email: "johndoe@example.com",
-      password: "password123"
-    });
-
-    expect(response.status).toBe(206);
-    expect(response.body.message).toBe("Succesfully signed in");
-    expect(response.body.data).toEqual({
-      email: "johndoe@example.com",
-      firstName: "John",
-      lastName: "Doe",
-      keys: [mockKeyModel],
-      subscription: null
-    });
-  });
-
   it("200 - Success path", async () => {
     jest.spyOn(UserService, "fetchUserByEmail").mockImplementation(() => new User(mockUsers[1]));
-    jest.spyOn(SubscriptionService, "fetchSubscriptionByuserid").mockImplementation(() => mockSubscriptionModel);
-    jest.spyOn(UserKeysService, "fetchKeysByuserid").mockImplementation(() => [mockKeyModel]);
+
     const response = await request(app).post("/auth/signin").send({
       email: "johndoe@example.com",
       password: "password123"
@@ -240,17 +166,5 @@ describe("Signin Controller", () => {
 
     expect(response.status).toBe(200);
     expect(response.body.message).toBe("Succesfully signed in");
-    expect(response.body.data).toEqual({
-      email: "johndoe@example.com",
-      firstName: "John",
-      lastName: "Doe",
-      keys: [mockKeyModel],
-      subscription: {
-        isActive: true,
-        keyLimit: 2,
-        usageLimit: 500,
-        subscriptionType: "free"
-      }
-    });
   });
 });

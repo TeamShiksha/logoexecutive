@@ -134,8 +134,6 @@ Resources:
       - CloudFrontCDN
       - IAMUser
     Properties:
-      Description: |
-        Permissions policy for LogoexecutiveUser
       ManagedPolicyName: logoexecutiveCDNS3Policy
       PolicyDocument:
         Version: "2012-10-17"

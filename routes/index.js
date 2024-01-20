@@ -5,13 +5,13 @@ const contactUsRouter = require("./contactUs");
 const authRouter = require("./auth");
 const keyRouter = require("./key");
 const updateProfileRouter = require("./updateProfile");
-const deleteProfileRouter = require("./deleteProfileRouter");
+const deleteUserAccountRouter = require("./deleteUserAccount");
 
 router.use("/auth", authRouter);
 router.use("/users", userRouter);
 router.use("/contact", contactUsRouter);
 router.use("/keys", keyRouter);
 router.use("/user/update",updateProfileRouter);
-router.use("/user/delete",deleteProfileRouter);
+router.use("/user/delete",deleteUserAccountRouter);
 
 module.exports = router;

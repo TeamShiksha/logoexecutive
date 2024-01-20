@@ -135,19 +135,19 @@ async function updateUser(updateProfile, user) {
 
 async function deleteUserAccount(userId) {
   try {
-    await db.runTransaction(async (t) => {
+    await db.runTransaction(async (transaction) => {
       const userSnapshot = await UserCollection.where("userId", "==", userId).limit(1).get();
       if (!userSnapshot.empty) {
         const userDoc = userSnapshot.docs[0];
-        t.delete(userDoc.ref);
+        transaction.delete(userDoc.ref);
       }
 
       const subscriptionSnapshot = await SubscriptionCollection.where("userId", "==", userId).get();
-      subscriptionSnapshot.forEach((doc) => t.delete(doc.ref));
+      subscriptionSnapshot.forEach((doc) => transaction.delete(doc.ref));
 
       const keySnapshot = await KeyCollection.where("userId", "==", userId).get();
       if (!keySnapshot.empty){
-        keySnapshot.forEach((doc) => t.delete(doc.ref));
+        keySnapshot.forEach((doc) => transaction.delete(doc.ref));
       }
     });
   } catch (err) {

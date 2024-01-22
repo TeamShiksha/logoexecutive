@@ -25,8 +25,9 @@ const s3Client = new S3Client({
         if (ImageData) {
           const params = {
             Bucket: bucketName,
-            Key: image,
+            Key: `${process.env.KEY}${image}`,
             Body: fs.readFileSync(imagePaths),
+            ContentType: "image/png",
           };
           const command = new PutObjectCommand(params);
           await s3Client.send(command);

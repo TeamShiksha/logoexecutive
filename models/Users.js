@@ -10,6 +10,8 @@ class User {
   createdAt;
   updatedAt;
   userRef;
+  isVerified;
+
   #password;
 
   /**
@@ -17,6 +19,7 @@ class User {
    * @param {string} params.userId
    * @param {string} params.email
    * @param {string} params.password
+   * @param {boolean} params.isVerified
    * @param {string} params.firstName
    * @param {string} params.lastName
    * @param {Date} params.createdAt
@@ -33,6 +36,7 @@ class User {
     this.createdAt = params.createdAt;
     this.updatedAt = params.updatedAt;
     this.userRef = params.userRef ?? null;
+    this.isVerified = params.isVerified;
   }
 
   get data() {
@@ -69,6 +73,7 @@ class User {
         password: hashedPassword,
         createdAt: Timestamp.now(),
         updatedAt: Timestamp.now(),
+        isVerified: false
       };
     } catch (err) {
       console.log(err);

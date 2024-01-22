@@ -3,7 +3,8 @@ const app = require("express")();
 const jwt = require("jsonwebtoken");
 const cookieParser = require("cookie-parser");
 const auth = require("../../../middlewares/auth");
-const { mockUserModel } = require("../../../utils/mocks/Users");
+const { mockUsers } = require("../../../utils/mocks/Users");
+const User = require("../../../models/Users");
 
 const mockCtrl = jest.fn();
 
@@ -21,16 +22,15 @@ describe("Auth middleware", () => {
     mockCtrl.mockImplementation((req, res) => {
       return res.status(200).json(req.userData);
     });
-    const mockJWT = mockUserModel.generateJWT();
+    const mockUser = new User(mockUsers[1]);
+    const mockJWT = mockUser.generateJWT();
     const response = await request(app)
       .get("/")
       .set("Cookie", `jwt=${mockJWT}`);
 
     expect(mockCtrl).toHaveBeenCalledTimes(1);
     expect(response.status).toBe(200);
-    expect(JSON.stringify(response.body)).toEqual(
-      JSON.stringify(mockUserModel.data),
-    );
+    expect(response.body).toEqual(mockUser.data);
   });
 
   it("401 - If user is not signed in / JWT not present", async () => {
@@ -56,7 +56,7 @@ describe("Auth middleware", () => {
       throw Error("test");
     });
 
-    const mockJWT = mockUserModel.generateJWT();
+    const mockJWT = new User(mockUsers[1]).generateJWT();
     const response = await request(app)
       .get("/")
       .set("Cookie", `jwt=${mockJWT}`);

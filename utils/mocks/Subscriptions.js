@@ -5,9 +5,9 @@ const subscriptionObj = {
   userId: crypto.randomUUID(),
   subscriptionId: crypto.randomUUID(),
   subscriptionType: "free",
-  keyLimit: "2",
-  usageLimit: "500",
-  isActive: "true",
+  keyLimit: 2,
+  usageLimit: 500,
+  isActive: true,
   createdAt: Timestamp.now().toDate().toString(),
   updatedAt: Timestamp.now().toDate().toString(),
 };

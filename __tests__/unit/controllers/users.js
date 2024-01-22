@@ -1,13 +1,13 @@
 const request = require("supertest");
 const app = require("../../../app");
-const jwt = require("jsonwebtoken");
 const User = require("../../../models/Users");
 const { Timestamp } = require("firebase-admin/firestore");
 const { STATUS_CODES } = require("http");
-const {mockUserModel} = require("../../../utils/mocks/Users");
-const {mockSubscriptionModel} = require("../../../utils/mocks/Subscription");
+const {mockUsers} = require("../../../utils/mocks/Users");
+const {mockSubscriptionModel} = require("../../../utils/mocks/Subscriptions");
 const {mockKeyModel} = require("../../../utils/mocks/Keys");
 
+const mockUserModel = new User(mockUsers[0]);
 const mockUser = new User({
   userId: "1",
   email: "john@email.com",
@@ -54,7 +54,7 @@ jest.mock("../../../services/Subscription", ()=>({
 
 const KeyService = require("../../../services/Key");
 jest.mock("../../../services/Key", ()=> ({
-  fetchKeyByuserid: jest.fn(),
+  fetchKeysByuserid: jest.fn(),
 }));
 
 
@@ -165,7 +165,7 @@ describe("getUser controller", ()=>{
       jest.spyOn(SubscriptionService, "fetchSubscriptionByuserid").mockImplementation(() => mockSubscriptionModel);
 
       const keyArray = Array(3).fill({ ...mockKeyModel });
-      jest.spyOn(KeyService, "fetchKeyByuserid").mockImplementation(() => keyArray);
+      jest.spyOn(KeyService, "fetchKeysByuserid").mockImplementation(() => keyArray);
 
       const keysToRemove = ["keyId", "userId", "updatedAt"];
       const filteredKeyData = keyArray.map((keyObject) => {

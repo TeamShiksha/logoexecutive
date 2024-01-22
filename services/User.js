@@ -1,7 +1,9 @@
 const { Timestamp } = require("firebase-admin/firestore");
 const User = require("../models/Users");
 const { UserCollection } = require("../utils/firestore");
-
+const { KeyCollection } = require("../utils/firestore");
+const { SubscriptionCollection } = require("../utils/firestore");
+const { db } = require("../utils/firestore");
 /**
  * Fetches all the users
  **/
@@ -131,6 +133,29 @@ async function updateUser(updateProfile, user) {
   }  
 }
 
+async function deleteUserAccount(userId) {
+  try {
+    await db.runTransaction(async (transaction) => {
+      const userSnapshot = await UserCollection.where("userId", "==", userId).limit(1).get();
+      if (!userSnapshot.empty) {
+        const userDoc = userSnapshot.docs[0];
+        transaction.delete(userDoc.ref);
+      }
+
+      const subscriptionSnapshot = await SubscriptionCollection.where("userId", "==", userId).get();
+      subscriptionSnapshot.forEach((doc) => transaction.delete(doc.ref));
+
+      const keySnapshot = await KeyCollection.where("userId", "==", userId).get();
+      if (!keySnapshot.empty){
+        keySnapshot.forEach((doc) => transaction.delete(doc.ref));
+      }
+    });
+  } catch (err) {
+    console.log(err);
+    throw err;
+  }
+}
+
 module.exports = {
   fetchUsers,
   fetchUserByEmail,
@@ -139,6 +164,7 @@ module.exports = {
   fetchUserFromId,
   verifyUser,
   updateUser,
+  deleteUserAccount,
 };
 
 

@@ -1,7 +1,8 @@
 const dotenv = require("dotenv");
 const fs = require("fs");
-const { validateEnv } = require("./utils/scripts/envSchema");
+const { validateEnv } = require("../../utils/scripts/envSchema.js");
 const path = require("path");
+const serverless = require("serverless-http");
 
 if (process.env.NODE_ENV !== "production") {
   dotenv.config({ path: `.env.${process.env.NODE_ENV}` });
@@ -12,7 +13,7 @@ if (process.env.NODE_ENV !== "production") {
 const serviceKeyPath = path.join(process.cwd(), "serviceAccountKey.json");
 const serviceAccountKeyExists = fs.existsSync(serviceKeyPath);
 
-const { error, value } = validateEnv(process.env, {
+const { error } = validateEnv(process.env, {
   serviceAccountKey: serviceAccountKeyExists,
 });
 
@@ -21,11 +22,6 @@ if (error) {
   process.exit(1);
 }
 
-const app = require("./app");
+const app = require("../../app.js");
 
-const { PORT } = value;
-app.listen(PORT, () => {
-  console.log(`[Server] running 🚀: http://localhost:${PORT}`);
-});
-
-module.exports = app;
+module.exports.handler = serverless(app);

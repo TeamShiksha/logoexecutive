@@ -134,3 +134,6 @@ dist
 serviceAccountKey.json
 .firebaserc
 package-lock.json
+
+# Local Netlify folder
+.netlify

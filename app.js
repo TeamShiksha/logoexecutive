@@ -11,7 +11,7 @@ app.use(cookieParser());
 app.use(cors({credentials: true}));
 app.use(express.json());
 
-app.use("/", routes);
+app.use("/api/", routes);
 
 app.use(routeNotFound);
 app.use(errorHandler);

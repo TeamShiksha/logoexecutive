@@ -11,10 +11,11 @@ staying in control of your budget. Elevate your brand with Logo Executive!
 ![Code](https://img.shields.io/badge/Visual_Studio_Code-0078D4?style=for-the-badge&logo=visual%20studio%20code&logoColor=white)
 ![Firebase](https://img.shields.io/badge/firebase-%23039BE5.svg?style=for-the-badge&logo=firebase)
 ![AWS](https://img.shields.io/badge/AWS-%23FF9900.svg?style=for-the-badge&logo=amazon-aws&logoColor=white)
-<img src="https://devicons.railway.app/i/railway-light.svg" width="30" height="30">
 
 ## Run or setup this project locally
 Follow [DEVELOPMENT Guide](DEVELOPMENT.md)
 
 ## Before pull request
 Before pull request make sure to follow proper procedure mentioned in [CONTRIBUTING](CONTRIBUTING.md)
+
+Read more [here](https://github.com/TeamShiksha/logoexecutive-docs)

@@ -37,7 +37,7 @@ Substitute the right-hand value of each environment variable with the correspond
 - Securely store this generated password in a safe location for use.
 
 ## AWS setup
-- This setup is necessary only when working with the business APIs. Otherwise, you can simply retain the example values.
+- Follow the guide given [here](https://github.com/TeamShiksha/logoexecutive-docs/blob/main/guides/cloudformation.md) for setting up AWS.
 
 ## Firebase setup
 - Sign in to [firebase](https://firebase.google.com/)  using your Google account and go to the Firebase console.

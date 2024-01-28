@@ -152,20 +152,6 @@ Resources:
         - !Ref IAMUser
 
 Outputs:
-  CreatedS3Bucket:
-    Value: !Ref S3bucket
-    Description: S3 bucket
-    Export:
-      Name: !Sub ${AWS::StackName}S3
-
-  CreatedCDN:
-    Value: !Ref CloudFrontCDN
-    Description: CDN Distribution
-    Export:
-      Name: !Sub ${AWS::StackName}DISTRIBUTION
-
-  CreatedUser:
-    Value: !Ref IAMUser
-    Description: User
-    Export:
-      Name: !Sub ${AWS::StackName}IAMUser
+  EnvFileItems:
+    Value: !Sub BUCKET_NAME=${S3bucket},BUCKET_REGION=${AWS::Region},KEY=${CDNPathInS3},DISTRIBUTION_DOMAIN=https://${CloudFrontCDN.DomainName},CLOUD_FRONT_KEYPAIR_ID=${CloudFrontPublicKey}
+    Description: Items to be used for the backend environmental variables

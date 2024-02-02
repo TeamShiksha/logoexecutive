@@ -1,0 +1,165 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: |
+  Creates resources for the logoexecutive project in the development environment. 
+  With a retention policy retain, these resources will not be deleted when the stack is removed. 
+  Services include CloudFront for CDN, S3 for object storage, and a Service role for access. 
+  Specifically designed for prod environment.
+
+Parameters:
+  EncodedRSAPublicKey:
+    Type: String
+    Default: |
+      Insert the public key value in PEM format, encompassing both 
+      -----BEGIN PUBLIC KEY----- and -----END PUBLIC KEY-----.
+      Refer to https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/private-content-trusted-signers.html for guidance.
+    Description: |
+      The public key is employed to verify the signed URL generated with the private key.
+
+  CDNPathInS3:
+    Type: String
+    Default: path/to/object
+    Description: |
+      Specify the S3 path where your objects are located, excluding the bucket name. 
+      Ensure the path does not begin or end with a slash.
+    AllowedPattern: ^[a-zA-Z0-9]+(/[a-zA-Z0-9]+)*$
+
+Resources:
+  S3bucket:
+    Type: AWS::S3::Bucket
+    DeletionPolicy: Retain
+    Properties:
+      BucketName: !Sub teamshiksha-logoexecutive-prod-${AWS::AccountId}-${AWS::Region}
+      AccessControl: Private
+
+  S3BucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    DeletionPolicy: Retain
+    DependsOn:
+      - S3bucket
+      - CloudFrontOAI
+    Properties:
+      Bucket: !Ref S3bucket
+      PolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Resource: !Join ["", [!GetAtt S3bucket.Arn, !Sub "/${CDNPathInS3}/*"]]
+            Action:
+              - s3:GetObject
+            Principal:
+              AWS:
+                !Join [
+                  "",
+                  [
+                    "arn:aws:iam::cloudfront:user/CloudFront Origin Access Identity ",
+                    !Ref CloudFrontOAI
+                  ],
+                ]
+
+  CloudFrontOAI:
+    Type: AWS::CloudFront::CloudFrontOriginAccessIdentity
+    DeletionPolicy: Retain
+    Properties:
+      CloudFrontOriginAccessIdentityConfig:
+        Comment: Legacy origin access identity(OAI) for Cloudfront CDN Prod
+
+  CloudFrontPublicKey:
+    Type: AWS::CloudFront::PublicKey
+    DeletionPolicy: Retain
+    DependsOn:
+      - CloudFrontOAI
+    Properties:
+      PublicKeyConfig:
+        Comment: Public key for verifying the signed URL Prod
+        CallerReference: !Sub ${AWS::AccountId}-${AWS::StackName}
+        EncodedKey: !Sub ${EncodedRSAPublicKey}
+        Name: LOGOEXECUTIVE_PUBLICKEY_PROD
+
+  CloudFrontKeyGroup:
+    Type: AWS::CloudFront::KeyGroup
+    DeletionPolicy: Retain
+    DependsOn:
+      - CloudFrontPublicKey
+    Properties:
+      KeyGroupConfig:
+        Comment: Key group used during Signed URL Prod
+        Items:
+          - !Ref CloudFrontPublicKey
+        Name: LOGOEXECUTIVE_KEYGROUP_PROD
+
+  CloudFrontCDN:
+    Type: AWS::CloudFront::Distribution
+    DeletionPolicy: Retain
+    DependsOn:
+      - CloudFrontKeyGroup
+      - S3BucketPolicy
+      - S3bucket
+    Properties:
+      DistributionConfig:
+        IPV6Enabled: true
+        Comment: Global CloudFront CDN for logoexecutive Prod
+        Origins:
+          - DomainName: !GetAtt S3bucket.DomainName
+            Id: !Ref S3bucket
+            OriginPath: !Join ["", [/, !Sub "${CDNPathInS3}"]]
+            S3OriginConfig:
+              OriginAccessIdentity: 
+                !Join [
+                  "",
+                  [
+                    "origin-access-identity/cloudfront/",
+                    !Ref CloudFrontOAI,
+                  ],
+                ]
+        Enabled: true
+        HttpVersion: http2
+        DefaultCacheBehavior:
+          AllowedMethods:
+            - GET
+            - HEAD
+          Compress: true
+          DefaultTTL: 5000
+          TargetOriginId: !Ref S3bucket
+          ViewerProtocolPolicy: https-only
+          ForwardedValues:
+            QueryString: true
+            Cookies:
+              Forward: none
+          TrustedKeyGroups:
+            - !Ref CloudFrontKeyGroup
+
+  IAMUser:
+    Type: AWS::IAM::User
+    DeletionPolicy: Retain
+    Properties:
+      UserName: LogoexecutiveUserProd
+
+  IAMManagedPolicy:
+    Type: AWS::IAM::ManagedPolicy
+    DeletionPolicy: Retain
+    DependsOn:
+      - S3bucket
+      - CloudFrontCDN
+      - IAMUser
+    Properties:
+      ManagedPolicyName: logoexecutiveCDNS3PolicyProd
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Resource: !Sub arn:aws:cloudfront::${AWS::AccountId}:distribution/${CloudFrontCDN}
+            Action:
+              - 'cloudformation:Describe*'
+              - 'cloudformation:List*'
+              - 'cloudformation:Get*'
+          - Effect: Allow
+            Resource: !Sub ${S3bucket.Arn}/${CDNPathInS3}/*
+            Action:
+              - 's3:Put*'
+      Users:
+        - !Ref IAMUser
+
+Outputs:
+  EnvFileItems:
+    Value: !Sub BUCKET_NAME=${S3bucket},BUCKET_REGION=${AWS::Region},KEY=${CDNPathInS3},DISTRIBUTION_DOMAIN=https://${CloudFrontCDN.DomainName},CLOUD_FRONT_KEYPAIR_ID=${CloudFrontPublicKey}
+    Description: Items to be used for the backend environmental variables

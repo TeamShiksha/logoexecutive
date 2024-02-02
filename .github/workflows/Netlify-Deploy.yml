@@ -7,8 +7,6 @@ on:
       - dev
       - tst
       - prd
-    paths:
-      - src/**
 
 jobs:
   build:
@@ -20,8 +18,6 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: 18.x
-          cache: 'npm'
-          cache-dependency-path: package-lock.json
       - name: Set NETLIFY_SITE_ID
         id: set_netlify_site_id
         run: |

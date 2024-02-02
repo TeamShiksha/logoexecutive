@@ -87,7 +87,7 @@ class User {
    **/
   async matchPassword(password) {
     const match = await bcrypt.compare(password, this.#password);
-    return !!match ?? false;
+    return !!match;
   }
 
   /**

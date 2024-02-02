@@ -18,6 +18,10 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: 18.x
+      - name: Set git config
+        run: |
+          git config --local user.email "aps08@users.noreply.github.com"
+          git config --local user.name "aps08"
       - name: Set NETLIFY_SITE_ID
         id: set_netlify_site_id
         run: |
@@ -27,6 +31,7 @@ jobs:
             cd events-frontend
             npm install
             yarn build
+            cd ..
             ls -a
           elif [ "${{ github.ref }}" == "refs/heads/tst" ]; then
             echo "NETLIFY_SITE_ID=${{ secrets.TST_NETLIFY_SITE_ID }}" >> $GITHUB_ENV

@@ -18,16 +18,15 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: 18.x
-      - name: Set git config
-        run: |
-          git config --local user.email "aps08@users.noreply.github.com"
-          git config --local user.name "aps08"
+      - uses: actions/checkout@v1  
+        with:
+          repository: TeamShiksha/logoexecutive-frontend
+          token: ${{ secrets.GITHUB_TOKEN }}
       - name: Set NETLIFY_SITE_ID
         id: set_netlify_site_id
         run: |
           if [ "${{ github.ref }}" == "refs/heads/dev" ]; then
             echo "NETLIFY_SITE_ID=${{ secrets.DEV_NETLIFY_SITE_ID }}" >> $GITHUB_ENV
-            git clone --single-branch --branch dev https://github.com/TeamShiksha/events-frontend.git
             cd events-frontend
             npm install
             yarn build

@@ -1,0 +1,33 @@
+.about {
+	padding: 64px 32px 0px;
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	grid-gap: 50px 60px;
+	justify-items: center;
+	max-width: 1440px;
+	margin: 0 auto;
+}
+
+.about-section {
+	max-width: 600px;
+}
+
+.about-section-heading {
+	font-size: 2rem;
+	margin-bottom: 18px;
+	color: #111827;
+}
+
+.about-section-paragraph {
+	color: var(--description);
+	line-height: 24px;
+	font-size: var(--large-text);
+	line-height: 32px;
+}
+
+@media screen and (max-width: 768px) {
+	.about {
+		padding: 32px 16px;
+		grid-template-columns: 1fr;
+	}
+}

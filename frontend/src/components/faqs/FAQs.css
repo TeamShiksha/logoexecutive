@@ -1,0 +1,25 @@
+.faqs {
+	margin: 80px 0px;
+}
+
+.faqs-heading {
+	color: var(--smooth-purple);
+	font-size: 2rem;
+	margin-bottom: 24px;
+	text-align: center;
+}
+
+.faqs-items-container {
+	max-width: 700px;
+	margin: 0 auto;
+}
+
+.faq-steps {
+	color: var(--description);
+	line-height: 24px;
+	font-size: var(--medium-text);
+}
+
+.faq-steps > li {
+	margin-bottom: 6px;
+}

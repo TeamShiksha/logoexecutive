@@ -1,0 +1,32 @@
+.pricing-container {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	padding: 64px 32px;
+}
+.switch-container {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	column-gap: 4px;
+	padding: 4px;
+	border: var(--border);
+	font-size: var(--medium-text);
+	line-height: 20px;
+	font-weight: 600;
+	text-align: center;
+	border-radius: 9999px;
+	width: fit-content;
+	margin: 64px auto 0px;
+}
+
+.switch-container > div {
+	color: rgb(107 114 128);
+	padding: 4px 10px;
+	border-radius: 9999px;
+	cursor: pointer;
+}
+
+.switch-container .active {
+	color: white;
+	background-color: rgb(79, 70, 229);
+}

@@ -1,0 +1,32 @@
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+	list-style: none;
+}
+
+:root {
+	--white: rgb(255, 255, 255);
+	--smooth-purple: rgb(79, 70, 229);
+	--black: rgb(17, 24, 39);
+	--smooth-gray: rgb(107 114 128);
+	--description: rgb(75, 85, 99);
+	--light-purple: rgba(79, 70, 229, 0.1);
+	--border: 2px solid rgb(229, 231, 235);
+	--bradius: 6px;
+	--shadow: rgba(140, 152, 164, 0.125) 0px 6px 24px 0px;
+	--small-text: 12px;
+	--medium-text: 16px;
+	--large-text: 20px;
+}
+
+* {
+	padding: 0;
+	margin: 0;
+	font-family: Inter;
+}
+
+body {
+	max-width: 1440px;
+	margin: 0 auto;
+}

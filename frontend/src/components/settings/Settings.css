@@ -1,0 +1,48 @@
+.sett-cont-heading {
+	color: var(--smooth-purple);
+	margin-bottom: 32px;
+	text-align: left;
+	font-size: 32px;
+}
+.settings {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	padding: 64px 32px;
+}
+
+.settings-heading {
+	margin: 0px 0px 20px;
+}
+
+.setting-instruction {
+	font-size: var(--medium-text);
+	margin: 6px 0px 30px;
+	color: var(--description);
+}
+
+.settings-button {
+	background-color: var(--smooth-purple);
+	color: var(--white);
+	border: none;
+	border-radius: var(--bradius);
+	cursor: pointer;
+	padding: 12px;
+	font-size: var(--medium-text);
+	font-weight: 500;
+	width: fit-content;
+}
+
+.settings-delete {
+	background-color: rgba(255, 0, 0, 0.7);
+}
+
+.settings-confirm-message {
+	margin-top: 10px;
+}
+
+@media screen and (max-width: 768px) {
+	.settings {
+		padding: 32px 16px;
+	}
+}

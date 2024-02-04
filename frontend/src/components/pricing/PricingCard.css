@@ -1,0 +1,162 @@
+.pricing-container > section > h1 {
+	text-align: center;
+	font-size: 2rem;
+}
+
+.pricing-container > section > p {
+	text-align: center;
+	max-width: 672px;
+	color: rgb(75 85 99);
+	font-size: var(--large-text);
+	line-height: 32px;
+	margin: 24px auto 64px;
+}
+
+.pricing-cards {
+	margin-top: 40px;
+	display: flex;
+	gap: 32px;
+	justify-content: center;
+	align-items: stretch;
+}
+
+.pricing-card {
+	max-width: 384px;
+	padding: 32px;
+	border: var(--border);
+	border-radius: var(--bradius);
+	text-align: left;
+	width: min(100%, 30rem);
+}
+
+.pricing-card:nth-child(2) {
+	border: var(--border);
+}
+
+.pricing-card h1 {
+	margin-top: 24px;
+	display: flex;
+	align-items: baseline;
+	column-gap: 4px;
+}
+
+.pricing-card h1 :first-child {
+	color: rgb(17 24 39);
+	font-size: 2rem;
+	line-height: 40px;
+	font-weight: 700;
+}
+
+.pricing-card h1 :nth-child(2) {
+	color: rgb(75, 85, 99);
+	font-size: var(--large-text);
+	line-height: 24px;
+	font-weight: 600;
+}
+
+.pricing-card:nth-child(2) > :first-child {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.pricing-card :first-child > p {
+	color: rgb(79, 70, 229);
+	background-color: rgba(79, 70, 229, 0.1);
+	border-radius: 9999px;
+	font-size: 12px;
+	line-height: 20px;
+	font-weight: 600;
+	padding: 4px 10px;
+}
+
+.pricing-card h4 {
+	color: rgb(17 24 39);
+	font-size: var(--large-text);
+	line-height: 32px;
+	font-weight: 600;
+}
+
+.pricing-card > p {
+	color: rgb(75 85 99);
+	font-size: var(--large-text);
+	line-height: 24px;
+	font-weight: 400;
+	margin-top: 16px;
+}
+
+.pricing-card ul {
+	margin-top: 32px;
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+}
+
+.pricing-card ul li {
+	display: flex;
+	align-items: flex-start;
+	gap: 12px;
+	color: rgb(75, 85, 99);
+	font-size: var(--large-text);
+	line-height: 24px;
+	font-weight: 400;
+}
+
+.pricing-card button {
+	margin-top: 24px;
+	font-size: var(--large-text);
+	line-height: 24px;
+	font-weight: 600;
+	cursor: pointer;
+	padding: 8px 12px;
+	width: 100%;
+	border-radius: var(--bradius);
+	border: var(--border);
+	background: transparent;
+	transition: 0.3s ease;
+	color: var(--smooth-purple);
+}
+
+.pricing-card:nth-child(2) div > h4 {
+	color: var(--smooth-purple);
+}
+
+.pricing-card:nth-child(2) button {
+	color: white;
+	background: rgb(79, 70, 229);
+}
+
+.pricing-card button:is(:focus-visible, :hover) {
+	color: white;
+	background: rgb(79, 70, 229);
+}
+
+.pricing-card .checkmark {
+	flex-shrink: 0;
+	height: 22px;
+	width: 20px;
+	color: rgb(79, 70, 229);
+	stroke-width: 0.25px;
+}
+
+@media screen and (max-width: 1024px) {
+	.pricing-container .pricing-cards {
+		flex-wrap: wrap;
+	}
+}
+
+@media screen and (max-width: 768px) {
+	.pricing-container .pricing-cards {
+		flex-direction: column;
+	}
+}
+
+@media screen and (max-width: 480px) {
+	.pricing-container > section > h1 {
+		font-size: 36px;
+	}
+
+	.pricing-container {
+		padding: 64px 24px;
+	}
+}

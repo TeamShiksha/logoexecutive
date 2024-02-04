@@ -1,0 +1,48 @@
+name: 'Deploy on netlify'
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - dev
+      - tst
+      - prd
+    paths:
+      - src/**
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - uses: actions/checkout@v2
+      - name: Using Node.js 18.x
+        uses: actions/setup-node@v2
+        with:
+          node-version: 18.x
+          cache: 'npm'
+          cache-dependency-path: package-lock.json
+      - name: Installing dependencies
+        run: npm install
+      - name: Building optimized file
+        run: yarn build
+      - name: Set NETLIFY_SITE_ID
+        id: set_netlify_site_id
+        run: |
+          if [ "${{ github.ref }}" == "refs/heads/dev" ]; then
+            echo "NETLIFY_SITE_ID=${{ secrets.DEV_NETLIFY_SITE_ID }}" >> $GITHUB_ENV
+          elif [ "${{ github.ref }}" == "refs/heads/tst" ]; then
+            echo "NETLIFY_SITE_ID=${{ secrets.TST_NETLIFY_SITE_ID }}" >> $GITHUB_ENV
+          elif [ "${{ github.ref }}" == "refs/heads/prd" ]; then
+            echo "NETLIFY_SITE_ID=${{ secrets.PRD_NETLIFY_SITE_ID }}" >> $GITHUB_ENV
+          else
+            echo "NETLIFY_SITE_ID=UNKNOWN_BRANCH" >> $GITHUB_ENV
+          fi
+      - name: Deploying on netlify
+        uses: South-Paw/action-netlify-deploy@v1.2.0
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          netlify-auth-token: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          netlify-site-id: ${{ env.NETLIFY_SITE_ID }}
+          build-dir: './build'
+          comment-on-commit: true

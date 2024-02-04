@@ -1,0 +1,18 @@
+.demo-container {
+	max-width: 440px;
+	margin: 0 auto;
+}
+
+.demo-heading {
+	text-align: center;
+	font-size: 2rem;
+	color: var(--smooth-purple);
+	margin-bottom: 18px;
+}
+
+.demo-input-description {
+	color: var(--description);
+	font-size: var(--large-text);
+	line-height: 32px;
+	text-align: center;
+}

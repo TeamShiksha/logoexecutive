@@ -1,0 +1,20 @@
+# some basic ignore settings for the react js project
+
+# Ignore everything in the root except the "src" directory
+
+/*
+!.gitignore
+!README.md
+!package.json
+!package-lock.json
+!src/
+!public/
+!node_modules/
+!config/
+!scripts/
+!build/
+!build.js
+!start.js
+!test.js
+!webpack.config.js
+

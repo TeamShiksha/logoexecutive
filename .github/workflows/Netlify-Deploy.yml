@@ -30,10 +30,6 @@ jobs:
           else
             echo "NETLIFY_SITE_ID=UNKNOWN_BRANCH" >> $GITHUB_ENV
           fi
-          cd frontend
-          npm install
-          yarn build
-          cd ..
       - name: Deploying on netlify
         uses: jsmrcaga/action-netlify-deploy@v2.0.0
         with:

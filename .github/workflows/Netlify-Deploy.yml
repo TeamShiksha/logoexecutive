@@ -41,6 +41,6 @@ jobs:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ env.NETLIFY_SITE_ID }}
           NETLIFY_DEPLOY_TO_PROD: true
-          build_directory: './frontend/build'
+          build_directory: 'frontend/build'
           functions_directory: 'netlify/functions/'
           comment-on-commit: true

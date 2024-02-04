@@ -32,7 +32,7 @@ describe("UpdateProfile Controller", () => {
       const mockToken = mockUserModel.generateJWT();
 
       const response = await request(app)
-        .patch("/users/update")
+        .patch("/api/users/update")
         .set("cookie", `jwt=${mockToken}`)
         .send({
           firstName: "Ghosty",
@@ -51,7 +51,7 @@ describe("UpdateProfile Controller", () => {
       const mockToken = mockUserModel.generateJWT();
 
       const response = await request(app)
-        .patch("/users/update")
+        .patch("/api/users/update")
         .set("cookie", `jwt=${mockToken}`)
         .send({
           lastName: "Rider",
@@ -70,7 +70,7 @@ describe("UpdateProfile Controller", () => {
       const mockToken = mockUserModel.generateJWT();
 
       const response = await request(app)
-        .patch("/users/update")
+        .patch("/api/users/update")
         .set("cookie", `jwt=${mockToken}`)
         .send({
           firstName: "Ghosty",
@@ -89,7 +89,7 @@ describe("UpdateProfile Controller", () => {
       const mockToken = mockUserModel.generateJWT();
 
       const response = await request(app)
-        .patch("/users/update")
+        .patch("/api/users/update")
         .set("cookie", `jwt=${mockToken}`)
         .send({
           firstName: "Ghosty1",
@@ -109,7 +109,7 @@ describe("UpdateProfile Controller", () => {
       const mockToken = mockUserModel.generateJWT();
 
       const response = await request(app)
-        .patch("/users/update")
+        .patch("/api/users/update")
         .set("cookie", `jwt=${mockToken}`)
         .send({
           firstName: "Ghosty",
@@ -131,7 +131,7 @@ describe("UpdateProfile Controller", () => {
       const mockToken = mockUserModel.generateJWT();
   
       const response = await request(app)
-        .patch("/users/update")
+        .patch("/api/users/update")
         .set("cookie", `jwt=${mockToken}`)
         .send({
           firstName: "Ghosty",
@@ -154,7 +154,7 @@ describe("UpdateProfile Controller", () => {
       const mockToken = mockUserModel.generateJWT();
   
       const response = await request(app)
-        .patch("/users/update")
+        .patch("/api/users/update")
         .set("cookie", `jwt=${mockToken}`)
         .send({
           firstName: "Ghosty",

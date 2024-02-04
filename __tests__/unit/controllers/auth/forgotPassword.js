@@ -44,7 +44,7 @@ describe("/forgot-password", () => {
 
   it("422 - on invalid payload regex", async () => {
     const response = await request(app)
-      .post("/auth/forgot-password")
+      .post("/api/auth/forgot-password")
       .send({ email: "123" });
 
     expect(response.status).toBe(422);
@@ -57,7 +57,7 @@ describe("/forgot-password", () => {
 
   it("422 - on invalid payload fields (missing email)", async () => {
     const response = await request(app)
-      .post("/auth/forgot-password")
+      .post("/api/auth/forgot-password")
       .send({ payload: "123" })
       .set("Content-Type", "application/json");
 
@@ -71,7 +71,7 @@ describe("/forgot-password", () => {
 
   it("422 - on invalid fields (extra fields)", async () => {
     const response = await request(app)
-      .post("/auth/forgot-password")
+      .post("/api/auth/forgot-password")
       .send({ email: "hello@example.com", extraField: "123" })
       .set("Content-Type", "application/json");
 
@@ -87,7 +87,7 @@ describe("/forgot-password", () => {
     fetchUserByEmailSpy.mockImplementation(() => null);
 
     const response = await request(app)
-      .post("/auth/forgot-password")
+      .post("/api/auth/forgot-password")
       .send(mockPayload);
 
     expect(response.status).toBe(404);
@@ -103,7 +103,7 @@ describe("/forgot-password", () => {
     createForgotTokenSpy.mockImplementation(() => null);
 
     const response = await request(app)
-      .post("/auth/forgot-password")
+      .post("/api/auth/forgot-password")
       .send(mockPayload);
 
     expect(response.status).toBe(503);
@@ -120,7 +120,7 @@ describe("/forgot-password", () => {
     SendEmailSpy.mockImplementation(() => ({ success: false }));
 
     const response = await request(app)
-      .post("/auth/forgot-password")
+      .post("/api/auth/forgot-password")
       .send(mockPayload);
 
     expect(response.status).toBe(500);
@@ -137,7 +137,7 @@ describe("/forgot-password", () => {
     SendEmailSpy.mockImplementation(() => ({ success: true }));
 
     const response = await request(app)
-      .post("/auth/forgot-password")
+      .post("/api/auth/forgot-password")
       .send(mockPayload);
 
     expect(response.status).toBe(200);
@@ -150,7 +150,7 @@ describe("/forgot-password", () => {
     });
 
     const response = await request(app)
-      .post("/auth/forgot-password")
+      .post("/api/auth/forgot-password")
       .send(mockPayload);
 
     expect(response.status).toBe(500);

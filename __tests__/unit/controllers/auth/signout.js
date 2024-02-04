@@ -5,7 +5,7 @@ const { STATUS_CODES } = require("http");
 const app = require("../../../../app");
 const User = require("../../../../models/Users.js");
 
-describe("/signout", () => {
+describe("/api/signout", () => {
   beforeAll(() => {
     process.env.JWT_SECRET = "secret";
   });
@@ -25,7 +25,7 @@ describe("/signout", () => {
 
   it("205 - Successful signout", async () => {
     const mockJWT = new User(mockUsers[0]).generateJWT();
-    const response = await request(app).get("/auth/signout").set("Cookie", `jwt=${mockJWT}`);
+    const response = await request(app).get("/api/auth/signout").set("Cookie", `jwt=${mockJWT}`);
 
     expect(response.status).toBe(205);
     // Should contain jwt=; in the set-cookie value

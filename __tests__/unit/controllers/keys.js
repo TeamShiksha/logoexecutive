@@ -24,7 +24,7 @@ describe("generate-key controller", () =>{
 
       const mockToken = mockUser.generateJWT();
       const response = await request(app)
-        .post("/keys/generate")
+        .post("/api/keys/generate")
         .set("cookie", `jwt=${mockToken}`)
         .send({
           "payload": {
@@ -43,7 +43,7 @@ describe("generate-key controller", () =>{
   it("Should return 422 response if keyId format is invalid", async () => {
     const mockToken = mockUser.generateJWT();
     const response = await request(app)
-      .delete("/keys/destroy")
+      .delete("/api/keys/destroy")
       .query({ keyId: "90" }) 
       .set("cookie", `jwt=${mockToken}`);
     expect(response.status).toBe(422);
@@ -58,7 +58,7 @@ describe("generate-key controller", () =>{
     const mockToken = mockUser.generateJWT();
     console.log(mockToken);
     const response = await request(app)
-      .delete("/keys/destroy")
+      .delete("/api/keys/destroy")
       .query({ keyId: 90 }) 
       .set("cookie", `jwt=${mockToken}`);
     expect(response.status).toBe(422);

@@ -26,7 +26,7 @@ describe("deleteUserAccountController", () => {
     const mockToken = mockUserModel.generateJWT();
 
     const response = await request(app)
-      .delete("/users/delete")
+      .delete("/api/users/delete")
       .set("cookie", `jwt=${mockToken}`);
 
     expect(response.statusCode).toBe(200);

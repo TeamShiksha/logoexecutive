@@ -69,7 +69,7 @@ describe("update-password controller", () =>{
 
       const mockToken = mockUser.generateJWT();
       const response = await request(app)
-        .post("/users/update-password")
+        .post("/api/users/update-password")
         .set("cookie", `jwt=${mockToken}`)
         .send({ 
           "payload": {
@@ -91,7 +91,7 @@ describe("update-password controller", () =>{
 
       const mockToken = mockUser.generateJWT();
       const response = await request(app)
-        .post("/users/update-password")
+        .post("/api/users/update-password")
         .set("cookie", `jwt=${mockToken}`)
         .send({ 
           "payload": {
@@ -131,7 +131,7 @@ describe("getUser controller", ()=>{
       jest.spyOn(UserService, "fetchUserFromId").mockImplementation(() => null);
 
       const response = await request(app)
-        .get("/users/user")
+        .get("/api/users/user")
         .set("cookie", `jwt=${mockToken}`);
 
       expect(response.status).toBe(404);
@@ -148,7 +148,7 @@ describe("getUser controller", ()=>{
       jest.spyOn(SubscriptionService, "fetchSubscriptionByuserid").mockImplementation(() => null);
 
       const response = await request(app)
-        .get("/users/user")
+        .get("/api/users/user")
         .set("cookie", `jwt=${mockToken}`);
 
       expect(response.status).toBe(404);
@@ -192,7 +192,7 @@ describe("getUser controller", ()=>{
       };
 
       const response = await request(app)
-        .get("/users/user")
+        .get("/api/users/user")
         .set("cookie", `jwt=${mockToken}`);
 
       expect(response.status).toBe(200);

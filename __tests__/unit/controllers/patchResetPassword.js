@@ -61,7 +61,7 @@ describe("resetPassword controller", () => {
       .mockImplementation(() => userTokenObj);
 
     const response = await request(app)
-      .patch("/auth/reset-password")
+      .patch("/api/auth/reset-password")
       .set("cookie", `resetPasswordSession=${mockToken}`)
       .send(resetPasswordPayload);
 
@@ -84,7 +84,7 @@ describe("resetPassword controller", () => {
       .mockImplementation(() => userTokenObj);
 
     const response = await request(app)
-      .patch("/auth/reset-password")
+      .patch("/api/auth/reset-password")
       .send(resetPasswordPayload);
 
     expect(response.status).toBe(401);
@@ -111,7 +111,7 @@ describe("resetPassword controller", () => {
       .mockImplementation(() => userTokenObj);
 
     const response = await request(app)
-      .patch("/auth/reset-password")
+      .patch("/api/auth/reset-password")
       .set("cookie", `resetPasswordSession=${mockToken}`)
       .send(mockBody);
 
@@ -140,7 +140,7 @@ describe("resetPassword controller", () => {
       .mockImplementation(() => userTokenObj);
 
     const response = await request(app)
-      .patch("/auth/reset-password")
+      .patch("/api/auth/reset-password")
       .set("cookie", `resetPasswordSession=${mockToken}`)
       .send(mockBody);
 
@@ -168,7 +168,7 @@ describe("resetPassword controller", () => {
       .mockImplementation(() => userTokenObj);
 
     const response = await request(app)
-      .patch("/auth/reset-password")
+      .patch("/api/auth/reset-password")
       .set("cookie", `resetPasswordSession=${mockToken}`)
       .send(mockBody);
 
@@ -198,7 +198,7 @@ describe("resetPassword controller", () => {
       .mockImplementation(() => userTokenObj);
 
     const response = await request(app)
-      .patch("/auth/reset-password")
+      .patch("/api/auth/reset-password")
       .set("cookie", `resetPasswordSession=${mockToken}`)
       .send(mockBody);
 

@@ -27,7 +27,7 @@ describe("Signin Controller", () => {
 
   it("422 - email is required", async () => {
     const response = await request(app)
-      .post("/auth/signin")
+      .post("/api/auth/signin")
       .send({ user: "hello world" });
 
     expect(response.status).toBe(422);
@@ -40,7 +40,7 @@ describe("Signin Controller", () => {
 
   it("422 - email is not valid", async () => {
     const response = await request(app)
-      .post("/auth/signin")
+      .post("/api/auth/signin")
       .send({ email: "**BAD STRING**" });
 
     expect(response.status).toBe(422);
@@ -52,7 +52,7 @@ describe("Signin Controller", () => {
   });
 
   it("422 - password is required", async () => {
-    const response = await request(app).post("/auth/signin").send({
+    const response = await request(app).post("/api/auth/signin").send({
       email: "john@doe.com"
     });
 
@@ -65,7 +65,7 @@ describe("Signin Controller", () => {
   });
 
   it("422 - password should be more than 8 characters", async () => {
-    const response = await request(app).post("/auth/signin").send({
+    const response = await request(app).post("/api/auth/signin").send({
       email: "john@doe.com",
       password: "john"
     });
@@ -79,7 +79,7 @@ describe("Signin Controller", () => {
   });
 
   it("422 - password should be more than 8 characters", async () => {
-    const response = await request(app).post("/auth/signin").send({
+    const response = await request(app).post("/api/auth/signin").send({
       email: "john@doe.com",
       password: "john's very long password, to fail the test"
     });
@@ -95,7 +95,7 @@ describe("Signin Controller", () => {
   it("401 - Email or Password incorrect (email does not exist)", async ()  => {
     jest.spyOn(UserService, "fetchUserByEmail").mockImplementation(() => null);
 
-    const response = await request(app).post("/auth/signin").send({
+    const response = await request(app).post("/api/auth/signin").send({
       email: "john@doe.com",
       password: "john password"
     });
@@ -111,7 +111,7 @@ describe("Signin Controller", () => {
   it("401 - User not verified", async () => {
     jest.spyOn(UserService, "fetchUserByEmail").mockImplementation(() => new User(mockUsers[0]));
 
-    const response = await request(app).post("/auth/signin").send({
+    const response = await request(app).post("/api/auth/signin").send({
       email: "john.doe@example.com",
       password: "password122"
     });
@@ -127,7 +127,7 @@ describe("Signin Controller", () => {
   it("401 - Email or Password incorrect (password does not match)", async () => {
     jest.spyOn(UserService, "fetchUserByEmail").mockImplementation(() => new User(mockUsers[1]));
 
-    const response = await request(app).post("/auth/signin").send({
+    const response = await request(app).post("/api/auth/signin").send({
       email: "john.doe@example.com",
       password: "password122"
     });
@@ -143,7 +143,7 @@ describe("Signin Controller", () => {
   it("500 - Unexpected errors", async () => {
     jest.spyOn(UserService, "fetchUserByEmail").mockImplementation(() => {throw new Error("Unexected error");});
 
-    const response = await request(app).post("/auth/signin").send({
+    const response = await request(app).post("/api/auth/signin").send({
       email: "johndoe@example.com",
       password: "password122"
     });
@@ -159,7 +159,7 @@ describe("Signin Controller", () => {
   it("200 - Success path", async () => {
     jest.spyOn(UserService, "fetchUserByEmail").mockImplementation(() => new User(mockUsers[1]));
 
-    const response = await request(app).post("/auth/signin").send({
+    const response = await request(app).post("/api/auth/signin").send({
       email: "johndoe@example.com",
       password: "password123"
     });

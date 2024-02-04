@@ -12,7 +12,7 @@
     "lint:fix-all": "eslint --fix .",
     "test": "jest",
     "test:unit": "cross-env NODE_ENV=test jest unit",
-    "build": "cd frontend && npm install and yarn build",
+    "build": "cd frontend && npm install and yarn build and ls -l",
     "test:coverage": "jest --coverage"
   },
   "dependencies": {

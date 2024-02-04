@@ -27,11 +27,11 @@ jobs:
         run: |
           if [ "${{ github.ref }}" == "refs/heads/dev" ]; then
             echo "NETLIFY_SITE_ID=${{ secrets.DEV_NETLIFY_SITE_ID }}" >> $GITHUB_ENV
-            cd logoexecutive-frontend
+            cd client
             npm install
             yarn build
             cd ..
-            ls -a
+            ls -l
           elif [ "${{ github.ref }}" == "refs/heads/tst" ]; then
             echo "NETLIFY_SITE_ID=${{ secrets.TST_NETLIFY_SITE_ID }}" >> $GITHUB_ENV
           elif [ "${{ github.ref }}" == "refs/heads/prd" ]; then
@@ -46,6 +46,6 @@ jobs:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
           NETLIFY_DEPLOY_TO_PROD: true
-          build_directory: './events-frontend/dist'
+          build_directory: './client/build'
           functions_directory: 'netlify/functions/'
           comment-on-commit: true

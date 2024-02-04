@@ -24,7 +24,10 @@ jobs:
           if [ "${{ github.ref }}" == "refs/heads/dev" ]; then
             echo "NETLIFY_SITE_ID=${{ secrets.DEV_NETLIFY_SITE_ID }}" >> $GITHUB_ENV
             ls -l
-            npm run build:frontend
+            cd frontend
+            npm install
+            ls -l
+            yarn build
           elif [ "${{ github.ref }}" == "refs/heads/tst" ]; then
             echo "NETLIFY_SITE_ID=${{ secrets.TST_NETLIFY_SITE_ID }}" >> $GITHUB_ENV
           elif [ "${{ github.ref }}" == "refs/heads/prd" ]; then

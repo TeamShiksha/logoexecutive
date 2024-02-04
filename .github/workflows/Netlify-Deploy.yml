@@ -36,7 +36,7 @@ jobs:
             echo "NETLIFY_SITE_ID=UNKNOWN_BRANCH" >> $GITHUB_ENV
           fi
       - name: Deploying on netlify
-        uses: jsmrcaga/action-netlify-deploy@v2.0.0
+        uses: South-Paw/action-netlify-deploy@v1.2.0
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}

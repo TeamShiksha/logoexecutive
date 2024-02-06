@@ -21,11 +21,6 @@
 	gap: 32px;
 }
 
-.your-api {
-	font-size: 32px;
-	color: var(--smooth-purple);
-}
-
 .dashboard-content-item {
 	box-shadow: var(--shadow);
 	border: var(--border);
@@ -35,6 +30,7 @@
 	text-align: left;
 	display: flex;
 	flex-direction: column;
+	flex-shrink: 1;
 }
 
 .dashboard-content-item .current-plan {
@@ -114,13 +110,27 @@
 	max-height: 250px;
 }
 
-.api-key-container {
+.generate-api {
+	box-shadow: var(--shadow);
+	border: var(--border);
+	background-color: var(--white);
+	border-radius: var(--bradius);
+	padding: 24px 32px;
+	text-align: left;
 	display: flex;
-	flex-direction: row;
-	gap: 0px 32px;
+	flex-direction: column;
+	flex-grow: 1;
+	flex-shrink: 0;
+}
+
+.api-key-container {
+	margin-top: 20px;
+	display: flex;
+	flex-direction: column;
+	gap: 10px 32px;
 	align-items: baseline;
-	width: 100%;
-	max-width: 872px;
+	justify-content: center;
+	flex: 1;
 }
 
 .api-key-container > button {

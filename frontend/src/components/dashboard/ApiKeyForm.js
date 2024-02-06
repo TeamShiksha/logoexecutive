@@ -10,10 +10,7 @@ const ApiKeyForm = ({
 }) => {
 	return (
 		<section className='dashboard-content-section'>
-			<form
-				className='api-key-container dashboard-content-item'
-				onSubmit={handleGenerateKey}
-			>
+			<form className='api-key-container ' onSubmit={handleGenerateKey}>
 				<CustomInput
 					type='text'
 					name='apikey'

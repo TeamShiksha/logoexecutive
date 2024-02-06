@@ -72,19 +72,20 @@ const DashboardContent = () => {
 			<section className='dashboard-content-section'>
 				<CurrentPlan />
 				<Usage usedCalls={USED_CALLS} totalCalls={TOTAL_CALLS} />
+				<div className='generate-api'>
+					<h1 className='content-item-heading'>Generate your API key</h1>
+					<ApiKeyForm
+						inputValue={inputValue}
+						setInputValue={setInputValue}
+						errorMessage={errorMessage}
+						setErrorMessage={setErrorMessage}
+						handleGenerateKey={handleGenerateKey}
+					/>
+				</div>
 			</section>
 
 			<div className='divider'></div>
 
-			<h3 className='your-api'> Your API Key</h3>
-
-			<ApiKeyForm
-				inputValue={inputValue}
-				setInputValue={setInputValue}
-				errorMessage={errorMessage}
-				setErrorMessage={setErrorMessage}
-				handleGenerateKey={handleGenerateKey}
-			/>
 			<ApiKeyTable
 				keys={keys}
 				copiedKey={copiedKey}

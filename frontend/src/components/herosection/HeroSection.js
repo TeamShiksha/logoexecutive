@@ -16,7 +16,7 @@ export const HeroSection = () => {
 					Elevate your brand with Logo Executive!
 				</p>
 			</div>
-			<img className='hero-image' src={Banner} alt='hero image' />
+			<img className='hero-image' src={Banner} alt='hero' />
 		</div>
 	);
 };

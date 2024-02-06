@@ -8,8 +8,7 @@
     "dev": "cross-env NODE_ENV=development netlify dev",
     "start": "cross-env NODE_ENV=production node server.js",
     "lint": "eslint .",
-    "lint:fix": "eslint --fix",
-    "lint:fix-all": "eslint --fix .",
+    "lint:fix": "eslint --fix .",
     "test": "jest",
     "test:unit": "cross-env NODE_ENV=test jest unit",
     "build": "cd frontend && npm install && yarn build && ls -l",
@@ -41,5 +40,7 @@
     "pre-commit": "^1.2.2",
     "supertest": "^6.3.3"
   },
-  "pre-commit": []
+  "pre-commit": [
+    "lint"
+  ]
 }

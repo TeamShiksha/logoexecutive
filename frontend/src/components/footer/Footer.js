@@ -26,7 +26,7 @@ const Footer = () => {
 			</section>
 			<section className='footer-right'>
 				<div className='footer-right-heading-container'>
-					<img src={businessLogo} />
+					<img src={businessLogo} alt='Brand logo' />
 					<h4>
 						Empower Your Branding: Logo Executive Where Logos Shine in Every
 						Size

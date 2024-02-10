@@ -69,17 +69,6 @@ class User {
         return null;
       }
       const hashedPassword = await bcrypt.hash(password, 10);
-      console.log("data from model", {
-        userId: crypto.randomUUID(),
-        email,
-        firstName,
-        lastName,
-        userType: "customer",
-        password: hashedPassword,
-        createdAt: Timestamp.now(),
-        updatedAt: Timestamp.now(),
-        isVerified: false,
-      });
       return {
         userId: crypto.randomUUID(),
         email,

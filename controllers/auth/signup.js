@@ -58,42 +58,35 @@ async function signupController(req, res, next) {
 
     const newUser = await createUser(value);
     if (!newUser) {
-      return res.status(500).json([
+      return res.status(500).json(
         {
-          message: "Unexpected error while creating user",
+          message: "Unexpected error occurred while creating user",
           error: STATUS_CODES[500],
           statusCode: 500,
         },
-      ]);
+      );
     }
 
     const newsubcription = await createSubscription(newUser.userId);
     if (!newsubcription) {
-      return res.status(206).json([
+      return res.status(206).json(
         {
-          message: "Unexpected error while creating subscription",
-          error: STATUS_CODES[500],
-          statusCode: 500,
-        },
-        {
-          message: "Successfully created user",
-          data: newUser.data,
+          message:
+            "Successfully created user but Unexpected error occurred while creating subscription",
           statusCode: 201,
         },
-      ]);
+      );
     }
 
     const verificationToken = await createVerifyToken(newUser.userId);
-    if(!verificationToken)
-      return res.status(206).json([{
-        message: "Failed to create email verification token",
-        error: STATUS_CODES[500],
-        statusCode: 500
-      }, {
-        message: "Successfully created user",
-        data: newUser.data,
-        statusCode: 201,
-      }]);
+    if (!verificationToken)
+      return res.status(206).json(
+        {
+          message:
+            "user created successfully. Verification email failed to send. Please visit our contact page for assistance. We're here to help.",
+          statusCode: 201,
+        },
+      );
 
     const emailRes = await sendEmail(
       newUser.email,
@@ -101,32 +94,22 @@ async function signupController(req, res, next) {
       verificationToken.tokenURL.href
     );
     if (!emailRes.success) {
-      return res.status(206).json([
+      return res.status(206).json(
         {
-          message: "Failed to send verification email",
-          error: STATUS_CODES[500],
-          statusCode: 500,
-        },
-        {
-          message: "Successfully created user",
-          data: newUser.data,
+          message:
+            "User created successfully. Verification email failed to send. Please visit our contact page for assistance. We're here to help.",
           statusCode: 201,
         },
-      ]);
+      );
     }
 
-    return res.status(201).json([
+    return res.status(201).json(
       {
-        message: "Successfully created user",
-        data: newUser.data,
+        message: "user created successfully and verification email sent on your email.",
         statusCode: 201,
       },
-      {
-        message: "Verification email sent successfully",
-        statusCode: 200,
-      },
-    ]);
-  } catch(err) {
+    );
+  } catch (err) {
     next(err);
   }
 }

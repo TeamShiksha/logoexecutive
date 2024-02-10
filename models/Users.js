@@ -11,7 +11,7 @@ class User {
   updatedAt;
   userRef;
   isVerified;
-
+  userType;
   #password;
 
   /**
@@ -22,6 +22,7 @@ class User {
    * @param {boolean} params.isVerified
    * @param {string} params.firstName
    * @param {string} params.lastName
+   * @param {string} params.userType
    * @param {Date} params.createdAt
    * @param {Date} params.updatedAt
    * @param {DocumentReference} [params.userRef] - Firebase document reference of the user
@@ -33,6 +34,7 @@ class User {
     this.#password = params.password;
     this.firstName = params.firstName;
     this.lastName = params.lastName;
+    this.userType = params.userType;
     this.createdAt = params.createdAt;
     this.updatedAt = params.updatedAt;
     this.userRef = params.userRef ?? null;
@@ -45,6 +47,7 @@ class User {
       lastName: this.lastName,
       email: this.email,
       userId: this.userId,
+      userType: this.userType,
     };
   }
 
@@ -57,6 +60,7 @@ class User {
    * @param {string} userData.firstName
    * @param {string} userData.lastName
    * @param {string} userData.password
+   * @param {string} userData.userType
    **/
   static async NewUser (userData) {
     try {
@@ -65,11 +69,23 @@ class User {
         return null;
       }
       const hashedPassword = await bcrypt.hash(password, 10);
+      console.log("data from model", {
+        userId: crypto.randomUUID(),
+        email,
+        firstName,
+        lastName,
+        userType: "customer",
+        password: hashedPassword,
+        createdAt: Timestamp.now(),
+        updatedAt: Timestamp.now(),
+        isVerified: false,
+      });
       return {
         userId: crypto.randomUUID(),
         email,
         firstName,
         lastName,
+        userType:"customer",
         password: hashedPassword,
         createdAt: Timestamp.now(),
         updatedAt: Timestamp.now(),

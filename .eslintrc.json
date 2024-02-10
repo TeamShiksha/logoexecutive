@@ -13,5 +13,6 @@
 		"require-await": "error",
 		"no-unused-labels": "error",
 		"indent": ["error", 2]
-	}
+	},
+	"ignorePatterns": ["frontend/"]
 }

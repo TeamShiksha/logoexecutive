@@ -11,6 +11,7 @@ const mockUsers = [
     password: bcrypt.hashSync("password123", 10), 
     createdAt: new Date("01-01-2001"),
     updatedAt: new Date("01-01-2001"),
+    userType: "customer",
     isVerified: false
   },
   {

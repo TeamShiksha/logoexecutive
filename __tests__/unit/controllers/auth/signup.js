@@ -188,13 +188,12 @@ describe("Signup Controller", () => {
       .send(mockValidPayload);
 
     expect(response.status).toBe(500);
-    expect(response.body).toEqual([
-      {
-        message: "Unexpected error while creating user",
-        error: STATUS_CODES[500],
-        statusCode: 500
-      }
-    ]);
+    console.log("response.body", response.body);
+    expect(response.body).toEqual({
+      message: "Unexpected error occurred while creating user",
+      error: STATUS_CODES[500],
+      statusCode: 500,
+    });
   });
 
   it("206 - when failed to create user subscription", async () => {
@@ -207,18 +206,11 @@ describe("Signup Controller", () => {
       .send(mockValidPayload);
 
     expect(response.status).toBe(206);
-    expect(response.body).toEqual([
-      {
-        message: "Unexpected error while creating subscription",
-        error: STATUS_CODES[500],
-        statusCode: 500,
-      },
-      {
-        message: "Successfully created user",
-        data: mockUserModel.data,
-        statusCode: 201,
-      },
-    ]);
+    expect(response.body).toEqual({
+      message:
+        "Successfully created user but Unexpected error occurred while creating subscription",
+      statusCode: 201,
+    });
   });
 
   it("206 - when failed to create user user token", async () => {
@@ -232,18 +224,11 @@ describe("Signup Controller", () => {
       .send(mockValidPayload);
 
     expect(response.status).toBe(206);
-    expect(response.body).toEqual([
-      {
-        message: "Failed to create email verification token",
-        error: STATUS_CODES[500],
-        statusCode: 500,
-      },
-      {
-        message: "Successfully created user",
-        data: mockUserModel.data,
-        statusCode: 201,
-      },
-    ]);
+    expect(response.body).toEqual({
+      message:
+        "user created successfully. Verification email failed to send. Please visit our contact page for assistance. We're here to help.",
+      statusCode: 201,
+    });
   });
 
   it("206 - when failed to send verification email", async () => {
@@ -256,20 +241,12 @@ describe("Signup Controller", () => {
     const response = await request(app)
       .post("/api/auth/signup")
       .send(mockValidPayload);
-
     expect(response.status).toBe(206);
-    expect(response.body).toEqual([
-      {
-        message: "Failed to send verification email",
-        error: STATUS_CODES[500],
-        statusCode: 500,
-      },
-      {
-        message: "Successfully created user",
-        data: mockUserModel.data,
-        statusCode: 201,
-      },
-    ]);
+    expect(response.body).toEqual({
+      message:
+        "User created successfully. Verification email failed to send. Please visit our contact page for assistance. We're here to help.",
+      statusCode: 201,
+    });
   });
 
   it("Success 201", async () => {
@@ -283,14 +260,10 @@ describe("Signup Controller", () => {
       .send(mockValidPayload);
 
     expect(response.status).toBe(201);
-    expect(response.body[0]).toEqual({
-      message: "Successfully created user",
-      data: mockUserModel.data,
-      statusCode: 201
-    });
-    expect(response.body[1]).toEqual({
-      message: "Verification email sent successfully",
-      statusCode: 200
+    expect(response.body).toEqual({
+      message:
+        "user created successfully and verification email sent on your email.",
+      statusCode: 201,
     });
   });
 

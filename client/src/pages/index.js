@@ -9,10 +9,12 @@ import ResetPasswordSuccessCard from './reset-password/ResetPasswordSuccessCard'
 import {Signin} from './signin/Signin';
 import {Signup} from './signup/Signup';
 import {Home} from './welcome/Home';
+import AdminDashboard from './admin/Admin';
 
 export {
 	About,
 	Account,
+	AdminDashboard,
 	ApiDocs,
 	Contactus,
 	Dashboard,

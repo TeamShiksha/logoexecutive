@@ -8,6 +8,7 @@ import useLocalStorage from './hooks/useLocalStorage';
 import {
 	About,
 	Account,
+	AdminDashboard,
 	ApiDocs,
 	Contactus,
 	Dashboard,
@@ -62,6 +63,7 @@ function App() {
 				<Route path='/reset-password' element={<ResetPassword />} />
 				<Route path='/docs' element={<ApiDocs />} />
 				<Route path='/account' element={<Account />} />
+				<Route path='/admin' element={<AdminDashboard />} />
 			</Routes>
 			<Footer />
 		</div>

@@ -1,6 +1,6 @@
 const dotenv = require("dotenv");
 const fs = require("fs");
-const { validateEnv } = require("../../utils/scripts/envSchema.js");
+const { validateEnv } = require("../utils/scripts/envSchema.js");
 const path = require("path");
 const serverless = require("serverless-http");
 
@@ -22,6 +22,6 @@ if (error) {
   process.exit(1);
 }
 
-const app = require("../../app.js");
+const app = require("../app.js");
 
 module.exports.handler = serverless(app);

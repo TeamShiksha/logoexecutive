@@ -1,5 +1,7 @@
 [build]
-    functions = "netlify/functions/"
+    functions = "server/functions/"
+		command = "yarn workspace client build"
+		publish = "client/build"
 [functions]
   external_node_modules = ["express"]
   node_bundler = "esbuild"

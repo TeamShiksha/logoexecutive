@@ -5,9 +5,18 @@
 		"server"
 	],
 	"scripts": {
-		"start": "concurrently \"yarn workspace server start\" \"yarn workspace client start\""
+		"start": "concurrently \"yarn workspace server start\" \"yarn workspace client start\"",
+		"lint:client": "yarn workspace client lint",
+		"lint:server": "yarn workspace server lint",
+		"lint": "concurrently \"yarn workspace server lint\" \"yarn workspace client lint\" \"cd client && yarn run check\"",
+		"lint-fix:server": "yarn workspace server lint:fix",
+		"lint-fix:client": "yarn workspace client lint:fix",
+		"lint-fix": "concurrently \"yarn workspace server lint:fix\" \"yarn workspace client lint:fix\" \"yarn workspace client format\"",
+		"test:server": "yarn workspace server test",
+		"test:client": "yarn workspace client test"
 	},
 	"devDependencies": {
 		"concurrently": "^8.2.2"
-	}
+	},
+	"pre-commit": ["lint"]
 }

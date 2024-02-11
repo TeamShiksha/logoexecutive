@@ -1,6 +1,6 @@
 const dotenv = require("dotenv");
 const fs = require("fs");
-const { validateEnv } = require("../utils/scripts/envSchema.js")
+const { validateEnv } = require("../utils/scripts/envSchema.js");
 const path = require("path");
 const serverless = require("serverless-http");
 

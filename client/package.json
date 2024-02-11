@@ -25,6 +25,7 @@
 		"test": "react-scripts test",
 		"eject": "react-scripts eject",
 		"lint": "eslint .",
+		"lint:fix": "eslint --fix .",
 		"format": "prettier --write .",
 		"check": "prettier --check ."
 	},

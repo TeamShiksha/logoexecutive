@@ -2,10 +2,6 @@ const Joi = require("joi");
 
 const EnvSchema = Joi.object()
   .keys({
-    PORT: Joi.alternatives(
-      Joi.string().regex(/^\d+$/),
-      Joi.number()
-    ).required(),
     BASE_URL: Joi.string().uri().required(),
     EMAIL_HOST: Joi.string().hostname().required(),
     EMAIL_SERVICE: Joi.string().required(),

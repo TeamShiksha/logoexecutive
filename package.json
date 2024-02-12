@@ -5,7 +5,9 @@
 		"server"
 	],
 	"scripts": {
-		"start": "concurrently \"yarn workspace server start\" \"yarn workspace client start\"",
+		"start": "concurrently \"yarn start:client\" \"yarn start:server\"",
+		"start:client": "yarn workspace client start",
+		"start:server": "yarn workspace server start",
 		"lint:client": "yarn workspace client lint",
 		"lint:server": "yarn workspace server lint",
 		"lint": "concurrently \"yarn workspace server lint\" \"yarn workspace client lint\" \"cd client && yarn run check\"",

@@ -1,7 +1,12 @@
+import DragAndDrop from '../../components/admindashboard/DragAndDrop';
 import './Admin.css';
 
 const AdminDashboard = () => {
-	return <div>Admin Dashboard</div>;
+	return (
+		<div>
+			<DragAndDrop />
+		</div>
+	);
 };
 
 export default AdminDashboard;

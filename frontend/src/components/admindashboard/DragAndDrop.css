@@ -1,0 +1,86 @@
+.card {
+	padding: 64px 32px;
+}
+
+.card p {
+	font-weight: bold;
+}
+
+.images-upload-btn {
+	outline: 0;
+	border: 0;
+	color: #fff;
+	cursor: pointer;
+	border-radius: 4px;
+	font-weight: 400;
+	padding: 8px 13px;
+	max-width: 150px;
+	width: 100%;
+	background: #4f46e5;
+}
+
+.drag-area {
+	height: 250px;
+	border-radius: 5px;
+	border: 2px dashed rgb(229 231 235);
+	background-color: rgb(249, 250, 251);
+	/* box-shadow: var(--shadow); */
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+	justify-content: center;
+	align-items: center;
+	user-select: none;
+	-webkit-user-select: none;
+	cursor: pointer;
+}
+
+.card .drag-area .visible {
+	font-size: 18px;
+}
+
+.card .select {
+	color: #5256ad;
+	cursor: pointer;
+	transition: 0.4s;
+}
+
+.card .select:hover {
+	opacity: 0.6;
+}
+
+.preview-container {
+	width: 100%;
+	height: auto;
+	display: flex;
+	flex-wrap: wrap;
+	overflow-y: auto;
+	margin-top: 10px;
+}
+
+.preveiw-container .image-preview {
+	width: auto;
+	height: auto;
+	position: relative;
+	border-radius: 5px;
+	margin-right: 5px;
+}
+
+.image-preview span {
+	position: absolute;
+	top: -2px;
+	right: 9px;
+	font-size: 20px;
+	cursor: pointer;
+}
+
+.card input,
+.card .drag-area .on-drop,
+.card .drag-area.dragover .visible {
+	display: none;
+}
+
+.image-delete {
+	z-index: 999;
+	color: #0086fe;
+}

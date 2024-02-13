@@ -10,7 +10,7 @@
 		"start:server": "yarn workspace server start",
 		"lint:client": "yarn workspace client lint",
 		"lint:server": "yarn workspace server lint",
-		"lint": "concurrently \"yarn lint:client\" \"yarn start:server\" \"cd client && yarn run check\"",
+		"lint": "concurrently \"yarn lint:client\" \"yarn lint:server\" \"cd client && yarn run check\"",
 		"lint-fix:server": "yarn workspace server lint:fix",
 		"lint-fix:client": "yarn workspace client lint:fix",
 		"lint-fix": "concurrently \"yarn workspace server lint:fix\" \"yarn workspace client lint:fix\" \"yarn workspace client format\"",

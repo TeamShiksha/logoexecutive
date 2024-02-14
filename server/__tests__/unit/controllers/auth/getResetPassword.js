@@ -18,6 +18,19 @@ describe("GET /reset-password", () => {
     delete process.env.JWT_SECRET;
   });
 
+  it("500 - CORS", async () => {
+    const response = await request(app)
+      .post("/api/auth/reset-password")
+      .set("Origin", "http://invalidcorsorigin.com");
+
+    expect(response.status).toBe(500);
+    expect(response.body).toEqual({
+      error: STATUS_CODES[500],
+      message: "Not allowed by CORS",
+      statusCode: 500
+    });
+  });
+
   it("422 - token missing", async () => {
     const response = await request(app).get("/api/auth/reset-password");
 

@@ -10,11 +10,11 @@ const UserToken = require("../../../../models/UserToken");
 
 describe("GET /reset-password", () => {
   beforeAll(() => {
-    process.env.CLIENT_URL = "https://clienturl.com";
+    process.env.BASE_URL = "https://clienturl.com";
     process.env.JWT_SECRET = "mysecret";
   });
   afterAll(() => {
-    delete process.env.CLIENT_URL;
+    delete process.env.BASE_URL;
     delete process.env.JWT_SECRET;
   });
 

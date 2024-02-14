@@ -1,46 +1,24 @@
 {
-  "name": "logoexecutive-backend",
-  "version": "1.0.0",
-  "main": "src/index.js",
-  "repository": "https://github.com/FrontendArmy/logoexecutive-backend.git",
-  "license": "MIT",
-  "scripts": {
-    "dev": "cross-env NODE_ENV=development netlify dev",
-    "start": "cross-env NODE_ENV=production node server.js",
-    "lint": "eslint .",
-    "lint:fix": "eslint --fix .",
-    "test": "jest",
-    "test:unit": "cross-env NODE_ENV=test jest unit",
-    "build": "cd frontend && npm install && yarn build && ls -l",
-    "test:coverage": "jest --coverage"
-  },
-  "dependencies": {
-    "@aws-sdk/client-s3": "^3.472.0",
-    "@aws-sdk/cloudfront-signer": "^3.451.0",
-    "@netlify/functions": "^2.5.1",
-    "bcrypt": "^5.1.1",
-    "cookie-parser": "^1.4.6",
-    "cors": "^2.8.5",
-    "cross-env": "^7.0.3",
-    "dayjs": "^1.11.10",
-    "dotenv": "^16.3.1",
-    "express": "^4.18.2",
-    "firebase-admin": "^11.10.1",
-    "joi": "^17.11.0",
-    "jsonwebtoken": "^9.0.2",
-    "nodemailer": "^6.9.7",
-    "serverless-http": "^3.2.0"
-  },
-  "devDependencies": {
-    "@types/jest": "^29.5.6",
-    "eslint": "^8.46.0",
-    "jest": "^29.6.4",
-    "netlify-cli": "^17.15.1",
-    "nodemon": "^3.0.1",
-    "pre-commit": "^1.2.2",
-    "supertest": "^6.3.3"
-  },
-  "pre-commit": [
-    "lint"
-  ]
+	"private": true,
+	"workspaces": [
+		"client",
+		"server"
+	],
+	"scripts": {
+		"start": "concurrently \"yarn start:client\" \"yarn start:server\"",
+		"start:client": "yarn workspace client start",
+		"start:server": "yarn workspace server start",
+		"lint:client": "yarn workspace client lint",
+		"lint:server": "yarn workspace server lint",
+		"lint": "concurrently \"yarn lint:client\" \"yarn lint:server\" \"cd client && yarn run check\"",
+		"lint-fix:server": "yarn workspace server lint:fix",
+		"lint-fix:client": "yarn workspace client lint:fix",
+		"lint-fix": "concurrently \"yarn workspace server lint:fix\" \"yarn workspace client lint:fix\" \"yarn workspace client format\"",
+		"test:server": "yarn workspace server test",
+		"test:client": "yarn workspace client test"
+	},
+	"devDependencies": {
+		"concurrently": "^8.2.2"
+	},
+	"pre-commit": ["lint"]
 }

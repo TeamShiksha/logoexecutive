@@ -46,7 +46,7 @@ const Header = ({user, logoutUser}) => {
 	return (
 		<header className={headerBg ? 'header bg' : 'header'}>
 			<Link to='/' className='logo'>
-				<img src={logo} alt='brand logo'/>
+				<img src={logo} alt='brand logo' />
 				<h2>LogoExecutive</h2>
 			</Link>
 			<div className='navbar-container'>

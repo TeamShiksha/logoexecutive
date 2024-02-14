@@ -1,7 +1,6 @@
 const { validateEnv } = require("../../../../utils/scripts/envSchema");
 
 const validEnv = {
-  PORT: 3000,
   CLOUD_FRONT_KEYPAIR_ID: "ABCDEF1234567890",
   CLOUD_FRONT_PRIVATE_KEY: "randomText",
   DISTRIBUTION_DOMAIN: "https://d111111abcdef8.cloudfront.net",
@@ -34,23 +33,6 @@ const extendedValidEnv = {
 
 describe("Env Schema Validation", () => {
   describe("If service account key exists", () => {
-    it("should return error message if port doesn't exists", () => {
-      const env = {};
-      const result = validateEnv(env, { serviceAccountKey: true });
-
-      expect(result).toHaveProperty("error");
-      expect(result.error.message).toMatch(/\"PORT\" is required/gi);
-    });
-
-    it("should return error if port is not a valid number", () => {
-      const env = { PORT: "abc" };
-      const result = validateEnv(env, { serviceAccountKey: true });
-      expect(result.error).toBeTruthy();
-      expect(result.error.message).toBe(
-        "\"PORT\" with value \"abc\" fails to match the required pattern: /^\\d+$/"
-      );
-    });
-
     it("should return value if port exists", () => {
       const env = { ...validEnv };
       const result = validateEnv(env, { serviceAccountKey: true });
@@ -205,16 +187,6 @@ describe("Env Schema Validation", () => {
       expect(result.error.message).toMatch(
         /\"FIRESTORE_PROJECT_ID\" is required/gi
       );
-    });
-
-    it("should return error if port does not exists", () => {
-      const env = { ...extendedValidEnv };
-      delete env.PORT;
-
-      const result = validateEnv(env);
-
-      expect(result).toHaveProperty("error");
-      expect(result.error.message).toMatch(/\"PORT\" is required/gi);
     });
 
     it("should return value for valid schema", () => {

@@ -13,7 +13,7 @@ describe("/api/signout", () => {
     delete process.env.JWT_SECRET;
   });
   it("401 - Auth cookie not present", async () => {
-    const response = await request(app).get("/auth/signout");
+    const response = await request(app).get("/api/auth/signout");
 
     expect(response.status).toBe(400);
     expect(response.body).toEqual({

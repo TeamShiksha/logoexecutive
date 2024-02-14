@@ -47,7 +47,7 @@ describe("getLogoController", () => {
 
     const mockQuery = {"companyName": "coupang"};
     const response = await request(app)
-      .get("/images/logo")
+      .get("/api/images/logo")
       .set("cookie", `jwt=${mockToken}`)
       .query(mockQuery);
     expect(response.status).toBe(422);
@@ -72,7 +72,7 @@ describe("getLogoController", () => {
 
     const mockQuery = {"apiKey": "2B1B1BF5F9914BCD85A0B1122C71EDDB"};
     const response = await request(app)
-      .get("/images/logo")
+      .get("/api/images/logo")
       .set("cookie", `jwt=${mockToken}`)
       .query(mockQuery);
     expect(response.status).toBe(422);
@@ -89,7 +89,7 @@ describe("getLogoController", () => {
 
     const mockQuery = {"companyName": "coupang", "apiKey": "2B1B1BF5F9914BCD85A0B1122C71EDDC"};
     const response = await request(app)
-      .get("/images/logo")
+      .get("/api/images/logo")
       .set("cookie", `jwt=${mockToken}`)
       .query(mockQuery);
     expect(response.status).toBe(403);
@@ -110,7 +110,7 @@ describe("getLogoController", () => {
 
     const mockQuery = {"companyName": "infibeam", "apiKey": "2B1B1BF5F9914BCD85A0B1122C71EDDB"};
     const response = await request(app)
-      .get("/images/logo")
+      .get("/api/images/logo")
       .set("cookie", `jwt=${mockToken}`)
       .query(mockQuery);
     expect(response.status).toBe(404);
@@ -135,7 +135,7 @@ describe("getLogoController", () => {
 
     const mockQuery = {"companyName": "coupang", "apiKey": "2B1B1BF5F9914BCD85A0B1122C71EDDB"};
     const response = await request(app)
-      .get("/images/logo")
+      .get("/api/images/logo")
       .set("cookie", `jwt=${mockToken}`)
       .query(mockQuery);
     expect(response.status).toBe(200);

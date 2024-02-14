@@ -28,6 +28,19 @@ describe("contactUs controller", () =>{
     jest.restoreAllMocks();
   });
 
+  it("500 - CORS", async () => {
+    const response = await request(app)
+      .post("/api/contact")
+      .set("Origin", "http://invalidcorsorigin.com");
+
+    expect(response.status).toBe(500);
+    expect(response.body).toEqual({
+      error: STATUS_CODES[500],
+      message: "Not allowed by CORS",
+      statusCode: 500
+    });
+  });
+
   it("422 - when email is missing", async () => {
 
     const mockPayload = {...mockValidPayload};

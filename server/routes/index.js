@@ -19,7 +19,7 @@ const privateRouteCORS = {
 
 router.use("/auth", cors(privateRouteCORS), authRouter);
 router.use("/users", cors(privateRouteCORS),userRouter);
-router.use("/contact", cors(), contactUsRouter);
+router.use("/contact", cors(privateRouteCORS), contactUsRouter);
 router.use("/keys", cors(privateRouteCORS), keyRouter);
 
 module.exports = router;

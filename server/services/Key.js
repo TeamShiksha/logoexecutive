@@ -39,9 +39,9 @@ async function fetchKeysByuserid(userId) {
   }
 }
 
-async function isAPIKeyPresent(userId, apiKey) {
+async function isAPIKeyPresent(apiKey) {
   try {
-    const keyRef = await KeyCollection.where("userId", "==", userId).where("key", "==", apiKey).get();
+    const keyRef = await KeyCollection.where("key", "==", apiKey).get();
 
     if (keyRef.empty) return false;
     return true;

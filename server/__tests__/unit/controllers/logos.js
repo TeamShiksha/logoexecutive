@@ -94,7 +94,7 @@ describe("getLogoController", () => {
       .query(mockQuery);
     expect(response.status).toBe(403);
     expect(response.body).toEqual({
-      message: "Given API key was not found for User",
+      message: "Given API key was not found",
       statusCode: 403,
       error: STATUS_CODES[403]
     });

@@ -25,12 +25,11 @@ async function getLogo(req, res, next) {
 
     const { companyName, apiKey } = value;
 
-    // Check if Keys are present for the given User
-    const { userId } = req.userData;
-    const apiKeyPresent = await isAPIKeyPresent(userId, apiKey);
+    // Check if API Key is present 
+    const apiKeyPresent = await isAPIKeyPresent(apiKey);
     if (!apiKeyPresent) {
       return res.status(403).json({
-        message: "Given API key was not found for User",
+        message: "Given API key was not found",
         statusCode: 403,
         error: STATUS_CODES[403]
       });

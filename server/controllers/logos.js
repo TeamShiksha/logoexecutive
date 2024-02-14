@@ -53,7 +53,6 @@ async function getLogo(req, res, next) {
     });
   }
   catch(err) {
-    console.log(err);
     next(err);
   }
 }

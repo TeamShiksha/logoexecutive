@@ -26,7 +26,7 @@ describe("getLogoController", () => {
   });
 
   afterAll(() => {
-    delete process.env.BASE_URL;
+    delete process.env.JWT_SECRET;
   });
 
   afterEach(() => {

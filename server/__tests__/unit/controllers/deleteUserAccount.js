@@ -14,10 +14,25 @@ const mockUserModel = new User(mockUsers[1]);
 describe("deleteUserAccountController", () => {
   beforeAll(() => {
     process.env.JWT_SECRET = "my_secret";
+    process.env.BASE_URL = "http://validcorsorigin.com";
   });
 
   afterAll(() => {
     delete process.env.JWT_SECRET;
+    delete process.env.BASE_URL;
+  });
+
+  it("500 - CORS", async () => {
+    const response = await request(app)
+      .post("/api/users/delete")
+      .set("Origin", "http://invalidcorsorigin.com");
+
+    expect(response.status).toBe(500);
+    expect(response.body).toEqual({
+      error: STATUS_CODES[500],
+      message: "Not allowed by CORS",
+      statusCode: 500
+    });
   });
 
   it("should return 200 when user data is deleted successfully", async () => {

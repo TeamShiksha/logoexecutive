@@ -4,6 +4,7 @@ const userService = require("../../../services/User");
 const userTokenService = require("../../../services/UserToken");
 const { mockUsers } = require("../../../utils/mocks/Users");
 const User = require("../../../models/Users");
+const { STATUS_CODES } = require("http");
 
 const resetPasswordPayload = {
   newPassword: "@Rtyu678KMh",
@@ -39,11 +40,26 @@ describe("resetPassword controller", () => {
   });
   afterAll(() => {
     delete process.env.BASE_URL;
+    delete process.env.JWT_SECRET;
   });
   afterEach(() => {
     jest.clearAllMocks();
     jest.restoreAllMocks();
   });
+
+  it("500 - CORS", async () => {
+    const response = await request(app)
+      .post("/api/auth/reset-password")
+      .set("Origin", "http://invalidcorsorigin.com");
+
+    expect(response.status).toBe(500);
+    expect(response.body).toEqual({
+      error: STATUS_CODES[500],
+      message: "Not allowed by CORS",
+      statusCode: 500
+    });
+  });
+
   it("should reset the existing password", async () => {
     const mockToken = mockUserModel.generateJWT();
 

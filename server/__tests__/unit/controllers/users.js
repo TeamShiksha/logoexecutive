@@ -63,6 +63,24 @@ describe("update-password controller", () =>{
 
     beforeAll(() => {
       process.env.JWT_SECRET = "my_secret";
+      process.env.BASE_URL = "http://validcorsorigin.com";
+    });
+    afterAll(() => {
+      delete process.env.JWT_SECRET;
+      delete process.env.BASE_URL;
+    });
+
+    it("500 - CORS", async () => {
+      const response = await request(app)
+        .post("/api/users/update-password")
+        .set("Origin", "http://invalidcorsorigin.com");
+
+      expect(response.status).toBe(500);
+      expect(response.body).toEqual({
+        error: STATUS_CODES[500],
+        message: "Not allowed by CORS",
+        statusCode: 500
+      });
     });
 
     it("Should return 422 when confirmPassword does not match newPassword", async() =>{

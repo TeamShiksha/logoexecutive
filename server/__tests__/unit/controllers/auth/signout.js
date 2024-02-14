@@ -8,10 +8,26 @@ const User = require("../../../../models/Users.js");
 describe("/api/signout", () => {
   beforeAll(() => {
     process.env.JWT_SECRET = "secret";
+    process.env.BASE_URL = "http://validcorsorigin.com";
   });
   afterAll(() => {
     delete process.env.JWT_SECRET;
+    delete process.env.BASE_URL;
   });
+
+  it("500 - CORS", async () => {
+    const response = await request(app)
+      .get("/api/auth/signout")
+      .set("Origin", "http://invalidcorsorigin.com");
+
+    expect(response.status).toBe(500);
+    expect(response.body).toEqual({
+      error: STATUS_CODES[500],
+      message: "Not allowed by CORS",
+      statusCode: 500
+    });
+  });
+
   it("401 - Auth cookie not present", async () => {
     const response = await request(app).get("/api/auth/signout");
 

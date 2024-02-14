@@ -11,18 +11,30 @@ const UserService = require("../../../../services/User");
 jest.mock("../../../../services/Subscription", () => ({
   fetchSubscriptionByuserid: jest.fn(),
 }));
-
-const { mockKeyModel } = require("../../../../utils/mocks/Keys.js");
 const { mockUsers } = require("../../../../utils/mocks/Users");
-const { mockSubscriptionModel }  = require("../../../../utils/mocks/Subscriptions.js");
 
 
 describe("Signin Controller", () => {
   beforeAll(() => {
     process.env.JWT_SECRET = "mysecret";
+    process.env.BASE_URL = "http://validcorsorigin.com";
   });
   afterAll(() => {
     delete process.env.JWT_SECRET;
+    delete process.env.BASE_URL;
+  });
+
+  it("500 - CORS", async () => {
+    const response = await request(app)
+      .post("/api/auth/signin")
+      .set("Origin", "http://invalidcorsorigin.com");
+
+    expect(response.status).toBe(500);
+    expect(response.body).toEqual({
+      error: STATUS_CODES[500],
+      message: "Not allowed by CORS",
+      statusCode: 500
+    });
   });
 
   it("422 - email is required", async () => {

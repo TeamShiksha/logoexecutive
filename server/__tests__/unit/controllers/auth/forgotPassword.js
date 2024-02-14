@@ -42,6 +42,19 @@ describe("/forgot-password", () => {
     delete process.env.BASE_URL;
   });
 
+  it("500 - CORS", async () => {
+    const response = await request(app)
+      .post("/api/auth/forgot-password")
+      .set("Origin", "http://invalidcorsorigin.com");
+
+    expect(response.status).toBe(500);
+    expect(response.body).toEqual({
+      error: STATUS_CODES[500],
+      message: "Not allowed by CORS",
+      statusCode: 500
+    });
+  });
+
   it("422 - on invalid payload regex", async () => {
     const response = await request(app)
       .post("/api/auth/forgot-password")

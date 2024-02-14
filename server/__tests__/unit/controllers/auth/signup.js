@@ -51,6 +51,19 @@ describe("Signup Controller", () => {
     jest.restoreAllMocks();
   });
 
+  it("500 - CORS", async () => {
+    const response = await request(app)
+      .get("/api/auth/signup")
+      .set("Origin", "http://invalidcorsorigin.com");
+
+    expect(response.status).toBe(500);
+    expect(response.body).toEqual({
+      error: STATUS_CODES[500],
+      message: "Not allowed by CORS",
+      statusCode: 500
+    });
+  });
+
   it("422 - when payload has missing fields", async () => {
     const response = await request(app)
       .post("/api/auth/signup")

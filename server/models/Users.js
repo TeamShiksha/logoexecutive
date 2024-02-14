@@ -1,6 +1,7 @@
 const bcrypt = require("bcrypt");
 const { DocumentReference, Timestamp } = require("firebase-admin/firestore");
 const jwt = require("jsonwebtoken");
+const { TypesOfUsers } = require("../utils/constants");
 
 class User {
   userId;
@@ -74,7 +75,7 @@ class User {
         email,
         firstName,
         lastName,
-        userType:"customer",
+        userType: TypesOfUsers.CUSTOMER,
         password: hashedPassword,
         createdAt: Timestamp.now(),
         updatedAt: Timestamp.now(),

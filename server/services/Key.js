@@ -39,6 +39,19 @@ async function fetchKeysByuserid(userId) {
   }
 }
 
+async function isAPIKeyPresent(apiKey) {
+  try {
+    const keyRef = await KeyCollection.where("key", "==", apiKey).get();
+
+    if (keyRef.empty) return false;
+    return true;
+    
+  } catch (err) {
+    console.log(err);
+    throw err;
+  }
+}
+
 async function destroyKey(keyId) {
   try {
     const keyRef = await KeyCollection.doc(keyId).delete();
@@ -53,4 +66,5 @@ module.exports = {
   createKey,
   fetchKeysByuserid,
   destroyKey,
+  isAPIKeyPresent
 };

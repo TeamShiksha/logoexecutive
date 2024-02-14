@@ -4,6 +4,7 @@ const userRouter = require("./user");
 const contactUsRouter = require("./contactUs");
 const authRouter = require("./auth");
 const keyRouter = require("./key");
+const logoRouter = require("./logo");
 const cors = require("cors");
 
 const privateRouteCORS = {
@@ -21,5 +22,8 @@ router.use("/auth", cors(privateRouteCORS), authRouter);
 router.use("/users", cors(privateRouteCORS),userRouter);
 router.use("/contact", cors(privateRouteCORS), contactUsRouter);
 router.use("/keys", cors(privateRouteCORS), keyRouter);
+
+// Business API - logo
+router.use("/images", logoRouter);
 
 module.exports = router;

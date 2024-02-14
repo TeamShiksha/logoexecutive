@@ -1,6 +1,7 @@
 const bcrypt = require("bcrypt");
 const { DocumentReference, Timestamp } = require("firebase-admin/firestore");
 const jwt = require("jsonwebtoken");
+const { UserType } = require("../utils/constants");
 
 class User {
   userId;
@@ -11,7 +12,7 @@ class User {
   updatedAt;
   userRef;
   isVerified;
-
+  userType;
   #password;
 
   /**
@@ -22,6 +23,7 @@ class User {
    * @param {boolean} params.isVerified
    * @param {string} params.firstName
    * @param {string} params.lastName
+   * @param {string} params.userType
    * @param {Date} params.createdAt
    * @param {Date} params.updatedAt
    * @param {DocumentReference} [params.userRef] - Firebase document reference of the user
@@ -33,6 +35,7 @@ class User {
     this.#password = params.password;
     this.firstName = params.firstName;
     this.lastName = params.lastName;
+    this.userType = params.userType;
     this.createdAt = params.createdAt;
     this.updatedAt = params.updatedAt;
     this.userRef = params.userRef ?? null;
@@ -45,6 +48,7 @@ class User {
       lastName: this.lastName,
       email: this.email,
       userId: this.userId,
+      userType: this.userType,
     };
   }
 
@@ -57,6 +61,7 @@ class User {
    * @param {string} userData.firstName
    * @param {string} userData.lastName
    * @param {string} userData.password
+   * @param {string} userData.userType
    **/
   static async NewUser (userData) {
     try {
@@ -70,6 +75,7 @@ class User {
         email,
         firstName,
         lastName,
+        userType: UserType.CUSTOMER,
         password: hashedPassword,
         createdAt: Timestamp.now(),
         updatedAt: Timestamp.now(),

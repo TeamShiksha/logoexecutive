@@ -1,4 +1,5 @@
 const bcrypt = require("bcrypt");
+const { UserType } = require("../constants");
 
 // 0 - Not verified user
 // 1 - Verified user
@@ -11,7 +12,8 @@ const mockUsers = [
     password: bcrypt.hashSync("password123", 10), 
     createdAt: new Date("01-01-2001"),
     updatedAt: new Date("01-01-2001"),
-    isVerified: false
+    userType: UserType.CUSTOMER,
+    isVerified: false,
   },
   {
     userId: "124",

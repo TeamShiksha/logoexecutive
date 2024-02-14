@@ -7,9 +7,9 @@ const UserTokenTypes = {
   VERIFY: "VERIFY",
 };
 
-const TypesOfUsers = {
+const UserType = {
   ADMIN: "admin",
   CUSTOMER:"customer"
 };
 
-module.exports = { UserTokenTypes, TypesOfUsers };
+module.exports = { UserTokenTypes, UserType };

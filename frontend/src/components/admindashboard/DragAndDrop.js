@@ -2,6 +2,7 @@ import {useEffect, useRef, useState} from 'react';
 import useFileHandler from '../../hooks/useFileHandler';
 import './DragAndDrop.css';
 import PreviewModal from './PreviewModal';
+import ImageTable from './ImageTable';
 const validImageFormats = ['jpg', 'png', 'svg'];
 
 const DragAndDrop = () => {
@@ -103,6 +104,7 @@ const DragAndDrop = () => {
 					setIsUploadSuccessfull={setIsUploadSuccessfull}
 				/>
 			)}
+			<ImageTable />
 		</section>
 	);
 };

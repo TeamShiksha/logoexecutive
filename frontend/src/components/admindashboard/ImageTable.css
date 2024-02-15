@@ -1,0 +1,24 @@
+.image-table {
+	width: 100%;
+	text-align: center;
+	font-size: var(--medium-text);
+	line-height: 175%;
+	border-spacing: 0;
+	margin-top: 60px;
+	border: var(--border);
+	border-radius: var(--bradius);
+}
+
+.image-table thead tr th {
+	background-color: rgb(226, 224, 224);
+	padding: 8px;
+	font-weight: 500;
+	color: var(--smooth-gray);
+}
+
+.image-table tbody tr td {
+	padding: 8px;
+	font-weight: 400;
+	color: var(--smooth-gray);
+	border-top: var(--border);
+}

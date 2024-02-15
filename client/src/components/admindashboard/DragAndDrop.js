@@ -1,15 +1,12 @@
+import PropTypes from 'prop-types';
 import {useEffect, useRef, useState} from 'react';
-import {dummyUploadedImageDetails} from '../../constants';
 import useFileHandler from '../../hooks/useFileHandler';
 import './DragAndDrop.css';
-import ImageTable from './ImageTable';
 import PreviewModal from './PreviewModal';
+
 const validImageFormats = ['jpg', 'png', 'svg'];
 
-const DragAndDrop = () => {
-	const [uploadedImages, setUploadedImages] = useState(
-		dummyUploadedImageDetails,
-	);
+const DragAndDrop = ({setUploadedImages}) => {
 	const [isDragging, setIsDragging] = useState(false);
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [isUploadSuccessfull, setIsUploadSuccessfull] = useState(false);
@@ -109,9 +106,12 @@ const DragAndDrop = () => {
 					setUploadedImages={setUploadedImages}
 				/>
 			)}
-			<ImageTable uploadedImages={uploadedImages} />
 		</section>
 	);
+};
+
+DragAndDrop.propTypes = {
+	setUploadedImages: PropTypes.func.isRequired,
 };
 
 export default DragAndDrop;

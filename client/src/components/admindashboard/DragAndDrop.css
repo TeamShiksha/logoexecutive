@@ -1,13 +1,10 @@
-.drag-drop-section {
-	padding: 64px 32px;
-}
-
-.drag-area {
+.drag-drop-section .drag-area {
 	height: 250px;
 	padding: 16px;
 	border-radius: 5px;
-	border: 2px dashed rgb(229 231 235);
-	background-color: rgb(249, 250, 251);
+	border: var(--border);
+	border-style: dashed;
+	background-color: var(--gray-drag-drop-background);
 	display: flex;
 	flex-direction: column;
 	gap: 10px;
@@ -24,7 +21,7 @@
 }
 
 .drag-drop-section .select {
-	color: #5256ad;
+	color: var(--smooth-purple);
 	cursor: pointer;
 	font-weight: bold;
 }
@@ -34,14 +31,8 @@
 }
 
 .image-select-error {
-	color: #ff3333;
+	color: var(--error);
 	line-height: 24px;
 	margin: 16px auto;
 	text-align: center;
-}
-
-@media screen and (max-width: 768px) {
-	.drag-drop-section {
-		padding: 32px 16px;
-	}
 }

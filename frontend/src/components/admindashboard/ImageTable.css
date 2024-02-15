@@ -1,3 +1,7 @@
+.image-table-wrapper {
+	overflow: auto;
+}
+
 .image-table {
 	width: 100%;
 	text-align: center;
@@ -7,6 +11,10 @@
 	margin-top: 60px;
 	border: var(--border);
 	border-radius: var(--bradius);
+}
+
+.image-table-heding-row {
+	white-space: nowrap;
 }
 
 .image-table thead tr th {
@@ -21,11 +29,6 @@
 	font-weight: 400;
 	color: var(--smooth-gray);
 	border-top: var(--border);
-}
-
-.image-table .reupload-btn-column {
-	display: grid;
-	place-items: center;
 }
 
 .image-table .reupload-btn {

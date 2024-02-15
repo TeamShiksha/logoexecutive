@@ -5,29 +5,31 @@ import './ImageTable.css';
 
 const ImageTable = ({uploadedImages}) => {
 	return (
-		<table className='image-table'>
-			<thead>
-				<tr>
-					{imageTableHeadings.map((heading, index) => (
-						<th key={index}>{heading}</th>
-					))}
-				</tr>
-			</thead>
-			<tbody>
-				{uploadedImages.map((image, index) => (
-					<tr key={index}>
-						<td>{image.name}</td>
-						<td>{image.createDate}</td>
-						<td>{image.updateDate}</td>
-						<td className='reupload-btn-column'>
-							<button className='reupload-btn'>
-								<BsArrowRepeat />
-							</button>
-						</td>
+		<div className='image-table-wrapper'>
+			<table className='image-table'>
+				<thead>
+					<tr className='image-table-heding-row'>
+						{imageTableHeadings.map((heading, index) => (
+							<th key={index}>{heading}</th>
+						))}
 					</tr>
-				))}
-			</tbody>
-		</table>
+				</thead>
+				<tbody>
+					{uploadedImages.map((image, index) => (
+						<tr key={index}>
+							<td>{image.name}</td>
+							<td>{image.createDate}</td>
+							<td>{image.updateDate}</td>
+							<td>
+								<button className='reupload-btn'>
+									<BsArrowRepeat />
+								</button>
+							</td>
+						</tr>
+					))}
+				</tbody>
+			</table>
+		</div>
 	);
 };
 

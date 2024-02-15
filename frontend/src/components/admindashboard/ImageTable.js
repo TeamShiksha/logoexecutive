@@ -1,27 +1,9 @@
-import {useState} from 'react';
+import PropTypes from 'prop-types';
+import {BsArrowRepeat} from 'react-icons/bs';
+import {imageTableHeadings} from '../../constants';
 import './ImageTable.css';
 
-const imageTableHeadings = [
-	'IMAGE NAME',
-	'CREATE DATE',
-	'UPDATE DATE',
-	'REUPLOAD',
-];
-
-const ImageTable = () => {
-	const [uploadedImagesDetails, setUploadedImagesDetails] = useState([
-		{
-			name: 'TeamShiksha.png',
-			createDate: 'Dec 18, 2023',
-			updateDate: 'Dec 27, 2023',
-		},
-		{
-			name: 'LogoExecutive.jpg',
-			createDate: 'Sep 07, 2023',
-			updateDate: 'Oct 12, 2023',
-		},
-	]);
-
+const ImageTable = ({uploadedImages}) => {
 	return (
 		<table className='image-table'>
 			<thead>
@@ -32,17 +14,31 @@ const ImageTable = () => {
 				</tr>
 			</thead>
 			<tbody>
-				{uploadedImagesDetails.map((imageDetails, index) => (
+				{uploadedImages.map((image, index) => (
 					<tr key={index}>
-						<td>{imageDetails.name}</td>
-						<td>{imageDetails.createDate}</td>
-						<td>{imageDetails.updateDate}</td>
-						<td></td>
+						<td>{image.name}</td>
+						<td>{image.createDate}</td>
+						<td>{image.updateDate}</td>
+						<td className='reupload-btn-column'>
+							<button className='reupload-btn'>
+								<BsArrowRepeat />
+							</button>
+						</td>
 					</tr>
 				))}
 			</tbody>
 		</table>
 	);
+};
+
+ImageTable.propTypes = {
+	uploadedImages: PropTypes.arrayOf(
+		PropTypes.shape({
+			name: PropTypes.string.isRequired,
+			createDate: PropTypes.string.isRequired,
+			updateDate: PropTypes.string.isRequired,
+		}),
+	).isRequired,
 };
 
 export default ImageTable;

@@ -22,3 +22,21 @@
 	color: var(--smooth-gray);
 	border-top: var(--border);
 }
+
+.image-table .reupload-btn-column {
+	display: grid;
+	place-items: center;
+}
+
+.image-table .reupload-btn {
+	padding: 6px 10px;
+	border: none;
+	border-radius: 99px;
+	cursor: pointer;
+}
+
+.image-table .reupload-btn > svg {
+	color: var(--smooth-gray);
+	height: 20px;
+	width: 20px;
+}

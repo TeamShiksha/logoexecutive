@@ -10,10 +10,24 @@ const PreviewModal = ({
 	setIsModalOpen,
 	isUploadSuccessfull,
 	setIsUploadSuccessfull,
+	setUploadedImages,
 }) => {
 	function handleUpload(event) {
 		event.preventDefault();
 		setIsUploadSuccessfull(true);
+
+		setUploadedImages((prevImages) => [
+			...prevImages,
+			{
+				name: image.name,
+				createDate: new Date().toLocaleDateString('en-US', {
+					month: 'short',
+					day: '2-digit',
+					year: 'numeric',
+				}),
+				updateDate: '-',
+			},
+		]);
 	}
 
 	return (
@@ -59,6 +73,7 @@ PreviewModal.propTypes = {
 	setIsModalOpen: PropTypes.func.isRequired,
 	isUploadSuccessfull: PropTypes.bool.isRequired,
 	setIsUploadSuccessfull: PropTypes.func.isRequired,
+	setUploadedImages: PropTypes.func.isRequired,
 };
 
 export default PreviewModal;

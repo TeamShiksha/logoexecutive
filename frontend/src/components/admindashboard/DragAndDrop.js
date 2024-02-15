@@ -1,11 +1,15 @@
 import {useEffect, useRef, useState} from 'react';
+import {dummyUploadedImageDetails} from '../../constants';
 import useFileHandler from '../../hooks/useFileHandler';
 import './DragAndDrop.css';
-import PreviewModal from './PreviewModal';
 import ImageTable from './ImageTable';
+import PreviewModal from './PreviewModal';
 const validImageFormats = ['jpg', 'png', 'svg'];
 
 const DragAndDrop = () => {
+	const [uploadedImages, setUploadedImages] = useState(
+		dummyUploadedImageDetails,
+	);
 	const [isDragging, setIsDragging] = useState(false);
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [isUploadSuccessfull, setIsUploadSuccessfull] = useState(false);
@@ -102,9 +106,10 @@ const DragAndDrop = () => {
 					setIsModalOpen={setIsModalOpen}
 					isUploadSuccessfull={isUploadSuccessfull}
 					setIsUploadSuccessfull={setIsUploadSuccessfull}
+					setUploadedImages={setUploadedImages}
 				/>
 			)}
-			<ImageTable />
+			<ImageTable uploadedImages={uploadedImages} />
 		</section>
 	);
 };

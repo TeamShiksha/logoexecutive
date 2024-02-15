@@ -129,3 +129,24 @@ export const faqsData = [
 		steps: ['Stay tuned coming soon'],
 	},
 ];
+
+// Admin dashboard related
+export const imageTableHeadings = [
+	'IMAGE NAME',
+	'CREATE DATE',
+	'UPDATE DATE',
+	'REUPLOAD',
+];
+
+export const dummyUploadedImageDetails = [
+	{
+		name: 'TeamShiksha.png',
+		createDate: 'Dec 18, 2023',
+		updateDate: 'Dec 27, 2023',
+	},
+	{
+		name: 'LogoExecutive.jpg',
+		createDate: 'Sep 07, 2023',
+		updateDate: 'Oct 12, 2023',
+	},
+];

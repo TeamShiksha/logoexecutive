@@ -1,0 +1,12 @@
+.admin-container {
+	padding: 64px 32px;
+	display: flex;
+	flex-direction: column;
+	gap: 80px;
+}
+
+@media screen and (max-width: 768px) {
+	.admin-container {
+		padding: 32px 16px;
+	}
+}

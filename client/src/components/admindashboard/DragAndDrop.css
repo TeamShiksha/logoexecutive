@@ -1,0 +1,38 @@
+.drag-drop-section .drag-area {
+	height: 250px;
+	padding: 16px;
+	border-radius: 5px;
+	border: var(--border);
+	border-style: dashed;
+	background-color: var(--gray-drag-drop-background);
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+	justify-content: center;
+	align-items: center;
+	user-select: none;
+	-webkit-user-select: none;
+	cursor: pointer;
+	text-align: center;
+}
+
+.drag-drop-section .drag-area {
+	font-size: 18px;
+}
+
+.drag-drop-section .select {
+	color: var(--smooth-purple);
+	cursor: pointer;
+	font-weight: bold;
+}
+
+.drag-drop-section .file {
+	display: none;
+}
+
+.image-select-error {
+	color: var(--error);
+	line-height: 24px;
+	margin: 16px auto;
+	text-align: center;
+}

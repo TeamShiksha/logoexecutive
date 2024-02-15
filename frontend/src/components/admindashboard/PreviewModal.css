@@ -1,0 +1,43 @@
+.preview-modal {
+	max-width: 750px;
+	max-height: 95vh;
+	width: 100%;
+	height: auto;
+}
+
+.preview-modal-form {
+	display: flex;
+	align-items: center;
+	gap: 16px;
+}
+
+.images-upload-btn {
+	outline: 0;
+	border: 0;
+	color: #fff;
+	cursor: pointer;
+	border-radius: 4px;
+	font-weight: 400;
+	padding: 8px 13px;
+	max-width: 130px;
+	width: 100%;
+	min-height: 46px;
+	background: #4f46e5;
+}
+
+.images-upload-btn:disabled {
+	opacity: 0.5;
+	cursor: not-allowed;
+}
+
+.image-upload-success {
+	color: #34a853;
+	line-height: 24px;
+	margin-bottom: 16px;
+	font-weight: bold;
+}
+
+.preview-container img {
+	width: 100%;
+	height: auto;
+}

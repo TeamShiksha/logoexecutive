@@ -2,7 +2,13 @@ import PropTypes from 'prop-types';
 import {IoIosCloseCircleOutline} from 'react-icons/io';
 import './Modal.css';
 
-const Modal = ({modalOpen, children, setModal, showButtons}) => {
+const Modal = ({
+	modalOpen,
+	children,
+	setModal,
+	showButtons,
+	containerClassName,
+}) => {
 	const closeModal = () => setModal(false);
 	const stopPropagation = (event) => event.stopPropagation();
 
@@ -14,7 +20,10 @@ const Modal = ({modalOpen, children, setModal, showButtons}) => {
 
 	return modalOpen ? (
 		<div className='modal-bg' onClick={closeModal}>
-			<div className='modal-container' onClick={stopPropagation}>
+			<div
+				className={`modal-container ${containerClassName || ''}`}
+				onClick={stopPropagation}
+			>
 				<IoIosCloseCircleOutline className='modal-close' onClick={closeModal} />
 				<div className='modal-content'>{children}</div>
 				{showButtons && (
@@ -35,6 +44,7 @@ Modal.propTypes = {
 	children: PropTypes.node,
 	setModal: PropTypes.func,
 	showButtons: PropTypes.bool,
+	containerClassName: PropTypes.string,
 };
 
 export default Modal;

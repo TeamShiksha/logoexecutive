@@ -1,14 +1,25 @@
 import {useEffect, useRef, useState} from 'react';
+import useFileHandler from '../../hooks/useFileHandler';
 import './DragAndDrop.css';
+import PreviewModal from './PreviewModal';
+const validImageFormats = ['jpg', 'png', 'svg'];
 
 const DragAndDrop = () => {
-	const [image, setImage] = useState(null);
 	const [isDragging, setIsDragging] = useState(false);
-	const [errorMessage, setErrorMessage] = useState(null);
+	const [isModalOpen, setIsModalOpen] = useState(false);
+	const [isUploadSuccessfull, setIsUploadSuccessfull] = useState(false);
 	const fileInputRef = useRef(null);
+	const {
+		file: image,
+		setFile: setImage,
+		error: errorMessage,
+		handleFile,
+	} = useFileHandler(validImageFormats);
 
 	// Revoke the object URL whenever the image changes or the component unmounts to avoid memory leak.
 	useEffect(() => {
+		if (image) setIsModalOpen(true);
+
 		return () => {
 			if (image?.url) {
 				URL.revokeObjectURL(image.url);
@@ -21,35 +32,50 @@ const DragAndDrop = () => {
 	}
 
 	function onFileSelect(event) {
-		setErrorMessage(null);
-		setImage(null);
-
+		setIsUploadSuccessfull(false);
 		const files = event.target.files;
 		if (files.length === 0) return;
-
 		const file = files[0];
-		const fileType = file.type;
-		const validImageTypes = ['image/jpeg', 'image/png'];
+		handleFile(file);
+	}
 
-		if (!validImageTypes.includes(fileType)) {
-			setErrorMessage(
-				`Please select an image file. You chose a ${fileType} file.`,
-			);
-			return;
-		}
-		console.log(file);
+	function handleImageNameChange(event) {
+		setImage((prev) => {
+			return {name: event.target.value, url: prev.url};
+		});
+	}
 
-		try {
-			const url = URL.createObjectURL(file);
-			setImage({name: file.name, url});
-		} catch (error) {
-			setErrorMessage('An error occurred while reading the file.');
-		}
+	function handleDragLeave(event) {
+		event.preventDefault();
+		setIsDragging(false);
+	}
+
+	function handleDragOver(event) {
+		event.preventDefault();
+		setIsDragging(true);
+		event.dataTransfer.dropEffect = 'copy';
+	}
+
+	function handleOnDrop(event) {
+		event.preventDefault();
+		setIsUploadSuccessfull(false);
+		setIsDragging(false);
+		const files = event.dataTransfer.files;
+		if (files.length === 0) return;
+		const file = files[0];
+		handleFile(file);
 	}
 
 	return (
-		<section className='card'>
-			<div className='drag-area' role='button' onClick={handleFileSelection}>
+		<section className='drag-drop-section'>
+			<div
+				className='drag-area'
+				role='button'
+				onClick={handleFileSelection}
+				onDragOver={handleDragOver}
+				onDragLeave={handleDragLeave}
+				onDrop={handleOnDrop}
+			>
 				{isDragging ? (
 					<p>Yes, drop here</p>
 				) : (
@@ -63,17 +89,20 @@ const DragAndDrop = () => {
 					name='file'
 					type='file'
 					className='file'
-					accept='image/*'
+					accept='image/jpeg, image/png, image/svg+xml'
 				/>
 			</div>
-			{errorMessage && <p>{errorMessage}</p>}
-			<div className='preview-container'>
-				<div className='image-preview'>
-					<span className='image-delete'>&times;</span>
-				</div>
-				{image && <img src={image.url} alt={image.name} />}
-			</div>
-			<button className='images-upload-btn'>Upload</button>
+			{errorMessage && <p className='image-select-error'>{errorMessage}</p>}
+			{image && (
+				<PreviewModal
+					image={image}
+					handleImageNameChange={handleImageNameChange}
+					isModalOpen={isModalOpen}
+					setIsModalOpen={setIsModalOpen}
+					isUploadSuccessfull={isUploadSuccessfull}
+					setIsUploadSuccessfull={setIsUploadSuccessfull}
+				/>
+			)}
 		</section>
 	);
 };

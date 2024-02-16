@@ -8,6 +8,8 @@ jest.mock("../../../../services/UserToken", () => ({
 const UserTokenService = require("../../../../services/UserToken");
 const UserToken = require("../../../../models/UserToken");
 
+const ENDPOINT = "/api/auth/reset-password";
+
 describe("GET /reset-password", () => {
   beforeAll(() => {
     process.env.BASE_URL = "https://clienturl.com";
@@ -20,19 +22,18 @@ describe("GET /reset-password", () => {
 
   it("500 - CORS", async () => {
     const response = await request(app)
-      .post("/api/auth/reset-password")
+      .post(ENDPOINT)
       .set("Origin", "http://invalidcorsorigin.com");
 
     expect(response.status).toBe(500);
     expect(response.body).toEqual({
-      error: STATUS_CODES[500],
-      message: "Not allowed by CORS",
+      error: STATUS_CODES[500], message: "Not allowed by CORS",
       statusCode: 500
     });
   });
 
   it("422 - token missing", async () => {
-    const response = await request(app).get("/api/auth/reset-password");
+    const response = await request(app).get(ENDPOINT);
 
     expect(response.status).toBe(422);
     expect(response.body).toEqual({
@@ -45,7 +46,7 @@ describe("GET /reset-password", () => {
   it("404 - User Token not found", async () => {
     jest.spyOn(UserTokenService, "fetchTokenFromId").mockImplementation(() => null);
 
-    const response = await request(app).get("/api/auth/reset-password").query({ token: "1235" });
+    const response = await request(app).get(ENDPOINT).query({ token: "1235" });
 
     expect(response.status).toBe(404);
     expect(response.body).toEqual({
@@ -65,7 +66,7 @@ describe("GET /reset-password", () => {
       userTokenId: "241254",
     }));
 
-    const response = await request(app).get("/api/auth/reset-password").query({ token: "1235" });
+    const response = await request(app).get(ENDPOINT).query({ token: "1235" });
 
     expect(response.status).toBe(403);
     expect(response.body).toEqual({
@@ -85,7 +86,7 @@ describe("GET /reset-password", () => {
       userTokenId: "241254",
     }));
 
-    const response = await request(app).get("/api/auth/reset-password").query({ token: "1235" });
+    const response = await request(app).get(ENDPOINT).query({ token: "1235" });
 
     expect(response.status).toBe(302);
     expect(response.header.location).toBe("https://clienturl.com/reset-password?token=123");
@@ -95,7 +96,7 @@ describe("GET /reset-password", () => {
   it("500 - Unexpected errors", async () => {
     jest.spyOn(UserTokenService, "fetchTokenFromId").mockImplementation(() => {throw new Error("Unexpected error");});
 
-    const response = await request(app).get("/api/auth/reset-password").query({ token: "1235" });
+    const response = await request(app).get(ENDPOINT).query({ token: "1235" });
 
     expect(response.status).toBe(500);
     expect(response.body).toEqual({

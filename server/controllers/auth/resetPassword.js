@@ -38,7 +38,11 @@ const resetPasswordController = async (req, res, next) => {
     const { error, value } = resetPasswordPayloadSchema.validate(result);
 
     if (error) {
-      return res.status(402).json({ message: error.message });
+      return res.status(422).json({
+        error: http.STATUS_CODES[422],
+        message: error.message,
+        statusCode: 422
+      });
     }
 
     if (value.confirmPassword === value.newPassword) {

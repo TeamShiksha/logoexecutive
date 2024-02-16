@@ -5,23 +5,18 @@ const userTokenService = require("../../../../services/UserToken");
 const { mockUsers } = require("../../../../utils/mocks/Users");
 const User = require("../../../../models/Users");
 const { STATUS_CODES } = require("http");
+const UserToken = require("../../../../models/UserToken");
+const { mockUserTokens } = require("../../../../utils/mocks/UserToken");
 
 const resetPasswordPayload = {
   newPassword: "@Rtyu678KMh",
   confirmPassword: "@Rtyu678KMh",
-  token: "6dc1ff1a95e04dcdb347269ed15575bc",
+  token: mockUserTokens[2].token,
 };
+
+const ENDPOINT = "/api/auth/reset-password";
 
 const mockUserModel = new User(mockUsers[0]);
-
-const userTokenObj = {
-  createdAt: "29 December 2023 at 17:04:18 UTC+5:30",
-  expireAt: "30 December 2023 at 17:04:18 UTC+5:30",
-  token: "6dc1ff1a95e04dcdb347269ed15575bc",
-  type: "VERIFY",
-  userId: "123",
-  userTokenId: "069290e9-a26d-4211-8753-881ed5067399",
-};
 
 jest.mock("../../../../services/User", () => ({
   fetchUserFromId: jest.fn(),
@@ -33,15 +28,17 @@ jest.mock("../../../../services/UserToken", () => ({
   deleteUserToken: jest.fn(),
 }));
 
-describe("resetPassword controller", () => {
+describe("PATCH /auth/reset-password", () => {
   beforeAll(() => {
     process.env.BASE_URL = "https://example.com";
     process.env.JWT_SECRET = "my_secret";
   });
+
   afterAll(() => {
     delete process.env.BASE_URL;
     delete process.env.JWT_SECRET;
   });
+
   afterEach(() => {
     jest.clearAllMocks();
     jest.restoreAllMocks();
@@ -49,7 +46,7 @@ describe("resetPassword controller", () => {
 
   it("500 - CORS", async () => {
     const response = await request(app)
-      .post("/api/auth/reset-password")
+      .post(ENDPOINT)
       .set("Origin", "http://invalidcorsorigin.com");
 
     expect(response.status).toBe(500);
@@ -60,139 +57,75 @@ describe("resetPassword controller", () => {
     });
   });
 
-  it("should reset the existing password", async () => {
-    const mockToken = mockUserModel.generateJWT();
-
-    jest
-      .spyOn(userService, "fetchUserFromId")
-      .mockImplementation(() => mockUserModel);
-    jest
-      .spyOn(userService, "updatePasswordService")
-      .mockImplementation(() => mockUserModel);
-    jest
-      .spyOn(userTokenService, "fetchTokenFromId")
-      .mockImplementation(() => userTokenObj);
-    jest
-      .spyOn(userTokenService, "deleteUserToken")
-      .mockImplementation(() => userTokenObj);
-
+  it("401 - Unauthorized error when cookie is not present", async () => {
     const response = await request(app)
-      .patch("/api/auth/reset-password")
-      .set("cookie", `resetPasswordSession=${mockToken}`)
-      .send(resetPasswordPayload);
-
-    expect(response.status).toBe(200);
-    expect(response.body).toEqual({ message: "Password updated Successfully" });
-  });
-
-  it("should throw 401 Unauthorized error when cookie is not present", async () => {
-    jest
-      .spyOn(userService, "fetchUserFromId")
-      .mockImplementation(() => mockUserModel);
-    jest
-      .spyOn(userService, "updatePasswordService")
-      .mockImplementation(() => mockUserModel);
-    jest
-      .spyOn(userTokenService, "fetchTokenFromId")
-      .mockImplementation(() => userTokenObj);
-    jest
-      .spyOn(userTokenService, "deleteUserToken")
-      .mockImplementation(() => userTokenObj);
-
-    const response = await request(app)
-      .patch("/api/auth/reset-password")
+      .patch(ENDPOINT)
       .send(resetPasswordPayload);
 
     expect(response.status).toBe(401);
   });
 
-  it("it should throw 402 error if token is missing from body", async () => {
+  it("422 - token is required", async () => {
     const mockToken = mockUserModel.generateJWT();
     const mockBody = {
       newPassword: "@Rtyu678KMh",
       confirmPassword: "@Rtyu678KMh",
     };
 
-    jest
-      .spyOn(userService, "fetchUserFromId")
-      .mockImplementation(() => mockUserModel);
-    jest
-      .spyOn(userService, "updatePasswordService")
-      .mockImplementation(() => mockUserModel);
-    jest
-      .spyOn(userTokenService, "fetchTokenFromId")
-      .mockImplementation(() => userTokenObj);
-    jest
-      .spyOn(userTokenService, "deleteUserToken")
-      .mockImplementation(() => userTokenObj);
-
     const response = await request(app)
-      .patch("/api/auth/reset-password")
+      .patch(ENDPOINT)
       .set("cookie", `resetPasswordSession=${mockToken}`)
       .send(mockBody);
 
-    expect(response.status).toBe(402);
-    expect(response.body).toEqual({ message: "\"token\" is required" });
+    expect(response.status).toBe(422);
+    expect(response.body).toEqual({
+      error: STATUS_CODES[422],
+      message: "\"token\" is required",
+      statusCode: 422
+    });
   });
 
-  it("should throw error 402 if new password is missing from body", async () => {
+  it("422 - newPassword is required", async () => {
     const mockToken = mockUserModel.generateJWT();
     const mockBody = {
       token: "6dc1ff1a95e04dcdb347269ed15575bc",
       confirmPassword: "@Rtyu678KMh",
     };
 
-    jest
-      .spyOn(userService, "fetchUserFromId")
-      .mockImplementation(() => mockUserModel);
-    jest
-      .spyOn(userService, "updatePasswordService")
-      .mockImplementation(() => mockUserModel);
-    jest
-      .spyOn(userTokenService, "fetchTokenFromId")
-      .mockImplementation(() => userTokenObj);
-    jest
-      .spyOn(userTokenService, "deleteUserToken")
-      .mockImplementation(() => userTokenObj);
-
     const response = await request(app)
-      .patch("/api/auth/reset-password")
+      .patch(ENDPOINT)
       .set("cookie", `resetPasswordSession=${mockToken}`)
       .send(mockBody);
 
-    expect(response.status).toBe(402);
-    expect(response.body).toEqual({ message: "\"newPassword\" is required" });
+    expect(response.status).toBe(422);
+    expect(response.body).toEqual({
+      error: STATUS_CODES[422],
+      message: "\"newPassword\" is required",
+      statusCode: 422
+    });
   });
-  it("should throw error 402 if confirm password is missing from body", async () => {
+
+  it("422 - confirmPassword is required", async () => {
     const mockToken = mockUserModel.generateJWT();
     const mockBody = {
       token: "6dc1ff1a95e04dcdb347269ed15575bc",
       newPassword: "@Rtyu678KMh",
     };
 
-    jest
-      .spyOn(userService, "fetchUserFromId")
-      .mockImplementation(() => mockUserModel);
-    jest
-      .spyOn(userService, "updatePasswordService")
-      .mockImplementation(() => mockUserModel);
-    jest
-      .spyOn(userTokenService, "fetchTokenFromId")
-      .mockImplementation(() => userTokenObj);
-    jest
-      .spyOn(userTokenService, "deleteUserToken")
-      .mockImplementation(() => userTokenObj);
-
     const response = await request(app)
-      .patch("/api/auth/reset-password")
+      .patch(ENDPOINT)
       .set("cookie", `resetPasswordSession=${mockToken}`)
       .send(mockBody);
 
-    expect(response.status).toBe(402);
-    expect(response.body).toEqual({ message: "\"confirmPassword\" is required" });
+    expect(response.status).toBe(422);
+    expect(response.body).toEqual({
+      error: STATUS_CODES[422],
+      message: "\"confirmPassword\" is required",
+      statusCode: 422
+    });
   });
 
-  it("should throw error 403 if the token is mismatch", async () => {
+  it("403 - token mismatch", async () => {
     const mockToken = mockUserModel.generateJWT();
     const mockBody = {
       newPassword: "@Rtyu678KMh",
@@ -208,13 +141,13 @@ describe("resetPassword controller", () => {
       .mockImplementation(() => mockUserModel);
     jest
       .spyOn(userTokenService, "fetchTokenFromId")
-      .mockImplementation(() => userTokenObj);
+      .mockImplementation(() => new UserToken(mockUserTokens[2]));
     jest
       .spyOn(userTokenService, "deleteUserToken")
-      .mockImplementation(() => userTokenObj);
+      .mockImplementation(() => new UserToken(mockUserTokens[2]));
 
     const response = await request(app)
-      .patch("/api/auth/reset-password")
+      .patch(ENDPOINT)
       .set("cookie", `resetPasswordSession=${mockToken}`)
       .send(mockBody);
 
@@ -224,5 +157,30 @@ describe("resetPassword controller", () => {
       message: "Invalid credentials",
       statusCode: 403,
     });
+  });
+
+  it("200 - Success", async () => {
+    const mockToken = mockUserModel.generateJWT();
+
+    jest
+      .spyOn(userService, "fetchUserFromId")
+      .mockImplementation(() => mockUserModel);
+    jest
+      .spyOn(userService, "updatePasswordService")
+      .mockImplementation(() => mockUserModel);
+    jest
+      .spyOn(userTokenService, "fetchTokenFromId")
+      .mockImplementation(() => new UserToken(mockUserTokens[2]));
+    jest
+      .spyOn(userTokenService, "deleteUserToken")
+      .mockImplementation(() => new UserToken(mockUserTokens[2]));
+
+    const response = await request(app)
+      .patch(ENDPOINT)
+      .set("cookie", `resetPasswordSession=${mockToken}`)
+      .send(resetPasswordPayload);
+
+    expect(response.status).toBe(200);
+    expect(response.body).toEqual({ message: "Password updated Successfully" });
   });
 });

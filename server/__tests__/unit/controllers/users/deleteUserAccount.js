@@ -1,17 +1,17 @@
 const request = require("supertest");
-const app = require("../../../app");
+const app = require("../../../../app");
 const { STATUS_CODES } = require("http");
-const User = require("../../../models/Users");
-const { mockUsers } = require("../../../utils/mocks/Users");
-const { deleteUserAccountController } = require("../../../controllers/deleteUserAccount");
+const User = require("../../../../models/Users");
+const { mockUsers } = require("../../../../utils/mocks/Users");
+const { deleteUserAccountController } = require("../../../../controllers/deleteUserAccount");
 
-jest.mock("../../../services/User", () => ({
+jest.mock("../../../../services/User", () => ({
   deleteUserAccount: jest.fn(),
 }));
 
 const mockUserModel = new User(mockUsers[1]);
 
-describe("deleteUserAccountController", () => {
+describe("POST /users/delete", () => {
   beforeAll(() => {
     process.env.JWT_SECRET = "my_secret";
     process.env.BASE_URL = "http://validcorsorigin.com";
@@ -35,8 +35,8 @@ describe("deleteUserAccountController", () => {
     });
   });
 
-  it("should return 200 when user data is deleted successfully", async () => {
-    require("../../../services/User").deleteUserAccount.mockResolvedValue();
+  it("200 - user data is deleted successfully", async () => {
+    require("../../../../services/User").deleteUserAccount.mockResolvedValue();
 
     const mockToken = mockUserModel.generateJWT();
 
@@ -55,7 +55,7 @@ describe("deleteUserAccountController", () => {
   it("should call next with an error when deleteUserAccount throws an error", async () => {
   
     const mockError = new Error("Mock error");
-    require("../../../services/User").deleteUserAccount.mockRejectedValue(mockError);
+    require("../../../../services/User").deleteUserAccount.mockRejectedValue(mockError);
   
     const mockReq = {
       userData: {

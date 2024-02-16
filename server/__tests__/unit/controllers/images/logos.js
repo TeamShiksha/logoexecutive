@@ -1,17 +1,17 @@
 const request = require("supertest");
-const app = require("../../../app");
-const KeyService = require("../../../services/Key");
-const LogoService = require("../../../services/Logo");
-const { mockUsers } = require("../../../utils/mocks/Users");
+const app = require("../../../../app");
+const KeyService = require("../../../../services/Key");
+const LogoService = require("../../../../services/Logo");
+const { mockUsers } = require("../../../../utils/mocks/Users");
 const { STATUS_CODES } = require("http");
-const User = require("../../../models/Users");
+const User = require("../../../../models/Users");
 
 
-jest.mock("../../../services/Key", () => ({
+jest.mock("../../../../services/Key", () => ({
   isAPIKeyPresent: jest.fn()
 }));
 
-jest.mock("../../../services/Logo", () => ({
+jest.mock("../../../../services/Logo", () => ({
   fetchImageByCompanyFree: jest.fn()
 }));
 
@@ -33,7 +33,7 @@ describe("getLogoController", () => {
     jest.resetAllMocks();
   });
 
-  it("Should return 422 if API Key is NOT present", async () => {
+  it("422 - API Key is NOT present", async () => {
 
     const mockToken = mockUserModel.generateJWT();
 
@@ -58,7 +58,7 @@ describe("getLogoController", () => {
     });
   });
 
-  it("Should return 422 if company name is NOT present", async () => {
+  it("422 - company name is NOT present", async () => {
 
     const mockToken = mockUserModel.generateJWT();
 
@@ -83,7 +83,7 @@ describe("getLogoController", () => {
     });
   });
 
-  it("Should return 403 if API key is not valid", async () => {
+  it("403 - API key is not valid", async () => {
 
     const mockToken = mockUserModel.generateJWT();
 
@@ -100,7 +100,7 @@ describe("getLogoController", () => {
     });
   });
 
-  it("Should return 404 if image is not found for given company name", async () => {
+  it("404 - image is not found for given company name", async () => {
 
     const mockToken = mockUserModel.generateJWT();
 
@@ -121,7 +121,7 @@ describe("getLogoController", () => {
     });
   });
 
-  it("Should return 200 if image is found for the company name with the correct API Key", async () => {
+  it("200 - image is found for the company name with the correct API Key", async () => {
 
     const mockToken = mockUserModel.generateJWT();
 

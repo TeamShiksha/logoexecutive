@@ -1,7 +1,7 @@
 const request = require("supertest");
-const app = require("../../../app");
+const app = require("../../../../app");
 const jwt = require("jsonwebtoken");
-const User = require("../../../models/Users");
+const User = require("../../../../models/Users");
 const { Timestamp } = require("firebase-admin/firestore");
 const { STATUS_CODES } = require("http");
 
@@ -37,7 +37,7 @@ describe("generate-key controller", () =>{
     });
   });
 
-  it ("Should return 422 response keyDescription format is invalid", async() =>{
+  it ("422 - keyDescription format is invalid", async() =>{
 
     const mockToken = mockUser.generateJWT();
     const response = await request(app)
@@ -56,7 +56,7 @@ describe("generate-key controller", () =>{
     });
   });
 
-  it("Should return 422 response if keyId format is invalid", async () => {
+  it("422 - keyId format is invalid", async () => {
     const mockToken = mockUser.generateJWT();
     const response = await request(app)
       .delete("/api/keys/destroy")
@@ -70,7 +70,7 @@ describe("generate-key controller", () =>{
     });
   });
 
-  it("Should return 422 response if keyId format is invalid", async () => {
+  it("422 - keyId format is invalid", async () => {
     const mockToken = mockUser.generateJWT();
     const response = await request(app)
       .delete("/api/keys/destroy")

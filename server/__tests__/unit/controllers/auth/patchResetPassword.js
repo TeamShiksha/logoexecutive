@@ -1,9 +1,9 @@
 const request = require("supertest");
-const app = require("../../../app");
-const userService = require("../../../services/User");
-const userTokenService = require("../../../services/UserToken");
-const { mockUsers } = require("../../../utils/mocks/Users");
-const User = require("../../../models/Users");
+const app = require("../../../../app");
+const userService = require("../../../../services/User");
+const userTokenService = require("../../../../services/UserToken");
+const { mockUsers } = require("../../../../utils/mocks/Users");
+const User = require("../../../../models/Users");
 const { STATUS_CODES } = require("http");
 
 const resetPasswordPayload = {
@@ -23,12 +23,12 @@ const userTokenObj = {
   userTokenId: "069290e9-a26d-4211-8753-881ed5067399",
 };
 
-jest.mock("../../../services/User", () => ({
+jest.mock("../../../../services/User", () => ({
   fetchUserFromId: jest.fn(),
   updatePasswordService: jest.fn(),
 }));
 
-jest.mock("../../../services/UserToken", () => ({
+jest.mock("../../../../services/UserToken", () => ({
   fetchTokenFromId: jest.fn(),
   deleteUserToken: jest.fn(),
 }));

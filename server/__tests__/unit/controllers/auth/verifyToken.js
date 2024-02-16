@@ -23,6 +23,8 @@ const User = require("../../../../models/Users");
 const mockUserModel = new User(mockUsers[0]);
 const mockUserTokenVerify = new UserToken(mockUserTokens[0]);
 
+const ENDPOINT = "/api/auth/verify";
+
 describe("GET /auth/verify", () => {
   beforeAll(() => {
     process.env.BASE_URL = "http://validcorsorigin.com";
@@ -39,7 +41,7 @@ describe("GET /auth/verify", () => {
 
   it("500 - CORS", async () => {
     const response = await request(app)
-      .get("/api/auth/verify")
+      .get(ENDPOINT)
       .set("Origin", "http://invalidcorsorigin.com");
 
     expect(response.status).toBe(500);
@@ -51,7 +53,7 @@ describe("GET /auth/verify", () => {
   });
 
   it("422 - token is not present", async () => {
-    const response = await request(app).get("/api/auth/verify");
+    const response = await request(app).get(ENDPOINT);
 
     expect(response.status).toBe(422);
     expect(response.body).toEqual({
@@ -65,7 +67,7 @@ describe("GET /auth/verify", () => {
     jest.spyOn(UserTokenService, "fetchTokenFromId").mockImplementation(() => null);
 
     const response = await request(app)
-      .get("/api/auth/verify")
+      .get(ENDPOINT)
       .query({ token: "token" });
 
     expect(response.status).toBe(400);
@@ -86,7 +88,7 @@ describe("GET /auth/verify", () => {
     jest.spyOn(UserTokenService, "fetchTokenFromId").mockImplementation(() => mockUserToken);
 
     const response = await request(app)
-      .get("/api/auth/verify")
+      .get(ENDPOINT)
       .query({ token: "token" });
 
     expect(response.status).toBe(403);
@@ -102,7 +104,7 @@ describe("GET /auth/verify", () => {
     jest.spyOn(UserService, "fetchUserFromId").mockImplementation(() => null);
 
     const response = await request(app)
-      .get("/api/auth/verify")
+      .get(ENDPOINT)
       .query({ token: "token" });
 
     expect(response.status).toBe(400);
@@ -122,7 +124,7 @@ describe("GET /auth/verify", () => {
     }));
 
     const response = await request(app)
-      .get("/api/auth/verify")
+      .get(ENDPOINT)
       .query({ token: "token" });
 
     expect(response.status).toBe(500);
@@ -139,7 +141,7 @@ describe("GET /auth/verify", () => {
     jest.spyOn(UserService, "verifyUser").mockImplementation(() => ({ success: true }));
 
     const response = await request(app)
-      .get("/api/auth/verify")
+      .get(ENDPOINT)
       .query({ token: "token" });
 
     expect(response.status).toBe(200);
@@ -152,7 +154,7 @@ describe("GET /auth/verify", () => {
     jest.spyOn(UserTokenService, "fetchTokenFromId").mockImplementation(() => {throw new Error("Unexpected error");});
 
     const response = await request(app)
-      .get("/api/auth/verify")
+      .get(ENDPOINT)
       .query({ token: "token" });
 
     expect(response.status).toBe(500);

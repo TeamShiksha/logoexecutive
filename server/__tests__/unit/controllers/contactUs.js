@@ -16,6 +16,8 @@ jest.mock("../../../services/ContactUs", () =>({
 const ContactUsService = require("../../../services/ContactUs");
 const {mockFormModel} = require("../../../utils/mocks/contactUs");
 
+const ENDPOINT = "/api/contact";
+
 describe("contactUs controller", () =>{
   beforeAll(() =>{
     process.env.BASE_URL = "https://example.com";
@@ -30,7 +32,7 @@ describe("contactUs controller", () =>{
 
   it("500 - CORS", async () => {
     const response = await request(app)
-      .post("/api/contact")
+      .post(ENDPOINT)
       .set("Origin", "http://invalidcorsorigin.com");
 
     expect(response.status).toBe(500);
@@ -47,7 +49,7 @@ describe("contactUs controller", () =>{
     delete mockPayload.email;
 
     const response = await request(app)
-      .post("/api/contact")
+      .post(ENDPOINT)
       .send(mockPayload);
 
     expect(response.status).toBe(422);
@@ -63,7 +65,7 @@ describe("contactUs controller", () =>{
     delete mockPayload.name;
 
     const response = await request(app)
-      .post("/api/contact")
+      .post(ENDPOINT)
       .send(mockPayload);
 
     expect(response.status).toBe(422);
@@ -78,7 +80,7 @@ describe("contactUs controller", () =>{
     const mockPayload = { ...mockValidPayload };
     delete mockPayload.message;
 
-    const response = await request(app).post("/api/contact").send(mockPayload);
+    const response = await request(app).post(ENDPOINT).send(mockPayload);
 
     expect(response.status).toBe(422);
     expect(response.body).toEqual({
@@ -91,7 +93,7 @@ describe("contactUs controller", () =>{
   it("422 - when name contains special characters", async () => {
     const mockPayload = { ...mockValidPayload, name: "Whatthef**k" };
 
-    const response = await request(app).post("/api/contact").send(mockPayload);
+    const response = await request(app).post(ENDPOINT).send(mockPayload);
 
     expect(response.status).toBe(422);
     expect(response.body).toEqual({
@@ -104,7 +106,7 @@ describe("contactUs controller", () =>{
   it("422 - when email is invalid", async () => {
     const mockPayload = { ...mockValidPayload, email: "email.com" };
 
-    const response = await request(app).post("/api/contact").send(mockPayload);
+    const response = await request(app).post(ENDPOINT).send(mockPayload);
 
     expect(response.status).toBe(422);
     expect(response.body).toEqual({
@@ -121,7 +123,7 @@ describe("contactUs controller", () =>{
         "bHjmasdasdasqPpKVkCBqmAjWfqSTqERxIICTyxEaOKQuvVacQowljPRkLdfMocsQnDjWQiFWdCEGcOZMyXwkiSUIanKEmgUZxEiYFkHiUbVCuuLlSBKbjXtShOvchvJeCWzyMrlSJgZjQdWnLMphwCVyAiPQiCMBpBNuJlodYMePImsUQbhGmOzPwxNGUHDqBiQjuGXjdLJpHQttkfxXubnHguCRxLahmmLiQUjJrBTewCetIFTHyBpfIIssYhZEqyvXbeZGHzaHMTFlXbCuZzNAahPidDckJMugDVijqcwcHLUiXOESDDBposimKjPTNNGMzLIedSceXoYmqKNEfbPhByqFNZgttUlZgSHXaxmmVWHSFJTgtUImRICDKQIJfpHpvfkBATUeQvEhnhihABMYAVstzrMfAArWaBWhlErAIxDogbcyRnndpOHfRtEPvFiWaxUDrYujVuokzflNISXKOJCYGvNeRqlcjqSIiQgPIStXeUHXMBiusjL",
     };
 
-    const response = await request(app).post("/api/contact").send(mockPayload);
+    const response = await request(app).post(ENDPOINT).send(mockPayload);
 
     expect(response.status).toBe(422);
     expect(response.body).toEqual({
@@ -134,7 +136,7 @@ describe("contactUs controller", () =>{
   it("400 - when form already exists", async () => {
     jest.spyOn(ContactUsService, "formExists").mockImplementation(() => true);
 
-    const response = await request(app).post("/api/contact").send(mockValidPayload);
+    const response = await request(app).post(ENDPOINT).send(mockValidPayload);
 
     expect(response.status).toBe(400);
     expect(response.body).toEqual({
@@ -148,7 +150,7 @@ describe("contactUs controller", () =>{
     jest.spyOn(ContactUsService, "formExists").mockImplementation(() => false);
     jest.spyOn(ContactUsService, "createForm").mockImplementation(() => null);
 
-    const response = await request(app).post("/api/contact").send(mockValidPayload);
+    const response = await request(app).post(ENDPOINT).send(mockValidPayload);
 
     expect(response.status).toBe(500);
     expect(response.body).toEqual({
@@ -162,7 +164,7 @@ describe("contactUs controller", () =>{
     jest.spyOn(ContactUsService, "formExists").mockImplementation(() => false);
     jest.spyOn(ContactUsService, "createForm").mockImplementation(() => mockFormModel);
 
-    const response = await request(app).post("/api/contact").send(mockValidPayload);
+    const response = await request(app).post(ENDPOINT).send(mockValidPayload);
 
     expect(response.status).toBe(200);
     expect(response.body).toEqual({
@@ -177,7 +179,7 @@ describe("contactUs controller", () =>{
       throw new Error("Mocked error message");
     });
 
-    const response = await request(app).post("/api/contact").send(mockValidPayload);
+    const response = await request(app).post(ENDPOINT).send(mockValidPayload);
 
     expect(response.status).toBe(500);
     expect(response.body).toEqual({

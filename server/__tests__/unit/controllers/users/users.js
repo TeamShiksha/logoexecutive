@@ -24,6 +24,7 @@ jest.mock("../../../../services/Key", ()=> ({
 
 const mockUserModel = new User(mockUsers[0]);
 
+const ENDPOINT = "/api/users/update-password";
 
 describe("POST - /users/update-password", () => {
   beforeAll(() => {
@@ -38,7 +39,7 @@ describe("POST - /users/update-password", () => {
 
   it("500 - CORS", async () => {
     const response = await request(app)
-      .post("/api/users/update-password")
+      .post(ENDPOINT)
       .set("Origin", "http://invalidcorsorigin.com");
 
     expect(response.status).toBe(500);

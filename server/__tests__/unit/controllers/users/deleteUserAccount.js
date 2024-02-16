@@ -11,6 +11,8 @@ jest.mock("../../../../services/User", () => ({
 
 const mockUserModel = new User(mockUsers[1]);
 
+const ENDPOINT = "/api/users/delete";
+
 describe("POST /users/delete", () => {
   beforeAll(() => {
     process.env.JWT_SECRET = "my_secret";
@@ -24,7 +26,7 @@ describe("POST /users/delete", () => {
 
   it("500 - CORS", async () => {
     const response = await request(app)
-      .post("/api/users/delete")
+      .post(ENDPOINT)
       .set("Origin", "http://invalidcorsorigin.com");
 
     expect(response.status).toBe(500);
@@ -41,7 +43,7 @@ describe("POST /users/delete", () => {
     const mockToken = mockUserModel.generateJWT();
 
     const response = await request(app)
-      .delete("/api/users/delete")
+      .delete(ENDPOINT)
       .set("cookie", `jwt=${mockToken}`);
 
     expect(response.statusCode).toBe(200);

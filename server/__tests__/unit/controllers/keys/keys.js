@@ -5,6 +5,8 @@ const User = require("../../../../models/Users");
 const { Timestamp } = require("firebase-admin/firestore");
 const { STATUS_CODES } = require("http");
 
+const ENDPOINT = "/api/keys/generate";
+
 const mockUser = new User({
   userId: "1",
   email: "john@email.com",
@@ -26,7 +28,7 @@ describe("generate-key controller", () =>{
 
   it("500 - CORS", async () => {
     const response = await request(app)
-      .post("/api/keys/generate")
+      .post(ENDPOINT)
       .set("Origin", "http://invalidcorsorigin.com");
 
     expect(response.status).toBe(500);
@@ -41,7 +43,7 @@ describe("generate-key controller", () =>{
 
     const mockToken = mockUser.generateJWT();
     const response = await request(app)
-      .post("/api/keys/generate")
+      .post(ENDPOINT)
       .set("cookie", `jwt=${mockToken}`)
       .send({
         "payload": {

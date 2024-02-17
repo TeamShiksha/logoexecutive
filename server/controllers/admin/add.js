@@ -25,7 +25,6 @@ const addAdminController = async (req, res, next) => {
     }
 
     const message = await setUserAdmin(email);
-    console.log(message);
 
     if (!message) {
       return res.status(404).json({

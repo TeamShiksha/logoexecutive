@@ -1,17 +1,17 @@
 const request = require("supertest");
-const app = require("../../../app");
-const KeyService = require("../../../services/Key");
-const LogoService = require("../../../services/Logo");
-const { mockUsers } = require("../../../utils/mocks/Users");
+const app = require("../../../../app");
+const KeyService = require("../../../../services/Key");
+const LogoService = require("../../../../services/Logo");
+const { mockUsers } = require("../../../../utils/mocks/Users");
 const { STATUS_CODES } = require("http");
-const User = require("../../../models/Users");
+const User = require("../../../../models/Users");
 
 
-jest.mock("../../../services/Key", () => ({
+jest.mock("../../../../services/Key", () => ({
   isAPIKeyPresent: jest.fn()
 }));
 
-jest.mock("../../../services/Logo", () => ({
+jest.mock("../../../../services/Logo", () => ({
   fetchImageByCompanyFree: jest.fn()
 }));
 

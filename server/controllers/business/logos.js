@@ -1,17 +1,17 @@
-const { isAPIKeyPresent } = require("../services/Key");
-const { fetchImageByCompanyFree } = require("../services/Logo");
+const { isAPIKeyPresent } = require("../../services/Key");
+const { fetchImageByCompanyFree } = require("../../services/Logo");
 const { STATUS_CODES } = require("http");
 const Joi = require("joi");
 
 const getLogoQuerySchema = Joi.object({
-  companyName: Joi.string().regex(/^[A-Za-z0-9&-]+$/).required(),
-  apiKey: Joi.string().guid({ version: "uuidv4" }).required()
+  companyName: Joi.string()
+    .regex(/^[A-Za-z0-9&-]+$/)
+    .required(),
+  apiKey: Joi.string().guid({ version: "uuidv4" }).required(),
 });
 
-
 async function getLogo(req, res, next) {
-  try{
-
+  try {
     const { error, value } = getLogoQuerySchema.validate(req.query);
 
     // Check if Company name is present in the Query
@@ -19,19 +19,19 @@ async function getLogo(req, res, next) {
       return res.status(422).json({
         message: "Please provide proper Company name and API Key",
         statusCode: 422,
-        error: STATUS_CODES[422]
+        error: STATUS_CODES[422],
       });
     }
 
     const { companyName, apiKey } = value;
 
-    // Check if API Key is present 
+    // Check if API Key is present
     const apiKeyPresent = await isAPIKeyPresent(apiKey);
     if (!apiKeyPresent) {
       return res.status(403).json({
         message: "Given API key was not found",
         statusCode: 403,
-        error: STATUS_CODES[403]
+        error: STATUS_CODES[403],
       });
     }
 
@@ -41,17 +41,16 @@ async function getLogo(req, res, next) {
       return res.status(404).json({
         message: "No image found for company name " + companyName,
         statusCode: 404,
-        error: STATUS_CODES[404]
+        error: STATUS_CODES[404],
       });
     }
 
     return res.status(200).json({
       message: "Image Link successfully generated for " + companyName,
       statusCode: 200,
-      data: imageUrl
+      data: imageUrl,
     });
-  }
-  catch(err) {
+  } catch (err) {
     next(err);
   }
 }

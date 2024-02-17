@@ -1,13 +1,10 @@
 const Joi = require("joi");
-const {sendEmail} = require("../services/sendEmail");
-const {
-  fetchUserByEmail,
-  updateUser,
-} = require("../services/User");
+const { sendEmail } = require("../../services/sendEmail");
+const { fetchUserByEmail, updateUser } = require("../../services/User");
 const {
   createVerifyToken,
   deleteUserToken,
-} = require("../services/UserToken");
+} = require("../../services/UserToken");
 const { STATUS_CODES } = require("http");
 
 const changeNameEmailSchema = Joi.object().keys({
@@ -91,7 +88,7 @@ async function updateProfileController(req, res) {
       await user.userRef.update({
         isVerified: false,
       });
-      
+
       await sendEmail(
         req.body.email,
         "Change email and name",

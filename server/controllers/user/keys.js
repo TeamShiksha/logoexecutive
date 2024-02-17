@@ -1,7 +1,7 @@
-const { createKey, fetchKeysByuserid } = require("../services/Key");
-const { fetchSubscriptionByuserid } = require("../services/Subscription");
+const { createKey, fetchKeysByuserid } = require("../../services/Key");
+const { fetchSubscriptionByuserid } = require("../../services/Subscription");
 const Joi = require("joi");
-const { destroyKey } = require("../services/Key");
+const { destroyKey } = require("../../services/Key");
 
 const generateKeyPayloadSchema = Joi.object().keys({
   keyDescription: Joi.string()
@@ -14,7 +14,7 @@ const generateKeyPayloadSchema = Joi.object().keys({
 const destroyKeyPayloadSchema = Joi.object({
   keyId: Joi.string().guid({ version: "uuidv4" }).required().messages({
     "string.guid": "\"keyId\" must be a valid UUID",
-    "any.required": "\"keyId\" is a required field"
+    "any.required": "\"keyId\" is a required field",
   }),
 });
 

@@ -1,6 +1,6 @@
 const Joi = require("joi");
-const {formExists, createForm} = require("../services/ContactUs");
-const {ContactUsCollection} = require("../utils/firestore");
+const {formExists, createForm} = require("../../services/ContactUs");
+const {ContactUsCollection} = require("../../utils/firestore");
 const { STATUS_CODES } = require("http");
 
 const contactUsPayloadSchema = Joi.object().keys({

@@ -28,6 +28,8 @@ const AddAdminForm = ({setAdminDetails}) => {
 				}),
 			},
 		]);
+		setEmail('');
+		setReason('');
 	}
 	return (
 		<form onSubmit={handleSubmit} className='add-admin-form'>

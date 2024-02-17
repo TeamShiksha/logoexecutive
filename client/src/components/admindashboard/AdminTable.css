@@ -1,0 +1,44 @@
+.admin-table-wrapper {
+	overflow: auto;
+}
+
+.admin-table {
+	width: 100%;
+	text-align: center;
+	font-size: var(--medium-text);
+	line-height: 175%;
+	border-spacing: 0;
+	border: var(--border);
+	border-radius: var(--bradius);
+}
+
+.admin-table-heding-row {
+	white-space: nowrap;
+}
+
+.admin-table thead tr th {
+	background-color: var(--table-heading-bg);
+	padding: 8px;
+	font-weight: 500;
+	color: var(--smooth-gray);
+}
+
+.admin-table tbody tr td {
+	padding: 8px;
+	font-weight: 400;
+	color: var(--smooth-gray);
+	border-top: var(--border);
+}
+
+.admin-table .action-btn {
+	padding: 6px 10px;
+	border: none;
+	border-radius: 99px;
+	cursor: pointer;
+}
+
+.admin-table .action-btn > svg {
+	height: 20px;
+	width: 20px;
+	color: var(--error);
+}

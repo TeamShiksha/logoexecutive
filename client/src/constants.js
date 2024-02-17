@@ -150,3 +150,18 @@ export const dummyUploadedImageDetails = [
 		updateDate: 'Oct 12, 2023',
 	},
 ];
+
+export const adminTableHeadings = ['EMAIL', 'REASON', 'ACTION', 'CREATE DATE'];
+
+export const dummyAdminTableDetails = [
+	{
+		email: 'admin@gmail.com',
+		reason: 'Testing 1',
+		createDate: 'Jan 12, 2024',
+	},
+	{
+		email: 'testadmin@gmail.com',
+		reason: 'Testing 2',
+		createDate: 'Jan 25, 2024',
+	},
+];

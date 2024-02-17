@@ -1,7 +1,7 @@
 const Joi = require("joi");
 const bcrypt = require("bcrypt");
 const JWT = require("jsonwebtoken");
-const http = require("http");
+const { STATUS_CODES } = require("http");
 const {
   fetchUserFromId,
   updatePasswordService,
@@ -24,7 +24,7 @@ const resetPasswordController = async (req, res, next) => {
 
     if (!resetPasswordSession) {
       return res.status(401).json({
-        error: "Unauthorized",
+        error: STATUS_CODES[401],
         message: "User not signed in",
         statusCode: 401,
       });
@@ -49,7 +49,7 @@ const resetPasswordController = async (req, res, next) => {
         let deleteTokenRef = await fetchTokenFromId(value.token);
         if (deleteTokenRef === null || deleteTokenRef.token !== value.token) {
           return res.status(403).json({
-            error: http.STATUS_CODES[403],
+            error: STATUS_CODES[403],
             message: "Invalid credentials",
             statusCode: 403,
           });
@@ -60,7 +60,7 @@ const resetPasswordController = async (req, res, next) => {
           .json({ message: "Password updated Successfully" });
       } else {
         return res.status(400).json({
-          error: http.STATUS_CODES[400],
+          error: STATUS_CODES[400],
           message: "Failed to update password",
           statusCode: 400,
         });

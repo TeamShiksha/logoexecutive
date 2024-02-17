@@ -49,7 +49,7 @@ describe("resetPassword controller", () => {
 
   it("500 - CORS", async () => {
     const response = await request(app)
-      .post("/api/user/reset-password")
+      .patch("/api/user/reset-password")
       .set("Origin", "http://invalidcorsorigin.com");
 
     expect(response.status).toBe(500);

@@ -33,7 +33,7 @@ describe("UpdateProfile Controller", () => {
       const mockToken = mockUserModel.generateJWT();
 
       const response = await request(app)
-        .patch("/api/users/update")
+        .patch("/api/user/update-profile")
         .set("cookie", `jwt=${mockToken}`)
         .send({
           firstName: "Ghosty",
@@ -50,7 +50,7 @@ describe("UpdateProfile Controller", () => {
 
     it("500 - CORS", async () => {
       const response = await request(app)
-        .post("/api/users/update")
+        .post("/api/user/update-profile")
         .set("Origin", "http://invalidcorsorigin.com");
 
       expect(response.status).toBe(500);
@@ -65,7 +65,7 @@ describe("UpdateProfile Controller", () => {
       const mockToken = mockUserModel.generateJWT();
 
       const response = await request(app)
-        .patch("/api/users/update")
+        .patch("/api/user/update-profile")
         .set("cookie", `jwt=${mockToken}`)
         .send({
           lastName: "Rider",
@@ -84,7 +84,7 @@ describe("UpdateProfile Controller", () => {
       const mockToken = mockUserModel.generateJWT();
 
       const response = await request(app)
-        .patch("/api/users/update")
+        .patch("/api/user/update-profile")
         .set("cookie", `jwt=${mockToken}`)
         .send({
           firstName: "Ghosty",
@@ -103,7 +103,7 @@ describe("UpdateProfile Controller", () => {
       const mockToken = mockUserModel.generateJWT();
 
       const response = await request(app)
-        .patch("/api/users/update")
+        .patch("/api/user/update-profile")
         .set("cookie", `jwt=${mockToken}`)
         .send({
           firstName: "Ghosty1",
@@ -123,7 +123,7 @@ describe("UpdateProfile Controller", () => {
       const mockToken = mockUserModel.generateJWT();
 
       const response = await request(app)
-        .patch("/api/users/update")
+        .patch("/api/user/update-profile")
         .set("cookie", `jwt=${mockToken}`)
         .send({
           firstName: "Ghosty",
@@ -147,7 +147,7 @@ describe("UpdateProfile Controller", () => {
       const mockToken = mockUserModel.generateJWT();
 
       const response = await request(app)
-        .patch("/api/users/update")
+        .patch("/api/user/update-profile")
         .set("cookie", `jwt=${mockToken}`)
         .send({
           firstName: "Ghosty",
@@ -174,7 +174,7 @@ describe("UpdateProfile Controller", () => {
       const mockToken = mockUserModel.generateJWT();
 
       const response = await request(app)
-        .patch("/api/users/update")
+        .patch("/api/user/update-profile")
         .set("cookie", `jwt=${mockToken}`)
         .send({
           firstName: "Ghosty",

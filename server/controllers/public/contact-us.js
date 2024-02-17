@@ -1,6 +1,5 @@
 const Joi = require("joi");
 const {formExists, createForm} = require("../../services/ContactUs");
-const {ContactUsCollection} = require("../../utils/firestore");
 const { STATUS_CODES } = require("http");
 
 const contactUsPayloadSchema = Joi.object().keys({
@@ -24,7 +23,7 @@ const contactUsPayloadSchema = Joi.object().keys({
     .message("Message is invalid (too long)"),
 });
 
-async function submitContactForm(req , res, next){
+async function contactUsController(req , res, next){
   try {   
     const payload = req.body;
 
@@ -72,6 +71,4 @@ async function submitContactForm(req , res, next){
   }
 }
 
-module.exports = {
-  submitContactForm,
-};
+module.exports = contactUsController;

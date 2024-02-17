@@ -49,7 +49,7 @@ describe("resetPassword controller", () => {
 
   it("500 - CORS", async () => {
     const response = await request(app)
-      .post("/api/auth/reset-password")
+      .post("/api/user/reset-password")
       .set("Origin", "http://invalidcorsorigin.com");
 
     expect(response.status).toBe(500);
@@ -77,7 +77,7 @@ describe("resetPassword controller", () => {
       .mockImplementation(() => userTokenObj);
 
     const response = await request(app)
-      .patch("/api/auth/reset-password")
+      .patch("/api/user/reset-password")
       .set("cookie", `resetPasswordSession=${mockToken}`)
       .send(resetPasswordPayload);
 
@@ -100,7 +100,7 @@ describe("resetPassword controller", () => {
       .mockImplementation(() => userTokenObj);
 
     const response = await request(app)
-      .patch("/api/auth/reset-password")
+      .patch("/api/user/reset-password")
       .send(resetPasswordPayload);
 
     expect(response.status).toBe(401);
@@ -127,7 +127,7 @@ describe("resetPassword controller", () => {
       .mockImplementation(() => userTokenObj);
 
     const response = await request(app)
-      .patch("/api/auth/reset-password")
+      .patch("/api/user/reset-password")
       .set("cookie", `resetPasswordSession=${mockToken}`)
       .send(mockBody);
 
@@ -156,7 +156,7 @@ describe("resetPassword controller", () => {
       .mockImplementation(() => userTokenObj);
 
     const response = await request(app)
-      .patch("/api/auth/reset-password")
+      .patch("/api/user/reset-password")
       .set("cookie", `resetPasswordSession=${mockToken}`)
       .send(mockBody);
 
@@ -184,7 +184,7 @@ describe("resetPassword controller", () => {
       .mockImplementation(() => userTokenObj);
 
     const response = await request(app)
-      .patch("/api/auth/reset-password")
+      .patch("/api/user/reset-password")
       .set("cookie", `resetPasswordSession=${mockToken}`)
       .send(mockBody);
 
@@ -214,7 +214,7 @@ describe("resetPassword controller", () => {
       .mockImplementation(() => userTokenObj);
 
     const response = await request(app)
-      .patch("/api/auth/reset-password")
+      .patch("/api/user/reset-password")
       .set("cookie", `resetPasswordSession=${mockToken}`)
       .send(mockBody);
 

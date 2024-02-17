@@ -1,10 +1,8 @@
-const express = require("express");
-const router = express.Router();
+const router = require("express").Router();
 const userRouter = require("./user");
-const contactUsRouter = require("./contactUs");
+const publicRouter = require("./public");
 const authRouter = require("./auth");
-const keyRouter = require("./key");
-const logoRouter = require("./logo");
+const logoRouter = require("./business");
 const cors = require("cors");
 
 const privateRouteCORS = {
@@ -19,11 +17,8 @@ const privateRouteCORS = {
 };
 
 router.use("/auth", cors(privateRouteCORS), authRouter);
-router.use("/users", cors(privateRouteCORS),userRouter);
-router.use("/contact", cors(privateRouteCORS), contactUsRouter);
-router.use("/keys", cors(privateRouteCORS), keyRouter);
-
-// Business API - logo
-router.use("/images", logoRouter);
+router.use("/user", cors(privateRouteCORS),userRouter);
+router.use("/public", cors(privateRouteCORS), publicRouter);
+router.use("/business", logoRouter);
 
 module.exports = router;

@@ -10,11 +10,9 @@ const getLogoQuerySchema = Joi.object({
   apiKey: Joi.string().guid({ version: "uuidv4" }).required(),
 });
 
-async function getLogo(req, res, next) {
+async function getLogoController(req, res, next) {
   try {
     const { error, value } = getLogoQuerySchema.validate(req.query);
-
-    // Check if Company name is present in the Query
     if (error) {
       return res.status(422).json({
         message: "Please provide proper Company name and API Key",
@@ -24,8 +22,6 @@ async function getLogo(req, res, next) {
     }
 
     const { companyName, apiKey } = value;
-
-    // Check if API Key is present
     const apiKeyPresent = await isAPIKeyPresent(apiKey);
     if (!apiKeyPresent) {
       return res.status(403).json({
@@ -35,7 +31,6 @@ async function getLogo(req, res, next) {
       });
     }
 
-    // Check if image is present for the given company in Firestore
     const imageUrl = await fetchImageByCompanyFree(companyName.toLowerCase());
     if (!imageUrl) {
       return res.status(404).json({
@@ -55,4 +50,4 @@ async function getLogo(req, res, next) {
   }
 }
 
-module.exports = { getLogo };
+module.exports = getLogoController;

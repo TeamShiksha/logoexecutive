@@ -113,6 +113,4 @@ async function updateProfileController(req, res) {
   }
 }
 
-module.exports = {
-  updateProfileController,
-};
+module.exports = updateProfileController;

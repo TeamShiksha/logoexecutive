@@ -16,6 +16,4 @@ async function deleteUserAccountController(req, res, next) {
   }
 }
 
-module.exports = {
-  deleteUserAccountController,
-};
+module.exports = deleteUserAccountController;

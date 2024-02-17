@@ -3,7 +3,7 @@ const app = require("../../../../app");
 const { STATUS_CODES } = require("http");
 const User = require("../../../../models/Users");
 const { mockUsers } = require("../../../../utils/mocks/Users");
-const { deleteUserAccountController } = require("../../../../controllers/user/deleteUserAccount");
+const deleteUserAccountController = require("../../../../controllers/user/delete");
 
 jest.mock("../../../../services//User", () => ({
   deleteUserAccount: jest.fn(),
@@ -24,7 +24,7 @@ describe("deleteUserAccountController", () => {
 
   it("500 - CORS", async () => {
     const response = await request(app)
-      .post("/api/users/delete")
+      .post("/api/user/delete")
       .set("Origin", "http://invalidcorsorigin.com");
 
     expect(response.status).toBe(500);
@@ -41,7 +41,7 @@ describe("deleteUserAccountController", () => {
     const mockToken = mockUserModel.generateJWT();
 
     const response = await request(app)
-      .delete("/api/users/delete")
+      .delete("/api/user/delete")
       .set("cookie", `jwt=${mockToken}`);
 
     expect(response.statusCode).toBe(200);

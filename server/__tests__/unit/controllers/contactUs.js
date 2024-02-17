@@ -14,7 +14,7 @@ jest.mock("../../../services/ContactUs", () =>({
 }));
 
 const ContactUsService = require("../../../services/ContactUs");
-const {mockFormModel} = require("../../../utils/mocks/contactUs");
+const {mockContactUsForm} = require("../../../utils/mocks/contactUs");
 
 const ENDPOINT = "/api/contact";
 
@@ -162,7 +162,7 @@ describe("contactUs controller", () =>{
 
   it("200 - Form submitted succesfully", async () => {
     jest.spyOn(ContactUsService, "formExists").mockImplementation(() => false);
-    jest.spyOn(ContactUsService, "createForm").mockImplementation(() => mockFormModel);
+    jest.spyOn(ContactUsService, "createForm").mockImplementation(() => mockContactUsForm);
 
     const response = await request(app).post(ENDPOINT).send(mockValidPayload);
 

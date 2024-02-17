@@ -2,9 +2,7 @@ const request = require("supertest");
 const app = require("../../../../app");
 const User = require("../../../../models/Users");
 const { STATUS_CODES } = require("http");
-const {mockUsers} = require("../../../../utils/mocks/Users");
-const {mockSubscriptionModel} = require("../../../../utils/mocks/Subscriptions");
-const {mockKeyModel} = require("../../../../utils/mocks/Keys");
+const { mockUsers } = require("../../../../utils/mocks/Users");
 
 const UserService = require("../../../../services/User");
 jest.mock("../../../../services/User", ()=>({
@@ -18,6 +16,10 @@ jest.mock("../../../../services/Subscription", ()=>({
 }));
 
 const KeyService = require("../../../../services/Key");
+const { mockSubscriptions } = require("../../../../utils/mocks/Subscriptions");
+const Subscriptions = require("../../../../models/Subscriptions");
+const Keys = require("../../../../models/Keys");
+const { mockKeys } = require("../../../../utils/mocks/Keys");
 jest.mock("../../../../services/Key", ()=> ({
   fetchKeysByuserid: jest.fn(),
 }));
@@ -153,10 +155,12 @@ describe("GET - /users/user", () => {
 
   it("200 - Success", async() =>{
     const mockToken = mockUserModel.generateJWT();
+    const mockSubscriptionModel = new Subscriptions(mockSubscriptions[0]);
+    const mockKeyModel = new Keys(mockKeys[0]); 
     jest.spyOn(UserService, "fetchUserFromId").mockImplementation(() => mockUserModel);
     jest.spyOn(SubscriptionService, "fetchSubscriptionByuserid").mockImplementation(() => mockSubscriptionModel);
 
-    const keyArray = Array(3).fill({ ...mockKeyModel });
+    const keyArray = Array(3).fill(mockKeyModel);
     jest.spyOn(KeyService, "fetchKeysByuserid").mockImplementation(() => keyArray);
 
     const keysToRemove = ["keyId", "userId", "updatedAt"];

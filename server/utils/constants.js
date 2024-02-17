@@ -8,8 +8,14 @@ const UserTokenTypes = {
 };
 
 const UserType = {
-  ADMIN: "admin",
-  CUSTOMER:"customer"
+  ADMIN: "ADMIN",
+  CUSTOMER:"CUSTOMER"
 };
 
-module.exports = { UserTokenTypes, UserType };
+const SubscriptionTypes = {
+  HOBBY: "HOBBY",
+  PRO: "PRO",
+  TEAMS: "TEAMS"
+};
+
+module.exports = { UserTokenTypes, UserType, SubscriptionTypes };

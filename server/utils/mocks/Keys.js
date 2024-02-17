@@ -1,18 +1,14 @@
-const Keys = require("../../models/Keys");
 const { Timestamp } = require("firebase-admin/firestore");
 
-const keysObj = {
-  userId: crypto.randomUUID(),
-  keyId: crypto.randomUUID(),
-  key: crypto.randomUUID(),
-  keyDescription: "this is key description",
-  usageCount: 9999,
-  createdAt: Timestamp.now().toDate().toString(),
-  updatedAt: Timestamp.now().toDate().toString(),
-};
+const mockKeys = [
+  {
+    userId: "0c1266ab-8ad2-4ab9-b56c-e1db6982f120",
+    keyId: "e132bdde-e0f4-4f62-88dd-06b06c5f5af0",
+    key: "e4f8df44-3761-4b7d-b204-c01471521c27",
+    keyDescription: "API-KEY-1",
+    createdAt: Timestamp.fromDate(new Date("01-01-2001")),
+    updatedAt: Timestamp.fromDate(new Date("01-01-2001")),
+  },
+];
 
-const mockKeyModel = new Keys(keysObj);
-
-module.exports = {
-  mockKeyModel,
-};
+module.exports = { mockKeys };

@@ -1,13 +1,15 @@
 const Joi = require("joi");
 const { STATUS_CODES } = require("http");
-const { fetchTokenFromId } = require("../../services/UserToken");
+const { fetchTokenFromId, deleteUserToken } = require("../../services/UserToken");
 const jwt = require("jsonwebtoken");
+const bcrypt = require("bcrypt");
+const { updatePasswordService, fetchUserFromId } = require("../../services/User");
 
 const payloadSchema = Joi.object().keys({
   token: Joi.string().required()
 });
 
-async function getResetPasswordController(req, res, next) {
+async function get(req, res, next) {
   try {
     const { error, value } = payloadSchema.validate(req.query);
 
@@ -44,4 +46,69 @@ async function getResetPasswordController(req, res, next) {
   }
 }
 
-module.exports = getResetPasswordController;
+
+const patchSchema = Joi.object().keys({
+  newPassword: Joi.string().trim().min(8).max(30).required(),
+  confirmPassword: Joi.string().trim().min(8).max(30).required(),
+  token: Joi.string().trim().required(),
+});
+const patch = async (req, res, next) => {
+  try {
+    const result = req.body;
+    const { resetPasswordSession } = req.cookies;
+
+    if (!resetPasswordSession) {
+      return res.status(401).json({
+        error: "Unauthorized",
+        message: "User not signed in",
+        statusCode: 401,
+      });
+    }
+
+    const decodedData = jwt.verify(
+      resetPasswordSession,
+      process.env.JWT_SECRET
+    );
+    const { userId } = decodedData;
+    const { error, value } = patchSchema.validate(result);
+
+    if (error) {
+      return res.status(422).json({
+        error: STATUS_CODES[422],
+        message: error.message,
+        statusCode: 422
+      });
+    }
+
+    if (value.confirmPassword === value.newPassword) {
+      const hashedPassword = await bcrypt.hash(value.newPassword, 10);
+      const userRef = await fetchUserFromId(userId);
+      const result = await updatePasswordService(userRef, hashedPassword);
+      if (result) {
+        let deleteTokenRef = await fetchTokenFromId(value.token);
+        if (deleteTokenRef === null || deleteTokenRef.token !== value.token) {
+          return res.status(403).json({
+            error: STATUS_CODES[403],
+            message: "Invalid credentials",
+            statusCode: 403,
+          });
+        }
+        await deleteUserToken(deleteTokenRef);
+        return res
+          .status(200)
+          .json({ message: "Password updated Successfully" });
+      } else {
+        return res.status(400).json({
+          error: STATUS_CODES[400],
+          message: "Failed to update password",
+          statusCode: 400,
+        });
+      }
+    }
+  } catch (error) {
+    next(error);
+  }
+};
+
+
+module.exports = { get, patch };

@@ -2,21 +2,20 @@ const request = require("supertest");
 const app = require("../../../../app");
 const { STATUS_CODES } = require("http");
 const ContactUsService = require("../../../../services/ContactUs");
-const {mockFormModel} = require("../../../../utils/mocks/contactUs");
-
-const mockValidPayload = {
-  name: "first last",
-  email: "example@gmail.com",
-  message: "hasta la vista",
-};
+const { mockContactUsForm } = require("../../../../utils/mocks/contactUs");
 
 jest.mock("../../../../services/ContactUs", () => ({
   formExists: jest.fn(),
   createForm: jest.fn(),
 }));
 
-
 describe("contactUs controller", () =>{
+  const mockValidPayload = {
+    name: "first last",
+    email: "example@gmail.com",
+    message: "hasta la vista",
+  };
+
   beforeAll(() =>{
     process.env.BASE_URL = "https://example.com";
   });
@@ -160,7 +159,7 @@ describe("contactUs controller", () =>{
 
   it("200 - Form submitted succesfully", async () => {
     jest.spyOn(ContactUsService, "formExists").mockImplementation(() => false);
-    jest.spyOn(ContactUsService, "createForm").mockImplementation(() => mockFormModel);
+    jest.spyOn(ContactUsService, "createForm").mockImplementation(() => mockContactUsForm);
 
     const response = await request(app).post("/api/public/contact-us").send(mockValidPayload);
 

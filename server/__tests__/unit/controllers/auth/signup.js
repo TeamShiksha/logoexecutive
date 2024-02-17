@@ -39,6 +39,8 @@ const UserToken = require("../../../../models/UserToken");
 const mockUserModel = new User(mockUsers[0]);
 const mockUserTokenVerify = new UserToken(mockUserTokens[0]);
 
+const ENDPOINT = "/api/auth/signup";
+
 describe("Signup Controller", () => {
   beforeAll(() => {
     process.env.BASE_URL = "https://exmample.com";
@@ -53,7 +55,7 @@ describe("Signup Controller", () => {
 
   it("500 - CORS", async () => {
     const response = await request(app)
-      .get("/api/auth/signup")
+      .get(ENDPOINT)
       .set("Origin", "http://invalidcorsorigin.com");
 
     expect(response.status).toBe(500);
@@ -66,7 +68,7 @@ describe("Signup Controller", () => {
 
   it("422 - when payload has missing fields", async () => {
     const response = await request(app)
-      .post("/api/auth/signup")
+      .post(ENDPOINT)
       .send({ user: "hello world" });
 
     expect(response.status).toBe(422);
@@ -83,7 +85,7 @@ describe("Signup Controller", () => {
     const mockPayload = { ...mockValidPayload, firstName: "J*e" };
 
     const response = await request(app)
-      .post("/api/auth/signup")
+      .post(ENDPOINT)
       .send(mockPayload);
 
     expect(response.status).toBe(422);
@@ -100,7 +102,7 @@ describe("Signup Controller", () => {
     const mockPayload = { ...mockValidPayload, lastName: "D*e" };
 
     const response = await request(app)
-      .post("/api/auth/signup")
+      .post(ENDPOINT)
       .send(mockPayload);
 
     expect(response.status).toBe(422);
@@ -117,7 +119,7 @@ describe("Signup Controller", () => {
     const mockPayload = { ...mockValidPayload, email: "johnDoe" };
 
     const response = await request(app)
-      .post("/api/auth/signup")
+      .post(ENDPOINT)
       .send(mockPayload);
 
     expect(response.status).toBe(422);
@@ -134,7 +136,7 @@ describe("Signup Controller", () => {
     const mockPayload = { ...mockValidPayload, password: "johnDoe" };
 
     const response = await request(app)
-      .post("/api/auth/signup")
+      .post(ENDPOINT)
       .send(mockPayload);
 
     expect(response.status).toBe(422);
@@ -154,7 +156,7 @@ describe("Signup Controller", () => {
     };
 
     const response = await request(app)
-      .post("/api/auth/signup")
+      .post(ENDPOINT)
       .send(mockPayload);
 
     expect(response.status).toBe(422);
@@ -175,7 +177,7 @@ describe("Signup Controller", () => {
     };
 
     const response = await request(app)
-      .post("/api/auth/signup")
+      .post(ENDPOINT)
       .send(mockPayload);
 
     expect(response.status).toBe(422);
@@ -192,7 +194,7 @@ describe("Signup Controller", () => {
     jest.spyOn(AuthService, "emailRecordExists").mockImplementation(() => true);
 
     const response = await request(app)
-      .post("/api/auth/signup")
+      .post(ENDPOINT)
       .send(mockValidPayload);
 
     expect(response.status).toBe(400);
@@ -212,7 +214,7 @@ describe("Signup Controller", () => {
     jest.spyOn(UserService, "createUser").mockImplementation(() => null);
 
     const response = await request(app)
-      .post("/api/auth/signup")
+      .post(ENDPOINT)
       .send(mockValidPayload);
 
     expect(response.status).toBe(500);
@@ -235,7 +237,7 @@ describe("Signup Controller", () => {
       .mockImplementation(() => null);
 
     const response = await request(app)
-      .post("/api/auth/signup")
+      .post(ENDPOINT)
       .send(mockValidPayload);
 
     expect(response.status).toBe(206);
@@ -261,7 +263,7 @@ describe("Signup Controller", () => {
       .mockImplementation(() => null);
 
     const response = await request(app)
-      .post("/api/auth/signup")
+      .post(ENDPOINT)
       .send(mockValidPayload);
 
     expect(response.status).toBe(206);
@@ -290,7 +292,7 @@ describe("Signup Controller", () => {
       .mockImplementation(() => ({ success: false }));
 
     const response = await request(app)
-      .post("/api/auth/signup")
+      .post(ENDPOINT)
       .send(mockValidPayload);
     expect(response.status).toBe(206);
     expect(response.body).toEqual({
@@ -317,7 +319,7 @@ describe("Signup Controller", () => {
       .spyOn(SendEmailService, "sendEmail")
       .mockImplementation(() => ({ success: true }));
     const response = await request(app)
-      .post("/api/auth/signup")
+      .post(ENDPOINT)
       .send(mockValidPayload);
 
     expect(response.status).toBe(201);
@@ -334,7 +336,7 @@ describe("Signup Controller", () => {
     });
 
     const response = await request(app)
-      .post("/api/auth/signup")
+      .post(ENDPOINT)
       .send(mockValidPayload);
 
     expect(response.status).toBe(500);

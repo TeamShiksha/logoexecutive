@@ -3,6 +3,6 @@ const router = express.Router();
 
 const addAdminController = require("../controllers/admin/add");
 
-router.put('/add', addAdminController);
+router.put("/add", addAdminController);
 
 module.exports = router;

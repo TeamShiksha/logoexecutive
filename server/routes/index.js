@@ -5,7 +5,7 @@ const contactUsRouter = require("./contactUs");
 const authRouter = require("./auth");
 const keyRouter = require("./key");
 const logoRouter = require("./logo");
-const adminRouter = require('./admin');
+const adminRouter = require("./admin");
 const cors = require("cors");
 
 const privateRouteCORS = {

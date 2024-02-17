@@ -1,12 +1,12 @@
 const express = require("express");
 const router = express.Router();
-const signinController = require("../controllers/user/signin.js");
-const signupController = require("../controllers/user/signup");
-const verifyTokenController = require("../controllers/user/verifyToken.js");
-const forgotPasswordController = require("../controllers/user/forgotPassword.js");
-const signoutController = require("../controllers/user/signout.js");
+const signinController = require("../controllers/auth/signin.js");
+const signupController = require("../controllers/auth/signup.js");
+const verifyTokenController = require("../controllers/auth/verifyToken.js");
+const forgotPasswordController = require("../controllers/auth/forgotPassword.js");
+const signoutController = require("../controllers/auth/signout.js");
 const resetPasswordController = require("../controllers/user/resetPassword.js");
-const getResetPasswordController = require("../controllers/user/getResetPassword.js");
+const getResetPasswordController = require("../controllers/auth/getResetPassword.js");
 
 router.post("/signin", signinController);
 router.post("/signup", signupController);

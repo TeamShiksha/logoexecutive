@@ -4,7 +4,7 @@ const jwt = require("jsonwebtoken");
 const cookieParser = require("cookie-parser");
 const auth = require("../../../middlewares/auth");
 const { mockUsers } = require("../../../utils/mocks/Users");
-const User = require("../../../models/Users");
+const { Users } = require("../../../models");
 
 const mockCtrl = jest.fn();
 
@@ -22,7 +22,7 @@ describe("Auth middleware", () => {
     mockCtrl.mockImplementation((req, res) => {
       return res.status(200).json(req.userData);
     });
-    const mockUser = new User(mockUsers[1]);
+    const mockUser = new Users(mockUsers[1]);
     const mockJWT = mockUser.generateJWT();
     const response = await request(app)
       .get("/")
@@ -56,7 +56,7 @@ describe("Auth middleware", () => {
       throw Error("test");
     });
 
-    const mockJWT = new User(mockUsers[1]).generateJWT();
+    const mockJWT = new Users(mockUsers[1]).generateJWT();
     const response = await request(app)
       .get("/")
       .set("Cookie", `jwt=${mockJWT}`);

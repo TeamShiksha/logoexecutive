@@ -9,25 +9,24 @@ const Subscriptions = require("../../../../models/Subscriptions");
 const Keys = require("../../../../models/Keys");
 
 const mockUserModel = new User(mockUsers[0]);
-
+const SubscriptionService = require("../../../../services/Subscriptions");
+const KeyService = require("../../../../services/Keys");
 const UserService = require("../../../../services/Users");
+
 jest.mock("../../../../services/Users", () => ({
   fetchUserFromId: jest.fn(),
 }));
-
-const SubscriptionService = require("../../../../services/Subscriptions");
 jest.mock("../../../../services/Subscriptions", () => ({
   fetchSubscriptionByuserid: jest.fn(),
 }));
-
-const KeyService = require("../../../../services/Keys");
 jest.mock("../../../../services/Keys", () => ({
   fetchKeysByuserid: jest.fn(),
 }));
 
-describe("GET - /user/data", () => {
-  const ENDPOINT = "/api/user/data";
+const ENDPOINT = "/api/user/data";
 
+describe("GET - /user/data", () => {
+  
   beforeAll(() => {
     process.env.JWT_SECRET = "my_secret";
     process.env.BASE_URL = "http://validcorsorigin.com";

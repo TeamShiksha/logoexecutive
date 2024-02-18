@@ -2,26 +2,25 @@ const request = require("supertest");
 const app = require("../../../../app");
 const { STATUS_CODES } = require("http");
 
+const UserTokenService = require("../../../../services/UserToken");
+const UserService = require("../../../../services/Users");
+const { mockUserTokens } = require("../../../../utils/mocks/UserToken");
+const UserToken = require("../../../../models/UserToken");
+const { mockUsers } = require("../../../../utils/mocks/Users");
+const User = require("../../../../models/Users");
+const mockUserModel = new User(mockUsers[0]);
+const mockUserTokenVerify = new UserToken(mockUserTokens[0]);
+
 jest.mock("../../../../services/UserToken", () => ({
   deleteUserToken: jest.fn().mockImplementation(
     () => new Promise((resolve) => resolve({ success: true })),
   ),
   fetchTokenFromId: jest.fn(),
 }));
-const UserTokenService = require("../../../../services/UserToken");
 jest.mock("../../../../services/Users", () => ({
   fetchUserFromId: jest.fn(),
   verifyUser: jest.fn(),
 }));
-const UserService = require("../../../../services/Users");
-
-const { mockUserTokens } = require("../../../../utils/mocks/UserToken");
-const UserToken = require("../../../../models/UserToken");
-const { mockUsers } = require("../../../../utils/mocks/Users");
-const User = require("../../../../models/Users");
-
-const mockUserModel = new User(mockUsers[0]);
-const mockUserTokenVerify = new UserToken(mockUserTokens[0]);
 
 const ENDPOINT = "/api/auth/verify";
 

@@ -10,6 +10,7 @@ jest.mock("../../../../services/Users", () => ({
 }));
 
 const mockUserModel = new User(mockUsers[1]);
+const ENDPOINT = "/api/user/delete";
 
 describe("deleteUserAccountController", () => {
   beforeAll(() => {
@@ -24,7 +25,7 @@ describe("deleteUserAccountController", () => {
 
   it("500 - CORS", async () => {
     const response = await request(app)
-      .post("/api/user/delete")
+      .post(ENDPOINT)
       .set("Origin", "http://invalidcorsorigin.com");
 
     expect(response.status).toBe(500);
@@ -41,7 +42,7 @@ describe("deleteUserAccountController", () => {
     const mockToken = mockUserModel.generateJWT();
 
     const response = await request(app)
-      .delete("/api/user/delete")
+      .delete(ENDPOINT)
       .set("cookie", `jwt=${mockToken}`);
 
     expect(response.statusCode).toBe(200);

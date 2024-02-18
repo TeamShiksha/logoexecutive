@@ -2,6 +2,16 @@ const request = require("supertest");
 const { STATUS_CODES } = require("http");
 const app = require("../../../../app");
 
+const UserService = require("../../../../services/Users");
+const SubscriptionService = require("../../../../services/Subscriptions");
+const SendEmailService = require("../../../../utils/sendEmail");
+const { mockUsers } = require("../../../../utils/mocks/Users");
+const { mockUserTokens } = require("../../../../utils/mocks/UserToken");
+const User = require("../../../../models/Users");
+const UserToken = require("../../../../models/UserToken");
+const mockUserModel = new User(mockUsers[0]);
+const mockUserTokenVerify = new UserToken(mockUserTokens[0]);
+
 const mockValidPayload = {
   firstName: "Joe",
   lastName: "Doe",
@@ -9,10 +19,6 @@ const mockValidPayload = {
   password: "good joe",
   confirmPassword: "good joe",
 };
-
-const UserService = require("../../../../services/Users");
-const SubscriptionService = require("../../../../services/Subscriptions");
-const SendEmailService = require("../../../../utils/sendEmail");
 
 jest.mock("../../../../services/Users", () => ({
   emailRecordExists: jest.fn(),
@@ -28,14 +34,6 @@ const UserTokenService = require("../../../../services/UserToken");
 jest.mock("../../../../utils/sendEmail", () => ({
   sendEmail: jest.fn(),
 }));
-
-const { mockUsers } = require("../../../../utils/mocks/Users");
-const { mockUserTokens } = require("../../../../utils/mocks/UserToken");
-const User = require("../../../../models/Users");
-const UserToken = require("../../../../models/UserToken");
-
-const mockUserModel = new User(mockUsers[0]);
-const mockUserTokenVerify = new UserToken(mockUserTokens[0]);
 
 const ENDPOINT = "/api/auth/signup";
 

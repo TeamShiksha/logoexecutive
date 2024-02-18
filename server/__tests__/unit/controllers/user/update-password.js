@@ -4,9 +4,10 @@ const { STATUS_CODES } = require("http");
 const User = require("../../../../models/Users");
 const { mockUsers } = require("../../../../utils/mocks/Users");
 
+const mockUserModel = new User(mockUsers[0]);
+const ENDPOINT = "/api/user/update-password";
+
 describe("POST - /user/update-password", () => {
-  const mockUserModel = new User(mockUsers[0]);
-  const ENDPOINT = "/api/user/update-password";
 
   beforeAll(() => {
     process.env.JWT_SECRET = "my_secret";

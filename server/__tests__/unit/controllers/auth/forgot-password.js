@@ -2,26 +2,23 @@ const request = require("supertest");
 const { STATUS_CODES } = require("http");
 const app = require("../../../../app");
 
-jest.mock("../../../../services/Users", () => ({
-  fetchUserByEmail: jest.fn(),
-}));
 const UserService = require("../../../../services/Users");
-
-jest.mock("../../../../services/UserToken", () => ({
-  createForgotToken: jest.fn(),
-}));
 const UserTokenService = require("../../../../services/UserToken");
-
-jest.mock("../../../../utils/sendEmail", () => ({
-  sendEmail: jest.fn(),
-}));
 const SendEmailService = require("../../../../utils/sendEmail");
-
 const UserToken = require("../../../../models/UserToken");
 const { mockUsers } = require("../../../../utils/mocks/Users");
 const User = require("../../../../models/Users");
 const { mockUserTokens } = require("../../../../utils/mocks/UserToken");
 
+jest.mock("../../../../services/UserToken", () => ({
+  createForgotToken: jest.fn(),
+}));
+jest.mock("../../../../services/Users", () => ({
+  fetchUserByEmail: jest.fn(),
+}));
+jest.mock("../../../../utils/sendEmail", () => ({
+  sendEmail: jest.fn(),
+}));
 
 const ENDPOINT = "/api/auth/forgot-password";
 const mockPayload = { email: "johndoe@example.com" };

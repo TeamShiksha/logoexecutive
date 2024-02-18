@@ -6,18 +6,17 @@ const { mockUsers } = require("../../../../utils/mocks/Users");
 const { STATUS_CODES } = require("http");
 const User = require("../../../../models/Users");
 
+const mockUserModel = new User(mockUsers[0]);
 
 jest.mock("../../../../services/Keys", () => ({
   isAPIKeyPresent: jest.fn()
 }));
-
 jest.mock("../../../../services/Images", () => ({
   fetchImageByCompanyFree: jest.fn()
 }));
 
-const mockUserModel = new User(mockUsers[0]);
 const mockCDNLink = "https://du4goljobz66l.cloudfront.net/meta.png?Expires=1706882374&Key-Pair-Id=K1CBTPCVEWK03E&Signature=l6ZpbQ-Z3WtJQ8inaDomAAAhcnnC0U2R~5Su7HWjC8fbbeQI4e4JBK368guQFYtc8rQAJMur446ozoXJE-9Hcj125NlZFSMqpeUsjam-nk9Wb2d8XGR6UjyxYLqGbhca8WYwl~h0CzHbe20PJXZbyuFPTufCrBTkIoh4o3Mg3MQDe2fPf5z6L9xLgVtbOrpJQoHZ0YlWTNvWJWutL-AFX8KbisrBaMi8zRa6h-mSfXuIoUyjziMRA5gPA0T8QSUJ8iLdbURwWxvRpRpM0Ohrjk06sWDSTkNzLL~pVNyL7LwO04mAHVK4XYgK5179xcZ-BjMMW1qJD3YF7G~xdcsXJw__";
-
+const ENDPOINT = "/api/business/logo";
 
 describe("getLogoController", () => {
 
@@ -47,7 +46,7 @@ describe("getLogoController", () => {
 
     const mockQuery = {"companyName": "coupang"};
     const response = await request(app)
-      .get("/api/business/logo")
+      .get(ENDPOINT)
       .set("cookie", `jwt=${mockToken}`)
       .query(mockQuery);
     expect(response.status).toBe(422);
@@ -72,7 +71,7 @@ describe("getLogoController", () => {
 
     const mockQuery = {"apiKey": "2B1B1BF5F9914BCD85A0B1122C71EDDB"};
     const response = await request(app)
-      .get("/api/business/logo")
+      .get(ENDPOINT)
       .set("cookie", `jwt=${mockToken}`)
       .query(mockQuery);
     expect(response.status).toBe(422);
@@ -89,7 +88,7 @@ describe("getLogoController", () => {
 
     const mockQuery = {"companyName": "coupang", "apiKey": "2B1B1BF5F9914BCD85A0B1122C71EDDC"};
     const response = await request(app)
-      .get("/api/business/logo")
+      .get(ENDPOINT)
       .set("cookie", `jwt=${mockToken}`)
       .query(mockQuery);
     expect(response.status).toBe(403);
@@ -110,7 +109,7 @@ describe("getLogoController", () => {
 
     const mockQuery = {"companyName": "infibeam", "apiKey": "2B1B1BF5F9914BCD85A0B1122C71EDDB"};
     const response = await request(app)
-      .get("/api/business/logo")
+      .get(ENDPOINT)
       .set("cookie", `jwt=${mockToken}`)
       .query(mockQuery);
     expect(response.status).toBe(404);
@@ -135,7 +134,7 @@ describe("getLogoController", () => {
 
     const mockQuery = {"companyName": "coupang", "apiKey": "2B1B1BF5F9914BCD85A0B1122C71EDDB"};
     const response = await request(app)
-      .get("/api/business/logo")
+      .get(ENDPOINT)
       .set("cookie", `jwt=${mockToken}`)
       .query(mockQuery);
     expect(response.status).toBe(200);

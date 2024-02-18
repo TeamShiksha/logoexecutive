@@ -9,13 +9,14 @@ jest.mock("../../../../services/ContactUs", () => ({
   createForm: jest.fn(),
 }));
 
-describe("contactUs controller", () =>{
-  const mockValidPayload = {
-    name: "first last",
-    email: "example@gmail.com",
-    message: "hasta la vista",
-  };
+const mockValidPayload = {
+  name: "first last",
+  email: "example@gmail.com",
+  message: "hasta la vista",
+};
 
+describe("contactUs controller", () =>{
+  
   beforeAll(() =>{
     process.env.BASE_URL = "https://example.com";
   });

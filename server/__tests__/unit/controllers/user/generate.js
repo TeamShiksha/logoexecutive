@@ -13,6 +13,8 @@ const mockUser = new User({
   createdAt: Timestamp.now().toDate(),
 });
 
+const ENDPOINT = "/api/user/generate";
+
 describe("generate-key controller", () =>{
   beforeAll(() => {
     process.env.JWT_SECRET = "my_secret";
@@ -25,7 +27,7 @@ describe("generate-key controller", () =>{
 
   it("500 - CORS", async () => {
     const response = await request(app)
-      .post("/api/user/generate")
+      .post(ENDPOINT)
       .set("Origin", "http://invalidcorsorigin.com");
 
     expect(response.status).toBe(500);
@@ -40,7 +42,7 @@ describe("generate-key controller", () =>{
 
     const mockToken = mockUser.generateJWT();
     const response = await request(app)
-      .post("/api/user/generate")
+      .post(ENDPOINT)
       .set("cookie", `jwt=${mockToken}`)
       .send({
         "payload": {

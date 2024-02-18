@@ -3,15 +3,15 @@ const { STATUS_CODES } = require("http");
 
 const app = require("../../../../app");
 const User = require("../../../../models/Users");
+const UserService = require("../../../../services/Users");
+const { mockUsers } = require("../../../../utils/mocks/Users");
 
 jest.mock("../../../../services/Users", () => ({
   fetchUserByEmail: jest.fn()
 }));
-const UserService = require("../../../../services/Users");
 jest.mock("../../../../services/Subscriptions", () => ({
   fetchSubscriptionByuserid: jest.fn(),
 }));
-const { mockUsers } = require("../../../../utils/mocks/Users");
 
 const ENDPOINT = "/api/auth/signin";
 

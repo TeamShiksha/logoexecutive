@@ -5,21 +5,21 @@ const UserToken = require("../../../../models/UserToken");
 const { mockUserTokens } = require("../../../../utils/mocks/UserToken");
 const User = require("../../../../models/Users");
 
+const UserTokenService = require("../../../../services/UserToken");
+const UserService = require("../../../../services/Users");
+
 jest.mock("../../../../services/UserToken", () => ({
   fetchTokenFromId: jest.fn(),
   deleteUserToken: jest.fn(),
 }));
-const UserTokenService = require("../../../../services/UserToken");
-const UserService = require("../../../../services/Users");
-
 jest.mock("../../../../services/Users", () => ({
   fetchUserFromId: jest.fn(),
   updatePasswordService: jest.fn(),
 }));
 
+const ENDPOINT = "/api/auth/reset-password";
 
 describe("GET /auth/reset-password", () => {
-  const ENDPOINT = "/api/auth/reset-password";
 
   beforeAll(() => {
     process.env.BASE_URL = "https://clienturl.com";

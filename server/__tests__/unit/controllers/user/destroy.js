@@ -12,6 +12,8 @@ const mockUser = new User({
   createdAt: Timestamp.now().toDate(),
 });
 
+const ENDPOINT = "/api/user/destroy";
+
 describe("generate-key controller", () =>{
   beforeAll(() => {
     process.env.JWT_SECRET = "my_secret";
@@ -25,7 +27,7 @@ describe("generate-key controller", () =>{
   it("Should return 422 response if keyId format is invalid", async () => {
     const mockToken = mockUser.generateJWT();
     const response = await request(app)
-      .delete("/api/user/destroy")
+      .delete(ENDPOINT)
       .query({ keyId: "90" }) 
       .set("cookie", `jwt=${mockToken}`);
     expect(response.status).toBe(422);
@@ -39,7 +41,7 @@ describe("generate-key controller", () =>{
   it("Should return 422 response if keyId format is invalid", async () => {
     const mockToken = mockUser.generateJWT();
     const response = await request(app)
-      .delete("/api/user/destroy")
+      .delete(ENDPOINT)
       .query({ keyId: 90 }) 
       .set("cookie", `jwt=${mockToken}`);
     expect(response.status).toBe(422);

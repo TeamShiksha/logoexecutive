@@ -329,7 +329,7 @@ describe("Signup Controller", () => {
   });
 
   it("Error 500 - Unexpected error", async () => {
-    jest.spyOn(AuthService, "emailRecordExists").mockImplementation(() => {
+    jest.spyOn(UserService, "emailRecordExists").mockImplementation(() => {
       throw new Error("Unexpected error");
     });
 

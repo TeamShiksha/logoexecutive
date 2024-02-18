@@ -10,18 +10,18 @@ const Keys = require("../../../../models/Keys");
 
 const mockUserModel = new User(mockUsers[0]);
 
-const UserService = require("../../../../services/User");
-jest.mock("../../../../services/User", () => ({
+const UserService = require("../../../../services/Users");
+jest.mock("../../../../services/Users", () => ({
   fetchUserFromId: jest.fn(),
 }));
 
-const SubscriptionService = require("../../../../services/Subscription");
-jest.mock("../../../../services/Subscription", () => ({
+const SubscriptionService = require("../../../../services/Subscriptions");
+jest.mock("../../../../services/Subscriptions", () => ({
   fetchSubscriptionByuserid: jest.fn(),
 }));
 
-const KeyService = require("../../../../services/Key");
-jest.mock("../../../../services/Key", () => ({
+const KeyService = require("../../../../services/Keys");
+jest.mock("../../../../services/Keys", () => ({
   fetchKeysByuserid: jest.fn(),
 }));
 

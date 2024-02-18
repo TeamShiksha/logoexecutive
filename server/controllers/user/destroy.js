@@ -1,5 +1,5 @@
 const Joi = require("joi");
-const { destroyKey } = require("../../services/Key");
+const { destroyKey } = require("../../services/Keys");
 
 const destroyKeyPayloadSchema = Joi.object({
   keyId: Joi.string().guid({ version: "uuidv4" }).required().messages({

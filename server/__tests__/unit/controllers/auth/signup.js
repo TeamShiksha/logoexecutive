@@ -1,6 +1,6 @@
 const request = require("supertest");
-const app = require("../../../../app");
 const { STATUS_CODES } = require("http");
+const app = require("../../../../app");
 
 const mockValidPayload = {
   firstName: "Joe",
@@ -10,26 +10,24 @@ const mockValidPayload = {
   confirmPassword: "good joe",
 };
 
-jest.mock("../../../../services/Auth", () => ({
+const UserService = require("../../../../services/Users");
+const SubscriptionService = require("../../../../services/Subscriptions");
+const SendEmailService = require("../../../../utils/sendEmail");
+
+jest.mock("../../../../services/Users", () => ({
   emailRecordExists: jest.fn(),
-}));
-const AuthService = require("../../../../services/Auth");
-jest.mock("../../../../services/User", () => ({
   createUser: jest.fn(),
 }));
-const UserService = require("../../../../services/User");
-jest.mock("../../../../services/Subscription", () => ({
+jest.mock("../../../../services/Subscriptions", () => ({
   createSubscription: jest.fn(),
 }));
-const SubscriptionService = require("../../../../services/Subscription");
 jest.mock("../../../../services/UserToken", () => ({
   createVerifyToken: jest.fn(),
 }));
 const UserTokenService = require("../../../../services/UserToken");
-jest.mock("../../../../services/sendEmail", () => ({
+jest.mock("../../../../utils/sendEmail", () => ({
   sendEmail: jest.fn(),
 }));
-const SendEmailService = require("../../../../services/sendEmail");
 
 const { mockUsers } = require("../../../../utils/mocks/Users");
 const { mockUserTokens } = require("../../../../utils/mocks/UserToken");
@@ -191,7 +189,7 @@ describe("Signup Controller", () => {
   });
 
   it("400 - when email already exists in db", async () => {
-    jest.spyOn(AuthService, "emailRecordExists").mockImplementation(() => true);
+    jest.spyOn(UserService, "emailRecordExists").mockImplementation(() => true);
 
     const response = await request(app)
       .post(ENDPOINT)
@@ -209,7 +207,7 @@ describe("Signup Controller", () => {
 
   it("500 - when failed to create user", async () => {
     jest
-      .spyOn(AuthService, "emailRecordExists")
+      .spyOn(UserService, "emailRecordExists")
       .mockImplementation(() => false);
     jest.spyOn(UserService, "createUser").mockImplementation(() => null);
 
@@ -227,7 +225,7 @@ describe("Signup Controller", () => {
 
   it("206 - when failed to create user subscription", async () => {
     jest
-      .spyOn(AuthService, "emailRecordExists")
+      .spyOn(UserService, "emailRecordExists")
       .mockImplementation(() => false);
     jest
       .spyOn(UserService, "createUser")
@@ -250,7 +248,7 @@ describe("Signup Controller", () => {
 
   it("206 - when failed to create user user token", async () => {
     jest
-      .spyOn(AuthService, "emailRecordExists")
+      .spyOn(UserService, "emailRecordExists")
       .mockImplementation(() => false);
     jest
       .spyOn(UserService, "createUser")
@@ -276,7 +274,7 @@ describe("Signup Controller", () => {
 
   it("206 - when failed to send verification email", async () => {
     jest
-      .spyOn(AuthService, "emailRecordExists")
+      .spyOn(UserService, "emailRecordExists")
       .mockImplementation(() => false);
     jest
       .spyOn(UserService, "createUser")
@@ -304,7 +302,7 @@ describe("Signup Controller", () => {
 
   it("Success 201", async () => {
     jest
-      .spyOn(AuthService, "emailRecordExists")
+      .spyOn(UserService, "emailRecordExists")
       .mockImplementation(() => false);
     jest
       .spyOn(UserService, "createUser")

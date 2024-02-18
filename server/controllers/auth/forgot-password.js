@@ -1,6 +1,6 @@
 const Joi = require("joi");
-const { fetchUserByEmail } = require("../../services/User");
-const { sendEmail } = require("../../services/sendEmail");
+const { fetchUserByEmail } = require("../../services/Users");
+const { sendEmail } = require("../../utils/sendEmail");
 const { createForgotToken } = require("../../services/UserToken");
 const { STATUS_CODES } = require("http");
 

@@ -4,7 +4,7 @@ const { STATUS_CODES } = require("http");
 const {
   fetchUserByEmail,
   updatePasswordService,
-} = require("../../services/User");
+} = require("../../services/Users");
 
 
 const updatePasswordPayloadSchema = Joi.object().keys({

@@ -25,13 +25,10 @@ async function createKey(data) {
 async function fetchKeysByuserid(userId) {
   try {
     const keyRef = await KeyCollection.where("userId", "==", userId).get();
-
     if (keyRef.empty) return null;
-
     const keys = keyRef.docs.map(doc => new Key({
       ...doc.data(),
     }));
-
     return keys;
   } catch (err) {
     console.log(err);
@@ -42,10 +39,8 @@ async function fetchKeysByuserid(userId) {
 async function isAPIKeyPresent(apiKey) {
   try {
     const keyRef = await KeyCollection.where("key", "==", apiKey).get();
-
     if (keyRef.empty) return false;
     return true;
-    
   } catch (err) {
     console.log(err);
     throw err;

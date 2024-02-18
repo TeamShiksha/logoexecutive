@@ -3,7 +3,7 @@ const {
   fetchTokenFromId,
   deleteUserToken,
 } = require("../../services/UserToken");
-const { verifyUser, fetchUserFromId } = require("../../services/User");
+const { verifyUser, fetchUserFromId } = require("../../services/Users");
 
 async function verifyTokenController(req, res, next) {
   try {

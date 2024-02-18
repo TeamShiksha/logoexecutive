@@ -1,5 +1,5 @@
 const Joi = require("joi");
-const { fetchUserByEmail } = require("../../services/User");
+const { fetchUserByEmail } = require("../../services/Users");
 const { STATUS_CODES } = require("http");
 const dayjs = require("dayjs");
 

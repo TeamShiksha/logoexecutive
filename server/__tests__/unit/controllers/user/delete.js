@@ -5,7 +5,7 @@ const User = require("../../../../models/Users");
 const { mockUsers } = require("../../../../utils/mocks/Users");
 const deleteUserAccountController = require("../../../../controllers/user/delete");
 
-jest.mock("../../../../services//User", () => ({
+jest.mock("../../../../services/Users", () => ({
   deleteUserAccount: jest.fn(),
 }));
 
@@ -36,7 +36,7 @@ describe("deleteUserAccountController", () => {
   });
 
   it("should return 200 when user data is deleted successfully", async () => {
-    require("../../../../services/User").deleteUserAccount.mockResolvedValue();
+    require("../../../../services/Users").deleteUserAccount.mockResolvedValue();
 
     const mockToken = mockUserModel.generateJWT();
 
@@ -55,7 +55,7 @@ describe("deleteUserAccountController", () => {
   it("should call next with an error when deleteUserAccount throws an error", async () => {
   
     const mockError = new Error("Mock error");
-    require("../../../../services/User").deleteUserAccount.mockRejectedValue(mockError);
+    require("../../../../services/Users").deleteUserAccount.mockRejectedValue(mockError);
   
     const mockReq = {
       userData: {

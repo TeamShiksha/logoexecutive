@@ -3,11 +3,11 @@ const app = require("../../../../app");
 const { mockUsers } = require("../../../../utils/mocks/Users");
 const { STATUS_CODES } = require("http");
 
-const UsersService = require("../../../../services/User");
+const UsersService = require("../../../../services/Users");
 const UserTokenService = require("../../../../services/UserToken");
 const User = require("../../../../models/Users");
 
-jest.mock("../../../../services/User", () => ({
+jest.mock("../../../../services/Users", () => ({
   fetchUserByEmail: jest.fn(),
   updateUser: jest.fn(),
 }));

@@ -4,11 +4,11 @@ const { STATUS_CODES } = require("http");
 const app = require("../../../../app");
 const User = require("../../../../models/Users");
 
-jest.mock("../../../../services/User", () => ({
+jest.mock("../../../../services/Users", () => ({
   fetchUserByEmail: jest.fn()
 }));
-const UserService = require("../../../../services/User");
-jest.mock("../../../../services/Subscription", () => ({
+const UserService = require("../../../../services/Users");
+jest.mock("../../../../services/Subscriptions", () => ({
   fetchSubscriptionByuserid: jest.fn(),
 }));
 const { mockUsers } = require("../../../../utils/mocks/Users");

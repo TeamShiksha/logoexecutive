@@ -2,20 +2,20 @@ const request = require("supertest");
 const { STATUS_CODES } = require("http");
 const app = require("../../../../app");
 
-jest.mock("../../../../services/User", () => ({
+jest.mock("../../../../services/Users", () => ({
   fetchUserByEmail: jest.fn(),
 }));
-const UserService = require("../../../../services/User");
+const UserService = require("../../../../services/Users");
 
 jest.mock("../../../../services/UserToken", () => ({
   createForgotToken: jest.fn(),
 }));
 const UserTokenService = require("../../../../services/UserToken");
 
-jest.mock("../../../../services/sendEmail", () => ({
+jest.mock("../../../../utils/sendEmail", () => ({
   sendEmail: jest.fn(),
 }));
-const SendEmailService = require("../../../../services/sendEmail");
+const SendEmailService = require("../../../../utils/sendEmail");
 
 const UserToken = require("../../../../models/UserToken");
 const { mockUsers } = require("../../../../utils/mocks/Users");

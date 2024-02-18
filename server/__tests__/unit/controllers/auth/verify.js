@@ -9,11 +9,11 @@ jest.mock("../../../../services/UserToken", () => ({
   fetchTokenFromId: jest.fn(),
 }));
 const UserTokenService = require("../../../../services/UserToken");
-jest.mock("../../../../services/User", () => ({
+jest.mock("../../../../services/Users", () => ({
   fetchUserFromId: jest.fn(),
   verifyUser: jest.fn(),
 }));
-const UserService = require("../../../../services/User");
+const UserService = require("../../../../services/Users");
 
 const { mockUserTokens } = require("../../../../utils/mocks/UserToken");
 const UserToken = require("../../../../models/UserToken");

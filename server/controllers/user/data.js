@@ -1,7 +1,7 @@
 const { STATUS_CODES } = require("http");
-const { fetchUserFromId } = require("../../services/User");
-const { fetchSubscriptionByuserid } = require("../../services/Subscription");
-const { fetchKeysByuserid } = require("../../services/Key");
+const { fetchUserFromId } = require("../../services/Users");
+const { fetchSubscriptionByuserid } = require("../../services/Subscriptions");
+const { fetchKeysByuserid } = require("../../services/Keys");
 
 async function getUserDataController(req, res, next) {
   try {

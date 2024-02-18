@@ -1,9 +1,9 @@
-const { mockUsers } = require("../../../../utils/mocks/Users.js");
+const { mockUsers } = require("../../../../utils/mocks/Users");
 
 const request = require("supertest");
 const { STATUS_CODES } = require("http");
 const app = require("../../../../app");
-const User = require("../../../../models/Users.js");
+const User = require("../../../../models/Users");
 
 const ENDPOINT = "/api/auth/signout";
 

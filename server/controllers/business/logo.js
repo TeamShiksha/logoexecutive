@@ -1,5 +1,5 @@
-const { isAPIKeyPresent } = require("../../services/Key");
-const { fetchImageByCompanyFree } = require("../../services/Logo");
+const { isAPIKeyPresent } = require("../../services/Keys");
+const { fetchImageByCompanyFree } = require("../../services/Images");
 const { STATUS_CODES } = require("http");
 const Joi = require("joi");
 

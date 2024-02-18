@@ -1,7 +1,7 @@
 const request = require("supertest");
 const { STATUS_CODES } = require("http");
 const app = require("../../../../app");
-const User = require("../../../../models/Users");
+const { Users } = require("../../../../models");
 const { mockUsers } = require("../../../../utils/mocks/Users");
 
 const ENDPOINT = "/api/auth/signout";
@@ -41,7 +41,7 @@ describe("/api/signout", () => {
   });
 
   it("205 - Successful signout", async () => {
-    const mockJWT = new User(mockUsers[0]).generateJWT();
+    const mockJWT = new Users(mockUsers[0]).generateJWT();
     const response = await request(app).get(ENDPOINT).set("Cookie", `jwt=${mockJWT}`);
 
     expect(response.status).toBe(205);

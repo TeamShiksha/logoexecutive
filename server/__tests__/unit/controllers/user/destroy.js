@@ -1,9 +1,9 @@
 const request = require("supertest");
 const app = require("../../../../app");
-const User = require("../../../../models/Users");
+const { Users } = require("../../../../models");
 const { Timestamp } = require("firebase-admin/firestore");
 
-const mockUser = new User({
+const mockUser = new Users({
   userId: "1",
   email: "john@email.com",
   firstName: "firstName",
@@ -11,7 +11,6 @@ const mockUser = new User({
   updatedAt: Timestamp.now().toDate(),
   createdAt: Timestamp.now().toDate(),
 });
-
 const ENDPOINT = "/api/user/destroy";
 
 describe("generate-key controller", () =>{

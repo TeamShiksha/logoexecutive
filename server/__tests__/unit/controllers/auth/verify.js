@@ -2,13 +2,11 @@ const request = require("supertest");
 const app = require("../../../../app");
 const { STATUS_CODES } = require("http");
 
-const UserTokenService = require("../../../../services/UserToken");
-const UserService = require("../../../../services/Users");
+const { UserTokenService, UserService } = require("../../../../services");
 const { mockUserTokens } = require("../../../../utils/mocks/UserToken");
-const UserToken = require("../../../../models/UserToken");
+const {UserToken, Users} = require("../../../../models");
 const { mockUsers } = require("../../../../utils/mocks/Users");
-const User = require("../../../../models/Users");
-const mockUserModel = new User(mockUsers[0]);
+const mockUserModel = new Users(mockUsers[0]);
 const mockUserTokenVerify = new UserToken(mockUserTokens[0]);
 
 jest.mock("../../../../services/UserToken", () => ({

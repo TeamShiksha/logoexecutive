@@ -1,9 +1,8 @@
 const request = require("supertest");
-const app = require("../../../../app");
-const KeyService = require("../../../../services/Keys");
-const LogoService = require("../../../../services/Images");
-const { mockUsers } = require("../../../../utils/mocks/Users");
 const { STATUS_CODES } = require("http");
+const app = require("../../../../app");
+const { KeyService, ImageService } = require("../../../../services");
+const { mockUsers } = require("../../../../utils/mocks/Users");
 const User = require("../../../../models/Users");
 
 const mockUserModel = new User(mockUsers[0]);
@@ -41,7 +40,7 @@ describe("getLogoController", () => {
       .mockImplementation(() => true);
 
     jest
-      .spyOn(LogoService, "fetchImageByCompanyFree")
+      .spyOn(ImageService, "fetchImageByCompanyFree")
       .mockImplementation(() => mockCDNLink);
 
     const mockQuery = {"companyName": "coupang"};
@@ -66,7 +65,7 @@ describe("getLogoController", () => {
       .mockImplementation(() => true);
 
     jest
-      .spyOn(LogoService, "fetchImageByCompanyFree")
+      .spyOn(ImageService, "fetchImageByCompanyFree")
       .mockImplementation(() => mockCDNLink);
 
     const mockQuery = {"apiKey": "2B1B1BF5F9914BCD85A0B1122C71EDDB"};
@@ -129,7 +128,7 @@ describe("getLogoController", () => {
       .mockImplementation(() => true);
 
     jest
-      .spyOn(LogoService, "fetchImageByCompanyFree")
+      .spyOn(ImageService, "fetchImageByCompanyFree")
       .mockImplementation(() => mockCDNLink);
 
     const mockQuery = {"companyName": "coupang", "apiKey": "2B1B1BF5F9914BCD85A0B1122C71EDDB"};

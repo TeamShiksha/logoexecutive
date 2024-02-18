@@ -2,8 +2,6 @@ const bcrypt = require("bcrypt");
 const { UserType } = require("../constants");
 const { Timestamp } = require("firebase-admin/firestore");
 
-// 0 - Not verified user
-// 1 - Verified user
 const mockUsers = [
   {
     userId: "0c1266ab-8ad2-4ab9-b56c-e1db6982f120",

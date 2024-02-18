@@ -3,9 +3,8 @@ const app = require("../../../../app");
 const { mockUsers } = require("../../../../utils/mocks/Users");
 const { STATUS_CODES } = require("http");
 
-const UsersService = require("../../../../services/Users");
-const UserTokenService = require("../../../../services/UserToken");
-const User = require("../../../../models/Users");
+const { UserService, UserTokenService } = require("../../../../services");
+const { Users } = require("../../../../models");
 
 jest.mock("../../../../services/Users", () => ({
   fetchUserByEmail: jest.fn(),
@@ -15,7 +14,7 @@ jest.mock("../../../../services/UserToken", () => ({
   createVerifyToken: jest.fn(),
 }));
 
-const mockUserModel = new User(mockUsers[1]);
+const mockUserModel = new Users(mockUsers[1]);
 const ENDPOINT = "/api/user/update-profile";
 
 describe("UpdateProfile Controller", () => {
@@ -141,7 +140,7 @@ describe("UpdateProfile Controller", () => {
 
     it("should return 404 when user does not exist", async () => {
       jest
-        .spyOn(UsersService, "fetchUserByEmail")
+        .spyOn(UserService, "fetchUserByEmail")
         .mockImplementation(() => null);
 
       const mockToken = mockUserModel.generateJWT();
@@ -165,7 +164,7 @@ describe("UpdateProfile Controller", () => {
 
     it("should return 500 when it fails to create a verification token", async () => {
       jest
-        .spyOn(UsersService, "fetchUserByEmail")
+        .spyOn(UserService, "fetchUserByEmail")
         .mockImplementation(() => mockUserModel);
       jest
         .spyOn(UserTokenService, "createVerifyToken")

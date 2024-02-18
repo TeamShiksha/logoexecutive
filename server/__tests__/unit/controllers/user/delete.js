@@ -1,7 +1,7 @@
 const request = require("supertest");
 const app = require("../../../../app");
 const { STATUS_CODES } = require("http");
-const User = require("../../../../models/Users");
+const { Users } = require("../../../../models");
 const { mockUsers } = require("../../../../utils/mocks/Users");
 const deleteUserAccountController = require("../../../../controllers/user/delete");
 
@@ -9,7 +9,7 @@ jest.mock("../../../../services/Users", () => ({
   deleteUserAccount: jest.fn(),
 }));
 
-const mockUserModel = new User(mockUsers[1]);
+const mockUserModel = new Users(mockUsers[1]);
 const ENDPOINT = "/api/user/delete";
 
 describe("deleteUserAccountController", () => {

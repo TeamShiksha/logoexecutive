@@ -1,7 +1,7 @@
 const request = require("supertest");
 const app = require("../../../../app");
 const { STATUS_CODES } = require("http");
-const ContactUsService = require("../../../../services/ContactUs");
+const { ContactUsService } = require("../../../../services");
 const { mockContactUsForm } = require("../../../../utils/mocks/contactUs");
 
 jest.mock("../../../../services/ContactUs", () => ({

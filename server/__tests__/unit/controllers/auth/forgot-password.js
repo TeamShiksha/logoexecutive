@@ -2,12 +2,10 @@ const request = require("supertest");
 const { STATUS_CODES } = require("http");
 const app = require("../../../../app");
 
-const UserService = require("../../../../services/Users");
-const UserTokenService = require("../../../../services/UserToken");
+const { UserTokenService, UserService } = require("../../../../services");
 const SendEmailService = require("../../../../utils/sendEmail");
-const UserToken = require("../../../../models/UserToken");
+const { Users, UserToken} = require("../../../../models");
 const { mockUsers } = require("../../../../utils/mocks/Users");
-const User = require("../../../../models/Users");
 const { mockUserTokens } = require("../../../../utils/mocks/UserToken");
 
 jest.mock("../../../../services/UserToken", () => ({
@@ -109,7 +107,7 @@ describe("/forgot-password", () => {
   });
 
   it("503 - unable to create forgot token", async () => {
-    fetchUserByEmailSpy.mockImplementation(() => new User(mockUsers[1]));
+    fetchUserByEmailSpy.mockImplementation(() => new Users(mockUsers[1]));
     createForgotTokenSpy.mockImplementation(() => null);
 
     const response = await request(app)
@@ -125,7 +123,7 @@ describe("/forgot-password", () => {
   });
 
   it("500 - unable to send forgot token via mail", async () => {
-    fetchUserByEmailSpy.mockImplementation(() => new User(mockUsers[1]));
+    fetchUserByEmailSpy.mockImplementation(() => new Users(mockUsers[1]));
     createForgotTokenSpy.mockImplementation(() => new UserToken(mockUserTokens[2]));
     SendEmailSpy.mockImplementation(() => ({ success: false }));
 
@@ -142,7 +140,7 @@ describe("/forgot-password", () => {
   });
 
   it("200 - success", async () => {
-    fetchUserByEmailSpy.mockImplementation(() => new User(mockUsers[1]));
+    fetchUserByEmailSpy.mockImplementation(() => new Users(mockUsers[1]));
     createForgotTokenSpy.mockImplementation(() =>new UserToken(mockUserTokens[2]));
     SendEmailSpy.mockImplementation(() => ({ success: true }));
 

@@ -1,10 +1,10 @@
 const request = require("supertest");
 const app = require("../../../../app");
 const { STATUS_CODES } = require("http");
-const User = require("../../../../models/Users");
+const { Users } = require("../../../../models");
 const { mockUsers } = require("../../../../utils/mocks/Users");
 
-const mockUserModel = new User(mockUsers[0]);
+const mockUserModel = new Users(mockUsers[0]);
 const ENDPOINT = "/api/user/update-password";
 
 describe("POST - /user/update-password", () => {

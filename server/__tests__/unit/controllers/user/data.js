@@ -1,17 +1,14 @@
 const request = require("supertest");
 const app = require("../../../../app");
-const User = require("../../../../models/Users");
 const { STATUS_CODES } = require("http");
+
+const { Users,Subscriptions, Keys } = require("../../../../models");
 const { mockUsers } = require("../../../../utils/mocks/Users");
 const { mockSubscriptions } = require("../../../../utils/mocks/Subscriptions");
 const { mockKeys } = require("../../../../utils/mocks/Keys");
-const Subscriptions = require("../../../../models/Subscriptions");
-const Keys = require("../../../../models/Keys");
 
-const mockUserModel = new User(mockUsers[0]);
-const SubscriptionService = require("../../../../services/Subscriptions");
-const KeyService = require("../../../../services/Keys");
-const UserService = require("../../../../services/Users");
+const mockUserModel = new Users(mockUsers[0]);
+const { SubscriptionService, KeyService, UserService } = require("../../../../services");
 
 jest.mock("../../../../services/Users", () => ({
   fetchUserFromId: jest.fn(),

@@ -2,14 +2,12 @@ const request = require("supertest");
 const { STATUS_CODES } = require("http");
 const app = require("../../../../app");
 
-const UserService = require("../../../../services/Users");
-const SubscriptionService = require("../../../../services/Subscriptions");
+const { UserService, SubscriptionService } = require("../../../../services");
 const SendEmailService = require("../../../../utils/sendEmail");
 const { mockUsers } = require("../../../../utils/mocks/Users");
 const { mockUserTokens } = require("../../../../utils/mocks/UserToken");
-const User = require("../../../../models/Users");
-const UserToken = require("../../../../models/UserToken");
-const mockUserModel = new User(mockUsers[0]);
+const { Users, UserToken} = require("../../../../models");
+const mockUserModel = new Users(mockUsers[0]);
 const mockUserTokenVerify = new UserToken(mockUserTokens[0]);
 
 const mockValidPayload = {

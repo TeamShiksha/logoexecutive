@@ -1,12 +1,9 @@
 const request = require("supertest");
 const app = require("../../../../app");
 const { STATUS_CODES } = require("http");
-const UserToken = require("../../../../models/UserToken");
+const { Users, UserToken} = require("../../../../models");
 const { mockUserTokens } = require("../../../../utils/mocks/UserToken");
-const User = require("../../../../models/Users");
-
-const UserTokenService = require("../../../../services/UserToken");
-const UserService = require("../../../../services/Users");
+const { UserTokenService, UserService } = require("../../../../services");
 
 jest.mock("../../../../services/UserToken", () => ({
   fetchTokenFromId: jest.fn(),
@@ -125,7 +122,7 @@ describe("PATCH /auth/reset-password", () => {
     token: mockUserTokens[2].token,
   };
 
-  const mockUserModel = new User(mockUserTokens[0]);
+  const mockUserModel = new Users(mockUserTokens[0]);
 
   beforeAll(() => {
     process.env.BASE_URL = "https://example.com";

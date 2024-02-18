@@ -2,8 +2,8 @@ const request = require("supertest");
 const { STATUS_CODES } = require("http");
 
 const app = require("../../../../app");
-const User = require("../../../../models/Users");
-const UserService = require("../../../../services/Users");
+const { Users } = require("../../../../models");
+const { UserService } = require("../../../../services");
 const { mockUsers } = require("../../../../utils/mocks/Users");
 
 jest.mock("../../../../services/Users", () => ({
@@ -122,7 +122,7 @@ describe("Signin Controller", () => {
   });
 
   it("401 - User not verified", async () => {
-    jest.spyOn(UserService, "fetchUserByEmail").mockImplementation(() => new User(mockUsers[0]));
+    jest.spyOn(UserService, "fetchUserByEmail").mockImplementation(() => new Users(mockUsers[0]));
 
     const response = await request(app).post(ENDPOINT).send({
       email: "john.doe@example.com",
@@ -138,7 +138,7 @@ describe("Signin Controller", () => {
   });
 
   it("401 - Email or Password incorrect (password does not match)", async () => {
-    jest.spyOn(UserService, "fetchUserByEmail").mockImplementation(() => new User(mockUsers[1]));
+    jest.spyOn(UserService, "fetchUserByEmail").mockImplementation(() => new Users(mockUsers[1]));
 
     const response = await request(app).post(ENDPOINT).send({
       email: "john.doe@example.com",
@@ -170,7 +170,7 @@ describe("Signin Controller", () => {
   });
 
   it("200 - Success path", async () => {
-    jest.spyOn(UserService, "fetchUserByEmail").mockImplementation(() => new User(mockUsers[1]));
+    jest.spyOn(UserService, "fetchUserByEmail").mockImplementation(() => new Users(mockUsers[1]));
 
     const response = await request(app).post(ENDPOINT).send({
       email: "johndoe@example.com",

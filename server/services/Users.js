@@ -1,5 +1,5 @@
 const { Timestamp } = require("firebase-admin/firestore");
-const User = require("../models/Users");
+const { Users } = require("../models");
 const { UserCollection } = require("../utils/firestore");
 const { KeyCollection } = require("../utils/firestore");
 const { SubscriptionCollection } = require("../utils/firestore");
@@ -26,7 +26,7 @@ async function emailRecordExists(email) {
 async function fetchUsers() {
   try {
     const usersRef = await UserCollection.get();
-    const users = usersRef.docs.map((doc) => new User({ ...doc.data(), id: doc.id }));
+    const users = usersRef.docs.map((doc) => new Users({ ...doc.data(), id: doc.id }));
     return {
       data: users,
     };
@@ -45,7 +45,7 @@ async function fetchUserByEmail(email) {
     const userRef = await UserCollection.where("email", "==", email)
       .limit(1).get();
     if (userRef.empty) return null;
-    const user = new User({
+    const user = new Users({
       ...userRef.docs[0].data(),
       userRef: userRef.docs[0].ref,
     });
@@ -67,7 +67,7 @@ async function fetchUserByEmail(email) {
 async function createUser(user) {
   try {
     const { email, firstName, lastName, password } = user;
-    const newUser = await User.NewUser({
+    const newUser = await Users.NewUser({
       email,
       firstName,
       lastName,
@@ -76,7 +76,7 @@ async function createUser(user) {
     if (!newUser) return null;
     const result = await UserCollection.doc(newUser.userId).set({ ...newUser, isVerified: false });
     if (!result) return null;
-    const createdUser = new User(newUser);
+    const createdUser = new Users(newUser);
     return createdUser;
   } catch (err) {
     console.log(err);
@@ -95,7 +95,7 @@ async function fetchUserFromId(userId) {
       .get();
     if (userSnapshot.empty) return null;
     const userDoc = userSnapshot.docs[0];
-    const user = new User({ ...userDoc.data(), userRef: userDoc.ref });
+    const user = new Users({ ...userDoc.data(), userRef: userDoc.ref });
     user.createdAt = user.createdAt.toDate();
     user.updatedAt = user.updatedAt.toDate();
     return user;

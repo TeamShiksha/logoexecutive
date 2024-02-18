@@ -52,6 +52,7 @@ const patchSchema = Joi.object().keys({
   confirmPassword: Joi.string().trim().min(8).max(30).required(),
   token: Joi.string().trim().required(),
 });
+
 const patch = async (req, res, next) => {
   try {
     const result = req.body;

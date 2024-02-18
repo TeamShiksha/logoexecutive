@@ -1,6 +1,6 @@
 const { Timestamp } = require("firebase-admin/firestore");
 const { ContactUsCollection } = require("../utils/firestore");
-const ContactUs = require("../models/ContactUs");
+const { ContactUs } = require("../models");
 
 /**
  * formExists - Checks if form exists in database by searching for provided email

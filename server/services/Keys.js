@@ -1,4 +1,4 @@
-const Key = require("../models/Keys");
+const { Keys } = require("../models");
 const { KeyCollection } = require("../utils/firestore");
 const {Timestamp} = require("firebase-admin/firestore");
 
@@ -14,7 +14,7 @@ async function createKey(data) {
       updatedAt: Timestamp.now(),
     };
     const result = await KeyCollection.doc(keyData.keyId).set(keyData);
-    const UserKey = new Key(keyData);
+    const UserKey = new Keys(keyData);
     return UserKey;
   } catch (err) {
     console.log(err);
@@ -26,7 +26,7 @@ async function fetchKeysByuserid(userId) {
   try {
     const keyRef = await KeyCollection.where("userId", "==", userId).get();
     if (keyRef.empty) return null;
-    const keys = keyRef.docs.map(doc => new Key({
+    const keys = keyRef.docs.map(doc => new Keys({
       ...doc.data(),
     }));
     return keys;

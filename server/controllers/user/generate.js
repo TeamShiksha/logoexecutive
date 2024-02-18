@@ -1,6 +1,6 @@
-const { createKey, fetchKeysByuserid } = require("../../services/Keys");
-const { fetchSubscriptionByuserid } = require("../../services/Subscriptions");
 const Joi = require("joi");
+const { createKey, fetchKeysByuserid,
+  fetchSubscriptionByuserid } = require("../../services");
 
 const generateKeyPayloadSchema = Joi.object().keys({
   keyDescription: Joi.string()

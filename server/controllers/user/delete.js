@@ -1,5 +1,6 @@
-const { deleteUserAccount } = require("../../services/Users");
 const { STATUS_CODES } = require("http");
+const { deleteUserAccount } = require("../../services");
+
 
 async function deleteUserAccountController(req, res, next) {
   const { userId } = req.userData;

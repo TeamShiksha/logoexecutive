@@ -1,9 +1,6 @@
 const { STATUS_CODES } = require("http");
-const {
-  fetchTokenFromId,
-  deleteUserToken,
-} = require("../../services/UserToken");
-const { verifyUser, fetchUserFromId } = require("../../services/Users");
+const { verifyUser, fetchUserFromId, 
+  fetchTokenFromId, deleteUserToken } = require("../../services");
 
 async function verifyTokenController(req, res, next) {
   try {

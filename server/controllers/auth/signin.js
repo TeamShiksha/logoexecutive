@@ -1,7 +1,7 @@
 const Joi = require("joi");
-const { fetchUserByEmail } = require("../../services/Users");
-const { STATUS_CODES } = require("http");
 const dayjs = require("dayjs");
+const { STATUS_CODES } = require("http");
+const { fetchUserByEmail } = require("../../services");
 
 const signinPayloadSchema = Joi.object().keys({
   email: Joi.string()

@@ -1,8 +1,7 @@
 const Joi = require("joi");
-const { sendEmail } = require("../../utils/sendEmail");
-const { fetchUserByEmail, updateUser } = require("../../services/Users");
-const { createVerifyToken } = require("../../services/UserToken");
 const { STATUS_CODES } = require("http");
+const { fetchUserByEmail, updateUser, createVerifyToken } = require("../../services");
+const { sendEmail } = require("../../utils/sendEmail");
 
 const changeNameEmailSchema = Joi.object().keys({
   firstName: Joi.string()

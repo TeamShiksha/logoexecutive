@@ -1,9 +1,9 @@
 const Joi = require("joi");
-const { STATUS_CODES } = require("http");
-const { fetchTokenFromId, deleteUserToken } = require("../../services/UserToken");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
-const { updatePasswordService, fetchUserFromId } = require("../../services/Users");
+const { STATUS_CODES } = require("http");
+const { fetchTokenFromId, deleteUserToken, 
+  updatePasswordService, fetchUserFromId } = require("../../services");
 
 const payloadSchema = Joi.object().keys({
   token: Joi.string().required()

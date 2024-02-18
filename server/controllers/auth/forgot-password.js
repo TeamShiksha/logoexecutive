@@ -1,8 +1,7 @@
 const Joi = require("joi");
-const { fetchUserByEmail } = require("../../services/Users");
-const { sendEmail } = require("../../utils/sendEmail");
-const { createForgotToken } = require("../../services/UserToken");
 const { STATUS_CODES } = require("http");
+const { fetchUserByEmail, createForgotToken } = require("../../services");
+const { sendEmail } = require("../../utils/sendEmail");
 
 const forgotPasswordSchema = Joi.object().keys({
   email: Joi.string()

@@ -1,6 +1,6 @@
 const Joi = require("joi");
-const {formExists, createForm} = require("../../services/ContactUs");
 const { STATUS_CODES } = require("http");
+const {formExists, createForm} = require("../../services");
 
 const contactUsPayloadSchema = Joi.object().keys({
   name: Joi.string()

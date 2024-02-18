@@ -14,7 +14,7 @@
 		"lint-fix:server": "yarn workspace server lint:fix",
 		"lint-fix:client": "yarn workspace client lint:fix",
 		"lint-fix": "concurrently \"yarn workspace server lint:fix\" \"yarn workspace client lint:fix\" \"yarn workspace client format\"",
-		"test:server": "yarn workspace server test",
+		"test:server": "yarn workspace server test --silent",
 		"test:client": "yarn workspace client test"
 	},
 	"devDependencies": {

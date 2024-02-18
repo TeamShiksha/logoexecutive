@@ -1,8 +1,8 @@
-const UserToken = require("../models/UserToken");
+const dayjs = require("dayjs");
+const { UserToken } = require("../models");
 const { Timestamp } = require("firebase-admin/firestore");
 const { UserTokenTypes } = require("../utils/constants");
 const { UserTokenCollection } = require("../utils/firestore");
-const dayjs = require("dayjs");
 
 /**
  * Creates user token in "UserTokens" collection

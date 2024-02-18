@@ -1,13 +1,17 @@
 const router = require("express").Router();
-const { getUser, updatePassword } = require("../controllers/users");
 const authMiddleware = require("../middlewares/auth");
-const { updateProfileController } = require("../controllers/updateProfile");
-const {deleteUserAccountController} = require("../controllers/deleteUserAccount.js");
+const updatePasswordController  = require("../controllers/user/update-password.js");
+const getUserDataController = require("../controllers/user/data.js");
+const generateKeyController = require("../controllers/user/generate");
+const destroyKeyController = require("../controllers/user/destroy");
+const updateProfileController = require("../controllers/user/update-profile.js");
+const deleteUserAccountController = require("../controllers/user/delete.js");
 
-router.get("/user", authMiddleware, getUser);
-router.post("/update-password", authMiddleware, updatePassword);
-router.patch("/update", authMiddleware, updateProfileController);
+router.get("/data", authMiddleware, getUserDataController);
+router.post("/update-password", authMiddleware, updatePasswordController);
+router.patch("/update-profile", authMiddleware, updateProfileController);
 router.delete("/delete", authMiddleware, deleteUserAccountController);
-
+router.post("/generate", authMiddleware, generateKeyController);
+router.delete("/destroy", authMiddleware, destroyKeyController);
 
 module.exports = router;

@@ -1,9 +1,10 @@
-const { mockUsers } = require("../../../../utils/mocks/Users.js");
-
 const request = require("supertest");
 const { STATUS_CODES } = require("http");
 const app = require("../../../../app");
-const User = require("../../../../models/Users.js");
+const { Users } = require("../../../../models");
+const { mockUsers } = require("../../../../utils/mocks/Users");
+
+const ENDPOINT = "/api/auth/signout";
 
 describe("/api/signout", () => {
   beforeAll(() => {
@@ -17,7 +18,7 @@ describe("/api/signout", () => {
 
   it("500 - CORS", async () => {
     const response = await request(app)
-      .get("/api/auth/signout")
+      .get(ENDPOINT)
       .set("Origin", "http://invalidcorsorigin.com");
 
     expect(response.status).toBe(500);
@@ -29,7 +30,7 @@ describe("/api/signout", () => {
   });
 
   it("401 - Auth cookie not present", async () => {
-    const response = await request(app).get("/api/auth/signout");
+    const response = await request(app).get(ENDPOINT);
 
     expect(response.status).toBe(400);
     expect(response.body).toEqual({
@@ -40,8 +41,8 @@ describe("/api/signout", () => {
   });
 
   it("205 - Successful signout", async () => {
-    const mockJWT = new User(mockUsers[0]).generateJWT();
-    const response = await request(app).get("/api/auth/signout").set("Cookie", `jwt=${mockJWT}`);
+    const mockJWT = new Users(mockUsers[0]).generateJWT();
+    const response = await request(app).get(ENDPOINT).set("Cookie", `jwt=${mockJWT}`);
 
     expect(response.status).toBe(205);
     // Should contain jwt=; in the set-cookie value

@@ -1,6 +1,14 @@
 const request = require("supertest");
-const app = require("../../../../app");
 const { STATUS_CODES } = require("http");
+const app = require("../../../../app");
+
+const { UserService, SubscriptionService } = require("../../../../services");
+const SendEmailService = require("../../../../utils/sendEmail");
+const { mockUsers } = require("../../../../utils/mocks/Users");
+const { mockUserTokens } = require("../../../../utils/mocks/UserToken");
+const { Users, UserToken} = require("../../../../models");
+const mockUserModel = new Users(mockUsers[0]);
+const mockUserTokenVerify = new UserToken(mockUserTokens[0]);
 
 const mockValidPayload = {
   firstName: "Joe",
@@ -10,34 +18,22 @@ const mockValidPayload = {
   confirmPassword: "good joe",
 };
 
-jest.mock("../../../../services/Auth", () => ({
+jest.mock("../../../../services/Users", () => ({
   emailRecordExists: jest.fn(),
-}));
-const AuthService = require("../../../../services/Auth");
-jest.mock("../../../../services/User", () => ({
   createUser: jest.fn(),
 }));
-const UserService = require("../../../../services/User");
-jest.mock("../../../../services/Subscription", () => ({
+jest.mock("../../../../services/Subscriptions", () => ({
   createSubscription: jest.fn(),
 }));
-const SubscriptionService = require("../../../../services/Subscription");
 jest.mock("../../../../services/UserToken", () => ({
   createVerifyToken: jest.fn(),
 }));
 const UserTokenService = require("../../../../services/UserToken");
-jest.mock("../../../../services/sendEmail", () => ({
+jest.mock("../../../../utils/sendEmail", () => ({
   sendEmail: jest.fn(),
 }));
-const SendEmailService = require("../../../../services/sendEmail");
 
-const { mockUsers } = require("../../../../utils/mocks/Users");
-const { mockUserTokens } = require("../../../../utils/mocks/UserToken");
-const User = require("../../../../models/Users");
-const UserToken = require("../../../../models/UserToken");
-
-const mockUserModel = new User(mockUsers[0]);
-const mockUserTokenVerify = new UserToken(mockUserTokens[0]);
+const ENDPOINT = "/api/auth/signup";
 
 describe("Signup Controller", () => {
   beforeAll(() => {
@@ -53,7 +49,7 @@ describe("Signup Controller", () => {
 
   it("500 - CORS", async () => {
     const response = await request(app)
-      .get("/api/auth/signup")
+      .get(ENDPOINT)
       .set("Origin", "http://invalidcorsorigin.com");
 
     expect(response.status).toBe(500);
@@ -66,7 +62,7 @@ describe("Signup Controller", () => {
 
   it("422 - when payload has missing fields", async () => {
     const response = await request(app)
-      .post("/api/auth/signup")
+      .post(ENDPOINT)
       .send({ user: "hello world" });
 
     expect(response.status).toBe(422);
@@ -83,7 +79,7 @@ describe("Signup Controller", () => {
     const mockPayload = { ...mockValidPayload, firstName: "J*e" };
 
     const response = await request(app)
-      .post("/api/auth/signup")
+      .post(ENDPOINT)
       .send(mockPayload);
 
     expect(response.status).toBe(422);
@@ -100,7 +96,7 @@ describe("Signup Controller", () => {
     const mockPayload = { ...mockValidPayload, lastName: "D*e" };
 
     const response = await request(app)
-      .post("/api/auth/signup")
+      .post(ENDPOINT)
       .send(mockPayload);
 
     expect(response.status).toBe(422);
@@ -117,7 +113,7 @@ describe("Signup Controller", () => {
     const mockPayload = { ...mockValidPayload, email: "johnDoe" };
 
     const response = await request(app)
-      .post("/api/auth/signup")
+      .post(ENDPOINT)
       .send(mockPayload);
 
     expect(response.status).toBe(422);
@@ -134,7 +130,7 @@ describe("Signup Controller", () => {
     const mockPayload = { ...mockValidPayload, password: "johnDoe" };
 
     const response = await request(app)
-      .post("/api/auth/signup")
+      .post(ENDPOINT)
       .send(mockPayload);
 
     expect(response.status).toBe(422);
@@ -154,7 +150,7 @@ describe("Signup Controller", () => {
     };
 
     const response = await request(app)
-      .post("/api/auth/signup")
+      .post(ENDPOINT)
       .send(mockPayload);
 
     expect(response.status).toBe(422);
@@ -175,7 +171,7 @@ describe("Signup Controller", () => {
     };
 
     const response = await request(app)
-      .post("/api/auth/signup")
+      .post(ENDPOINT)
       .send(mockPayload);
 
     expect(response.status).toBe(422);
@@ -189,10 +185,10 @@ describe("Signup Controller", () => {
   });
 
   it("400 - when email already exists in db", async () => {
-    jest.spyOn(AuthService, "emailRecordExists").mockImplementation(() => true);
+    jest.spyOn(UserService, "emailRecordExists").mockImplementation(() => true);
 
     const response = await request(app)
-      .post("/api/auth/signup")
+      .post(ENDPOINT)
       .send(mockValidPayload);
 
     expect(response.status).toBe(400);
@@ -207,12 +203,12 @@ describe("Signup Controller", () => {
 
   it("500 - when failed to create user", async () => {
     jest
-      .spyOn(AuthService, "emailRecordExists")
+      .spyOn(UserService, "emailRecordExists")
       .mockImplementation(() => false);
     jest.spyOn(UserService, "createUser").mockImplementation(() => null);
 
     const response = await request(app)
-      .post("/api/auth/signup")
+      .post(ENDPOINT)
       .send(mockValidPayload);
 
     expect(response.status).toBe(500);
@@ -225,7 +221,7 @@ describe("Signup Controller", () => {
 
   it("206 - when failed to create user subscription", async () => {
     jest
-      .spyOn(AuthService, "emailRecordExists")
+      .spyOn(UserService, "emailRecordExists")
       .mockImplementation(() => false);
     jest
       .spyOn(UserService, "createUser")
@@ -235,7 +231,7 @@ describe("Signup Controller", () => {
       .mockImplementation(() => null);
 
     const response = await request(app)
-      .post("/api/auth/signup")
+      .post(ENDPOINT)
       .send(mockValidPayload);
 
     expect(response.status).toBe(206);
@@ -248,7 +244,7 @@ describe("Signup Controller", () => {
 
   it("206 - when failed to create user user token", async () => {
     jest
-      .spyOn(AuthService, "emailRecordExists")
+      .spyOn(UserService, "emailRecordExists")
       .mockImplementation(() => false);
     jest
       .spyOn(UserService, "createUser")
@@ -261,7 +257,7 @@ describe("Signup Controller", () => {
       .mockImplementation(() => null);
 
     const response = await request(app)
-      .post("/api/auth/signup")
+      .post(ENDPOINT)
       .send(mockValidPayload);
 
     expect(response.status).toBe(206);
@@ -274,7 +270,7 @@ describe("Signup Controller", () => {
 
   it("206 - when failed to send verification email", async () => {
     jest
-      .spyOn(AuthService, "emailRecordExists")
+      .spyOn(UserService, "emailRecordExists")
       .mockImplementation(() => false);
     jest
       .spyOn(UserService, "createUser")
@@ -290,7 +286,7 @@ describe("Signup Controller", () => {
       .mockImplementation(() => ({ success: false }));
 
     const response = await request(app)
-      .post("/api/auth/signup")
+      .post(ENDPOINT)
       .send(mockValidPayload);
     expect(response.status).toBe(206);
     expect(response.body).toEqual({
@@ -302,7 +298,7 @@ describe("Signup Controller", () => {
 
   it("Success 201", async () => {
     jest
-      .spyOn(AuthService, "emailRecordExists")
+      .spyOn(UserService, "emailRecordExists")
       .mockImplementation(() => false);
     jest
       .spyOn(UserService, "createUser")
@@ -317,7 +313,7 @@ describe("Signup Controller", () => {
       .spyOn(SendEmailService, "sendEmail")
       .mockImplementation(() => ({ success: true }));
     const response = await request(app)
-      .post("/api/auth/signup")
+      .post(ENDPOINT)
       .send(mockValidPayload);
 
     expect(response.status).toBe(201);
@@ -329,12 +325,12 @@ describe("Signup Controller", () => {
   });
 
   it("Error 500 - Unexpected error", async () => {
-    jest.spyOn(AuthService, "emailRecordExists").mockImplementation(() => {
+    jest.spyOn(UserService, "emailRecordExists").mockImplementation(() => {
       throw new Error("Unexpected error");
     });
 
     const response = await request(app)
-      .post("/api/auth/signup")
+      .post(ENDPOINT)
       .send(mockValidPayload);
 
     expect(response.status).toBe(500);

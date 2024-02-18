@@ -12,7 +12,6 @@ const mockUser = new User({
   updatedAt: Timestamp.now().toDate(),
   createdAt: Timestamp.now().toDate(),
 });
-
 const ENDPOINT = "/api/user/generate";
 
 describe("generate-key controller", () =>{

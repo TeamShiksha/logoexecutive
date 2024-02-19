@@ -1,0 +1,30 @@
+.add-admin-form {
+	display: flex;
+	gap: 0px 32px;
+	align-items: center;
+}
+
+.add-admin-form > button {
+	flex-shrink: 0;
+	background-color: #00bd68;
+	border: none;
+	border-radius: var(--bradius);
+	box-shadow: var(--shadow);
+	color: var(--white);
+	cursor: pointer;
+	min-height: 39px;
+	padding: 12px;
+	font-size: 16px;
+	font-weight: 500;
+}
+
+.add-admin-form > button:hover {
+	background-image: linear-gradient(-180deg, #00d775, #00bd68);
+}
+
+@media screen and (max-width: 768px) {
+	.add-admin-form {
+		flex-direction: column;
+		align-items: flex-start;
+	}
+}

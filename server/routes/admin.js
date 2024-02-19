@@ -1,7 +1,8 @@
 const express = require("express");
-const router = express.Router();
 
 const addAdminController = require("../controllers/admin/add");
+
+const router = express.Router();
 
 router.put("/add", addAdminController);
 

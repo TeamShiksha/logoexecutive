@@ -1,7 +1,7 @@
 const request = require("supertest");
 const app = require("../../../../app");
 const { STATUS_CODES } = require("http");
-const addService = require("../../../../services/AddAdmin");
+const { AdminService } = require("../../../../services");
 
 jest.mock("../../../../services/AddAdmin", () => ({
   setUserAdmin: jest.fn()
@@ -47,7 +47,7 @@ describe("setAdminController", () => {
     const mockEmail = "bill@gmail.com";
 
     jest
-      .spyOn(addService, "setUserAdmin")
+      .spyOn(AdminService, "setUserAdmin")
       .mockImplementation(() => mockMessage);
 
     const mockPayload = {"new_admin_email": mockEmail};
@@ -68,7 +68,7 @@ describe("setAdminController", () => {
     const mockEmail = "bill@gmail.com";
 
     jest
-      .spyOn(addService, "setUserAdmin")
+      .spyOn(AdminService, "setUserAdmin")
       .mockImplementation(() => mockMessage);
 
     const mockPayload = {"new_admin_email": mockEmail};

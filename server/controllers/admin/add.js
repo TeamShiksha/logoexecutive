@@ -1,6 +1,6 @@
 const Joi = require("joi");
 const { STATUS_CODES } = require("http");
-const { setUserAdmin } = require("../../services/AddAdmin");
+const { setUserAdmin } = require("../../services");
 
 const addAdminSchema = Joi.object().keys({
   "new_admin_email": Joi.string()

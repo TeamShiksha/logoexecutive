@@ -3,7 +3,7 @@ const { DocumentReference, Timestamp } = require("firebase-admin/firestore");
 const jwt = require("jsonwebtoken");
 const { UserType } = require("../utils/constants");
 
-class User {
+class Users {
   userId;
   email;
   firstName;
@@ -106,4 +106,4 @@ class User {
   }
 }
 
-module.exports = User;
+module.exports = Users;

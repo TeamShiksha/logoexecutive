@@ -1,10 +1,8 @@
 const Joi = require("joi");
-const { emailRecordExists } = require("../../services/Auth");
-const { createUser } = require("../../services/User");
-const { createSubscription } = require("../../services/Subscription");
-const { sendEmail } = require("../../services/sendEmail");
 const { STATUS_CODES } = require("http");
-const { createVerifyToken } = require("../../services/UserToken");
+const { sendEmail } = require("../../utils/sendEmail");
+const { createUser, emailRecordExists,
+  createVerifyToken, createSubscription } = require("../../services");
 
 const signupPayloadSchema = Joi.object().keys({
   firstName: Joi.string()

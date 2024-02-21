@@ -1,0 +1,35 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Settings component renders Settings component correctly 1`] = `
+<DocumentFragment>
+  <section
+    class="settings"
+  >
+    <h1
+      class="sett-cont-heading"
+    >
+      Settings
+    </h1>
+    <button
+      class="settings-button"
+    >
+      Download Account Data
+    </button>
+    <p
+      class="setting-instruction"
+    >
+      This will prepare a PDF download of your personal data.
+    </p>
+    <button
+      class="settings-button settings-delete"
+    >
+      Delete Account
+    </button>
+    <p
+      class="setting-instruction"
+    >
+      This will permanently delete your account and all associated data.
+    </p>
+  </section>
+</DocumentFragment>
+`;

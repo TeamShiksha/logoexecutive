@@ -18,6 +18,10 @@
 	--small-text: 12px;
 	--medium-text: 16px;
 	--large-text: 20px;
+	--gray-drag-drop-background: rgb(249, 250, 251);
+	--error: rgb(255, 55, 55);
+	--success: rgb(52, 168, 83);
+	--table-heading-bg: rgb(226, 224, 224);
 }
 
 * {

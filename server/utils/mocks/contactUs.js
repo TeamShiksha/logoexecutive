@@ -1,18 +1,17 @@
-const ContactUs = require("../../models/ContactUs");
+const { Timestamp } = require("firebase-admin/firestore");
 
-const formObj = {
-  email: "example@gmail.com",
-  name: "first last",
-  message: "hasta la vista baby",
-  contactId: "123",
-  activityStatus: true,
-  assignedTo: null,
-  createdAt: new Date("01-01-2001"),
-  updatedAt: new Date("01-01-2001"),
-};
+// Generic form
+const mockContactUsForm = [
+  {
+    email: "example@gmail.com",
+    name: "first last",
+    message: "hasta la vista baby",
+    contactId: "123",
+    activityStatus: true,
+    assignedTo: null,
+    createdAt: Timestamp.fromDate(new Date("01-01-2001")),
+    updatedAt: Timestamp.fromDate(new Date("01-01-2001")),
+  }
+];
 
-const mockFormModel = new ContactUs(formObj);
-
-module.exports = {
-  mockFormModel,
-};
+module.exports = { mockContactUsForm };

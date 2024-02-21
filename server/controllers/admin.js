@@ -1,5 +1,4 @@
-const { uploadToS3 } = require("../services/Logo");
-const { createImageData } = require("../services/Image");
+const { createImageData, uploadToS3 } = require("../services");
 const { STATUS_CODES } = require("http");
 const Joi = require("joi");
 

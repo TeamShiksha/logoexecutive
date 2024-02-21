@@ -1,0 +1,22 @@
+.admin-container {
+	padding: 64px 32px;
+	display: flex;
+	flex-direction: column;
+	gap: 64px;
+}
+
+.admin-section-container {
+	display: flex;
+	flex-direction: column;
+	gap: 32px;
+}
+
+.admin-section-container > h2 {
+	font-size: 2rem;
+}
+
+@media screen and (max-width: 768px) {
+	.admin-container {
+		padding: 32px 16px;
+	}
+}

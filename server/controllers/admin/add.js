@@ -3,7 +3,7 @@ const { STATUS_CODES } = require("http");
 const { setUserAdmin } = require("../../services");
 
 const addAdminSchema = Joi.object().keys({
-  "new_admin_email": Joi.string()
+  "email": Joi.string()
     .trim()
     .required()
     .max(50)
@@ -13,20 +13,20 @@ const addAdminSchema = Joi.object().keys({
 
 const addAdminController = async (req, res, next) => {
   try{
-    const email = req.body.new_admin_email;
+    const email = req.body.email;
     const { error } = addAdminSchema.validate(req.body);
 
     if (error) {
       return res.status(422).json({
         status: 422,
-        message: error.details[0].message,
+        message: error.message,
         error: STATUS_CODES[422],
       });
     }
 
-    const message = await setUserAdmin(email);
+    const response = await setUserAdmin(email);
 
-    if (!message) {
+    if (!response) {
       return res.status(404).json({
         status: 404,
         error: STATUS_CODES[404],
@@ -34,10 +34,7 @@ const addAdminController = async (req, res, next) => {
       });
     }
 
-    return res.status(200).json({
-      statusCode: 200,
-      message: message
-    });
+    return res.status(200).json(response);
 
   }
     

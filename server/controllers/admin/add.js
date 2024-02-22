@@ -34,7 +34,14 @@ const addAdminController = async (req, res, next) => {
       });
     }
 
-    return res.status(200).json(response);
+    if (!response.isNewAdmin){
+      return res.status(204).json();
+    }
+
+    return res.status(200).json({
+      status: 200,
+      message: `User ${email} is now an admin`
+    });
 
   }
     

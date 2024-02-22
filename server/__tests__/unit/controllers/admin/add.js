@@ -15,10 +15,14 @@ describe("setAdminController", () => {
 
   beforeAll(() => {
     process.env.JWT_SECRET = "secret";
-  })
+  });
 
   afterAll(() => {
     delete process.env.JWT_SECRET;
+  });
+
+  afterEach(() => {
+    jest.resetAllMocks();
   })
 
   it("401 - User is not Signed In", async () => {
@@ -28,14 +32,14 @@ describe("setAdminController", () => {
       .put(ENDPOINT)
       .send(mockPayload);
 
-      expect(response.status).toBe(401);
-      expect(response.body).toEqual({
-        "statusCode": 401,
-        "message": "User not signed in",
-        "error": STATUS_CODES[401]
-      });
+    expect(response.status).toBe(401);
+    expect(response.body).toEqual({
+      "statusCode": 401,
+      "message": "User not signed in",
+      "error": STATUS_CODES[401]
+    });
 
-  }) 
+  }); 
 
   it("422 - Given email is not valid", async () => {
     const mockEmail = "bill_gmail.com";
@@ -73,9 +77,12 @@ describe("setAdminController", () => {
 
   });
 
-  it("200 - Given user is already an admin", async () => {
-    const mockResponse = {statusCode: 200, message: "User bill@gmail.com is already an admin"};
+  it("204 - Given user is already an admin", async () => {
     const mockEmail = "bill@gmail.com";
+    const mockResponse = {
+      success: true,
+      isNewAdmin: false 
+    }
     const mockJWT = new Users(mockUsers[0]).generateJWT();
 
     jest
@@ -88,12 +95,14 @@ describe("setAdminController", () => {
       .set("Cookie", `jwt=${mockJWT}`)
       .send(mockPayload);
 
-    expect(response.status).toBe(200);
-    expect(response.body).toEqual(mockResponse);
+    expect(response.status).toBe(204);
   });
 
   it("200 - User is set to admin", async () => {
-    const mockResponse = {statusCode: 200, message: "User bill@gmail.com is now an admin"};
+    const mockResponse = {
+      success: true,
+      isNewAdmin: true
+    };
     const mockEmail = "bill@gmail.com";
     const mockJWT = new Users(mockUsers[0]).generateJWT();
 
@@ -108,7 +117,10 @@ describe("setAdminController", () => {
       .send(mockPayload);
 
     expect(response.status).toBe(200);
-    expect(response.body).toEqual(mockResponse);
+    expect(response.body).toEqual({
+      "message": "User bill@gmail.com is now an admin",
+      "status": 200
+    });
 
   });
 });

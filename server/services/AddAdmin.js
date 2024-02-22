@@ -8,17 +8,17 @@ async function setUserAdmin(email) {
     const userType = userRef.docs[0].data().userType;
     if (userType == UserType.ADMIN) {
       return {
-              statusCode: 204,
-              message: `User ${email} is already an admin`
-            };
+        success: true,
+        isNewAdmin: false 
+      };
     }
     const updatedUser = { userType : UserType.ADMIN };
     const doc = userRef.docs[0];
     await doc.ref.update(updatedUser);
     return {
-            statusCode: 200,
-            message: `User ${email} is now an admin`
-          };
+      success: true,
+      isNewAdmin: true
+    };
   }
   catch(err){
     console.log(err);

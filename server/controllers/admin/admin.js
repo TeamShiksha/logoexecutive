@@ -1,13 +1,13 @@
-const { createImageData, uploadToS3 } = require("../../../services");
+const { createImageData, uploadToS3 } = require("../../services");
 const { STATUS_CODES } = require("http");
 const Joi = require("joi");
-let {UserType} = require("../../../utils/constants");
+let {UserType} = require("../../utils/constants");
 
 const imageNameSchema = Joi.string()
   .pattern(/^.+\.(png|jpg|svg)$/i)
   .lowercase()
   .messages({
-    'string.pattern.base': 'Invalid image name. It should include one of the following extensions: .png, .jpg, .svg',
+    "string.pattern.base": "Invalid image name. It should include one of the following extensions: .png, .jpg, .svg",
   });
 
 async function adminUploadController(req, res, next) {

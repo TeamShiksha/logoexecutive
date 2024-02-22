@@ -13,15 +13,18 @@ const s3 = new S3Client({
 });
 
 async function uploadToS3(file, imageName) {
+  const imageNameParts = imageName.split(".");
+  const extension = imageNameParts[imageNameParts.length - 1];
+
   const uploadParams = {
     Bucket: process.env.BUCKET_NAME,
     Body: file.buffer,
-    Key: `${process.env.KEY}/${imageName}`,
+    Key: `${process.env.KEY}/${extension}/${imageName}`,
   };
 
   try {
     await s3.send(new PutObjectCommand(uploadParams));
-    return `${process.env.KEY}/${imageName}`;
+    return `${process.env.KEY}/${extension}/${imageName}`;
   } catch (error) {
     console.error(`Failed to upload file to S3: ${error}`);
     throw error; 

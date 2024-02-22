@@ -1,17 +1,6 @@
 const request = require("supertest");
-const { STATUS_CODES } = require("http");
-const { uploadToS3 } = require("../../../services/Logo");
-const { createImageData } = require("../../../services/Image");
-const User = require("../../../models/Users");
-const { mockUsers } = require("../../../utils/mocks/Users");
-
-jest.mock("../../../services/Logo", () => ({
-  uploadToS3: jest.fn(),
-}));
-
-jest.mock("../../../services/Image", () => ({
-  createImageData: jest.fn(),
-}));
+const User = require("../../../../models/Users");
+const { mockUsers } = require("../../../../utils/mocks/Users");
 
 const multerMock = {
   single: () => (req, res, next) => {
@@ -23,20 +12,13 @@ const multerMock = {
   },
 };
 
-jest.mock("../../../services/Logo", () => ({
+jest.mock("../../../../services/", () => ({
   uploadToS3: jest.fn(),
+  createImageData: jest.fn(),
   upload: multerMock,
 }));
 
-const mockUserModel = new User(mockUsers[1]);
-const app = require("../../../app");
-
-let mockUserType = "user";
-
-jest.mock("../../../middlewares/auth", () => (req, res, next) => {
-  req.userData = { userId: "someUserId", userType: mockUserType };
-  next();
-});
+const app = require("../../../../app");
 
 describe("adminUploadController", () => {
   beforeAll(() => {
@@ -48,8 +30,7 @@ describe("adminUploadController", () => {
   });
 
   it("should return 400 if imageName is invalid", async () => {
-    mockUserType = "admin";
-
+    const mockUserModel = new User({ ...mockUsers[1], userType: "ADMIN" });
     const mockToken = mockUserModel.generateJWT();
 
     const response = await request(app)
@@ -59,13 +40,14 @@ describe("adminUploadController", () => {
 
     expect(response.status).toBe(400);
     expect(response.body).toEqual({
-      error: "Invalid image name. It should include one of the following extensions: .png, .jpg, .svg"
+      error: "Bad Request",
+      message: "Invalid image name. It should include one of the following extensions: .png, .jpg, .svg",
+      status: 400,
     });
   });
 
   it("should return 403 if userType is not admin", async () => {
-    mockUserType = "user"; 
-
+    const mockUserModel = new User({ ...mockUsers[1], userType: "USER" });
     const mockToken = mockUserModel.generateJWT();
 
     const response = await request(app)
@@ -75,12 +57,14 @@ describe("adminUploadController", () => {
 
     expect(response.status).toBe(403);
     expect(response.body).toEqual({
-      error: STATUS_CODES[403]
+      error: "Forbidden",
+      status: 403,
     });
   });
 
   it("should return 200 and the image data if the image is uploaded successfully", async () => {
-    mockUserType = "admin"; 
+    const mockUserModel = new User({ ...mockUsers[1], userType: "ADMIN" });
+    const { uploadToS3, createImageData } = require("../../../../services/");
     uploadToS3.mockResolvedValue("key");
     createImageData.mockResolvedValue({
       imageId: "id",
@@ -97,7 +81,8 @@ describe("adminUploadController", () => {
 
     expect(response.status).toBe(200);
     expect(response.body).toEqual({
-      message: "Image validimagename.png uploaded successfully to S3 bucket with key key",
+      message: "Image validImageName.png uploaded successfully to S3 bucket with key key",
+      status: 200,
       imageId: "id",
       createdAt: expect.any(String),
       updatedAt: expect.any(String)

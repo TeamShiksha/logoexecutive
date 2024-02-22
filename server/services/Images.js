@@ -1,6 +1,5 @@
 const { S3Client, PutObjectCommand } = require("@aws-sdk/client-s3");
-const multer = require("multer");
-
+const {Images}= require("../models");
 const { Timestamp } = require("firebase-admin/firestore");
 const { ImageCollection } = require("../utils/firestore");
 const { cloudFrontSignedURL } = require("../utils/cloudFront");
@@ -11,10 +10,6 @@ const s3 = new S3Client({
     accessKeyId: process.env.ACCESS_KEY,
     secretAccessKey: process.env.SECRET_ACCESS_KEY,
   },
-});
-
-const upload = multer({
-  storage: multer.memoryStorage()
 });
 
 async function uploadToS3(file, imageName) {
@@ -53,18 +48,17 @@ async function fetchImageByCompanyFree(company) {
 
 async function createImageData(domainame, uploadedBy) {
   try {
-    const imageData = {
-      imageId: crypto.randomUUID(),
-      domainame: domainame,
-      uploadedBy: uploadedBy,
-      createdAt: Timestamp.now(),
-      updatedAt: Timestamp.now(),
-    };
-    await ImageCollection.doc(imageData.imageId).set(imageData);
+    const newImage = Images.newImage({
+      domainame,
+      uploadedBy,
+    });
+    if (!newImage) return null;
+    const result = await ImageCollection.doc(newImage.imageId).set(newImage);
+    if (!result) return null;
     return {
-      imageId: imageData.imageId,
-      createdAt: imageData.createdAt.toDate(),
-      updatedAt: imageData.updatedAt.toDate()
+      imageId: newImage.imageId,
+      createdAt: newImage.createdAt.toDate(),
+      updatedAt: newImage.updatedAt.toDate()
     };
   } catch (error) {
     console.error(`Failed to create image data: ${error}`);
@@ -73,4 +67,4 @@ async function createImageData(domainame, uploadedBy) {
 }
 
 
-module.exports = { createImageData, fetchImageByCompanyFree, upload, uploadToS3 };
+module.exports = { createImageData, fetchImageByCompanyFree, uploadToS3 };

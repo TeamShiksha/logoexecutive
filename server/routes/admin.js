@@ -1,9 +1,6 @@
-const express = require("express");
-
+const router = require("express").Router();
 const addAdminController = require("../controllers/admin/add");
 const authMiddleware = require("../middlewares/auth");
-
-const router = express.Router();
 
 router.put("/add", authMiddleware, addAdminController);
 

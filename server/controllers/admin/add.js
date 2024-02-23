@@ -15,7 +15,6 @@ const addAdminController = async (req, res, next) => {
   try{
     const email = req.body.email;
     const { error } = addAdminSchema.validate(req.body);
-
     if (error) {
       return res.status(422).json({
         status: 422,
@@ -25,7 +24,6 @@ const addAdminController = async (req, res, next) => {
     }
 
     const response = await setUserAdmin(email);
-
     if (!response) {
       return res.status(404).json({
         status: 404,
@@ -37,7 +35,6 @@ const addAdminController = async (req, res, next) => {
     if (!response.isNewAdmin){
       return res.status(204).json();
     }
-
     return res.status(200).json({
       status: 200,
       message: `User ${email} is now an admin`

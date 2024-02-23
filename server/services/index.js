@@ -6,14 +6,14 @@ const { createForgotToken, deleteUserToken, createVerifyToken,
   fetchTokenFromId, fetchTokenFromUserid } = require("./UserToken");
 const {fetchUsers, fetchUserByEmail, createUser, updatePasswordService,
   fetchUserFromId, verifyUser, updateUser, deleteUserAccount, emailRecordExists } = require("./Users");
-const { setUserAdmin } = require("./AddAdmin");
+const { setUserAdmin } = require("./admin");
 const ContactUsService = require("./ContactUs");
 const ImageService = require("./Images");
 const KeyService = require("./Keys");
 const SubscriptionService = require("./Subscriptions");
 const UserTokenService = require("./UserToken");
 const UserService = require("./Users");
-const AdminService = require("./AddAdmin");
+const AdminService = require("./admin");
 
 module.exports = {
   formExists, createForm, createImageData, fetchImageByCompanyFree,

@@ -5,7 +5,7 @@ const { AdminService } = require("../../../../services");
 const { Users } = require("../../../../models");
 const { mockUsers } = require("../../../../utils/mocks/Users");
 
-jest.mock("../../../../services/AddAdmin", () => ({
+jest.mock("../../../../services/admin", () => ({
   setUserAdmin: jest.fn()
 }));
 
@@ -24,6 +24,24 @@ describe("setAdminController", () => {
   afterEach(() => {
     jest.resetAllMocks();
   })
+
+  it("500 - CORS Error on invalid origin", async () => {
+    const mockEmail = "bill_@gmail.com";
+    const mockPayload = {"email": mockEmail};
+    const mockJWT = new Users(mockUsers[0]).generateJWT();
+    const response = await request(app)
+      .put(ENDPOINT)
+      .set("Origin", "http://invalidcorsorigin.com")
+      .set("Cookie", `jwt=${mockJWT}`)
+      .send(mockPayload);
+
+    expect(response.status).toBe(500);
+    expect(response.body).toEqual({
+      error: STATUS_CODES[500],
+      message: "Not allowed by CORS",
+      statusCode: 500
+    });
+  });
 
   it("401 - User is not Signed In", async () => {
     const mockEmail = "bill_@gmail.com";

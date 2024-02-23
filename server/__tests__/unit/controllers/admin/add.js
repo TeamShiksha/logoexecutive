@@ -78,7 +78,7 @@ describe("setAdminController", () => {
 
   it("422 - Given email is not valid", async () => {
     const mockEmail = "bill_gmail.com";
-    const mockJWT = new Users(mockUsers[0]).generateJWT();
+    const mockJWT = new Users(mockUsers[2]).generateJWT();
     const mockPayload = {"email": mockEmail};
     const response = await request(app)
       .put(ENDPOINT)
@@ -94,9 +94,27 @@ describe("setAdminController", () => {
 
   });
 
+  it("401 - The requester is not an ADMIN", async () => {
+    const mockEmail = "bill_gmail.com";
+    const mockJWT = new Users(mockUsers[0]).generateJWT();
+    const mockPayload = {"email": mockEmail};
+    const response = await request(app)
+      .put(ENDPOINT)
+      .set("Cookie", `jwt=${mockJWT}`)
+      .send(mockPayload);
+
+    expect(response.status).toBe(401);
+    expect(response.body).toEqual({
+      "statusCode": 401,
+      "message": "User not authorized",
+      "error": STATUS_CODES[401]
+    });
+
+  });
+
   it("404 - Given email is not present", async () => {
     const mockEmail = "bill@gmail.com";
-    const mockJWT = new Users(mockUsers[0]).generateJWT();
+    const mockJWT = new Users(mockUsers[2]).generateJWT();
     const mockPayload = {"email": mockEmail};
     const response = await request(app)
       .put(ENDPOINT)
@@ -118,7 +136,7 @@ describe("setAdminController", () => {
       success: true,
       isNewAdmin: false 
     };
-    const mockJWT = new Users(mockUsers[0]).generateJWT();
+    const mockJWT = new Users(mockUsers[2]).generateJWT();
 
     jest
       .spyOn(AdminService, "setUserAdmin")
@@ -139,7 +157,7 @@ describe("setAdminController", () => {
       isNewAdmin: true
     };
     const mockEmail = "bill@gmail.com";
-    const mockJWT = new Users(mockUsers[0]).generateJWT();
+    const mockJWT = new Users(mockUsers[2]).generateJWT();
 
     jest
       .spyOn(AdminService, "setUserAdmin")

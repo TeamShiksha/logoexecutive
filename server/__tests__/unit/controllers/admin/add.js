@@ -23,7 +23,7 @@ describe("setAdminController", () => {
 
   afterEach(() => {
     jest.resetAllMocks();
-  })
+  });
 
   it("500 - CORS Error on invalid origin", async () => {
     const mockEmail = "bill_@gmail.com";
@@ -40,6 +40,23 @@ describe("setAdminController", () => {
       error: STATUS_CODES[500],
       message: "Not allowed by CORS",
       statusCode: 500
+    });
+  });
+
+  it("404 - Route not found on POST request instead of PUT", async () => {
+    const mockEmail = "bill_@gmail.com";
+    const mockPayload = {"email": mockEmail};
+    const mockJWT = new Users(mockUsers[0]).generateJWT();
+    const response = await request(app)
+      .post(ENDPOINT)
+      .set("Cookie", `jwt=${mockJWT}`)
+      .send(mockPayload);
+
+    expect(response.status).toBe(404);
+    expect(response.body).toEqual({
+      "statusCode": 404,
+      "message": "route not found",
+      "error": "not found"
     });
   });
 
@@ -100,7 +117,7 @@ describe("setAdminController", () => {
     const mockResponse = {
       success: true,
       isNewAdmin: false 
-    }
+    };
     const mockJWT = new Users(mockUsers[0]).generateJWT();
 
     jest

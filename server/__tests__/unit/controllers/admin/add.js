@@ -153,7 +153,7 @@ describe("setAdminController", () => {
 
     expect(response.status).toBe(200);
     expect(response.body).toEqual({
-      "message": "User bill@gmail.com is now an admin",
+      "message": "The user has been granted admin privileges",
       "status": 200
     });
 

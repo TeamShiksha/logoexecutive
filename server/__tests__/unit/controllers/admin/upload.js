@@ -16,7 +16,7 @@ jest.mock("../../../../services/", () => ({
   uploadToS3: jest.fn(),
   createImageData: jest.fn(),
 }));
-
+const ENDPOINT= "/api/admin/upload";
 const app = require("../../../../app");
 
 describe("adminUploadController", () => {
@@ -27,8 +27,6 @@ describe("adminUploadController", () => {
   afterAll(() => {
     delete process.env.JWT_SECRET;
   });
-
-  const ENDPOINT= "/api/admin/upload";
 
   it("should return 400 if imageName is invalid", async () => {
     const mockUserModel = new Users({ ...mockUsers[1], userType: "ADMIN" });

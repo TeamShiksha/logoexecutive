@@ -47,23 +47,6 @@ describe("adminUploadController", () => {
     });
   });
 
-
-  it("should return 403 if userType is not admin", async () => {
-    const mockUserModel = new Users({ ...mockUsers[1], userType: "USER" });
-    const mockToken = mockUserModel.generateJWT();
-
-    const response = await request(app)
-      .post(ENDPOINT)
-      .set("cookie", `jwt=${mockToken}`)
-      .send({ imageName: "validImageName.png" });
-
-    expect(response.status).toBe(403);
-    expect(response.body).toEqual({
-      error: "Forbidden",
-      status: 403,
-    });
-  });
-
   it("should return 200 and the image data if the image is uploaded successfully", async () => {
     const mockUserModel = new Users({ ...mockUsers[1], userType: "ADMIN" });
     const { uploadToS3, createImageData } = require("../../../../services");

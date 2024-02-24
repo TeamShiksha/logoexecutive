@@ -12,7 +12,7 @@ const imageNameSchema = Joi.string()
 
 async function adminUploadController(req, res, next) {
   try {
-    let { userId, userType } = req.userData;
+    let { userId } = req.userData;
     let  {imageName}  = req.body;
     const file = req.file;
 
@@ -30,13 +30,6 @@ async function adminUploadController(req, res, next) {
         status: 400,
         message: error.details[0].message,
         error: STATUS_CODES[400]
-      });
-    }
-
-    if (userType !== UserType.ADMIN ) {
-      return res.status(403).json({
-        status: 403,
-        error: STATUS_CODES[403]
       });
     }
     const imageNameParts = imageName.split(".");

@@ -1,5 +1,5 @@
 const request = require("supertest");
-const User = require("../../../../models/Users");
+const {Users} = require("../../../../models/index");
 const { mockUsers } = require("../../../../utils/mocks/Users");
 
 jest.mock("../../../../middlewares/fileUpload", () => ({
@@ -28,12 +28,14 @@ describe("adminUploadController", () => {
     delete process.env.JWT_SECRET;
   });
 
+  const ENDPOINT= "/api/admin/upload";
+
   it("should return 400 if imageName is invalid", async () => {
-    const mockUserModel = new User({ ...mockUsers[1], userType: "ADMIN" });
+    const mockUserModel = new Users({ ...mockUsers[1], userType: "ADMIN" });
     const mockToken = mockUserModel.generateJWT();
 
     const response = await request(app)
-      .post("/api/admin/upload")
+      .post(ENDPOINT)
       .set("cookie", `jwt=${mockToken}`)
       .send({ imageName: "invalidImageName" });
 
@@ -47,11 +49,11 @@ describe("adminUploadController", () => {
 
 
   it("should return 403 if userType is not admin", async () => {
-    const mockUserModel = new User({ ...mockUsers[1], userType: "USER" });
+    const mockUserModel = new Users({ ...mockUsers[1], userType: "USER" });
     const mockToken = mockUserModel.generateJWT();
 
     const response = await request(app)
-      .post("/api/admin/upload")
+      .post(ENDPOINT)
       .set("cookie", `jwt=${mockToken}`)
       .send({ imageName: "validImageName.png" });
 
@@ -63,7 +65,7 @@ describe("adminUploadController", () => {
   });
 
   it("should return 200 and the image data if the image is uploaded successfully", async () => {
-    const mockUserModel = new User({ ...mockUsers[1], userType: "ADMIN" });
+    const mockUserModel = new Users({ ...mockUsers[1], userType: "ADMIN" });
     const { uploadToS3, createImageData } = require("../../../../services");
     uploadToS3.mockResolvedValue("key");
     createImageData.mockResolvedValue({
@@ -75,7 +77,7 @@ describe("adminUploadController", () => {
     const mockToken = mockUserModel.generateJWT();
 
     const response = await request(app)
-      .post("/api/admin/upload")
+      .post(ENDPOINT)
       .set("cookie", `jwt=${mockToken}`)
       .send({ imageName: "validImageName.png" });
 
@@ -93,7 +95,7 @@ describe("adminUploadController", () => {
     const invalidToken = "invalidToken";
   
     const response = await request(app)
-      .post("/api/admin/upload")
+      .post(ENDPOINT)
       .set("cookie", `jwt=${invalidToken}`)
       .send({ imageName: "validImageName.png" });
   
@@ -106,11 +108,11 @@ describe("adminUploadController", () => {
   });
   
   it("should return 400 if payload is empty", async () => {
-    const mockUserModel = new User({ ...mockUsers[1], userType: "ADMIN" });
+    const mockUserModel = new Users({ ...mockUsers[1], userType: "ADMIN" });
     const mockToken = mockUserModel.generateJWT();
   
     const response = await request(app)
-      .post("/api/admin/upload")
+      .post(ENDPOINT)
       .set("cookie", `jwt=${mockToken}`)
       .send({});
   
@@ -123,7 +125,7 @@ describe("adminUploadController", () => {
   });
 
   it("should return 400 if imageName is present but file is not", async () => {
-    const mockUserModel = new User({ ...mockUsers[1], userType: "ADMIN" });
+    const mockUserModel = new Users({ ...mockUsers[1], userType: "ADMIN" });
     const mockToken = mockUserModel.generateJWT();
 
     jest.mock("../../../../middlewares/fileUpload", () => ({
@@ -135,7 +137,7 @@ describe("adminUploadController", () => {
     jest.resetModules();
     const app = require("../../../../app");
     const response = await request(app)
-      .post("/api/admin/upload")
+      .post(ENDPOINT)
       .set("cookie", `jwt=${mockToken}`)
       .send({ imageName: "validImageName.png" });
   
@@ -148,7 +150,7 @@ describe("adminUploadController", () => {
   });
   
   it("should return 400 if neither imageName nor file are present", async () => {
-    const mockUserModel = new User({ ...mockUsers[1], userType: "ADMIN" });
+    const mockUserModel = new Users({ ...mockUsers[1], userType: "ADMIN" });
     const mockToken = mockUserModel.generateJWT();
   
     jest.mock("../../../../middlewares/fileUpload", () => ({
@@ -161,7 +163,7 @@ describe("adminUploadController", () => {
     const app = require("../../../../app");
   
     const response = await request(app)
-      .post("/api/admin/upload")
+      .post(ENDPOINT)
       .set("cookie", `jwt=${mockToken}`)
       .send({});
   
@@ -176,11 +178,11 @@ describe("adminUploadController", () => {
   it("should handle CORS correctly", async () => {
     process.env.BASE_URL = "http://localhost:3000"; 
   
-    const mockUserModel = new User({ ...mockUsers[1], userType: "ADMIN" });
+    const mockUserModel = new Users({ ...mockUsers[1], userType: "ADMIN" });
     const mockToken = mockUserModel.generateJWT();
   
     const response = await request(app)
-      .options("/api/admin/upload") 
+      .options(ENDPOINT) 
       .set("cookie", `jwt=${mockToken}`)
       .set("Access-Control-Request-Method", "POST") 
       .set("Origin", process.env.BASE_URL);

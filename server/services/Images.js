@@ -1,6 +1,32 @@
+const { S3Client, PutObjectCommand } = require("@aws-sdk/client-s3");
+const {Images}= require("../models");
 const { Timestamp } = require("firebase-admin/firestore");
 const { ImageCollection } = require("../utils/firestore");
 const { cloudFrontSignedURL } = require("../utils/cloudFront");
+
+const s3 = new S3Client({
+  region: process.env.BUCKET_REGION,
+  credentials: {
+    accessKeyId: process.env.ACCESS_KEY,
+    secretAccessKey: process.env.SECRET_ACCESS_KEY,
+  },
+});
+
+async function uploadToS3(file, imageName, extension) {
+  const uploadParams = {
+    Bucket: process.env.BUCKET_NAME,
+    Body: file.buffer,
+    Key: `${process.env.KEY}/${extension}/${imageName}`,
+  };
+
+  try {
+    await s3.send(new PutObjectCommand(uploadParams));
+    return `${process.env.KEY}/${extension}/${imageName}`;
+  } catch (error) {
+    console.error(`Failed to upload file to S3: ${error}`);
+    throw error; 
+  }
+}
 
 async function fetchImageByCompanyFree(company) {
   try{
@@ -20,22 +46,26 @@ async function fetchImageByCompanyFree(company) {
   }
 }
 
-async function createImageData(file) {
-  const imageData = {
-    imageUrl: file,
-    imageUsageCount: 0,
-    imageId: crypto.randomUUID(),
-    createAt: Timestamp.now(),
-    updatedAt: Timestamp.now(),
-  };
-  const result = await ImageCollection.where(
-    "imageUrl",
-    "==",
-    imageData.imageUrl
-  ).get();
-  if (result.size > 0) return false;
-  await ImageCollection.doc(imageData.imageId).set(imageData);
-  return true;
+async function createImageData(domainame, uploadedBy, extension) {
+  try {
+    const newImage = Images.newImage({
+      domainame,
+      uploadedBy,
+      extension
+    });
+    if (!newImage) return null;
+    const result = await ImageCollection.doc(newImage.imageId).set(newImage);
+    if (!result) return null;
+    return {
+      imageId: newImage.imageId,
+      createdAt: newImage.createdAt.toDate(),
+      updatedAt: newImage.updatedAt.toDate()
+    };
+  } catch (error) {
+    console.error(`Failed to create image data: ${error}`);
+    throw error;
+  }
 }
 
-module.exports = { createImageData, fetchImageByCompanyFree };
+
+module.exports = { createImageData, fetchImageByCompanyFree, uploadToS3 };

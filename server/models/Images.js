@@ -1,22 +1,25 @@
+const { Timestamp } = require("firebase-admin/firestore");
 class Images {
   imageId;
-  imageUrl;
+  extension;
+  domainame;
+  uploadedBy;
   createdAt;
   updatedAt;
-  imageUsageCount;
 
   /**
    * @param {Object} params
    * @param {string} params.imageId
-   * @param {string} params.imageUrl
-   * @param {number} params.imageUsageCount
+   * @param {string} params.domainame
+   * @param {string} params.uploadedBy
    * @param {Date} params.createdAt
    * @param {Date} params.updatedAt
    **/
   constructor(params) {
     this.imageId = params.imageId;
-    this.imageUrl = params.imageUrl;
-    this.imageUsageCount = params.imageUsageCount;
+    this.extension = params.extension;
+    this.domainame = params.domainame;
+    this.uploadedBy = params.uploadedBy;
     this.createdAt = params.createdAt;
     this.updatedAt = params.updatedAt;
   }
@@ -24,10 +27,35 @@ class Images {
   get data() {
     return {
       imageId: this.imageId,
-      imageUrl: this.imageUrl,
-      imageUsageCount: this.imageUsageCount,
+      extension: this.extension,
+      domainame: this.domainame,
+      uploadedBy: this.uploadedBy,
       createdAt: this.createdAt,
       updatedAt: this.updatedAt,
+    };
+  }
+
+  /**
+   * Creates a new image object with current time for createdAt
+   * and updatedAt
+   *
+   * @param {Object} imageData
+   * @param {string} imageData.domainame
+   * @param {string} imageData.uploadedBy
+   * @param {string} imageData.extension
+   **/
+  static newImage(imageData) {
+    const { domainame, uploadedBy, extension } = imageData;
+    if (!domainame || !uploadedBy  || !extension) {
+      return null;
+    }
+    return {
+      imageId: crypto.randomUUID(),
+      extension,
+      domainame,
+      uploadedBy,
+      createdAt: Timestamp.now(),
+      updatedAt: Timestamp.now(),
     };
   }
 }

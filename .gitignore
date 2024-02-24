@@ -136,3 +136,7 @@ package-lock.json
 
 # Local Netlify folder
 .netlify
+
+# Ignore private and public key files
+private_key.pem
+public_key.pem

@@ -70,8 +70,8 @@ class UserToken {
    */
   get tokenURL() {
     let path;
-    if (this.type === UserTokenTypes.FORGOT) path = "/auth/reset-password";
-    if (this.type === UserTokenTypes.VERIFY) path = "/auth/verify";
+    if (this.type === UserTokenTypes.FORGOT) path = "/api/auth/reset-password";
+    if (this.type === UserTokenTypes.VERIFY) path = "/api/auth/verify";
     const url = new URL(path, process.env.BASE_URL);
     url.searchParams.append("token", this.token);
     return url;

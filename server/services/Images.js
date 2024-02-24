@@ -12,10 +12,7 @@ const s3 = new S3Client({
   },
 });
 
-async function uploadToS3(file, imageName) {
-  const imageNameParts = imageName.split(".");
-  const extension = imageNameParts[imageNameParts.length - 1];
-
+async function uploadToS3(file, imageName, extension) {
   const uploadParams = {
     Bucket: process.env.BUCKET_NAME,
     Body: file.buffer,
@@ -49,11 +46,12 @@ async function fetchImageByCompanyFree(company) {
   }
 }
 
-async function createImageData(domainame, uploadedBy) {
+async function createImageData(domainame, uploadedBy, extension) {
   try {
     const newImage = Images.newImage({
       domainame,
       uploadedBy,
+      extension
     });
     if (!newImage) return null;
     const result = await ImageCollection.doc(newImage.imageId).set(newImage);

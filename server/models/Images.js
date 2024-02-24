@@ -1,6 +1,7 @@
 const { Timestamp } = require("firebase-admin/firestore");
 class Images {
   imageId;
+  extension;
   domainame;
   uploadedBy;
   createdAt;
@@ -16,6 +17,7 @@ class Images {
    **/
   constructor(params) {
     this.imageId = params.imageId;
+    this.extension = params.extension;
     this.domainame = params.domainame;
     this.uploadedBy = params.uploadedBy;
     this.createdAt = params.createdAt;
@@ -25,6 +27,7 @@ class Images {
   get data() {
     return {
       imageId: this.imageId,
+      extension: this.extension,
       domainame: this.domainame,
       uploadedBy: this.uploadedBy,
       createdAt: this.createdAt,
@@ -39,14 +42,16 @@ class Images {
    * @param {Object} imageData
    * @param {string} imageData.domainame
    * @param {string} imageData.uploadedBy
+   * @param {string} imageData.extension
    **/
   static newImage(imageData) {
-    const { domainame, uploadedBy } = imageData;
-    if (!domainame || !uploadedBy) {
+    const { domainame, uploadedBy, extension } = imageData;
+    if (!domainame || !uploadedBy  || !extension) {
       return null;
     }
     return {
       imageId: crypto.randomUUID(),
+      extension,
       domainame,
       uploadedBy,
       createdAt: Timestamp.now(),

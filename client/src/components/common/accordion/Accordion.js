@@ -11,7 +11,10 @@ const Accordion = ({title, children, expanded, toggle}) => {
 					className={`accordion-expand-icon ${expanded ? 'expanded' : ''}`}
 				/>
 			</div>
-			<div className={`accordion-content ${expanded ? 'show' : ''}`}>
+			<div
+				className={`accordion-content ${expanded ? 'show' : ''}`}
+				data-testid='accordion-content-wrapper'
+			>
 				<div className='accordion-child-wrapper'>{children}</div>
 			</div>
 		</div>

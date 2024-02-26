@@ -19,12 +19,16 @@ const Modal = ({
 	}
 
 	return modalOpen ? (
-		<div className='modal-bg' onClick={closeModal}>
+		<div className='modal-bg' onClick={closeModal} data-testid='modal-bg'>
 			<div
 				className={`modal-container ${containerClassName || ''}`}
 				onClick={stopPropagation}
 			>
-				<IoIosCloseCircleOutline className='modal-close' onClick={closeModal} />
+				<IoIosCloseCircleOutline
+					className='modal-close'
+					onClick={closeModal}
+					data-testid='modal-close'
+				/>
 				<div className='modal-content'>{children}</div>
 				{showButtons && (
 					<footer className='modal-buttons-container'>

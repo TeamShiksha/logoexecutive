@@ -23,12 +23,14 @@ const Pricing = () => {
 					<div
 						className={selectMonthly ? 'active' : ''}
 						onClick={handleSwitchChange}
+						data-testid='monthly'
 					>
 						<span>Monthly</span>
 					</div>
 					<div
 						className={selectMonthly ? '' : 'active'}
 						onClick={handleSwitchChange}
+						data-testid='annually'
 					>
 						<span>Annually</span>
 					</div>

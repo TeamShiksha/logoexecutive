@@ -28,7 +28,8 @@
 		"lint": "eslint .",
 		"lint:fix": "eslint --fix .",
 		"format": "prettier --write .",
-		"check": "prettier --check ."
+		"check": "prettier --check .",
+		"coverage": "yarn test --coverage --watchAll=false"
 	},
 	"eslintConfig": {
 		"extends": [

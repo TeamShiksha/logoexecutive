@@ -1,8 +1,9 @@
-import {render, screen} from '@testing-library/react';
+import {render, screen, fireEvent} from '@testing-library/react';
 import Footer from './Footer';
 import {BrowserRouter} from 'react-router-dom';
 describe('Footer', () => {
 	it('should render the footer component', () => {
+		const windowSpy = jest.spyOn(window, 'open');
 		render(
 			<BrowserRouter>
 				<Footer />
@@ -21,5 +22,7 @@ describe('Footer', () => {
 		const teamShikshaLogo = screen.getByAltText('TeamShiksha Logo');
 		expect(brandLogo).toBeInTheDocument();
 		expect(teamShikshaLogo).toBeInTheDocument();
+		fireEvent.click(teamShikshaLogo);
+		expect(windowSpy).toHaveBeenCalledWith('https://team.shiksha', '_blank');
 	});
 });

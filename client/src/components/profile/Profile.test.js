@@ -52,6 +52,4 @@ describe('Profile component', () => {
 		});
 		expect(repeatNewPasswordInput.value).toBe('newPassword456');
 	});
-
-	// Add test cases to cover scenario when form is submitted
 });

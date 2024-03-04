@@ -19,7 +19,7 @@ const PricingCard = ({content, selectMonthly}) => {
 		: 'Get Started';
 
 	return (
-		<div className='pricing-card'>
+		<div className='pricing-card' data-testid='pricing-card'>
 			<div>
 				<h4>{content.title}</h4>
 				{content.label && <p>{content.label}</p>}

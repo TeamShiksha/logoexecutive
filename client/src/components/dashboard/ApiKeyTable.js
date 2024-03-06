@@ -24,14 +24,14 @@ const ApiKeyTable = ({keys, copiedKey, handleCopyToClipboard, deleteKey}) => {
 									{copiedKey === key.apiKey ? (
 										<div
 											className='api-key-copied'
-											data-testId='api-key-copied'
+											data-testid='api-key-copied'
 										>
 											<LuCopyCheck />
 										</div>
 									) : (
 										<button
 											className='api-key-copy'
-											data-testId='api-key-copy'
+											data-testid='api-key-copy'
 											onClick={() => handleCopyToClipboard(key.apiKey)}
 										>
 											<FiCopy />
@@ -41,7 +41,7 @@ const ApiKeyTable = ({keys, copiedKey, handleCopyToClipboard, deleteKey}) => {
 								<td>
 									<button
 										className='api-key-delete-button'
-										data-testId='api-key-delete'
+										data-testid='api-key-delete'
 										onClick={() => deleteKey(key.apiKey)}
 									>
 										<MdDeleteOutline />

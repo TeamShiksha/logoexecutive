@@ -37,7 +37,11 @@ const PreviewModal = ({
 			showButtons={false}
 			containerClassName='preview-modal'
 		>
-			<form onSubmit={handleUpload} className='preview-modal-form'>
+			<form
+				onSubmit={handleUpload}
+				className='preview-modal-form'
+				data-testid='form'
+			>
 				<CustomInput
 					type='text'
 					label='Image name'

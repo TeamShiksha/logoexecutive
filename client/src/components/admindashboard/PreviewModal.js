@@ -40,7 +40,7 @@ const PreviewModal = ({
 			<form
 				onSubmit={handleUpload}
 				className='preview-modal-form'
-				data-testid='form'
+				data-testid='preview-modal-form'
 			>
 				<CustomInput
 					type='text'

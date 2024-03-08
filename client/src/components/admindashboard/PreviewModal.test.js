@@ -24,7 +24,7 @@ describe('PreviewModal', () => {
 				setUploadedImages={mockSetUploadedImages}
 			/>,
 		);
-		expect(screen.getByTestId('form')).toBeInTheDocument();
+		expect(screen.getByTestId('preview-modal-form')).toBeInTheDocument();
 		expect(screen.getByText('Image name')).toBeInTheDocument();
 		expect(screen.getByRole('img')).toHaveAttribute('src', mockImage.url);
 	});
@@ -59,7 +59,7 @@ describe('PreviewModal', () => {
 				setUploadedImages={mockSetUploadedImages}
 			/>,
 		);
-		const form = screen.getByTestId('form');
+		const form = screen.getByTestId('preview-modal-form');
 		fireEvent.submit(form);
 		expect(mockSetIsUploadSuccessfull).toHaveBeenCalledWith(true);
 		expect(mockSetUploadedImages).toHaveBeenCalledTimes(1);

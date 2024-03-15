@@ -14,7 +14,7 @@ const ImageTable = ({uploadedImages}) => {
 						))}
 					</tr>
 				</thead>
-				<tbody role='table-body'>
+				<tbody role='image-table-body'>
 					{uploadedImages.map((image, index) => (
 						<tr key={index}>
 							<td>{image.name}</td>

@@ -57,7 +57,7 @@ const PreviewModal = ({
 				<p className='image-upload-success'>Image uploaded successfully.</p>
 			)}
 			<div className='preview-container'>
-				<img src={image.url} alt={image.name} />
+				<img src={image.url} alt={image.name} data-testid='image-preview' />
 			</div>
 		</Modal>
 	);

@@ -10,9 +10,9 @@ global.URL.createObjectURL = jest.fn();
 describe('Drag and Drop Component', () => {
 	const mockFile = new File(['fileContent'], 'image.jpg', {type: 'image/jpeg'});
 	const mockTextFile = new File(['fileContent'], 'image.txt', {type: 'text'});
+	const dragFunction = jest.fn();
 
 	test('Drag and Drop component should be rendered properly', () => {
-		const dragFunction = jest.fn();
 		render(<DragAndDrop setUploadedImages={dragFunction} />);
 		expect(
 			screen.getByText('Drag and drop your image here or click to browse.'),
@@ -22,7 +22,6 @@ describe('Drag and Drop Component', () => {
 	});
 
 	test('Uploading file in the input should work as expected', async () => {
-		const dragFunction = jest.fn();
 		render(<DragAndDrop setUploadedImages={dragFunction} />);
 		const imageUploadElement = screen.getByRole('file-upload');
 		expect(imageUploadElement).toBeInTheDocument();
@@ -36,7 +35,6 @@ describe('Drag and Drop Component', () => {
 	});
 
 	test('Drag over and check if the text changes', () => {
-		const dragFunction = jest.fn();
 		render(<DragAndDrop setUploadedImages={dragFunction} />);
 		const dragArea = screen.getByTestId('drag-area');
 		const dataTransfer = {dropEffect: ''};
@@ -49,7 +47,6 @@ describe('Drag and Drop Component', () => {
 	});
 
 	test('Drag and Drop functionality of image should work as expected', () => {
-		const dragFunction = jest.fn();
 		render(<DragAndDrop setUploadedImages={dragFunction} />);
 		expect(
 			screen.getByText('Drag and drop your image here or click to browse.'),
@@ -64,16 +61,15 @@ describe('Drag and Drop Component', () => {
 	});
 
 	test('Error message should be shown for wrong type of file', () => {
-		const dragFunction = jest.fn();
 		render(<DragAndDrop setUploadedImages={dragFunction} />);
 		const imageUploadElement = screen.getByRole('file-upload');
 		expect(imageUploadElement).toBeInTheDocument();
 		userEvent.upload(imageUploadElement, mockTextFile);
 		expect(screen.getByTestId('image-error')).toBeInTheDocument();
+		expect(screen.getByText('Please select jpg,png,svg file. You chose a txt file.')).toBeInTheDocument();
 	});
 
 	test('Click Upload after dropping image and see the success message', () => {
-		const dragFunction = jest.fn();
 		render(<DragAndDrop setUploadedImages={dragFunction} />);
 		const dragArea = screen.getByTestId('drag-area');
 		const dataTransfer = {files: [mockFile]};
@@ -86,7 +82,6 @@ describe('Drag and Drop Component', () => {
 	});
 
 	test('Upload image and then close the modal', () => {
-		const dragFunction = jest.fn();
 		render(<DragAndDrop setUploadedImages={dragFunction} />);
 		const dragArea = screen.getByTestId('drag-area');
 		const dataTransfer = {files: [mockFile]};

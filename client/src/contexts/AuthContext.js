@@ -1,7 +1,5 @@
-import axios from 'axios';
 import {createContext, useState} from 'react';
-
-const BASE_API_URL = process.env.REACT_APP_BASE_API_URL;
+import {protectedInstance} from '../api/api_instance';
 
 export const AuthContext = createContext();
 
@@ -10,7 +8,7 @@ export const AuthProvider = ({children}) => {
 
 	const logout = async () => {
 		try {
-			await axios.get(`${BASE_API_URL}/auth/signout`, {withCredentials: true});
+			await protectedInstance.get(`auth/signout`);
 			setIsAuthenticated(false);
 		} catch (err) {
 			console.error(err);

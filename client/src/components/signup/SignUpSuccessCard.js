@@ -1,6 +1,7 @@
+import PropTypes from 'prop-types';
 import './SignUpSuccessCard.css';
 
-const SignUpSuccessCard = () => {
+const SignUpSuccessCard = ({message}) => {
 	return (
 		<section className='signup-success-card-wrapper'>
 			<div className='signup-success-card'>
@@ -20,13 +21,14 @@ const SignUpSuccessCard = () => {
 					<polyline points='20 6 9 17 4 12'></polyline>
 				</svg>
 				<h3 className='signup-success-title'>Sign-Up Submission Successful</h3>
-				<p className='signup-success-message'>
-					Please check your email for a verification link. Your account must be
-					verified before you can sign in.
-				</p>
+				<p className='signup-success-message'>{message}</p>
 			</div>
 		</section>
 	);
+};
+
+SignUpSuccessCard.propTypes = {
+	message: PropTypes.string.isRequired,
 };
 
 export default SignUpSuccessCard;

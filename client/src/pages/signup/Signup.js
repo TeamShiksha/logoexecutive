@@ -1,10 +1,8 @@
-import axios from 'axios';
 import {useState} from 'react';
 import {NavLink} from 'react-router-dom';
 import './Signup.css';
 import SignUpSuccessCard from '../../components/signup/SignUpSuccessCard';
-
-const BASE_API_URL = process.env.REACT_APP_BASE_API_URL;
+import {useApi} from '../../hooks/useApi';
 
 export const Signup = () => {
 	const INITIAL_FORM_DATA = {
@@ -16,17 +14,18 @@ export const Signup = () => {
 	};
 	const [formData, setFormData] = useState(INITIAL_FORM_DATA);
 	const [validationErrors, setValidationErrors] = useState({});
-	const [errorMsg, setErrorMsg] = useState('');
-	const [submitting, setSubmitting] = useState(false);
 	const [isSignUpSuccess, setIsSignUpSuccess] = useState(false);
+	const {data, errorMsg, loading, makeRequest} = useApi({
+		url: `auth/signup`,
+		method: 'post',
+		data: formData,
+	});
 
 	const handleChange = (event) => {
 		const {name, value} = event.target;
 
 		// Trim leading and trailing whitespace from the input value
 		const trimmedValue = value.trim();
-
-		setErrorMsg(null);
 
 		setFormData((prevData) => ({
 			...prevData,
@@ -92,7 +91,7 @@ export const Signup = () => {
 	};
 
 	const handleSubmit = async (event) => {
-		setErrorMsg(null);
+		setValidationErrors({});
 		event.preventDefault();
 
 		// Validate the form data
@@ -101,22 +100,11 @@ export const Signup = () => {
 		// Check if there are any validation errors
 		if (Object.keys(errors).length === 0) {
 			// No errors, proceed with registration logic here
-			setSubmitting(true);
-			try {
-				await axios.post(`${BASE_API_URL}/auth/signup`, formData);
-			} catch (error) {
-				setSubmitting(false);
-				console.error(error);
-				if (error.response) {
-					setErrorMsg(error?.response?.data[0]?.message);
-				} else {
-					setErrorMsg(error?.message);
-				}
-				return;
+			const success = await makeRequest();
+			if (success) {
+				setFormData(INITIAL_FORM_DATA);
+				setIsSignUpSuccess(true);
 			}
-			setSubmitting(false);
-			setFormData(INITIAL_FORM_DATA);
-			setIsSignUpSuccess(true);
 		} else {
 			// Set the validation errors
 			setValidationErrors(errors);
@@ -146,7 +134,7 @@ export const Signup = () => {
 	return (
 		<>
 			{isSignUpSuccess ? (
-				<SignUpSuccessCard />
+				<SignUpSuccessCard message={data.message} />
 			) : (
 				<div className='page-div'>
 					<form onSubmit={handleSubmit} noValidate className='form-box'>
@@ -245,9 +233,9 @@ export const Signup = () => {
 							<button
 								type='submit'
 								className='submit-button'
-								disabled={submitting}
+								disabled={loading}
 							>
-								{submitting ? 'Submitting...' : 'Register'}
+								{loading ? 'Submitting...' : 'Register'}
 							</button>
 						</div>
 						<div className='input-actiontext'>

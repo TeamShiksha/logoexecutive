@@ -1,12 +1,10 @@
-import axios from 'axios';
 import {useContext, useState} from 'react';
 import {useNavigate} from 'react-router';
 import {NavLink} from 'react-router-dom';
 import CustomInput from '../common/input/CustomInput';
 import './Signincard.css';
 import {AuthContext} from '../../contexts/AuthContext';
-
-const BASE_API_URL = process.env.REACT_APP_BASE_API_URL;
+import {useApi} from '../../hooks/useApi';
 
 export default function Signincard() {
 	const INITIAL_FORM_DATA = {
@@ -14,8 +12,15 @@ export default function Signincard() {
 		password: '',
 	};
 	const [formData, setFormData] = useState(INITIAL_FORM_DATA);
-	const [errorMsg, setErrorMsg] = useState('');
-	const [submitting, setSubmitting] = useState(false);
+	const [validationErrors, setValidationErrors] = useState('');
+	const {errorMsg, loading, makeRequest} = useApi(
+		{
+			url: `auth/signin`,
+			method: 'post',
+			data: formData,
+		},
+		true,
+	);
 
 	const {setIsAuthenticated} = useContext(AuthContext);
 	const navigate = useNavigate();
@@ -26,7 +31,7 @@ export default function Signincard() {
 		// Trim leading and trailing whitespace from the input value
 		const trimmedValue = value.trim();
 
-		setErrorMsg(null);
+		setValidationErrors(null);
 
 		setFormData((prev) => {
 			return {
@@ -49,35 +54,17 @@ export default function Signincard() {
 	};
 
 	const handleSubmit = async (e) => {
-		setErrorMsg(null);
+		setValidationErrors(null);
 		e.preventDefault();
 		const error = validateFormData();
 		if (error) {
-			setErrorMsg(error);
+			setValidationErrors(error);
 		} else {
-			setSubmitting(true);
-			try {
-				const response = await axios.post(
-					`${BASE_API_URL}/auth/signin`,
-					formData,
-					{
-						withCredentials: true,
-					},
-				);
-				if (response.status === 200) {
-					setIsAuthenticated(true);
-				}
+			const success = await makeRequest();
+			if (success) {
 				setFormData(INITIAL_FORM_DATA);
+				setIsAuthenticated(true);
 				navigate('/dashboard');
-				setSubmitting(false);
-			} catch (err) {
-				setSubmitting(false);
-				console.error(err);
-				if (err?.response) {
-					setErrorMsg(err?.response?.data?.message);
-				} else {
-					setErrorMsg(err?.message);
-				}
 			}
 		}
 	};
@@ -86,11 +73,11 @@ export default function Signincard() {
 		<div className='inputlogin'>
 			<h3 className='head3'>Sign in to dashboard</h3>
 			<p
-				className={`input-error ${errorMsg ? '' : 'hidden'}`}
+				className={`input-error ${validationErrors || errorMsg ? '' : 'hidden'}`}
 				aria-live='assertive'
 				role='alert'
 			>
-				{errorMsg || ' '}
+				{validationErrors || errorMsg || ' '}
 			</p>
 			<form onSubmit={handleSubmit}>
 				<CustomInput
@@ -112,9 +99,9 @@ export default function Signincard() {
 				<button
 					className='login-btn'
 					aria-label='Sign in to Dashboard'
-					disabled={submitting}
+					disabled={loading}
 				>
-					{submitting ? 'Submitting...' : 'Login'}
+					{loading ? 'Submitting...' : 'Login'}
 				</button>
 			</form>
 			<section className='input-actiontext'>

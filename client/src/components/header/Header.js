@@ -1,18 +1,21 @@
-import PropTypes from 'prop-types';
-import {useEffect, useState} from 'react';
+import {useContext, useEffect, useState} from 'react';
 import {HiMenu} from 'react-icons/hi';
 import {Link, useNavigate} from 'react-router-dom';
 import logo from '../../assets/images/business-man-logo.webp';
 import './Header.css';
 import Navbar from './Navbar';
 import {loggedInNavbarItems, loggedOutNavbarItems} from '../../constants';
+import {AuthContext} from '../../contexts/AuthContext';
 
-const Header = ({user, logoutUser}) => {
+const Header = () => {
 	const [showNavBar, setShowNavBar] = useState(window.innerWidth > 1000);
 	const [headerBg, setHeaderBg] = useState(window.scrollY > 75);
+	const {isAuthenticated, logout} = useContext(AuthContext);
 	const navigate = useNavigate();
 
-	const navbarItems = user ? loggedInNavbarItems : loggedOutNavbarItems;
+	const navbarItems = isAuthenticated
+		? loggedInNavbarItems
+		: loggedOutNavbarItems;
 
 	const toggleShowNavBar = () => {
 		setShowNavBar((prev) => !prev);
@@ -23,8 +26,8 @@ const Header = ({user, logoutUser}) => {
 	};
 
 	const handleLogout = () => {
-		logoutUser();
-		navigate('/signin');
+		logout();
+		navigate('/welcome');
 	};
 
 	useEffect(() => {
@@ -53,10 +56,10 @@ const Header = ({user, logoutUser}) => {
 				{showNavBar && <Navbar navbarItems={navbarItems} />}
 				<div className='cta-container'>
 					<button
-						onClick={user ? handleLogout : () => navigate('/signin')}
+						onClick={isAuthenticated ? handleLogout : () => navigate('/signin')}
 						className='cta-button'
 					>
-						{user ? 'Logout' : 'Get Started'}
+						{isAuthenticated ? 'Logout' : 'Get Started'}
 					</button>
 
 					<HiMenu onClick={toggleShowNavBar} className='burger-menu' />
@@ -67,8 +70,3 @@ const Header = ({user, logoutUser}) => {
 };
 
 export default Header;
-
-Header.propTypes = {
-	user: PropTypes.string,
-	logoutUser: PropTypes.func,
-};

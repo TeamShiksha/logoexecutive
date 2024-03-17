@@ -1,22 +1,23 @@
 import axios from 'axios';
-import PropTypes from 'prop-types';
-import {useState} from 'react';
+import {useContext, useState} from 'react';
 import {useNavigate} from 'react-router';
 import {NavLink} from 'react-router-dom';
 import CustomInput from '../common/input/CustomInput';
 import './Signincard.css';
+import {AuthContext} from '../../contexts/AuthContext';
 
 const BASE_API_URL = process.env.REACT_APP_BASE_API_URL;
 
-export default function Signincard({setUser}) {
-	const [formData, setFormData] = useState({
+export default function Signincard() {
+	const INITIAL_FORM_DATA = {
 		email: '',
 		password: '',
-	});
-
+	};
+	const [formData, setFormData] = useState(INITIAL_FORM_DATA);
 	const [errorMsg, setErrorMsg] = useState('');
 	const [submitting, setSubmitting] = useState(false);
 
+	const {setIsAuthenticated} = useContext(AuthContext);
 	const navigate = useNavigate();
 
 	const handleFormChange = (e) => {
@@ -59,10 +60,16 @@ export default function Signincard({setUser}) {
 				const response = await axios.post(
 					`${BASE_API_URL}/auth/signin`,
 					formData,
+					{
+						withCredentials: true,
+					},
 				);
-				setUser(response?.data?.token);
-				setFormData({email: '', password: ''});
+				if (response.status === 200) {
+					setIsAuthenticated(true);
+				}
+				setFormData(INITIAL_FORM_DATA);
 				navigate('/dashboard');
+				setSubmitting(false);
 			} catch (err) {
 				setSubmitting(false);
 				console.error(err);
@@ -124,7 +131,3 @@ export default function Signincard({setUser}) {
 		</div>
 	);
 }
-
-Signincard.propTypes = {
-	setUser: PropTypes.func,
-};

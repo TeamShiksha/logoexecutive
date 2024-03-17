@@ -1,15 +1,10 @@
 import Signincard from '../../components/signincard/Signincard';
 import './Signin.css';
-import PropTypes from 'prop-types';
 
-export const Signin = ({setUser}) => {
+export const Signin = () => {
 	return (
 		<div className='login-main'>
-			<Signincard setUser={setUser} />
+			<Signincard />
 		</div>
 	);
-};
-
-Signin.propTypes = {
-	setUser: PropTypes.func,
 };

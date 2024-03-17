@@ -96,3 +96,7 @@
 .input-actiontext-link {
 	text-decoration: none;
 }
+
+.error {
+	max-width: 300px;
+}

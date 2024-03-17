@@ -1,0 +1,35 @@
+.signup-success-card-wrapper {
+	margin: 100px 14px;
+	display: grid;
+	place-items: center;
+}
+
+.signup-success-card {
+	max-width: 400px;
+	border-radius: var(--bradius);
+	border: var(--border);
+	box-shadow: var(--shadow);
+	padding: 24px;
+	text-align: center;
+}
+
+.signup-success-icon {
+	margin: auto;
+	height: 48px;
+	width: 48px;
+	color: #48bb78;
+}
+
+.signup-success-title {
+	margin-top: 4px;
+	color: var(--black);
+	font-size: 24px;
+	line-height: 32px;
+}
+
+.signup-success-message {
+	color: var(--description);
+	font-size: 14px;
+	line-height: 20px;
+	margin: 4px 0px 20px;
+}

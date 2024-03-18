@@ -69,9 +69,10 @@ const DragAndDrop = ({setUploadedImages}) => {
 	}
 
 	return (
-		<section className='drag-drop-section'>
+		<section className='drag-drop-section' data-testid='component'>
 			<div
 				className='drag-area'
+				data-testid='drag-area'
 				role='button'
 				onClick={handleFileSelection}
 				onDragOver={handleDragOver}
@@ -91,12 +92,18 @@ const DragAndDrop = ({setUploadedImages}) => {
 					name='file'
 					type='file'
 					className='file'
+					data-testid='file-upload'
 					accept='image/jpeg, image/png, image/svg+xml'
 				/>
 			</div>
-			{errorMessage && <p className='image-select-error'>{errorMessage}</p>}
+			{errorMessage && (
+				<p className='image-select-error' data-testid='image-error'>
+					{errorMessage}
+				</p>
+			)}
 			{image && (
 				<PreviewModal
+					data-testid='preview'
 					image={image}
 					handleImageNameChange={handleImageNameChange}
 					isModalOpen={isModalOpen}

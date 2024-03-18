@@ -66,13 +66,13 @@ describe("Signup Controller", () => {
       .send({ user: "hello world" });
 
     expect(response.status).toBe(422);
-    expect(response.body).toEqual([
+    expect(response.body).toEqual(
       {
         message: "\"firstName\" is required",
         statusCode: 422,
         error: STATUS_CODES[422],
       },
-    ]);
+    );
   });
 
   it("422 - when firstName contains special characters", async () => {
@@ -83,13 +83,13 @@ describe("Signup Controller", () => {
       .send(mockPayload);
 
     expect(response.status).toBe(422);
-    expect(response.body).toEqual([
+    expect(response.body).toEqual(
       {
         message: "firstName should not contain any special character or number",
         statusCode: 422,
         error: STATUS_CODES[422],
       },
-    ]);
+    );
   });
 
   it("422 - when lastName contains special characters", async () => {
@@ -100,13 +100,13 @@ describe("Signup Controller", () => {
       .send(mockPayload);
 
     expect(response.status).toBe(422);
-    expect(response.body).toEqual([
+    expect(response.body).toEqual(
       {
         message: "lastName should not contain any special character or number",
         statusCode: 422,
         error: STATUS_CODES[422],
       },
-    ]);
+    );
   });
 
   it("422 - when email is invalid", async () => {
@@ -117,13 +117,13 @@ describe("Signup Controller", () => {
       .send(mockPayload);
 
     expect(response.status).toBe(422);
-    expect(response.body).toEqual([
+    expect(response.body).toEqual(
       {
         message: "email should be valid",
         statusCode: 422,
         error: STATUS_CODES[422],
       },
-    ]);
+    );
   });
 
   it("422 - when password is invalid (too short)", async () => {
@@ -134,13 +134,13 @@ describe("Signup Controller", () => {
       .send(mockPayload);
 
     expect(response.status).toBe(422);
-    expect(response.body).toEqual([
+    expect(response.body).toEqual(
       {
         message: "\"password\" length must be at least 8 characters long",
         statusCode: 422,
         error: STATUS_CODES[422],
       },
-    ]);
+    );
   });
 
   it("422 - when password is invalid (too long)", async () => {
@@ -154,14 +154,14 @@ describe("Signup Controller", () => {
       .send(mockPayload);
 
     expect(response.status).toBe(422);
-    expect(response.body).toEqual([
+    expect(response.body).toEqual(
       {
         message:
           "\"password\" length must be less than or equal to 30 characters long",
         statusCode: 422,
         error: STATUS_CODES[422],
       },
-    ]);
+    );
   });
 
   it("422 - when confirm password doesn't match", async () => {
@@ -175,13 +175,13 @@ describe("Signup Controller", () => {
       .send(mockPayload);
 
     expect(response.status).toBe(422);
-    expect(response.body).toEqual([
+    expect(response.body).toEqual(
       {
         message: "Confirm Password should match password",
         statusCode: 422,
         error: STATUS_CODES[422],
       },
-    ]);
+    );
   });
 
   it("400 - when email already exists in db", async () => {
@@ -192,13 +192,13 @@ describe("Signup Controller", () => {
       .send(mockValidPayload);
 
     expect(response.status).toBe(400);
-    expect(response.body).toEqual([
+    expect(response.body).toEqual(
       {
         message: "Email already exists",
         statusCode: 400,
         error: STATUS_CODES[400],
       },
-    ]);
+    );
   });
 
   it("500 - when failed to create user", async () => {

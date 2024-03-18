@@ -33,25 +33,25 @@ async function signupController(req, res, next) {
   try {
     const { error, value } = signupPayloadSchema.validate(req.body);
     if (!!error) {
-      return res.status(422).json([
+      return res.status(422).json(
         {
           message: error.message,
           error: STATUS_CODES[422],
           statusCode: 422,
         },
-      ]);
+      );
     }
 
     const { email } = value;
     const emailExists = await emailRecordExists(email);
     if (emailExists) {
-      return res.status(400).json([
+      return res.status(400).json(
         {
           message: "Email already exists",
           error: STATUS_CODES[400],
           statusCode: 400,
         },
-      ]);
+      );
     }
 
     const newUser = await createUser(value);

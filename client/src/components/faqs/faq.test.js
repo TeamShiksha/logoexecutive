@@ -16,7 +16,7 @@ const faqsMockData = [
 		steps: ['Stay tuned coming soon'],
 	},
 ];
-		
+
 describe('FAQ', () => {
 	it('should render the FAQ questions and answers', () => {
 		render(<FAQs />);

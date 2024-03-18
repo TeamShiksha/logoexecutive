@@ -92,7 +92,7 @@ const DragAndDrop = ({setUploadedImages}) => {
 					name='file'
 					type='file'
 					className='file'
-					role='file-upload'
+					data-testid='file-upload'
 					accept='image/jpeg, image/png, image/svg+xml'
 				/>
 			</div>

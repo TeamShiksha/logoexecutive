@@ -6,15 +6,15 @@ import './ImageTable.css';
 const ImageTable = ({uploadedImages}) => {
 	return (
 		<div className='image-table-wrapper'>
-			<table className='image-table' role='table'>
+			<table className='image-table'>
 				<thead>
-					<tr className='image-table-heding-row' role='row'>
+					<tr className='image-table-heding-row'>
 						{imageTableHeadings.map((heading, index) => (
 							<th key={index}>{heading}</th>
 						))}
 					</tr>
 				</thead>
-				<tbody role='image-table-body'>
+				<tbody>
 					{uploadedImages.map((image, index) => (
 						<tr key={index}>
 							<td>{image.name}</td>

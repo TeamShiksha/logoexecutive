@@ -16,8 +16,8 @@ describe('Image Table Component', () => {
 
 	test('Images should not be listed if there are no images', () => {
 		render(<ImageTable uploadedImages={[]} />);
-		const tbody = screen.getByRole('image-table-body');
-		const imageRows = screen.queryAllByRole('row', {container: tbody});
+		const tableElement = screen.getByRole('table');
+		const imageRows = screen.queryAllByRole('row', {container: tableElement});
 		expect(imageRows).toHaveLength(1);
 	});
 
@@ -37,8 +37,8 @@ describe('Image Table Component', () => {
 			},
 		];
 		render(<ImageTable uploadedImages={mockImages} />);
-		const tbody = screen.getByRole('image-table-body');
-		const imageRows = screen.queryAllByRole('row', {container: tbody});
+		const tableElement = screen.getByRole('table');
+		const imageRows = screen.queryAllByRole('row', {container: tableElement});
 		const imagesLength = mockImages.length;
 		expect(imageRows).toHaveLength(imagesLength + 1);
 	});

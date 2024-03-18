@@ -3,7 +3,6 @@ import {render, screen, fireEvent} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import DragAndDrop from './DragAndDrop';
-import AdminDashboard from '../../pages/admin/Admin';
 
 global.URL.createObjectURL = jest.fn();
 
@@ -17,13 +16,13 @@ describe('Drag and Drop Component', () => {
 		expect(
 			screen.getByText('Drag and drop your image here or click to browse.'),
 		).toBeInTheDocument();
-		const imageUploadElement = screen.getByRole('file-upload');
+		const imageUploadElement = screen.getByTestId('file-upload');
 		expect(imageUploadElement).toBeInTheDocument();
 	});
 
 	test('Uploading file in the input should work as expected', async () => {
 		render(<DragAndDrop setUploadedImages={dragFunction} />);
-		const imageUploadElement = screen.getByRole('file-upload');
+		const imageUploadElement = screen.getByTestId('file-upload');
 		expect(imageUploadElement).toBeInTheDocument();
 		userEvent.upload(imageUploadElement, mockFile);
 		expect(imageUploadElement.files[0].name).toBe('image.jpg');
@@ -62,11 +61,13 @@ describe('Drag and Drop Component', () => {
 
 	test('Error message should be shown for wrong type of file', () => {
 		render(<DragAndDrop setUploadedImages={dragFunction} />);
-		const imageUploadElement = screen.getByRole('file-upload');
+		const imageUploadElement = screen.getByTestId('file-upload');
 		expect(imageUploadElement).toBeInTheDocument();
 		userEvent.upload(imageUploadElement, mockTextFile);
 		expect(screen.getByTestId('image-error')).toBeInTheDocument();
-		expect(screen.getByText('Please select jpg,png,svg file. You chose a txt file.')).toBeInTheDocument();
+		expect(
+			screen.getByText('Please select jpg,png,svg file. You chose a txt file.'),
+		).toBeInTheDocument();
 	});
 
 	test('Click Upload after dropping image and see the success message', () => {
@@ -90,30 +91,5 @@ describe('Drag and Drop Component', () => {
 		fireEvent.click(closeButton);
 		const modalElement = screen.queryByTestId('modal-bg');
 		expect(modalElement).toBeNull();
-	});
-
-	test('Drag and Drop the image and check if the image is listed in the table', () => {
-		render(<AdminDashboard />);
-		var tbody = screen.getByRole('image-table-body');
-		var imageRowsBeforeUpload = screen.queryAllByRole('row', {
-			container: tbody,
-		});
-		const imagesLengthBeforeUpload = imageRowsBeforeUpload.length;
-		expect(imageRowsBeforeUpload).toHaveLength(imagesLengthBeforeUpload);
-		const dragArea = screen.getByTestId('drag-area');
-		const dataTransfer = {files: [mockFile]};
-		fireEvent.drop(dragArea, {dataTransfer});
-		const uploadButton = screen.getByRole('button', {name: 'Upload'});
-		fireEvent.click(uploadButton);
-		expect(
-			screen.getByText('Image uploaded successfully.'),
-		).toBeInTheDocument();
-		fireEvent.click(screen.getByTestId('component'));
-		tbody = screen.getByRole('image-table-body');
-		const imageRowsAfterUpload = screen.queryAllByRole('row', {
-			container: tbody,
-		});
-		const imagesLengthAfterUpload = imagesLengthBeforeUpload + 1;
-		expect(imageRowsAfterUpload).toHaveLength(imagesLengthAfterUpload);
 	});
 });

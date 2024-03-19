@@ -1,7 +1,7 @@
 {
   "name": "server",
   "version": "1.0.0",
-  "repository": "https://github.com/FrontendArmy/logoexecutive-backend.git",
+  "repository": "https://github.com/TeamShiksha/logoexecutive.git",
   "license": "MIT",
   "scripts": {
     "start": "cross-env NODE_ENV=development netlify dev",
@@ -9,7 +9,6 @@
     "lint:fix": "eslint --fix .",
     "test": "jest",
     "test:unit": "cross-env NODE_ENV=test jest unit",
-    "build": "cd frontend && npm install && yarn build && ls -l",
     "test:coverage": "jest --coverage"
   },
   "dependencies": {

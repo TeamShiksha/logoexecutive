@@ -2,19 +2,13 @@ import {useState} from 'react';
 import {NavLink} from 'react-router-dom';
 import './Signup.css';
 import {useApi} from '../../hooks/useApi';
+import {INITIAL_SIGNUP_FORM_DATA} from '../../constants';
 
 export const Signup = () => {
-	const INITIAL_FORM_DATA = {
-		firstName: '',
-		lastName: '',
-		email: '',
-		password: '',
-		confirmPassword: '',
-	};
-	const [formData, setFormData] = useState(INITIAL_FORM_DATA);
+	const [formData, setFormData] = useState(INITIAL_SIGNUP_FORM_DATA);
 	const [validationErrors, setValidationErrors] = useState({});
 	const [isSignUpSuccess, setIsSignUpSuccess] = useState(false);
-	const {data, errorMsg, loading, makeRequest} = useApi({
+	const {data, errorMsg, makeRequest} = useApi({
 		url: `auth/signup`,
 		method: 'post',
 		data: formData,
@@ -23,7 +17,6 @@ export const Signup = () => {
 	const handleChange = (event) => {
 		const {name, value} = event.target;
 
-		// Trim leading and trailing whitespace from the input value
 		const trimmedValue = value.trim();
 
 		setFormData((prevData) => ({
@@ -31,7 +24,6 @@ export const Signup = () => {
 			[name]: trimmedValue,
 		}));
 
-		// Reset the validation error for the current field
 		setValidationErrors((prevErrors) => ({
 			...prevErrors,
 			[name]: '',
@@ -41,7 +33,6 @@ export const Signup = () => {
 	const validateFormData = () => {
 		const errors = {};
 
-		// Validation for First Name
 		if (formData.firstName === '') {
 			errors.firstName = 'First name is required.';
 		} else if (/[^a-zA-Z]/.test(formData.firstName)) {
@@ -53,7 +44,6 @@ export const Signup = () => {
 			errors.firstName = 'First name should be 1 to 20 characters long.';
 		}
 
-		// Validation for Last Name
 		if (formData.lastName === '') {
 			errors.lastName = 'Last name is required.';
 		} else if (/[^a-zA-Z]/.test(formData.lastName)) {
@@ -62,7 +52,6 @@ export const Signup = () => {
 			errors.lastName = 'Last name should be 1 to 20 characters long.';
 		}
 
-		// Validation for Email
 		if (formData.email === '') {
 			errors.email = 'Email is required.';
 		} else if (formData.email.length > 50) {
@@ -71,7 +60,6 @@ export const Signup = () => {
 			errors.email = 'Invalid email format.';
 		}
 
-		// Validation for Password
 		if (formData.password === '') {
 			errors.password = 'Password is required.';
 		} else if (formData.password.length < 8 || formData.password.length > 30) {
@@ -81,7 +69,6 @@ export const Signup = () => {
 				'Password should contain at least one uppercase letter, one lowercase letter, one digit, and one special character.';
 		}
 
-		// Validation for Confirm Password
 		if (formData.confirmPassword !== formData.password) {
 			errors.confirmPassword = 'Passwords do not match.';
 		}
@@ -94,19 +81,15 @@ export const Signup = () => {
 		setIsSignUpSuccess(false);
 		event.preventDefault();
 
-		// Validate the form data
 		const errors = validateFormData();
 
-		// Check if there are any validation errors
 		if (Object.keys(errors).length === 0) {
-			// No errors, proceed with registration logic here
 			const success = await makeRequest();
 			if (success) {
-				setFormData(INITIAL_FORM_DATA);
+				setFormData(INITIAL_SIGNUP_FORM_DATA);
 				setIsSignUpSuccess(true);
 			}
 		} else {
-			// Set the validation errors
 			setValidationErrors(errors);
 		}
 	};
@@ -117,7 +100,6 @@ export const Signup = () => {
 	};
 
 	const isValidPassword = (password) => {
-		// Define your password strength criteria here
 		const hasUppercase = /[A-Z]/;
 		const hasLowercase = /[a-z]/;
 		const hasDigit = /\d/;
@@ -223,8 +205,8 @@ export const Signup = () => {
 					<p className='error'>{validationErrors.confirmPassword}</p>
 				</div>
 				<div className='input-group'>
-					<button type='submit' className='submit-button' disabled={loading}>
-						{loading ? 'Submitting...' : 'Register'}
+					<button type='submit' className='submit-button'>
+						Register
 					</button>
 				</div>
 				<div className='input-actiontext'>

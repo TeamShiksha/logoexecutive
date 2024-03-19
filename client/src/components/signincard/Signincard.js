@@ -5,15 +5,12 @@ import CustomInput from '../common/input/CustomInput';
 import './Signincard.css';
 import {AuthContext} from '../../contexts/AuthContext';
 import {useApi} from '../../hooks/useApi';
+import {INITIAL_SIGNIN_FORM_DATA} from '../../constants';
 
 export default function Signincard() {
-	const INITIAL_FORM_DATA = {
-		email: '',
-		password: '',
-	};
-	const [formData, setFormData] = useState(INITIAL_FORM_DATA);
+	const [formData, setFormData] = useState(INITIAL_SIGNIN_FORM_DATA);
 	const [validationErrors, setValidationErrors] = useState('');
-	const {errorMsg, loading, makeRequest} = useApi(
+	const {errorMsg, makeRequest} = useApi(
 		{
 			url: `auth/signin`,
 			method: 'post',
@@ -28,7 +25,6 @@ export default function Signincard() {
 	const handleFormChange = (e) => {
 		const {name, value} = e.target;
 
-		// Trim leading and trailing whitespace from the input value
 		const trimmedValue = value.trim();
 
 		setValidationErrors(null);
@@ -62,7 +58,7 @@ export default function Signincard() {
 		} else {
 			const success = await makeRequest();
 			if (success) {
-				setFormData(INITIAL_FORM_DATA);
+				setFormData(INITIAL_SIGNIN_FORM_DATA);
 				setIsAuthenticated(true);
 				navigate('/dashboard');
 			}
@@ -96,12 +92,8 @@ export default function Signincard() {
 					value={formData.password}
 					onChange={handleFormChange}
 				/>
-				<button
-					className='login-btn'
-					aria-label='Sign in to Dashboard'
-					disabled={loading}
-				>
-					{loading ? 'Submitting...' : 'Login'}
+				<button className='login-btn' aria-label='Sign in to Dashboard'>
+					Login
 				</button>
 			</form>
 			<section className='input-actiontext'>

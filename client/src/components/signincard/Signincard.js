@@ -1,31 +1,33 @@
-import axios from 'axios';
-import PropTypes from 'prop-types';
-import {useState} from 'react';
+import {useContext, useState} from 'react';
 import {useNavigate} from 'react-router';
 import {NavLink} from 'react-router-dom';
 import CustomInput from '../common/input/CustomInput';
 import './Signincard.css';
+import {AuthContext} from '../../contexts/AuthContext';
+import {useApi} from '../../hooks/useApi';
+import {INITIAL_SIGNIN_FORM_DATA} from '../../constants';
 
-const BASE_API_URL = process.env.REACT_APP_BASE_API_URL;
+export default function Signincard() {
+	const [formData, setFormData] = useState(INITIAL_SIGNIN_FORM_DATA);
+	const [validationErrors, setValidationErrors] = useState('');
+	const {errorMsg, makeRequest} = useApi(
+		{
+			url: `auth/signin`,
+			method: 'post',
+			data: formData,
+		},
+		true,
+	);
 
-export default function Signincard({setUser}) {
-	const [formData, setFormData] = useState({
-		email: '',
-		password: '',
-	});
-
-	const [errorMsg, setErrorMsg] = useState('');
-	const [submitting, setSubmitting] = useState(false);
-
+	const {setIsAuthenticated} = useContext(AuthContext);
 	const navigate = useNavigate();
 
 	const handleFormChange = (e) => {
 		const {name, value} = e.target;
 
-		// Trim leading and trailing whitespace from the input value
 		const trimmedValue = value.trim();
 
-		setErrorMsg(null);
+		setValidationErrors(null);
 
 		setFormData((prev) => {
 			return {
@@ -48,29 +50,17 @@ export default function Signincard({setUser}) {
 	};
 
 	const handleSubmit = async (e) => {
-		setErrorMsg(null);
+		setValidationErrors(null);
 		e.preventDefault();
 		const error = validateFormData();
 		if (error) {
-			setErrorMsg(error);
+			setValidationErrors(error);
 		} else {
-			setSubmitting(true);
-			try {
-				const response = await axios.post(
-					`${BASE_API_URL}/auth/signin`,
-					formData,
-				);
-				setUser(response?.data?.token);
-				setFormData({email: '', password: ''});
+			const success = await makeRequest();
+			if (success) {
+				setFormData(INITIAL_SIGNIN_FORM_DATA);
+				setIsAuthenticated(true);
 				navigate('/dashboard');
-			} catch (err) {
-				setSubmitting(false);
-				console.error(err);
-				if (err?.response) {
-					setErrorMsg(err?.response?.data?.message);
-				} else {
-					setErrorMsg(err?.message);
-				}
 			}
 		}
 	};
@@ -79,11 +69,11 @@ export default function Signincard({setUser}) {
 		<div className='inputlogin'>
 			<h3 className='head3'>Sign in to dashboard</h3>
 			<p
-				className={`input-error ${errorMsg ? '' : 'hidden'}`}
+				className={`input-error ${validationErrors || errorMsg ? '' : 'hidden'}`}
 				aria-live='assertive'
 				role='alert'
 			>
-				{errorMsg || ' '}
+				{validationErrors || errorMsg || ' '}
 			</p>
 			<form onSubmit={handleSubmit}>
 				<CustomInput
@@ -102,12 +92,8 @@ export default function Signincard({setUser}) {
 					value={formData.password}
 					onChange={handleFormChange}
 				/>
-				<button
-					className='login-btn'
-					aria-label='Sign in to Dashboard'
-					disabled={submitting}
-				>
-					{submitting ? 'Submitting...' : 'Login'}
+				<button className='login-btn' aria-label='Sign in to Dashboard'>
+					Login
 				</button>
 			</form>
 			<section className='input-actiontext'>
@@ -124,7 +110,3 @@ export default function Signincard({setUser}) {
 		</div>
 	);
 }
-
-Signincard.propTypes = {
-	setUser: PropTypes.func,
-};

@@ -165,3 +165,16 @@ export const dummyAdminTableDetails = [
 		createDate: 'Jan 25, 2024',
 	},
 ];
+
+export const INITIAL_SIGNUP_FORM_DATA = {
+	firstName: '',
+	lastName: '',
+	email: '',
+	password: '',
+	confirmPassword: '',
+};
+
+export const INITIAL_SIGNIN_FORM_DATA = {
+	email: '',
+	password: '',
+};

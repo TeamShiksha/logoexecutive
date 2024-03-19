@@ -1,10 +1,14 @@
 {
+	"name": "logoexecutive",
 	"private": true,
+	"version": "1.0.0",
+	"repository": "https://github.com/TeamShiksha/logoexecutive.git",
 	"workspaces": [
 		"client",
 		"server"
 	],
 	"scripts": {
+		"build": "yarn workspace client build",
 		"start": "concurrently \"yarn start:client\" \"yarn start:server\"",
 		"start:client": "yarn workspace client start",
 		"start:server": "yarn workspace server start",
@@ -14,8 +18,9 @@
 		"lint-fix:server": "yarn workspace server lint:fix",
 		"lint-fix:client": "yarn workspace client lint:fix",
 		"lint-fix": "concurrently \"yarn workspace server lint:fix\" \"yarn workspace client lint:fix\" \"yarn workspace client format\"",
+		"test": "concurrently \"yarn test:client\" \"yarn test:server\"",
 		"test:server": "yarn workspace server test --silent",
-		"test:client": "yarn workspace client test"
+		"test:client": "yarn workspace client test --silent"
 	},
 	"devDependencies": {
 		"concurrently": "^8.2.2"

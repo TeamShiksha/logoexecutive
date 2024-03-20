@@ -1,7 +1,6 @@
 import React from 'react';
 import {fireEvent, render, screen, waitFor} from '@testing-library/react';
 import Signincard from './Signincard';
-import * as router from 'react-router';
 import {BrowserRouter} from 'react-router-dom';
 import {AuthContext} from '../../contexts/AuthContext';
 

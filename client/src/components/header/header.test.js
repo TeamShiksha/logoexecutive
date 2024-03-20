@@ -6,7 +6,6 @@ import {AuthContext} from '../../contexts/AuthContext';
 
 describe('Header', () => {
 	const navigate = jest.fn();
-	const mockSetIsAuthenticated = jest.fn();
 	const mockLogout = jest.fn();
 
 	const renderHeader = (isAuthenticated) => {
@@ -14,7 +13,6 @@ describe('Header', () => {
 			<AuthContext.Provider
 				value={{
 					isAuthenticated,
-					setIsAuthenticated: mockSetIsAuthenticated,
 					logout: mockLogout,
 				}}
 			>

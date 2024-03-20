@@ -1,17 +1,30 @@
 import React from 'react';
-import {fireEvent, render, screen} from '@testing-library/react';
+import {fireEvent, render, screen, waitFor} from '@testing-library/react';
 import Signincard from './Signincard';
+import * as router from 'react-router';
 import {BrowserRouter} from 'react-router-dom';
+import {AuthContext} from '../../contexts/AuthContext';
 
 describe('Sign In Card Component', () => {
 	const mockSetUser = jest.fn();
 
-	test('Sign in card should be rendered properly with the proper form', () => {
+	const renderSignincard = (isAuthenticated) => {
 		render(
-			<BrowserRouter>
-				<Signincard setUser={mockSetUser} />
-			</BrowserRouter>,
+			<AuthContext.Provider
+				value={{
+					isAuthenticated,
+					setIsAuthenticated: mockSetUser,
+				}}
+			>
+				<BrowserRouter>
+					<Signincard />
+				</BrowserRouter>
+			</AuthContext.Provider>,
 		);
+	};
+
+	test('Sign in card should be rendered properly with the proper form', () => {
+		renderSignincard(false);
 		const emailInputElement = screen.getByLabelText('email');
 		const passwordInputElement = screen.getByLabelText('password');
 		const buttonElement = screen.getByLabelText('Sign in to Dashboard');
@@ -22,11 +35,7 @@ describe('Sign In Card Component', () => {
 	});
 
 	test('Input value change should be handled', () => {
-		render(
-			<BrowserRouter>
-				<Signincard setUser={mockSetUser} />
-			</BrowserRouter>,
-		);
+		renderSignincard(false);
 		const emailInputElement = screen.getByLabelText('email');
 		const passwordInputElement = screen.getByLabelText('password');
 		fireEvent.change(emailInputElement, {
@@ -40,11 +49,7 @@ describe('Sign In Card Component', () => {
 	});
 
 	test('Inproper email address should throw error', () => {
-		render(
-			<BrowserRouter>
-				<Signincard setUser={mockSetUser} />
-			</BrowserRouter>,
-		);
+		renderSignincard(false);
 		const emailInputElement = screen.getByLabelText('email');
 		const buttonElement = screen.getByLabelText('Sign in to Dashboard');
 		fireEvent.change(emailInputElement, {

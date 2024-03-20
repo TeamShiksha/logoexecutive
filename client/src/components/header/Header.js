@@ -62,7 +62,11 @@ const Header = () => {
 						{isAuthenticated ? 'Logout' : 'Get Started'}
 					</button>
 
-					<HiMenu onClick={toggleShowNavBar} className='burger-menu' />
+					<HiMenu
+						onClick={toggleShowNavBar}
+						className='burger-menu'
+						data-testid='burger-menu'
+					/>
 				</div>
 			</div>
 		</header>

@@ -66,4 +66,36 @@ describe('Header', () => {
 		fireEvent.click(getStartedButton);
 		expect(navigate).toHaveBeenCalledWith('/signin');
 	});
+
+	test('should toggle navigation bar visibility when burger menu is clicked', () => {
+		renderHeader(false);
+		global.window.innerWidth = 800;
+		fireEvent.resize(global.window);
+		const burgerMenu = screen.getByTestId('burger-menu');
+		fireEvent.click(burgerMenu);
+		expect(screen.getByRole('navigation')).toBeInTheDocument();
+		fireEvent.click(burgerMenu);
+		expect(screen.queryByRole('navigation')).toBeNull();
+	});
+
+	test('should change header background on scroll', () => {
+		renderHeader(false);
+		expect(screen.getByRole('banner')).not.toHaveClass('bg');
+		global.window.scrollY = 100;
+		fireEvent.scroll(global.window);
+		expect(screen.getByRole('banner')).toHaveClass('bg');
+		global.window.scrollY = 0;
+		fireEvent.scroll(global.window);
+		expect(screen.getByRole('banner')).not.toHaveClass('bg');
+	});
+
+	test('should hide navigation bar when window width is less than 1001', () => {
+		renderHeader(false);
+		global.window.innerWidth = 800;
+		fireEvent.resize(global.window);
+		expect(screen.queryByRole('navigation')).toBeNull();
+		global.window.innerWidth = 1200;
+		fireEvent.resize(global.window);
+		expect(screen.getByRole('navigation')).toBeInTheDocument();
+	});
 });

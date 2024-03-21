@@ -9,7 +9,6 @@ const EnvSchema = Joi.object()
       Joi.string().regex(/^\d+$/),
       Joi.number()
     ).required(),
-    EMAIL_SECURE: Joi.boolean().required(),
     EMAIL_USER: Joi.string().email().required(),
     EMAIL_PASS: Joi.string().required(),
     CLOUD_FRONT_KEYPAIR_ID: Joi.string()

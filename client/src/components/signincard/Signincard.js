@@ -12,7 +12,7 @@ export default function Signincard() {
 	const [validationErrors, setValidationErrors] = useState('');
 	const {errorMsg, makeRequest} = useApi(
 		{
-			url: `auth/signin`,
+			url: `api/auth/signin`,
 			method: 'post',
 			data: formData,
 		},

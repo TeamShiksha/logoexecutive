@@ -8,7 +8,7 @@ export const AuthProvider = ({children}) => {
 
 	const logout = async () => {
 		try {
-			await protectedInstance.get(`auth/signout`);
+			await protectedInstance.get(`api/auth/signout`);
 			setIsAuthenticated(false);
 		} catch (err) {
 			console.error(err);

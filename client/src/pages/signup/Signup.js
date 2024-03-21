@@ -9,7 +9,7 @@ export const Signup = () => {
 	const [validationErrors, setValidationErrors] = useState({});
 	const [isSignUpSuccess, setIsSignUpSuccess] = useState(false);
 	const {data, errorMsg, makeRequest} = useApi({
-		url: `auth/signup`,
+		url: `api/auth/signup`,
 		method: 'post',
 		data: formData,
 	});

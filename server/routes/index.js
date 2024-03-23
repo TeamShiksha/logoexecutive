@@ -8,6 +8,7 @@ const cors = require("cors");
 
 const privateRouteCORS = {
   origin: (origin, callback) => {
+    console.log(origin, process.env.BASE_URL);
     if(origin === process.env.BASE_URL || !origin) {
       callback(null, true);
     } else {

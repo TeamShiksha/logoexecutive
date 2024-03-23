@@ -2,22 +2,28 @@ import {useState} from 'react';
 import {NavLink} from 'react-router-dom';
 import CustomInput from '../../components/common/input/CustomInput';
 import './ForgotPassword.css';
+import {useApi} from '../../hooks/useApi';
 
 const ForgotPassword = () => {
 	const [userEmail, setUserEmail] = useState('');
 	const [errorMsg, setErrorMsg] = useState('');
 	const [successMsg, setSuccessMsg] = useState('');
-
+	const {makeRequest} = useApi({
+		url: `api/auth/forgot-password`,
+		method: 'post',
+		data: {email: userEmail},
+	});
 	function handleUserEmailChange(e) {
 		setUserEmail(e.target.value);
 	}
 
-	function handleSubmit(e) {
+	async function handleSubmit(e) {
 		e.preventDefault();
 		setErrorMsg('');
 		setSuccessMsg('');
+		const success = await makeRequest();
 		// this is just for mocking, logic needs to be replaced during backend integration.
-		if (userEmail === 'testing@gmail.com') {
+		if (success) {
 			setSuccessMsg(`✓ Email sent! Check your inbox for the reset link.`);
 		} else {
 			setErrorMsg(`No account found! Please double-check your email.`);

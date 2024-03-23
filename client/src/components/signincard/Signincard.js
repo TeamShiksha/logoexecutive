@@ -6,6 +6,7 @@ import './Signincard.css';
 import {AuthContext} from '../../contexts/AuthContext';
 import {useApi} from '../../hooks/useApi';
 import {INITIAL_SIGNIN_FORM_DATA} from '../../constants';
+import Button from '../common/Button/Button';
 
 export default function Signincard() {
 	const [formData, setFormData] = useState(INITIAL_SIGNIN_FORM_DATA);
@@ -94,9 +95,9 @@ export default function Signincard() {
 					value={formData.password}
 					onChange={handleFormChange}
 				/>
-				<button className='login-btn' aria-label='Sign in to Dashboard'>
-					Login
-				</button>
+				<Button aria-label='Sign in to Dashboard'>
+					<span style={{fontSize: '20px'}}>Login</span>
+				</Button>
 			</form>
 			<section className='input-actiontext'>
 				<div>

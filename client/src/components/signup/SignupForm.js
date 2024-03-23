@@ -186,7 +186,7 @@ export default function SignupForm() {
 						error={validationErrors.confirmPassword}
 					/>
 
-					<Button type='submit' onClick={handleSubmit} disabled={loading}>
+					<Button type='submit' disabled={loading}>
 						<span style={{fontSize: '20px'}}>Register</span>
 					</Button>
 

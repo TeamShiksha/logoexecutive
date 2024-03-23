@@ -2,28 +2,28 @@ import PropTypes from 'prop-types';
 import './CustomInput.css';
 
 const CustomInput = ({
-	type,
+	type = 'text',
 	label,
 	value,
 	name,
 	onChange,
 	error,
 	className,
-	...rest
+	...props
 }) => {
 	return (
 		<div className='custom-input-group'>
 			<input
 				type={type}
-				id={label}
+				id={props.id}
 				name={name}
 				value={value}
 				onChange={onChange}
 				required
 				className={`custom-input ${className}`}
-				{...rest}
+				{...props}
 			/>
-			<label className='custom-input-label' htmlFor={label}>
+			<label className='custom-input-label' htmlFor={props.id}>
 				{label}
 			</label>
 			{error && <p className='custom-input-error'>{error}</p>}

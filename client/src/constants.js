@@ -166,14 +166,6 @@ export const dummyAdminTableDetails = [
 	},
 ];
 
-export const INITIAL_SIGNUP_FORM_DATA = {
-	firstName: '',
-	lastName: '',
-	email: '',
-	password: '',
-	confirmPassword: '',
-};
-
 export const INITIAL_SIGNIN_FORM_DATA = {
 	email: '',
 	password: '',

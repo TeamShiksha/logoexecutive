@@ -80,15 +80,17 @@ export default function Signincard() {
 					className='inputs'
 					type='email'
 					name='email'
-					label='email'
+					id='email'
+					label='Email'
 					value={formData.email}
 					onChange={handleFormChange}
 				/>
 				<CustomInput
 					className='inputs'
+					id='password'
 					type='password'
 					name='password'
-					label='password'
+					label='Password'
 					value={formData.password}
 					onChange={handleFormChange}
 				/>

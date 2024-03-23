@@ -8,5 +8,12 @@
       "port": 4040
     },
     "singleProjectMode": true
+  },
+  "functions": {
+    "source": "functions"
+  },
+  "firestore": {
+    "rules": "firestore.rules",
+    "indexes": "firestore.indexes.json"
   }
 }

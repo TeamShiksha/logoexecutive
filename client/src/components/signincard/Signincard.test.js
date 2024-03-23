@@ -1,5 +1,5 @@
 import React from 'react';
-import {fireEvent, render, screen, waitFor} from '@testing-library/react';
+import {fireEvent, render, screen} from '@testing-library/react';
 import Signincard from './Signincard';
 import {BrowserRouter} from 'react-router-dom';
 import {AuthContext} from '../../contexts/AuthContext';
@@ -24,9 +24,11 @@ describe('Sign In Card Component', () => {
 
 	test('Sign in card should be rendered properly with the proper form', () => {
 		renderSignincard(false);
-		const emailInputElement = screen.getByLabelText('email');
-		const passwordInputElement = screen.getByLabelText('password');
+
+		const emailInputElement = screen.getByLabelText('Email');
+		const passwordInputElement = screen.getByLabelText('Password');
 		const buttonElement = screen.getByLabelText('Sign in to Dashboard');
+
 		expect(screen.getByText('Sign in to dashboard')).toBeInTheDocument();
 		expect(emailInputElement).toBeInTheDocument();
 		expect(passwordInputElement).toBeInTheDocument();
@@ -35,30 +37,40 @@ describe('Sign In Card Component', () => {
 
 	test('Input value change should be handled', () => {
 		renderSignincard(false);
-		const emailInputElement = screen.getByLabelText('email');
-		const passwordInputElement = screen.getByLabelText('password');
+
+		const emailInputElement = screen.getByLabelText('Email');
+		const passwordInputElement = screen.getByLabelText('Password');
+
 		fireEvent.change(emailInputElement, {
 			target: {value: 'bill@gmail.com'},
 		});
+
 		expect(emailInputElement.value).toBe('bill@gmail.com');
+
 		fireEvent.change(passwordInputElement, {
 			target: {value: 'p@$$W0rD'},
 		});
+
 		expect(passwordInputElement.value).toBe('p@$$W0rD');
 	});
 
 	test('Inproper email address should throw error', () => {
 		renderSignincard(false);
-		const emailInputElement = screen.getByLabelText('email');
+
+		const emailInputElement = screen.getByLabelText('Email');
 		const buttonElement = screen.getByLabelText('Sign in to Dashboard');
 		fireEvent.change(emailInputElement, {
 			target: {value: 'bill@gaf'},
 		});
+
 		expect(emailInputElement.value).toBe('bill@gaf');
 		const alertElement = screen.getByRole('alert');
+
 		expect(alertElement).toBeInTheDocument();
 		expect(alertElement).toHaveClass('hidden');
+
 		fireEvent.click(buttonElement);
+
 		expect(alertElement).toBeInTheDocument();
 		expect(alertElement).not.toHaveClass('hidden');
 		expect(alertElement).toHaveTextContent(

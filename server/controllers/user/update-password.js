@@ -70,7 +70,7 @@ async function updatePasswordController(req, res) {
       });
     }
   } catch (err) {
-    console.log("Location: updatePassword controller", err);
+    console.log(err);
     throw err;
   }
 }

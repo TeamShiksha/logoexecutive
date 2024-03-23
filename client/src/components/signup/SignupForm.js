@@ -4,6 +4,7 @@ import {useApi} from '../../hooks/useApi';
 import {NavLink} from 'react-router-dom';
 import styles from './SignupForm.module.css';
 import CustomInput from '../common/input/CustomInput';
+import Button from '../common/Button/Button';
 
 export function validateFormData(formData) {
 	const errors = {};
@@ -79,7 +80,7 @@ export default function SignupForm() {
 	const [formData, setFormData] = useState(INITIAL_DATA);
 	const [validationErrors, setValidationErrors] = useState({});
 	const [isSignUpSuccess, setIsSignUpSuccess] = useState(false);
-	const {data, errorMsg, makeRequest} = useApi({
+	const {data, errorMsg, makeRequest, loading} = useApi({
 		url: `api/auth/signup`,
 		method: 'post',
 		data: formData,
@@ -185,13 +186,9 @@ export default function SignupForm() {
 						error={validationErrors.confirmPassword}
 					/>
 
-					<button
-						type='submit'
-						className='submit-button'
-						onClick={handleSubmit}
-					>
-						Register
-					</button>
+					<Button type='submit' onClick={handleSubmit} disabled={loading}>
+						<span style={{fontSize: '20px'}}>Register</span>
+					</Button>
 
 					<div className='input-actiontext'>
 						<span>Already have an account?</span>

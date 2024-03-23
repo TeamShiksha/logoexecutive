@@ -10,3 +10,6 @@
   from = "/api/*"
   status = 200
   to = "/.netlify/functions/api/:splat"
+  from = "/*"
+  status = 200
+  to = "/index.html"

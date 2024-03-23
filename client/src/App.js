@@ -20,6 +20,8 @@ import ScrollToAnchor from './utils/ScrollToAnchor';
 import {AuthProvider} from './contexts/AuthContext';
 import ProtectedRoute from './utils/ProtectedRoute';
 import CheckAuth from './utils/CheckAuth';
+import Verification from './pages/verification/Verification';
+import Error404 from './pages/Error404/Error404';
 
 function App() {
 	return (
@@ -38,6 +40,7 @@ function App() {
 							</ProtectedRoute>
 						}
 					/>
+					<Route path='/verify' element={<Verification />} />
 					<Route path='/signup' element={<Signup />} />
 					<Route path='/signin' element={<Signin />} />
 					<Route path='/pricing' element={<Pricing />} />
@@ -63,6 +66,7 @@ function App() {
 							</ProtectedRoute>
 						}
 					/>
+					<Route path='*' element={<Error404 />}></Route>
 				</Routes>
 				<Footer />
 			</AuthProvider>

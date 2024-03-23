@@ -1,6 +1,7 @@
 const { Timestamp, DocumentReference } = require("firebase-admin/firestore");
 const { normalizeDate } = require("../utils/date");
 const { UserTokenTypes } = require("../utils/constants");
+const { v4 } = require("uuid");
 const dayjs = require("dayjs");
 
 class UserToken {
@@ -43,8 +44,8 @@ class UserToken {
     const expireAt = params.expireAt ? normalizeDate(params.expireAt) : dayjs().add(1, "day").toDate();
     return {
       userId: params.userId,
-      token: crypto.randomUUID().replaceAll("-", ""),
-      userTokenId: crypto.randomUUID(),
+      token: v4().replaceAll("-", ""),
+      userTokenId: v4(),
       type: params.type,
       createdAt: Timestamp.now(),
       expireAt: Timestamp.fromDate(expireAt),

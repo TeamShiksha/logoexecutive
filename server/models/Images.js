@@ -1,4 +1,6 @@
 const { Timestamp } = require("firebase-admin/firestore");
+const { v4 } = require("uuid");
+
 class Images {
   imageId;
   extension;
@@ -50,7 +52,7 @@ class Images {
       return null;
     }
     return {
-      imageId: crypto.randomUUID(),
+      imageId: v4(),
       extension,
       domainame,
       uploadedBy,

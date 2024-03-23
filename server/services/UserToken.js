@@ -3,6 +3,7 @@ const { UserToken } = require("../models");
 const { Timestamp } = require("firebase-admin/firestore");
 const { UserTokenTypes } = require("../utils/constants");
 const { UserTokenCollection } = require("../utils/firestore");
+const { v4 } = require("uuid");
 
 /**
  * Creates user token in "UserTokens" collection
@@ -14,8 +15,8 @@ async function createForgotToken(userId) {
     const newUserForgotToken = {
       userId: userId,
       type: UserTokenTypes.FORGOT,
-      userTokenId: crypto.randomUUID(),
-      token: crypto.randomUUID().replaceAll("-", ""),
+      userTokenId: v4(),
+      token: v4().replaceAll("-", ""),
       createdAt: Timestamp.now(),
       expireAt: Timestamp.fromDate(expireAt),
     };
@@ -62,8 +63,8 @@ async function createVerifyToken(userId) {
     const newUserVerifyToken = {
       userId: userId,
       type: UserTokenTypes.VERIFY,
-      userTokenId: crypto.randomUUID(),
-      token: crypto.randomUUID().replaceAll("-", ""),
+      userTokenId: v4(),
+      token: v4().replaceAll("-", ""),
       createdAt: Timestamp.now(),
       expireAt: Timestamp.fromDate(expireAt),
     };

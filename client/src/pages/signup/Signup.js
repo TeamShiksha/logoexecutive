@@ -1,4 +1,3 @@
-import './Signup.css';
 import {useContext} from 'react';
 import {AuthContext} from '../../contexts/AuthContext';
 import {Navigate} from 'react-router';

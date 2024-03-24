@@ -1,6 +1,7 @@
 const { Timestamp } = require("firebase-admin/firestore");
 const { SubscriptionTypes } = require("../utils/constants");
 const { normalizeDate } = require("../utils/date");
+const { v4 } = require("uuid");
 
 class Subscriptions {
   userId;

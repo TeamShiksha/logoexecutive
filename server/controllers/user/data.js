@@ -21,12 +21,12 @@ async function getUserDataController(req, res, next) {
     Object.assign(data, user.data);
 
     let statusCode = 200;
-    if(subscriptionData.status === "fulfilled") {
+    if(subscriptionData.status === "fulfilled" && subscriptionData.value) {
       Object.assign(data, { subscription: subscriptionData.value.data });
     } else {
       statusCode = 206;
     }
-    if(userKeys.status === "fulfilled") {
+    if(userKeys.status === "fulfilled" && userKeys.value) {
       Object.assign(data, { keys: userKeys.value.map(key => key.data) });
     } else {
       statusCode = 206;

@@ -1,6 +1,5 @@
 const { S3Client, PutObjectCommand } = require("@aws-sdk/client-s3");
 const {Images}= require("../models");
-const { Timestamp } = require("firebase-admin/firestore");
 const { ImageCollection } = require("../utils/firestore");
 const { cloudFrontSignedURL } = require("../utils/cloudFront");
 

@@ -68,7 +68,7 @@ async function generateKeyController(req, res) {
       });
     }
   } catch (err) {
-    console.log("Location: generateKey controller", err);
+    console.log(err);
     throw err;
   }
 }

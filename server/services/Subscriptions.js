@@ -1,11 +1,12 @@
 const { Subscriptions } = require("../models");
 const { SubscriptionCollection } = require("../utils/firestore");
 const { Timestamp } = require("firebase-admin/firestore");
+const { v4 } = require("uuid");
 
 async function createSubscription(userId) {
   try {
     const subscriptionData = {
-      subscriptionId: crypto.randomUUID(),
+      subscriptionId: v4(),
       userId: userId,
       subscriptionType: "free",
       keyLimit: 2,

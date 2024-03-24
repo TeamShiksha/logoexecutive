@@ -1,5 +1,8 @@
 import {useState} from 'react';
 
+/**
+ * @param {string[]} validFormats - list of file formats
+ **/
 const useFileHandler = (validFormats) => {
 	const [file, setFile] = useState(null);
 	const [error, setError] = useState(null);

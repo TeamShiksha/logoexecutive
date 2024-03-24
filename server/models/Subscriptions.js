@@ -1,4 +1,6 @@
 const { Timestamp } = require("firebase-admin/firestore");
+const { SubscriptionTypes } = require("../utils/constants");
+const { normalizeDate } = require("../utils/date");
 
 class Subscriptions {
   userId;
@@ -28,8 +30,26 @@ class Subscriptions {
     this.keyLimit = params.keyLimit;
     this.usageLimit = params.usageLimit;
     this.isActive = params.isActive;
-    this.createdAt = params.createdAt;
-    this.updatedAt = params.updatedAt;
+    this.createdAt = normalizeDate(params.createdAt);
+    this.updatedAt = normalizeDate(params.updatedAt);
+  }
+
+  /**
+		* Creates a new firebase document compatible subscription object
+		* @param {string} userId 
+		* @param {string} subscriptionType 
+	**/
+  static NewSubscription(userId) {
+    return {
+      subscriptionId: crypto.randomUUID(),
+      userId,
+      subscriptionType: SubscriptionTypes.HOBBY,
+      keyLimit: 2,
+      usageLimit: 500,
+      isActive: false,
+      createdAt: Timestamp.now(),
+      updatedAt: Timestamp.now(),
+    };
   }
 
   get data() {

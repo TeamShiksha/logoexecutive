@@ -170,3 +170,15 @@ export const INITIAL_SIGNIN_FORM_DATA = {
 	email: '',
 	password: '',
 };
+
+export const SubscriptionTypes = {
+	HOBBY: 'HOBBY',
+	PRO: 'PRO',
+	TEAMS: 'TEAMS',
+};
+
+export const SubscriptionLabels = {
+	[SubscriptionTypes.HOBBY]: 'Hobby',
+	[SubscriptionTypes.PRO]: 'Pro',
+	[SubscriptionTypes.TEAMS]: 'Teams',
+};

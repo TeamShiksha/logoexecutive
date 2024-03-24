@@ -49,21 +49,6 @@
 	gap: 12px;
 }
 
-.current-plan-status {
-	background-color: #00c9a7;
-	border-radius: 5px;
-	color: #fff;
-	padding: 5px 10px;
-}
-
-.dashboard-content-item .current-plan-tagline {
-	color: var(--description);
-	font-size: var(--medium-text);
-	line-height: 20px;
-	font-weight: 400;
-	margin-bottom: 30px;
-}
-
 .dashboard-content-item > button {
 	max-width: fit-content;
 }
@@ -245,18 +230,6 @@
 	color: var(--smooth-gray);
 }
 
-.upgrade-button {
-	background-color: var(--smooth-purple);
-	color: var(--white);
-	border: none;
-	border-radius: var(--bradius);
-	cursor: pointer;
-	text-wrap: nowrap;
-	padding: 12px;
-	font-size: 16px;
-	font-weight: 500;
-}
-
 .full-width {
 	width: 100%;
 }
@@ -286,10 +259,6 @@
 		overflow: auto;
 	}
 
-	.dashboard-content-item .current-plan-tagline {
-		margin-bottom: 20px;
-	}
-
 	.api-key-container {
 		flex-direction: column;
 		align-items: flex-start;
@@ -298,11 +267,6 @@
 	.dashboard-content-item .api-key-input {
 		width: calc(100% - 24px);
 		max-width: 450px;
-	}
-
-	.upgrade-button {
-		padding: 8px 14px;
-		font-size: 13px;
 	}
 
 	.menu-dropdown-button {

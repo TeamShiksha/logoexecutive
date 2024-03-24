@@ -1,20 +1,13 @@
 const { Subscriptions } = require("../models");
+const { SubscriptionTypes } = require("../utils/constants");
 const { SubscriptionCollection } = require("../utils/firestore");
 const { Timestamp } = require("firebase-admin/firestore");
 
 async function createSubscription(userId) {
   try {
-    const subscriptionData = {
-      subscriptionId: crypto.randomUUID(),
-      userId: userId,
-      subscriptionType: "free",
-      keyLimit: 2,
-      usageLimit: 500,
-      isActive: false,
-      createdAt: Timestamp.now(),
-      updatedAt: Timestamp.now(),
-    };
+    const subscriptionData = Subscriptions.NewSubscription(userId);
     const result = await SubscriptionCollection.doc(subscriptionData.subscriptionId).set(subscriptionData);
+
     const UserSubscription = new Subscriptions(subscriptionData);
     return UserSubscription;
   } catch (err) {

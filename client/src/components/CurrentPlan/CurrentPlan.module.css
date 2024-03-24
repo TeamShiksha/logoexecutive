@@ -1,0 +1,63 @@
+.Container {
+	padding: 16px;
+}
+
+.Header {
+	display: flex;
+}
+.HeaderTitle {
+	color: rgb(103, 119, 136);
+	font-size: var(--large-text);
+	font-weight: 500;
+	line-height: 20px;
+}
+.HeaderStatus {
+	background: var(--smooth-gray);
+	border-radius: 4px;
+	color: #fff;
+	padding: 4px 12px;
+	margin-left: auto;
+}
+.HeaderStatus_Active {
+	background: #00c9a7;
+}
+
+.Content {
+	margin: 8px 0;
+}
+.ContentTitle {
+	color: var(--black);
+	font-size: var(--large-text);
+	line-height: 28px;
+	font-weight: 600;
+	margin: 12px 0;
+}
+.Tagline {
+	color: var(--description);
+	line-height: 20px;
+	font-weight: 400px;
+}
+
+.Footer {
+	margin-top: 32px;
+}
+.Footer button {
+	font-size: 16px;
+	font-weight: 500;
+	padding: 12px;
+}
+
+@media screen and (max-width: 768px) {
+	.Container {
+		padding: 0;
+	}
+
+	.Footer {
+		margin-top: 24px;
+	}
+
+	.Footer button {
+		padding: 8px;
+		font-size: 14px;
+	}
+}

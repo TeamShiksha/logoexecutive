@@ -1,0 +1,17 @@
+.Button {
+	background: var(--smooth-purple);
+	color: white;
+	padding: 8px 16px;
+	border: none;
+	border-radius: var(--bradius);
+	font-weight: bold;
+	display: flex;
+	align-items: center;
+	cursor: pointer;
+	gap: 4px;
+}
+
+.Button:disabled {
+	opacity: 0.6;
+	cursor: not-allowed;
+}

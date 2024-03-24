@@ -22,9 +22,7 @@ async function fetchSubscriptionByuserid(userId) {
     const subscriptionRef = await SubscriptionCollection.where("userId", "==", userId)
       .limit(1).get();
     if (subscriptionRef.empty) return null;
-    const subscription = new Subscriptions({
-      ...subscriptionRef.docs[0].data(),
-    });
+    const subscription = new Subscriptions(subscriptionRef.docs[0].data());
 
     return subscription;
   } catch (err) {

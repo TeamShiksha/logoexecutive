@@ -54,7 +54,6 @@ class Subscriptions {
 
   get data() {
     return {
-      userId: this.userId,
       subscriptionId: this.subscriptionId,
       subscriptionType: this.subscriptionType,
       keyLimit: this.keyLimit,

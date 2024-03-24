@@ -3,12 +3,13 @@ import {NavLink} from 'react-router-dom';
 import './Signup.css';
 import {useApi} from '../../hooks/useApi';
 import {INITIAL_SIGNUP_FORM_DATA} from '../../constants';
+import {Spinner} from '../../components/spinner/Spinner';
 
 export const Signup = () => {
 	const [formData, setFormData] = useState(INITIAL_SIGNUP_FORM_DATA);
 	const [validationErrors, setValidationErrors] = useState({});
 	const [isSignUpSuccess, setIsSignUpSuccess] = useState(false);
-	const {data, errorMsg, makeRequest} = useApi({
+	const {data, errorMsg, makeRequest, loading} = useApi({
 		url: `api/auth/signup`,
 		method: 'post',
 		data: formData,
@@ -114,108 +115,111 @@ export const Signup = () => {
 	};
 
 	return (
-		<div className='page-div'>
-			<form onSubmit={handleSubmit} noValidate className='form-box'>
-				<h2 className='form-title'>Sign up for free</h2>
-				<p
-					className={`input-error ${errorMsg ? '' : 'hidden'}`}
-					aria-live='assertive'
-					role='alert'
-				>
-					{errorMsg || ' '}
-				</p>
-				{isSignUpSuccess && <p className='signup-success'>{data.message}</p>}
-				<div className='input-group'>
-					<input
-						type='text'
-						id='firstName'
-						name='firstName'
-						value={formData.firstName}
-						onChange={handleChange}
-						required
-						className='input'
-					/>
-					<label className='user-label' htmlFor='firstName'>
-						First Name
-					</label>
-					<p className='error'>{validationErrors.firstName}</p>
-				</div>
+		<>
+			{loading && <Spinner />}
+			<div className='page-div'>
+				<form onSubmit={handleSubmit} noValidate className='form-box'>
+					<h2 className='form-title'>Sign up for free</h2>
+					<p
+						className={`input-error ${errorMsg ? '' : 'hidden'}`}
+						aria-live='assertive'
+						role='alert'
+					>
+						{errorMsg || ' '}
+					</p>
+					{isSignUpSuccess && <p className='signup-success'>{data.message}</p>}
+					<div className='input-group'>
+						<input
+							type='text'
+							id='firstName'
+							name='firstName'
+							value={formData.firstName}
+							onChange={handleChange}
+							required
+							className='input'
+						/>
+						<label className='user-label' htmlFor='firstName'>
+							First Name
+						</label>
+						<p className='error'>{validationErrors.firstName}</p>
+					</div>
 
-				<div className='input-group'>
-					<input
-						type='text'
-						id='lastName'
-						name='lastName'
-						value={formData.lastName}
-						onChange={handleChange}
-						required
-						className='input'
-					/>
-					<label className='user-label' htmlFor='lastName'>
-						Last Name
-					</label>
-					<p className='error'>{validationErrors.lastName}</p>
-				</div>
+					<div className='input-group'>
+						<input
+							type='text'
+							id='lastName'
+							name='lastName'
+							value={formData.lastName}
+							onChange={handleChange}
+							required
+							className='input'
+						/>
+						<label className='user-label' htmlFor='lastName'>
+							Last Name
+						</label>
+						<p className='error'>{validationErrors.lastName}</p>
+					</div>
 
-				<div className='input-group'>
-					<input
-						type='text'
-						id='email'
-						name='email'
-						value={formData.email}
-						onChange={handleChange}
-						required
-						className='input'
-					/>
-					<label className='user-label' htmlFor='email'>
-						Email
-					</label>
-					<p className='error'>{validationErrors.email}</p>
-				</div>
+					<div className='input-group'>
+						<input
+							type='text'
+							id='email'
+							name='email'
+							value={formData.email}
+							onChange={handleChange}
+							required
+							className='input'
+						/>
+						<label className='user-label' htmlFor='email'>
+							Email
+						</label>
+						<p className='error'>{validationErrors.email}</p>
+					</div>
 
-				<div className='input-group'>
-					<input
-						type='password'
-						id='password'
-						name='password'
-						value={formData.password}
-						onChange={handleChange}
-						required
-						className='input'
-					/>
-					<label className='user-label' htmlFor='password'>
-						Password
-					</label>
-					<p className='error'>{validationErrors.password}</p>
-				</div>
+					<div className='input-group'>
+						<input
+							type='password'
+							id='password'
+							name='password'
+							value={formData.password}
+							onChange={handleChange}
+							required
+							className='input'
+						/>
+						<label className='user-label' htmlFor='password'>
+							Password
+						</label>
+						<p className='error'>{validationErrors.password}</p>
+					</div>
 
-				<div className='input-group'>
-					<input
-						type='password'
-						id='confirmPassword'
-						name='confirmPassword'
-						value={formData.confirmPassword}
-						onChange={handleChange}
-						required
-						className='input'
-					/>
-					<label className='user-label' htmlFor='confirmPassword'>
-						Confirm Password
-					</label>
-					<p className='error'>{validationErrors.confirmPassword}</p>
-				</div>
-				<div className='input-group'>
-					<button type='submit' className='submit-button'>
-						Register
-					</button>
-				</div>
-				<div className='input-actiontext'>
-					<span>Already have an account?</span>
-					<NavLink to='/signin' className='input-actiontext-link'>
-						Sign in
-					</NavLink>
-				</div>
-			</form>
-		</div>
+					<div className='input-group'>
+						<input
+							type='password'
+							id='confirmPassword'
+							name='confirmPassword'
+							value={formData.confirmPassword}
+							onChange={handleChange}
+							required
+							className='input'
+						/>
+						<label className='user-label' htmlFor='confirmPassword'>
+							Confirm Password
+						</label>
+						<p className='error'>{validationErrors.confirmPassword}</p>
+					</div>
+					<div className='input-group'>
+						<button type='submit' className='submit-button' disabled={loading}>
+							Register
+						</button>
+					</div>
+					<div className='input-actiontext'>
+						<span>Already have an account?</span>
+						<NavLink to='/signin' className='input-actiontext-link'>
+							Sign in
+						</NavLink>
+					</div>
+				</form>
+			</div>
+		</>
 	);
 };

@@ -54,7 +54,8 @@
 }
 
 .input:focus ~ .user-label,
-.input:valid ~ .user-label {
+.input:valid ~ .user-label,
+.input:disabled ~ .user-label {
 	color: var(--smooth-purple);
 	transform: translateY(-50%) scale(0.8);
 	background-color: var(--white);

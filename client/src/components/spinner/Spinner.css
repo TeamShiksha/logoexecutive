@@ -1,4 +1,4 @@
-.spinner_container {
+.container {
 	position: fixed;
 	top: 0;
 	height: 100%;
@@ -16,20 +16,7 @@
 	border-top: 4px solid lightgray;
 	border-radius: 50%;
 	animation: spin 1s linear infinite;
-	margin: auto;
-}
-
-.small {
-	height: 20px;
-	width: 20px;
-}
-
-.medium {
-	height: 40px;
-	width: 40px;
-}
-
-.large {
+	margin: auto; /* to center the spinner */
 	height: 50px;
 	width: 50px;
 }

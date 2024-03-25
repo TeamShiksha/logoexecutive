@@ -6,13 +6,13 @@ import './Signincard.css';
 import {AuthContext} from '../../contexts/AuthContext';
 import {useApi} from '../../hooks/useApi';
 import {INITIAL_SIGNIN_FORM_DATA} from '../../constants';
-import {Spinner} from '../spinner/Spinner';
 
 export default function Signincard() {
 	const [formData, setFormData] = useState(INITIAL_SIGNIN_FORM_DATA);
 	const [validationErrors, setValidationErrors] = useState('');
 	const {setIsAuthenticated} = useContext(AuthContext);
-	console.log('krishna ', useContext(AuthContext));
+	const navigate = useNavigate();
+
 	const {errorMsg, makeRequest, loading} = useApi(
 		{
 			url: `api/auth/signin`,
@@ -21,8 +21,6 @@ export default function Signincard() {
 		},
 		true,
 	);
-
-	const navigate = useNavigate();
 
 	const handleFormChange = (e) => {
 		const {name, value} = e.target;
@@ -69,7 +67,6 @@ export default function Signincard() {
 
 	return (
 		<>
-			{loading && <Spinner />}
 			<div className='inputlogin'>
 				<h3 className='head3'>Sign in to dashboard</h3>
 				<p
@@ -87,6 +84,7 @@ export default function Signincard() {
 						label='email'
 						value={formData.email}
 						onChange={handleFormChange}
+						disabled={loading}
 					/>
 					<CustomInput
 						className='inputs'
@@ -95,8 +93,13 @@ export default function Signincard() {
 						label='password'
 						value={formData.password}
 						onChange={handleFormChange}
+						disabled={loading}
 					/>
-					<button className='login-btn' aria-label='Sign in to Dashboard'>
+					<button
+						className='login-btn'
+						aria-label='Sign in to Dashboard'
+						disabled={loading}
+					>
 						Login
 					</button>
 				</form>

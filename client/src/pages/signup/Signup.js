@@ -3,7 +3,6 @@ import {NavLink} from 'react-router-dom';
 import './Signup.css';
 import {useApi} from '../../hooks/useApi';
 import {INITIAL_SIGNUP_FORM_DATA} from '../../constants';
-import {Spinner} from '../../components/spinner/Spinner';
 
 export const Signup = () => {
 	const [formData, setFormData] = useState(INITIAL_SIGNUP_FORM_DATA);
@@ -116,7 +115,6 @@ export const Signup = () => {
 
 	return (
 		<>
-			{loading && <Spinner />}
 			<div className='page-div'>
 				<form onSubmit={handleSubmit} noValidate className='form-box'>
 					<h2 className='form-title'>Sign up for free</h2>
@@ -137,6 +135,7 @@ export const Signup = () => {
 							onChange={handleChange}
 							required
 							className='input'
+							disabled={loading}
 						/>
 						<label className='user-label' htmlFor='firstName'>
 							First Name
@@ -153,6 +152,7 @@ export const Signup = () => {
 							onChange={handleChange}
 							required
 							className='input'
+							disabled={loading}
 						/>
 						<label className='user-label' htmlFor='lastName'>
 							Last Name
@@ -169,6 +169,7 @@ export const Signup = () => {
 							onChange={handleChange}
 							required
 							className='input'
+							disabled={loading}
 						/>
 						<label className='user-label' htmlFor='email'>
 							Email
@@ -185,6 +186,7 @@ export const Signup = () => {
 							onChange={handleChange}
 							required
 							className='input'
+							disabled={loading}
 						/>
 						<label className='user-label' htmlFor='password'>
 							Password
@@ -201,6 +203,7 @@ export const Signup = () => {
 							onChange={handleChange}
 							required
 							className='input'
+							disabled={loading}
 						/>
 						<label className='user-label' htmlFor='confirmPassword'>
 							Confirm Password

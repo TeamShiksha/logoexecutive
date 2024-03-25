@@ -25,6 +25,7 @@ const ForgotPassword = () => {
 		// this is just for mocking, logic needs to be replaced during backend integration.
 		if (success) {
 			setSuccessMsg(`✓ Email sent! Check your inbox for the reset link.`);
+			setUserEmail('');
 		} else {
 			setErrorMsg(`No account found! Please double-check your email.`);
 		}

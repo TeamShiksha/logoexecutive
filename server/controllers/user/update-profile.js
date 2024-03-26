@@ -49,7 +49,7 @@ async function updateProfileController(req, res) {
       return res.status(404).json({
         status: 404,
         error: STATUS_CODES[404],
-        message: "User not found",
+        message: "User not found.",
       });
     }
 
@@ -60,7 +60,7 @@ async function updateProfileController(req, res) {
     ) {
       return res
         .status(200)
-        .json({ status: 200, message: "Profile updated successfully" });
+        .json({ status: 200, message: "The profile has been successfully updated." });
     }
 
     const changes = ["firstName", "lastName", "email"].map((field) =>
@@ -91,7 +91,7 @@ async function updateProfileController(req, res) {
         verificationToken.tokenURL.href
       );
 
-      successRes.push("Verification link on new email sent successfully");
+      successRes.push("The verification link for the new email has been successfully sent");
 
       await sendEmail(
         user.email,
@@ -99,7 +99,7 @@ async function updateProfileController(req, res) {
         " Please verify your new email address by clicking on the link sent to your new email address"
       );
 
-      successRes.push("Confirmation mail on old email sent successfully");
+      successRes.push("The confirmation email has been successfully sent to the old email address.");
 
       return res.status(200).json({ status: 200, message: successRes });
     }

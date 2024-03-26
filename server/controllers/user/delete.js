@@ -10,7 +10,7 @@ async function deleteUserAccountController(req, res, next) {
     res.status(200).json({
       status: 200,
       message: STATUS_CODES[200],
-      data: { message: "User data deleted successfully" },
+      data: { message: "Your user data has been successfully deleted from our system." },
     });
   } catch (err) {
     next(err);

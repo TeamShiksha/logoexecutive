@@ -140,7 +140,7 @@ describe("contactUs controller", () =>{
     expect(response.body).toEqual({
       statusCode: 400,
       error: STATUS_CODES[400],
-      message: "Form is previously submitted. We will contact you soon!",
+      message: "Your form has been previously submitted. Our team will be in touch with you shortly.",
     });
   });
 
@@ -167,7 +167,7 @@ describe("contactUs controller", () =>{
     expect(response.status).toBe(200);
     expect(response.body).toEqual({
       statusCode: 200,
-      message: "Form is submitted",
+      message: "The form has been successfully submitted.",
     });
   });
 

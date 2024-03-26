@@ -49,7 +49,7 @@ describe("deleteUserAccountController", () => {
     expect(response.body).toEqual({
       status: 200,
       message: STATUS_CODES[200],
-      data: { message: "User data deleted successfully" },
+      data: { message: "Your user data has been successfully deleted from our system." },
     });
   });
 

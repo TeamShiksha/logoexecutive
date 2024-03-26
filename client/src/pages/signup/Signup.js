@@ -1,13 +1,15 @@
-import {useState} from 'react';
-import {NavLink} from 'react-router-dom';
-import './Signup.css';
+import {useState, useContext} from 'react';
+import {NavLink, Navigate} from 'react-router-dom';
 import {useApi} from '../../hooks/useApi';
 import {INITIAL_SIGNUP_FORM_DATA} from '../../constants';
+import {AuthContext} from '../../contexts/AuthContext';
+import './Signup.css';
 
-export const Signup = () => {
+const Signup = () => {
 	const [formData, setFormData] = useState(INITIAL_SIGNUP_FORM_DATA);
 	const [validationErrors, setValidationErrors] = useState({});
 	const [isSignUpSuccess, setIsSignUpSuccess] = useState(false);
+	const {isAuthenticated} = useContext(AuthContext);
 	const {data, errorMsg, makeRequest} = useApi({
 		url: `api/auth/signup`,
 		method: 'post',
@@ -113,7 +115,7 @@ export const Signup = () => {
 		);
 	};
 
-	return (
+	return !isAuthenticated ? (
 		<div className='page-div'>
 			<form onSubmit={handleSubmit} noValidate className='form-box'>
 				<h2 className='form-title'>Sign up for free</h2>
@@ -217,5 +219,9 @@ export const Signup = () => {
 				</div>
 			</form>
 		</div>
+	) : (
+		<Navigate to='/dashboard' />
 	);
 };
+
+export default Signup;

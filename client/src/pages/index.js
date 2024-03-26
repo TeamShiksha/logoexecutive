@@ -7,8 +7,8 @@ import ForgotPassword from './forgot-password/ForgotPassword';
 import ResetPassword from './reset-password/ResetPassword';
 import ResetPasswordSuccessCard from './reset-password/ResetPasswordSuccessCard';
 import Signin from './signin/Signin';
-import {Signup} from './signup/Signup';
-import {Home} from './welcome/Home';
+import Signup from './signup/Signup';
+import Home from './welcome/Home';
 import AdminDashboard from './admin/Admin';
 
 export {

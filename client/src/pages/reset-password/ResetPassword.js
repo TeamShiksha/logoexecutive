@@ -1,18 +1,39 @@
-import {useState} from 'react';
+import {useState, useEffect} from 'react';
 import CustomInput from '../../components/common/input/CustomInput';
 import './ResetPassword.css';
 import ResetPasswordSuccessCard from './ResetPasswordSuccessCard';
+import {useLocation} from 'react-router';
+import {useApi} from '../../hooks/useApi';
 
 function ResetPassword() {
 	const [newPassword, setNewPassword] = useState('');
 	const [confirmPassword, setConfirmPassword] = useState('');
 	const [errorMsg, setErrorMsg] = useState('');
 	const [success, setSuccess] = useState(false);
+	const [token, setToken] = useState(null);
+
+	const location = useLocation();
+
+	const {makeRequest} = useApi({
+		url: `api/auth/reset-password`,
+		method: 'patch',
+		data: {newPassword, confirmPassword, token},
+	});
+
+	useEffect(() => {
+		let extractedToken = location?.search.replace('?token=', '');
+		if (extractedToken) {
+			setToken(extractedToken);
+		} else {
+			console.error('No token found in the URL');
+		}
+	}, []);
 
 	const handleSubmit = (event) => {
 		event.preventDefault();
 		setErrorMsg('');
 		if (newPassword === confirmPassword) {
+			makeRequest();
 			setSuccess(true);
 		} else {
 			setErrorMsg(

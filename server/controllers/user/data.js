@@ -13,46 +13,28 @@ async function getUserDataController(req, res, next) {
         message: "User document not found",
       });
     }
-    const userData = { ...user };
-    const subscriptionData = await fetchSubscriptionByuserid(userId);
-    if (!subscriptionData) {
-      return res.status(404).json({
-        statusCode: 404,
-        error: STATUS_CODES[404],
-        message: "Subscription document of user not found",
-      });
-    }
-    userData.subscription = { ...subscriptionData };
-    const keyData = await fetchKeysByuserid(userId);
-    const keysToRemove = ["keyId", "userId", "updatedAt"];
-    let filteredKeyData = null;
-    if (keyData) {
-      filteredKeyData = keyData.map((keyObject) => {
-        keysToRemove.forEach((keyToRemove) => {
-          delete keyObject[keyToRemove];
-        });
-        return keyObject;
-      });
-    }
-    userData.key = { ...filteredKeyData };
-    const result = {
-      email: userData.email,
-      firstName: userData.firstName,
-      lastName: userData.lastName,
-      subscriptionId: userData.subscription.subscriptionId,
-      subscriptionType: userData.subscription.subscriptionType,
-      usageLimit: userData.subscription.usageLimit,
-      isActive: userData.subscription.isActive,
-      keys: userData.key,
-    };
 
-    return res.status(200).json({
-      statusCode: 200,
-      success: STATUS_CODES[200],
-      data: result,
-    });
+    const data = {};
+
+    const [subscriptionData, userKeys] = await Promise.allSettled([fetchSubscriptionByuserid(userId), fetchKeysByuserid(userId)]);
+
+    Object.assign(data, user.data);
+
+    let statusCode = 200;
+    if(subscriptionData.status === "fulfilled" && subscriptionData.value) {
+      Object.assign(data, { subscription: subscriptionData.value.data });
+    } else {
+      statusCode = 206;
+    }
+    if(userKeys.status === "fulfilled" && userKeys.value) {
+      Object.assign(data, { keys: userKeys.value.map(key => key.data) });
+    } else {
+      statusCode = 206;
+    }
+
+    return res.status(statusCode).json({ data });
   } catch (err) {
-    throw err;
+    next(err);
   }
 }
 

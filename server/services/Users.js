@@ -94,11 +94,8 @@ async function fetchUserFromId(userId) {
       .limit(1)
       .get();
     if (userSnapshot.empty) return null;
-    const userDoc = userSnapshot.docs[0];
-    const user = new Users({ ...userDoc.data(), userRef: userDoc.ref });
-    user.createdAt = user.createdAt.toDate();
-    user.updatedAt = user.updatedAt.toDate();
-    return user;
+    
+    return new Users({ ...userSnapshot.docs[0].data(), userRef: userSnapshot.docs[0].ref });
   } catch (err) {
     console.log(err);
     throw err;

@@ -1,6 +1,6 @@
 import React from 'react';
 import {render, screen} from '@testing-library/react';
-import {HeroSection} from './HeroSection';
+import HeroSection from './HeroSection';
 import Banner from '../../assets/images/Banner.jpg';
 
 describe('Hero Section Component', () => {

@@ -1,10 +1,10 @@
 import {useState} from 'react';
 import {NavLink} from 'react-router-dom';
-import './Signup.css';
 import {useApi} from '../../hooks/useApi';
 import {INITIAL_SIGNUP_FORM_DATA} from '../../constants';
+import './Signup.css';
 
-export const Signup = () => {
+function Signup() {
 	const [formData, setFormData] = useState(INITIAL_SIGNUP_FORM_DATA);
 	const [validationErrors, setValidationErrors] = useState({});
 	const [isSignUpSuccess, setIsSignUpSuccess] = useState(false);
@@ -16,14 +16,11 @@ export const Signup = () => {
 
 	const handleChange = (event) => {
 		const {name, value} = event.target;
-
 		const trimmedValue = value.trim();
-
 		setFormData((prevData) => ({
 			...prevData,
 			[name]: trimmedValue,
 		}));
-
 		setValidationErrors((prevErrors) => ({
 			...prevErrors,
 			[name]: '',
@@ -32,7 +29,6 @@ export const Signup = () => {
 
 	const validateFormData = () => {
 		const errors = {};
-
 		if (formData.firstName === '') {
 			errors.firstName = 'First name is required.';
 		} else if (/[^a-zA-Z]/.test(formData.firstName)) {
@@ -43,7 +39,6 @@ export const Signup = () => {
 		) {
 			errors.firstName = 'First name should be 1 to 20 characters long.';
 		}
-
 		if (formData.lastName === '') {
 			errors.lastName = 'Last name is required.';
 		} else if (/[^a-zA-Z]/.test(formData.lastName)) {
@@ -51,7 +46,6 @@ export const Signup = () => {
 		} else if (formData.lastName.length < 1 || formData.lastName.length > 20) {
 			errors.lastName = 'Last name should be 1 to 20 characters long.';
 		}
-
 		if (formData.email === '') {
 			errors.email = 'Email is required.';
 		} else if (formData.email.length > 50) {
@@ -59,7 +53,6 @@ export const Signup = () => {
 		} else if (!isValidEmail(formData.email)) {
 			errors.email = 'Invalid email format.';
 		}
-
 		if (formData.password === '') {
 			errors.password = 'Password is required.';
 		} else if (formData.password.length < 8 || formData.password.length > 30) {
@@ -68,11 +61,9 @@ export const Signup = () => {
 			errors.password =
 				'Password should contain at least one uppercase letter, one lowercase letter, one digit, and one special character.';
 		}
-
 		if (formData.confirmPassword !== formData.password) {
 			errors.confirmPassword = 'Passwords do not match.';
 		}
-
 		return errors;
 	};
 
@@ -80,7 +71,6 @@ export const Signup = () => {
 		setValidationErrors({});
 		setIsSignUpSuccess(false);
 		event.preventDefault();
-
 		const errors = validateFormData();
 
 		if (Object.keys(errors).length === 0) {
@@ -104,7 +94,6 @@ export const Signup = () => {
 		const hasLowercase = /[a-z]/;
 		const hasDigit = /\d/;
 		const hasSpecialCharacter = /[!@#$%^&*]/;
-
 		return (
 			hasUppercase.test(password) &&
 			hasLowercase.test(password) &&
@@ -142,7 +131,6 @@ export const Signup = () => {
 						</label>
 						<p className='error'>{validationErrors.firstName}</p>
 					</div>
-
 					<div className='input-group'>
 						<input
 							type='text'
@@ -159,7 +147,6 @@ export const Signup = () => {
 						</label>
 						<p className='error'>{validationErrors.lastName}</p>
 					</div>
-
 					<div className='input-group'>
 						<input
 							type='text'
@@ -176,7 +163,6 @@ export const Signup = () => {
 						</label>
 						<p className='error'>{validationErrors.email}</p>
 					</div>
-
 					<div className='input-group'>
 						<input
 							type='password'
@@ -193,7 +179,6 @@ export const Signup = () => {
 						</label>
 						<p className='error'>{validationErrors.password}</p>
 					</div>
-
 					<div className='input-group'>
 						<input
 							type='password'
@@ -226,3 +211,5 @@ export const Signup = () => {
 		</>
 	);
 };
+
+export default Signup;

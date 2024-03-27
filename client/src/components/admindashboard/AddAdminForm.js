@@ -3,17 +3,15 @@ import {useState} from 'react';
 import CustomInput from '../common/input/CustomInput';
 import './AddAdminForm.css';
 
-const AddAdminForm = ({setAdminDetails}) => {
+function AddAdminForm({setAdminDetails}) {
 	const [email, setEmail] = useState('');
 	const [reason, setReason] = useState('');
-
 	function handleEmailChange(event) {
 		setEmail(event.target.value);
 	}
 	function handleReasonChange(event) {
 		setReason(event.target.value);
 	}
-
 	function handleSubmit(event) {
 		event.preventDefault();
 		setAdminDetails((prev) => [

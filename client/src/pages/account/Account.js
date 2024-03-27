@@ -3,7 +3,7 @@ import Profile from '../../components/profile/Profile';
 import Settings from '../../components/settings/Settings';
 import './Account.css';
 
-const Account = () => {
+function Account() {
 	return (
 		<article className='account-container'>
 			<Profile />

@@ -1,7 +1,7 @@
-import './About.css';
 import Contactus from '../contactus/Contactus';
+import './About.css';
 
-const About = () => {
+function About() {
 	return (
 		<>
 			<article className='about'>
@@ -17,7 +17,6 @@ const About = () => {
 						convenient and cost-effective for our valued customers.
 					</p>
 				</section>
-
 				<section className='about-section'>
 					<h2 className='about-section-heading'>Purpose and Goals</h2>
 					<p className='about-section-paragraph'>
@@ -32,7 +31,6 @@ const About = () => {
 						impression in the market.
 					</p>
 				</section>
-
 				<section className='about-section'>
 					<h2 className='about-section-heading'>Introduction to the Team</h2>
 					<p className='about-section-paragraph'>
@@ -46,7 +44,6 @@ const About = () => {
 						delivering results that align with your unique brand identity.
 					</p>
 				</section>
-
 				<section className='about-section'>
 					<h2 className='about-section-heading'>Offerings</h2>
 					<p className='about-section-paragraph'>
@@ -71,6 +68,6 @@ const About = () => {
 			<Contactus />
 		</>
 	);
-};
+}
 
 export default About;

@@ -1,10 +1,12 @@
 import Signincard from '../../components/signincard/Signincard';
 import './Signin.css';
 
-export const Signin = () => {
+function Signin() {
 	return (
 		<div className='login-main'>
 			<Signincard />
 		</div>
 	);
 };
+
+export default Signin;

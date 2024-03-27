@@ -1,10 +1,12 @@
-import {useState} from 'react';
-import {NavLink} from 'react-router-dom';
+import {useState, useContext} from 'react';
+import {NavLink, Navigate} from 'react-router-dom';
 import {useApi} from '../../hooks/useApi';
 import {INITIAL_SIGNUP_FORM_DATA} from '../../constants';
+import {AuthContext} from '../../contexts/AuthContext';
 import './Signup.css';
 
 function Signup() {
+	const {isAuthenticated} = useContext(AuthContext);
 	const [formData, setFormData] = useState(INITIAL_SIGNUP_FORM_DATA);
 	const [validationErrors, setValidationErrors] = useState({});
 	const [isSignUpSuccess, setIsSignUpSuccess] = useState(false);
@@ -72,7 +74,6 @@ function Signup() {
 		setIsSignUpSuccess(false);
 		event.preventDefault();
 		const errors = validateFormData();
-
 		if (Object.keys(errors).length === 0) {
 			const success = await makeRequest();
 			if (success) {
@@ -88,7 +89,6 @@ function Signup() {
 		const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
 		return emailRegex.test(email);
 	};
-
 	const isValidPassword = (password) => {
 		const hasUppercase = /[A-Z]/;
 		const hasLowercase = /[a-z]/;
@@ -101,6 +101,9 @@ function Signup() {
 			hasSpecialCharacter.test(password)
 		);
 	};
+	if (isAuthenticated) {
+		return <Navigate to='/dashboard' />;
+	}
 
 	return (
 		<>

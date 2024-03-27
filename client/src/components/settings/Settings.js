@@ -2,9 +2,8 @@ import {useState} from 'react';
 import Modal from '../common/modal/Modal';
 import './Settings.css';
 
-const Settings = () => {
+function Settings() {
 	const [modalOpen, setModalOpen] = useState(false);
-
 	const openModal = () => setModalOpen(true);
 	return (
 		<section className='settings'>
@@ -29,6 +28,6 @@ const Settings = () => {
 			</Modal>
 		</section>
 	);
-};
+}
 
 export default Settings;

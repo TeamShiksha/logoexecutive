@@ -2,17 +2,16 @@ import {useContext, useState} from 'react';
 import {useNavigate} from 'react-router';
 import {NavLink} from 'react-router-dom';
 import CustomInput from '../common/input/CustomInput';
-import './Signincard.css';
 import {AuthContext} from '../../contexts/AuthContext';
 import {useApi} from '../../hooks/useApi';
 import {INITIAL_SIGNIN_FORM_DATA} from '../../constants';
+import './Signincard.css';
 
-export default function Signincard() {
+function Signincard() {
 	const [formData, setFormData] = useState(INITIAL_SIGNIN_FORM_DATA);
 	const [validationErrors, setValidationErrors] = useState('');
 	const {setIsAuthenticated} = useContext(AuthContext);
 	const navigate = useNavigate();
-
 	const {errorMsg, makeRequest, loading} = useApi(
 		{
 			url: `api/auth/signin`,
@@ -24,11 +23,8 @@ export default function Signincard() {
 
 	const handleFormChange = (e) => {
 		const {name, value} = e.target;
-
 		const trimmedValue = value.trim();
-
 		setValidationErrors(null);
-
 		setFormData((prev) => {
 			return {
 				...prev,
@@ -118,3 +114,5 @@ export default function Signincard() {
 		</>
 	);
 }
+
+export default Signincard;

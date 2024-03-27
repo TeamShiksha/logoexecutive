@@ -3,7 +3,7 @@ import {FiCopy} from 'react-icons/fi';
 import {LuCopyCheck} from 'react-icons/lu';
 import {MdDeleteOutline} from 'react-icons/md';
 
-const ApiKeyTable = ({keys, copiedKey, handleCopyToClipboard, deleteKey}) => {
+function ApiKeyTable({keys, copiedKey, handleCopyToClipboard, deleteKey}) {
 	return (
 		<section className='dashboard-content-section'>
 			<div className='dashboard-content-item api-key-table'>
@@ -55,7 +55,7 @@ const ApiKeyTable = ({keys, copiedKey, handleCopyToClipboard, deleteKey}) => {
 			</div>
 		</section>
 	);
-};
+}
 
 ApiKeyTable.propTypes = {
 	keys: PropTypes.arrayOf(

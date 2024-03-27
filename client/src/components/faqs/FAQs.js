@@ -5,7 +5,6 @@ import './FAQs.css';
 
 const FAQs = () => {
 	const [activeAccordian, setActiveAccordion] = useState(false);
-
 	function handleChange(accordion) {
 		setActiveAccordion(activeAccordian === accordion ? false : accordion);
 	}

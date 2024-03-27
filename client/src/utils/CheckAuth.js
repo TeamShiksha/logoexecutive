@@ -17,6 +17,6 @@ function CheckAuth() {
 		checkCookieExists();
 	}, [setIsAuthenticated]);
 	return null;
-};
+}
 
 export default CheckAuth;

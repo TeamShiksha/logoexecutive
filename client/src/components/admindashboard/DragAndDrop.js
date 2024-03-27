@@ -1,12 +1,11 @@
 import PropTypes from 'prop-types';
 import {useEffect, useRef, useState} from 'react';
 import useFileHandler from '../../hooks/useFileHandler';
-import './DragAndDrop.css';
 import PreviewModal from './PreviewModal';
+import './DragAndDrop.css';
 
-const validImageFormats = ['jpg', 'png', 'svg'];
-
-const DragAndDrop = ({setUploadedImages}) => {
+function DragAndDrop({setUploadedImages}) {
+	const validImageFormats = ['jpg', 'png', 'svg'];
 	const [isDragging, setIsDragging] = useState(false);
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [isUploadSuccessfull, setIsUploadSuccessfull] = useState(false);
@@ -18,10 +17,8 @@ const DragAndDrop = ({setUploadedImages}) => {
 		handleFile,
 	} = useFileHandler(validImageFormats);
 
-	// Revoke the object URL whenever the image changes or the component unmounts to avoid memory leak.
 	useEffect(() => {
 		if (image) setIsModalOpen(true);
-
 		return () => {
 			if (image?.url) {
 				URL.revokeObjectURL(image.url);
@@ -32,7 +29,6 @@ const DragAndDrop = ({setUploadedImages}) => {
 	function handleFileSelection() {
 		fileInputRef.current.click();
 	}
-
 	function onFileSelect(event) {
 		setIsUploadSuccessfull(false);
 		const files = event.target.files;
@@ -40,24 +36,20 @@ const DragAndDrop = ({setUploadedImages}) => {
 		const file = files[0];
 		handleFile(file);
 	}
-
 	function handleImageNameChange(event) {
 		setImage((prev) => {
 			return {name: event.target.value, url: prev.url};
 		});
 	}
-
 	function handleDragLeave(event) {
 		event.preventDefault();
 		setIsDragging(false);
 	}
-
 	function handleDragOver(event) {
 		event.preventDefault();
 		setIsDragging(true);
 		event.dataTransfer.dropEffect = 'copy';
 	}
-
 	function handleOnDrop(event) {
 		event.preventDefault();
 		setIsUploadSuccessfull(false);
@@ -115,7 +107,7 @@ const DragAndDrop = ({setUploadedImages}) => {
 			)}
 		</section>
 	);
-};
+}
 
 DragAndDrop.propTypes = {
 	setUploadedImages: PropTypes.func.isRequired,

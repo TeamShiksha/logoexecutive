@@ -3,7 +3,7 @@ import CustomInput from '../common/input/CustomInput';
 import Modal from '../common/modal/Modal';
 import './PreviewModal.css';
 
-const PreviewModal = ({
+function PreviewModal({
 	image,
 	handleImageNameChange,
 	isModalOpen,
@@ -11,11 +11,10 @@ const PreviewModal = ({
 	isUploadSuccessfull,
 	setIsUploadSuccessfull,
 	setUploadedImages,
-}) => {
+}) {
 	function handleUpload(event) {
 		event.preventDefault();
 		setIsUploadSuccessfull(true);
-
 		setUploadedImages((prevImages) => [
 			...prevImages,
 			{
@@ -65,7 +64,7 @@ const PreviewModal = ({
 			</div>
 		</Modal>
 	);
-};
+}
 
 PreviewModal.propTypes = {
 	image: PropTypes.shape({

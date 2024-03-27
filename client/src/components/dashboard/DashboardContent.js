@@ -8,7 +8,7 @@ const TOTAL_CALLS = 5000;
 const USED_CALLS = 3000;
 const RANDOM_STRING_LENGTH = 36;
 
-const DashboardContent = () => {
+function DashboardContent() {
 	const [inputValue, setInputValue] = useState('');
 	const [errorMessage, setErrorMessage] = useState('');
 	const [copiedKey, setCopiedKey] = useState(null);
@@ -24,15 +24,12 @@ const DashboardContent = () => {
 			createDate: 'Sep 07, 2023',
 		},
 	]);
-
 	const handleGenerateKey = (e) => {
 		e.preventDefault();
-
 		if (inputValue.trim() === '') {
 			setErrorMessage('Description cannot be empty');
 			return;
 		}
-
 		const newKey = {
 			description: inputValue,
 			apiKey:
@@ -48,16 +45,13 @@ const DashboardContent = () => {
 				year: 'numeric',
 			}),
 		};
-
 		setKeys([newKey, ...keys]);
 		setInputValue('');
 		setErrorMessage('');
 	};
-
 	const handleDeleteKey = (apiKey) => {
 		setKeys(keys.filter((key) => key.apiKey !== apiKey));
 	};
-
 	const handleCopyToClipboard = async (apiKey) => {
 		try {
 			await navigator.clipboard.writeText(apiKey);
@@ -83,9 +77,7 @@ const DashboardContent = () => {
 					/>
 				</div>
 			</section>
-
 			<div className='divider'></div>
-
 			<ApiKeyTable
 				keys={keys}
 				copiedKey={copiedKey}
@@ -94,6 +86,6 @@ const DashboardContent = () => {
 			/>
 		</div>
 	);
-};
+}
 
 export default DashboardContent;

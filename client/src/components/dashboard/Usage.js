@@ -2,9 +2,8 @@ import PropTypes from 'prop-types';
 import {months} from '../../constants';
 import PieGraph from './PieGraph';
 
-const Usage = ({usedCalls, totalCalls}) => {
+function Usage({usedCalls, totalCalls}) {
 	const percentage = (usedCalls / totalCalls) * 100;
-
 	const now = new Date();
 	const nextMonth = months[(now.getMonth() + 1) % 12];
 	const nextYear = now.getFullYear() + (now.getMonth() === 11 ? 1 : 0);
@@ -28,7 +27,7 @@ const Usage = ({usedCalls, totalCalls}) => {
 			</p>
 		</div>
 	);
-};
+}
 
 Usage.propTypes = {
 	usedCalls: PropTypes.number.isRequired,

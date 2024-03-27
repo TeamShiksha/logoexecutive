@@ -1,9 +1,9 @@
 import PropTypes from 'prop-types';
 import {adminTableHeadings} from '../../constants';
-import './AdminTable.css';
 import {MdDeleteOutline} from 'react-icons/md';
+import './AdminTable.css';
 
-const AdminTable = ({adminDetails, deleteAdmin}) => {
+function AdminTable({adminDetails, deleteAdmin}) {
 	return (
 		<div className='admin-table-wrapper'>
 			<table className='admin-table'>
@@ -34,7 +34,7 @@ const AdminTable = ({adminDetails, deleteAdmin}) => {
 			</table>
 		</div>
 	);
-};
+}
 
 AdminTable.propTypes = {
 	adminDetails: PropTypes.arrayOf(

@@ -2,16 +2,15 @@ import PropTypes from 'prop-types';
 import {IoIosCloseCircleOutline} from 'react-icons/io';
 import './Modal.css';
 
-const Modal = ({
+function Modal({
 	modalOpen,
 	children,
 	setModal,
 	showButtons,
 	containerClassName,
-}) => {
+}) {
 	const closeModal = () => setModal(false);
 	const stopPropagation = (event) => event.stopPropagation();
-
 	if (modalOpen) {
 		document.body.style.overflow = 'hidden';
 	} else {
@@ -41,7 +40,7 @@ const Modal = ({
 			</div>
 		</div>
 	) : null;
-};
+}
 
 Modal.propTypes = {
 	modalOpen: PropTypes.bool,

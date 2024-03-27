@@ -1,13 +1,13 @@
 import PropTypes from 'prop-types';
 import CustomInput from '../common/input/CustomInput';
 
-const ApiKeyForm = ({
+function ApiKeyForm({
 	inputValue,
 	setInputValue,
 	errorMessage,
 	setErrorMessage,
 	handleGenerateKey,
-}) => {
+}) {
 	return (
 		<section className='dashboard-content-section'>
 			<form className='api-key-container ' onSubmit={handleGenerateKey}>
@@ -26,7 +26,7 @@ const ApiKeyForm = ({
 			</form>
 		</section>
 	);
-};
+}
 
 ApiKeyForm.propTypes = {
 	inputValue: PropTypes.string.isRequired,

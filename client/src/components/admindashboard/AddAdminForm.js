@@ -48,7 +48,7 @@ function AddAdminForm({setAdminDetails}) {
 			<button type='submit'>Add Admin</button>
 		</form>
 	);
-};
+}
 
 AddAdminForm.propTypes = {
 	setAdminDetails: PropTypes.func.isRequired,

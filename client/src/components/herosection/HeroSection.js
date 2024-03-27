@@ -1,5 +1,5 @@
-import './Herosection.css';
 import Banner from '../../assets/images/Banner.jpg';
+import './Herosection.css';
 
 function HeroSection() {
 	return (
@@ -19,6 +19,6 @@ function HeroSection() {
 			<img className='hero-image' src={Banner} alt='hero' />
 		</div>
 	);
-};
+}
 
 export default HeroSection;

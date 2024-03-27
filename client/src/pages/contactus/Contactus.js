@@ -68,6 +68,6 @@ function Contactus() {
 			</div>
 		</div>
 	);
-};
+}
 
 export default Contactus;

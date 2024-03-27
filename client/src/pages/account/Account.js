@@ -11,6 +11,6 @@ function Account() {
 			<Settings />
 		</article>
 	);
-};
+}
 
 export default Account;

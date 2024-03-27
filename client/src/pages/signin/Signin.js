@@ -7,6 +7,6 @@ function Signin() {
 			<Signincard />
 		</div>
 	);
-};
+}
 
 export default Signin;

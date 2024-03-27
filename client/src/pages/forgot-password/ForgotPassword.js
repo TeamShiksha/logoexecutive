@@ -63,6 +63,6 @@ function ForgotPassword() {
 			</section>
 		</div>
 	);
-};
+}
 
 export default ForgotPassword;

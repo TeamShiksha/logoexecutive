@@ -37,6 +37,6 @@ function ApiDocs() {
 			</ReactMarkdown>
 		</section>
 	);
-};
+}
 
 export default ApiDocs;

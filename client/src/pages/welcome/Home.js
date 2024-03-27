@@ -1,7 +1,7 @@
 import Demo from '../../components/demo/Demo';
 import HeroSection from '../../components/herosection/HeroSection';
-import './Home.css';
 import FAQs from '../../components/faqs/FAQs';
+import './Home.css';
 
 function Home() {
 	return (
@@ -11,6 +11,6 @@ function Home() {
 			<FAQs />
 		</div>
 	);
-};
+}
 
 export default Home;

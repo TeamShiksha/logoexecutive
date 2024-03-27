@@ -5,7 +5,6 @@ export const AuthContext = createContext();
 
 export const AuthProvider = ({children}) => {
 	const [isAuthenticated, setIsAuthenticated] = useState(false);
-
 	const logout = async () => {
 		try {
 			await protectedInstance.get(`api/auth/signout`);
@@ -14,7 +13,6 @@ export const AuthProvider = ({children}) => {
 			console.error(err);
 		}
 	};
-
 	return (
 		<AuthContext.Provider value={{isAuthenticated, setIsAuthenticated, logout}}>
 			{children}

@@ -1,3 +1,5 @@
+const { normalizeDate } = require("../utils/date");
+
 class Keys {
   keyId;
   userId;
@@ -13,8 +15,8 @@ class Keys {
    * @param {string} params.userId
    * @param {string} params.key
    * @param {number} params.usageCount
-   * @param {Date} params.createdAt
-   * @param {Date} params.updatedAt
+   * @param {Date|Timestamp|string} params.createdAt
+   * @param {Date|Timestamp|string} params.updatedAt
    **/
   constructor(params) {
     this.keyId = params.keyId;
@@ -22,8 +24,8 @@ class Keys {
     this.keyDescription = params.keyDescription;
     this.key = params.key;
     this.usageCount = params.usageCount;
-    this.createdAt = params.createdAt;
-    this.updatedAt = params.updatedAt;
+    this.createdAt = normalizeDate(params.createdAt);
+    this.updatedAt = normalizeDate(params.updatedAt);
   }
 
   get data() {
@@ -31,7 +33,9 @@ class Keys {
       keyId: this.keyId,
       keyDescription: this.keyDescription,
       key: this.key,
+      usageCount: this.usageCount,
       createdAt: this.createdAt,
+      updatedAt: this.updatedAt
     };
   }
 }

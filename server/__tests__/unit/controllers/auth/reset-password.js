@@ -273,6 +273,6 @@ describe("PATCH /auth/reset-password", () => {
       .send(resetPasswordPayload);
 
     expect(response.status).toBe(200);
-    expect(response.body).toEqual({ message: "Password updated Successfully" });
+    expect(response.body).toEqual({ message: "Your password has been updated successfully." });
   });
 });

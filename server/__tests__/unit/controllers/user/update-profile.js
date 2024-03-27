@@ -158,7 +158,7 @@ describe("UpdateProfile Controller", () => {
       expect(response.body).toEqual({
         status: 404,
         error: STATUS_CODES[404],
-        message: "User not found",
+        message: "User not found.",
       });
     });
 

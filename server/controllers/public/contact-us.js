@@ -44,7 +44,7 @@ async function contactUsController(req , res, next){
       return res
         .status(400)
         .json({
-          message: "Form is previously submitted. We will contact you soon!",
+          message: "Your form has been previously submitted. Our team will be in touch with you shortly.",
           statusCode: 400,
           error: STATUS_CODES[400],
         });
@@ -61,7 +61,7 @@ async function contactUsController(req , res, next){
     }
 
     return res.status(200).json({
-      message: "Form is submitted",
+      message: "The form has been successfully submitted.",
       statusCode: 200,
     });
   }

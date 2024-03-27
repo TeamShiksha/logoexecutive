@@ -22,7 +22,6 @@ const ForgotPassword = () => {
 		setErrorMsg('');
 		setSuccessMsg('');
 		const success = await makeRequest();
-		// this is just for mocking, logic needs to be replaced during backend integration.
 		if (success) {
 			setSuccessMsg(`✓ Email sent! Check your inbox for the reset link.`);
 			setUserEmail('');

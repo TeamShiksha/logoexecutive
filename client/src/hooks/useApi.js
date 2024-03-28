@@ -36,6 +36,5 @@ export const useApi = (config, isProtected = false) => {
 		}
 		return success;
 	};
-
 	return {data, setData, errorMsg, loading, makeRequest};
 };

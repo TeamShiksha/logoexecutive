@@ -1,5 +1,5 @@
 import {useContext, useState} from 'react';
-import {useNavigate} from 'react-router';
+import {useLocation, useNavigate} from 'react-router';
 import {NavLink} from 'react-router-dom';
 import CustomInput from '../common/input/CustomInput';
 import {AuthContext} from '../../contexts/AuthContext';
@@ -12,6 +12,7 @@ function Signincard() {
 	const [validationErrors, setValidationErrors] = useState('');
 	const {setIsAuthenticated} = useContext(AuthContext);
 	const navigate = useNavigate();
+	const {state} = useLocation();
 	const {errorMsg, makeRequest, loading} = useApi(
 		{
 			url: `api/auth/signin`,
@@ -56,7 +57,7 @@ function Signincard() {
 			if (success) {
 				setFormData(INITIAL_SIGNIN_FORM_DATA);
 				setIsAuthenticated(true);
-				navigate('/dashboard');
+				navigate(state?.path || '/dashboard');
 			}
 		}
 	};

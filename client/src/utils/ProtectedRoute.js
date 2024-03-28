@@ -1,11 +1,16 @@
 import PropTypes from 'prop-types';
 import {useContext} from 'react';
 import {AuthContext} from '../contexts/AuthContext';
-import {Navigate} from 'react-router';
+import {Navigate, useLocation} from 'react-router';
 
 function ProtectedRoute({children}) {
 	const {isAuthenticated} = useContext(AuthContext);
-	return isAuthenticated ? children : <Navigate to='/signin' />;
+	const location = useLocation();
+	return isAuthenticated ? (
+		children
+	) : (
+		<Navigate to='/signin' replace state={{path: location.pathname}} />
+	);
 }
 
 ProtectedRoute.propTypes = {

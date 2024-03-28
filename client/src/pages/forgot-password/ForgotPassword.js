@@ -1,14 +1,18 @@
 import {useState} from 'react';
 import {NavLink} from 'react-router-dom';
 import CustomInput from '../../components/common/input/CustomInput';
-import './ForgotPassword.css';
 import {useApi} from '../../hooks/useApi';
+import './ForgotPassword.css';
 
 function ForgotPassword() {
 	const [userEmail, setUserEmail] = useState('');
-	const [errorMsg, setErrorMsg] = useState('');
-	const [successMsg, setSuccessMsg] = useState('');
-	const {makeRequest, loading} = useApi({
+	const [isSuccess, setIsSuccess] = useState(false);
+	const {
+		data: response,
+		makeRequest,
+		loading,
+		errorMsg,
+	} = useApi({
 		url: `api/auth/forgot-password`,
 		method: 'post',
 		data: {email: userEmail},
@@ -20,15 +24,12 @@ function ForgotPassword() {
 
 	async function handleSubmit(e) {
 		e.preventDefault();
-		setErrorMsg('');
-		setSuccessMsg('');
+		setIsSuccess(false);
 		const success = await makeRequest();
 
 		if (success) {
-			setSuccessMsg(`Successfully sent email`);
+			setIsSuccess(true);
 			setUserEmail('');
-		} else {
-			setErrorMsg(`Email does not exist`);
 		}
 	}
 
@@ -48,13 +49,13 @@ function ForgotPassword() {
 						{errorMsg}
 					</p>
 				)}
-				{successMsg && (
+				{isSuccess && (
 					<p
 						className='forgot-password-success'
 						aria-live='assertive'
 						role='alert'
 					>
-						{successMsg}
+						{response?.message}
 					</p>
 				)}
 				<form onSubmit={handleSubmit}>
@@ -64,6 +65,7 @@ function ForgotPassword() {
 						value={userEmail}
 						name='userEmail'
 						onChange={handleUserEmailChange}
+						disabled={loading}
 					/>
 					<button type='submit' disabled={loading}>
 						Submit

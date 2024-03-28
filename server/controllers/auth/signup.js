@@ -11,22 +11,22 @@ const signupPayloadSchema = Joi.object().keys({
     .min(1)
     .max(20)
     .regex(/^[^!@#$%^&*(){}\[\]\\\.;'",.<>/?`~|0-9]*$/)
-    .message("firstName should not contain any special character or number"),
+    .message("firstName should not contain any special characters or numbers"),
   lastName: Joi.string()
     .trim()
     .required()
     .min(1)
     .max(20)
     .regex(/^[^!@#$%^&*(){}\[\]\\\.;'",.<>/?`~|0-9]*$/)
-    .message("lastName should not contain any special character or number"),
+    .message("lastName should not contain any special characters or numbers"),
   email: Joi.string()
     .trim()
     .required()
     .max(50)
     .regex(/^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/)
-    .message("email should be valid"),
+    .message("The Email you have entered is invalid"),
   password: Joi.string().trim().required().min(8).max(30),
-  confirmPassword: Joi.any().required().equal(Joi.ref("password")).messages({"any.only": "Confirm Password should match password"}),
+  confirmPassword: Joi.any().required().equal(Joi.ref("password")).messages({"any.only": "Passwords do not match"}),
 });
 
 async function signupController(req, res, next) {
@@ -47,9 +47,9 @@ async function signupController(req, res, next) {
     if (emailExists) {
       return res.status(400).json(
         {
-          message: "Email already exists",
+          message: "The Email you have entered already exists",
           error: STATUS_CODES[400],
-          statusCode: 400,
+          statusCode: 400
         },
       );
     }
@@ -88,7 +88,7 @@ async function signupController(req, res, next) {
 
     const emailRes = await sendEmail(
       newUser.email,
-      "Please Verify email",
+      "Please Verify your email",
       verificationToken.tokenURL.href
     );
     if (!emailRes.success) {
@@ -103,7 +103,7 @@ async function signupController(req, res, next) {
 
     return res.status(201).json(
       {
-        message: "user created successfully and verification email sent on your email.",
+        message: "User has been created successfully. Verification email has been sent to your email.",
         statusCode: 201,
       },
     );

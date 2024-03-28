@@ -8,7 +8,7 @@ const forgotPasswordSchema = Joi.object().keys({
     .trim()
     .required()
     .regex(/^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/)
-    .message("Email is not valid"),
+    .message("The Email you have entered is invalid"),
 });
 
 const mailText = (url) => ({
@@ -32,7 +32,7 @@ async function forgotPasswordController(req, res, next) {
     if (!user)
       return res.status(404).json({
         error: STATUS_CODES[404],
-        message: "Email does not exist",
+        message: "The Email you have entered does not exist",
         statusCode: 404
       });
 

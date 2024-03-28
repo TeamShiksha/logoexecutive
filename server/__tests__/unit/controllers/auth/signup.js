@@ -85,7 +85,7 @@ describe("Signup Controller", () => {
     expect(response.status).toBe(422);
     expect(response.body).toEqual(
       {
-        message: "firstName should not contain any special character or number",
+        message: "firstName should not contain any special characters or numbers",
         statusCode: 422,
         error: STATUS_CODES[422],
       },
@@ -102,7 +102,7 @@ describe("Signup Controller", () => {
     expect(response.status).toBe(422);
     expect(response.body).toEqual(
       {
-        message: "lastName should not contain any special character or number",
+        message: "lastName should not contain any special characters or numbers",
         statusCode: 422,
         error: STATUS_CODES[422],
       },
@@ -119,7 +119,7 @@ describe("Signup Controller", () => {
     expect(response.status).toBe(422);
     expect(response.body).toEqual(
       {
-        message: "email should be valid",
+        message: "The Email you have entered is invalid",
         statusCode: 422,
         error: STATUS_CODES[422],
       },
@@ -177,7 +177,7 @@ describe("Signup Controller", () => {
     expect(response.status).toBe(422);
     expect(response.body).toEqual(
       {
-        message: "Confirm Password should match password",
+        message: "Passwords do not match",
         statusCode: 422,
         error: STATUS_CODES[422],
       },
@@ -194,7 +194,7 @@ describe("Signup Controller", () => {
     expect(response.status).toBe(400);
     expect(response.body).toEqual(
       {
-        message: "Email already exists",
+        message: "The Email you have entered already exists",
         statusCode: 400,
         error: STATUS_CODES[400],
       },
@@ -319,7 +319,7 @@ describe("Signup Controller", () => {
     expect(response.status).toBe(201);
     expect(response.body).toEqual({
       message:
-        "user created successfully and verification email sent on your email.",
+        "User has been created successfully. Verification email has been sent to your email.",
       statusCode: 201,
     });
   });

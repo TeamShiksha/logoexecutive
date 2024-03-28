@@ -17,14 +17,14 @@ async function verifyTokenController(req, res, next) {
     if (!userToken)
       return res.status(400).json({
         error: STATUS_CODES[400],
-        message: "Token does not exists",
+        message: "User Token does not exist",
         statusCode: 400,
       });
 
     if (userToken.isExpired())
       return res.status(403).json({
         error: STATUS_CODES[403],
-        message: "User token expired",
+        message: "Your User Token has expired",
         statusCode: 403,
       });
 
@@ -46,10 +46,10 @@ async function verifyTokenController(req, res, next) {
 
     deleteUserToken(userToken).then((result) => {
       if (!result.success)
-        console.error(`Token id:${userToken.token} not deleted`);
+        console.error(`Token id:${userToken.token} could not be deleted`);
     });
 
-    return res.status(200).json({ message: "User verified successfully" });
+    return res.status(200).json({ message: "User verification successful" });
   } catch (err) {
     next(err);
   }

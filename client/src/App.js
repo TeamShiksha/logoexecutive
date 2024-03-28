@@ -5,7 +5,7 @@ import Pricing from './components/pricing/Pricing';
 import {
 	About,
 	Account,
-	AdminDashboard,
+	// AdminDashboard,
 	ApiDocs,
 	Contactus,
 	Dashboard,
@@ -43,14 +43,14 @@ function App() {
 						</ProtectedRoute>
 					}
 				/>
-				<Route
+				{/* <Route
 					path='/admin'
 					element={
 						<ProtectedRoute>
 							<AdminDashboard />
 						</ProtectedRoute>
 					}
-				/>
+				/> */}
 				<Route
 					path='/dashboard'
 					element={

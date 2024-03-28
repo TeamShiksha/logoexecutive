@@ -34,7 +34,7 @@ async function generateKeyController(req, res) {
     if (keyCount >= keyLimit) {
       return res.status(403).json({
         message:
-            "Key generation limit reached. Upgrade your subscription to generate more.",
+            "The maximum limit for key generation has been reached. Please consider upgrading your subscription to generate additional keys.",
         statusCode: 403,
         error: "Forbidden",
       });
@@ -62,13 +62,13 @@ async function generateKeyController(req, res) {
     const userKeyData = UserKey.data;
     if (userKeyData) {
       return res.status(200).json({
-        message: "Key generated successfully!",
+        message: "The key has been successfully generated!",
         statusCode: 200,
         data: userKeyData,
       });
     }
   } catch (err) {
-    console.log("Location: generateKey controller", err);
+    console.log(err);
     throw err;
   }
 }

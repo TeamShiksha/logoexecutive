@@ -1,7 +1,7 @@
 import './Divider.css';
 
-const Divider = () => {
+function Divider() {
 	return <div className='divider' data-testid='divider'></div>;
-};
+}
 
 export default Divider;

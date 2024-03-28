@@ -1,7 +1,7 @@
-import './Herosection.css';
 import Banner from '../../assets/images/Banner.jpg';
+import './Herosection.css';
 
-export const HeroSection = () => {
+function HeroSection() {
 	return (
 		<div className='hero-container'>
 			<div className='hero-box'>
@@ -19,4 +19,6 @@ export const HeroSection = () => {
 			<img className='hero-image' src={Banner} alt='hero' />
 		</div>
 	);
-};
+}
+
+export default HeroSection;

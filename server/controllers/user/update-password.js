@@ -46,7 +46,7 @@ async function updatePasswordController(req, res) {
     const matchPassword = await user.matchPassword(currPassword);
     if (!matchPassword) {
       return res.status(400).json({
-        message: "Current Password is incorrect",
+        message: "The provided current password is incorrect.",
         statusCode: 400,
         error: STATUS_CODES[400],
       });
@@ -58,7 +58,7 @@ async function updatePasswordController(req, res) {
     const result = updatePasswordService(user, hashNewPassword);
     if (result) {
       return res.status(200).json({
-        message: "Password updated successfully",
+        message: "Your password has been updated successfully.",
         statusCode: 200,
         error: "OK",
       });
@@ -70,7 +70,7 @@ async function updatePasswordController(req, res) {
       });
     }
   } catch (err) {
-    console.log("Location: updatePassword controller", err);
+    console.log(err);
     throw err;
   }
 }

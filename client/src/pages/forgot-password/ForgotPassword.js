@@ -3,20 +3,17 @@ import {NavLink} from 'react-router-dom';
 import CustomInput from '../../components/common/input/CustomInput';
 import './ForgotPassword.css';
 
-const ForgotPassword = () => {
+function ForgotPassword() {
 	const [userEmail, setUserEmail] = useState('');
 	const [errorMsg, setErrorMsg] = useState('');
 	const [successMsg, setSuccessMsg] = useState('');
-
 	function handleUserEmailChange(e) {
 		setUserEmail(e.target.value);
 	}
-
 	function handleSubmit(e) {
 		e.preventDefault();
 		setErrorMsg('');
 		setSuccessMsg('');
-		// this is just for mocking, logic needs to be replaced during backend integration.
 		if (userEmail === 'testing@gmail.com') {
 			setSuccessMsg(`✓ Email sent! Check your inbox for the reset link.`);
 		} else {
@@ -31,7 +28,6 @@ const ForgotPassword = () => {
 				<p className='forgot-password-instruction'>
 					Enter the email you used to create your account.
 				</p>
-
 				{errorMsg && (
 					<p
 						className='forgot-password-error'
@@ -41,7 +37,6 @@ const ForgotPassword = () => {
 						{errorMsg}
 					</p>
 				)}
-
 				{successMsg && (
 					<p
 						className='forgot-password-success'
@@ -51,7 +46,6 @@ const ForgotPassword = () => {
 						{successMsg}
 					</p>
 				)}
-
 				<form onSubmit={handleSubmit}>
 					<CustomInput
 						type='email'
@@ -69,6 +63,6 @@ const ForgotPassword = () => {
 			</section>
 		</div>
 	);
-};
+}
 
 export default ForgotPassword;

@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import {MdOutlineExpandMore} from 'react-icons/md';
 import './Accordion.css';
 
-const Accordion = ({title, children, expanded, toggle}) => {
+function Accordion({title, children, expanded, toggle}) {
 	return (
 		<div className='accordion'>
 			<div className='accordion-header' onClick={() => toggle(title)}>
@@ -19,7 +19,7 @@ const Accordion = ({title, children, expanded, toggle}) => {
 			</div>
 		</div>
 	);
-};
+}
 
 Accordion.propTypes = {
 	children: PropTypes.node.isRequired,

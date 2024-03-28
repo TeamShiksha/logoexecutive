@@ -2,17 +2,13 @@ import PropTypes from 'prop-types';
 import {HiCheck} from 'react-icons/hi2';
 import './PricingCard.css';
 
-const PricingCard = ({content, selectMonthly}) => {
-	// Function to calculate price based on the selected pricing period
+function PricingCard({content, selectMonthly}) {
 	const calculatePrice = (price) => {
 		return selectMonthly ? price : '₹19200';
 	};
-
-	// Function to calculate period based on the selected pricing period
 	const calculatePeriod = (period) => {
 		return period ? (selectMonthly ? '/month' : '/year') : null;
 	};
-
 	const price = content.period ? calculatePrice(content.price) : content.price;
 	const buttonText = ['Teams', 'Pro'].includes(content.title)
 		? 'Coming Soon'
@@ -40,7 +36,7 @@ const PricingCard = ({content, selectMonthly}) => {
 			</ul>
 		</div>
 	);
-};
+}
 
 PricingCard.propTypes = {
 	content: PropTypes.shape({

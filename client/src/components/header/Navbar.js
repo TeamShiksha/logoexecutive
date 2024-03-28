@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import {NavLink} from 'react-router-dom';
 
-const Navbar = ({navbarItems}) => {
+function Navbar({navbarItems}) {
 	return (
 		<nav className='navbar-menu'>
 			{navbarItems?.map((item, index) => (
@@ -11,7 +11,7 @@ const Navbar = ({navbarItems}) => {
 			))}
 		</nav>
 	);
-};
+}
 
 Navbar.propTypes = {
 	navbarItems: PropTypes.arrayOf(

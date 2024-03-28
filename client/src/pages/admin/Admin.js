@@ -10,12 +10,11 @@ import {
 } from '../../constants';
 import './Admin.css';
 
-const AdminDashboard = () => {
+function AdminDashboard() {
 	const [uploadedImages, setUploadedImages] = useState(
 		dummyUploadedImageDetails,
 	);
 	const [adminDetails, setAdminDetails] = useState(dummyAdminTableDetails);
-
 	function handleDeleteAdmin(adminEmail) {
 		setAdminDetails(adminDetails.filter((admin) => admin.email !== adminEmail));
 	}
@@ -38,6 +37,6 @@ const AdminDashboard = () => {
 			</section>
 		</div>
 	);
-};
+}
 
 export default AdminDashboard;

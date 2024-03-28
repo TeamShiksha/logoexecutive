@@ -3,9 +3,8 @@ import PricingCard from './PricingCard';
 import {pricingCardsContent} from '../../constants';
 import './Pricing.css';
 
-const Pricing = () => {
+function Pricing() {
 	const [selectMonthly, setSelectMonthly] = useState(true);
-
 	const handleSwitchChange = () => {
 		setSelectMonthly((prev) => !prev);
 	};
@@ -18,7 +17,6 @@ const Pricing = () => {
 					Opt for a plan providing access to top-tier company logos. Boost your
 					projects and brand with our superior API service.
 				</p>
-
 				<div className='switch-container'>
 					<div
 						className={selectMonthly ? 'active' : ''}
@@ -36,7 +34,6 @@ const Pricing = () => {
 					</div>
 				</div>
 			</section>
-
 			<div className='pricing-cards'>
 				{pricingCardsContent.map((cardContent, index) => (
 					<PricingCard
@@ -48,6 +45,6 @@ const Pricing = () => {
 			</div>
 		</div>
 	);
-};
+}
 
 export default Pricing;

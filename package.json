@@ -20,7 +20,8 @@
 		"lint-fix": "concurrently \"yarn workspace server lint:fix\" \"yarn workspace client lint:fix\" \"yarn workspace client format\"",
 		"test": "concurrently \"yarn test:client\" \"yarn test:server\"",
 		"test:server": "yarn workspace server test --silent",
-		"test:client": "yarn workspace client test --silent"
+		"test:client": "yarn workspace client test --silent",
+		"format:client": "yarn workspace client format"
 	},
 	"devDependencies": {
 		"concurrently": "^8.2.2"

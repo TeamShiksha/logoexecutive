@@ -1,9 +1,9 @@
 import Demo from '../../components/demo/Demo';
-import {HeroSection} from '../../components/herosection/HeroSection';
-import './Home.css';
+import HeroSection from '../../components/herosection/HeroSection';
 import FAQs from '../../components/faqs/FAQs';
+import './Home.css';
 
-export const Home = () => {
+function Home() {
 	return (
 		<div className='home-container'>
 			<HeroSection />
@@ -11,4 +11,6 @@ export const Home = () => {
 			<FAQs />
 		</div>
 	);
-};
+}
+
+export default Home;

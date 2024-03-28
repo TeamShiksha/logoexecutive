@@ -2,33 +2,29 @@ import {useContext, useState} from 'react';
 import {useNavigate} from 'react-router';
 import {NavLink} from 'react-router-dom';
 import CustomInput from '../common/input/CustomInput';
-import './Signincard.css';
 import {AuthContext} from '../../contexts/AuthContext';
 import {useApi} from '../../hooks/useApi';
 import {INITIAL_SIGNIN_FORM_DATA} from '../../constants';
+import './Signincard.css';
 
-export default function Signincard() {
+function Signincard() {
 	const [formData, setFormData] = useState(INITIAL_SIGNIN_FORM_DATA);
 	const [validationErrors, setValidationErrors] = useState('');
-	const {errorMsg, makeRequest} = useApi(
+	const {setIsAuthenticated} = useContext(AuthContext);
+	const navigate = useNavigate();
+	const {errorMsg, makeRequest, loading} = useApi(
 		{
-			url: `auth/signin`,
+			url: `api/auth/signin`,
 			method: 'post',
 			data: formData,
 		},
 		true,
 	);
 
-	const {setIsAuthenticated} = useContext(AuthContext);
-	const navigate = useNavigate();
-
 	const handleFormChange = (e) => {
 		const {name, value} = e.target;
-
 		const trimmedValue = value.trim();
-
 		setValidationErrors(null);
-
 		setFormData((prev) => {
 			return {
 				...prev,
@@ -66,47 +62,57 @@ export default function Signincard() {
 	};
 
 	return (
-		<div className='inputlogin'>
-			<h3 className='head3'>Sign in to dashboard</h3>
-			<p
-				className={`input-error ${validationErrors || errorMsg ? '' : 'hidden'}`}
-				aria-live='assertive'
-				role='alert'
-			>
-				{validationErrors || errorMsg || ' '}
-			</p>
-			<form onSubmit={handleSubmit}>
-				<CustomInput
-					className='inputs'
-					type='email'
-					name='email'
-					label='email'
-					value={formData.email}
-					onChange={handleFormChange}
-				/>
-				<CustomInput
-					className='inputs'
-					type='password'
-					name='password'
-					label='password'
-					value={formData.password}
-					onChange={handleFormChange}
-				/>
-				<button className='login-btn' aria-label='Sign in to Dashboard'>
-					Login
-				</button>
-			</form>
-			<section className='input-actiontext'>
-				<div>
-					<span className='input-actiontext-support'>No account?</span>
-					<NavLink to='/signup' className='input-actiontext-link'>
-						Sign up
+		<>
+			<div className='inputlogin'>
+				<h3 className='head3'>Sign in to dashboard</h3>
+				<p
+					className={`input-error ${validationErrors || errorMsg ? '' : 'hidden'}`}
+					aria-live='assertive'
+					role='alert'
+				>
+					{validationErrors || errorMsg || ' '}
+				</p>
+				<form onSubmit={handleSubmit}>
+					<CustomInput
+						className='inputs'
+						type='email'
+						name='email'
+						label='email'
+						value={formData.email}
+						onChange={handleFormChange}
+						disabled={loading}
+					/>
+					<CustomInput
+						className='inputs'
+						type='password'
+						name='password'
+						label='password'
+						value={formData.password}
+						onChange={handleFormChange}
+						disabled={loading}
+					/>
+					<button
+						className='login-btn'
+						aria-label='Sign in to Dashboard'
+						disabled={loading}
+					>
+						Login
+					</button>
+				</form>
+				<section className='input-actiontext'>
+					<div>
+						<span className='input-actiontext-support'>No account?</span>
+						<NavLink to='/signup' className='input-actiontext-link'>
+							Sign up
+						</NavLink>
+					</div>
+					<NavLink to='/forgot-password' className='input-actiontext-link'>
+						Forgot Password
 					</NavLink>
-				</div>
-				<NavLink to='/forgot-password' className='input-actiontext-link'>
-					Forgot Password
-				</NavLink>
-			</section>
-		</div>
+				</section>
+			</div>
+		</>
 	);
 }
+
+export default Signincard;

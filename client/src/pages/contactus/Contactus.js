@@ -4,11 +4,10 @@ import CustomInput from '../../components/common/input/CustomInput';
 import './Contactus.css';
 import {Link} from 'react-router-dom';
 
-const Contactus = () => {
+function Contactus() {
 	const [name, setName] = useState('');
 	const [email, setEmail] = useState('');
 	const [message, setMessage] = useState('');
-
 	const sendMessage = () => {};
 
 	return (
@@ -53,7 +52,6 @@ const Contactus = () => {
 						Send Message
 					</button>
 				</div>
-
 				<div className='contact-subcont-second-sec-col'>
 					<div className='contact-get-in-touch contact-text'>
 						<h3>Get in touch</h3>
@@ -70,6 +68,6 @@ const Contactus = () => {
 			</div>
 		</div>
 	);
-};
+}
 
 export default Contactus;

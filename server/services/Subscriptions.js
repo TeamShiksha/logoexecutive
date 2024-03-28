@@ -1,20 +1,14 @@
 const { Subscriptions } = require("../models");
 const { SubscriptionCollection } = require("../utils/firestore");
-const { Timestamp } = require("firebase-admin/firestore");
 
+/**
+ * @param {string} userId - userId of user
+ **/
 async function createSubscription(userId) {
   try {
-    const subscriptionData = {
-      subscriptionId: crypto.randomUUID(),
-      userId: userId,
-      subscriptionType: "free",
-      keyLimit: 2,
-      usageLimit: 500,
-      isActive: false,
-      createdAt: Timestamp.now(),
-      updatedAt: Timestamp.now(),
-    };
+    const subscriptionData = Subscriptions.NewSubscription(userId);
     const result = await SubscriptionCollection.doc(subscriptionData.subscriptionId).set(subscriptionData);
+
     const UserSubscription = new Subscriptions(subscriptionData);
     return UserSubscription;
   } catch (err) {
@@ -28,11 +22,8 @@ async function fetchSubscriptionByuserid(userId) {
     const subscriptionRef = await SubscriptionCollection.where("userId", "==", userId)
       .limit(1).get();
     if (subscriptionRef.empty) return null;
-    const subscription = new Subscriptions({
-      ...subscriptionRef.docs[0].data(),
-    });
-    subscription.createdAt = subscription.createdAt.toDate();
-    subscription.updatedAt = subscription.updatedAt.toDate();
+    const subscription = new Subscriptions(subscriptionRef.docs[0].data());
+
     return subscription;
   } catch (err) {
     console.log(err);
@@ -41,5 +32,6 @@ async function fetchSubscriptionByuserid(userId) {
 }
 
 module.exports = {
-  createSubscription, fetchSubscriptionByuserid
+  createSubscription,
+  fetchSubscriptionByuserid
 };

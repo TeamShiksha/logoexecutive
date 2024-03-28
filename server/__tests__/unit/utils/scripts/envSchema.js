@@ -8,7 +8,6 @@ const validEnv = {
   EMAIL_HOST: "randomText",
   EMAIL_SERVICE: "randomText",
   EMAIL_PORT: 587,
-  EMAIL_SECURE: true,
   EMAIL_USER: "ghosty@gmail.com",
   EMAIL_PASS: "randomText",
   BUCKET_NAME: "logoexecutive",

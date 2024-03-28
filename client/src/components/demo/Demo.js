@@ -4,7 +4,6 @@ import './Demo.css';
 
 const Demo = () => {
 	const [brandName, setBrandName] = useState('');
-
 	const handleBrandNameChange = (event) => {
 		setBrandName(event.target.value);
 	};

@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import './CustomInput.css';
 
-const CustomInput = ({
+function CustomInput({
 	type,
 	label,
 	value,
@@ -10,7 +10,7 @@ const CustomInput = ({
 	error,
 	className,
 	...rest
-}) => {
+}) {
 	return (
 		<div className='custom-input-group'>
 			<input
@@ -29,7 +29,7 @@ const CustomInput = ({
 			{error && <p className='custom-input-error'>{error}</p>}
 		</div>
 	);
-};
+}
 
 CustomInput.propTypes = {
 	type: PropTypes.string.isRequired,

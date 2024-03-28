@@ -1,9 +1,8 @@
 import {useContext, useEffect} from 'react';
 import {AuthContext} from '../contexts/AuthContext';
 
-const CheckAuth = () => {
+function CheckAuth() {
 	const {setIsAuthenticated} = useContext(AuthContext);
-
 	useEffect(() => {
 		const checkCookieExists = () => {
 			const jwtCookie = document.cookie
@@ -15,11 +14,9 @@ const CheckAuth = () => {
 				setIsAuthenticated(false);
 			}
 		};
-
 		checkCookieExists();
 	}, [setIsAuthenticated]);
-
 	return null;
-};
+}
 
 export default CheckAuth;

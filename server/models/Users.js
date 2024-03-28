@@ -1,7 +1,9 @@
 const bcrypt = require("bcrypt");
 const { DocumentReference, Timestamp } = require("firebase-admin/firestore");
 const jwt = require("jsonwebtoken");
+const { v4 } = require("uuid");
 const { UserType } = require("../utils/constants");
+const { normalizeDate } = require("../utils/date");
 
 class Users {
   userId;
@@ -36,8 +38,8 @@ class Users {
     this.firstName = params.firstName;
     this.lastName = params.lastName;
     this.userType = params.userType;
-    this.createdAt = params.createdAt;
-    this.updatedAt = params.updatedAt;
+    this.createdAt = normalizeDate(params.createdAt);
+    this.updatedAt = normalizeDate(params.updatedAt);
     this.userRef = params.userRef ?? null;
     this.isVerified = params.isVerified;
   }
@@ -71,7 +73,7 @@ class Users {
       }
       const hashedPassword = await bcrypt.hash(password, 10);
       return {
-        userId: crypto.randomUUID(),
+        userId: v4(),
         email,
         firstName,
         lastName,

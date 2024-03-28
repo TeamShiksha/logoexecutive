@@ -1,6 +1,7 @@
 const { Timestamp } = require("firebase-admin/firestore");
 const { ContactUsCollection } = require("../utils/firestore");
 const { ContactUs } = require("../models");
+const { v4 } = require("uuid");
 
 /**
  * formExists - Checks if form exists in database by searching for provided email
@@ -31,7 +32,7 @@ async function createForm(formData){
       name: formData.name,
       email: formData.email,
       message: formData.message,
-      contactId: crypto.randomUUID(),
+      contactId: v4(),
       assignedTo: null,
       createdAt: Timestamp.now(),
       updatedAt: Timestamp.now(),

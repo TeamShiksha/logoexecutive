@@ -7,7 +7,7 @@ const cleanPercentage = (percentage) => {
 };
 
 const Circle = ({colour, pct, strokeWidth, fill}) => {
-	const r = 70 - strokeWidth / 2; // to adjust the radius based on the stroke width
+	const r = 70 - strokeWidth / 2;
 	const circ = 2 * Math.PI * r;
 	const strokePct = ((100 - pct) * circ) / 100;
 	return (
@@ -51,7 +51,7 @@ Text.propTypes = {
 	fontSize: PropTypes.string.isRequired,
 };
 
-const PieGraph = ({percentage, colour, strokeWidth, fontSize, fill}) => {
+function PieGraph({percentage, colour, strokeWidth, fontSize, fill}) {
 	const pct = cleanPercentage(percentage);
 	return (
 		<svg viewBox='0 0 200 200' preserveAspectRatio='xMidYMid meet'>
@@ -67,7 +67,7 @@ const PieGraph = ({percentage, colour, strokeWidth, fontSize, fill}) => {
 			<Text percentage={pct} fontSize={fontSize} />
 		</svg>
 	);
-};
+}
 
 PieGraph.propTypes = {
 	percentage: PropTypes.number.isRequired,

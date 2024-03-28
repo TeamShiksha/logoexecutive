@@ -2,7 +2,7 @@ import {useState} from 'react';
 import CustomInput from '../common/input/CustomInput';
 import './Profile.css';
 
-const Profile = () => {
+function Profile() {
 	const [firstName, setfirstName] = useState('');
 	const [lastName, setlastName] = useState('');
 	const [email, setEmail] = useState('');
@@ -88,6 +88,6 @@ const Profile = () => {
 			</div>
 		</div>
 	);
-};
+}
 
 export default Profile;

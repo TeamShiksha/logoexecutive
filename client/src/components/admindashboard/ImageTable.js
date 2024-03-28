@@ -3,7 +3,7 @@ import {BsArrowRepeat} from 'react-icons/bs';
 import {imageTableHeadings} from '../../constants';
 import './ImageTable.css';
 
-const ImageTable = ({uploadedImages}) => {
+function ImageTable({uploadedImages}) {
 	return (
 		<div className='image-table-wrapper'>
 			<table className='image-table'>
@@ -31,7 +31,7 @@ const ImageTable = ({uploadedImages}) => {
 			</table>
 		</div>
 	);
-};
+}
 
 ImageTable.propTypes = {
 	uploadedImages: PropTypes.arrayOf(

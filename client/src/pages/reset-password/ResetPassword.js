@@ -1,14 +1,13 @@
 import {useState} from 'react';
 import CustomInput from '../../components/common/input/CustomInput';
-import './ResetPassword.css';
 import ResetPasswordSuccessCard from './ResetPasswordSuccessCard';
+import './ResetPassword.css';
 
 function ResetPassword() {
 	const [newPassword, setNewPassword] = useState('');
 	const [confirmPassword, setConfirmPassword] = useState('');
 	const [errorMsg, setErrorMsg] = useState('');
 	const [success, setSuccess] = useState(false);
-
 	const handleSubmit = (event) => {
 		event.preventDefault();
 		setErrorMsg('');
@@ -39,7 +38,6 @@ function ResetPassword() {
 						{errorMsg}
 					</p>
 				)}
-
 				<form onSubmit={handleSubmit}>
 					<CustomInput
 						name='new password'

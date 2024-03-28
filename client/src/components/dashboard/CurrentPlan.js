@@ -1,4 +1,4 @@
-const CurrentPlan = () => {
+function CurrentPlan() {
 	return (
 		<div className='dashboard-content-item'>
 			<div className='current-plan-header'>
@@ -12,6 +12,6 @@ const CurrentPlan = () => {
 			<button className='upgrade-button'>Upgrade Plan</button>
 		</div>
 	);
-};
+}
 
 export default CurrentPlan;

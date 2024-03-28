@@ -3,7 +3,6 @@ import ReactMarkdown from 'react-markdown';
 import gfm from 'remark-gfm';
 import './ApiDocs.css';
 
-// custom component for rendering code blocks.
 const components = {
 	code({className, children, ...props}) {
 		return (
@@ -14,10 +13,9 @@ const components = {
 	},
 };
 
-const ApiDocs = () => {
+function ApiDocs() {
 	const file_name = 'docs.md';
 	const [post, setPost] = useState('');
-
 	useEffect(() => {
 		const fetchMarkdown = async () => {
 			try {
@@ -29,7 +27,6 @@ const ApiDocs = () => {
 				console.log(err);
 			}
 		};
-
 		fetchMarkdown();
 	}, []);
 
@@ -40,6 +37,6 @@ const ApiDocs = () => {
 			</ReactMarkdown>
 		</section>
 	);
-};
+}
 
 export default ApiDocs;

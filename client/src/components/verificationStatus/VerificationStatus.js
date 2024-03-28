@@ -13,7 +13,7 @@ function VerificationStatus(props) {
 	);
 	useEffectOnce(makeRequest);
 	return !loading ? (
-		<div className='inputlogin'>
+		<div data-testid='verificationStatus' className='inputlogin'>
 			<h3 className='head3'>
 				{errorMsg || 'Email has been verified successfully'}
 			</h3>

@@ -59,7 +59,7 @@ describe("/forgot-password", () => {
     expect(response.body).toEqual({
       error: STATUS_CODES[422],
       statusCode: 422,
-      message: "Email is not valid",
+      message: "Invalid email.",
     });
   });
 
@@ -101,7 +101,7 @@ describe("/forgot-password", () => {
     expect(response.status).toBe(404);
     expect(response.body).toEqual({
       error: STATUS_CODES[404],
-      message: "Email does not exist",
+      message: "Email does not exist.",
       statusCode: 404,
     });
   });

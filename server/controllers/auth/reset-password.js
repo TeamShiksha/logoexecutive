@@ -31,7 +31,7 @@ async function get(req, res, next) {
     if(userToken.isExpired())
       return res.status(403).json({
         error: STATUS_CODES[403],
-        message: "User Token is expired",
+        message: "Token expired",
         statusCode: 403,
       });
 
@@ -60,8 +60,8 @@ const patch = async (req, res, next) => {
 
     if (!resetPasswordSession) {
       return res.status(401).json({
-        error: "Unauthorized",
-        message: "User not signed in",
+        error: STATUS_CODES[401],
+        message: "User is not signed in",
         statusCode: 401,
       });
     }

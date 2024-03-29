@@ -85,7 +85,7 @@ describe("Signup Controller", () => {
     expect(response.status).toBe(422);
     expect(response.body).toEqual(
       {
-        message: "firstName should not contain any special character or number",
+        message: "First name can only contain alphabets.",
         statusCode: 422,
         error: STATUS_CODES[422],
       },
@@ -102,7 +102,7 @@ describe("Signup Controller", () => {
     expect(response.status).toBe(422);
     expect(response.body).toEqual(
       {
-        message: "lastName should not contain any special character or number",
+        message: "Last name can only contain alphabets.",
         statusCode: 422,
         error: STATUS_CODES[422],
       },
@@ -119,7 +119,7 @@ describe("Signup Controller", () => {
     expect(response.status).toBe(422);
     expect(response.body).toEqual(
       {
-        message: "email should be valid",
+        message: "Invalid email",
         statusCode: 422,
         error: STATUS_CODES[422],
       },
@@ -177,7 +177,7 @@ describe("Signup Controller", () => {
     expect(response.status).toBe(422);
     expect(response.body).toEqual(
       {
-        message: "Confirm Password should match password",
+        message: "Passwords mismatch",
         statusCode: 422,
         error: STATUS_CODES[422],
       },
@@ -319,7 +319,7 @@ describe("Signup Controller", () => {
     expect(response.status).toBe(201);
     expect(response.body).toEqual({
       message:
-        "user created successfully and verification email sent on your email.",
+        "User created successfully. Verification email sent.",
       statusCode: 201,
     });
   });

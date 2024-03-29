@@ -58,7 +58,7 @@ describe("Signin Controller", () => {
 
     expect(response.status).toBe(422);
     expect(response.body).toEqual({
-      message: "Email is not valid",
+      message: "Invalid email",
       statusCode: 422,
       error: STATUS_CODES[422],
     });
@@ -116,7 +116,7 @@ describe("Signin Controller", () => {
     expect(response.status).toBe(401);
     expect(response.body).toEqual({
       error: STATUS_CODES[401],
-      message: "Email or Password incorrect",
+      message: "Incorrect email or password.",
       statusCode: 401
     });
   });
@@ -132,7 +132,7 @@ describe("Signin Controller", () => {
     expect(response.status).toBe(401);
     expect(response.body).toEqual({
       error: STATUS_CODES[401],
-      message: "Email is not verified",
+      message: "Email not verified",
       statusCode: 401
     });
   });
@@ -148,7 +148,7 @@ describe("Signin Controller", () => {
     expect(response.status).toBe(401);
     expect(response.body).toEqual({
       error: STATUS_CODES[401],
-      message: "Email or Password incorrect",
+      message: "Incorrect email or password.",
       statusCode: 401
     });
   });
@@ -178,6 +178,6 @@ describe("Signin Controller", () => {
     });
 
     expect(response.status).toBe(200);
-    expect(response.body.message).toBe("Succesfully signed in");
+    expect(response.body.message).toBe("Sign-in successful");
   });
 });

@@ -70,7 +70,7 @@ describe("GET /auth/verify", () => {
     expect(response.status).toBe(400);
     expect(response.body).toEqual({
       error: STATUS_CODES[400],
-      message: "User Token does not exist",
+      message: "Invalid token",
       statusCode: 400,
     });
   });
@@ -91,7 +91,7 @@ describe("GET /auth/verify", () => {
     expect(response.status).toBe(403);
     expect(response.body).toEqual({
       error: STATUS_CODES[403],
-      message: "Your User Token has expired",
+      message: "Token expired",
       statusCode: 403,
     });
   });
@@ -143,7 +143,7 @@ describe("GET /auth/verify", () => {
 
     expect(response.status).toBe(200);
     expect(response.body).toEqual({
-      message: "User verification successful",
+      message: "Verification successful",
     });
   });
 

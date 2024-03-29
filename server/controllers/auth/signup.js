@@ -11,22 +11,22 @@ const signupPayloadSchema = Joi.object().keys({
     .min(1)
     .max(20)
     .regex(/^[^!@#$%^&*(){}\[\]\\\.;'",.<>/?`~|0-9]*$/)
-    .message("firstName should not contain any special characters or numbers"),
+    .message("Firstname should be alphanumeric"),
   lastName: Joi.string()
     .trim()
     .required()
     .min(1)
     .max(20)
     .regex(/^[^!@#$%^&*(){}\[\]\\\.;'",.<>/?`~|0-9]*$/)
-    .message("lastName should not contain any special characters or numbers"),
+    .message("Lastname should be alphanumeric"),
   email: Joi.string()
     .trim()
     .required()
     .max(50)
     .regex(/^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/)
-    .message("The Email you have entered is invalid"),
+    .message("Invalid email"),
   password: Joi.string().trim().required().min(8).max(30),
-  confirmPassword: Joi.any().required().equal(Joi.ref("password")).messages({"any.only": "Passwords do not match"}),
+  confirmPassword: Joi.any().required().equal(Joi.ref("password")).messages({"any.only": "Passwords mismatch"}),
 });
 
 async function signupController(req, res, next) {
@@ -47,7 +47,7 @@ async function signupController(req, res, next) {
     if (emailExists) {
       return res.status(400).json(
         {
-          message: "The Email you have entered already exists",
+          message: "Email already exists",
           error: STATUS_CODES[400],
           statusCode: 400
         },
@@ -103,7 +103,7 @@ async function signupController(req, res, next) {
 
     return res.status(201).json(
       {
-        message: "User has been created successfully. Verification email has been sent to your email.",
+        message: "User created successfully. Verification email sent.",
         statusCode: 201,
       },
     );

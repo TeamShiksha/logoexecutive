@@ -77,7 +77,7 @@ describe("GET /auth/reset-password", () => {
     expect(response.status).toBe(403);
     expect(response.body).toEqual({
       error: STATUS_CODES[403],
-      message: "Your User Token has expired",
+      message: "Token expired",
       statusCode: 403
     });
   });

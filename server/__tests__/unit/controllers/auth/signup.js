@@ -85,7 +85,7 @@ describe("Signup Controller", () => {
     expect(response.status).toBe(422);
     expect(response.body).toEqual(
       {
-        message: "firstName should not contain any special characters or numbers",
+        message: "Firstname should be alphanumeric",
         statusCode: 422,
         error: STATUS_CODES[422],
       },
@@ -102,7 +102,7 @@ describe("Signup Controller", () => {
     expect(response.status).toBe(422);
     expect(response.body).toEqual(
       {
-        message: "lastName should not contain any special characters or numbers",
+        message: "Lastname should be alphanumeric",
         statusCode: 422,
         error: STATUS_CODES[422],
       },
@@ -119,7 +119,7 @@ describe("Signup Controller", () => {
     expect(response.status).toBe(422);
     expect(response.body).toEqual(
       {
-        message: "The Email you have entered is invalid",
+        message: "Invalid email",
         statusCode: 422,
         error: STATUS_CODES[422],
       },
@@ -177,7 +177,7 @@ describe("Signup Controller", () => {
     expect(response.status).toBe(422);
     expect(response.body).toEqual(
       {
-        message: "Passwords do not match",
+        message: "Passwords mismatch",
         statusCode: 422,
         error: STATUS_CODES[422],
       },
@@ -194,7 +194,7 @@ describe("Signup Controller", () => {
     expect(response.status).toBe(400);
     expect(response.body).toEqual(
       {
-        message: "The Email you have entered already exists",
+        message: "Email already exists",
         statusCode: 400,
         error: STATUS_CODES[400],
       },
@@ -319,7 +319,7 @@ describe("Signup Controller", () => {
     expect(response.status).toBe(201);
     expect(response.body).toEqual({
       message:
-        "User has been created successfully. Verification email has been sent to your email.",
+        "User created successfully. Verification email sent.",
       statusCode: 201,
     });
   });

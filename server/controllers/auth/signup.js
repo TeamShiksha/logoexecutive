@@ -11,14 +11,14 @@ const signupPayloadSchema = Joi.object().keys({
     .min(1)
     .max(20)
     .regex(/^[^!@#$%^&*(){}\[\]\\\.;'",.<>/?`~|0-9]*$/)
-    .message("Firstname should be alphanumeric"),
+    .message("First name can only contain alphabets."),
   lastName: Joi.string()
     .trim()
     .required()
     .min(1)
     .max(20)
     .regex(/^[^!@#$%^&*(){}\[\]\\\.;'",.<>/?`~|0-9]*$/)
-    .message("Lastname should be alphanumeric"),
+    .message("Last name can only contain alphabets."),
   email: Joi.string()
     .trim()
     .required()

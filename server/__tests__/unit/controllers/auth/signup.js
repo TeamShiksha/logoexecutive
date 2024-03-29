@@ -85,7 +85,7 @@ describe("Signup Controller", () => {
     expect(response.status).toBe(422);
     expect(response.body).toEqual(
       {
-        message: "Firstname should be alphanumeric",
+        message: "First name can only contain alphabets.",
         statusCode: 422,
         error: STATUS_CODES[422],
       },
@@ -102,7 +102,7 @@ describe("Signup Controller", () => {
     expect(response.status).toBe(422);
     expect(response.body).toEqual(
       {
-        message: "Lastname should be alphanumeric",
+        message: "Last name can only contain alphabets.",
         statusCode: 422,
         error: STATUS_CODES[422],
       },

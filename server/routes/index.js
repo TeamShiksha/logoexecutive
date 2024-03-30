@@ -14,14 +14,14 @@ const privateRouteCORS = {
       callback(new Error("Not allowed by CORS"));
     }
   },
-  credentials: true
+  credentials: true,
 };
 
-router.use("/auth", authRouter);
-router.use("/user",userRouter);
-router.use("/admin",adminRouter);
-router.use("/public", publicRouter);
+router.use("/auth", cors(privateRouteCORS), authRouter);
+router.use("/user", cors(privateRouteCORS), userRouter);
+router.use("/admin", cors(privateRouteCORS), adminRouter);
+router.use("/public", cors(privateRouteCORS), publicRouter);
 router.use("/business", logoRouter);
-router.use("/admin", adminRouter);
+router.use("/admin", cors(privateRouteCORS), adminRouter);
 
 module.exports = router;

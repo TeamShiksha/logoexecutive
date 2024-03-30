@@ -19,7 +19,7 @@ function ApiKeyTable({keys, copiedKey, handleCopyToClipboard, deleteKey}) {
 					<tbody>
 						{keys.map((key, index) => (
 							<tr key={index}>
-								<td>{key.description}</td>
+								<td>{key.keyDescription}</td>
 								<td className='api-key-column'>
 									{copiedKey === key.apiKey ? (
 										<div

@@ -3,6 +3,7 @@ import ApiKeyForm from './ApiKeyForm';
 import ApiKeyTable from './ApiKeyTable';
 import CurrentPlan from './CurrentPlan';
 import Usage from './Usage';
+import {useApi} from '../../hooks/useApi';
 
 const TOTAL_CALLS = 5000;
 const USED_CALLS = 3000;
@@ -12,42 +13,52 @@ function DashboardContent() {
 	const [inputValue, setInputValue] = useState('');
 	const [errorMessage, setErrorMessage] = useState('');
 	const [copiedKey, setCopiedKey] = useState(null);
-	const [keys, setKeys] = useState([
+	const [keys, setKeys] = useState([]);
+
+	const {data, makeRequest} = useApi(
 		{
-			description: 'Demo Key 1',
-			apiKey: 'maohquwnbtpszjqj91myxk',
-			createDate: 'Dec 18, 2023',
+			url: 'api/user/generate',
+			method: 'post',
+			data: {
+				keyDescription: inputValue,
+				apiKey:
+					Math.random()
+						.toString(RANDOM_STRING_LENGTH)
+						.substring(2, RANDOM_STRING_LENGTH) +
+					Math.random()
+						.toString(RANDOM_STRING_LENGTH)
+						.substring(2, RANDOM_STRING_LENGTH),
+				createDate: new Date().toLocaleDateString('en-US', {
+					day: '2-digit',
+					month: 'short',
+					year: 'numeric',
+				}),
+			},
 		},
-		{
-			description: 'Demo Key 2',
-			apiKey: 'txoediu8lvq01vzdpz38hldc',
-			createDate: 'Sep 07, 2023',
-		},
-	]);
-	const handleGenerateKey = (e) => {
+		true,
+	);
+	
+	const handleGenerateKey = async (e) => {
 		e.preventDefault();
 		if (inputValue.trim() === '') {
 			setErrorMessage('Description cannot be empty');
 			return;
 		}
-		const newKey = {
-			description: inputValue,
-			apiKey:
-				Math.random()
-					.toString(RANDOM_STRING_LENGTH)
-					.substring(2, RANDOM_STRING_LENGTH) +
-				Math.random()
-					.toString(RANDOM_STRING_LENGTH)
-					.substring(2, RANDOM_STRING_LENGTH),
-			createDate: new Date().toLocaleDateString('en-US', {
-				day: '2-digit',
-				month: 'short',
-				year: 'numeric',
-			}),
-		};
-		setKeys([newKey, ...keys]);
+
+		try {
+			const response = await makeRequest();
+			if (response && data?.data) {
+				setKeys([data.data, ...keys]);
+				setErrorMessage('');
+			} else {
+				setErrorMessage(response?.message || 'An error occurred');
+			}
+		} catch (error) {
+			setErrorMessage(
+				error?.response?.data?.message || error?.message || 'An error occurred',
+			);
+		}
 		setInputValue('');
-		setErrorMessage('');
 	};
 	const handleDeleteKey = (apiKey) => {
 		setKeys(keys.filter((key) => key.apiKey !== apiKey));

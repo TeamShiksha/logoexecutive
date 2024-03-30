@@ -1,6 +1,9 @@
 const Joi = require("joi");
-const { createKey, fetchKeysByuserid,
-  fetchSubscriptionByuserid } = require("../../services");
+const {
+  createKey,
+  fetchKeysByuserid,
+  fetchSubscriptionByuserid,
+} = require("../../services");
 
 const generateKeyPayloadSchema = Joi.object().keys({
   keyDescription: Joi.string()
@@ -24,13 +27,13 @@ async function generateKeyController(req, res) {
     const { userId } = req.userData;
     const subscription = await fetchSubscriptionByuserid(userId);
     const keyLimit = subscription.keyLimit;
-  
+
     var keyCount = 1;
     const keysObject = (await fetchKeysByuserid(userId)) || [];
     if (keysObject != null) {
       keyCount = keysObject.length;
     }
-  
+
     if (keyCount >= keyLimit) {
       return res.status(403).json({
         message:
@@ -39,25 +42,28 @@ async function generateKeyController(req, res) {
         error: "Forbidden",
       });
     }
-  
+
     const duplicateKeyDescription =
-        keysObject.length > 0 &&
-        keysObject.every((keys) =>
-          req.body.keyDescription.includes(keys.keyDescription)
-        );
-  
+      keysObject.length > 0 &&
+      keysObject.every((keys) =>
+        req.body.keyDescription.includes(keys.keyDescription)
+      );
+
     if (duplicateKeyDescription) {
-      return res.status(422).json({
+      return res.status(409).json({
         message: "Please provide a different key description",
-        statusCode: 422,
+        statusCode: 409,
         error: "Unprocessable payload",
       });
     }
-  
+
     const data = {
       userId: req.userData.userId,
       keyDescription: req.body.keyDescription,
+      createDate: req.body.createDate,
+      apiKey: req.body.apiKey,
     };
+
     const UserKey = await createKey(data);
     const userKeyData = UserKey.data;
     if (userKeyData) {

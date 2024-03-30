@@ -1,9 +1,10 @@
-import {useState, useEffect} from 'react';
+import { useState, useEffect } from 'react';
 import CustomInput from '../../components/common/input/CustomInput';
 import './ResetPassword.css';
 import ResetPasswordSuccessCard from './ResetPasswordSuccessCard';
-import {useLocation} from 'react-router';
-import {useApi} from '../../hooks/useApi';
+import { useLocation } from 'react-router';
+import { useApi } from '../../hooks/useApi';
+import { useNavigate } from 'react-router-dom';
 
 function ResetPassword() {
 	const [newPassword, setNewPassword] = useState('');
@@ -11,30 +12,29 @@ function ResetPassword() {
 	const [errorMsg, setErrorMsg] = useState('');
 	const [success, setSuccess] = useState(false);
 	const [token, setToken] = useState(null);
-
+	const navigate = useNavigate();
 	const location = useLocation();
 
-	const {makeRequest} = useApi({
+	const {
+		makeRequest,
+		loading,
+		errorMsg: apiErrorMsg,
+	} = useApi({
 		url: `api/auth/reset-password`,
 		method: 'patch',
-		data: {newPassword, confirmPassword, token},
+		data: { newPassword, confirmPassword, token },
 	});
 
-	useEffect(() => {
-		let extractedToken = location?.search.replace('?token=', '');
-		if (extractedToken) {
-			setToken(extractedToken);
-		} else {
-			console.error('No token found in the URL');
-		}
-	}, []);
-
-	const handleSubmit = (event) => {
+	const handleSubmit = async (event) => {
 		event.preventDefault();
-		setErrorMsg('');
-		if (newPassword === confirmPassword) {
-			makeRequest();
-			setSuccess(true);
+		setErrorMsg("");
+		if (confirmPassword == newPassword) {
+			let success = await makeRequest();
+			if (success) {
+				setSuccess(true);
+			} else {
+				setErrorMsg(apiErrorMsg);
+			}
 		} else {
 			setErrorMsg(
 				"Passwords don't match! Please double-check and re-enter them.",
@@ -42,7 +42,17 @@ function ResetPassword() {
 		}
 	};
 
-	return success ? (
+	useEffect(() => {
+		let extractedToken = location?.search.replace('?token=', '');
+		if (extractedToken) {
+			setToken(extractedToken);
+		} else {
+			navigate('/signin');
+		}
+	}, []);
+
+
+	return loading ? <h1>Loading</h1> : success ? (
 		<ResetPasswordSuccessCard />
 	) : (
 		<section className='reset-password-wrapper'>

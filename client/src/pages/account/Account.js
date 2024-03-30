@@ -5,7 +5,7 @@ import './Account.css';
 
 function Account() {
 	return (
-		<article className='account-container'>
+		<article className='account-container' data-testid='testid-account'>
 			<Profile />
 			<Divider />
 			<Settings />

@@ -1,6 +1,9 @@
-import {useState} from 'react';
+import {useState, useEffect} from 'react';
 import CustomInput from '../../components/common/input/CustomInput';
 import ResetPasswordSuccessCard from './ResetPasswordSuccessCard';
+import {useLocation} from 'react-router';
+import {useApi} from '../../hooks/useApi';
+import {useNavigate} from 'react-router-dom';
 import './ResetPassword.css';
 
 function ResetPassword() {
@@ -8,17 +11,41 @@ function ResetPassword() {
 	const [confirmPassword, setConfirmPassword] = useState('');
 	const [errorMsg, setErrorMsg] = useState('');
 	const [success, setSuccess] = useState(false);
-	const handleSubmit = (event) => {
+	const [token, setToken] = useState(null);
+	const navigate = useNavigate();
+	const location = useLocation();
+
+	const {makeRequest, errorMsg: apiErrorMsg} = useApi({
+		url: `api/auth/reset-password`,
+		method: 'patch',
+		data: {newPassword, confirmPassword, token},
+	});
+
+	const handleSubmit = async (event) => {
 		event.preventDefault();
 		setErrorMsg('');
-		if (newPassword === confirmPassword) {
-			setSuccess(true);
+		if (confirmPassword === newPassword) {
+			let success = await makeRequest();
+			if (success) {
+				setSuccess(true);
+			} else {
+				setErrorMsg(apiErrorMsg);
+			}
 		} else {
 			setErrorMsg(
 				"Passwords don't match! Please double-check and re-enter them.",
 			);
 		}
 	};
+
+	useEffect(() => {
+		let extractedToken = location?.search.replace('?token=', '');
+		if (extractedToken) {
+			setToken(extractedToken);
+		} else {
+			navigate('/signin');
+		}
+	}, []);
 
 	return success ? (
 		<ResetPasswordSuccessCard />

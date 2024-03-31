@@ -1,5 +1,5 @@
 import React from 'react';
-import {render, screen, fireEvent } from '@testing-library/react';
+import {render, screen, fireEvent} from '@testing-library/react';
 import {Dashboard} from './Dashboard';
 
 describe('Dashboard Component', () => {
@@ -32,7 +32,7 @@ describe('Dashboard Component', () => {
 		const deletedApiKeyDescription = screen.queryByText('Demo Key 1');
 		expect(deletedApiKeyDescription).not.toBeInTheDocument();
 	});
-    it('shows an error message when trying to generate a key without a description', async () => {
+	it('shows an error message when trying to generate a key without a description', async () => {
 		render(<Dashboard />);
 		const button = screen.getByText('Generate Key');
 		fireEvent.click(button);
@@ -40,13 +40,13 @@ describe('Dashboard Component', () => {
 		expect(errordocument).toBeInTheDocument();
 	});
 	it('copies API key to clipboard', async () => {
-        global.navigator.clipboard = {
-            writeText: jest.fn(),
-        };
-        render(<Dashboard />);
-        const buttons = screen.getAllByTestId('api-key-copy');
-        fireEvent.click(buttons[0]);
-        const inscreenirem = await screen.findByTestId('api-key-copied');
+		global.navigator.clipboard = {
+			writeText: jest.fn(),
+		};
+		render(<Dashboard />);
+		const buttons = screen.getAllByTestId('api-key-copy');
+		fireEvent.click(buttons[0]);
+		const inscreenirem = await screen.findByTestId('api-key-copied');
 		expect(inscreenirem).toBeInTheDocument();
-    }); 
+	});
 });

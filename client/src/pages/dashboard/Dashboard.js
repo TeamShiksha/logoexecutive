@@ -65,29 +65,32 @@ export const Dashboard = () => {
 
 	return (
 		<div className='dashboard-container' data-testid='testid-dashboard'>
-			<div className='dashboard-content-container' data-testid='testid-dashboardcontent'>
-			<section className='dashboard-content-section'>
-				<CurrentPlan />
-				<Usage usedCalls={USED_CALLS} totalCalls={TOTAL_CALLS} />
-				<div className='generate-api'>
-					<h1 className='content-item-heading'>Generate your API key</h1>
-					<ApiKeyForm
-						inputValue={inputValue}
-						setInputValue={setInputValue}
-						errorMessage={errorMessage}
-						setErrorMessage={setErrorMessage}
-						handleGenerateKey={handleGenerateKey}
-					/>
-				</div>
-			</section>
-			<div className='divider'></div>
-			<ApiKeyTable
-				keys={keys}
-				copiedKey={copiedKey}
-				handleCopyToClipboard={handleCopyToClipboard}
-				deleteKey={handleDeleteKey}
-			/>
-		</div>
+			<div
+				className='dashboard-content-container'
+				data-testid='testid-dashboardcontent'
+			>
+				<section className='dashboard-content-section'>
+					<CurrentPlan />
+					<Usage usedCalls={USED_CALLS} totalCalls={TOTAL_CALLS} />
+					<div className='generate-api'>
+						<h1 className='content-item-heading'>Generate your API key</h1>
+						<ApiKeyForm
+							inputValue={inputValue}
+							setInputValue={setInputValue}
+							errorMessage={errorMessage}
+							setErrorMessage={setErrorMessage}
+							handleGenerateKey={handleGenerateKey}
+						/>
+					</div>
+				</section>
+				<div className='divider'></div>
+				<ApiKeyTable
+					keys={keys}
+					copiedKey={copiedKey}
+					handleCopyToClipboard={handleCopyToClipboard}
+					deleteKey={handleDeleteKey}
+				/>
+			</div>
 		</div>
 	);
 };

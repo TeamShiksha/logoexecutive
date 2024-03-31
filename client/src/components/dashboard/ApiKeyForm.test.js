@@ -12,9 +12,8 @@ describe('ApiKeyForm', () => {
 				handleGenerateKey={() => {}}
 			/>,
 		);
-
 		expect(
-			screen.getByLabelText('Description for API Key'),
+			screen.getByLabelText('Description For API Key'),
 		).toBeInTheDocument();
 		expect(screen.getByText('Generate Key')).toBeInTheDocument();
 	});
@@ -31,8 +30,7 @@ describe('ApiKeyForm', () => {
 				handleGenerateKey={() => {}}
 			/>,
 		);
-
-		fireEvent.change(screen.getByLabelText('Description for API Key'), {
+		fireEvent.change(screen.getByLabelText('Description For API Key'), {
 			target: {value: 'New Value'},
 		});
 		expect(setInputValue).toHaveBeenCalledWith('New Value');
@@ -50,7 +48,6 @@ describe('ApiKeyForm', () => {
 				handleGenerateKey={handleGenerateKey}
 			/>,
 		);
-
 		fireEvent.click(screen.getByText('Generate Key'));
 		expect(handleGenerateKey).toHaveBeenCalled();
 	});

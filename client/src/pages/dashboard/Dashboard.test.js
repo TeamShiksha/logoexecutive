@@ -1,5 +1,5 @@
 import React from 'react';
-import {render, screen, fireEvent} from '@testing-library/react';
+import {render, screen, fireEvent } from '@testing-library/react';
 import {Dashboard} from './Dashboard';
 
 describe('Dashboard Component', () => {
@@ -16,12 +16,6 @@ describe('Dashboard Component', () => {
 		const apiKeyTableComponent = screen.getByText('DESCRIPTION');
 		expect(apiKeyTableComponent).toBeInTheDocument();
 	});
-	it('copies API key to clipboard', async () => {
-		render(<Dashboard />);
-		const button = screen.getByTestId('api-key-copy');
-		fireEvent.click(button);
-		expect(screen.getByTestId('api-key-copied')).toBeInTheDocument();
-	});
 	it('generates API key and adds to the list', () => {
 		render(<Dashboard />);
 		const descriptionInput = screen.getByLabelText('Description For API Key');
@@ -31,13 +25,6 @@ describe('Dashboard Component', () => {
 		const apiKeyDescription = screen.getByText('Test API Key');
 		expect(apiKeyDescription).toBeInTheDocument();
 	});
-	it('shows an error message when trying to generate a key without a description', async () => {
-		render(<Dashboard />);
-		const button = screen.getByText('Generate Key');
-		fireEvent.click(button);
-		const errordocument = screen.getByText('Description cannot be empty');
-		expect(errordocument).toBeInTheDocument();
-	});
 	it('Delete API key and remove from the list', () => {
 		render(<Dashboard />);
 		const deleteButton = screen.getAllByTestId('api-key-delete');
@@ -45,4 +32,21 @@ describe('Dashboard Component', () => {
 		const deletedApiKeyDescription = screen.queryByText('Demo Key 1');
 		expect(deletedApiKeyDescription).not.toBeInTheDocument();
 	});
+    it('shows an error message when trying to generate a key without a description', async () => {
+		render(<Dashboard />);
+		const button = screen.getByText('Generate Key');
+		fireEvent.click(button);
+		const errordocument = screen.getByText('Description cannot be empty');
+		expect(errordocument).toBeInTheDocument();
+	});
+	it('copies API key to clipboard', async () => {
+        global.navigator.clipboard = {
+            writeText: jest.fn(),
+        };
+        render(<Dashboard />);
+        const buttons = screen.getAllByTestId('api-key-copy');
+        fireEvent.click(buttons[0]);
+        const inscreenirem = await screen.findByTestId('api-key-copied');
+		expect(inscreenirem).toBeInTheDocument();
+    }); 
 });

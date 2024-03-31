@@ -55,12 +55,8 @@ export const Dashboard = () => {
 		setKeys(keys.filter((key) => key.apiKey !== apiKey));
 	};
 	const handleCopyToClipboard = async (apiKey) => {
-		try {
-			await navigator.clipboard.writeText(apiKey);
-			setCopiedKey(apiKey);
-		} catch (err) {
-			console.error('Failed to copy text: ', err);
-		}
+		await navigator.clipboard.writeText(apiKey);
+		setCopiedKey(apiKey);
 	};
 
 	return (

@@ -29,7 +29,7 @@ function Settings() {
 	};
 
 	return (
-		<section className='settings'>
+		<section className='settings' data-testid='testid-settings'>
 			<h1 className='sett-cont-heading'>Settings</h1>
 			<button className='settings-button'>Download Account Data</button>
 			<p className='setting-instruction'>

@@ -3,7 +3,7 @@ import {FiCopy} from 'react-icons/fi';
 import {LuCopyCheck} from 'react-icons/lu';
 import {MdDeleteOutline} from 'react-icons/md';
 
-function ApiKeyTable({keys, copiedKey, handleCopyToClipboard, deleteKey}) {
+function ApiKeyTable({ keys, copiedKey, handleCopyToClipboard, deleteKey }) {
 	return (
 		<section className='dashboard-content-section'>
 			<div className='dashboard-content-item api-key-table'>
@@ -21,7 +21,7 @@ function ApiKeyTable({keys, copiedKey, handleCopyToClipboard, deleteKey}) {
 							<tr key={index}>
 								<td>{key.keyDescription}</td>
 								<td className='api-key-column'>
-									{copiedKey === key.apiKey ? (
+									{copiedKey === key.key ? (
 										<div
 											className='api-key-copied'
 											data-testid='api-key-copied'
@@ -32,7 +32,7 @@ function ApiKeyTable({keys, copiedKey, handleCopyToClipboard, deleteKey}) {
 										<button
 											className='api-key-copy'
 											data-testid='api-key-copy'
-											onClick={() => handleCopyToClipboard(key.apiKey)}
+											onClick={() => handleCopyToClipboard(key.key)}
 										>
 											<FiCopy />
 										</button>
@@ -42,12 +42,16 @@ function ApiKeyTable({keys, copiedKey, handleCopyToClipboard, deleteKey}) {
 									<button
 										className='api-key-delete-button'
 										data-testid='api-key-delete'
-										onClick={() => deleteKey(key.apiKey)}
+										onClick={() => deleteKey(key.key)}
 									>
 										<MdDeleteOutline />
 									</button>
 								</td>
-								<td>{key.createDate}</td>
+								<td>
+									{key?.createdAt?._seconds
+										? new Date(key.createdAt._seconds * 1000).toLocaleString()
+										: ''}
+								</td>
 							</tr>
 						))}
 					</tbody>

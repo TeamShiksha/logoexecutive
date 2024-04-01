@@ -82,6 +82,7 @@ function Signincard() {
 						value={formData.email}
 						onChange={handleFormChange}
 						disabled={loading}
+						
 					/>
 					<CustomInput
 						className='inputs'

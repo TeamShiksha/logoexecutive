@@ -8,8 +8,6 @@ class Keys {
   usageCount;
   createdAt;
   updatedAt;
-  apiKey;
-  createDate;
 
   /**
    * @param {Object} params
@@ -28,8 +26,6 @@ class Keys {
     this.usageCount = params.usageCount;
     this.createdAt = params.createdAt;
     this.updatedAt = params.updatedAt;
-    this.createDate = params.createDate;
-    this.apiKey = params.apiKey;
   }
 
   get data() {
@@ -40,8 +36,6 @@ class Keys {
       usageCount: this.usageCount,
       createdAt: this.createdAt,
       updatedAt: this.updatedAt,
-      createDate: this.createDate,
-      apiKey: this.apiKey,
     };
   }
 }

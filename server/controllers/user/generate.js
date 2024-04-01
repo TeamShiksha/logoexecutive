@@ -10,7 +10,7 @@ const generateKeyPayloadSchema = Joi.object().keys({
     .trim()
     .required()
     .regex(/^[a-zA-Z\s]+$/u)
-    .message("keyDescription must contain only alphabets"),
+    .message("Key Description must contain only alphabets"),
 });
 
 async function generateKeyController(req, res) {
@@ -60,8 +60,6 @@ async function generateKeyController(req, res) {
     const data = {
       userId: req.userData.userId,
       keyDescription: req.body.keyDescription,
-      createDate: req.body.createDate,
-      apiKey: req.body.apiKey,
     };
 
     const UserKey = await createKey(data);

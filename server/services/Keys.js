@@ -10,8 +10,6 @@ async function createKey(data) {
       userId: data.userId,
       key: v4().replace(/-/g, "").toUpperCase(),
       keyDescription: data.keyDescription,
-      createDate: data.createDate,
-      apiKey: data.apiKey,
       usageCount: 0,
       createdAt: Timestamp.now(),
       updatedAt: Timestamp.now(),

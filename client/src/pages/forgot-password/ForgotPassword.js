@@ -21,7 +21,6 @@ function ForgotPassword() {
 	function handleUserEmailChange(e) {
 		setUserEmail(e.target.value);
 	}
-
 	async function handleSubmit(e) {
 		e.preventDefault();
 		setIsSuccess(false);

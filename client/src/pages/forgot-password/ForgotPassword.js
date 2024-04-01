@@ -24,12 +24,16 @@ function ForgotPassword() {
 
 	async function handleSubmit(e) {
 		e.preventDefault();
-		setIsSuccess(false);
-		const success = await makeRequest();
+		try {
+			setIsSuccess(false);
+			const success = await makeRequest();
 
-		if (success) {
-			setIsSuccess(true);
-			setUserEmail('');
+			if (success) {
+				setIsSuccess(true);
+				setUserEmail('');
+			}
+		} catch (error) {
+			console.error('Unexpected Error :', error);
 		}
 	}
 

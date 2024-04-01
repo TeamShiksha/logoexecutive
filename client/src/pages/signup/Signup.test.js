@@ -49,6 +49,6 @@ describe('Signup', () => {
 			const form = screen.getByTestId('form');
 			fireEvent.click(registerButton);
 		});
-		// expect(handleSubmitMock).toHaveBeenCalled();
+		expect(handleSubmitMock).toHaveBeenCalled();
 	});
 });

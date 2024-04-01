@@ -21,7 +21,7 @@ const FAQs = () => {
 							title={faq.title}
 							toggle={handleChange}
 						>
-							<ul className='faq-steps'>
+							<ul className='faq-steps' data-testid='faq-content'>
 								{faq.steps.map((step, index) => {
 									return <li key={index}>{step}</li>;
 								})}

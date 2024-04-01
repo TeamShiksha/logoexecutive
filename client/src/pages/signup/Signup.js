@@ -7,7 +7,6 @@ import './Signup.css';
 
 function Signup() {
 	const {isAuthenticated} = useContext(AuthContext);
-	console.log('isAuthenticated', isAuthenticated);
 	const [formData, setFormData] = useState(INITIAL_SIGNUP_FORM_DATA);
 	const [validationErrors, setValidationErrors] = useState({});
 	const [isSignUpSuccess, setIsSignUpSuccess] = useState(false);
@@ -71,7 +70,6 @@ function Signup() {
 	};
 
 	const handleSubmit = async (event) => {
-		console.log('form submission intitated');
 		setValidationErrors({});
 		setIsSignUpSuccess(false);
 		event.preventDefault();
@@ -110,12 +108,7 @@ function Signup() {
 	return (
 		<>
 			<div className='page-div'>
-				<form
-					onSubmit={handleSubmit}
-					noValidate
-					className='form-box'
-					data-testid='form'
-				>
+				<form onSubmit={handleSubmit} noValidate className='form-box'>
 					<h2 className='form-title'>Sign up for free</h2>
 					<p
 						className={`input-error ${errorMsg ? '' : 'hidden'}`}

@@ -36,9 +36,32 @@ describe('Dashboard Component', () => {
 		render(<Dashboard />);
 		const button = screen.getByText('Generate Key');
 		fireEvent.click(button);
-		const errordocument = screen.getByText('Description cannot be empty');
+		const errordocument = screen.getByText('Key Description cannot be empty');
 		expect(errordocument).toBeInTheDocument();
 	});
+
+	it('shows an error message when trying to generate a key greater than 12 characters', () => {
+		render(<Dashboard />);
+		const descriptionInput = screen.getByLabelText('Description For API Key');
+		fireEvent.change(descriptionInput, {target: {value: 'Test API Key'}});
+		const generateButton = screen.getByText('Generate Key');
+		fireEvent.click(generateButton);
+		const errordocument = screen.getByText('Key Description cannot be more than 12 characters');
+		expect(errordocument).toBeInTheDocument();
+	});
+
+	it('shows an error message when trying to generate a key having numbers', () => {
+		render(<Dashboard />);
+		const descriptionInput = screen.getByLabelText('Description For API Key');
+		fireEvent.change(descriptionInput, {target: {value: 'Test API 1222'}});
+		const generateButton = screen.getByText('Generate Key');
+		fireEvent.click(generateButton);
+		const errordocument = screen.getByText(
+			'Key Description must contain only alphabets and spaces',
+		);
+		expect(errordocument).toBeInTheDocument();
+	});
+	
 	it('copies API key to clipboard', async () => {
 		global.navigator.clipboard = {
 			writeText: jest.fn(),

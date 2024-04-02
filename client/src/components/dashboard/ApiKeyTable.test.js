@@ -3,8 +3,8 @@ import ApiKeyTable from './ApiKeyTable';
 
 describe('ApiKeyTable', () => {
 	const keys = [
-		{description: 'Test Key 1', apiKey: '123', createDate: '2024-02-29'},
-		{description: 'Test Key 2', apiKey: '456', createDate: '2024-02-28'},
+		{keyDescription: 'Test Key 1', key: '123', createdAt: '2024-02-29'},
+		{keyDescription: 'Test Key 2', key: '456', createdAt: '2024-02-28'},
 	];
 
 	it('renders correctly', () => {

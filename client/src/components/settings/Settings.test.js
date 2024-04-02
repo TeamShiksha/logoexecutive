@@ -1,10 +1,15 @@
 import React from 'react';
 import {render, screen, fireEvent} from '@testing-library/react';
 import Settings from './Settings';
+import {BrowserRouter} from 'react-router-dom';
 
 describe('Settings component', () => {
 	test('renders settings component', () => {
-		render(<Settings />);
+		render(
+			<BrowserRouter>
+				<Settings />
+			</BrowserRouter>,
+		);
 
 		const headingElement = screen.getByText(/Settings/i);
 		expect(headingElement).toBeInTheDocument();
@@ -17,7 +22,11 @@ describe('Settings component', () => {
 	});
 
 	test('opens modal when delete button is clicked', () => {
-		render(<Settings />);
+		render(
+			<BrowserRouter>
+				<Settings />
+			</BrowserRouter>,
+		);
 
 		const modalElement = screen.queryByText(/Are you sure?/i);
 		expect(modalElement).not.toBeInTheDocument();

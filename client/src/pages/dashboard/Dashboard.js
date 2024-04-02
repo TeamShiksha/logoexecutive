@@ -50,7 +50,7 @@ export const Dashboard = () => {
 		}
 
 		if (inputValue.match(/^[a-zA-Z\s]+$/u) === null) {
-			setErrorMessage('Key Description must contain only alphabets');
+			setErrorMessage('Key Description must contain only alphabets and spaces');
 			return false;
 		}
 		return true;

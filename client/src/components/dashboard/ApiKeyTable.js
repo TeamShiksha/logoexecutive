@@ -3,7 +3,7 @@ import {FiCopy} from 'react-icons/fi';
 import {LuCopyCheck} from 'react-icons/lu';
 import {MdDeleteOutline} from 'react-icons/md';
 
-function ApiKeyTable({ keys, copiedKey, handleCopyToClipboard, deleteKey }) {
+function ApiKeyTable({keys, copiedKey, handleCopyToClipboard, deleteKey}) {
 	return (
 		<section className='dashboard-content-section'>
 			<div className='dashboard-content-item api-key-table'>
@@ -17,6 +17,14 @@ function ApiKeyTable({ keys, copiedKey, handleCopyToClipboard, deleteKey }) {
 						</tr>
 					</thead>
 					<tbody>
+						{!keys.length && (
+							<tr>
+								<td colSpan='4' className='no-keys'>
+									Your api keys will be visible here. click on generate key to
+									add new api key
+								</td>
+							</tr>
+						)}
 						{keys.map((key, index) => (
 							<tr key={index}>
 								<td>{key.keyDescription}</td>
@@ -48,9 +56,11 @@ function ApiKeyTable({ keys, copiedKey, handleCopyToClipboard, deleteKey }) {
 									</button>
 								</td>
 								<td>
-									{key?.createdAt?._seconds
-										? new Date(key.createdAt._seconds * 1000).toLocaleString()
-										: ''}
+									{new Date(key?.createdAt).toLocaleDateString('en-us', {
+										month: 'long',
+										day: 'numeric',
+										year: 'numeric',
+									}) || ''}
 								</td>
 							</tr>
 						))}

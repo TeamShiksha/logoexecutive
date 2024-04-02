@@ -8,7 +8,6 @@ function ForgotPassword() {
 	const [userEmail, setUserEmail] = useState('');
 	const [isSuccess, setIsSuccess] = useState(false);
 	const [validationError, setValidationError] = useState(null);
-
 	const {
 		data: response,
 		makeRequest,
@@ -23,7 +22,6 @@ function ForgotPassword() {
 	function handleUserEmailChange(e) {
 		setUserEmail(e.target.value);
 	}
-
 	const validateFormData = () => {
 		if (!userEmail) {
 			return 'Please enter your email address';
@@ -36,12 +34,9 @@ function ForgotPassword() {
 
 	async function handleSubmit(e) {
 		e.preventDefault();
-
 		setIsSuccess(false);
 		setValidationError(null);
-
 		const error = validateFormData();
-
 		if (error) {
 			setValidationError(error);
 		} else {
@@ -63,7 +58,6 @@ function ForgotPassword() {
 				<p className='forgot-password-error' aria-live='assertive' role='alert'>
 					{errorMsg || validationError || ''}
 				</p>
-
 				{isSuccess && (
 					<p
 						className='forgot-password-success'

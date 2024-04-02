@@ -60,15 +60,10 @@ function ForgotPassword() {
 				<p className='forgot-password-instruction'>
 					Enter the email you used to create your account.
 				</p>
-				{errorMsg && (
-					<p
-						className='forgot-password-error'
-						aria-live='assertive'
-						role='alert'
-					>
-						{errorMsg}
-					</p>
-				)}
+				<p className='forgot-password-error' aria-live='assertive' role='alert'>
+					{errorMsg || validationError || ''}
+				</p>
+
 				{isSuccess && (
 					<p
 						className='forgot-password-success'
@@ -85,7 +80,6 @@ function ForgotPassword() {
 						name='userEmail'
 						onChange={handleUserEmailChange}
 						disabled={loading}
-						error={validationError}
 					/>
 					<button type='submit' disabled={loading}>
 						Submit

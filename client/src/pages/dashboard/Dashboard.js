@@ -61,10 +61,7 @@ export const Dashboard = () => {
 
 	return (
 		<div className='dashboard-container' data-testid='testid-dashboard'>
-			<div
-				className='dashboard-content-container'
-				data-testid='testid-dashboardcontent'
-			>
+			<div className='dashboard-content-container'>
 				<section className='dashboard-content-section'>
 					<CurrentPlan />
 					<Usage usedCalls={USED_CALLS} totalCalls={TOTAL_CALLS} />

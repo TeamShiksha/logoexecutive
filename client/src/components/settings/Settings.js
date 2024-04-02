@@ -16,7 +16,7 @@ function Settings() {
 
 	const openModal = () => setModalOpen(true);
 
-	const handleOkayClick = async () => {
+	const handleConfirm = async () => {
 		try {
 			const response = await makeRequest();
 			if (response?.data?.success) {
@@ -45,7 +45,7 @@ function Settings() {
 				modalOpen={modalOpen}
 				setModal={setModalOpen}
 				showButtons={true}
-				handleOkayClick={handleOkayClick}
+				handleConfirm={handleConfirm}
 			>
 				<h2>Are you sure?</h2>
 				<p className='settings-confirm-message'>

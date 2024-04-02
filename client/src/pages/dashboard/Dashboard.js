@@ -8,7 +8,6 @@ import {useApi} from '../../hooks/useApi';
 
 const TOTAL_CALLS = 5000;
 const USED_CALLS = 3000;
-// const RANDOM_STRING_LENGTH = 36;
 
 export const Dashboard = () => {
 	const [inputValue, setInputValue] = useState('');

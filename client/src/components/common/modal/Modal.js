@@ -6,7 +6,7 @@ function Modal({
 	modalOpen,
 	children,
 	setModal,
-	handleOkayClick,
+	handleConfirm,
 	showButtons,
 	containerClassName,
 }) {
@@ -37,7 +37,7 @@ function Modal({
 						</button>
 						<button
 							className='modal-button modal-ok-button'
-							onClick={handleOkayClick}
+							onClick={handleConfirm}
 						>
 							Okay
 						</button>

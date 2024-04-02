@@ -24,8 +24,8 @@ class Keys {
     this.keyDescription = params.keyDescription;
     this.key = params.key;
     this.usageCount = params.usageCount;
-    this.createdAt = params.createdAt;
-    this.updatedAt = params.updatedAt;
+    this.createdAt = normalizeDate(params.createdAt);
+    this.updatedAt = normalizeDate(params.updatedAt);;
   }
 
   get data() {

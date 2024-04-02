@@ -3,6 +3,7 @@ import {NavLink, Navigate} from 'react-router-dom';
 import {useApi} from '../../hooks/useApi';
 import {INITIAL_SIGNUP_FORM_DATA} from '../../constants';
 import {AuthContext} from '../../contexts/AuthContext';
+import {isValidEmail, isValidPassword} from '../../utils/helpers';
 import './Signup.css';
 
 function Signup() {
@@ -85,22 +86,6 @@ function Signup() {
 		}
 	};
 
-	const isValidEmail = (email) => {
-		const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
-		return emailRegex.test(email);
-	};
-	const isValidPassword = (password) => {
-		const hasUppercase = /[A-Z]/;
-		const hasLowercase = /[a-z]/;
-		const hasDigit = /\d/;
-		const hasSpecialCharacter = /[!@#$%^&*]/;
-		return (
-			hasUppercase.test(password) &&
-			hasLowercase.test(password) &&
-			hasDigit.test(password) &&
-			hasSpecialCharacter.test(password)
-		);
-	};
 	if (isAuthenticated) {
 		return <Navigate to='/dashboard' />;
 	}

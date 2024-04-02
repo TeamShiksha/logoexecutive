@@ -6,16 +6,19 @@ import Navbar from './Navbar';
 import {loggedInNavbarItems, loggedOutNavbarItems} from '../../constants';
 import {AuthContext} from '../../contexts/AuthContext';
 import './Header.css';
+import Dropdown from './Dropdown';
 
 function Header() {
 	const [showNavBar, setShowNavBar] = useState(window.innerWidth > 1000);
 	const [headerBg, setHeaderBg] = useState(window.scrollY > 75);
 	const {isAuthenticated, logout} = useContext(AuthContext);
+	const [showAccount, setShowAccount] = useState(false);
 	const navigate = useNavigate();
 	const navbarItems = isAuthenticated
 		? loggedInNavbarItems
 		: loggedOutNavbarItems;
 	const toggleShowNavBar = () => {
+		setShowAccount(false);
 		setShowNavBar((prev) => !prev);
 	};
 	const changeHeaderBg = () => {
@@ -24,6 +27,10 @@ function Header() {
 	const handleLogout = () => {
 		logout();
 		navigate('/welcome');
+	};
+	const toggleShowAccount = () => {
+		if (window.innerWidth <= 1000) setShowNavBar(false);
+		setShowAccount((prev) => !prev);
 	};
 
 	useEffect(() => {
@@ -52,16 +59,19 @@ function Header() {
 				{showNavBar && <Navbar navbarItems={navbarItems} />}
 				<div className='cta-container'>
 					<button
-						onClick={isAuthenticated ? handleLogout : () => navigate('/signin')}
+						onClick={
+							isAuthenticated ? toggleShowAccount : () => navigate('/signin')
+						}
 						className='cta-button'
 					>
-						{isAuthenticated ? 'Logout' : 'Get Started'}
+						{isAuthenticated ? 'Account' : 'Get Started'}
 					</button>
 					<HiMenu
 						onClick={toggleShowNavBar}
 						className='burger-menu'
 						data-testid='burger-menu'
 					/>
+					{showAccount && <Dropdown handleLogout={handleLogout} />}
 				</div>
 			</div>
 		</header>

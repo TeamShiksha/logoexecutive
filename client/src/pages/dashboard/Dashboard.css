@@ -50,10 +50,13 @@
 }
 
 .current-plan-status {
-	background-color: #00c9a7;
+	background-color: var(--smooth-gray);
 	border-radius: 5px;
 	color: #fff;
 	padding: 5px 10px;
+}
+.current-plan-status.active {
+	background: #00c9a7;
 }
 
 .dashboard-content-item .current-plan-tagline {

@@ -1,30 +1,44 @@
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import ApiKeyForm from '../../components/dashboard/ApiKeyForm';
 import ApiKeyTable from '../../components/dashboard/ApiKeyTable';
 import CurrentPlan from '../../components/dashboard/CurrentPlan';
 import Usage from '../../components/dashboard/Usage';
 import './Dashboard.css';
 
-const TOTAL_CALLS = 5000;
-const USED_CALLS = 3000;
 const RANDOM_STRING_LENGTH = 36;
+
+function getUsedCalls(keys) {
+	let result = 0;
+
+	if (!keys) return result;
+
+	keys.forEach((key) => {
+		result += key.usageCount;
+	});
+
+	return result;
+}
 
 export const Dashboard = () => {
 	const [inputValue, setInputValue] = useState('');
 	const [errorMessage, setErrorMessage] = useState('');
 	const [copiedKey, setCopiedKey] = useState(null);
-	const [keys, setKeys] = useState([
-		{
-			description: 'Demo Key 1',
-			apiKey: 'maohquwnbtpszjqj91myxk',
-			createDate: 'Dec 18, 2023',
-		},
-		{
-			description: 'Demo Key 2',
-			apiKey: 'txoediu8lvq01vzdpz38hldc',
-			createDate: 'Sep 07, 2023',
-		},
-	]);
+	const [keys, setKeys] = useState([]);
+	const [dashboardData, setDashboardData] = useState();
+
+	useEffect(() => {
+		if (dashboardData?.keys) {
+			setKeys(dashboardData.keys);
+		}
+	}, [dashboardData]);
+
+	useEffect(() => {
+		fetch('/api/user/data')
+			.then((res) => res.json())
+			.then((data) => {
+				setDashboardData(data.data);
+			});
+	}, []);
 
 	const handleGenerateKey = (e) => {
 		e.preventDefault();
@@ -63,8 +77,11 @@ export const Dashboard = () => {
 		<div className='dashboard-container' data-testid='testid-dashboard'>
 			<div className='dashboard-content-container'>
 				<section className='dashboard-content-section'>
-					<CurrentPlan />
-					<Usage usedCalls={USED_CALLS} totalCalls={TOTAL_CALLS} />
+					<CurrentPlan subscriptionData={dashboardData?.subscription} />
+					<Usage
+						usedCalls={getUsedCalls(dashboardData?.keys)}
+						totalCalls={dashboardData?.subscription.usageLimit || 0}
+					/>
 					<div className='generate-api'>
 						<h1 className='content-item-heading'>Generate your API key</h1>
 						<ApiKeyForm

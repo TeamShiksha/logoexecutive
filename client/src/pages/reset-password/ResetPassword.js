@@ -1,6 +1,7 @@
 import {useState, useEffect} from 'react';
 import CustomInput from '../../components/common/input/CustomInput';
 import ResetPasswordSuccessCard from './ResetPasswordSuccessCard';
+import ResetPasswordFailureCard from './ResetPasswordFailureCard';
 import {useLocation} from 'react-router';
 import {useApi} from '../../hooks/useApi';
 import {useNavigate} from 'react-router-dom';
@@ -20,6 +21,10 @@ function ResetPassword() {
 		method: 'patch',
 		data: {newPassword, confirmPassword, token},
 	});
+	const {makeRequest: makeTokenRequest, errorMsg: tokenError} = useApi({
+		url: `api/auth/reset-password${location?.search}`,
+		method: 'get',
+	});
 
 	const handleSubmit = async (event) => {
 		event.preventDefault();
@@ -38,10 +43,18 @@ function ResetPassword() {
 		}
 	};
 
+	const checkValidToken = async () => {
+		return await makeTokenRequest();
+	};
+
 	useEffect(() => {
 		let extractedToken = location?.search.replace('?token=', '');
 		if (extractedToken) {
-			setToken(extractedToken);
+			let success = checkValidToken();
+			console.log(success);
+			if (success) {
+				setToken(extractedToken);
+			}
 		} else {
 			navigate('/signin');
 		}
@@ -49,6 +62,8 @@ function ResetPassword() {
 
 	return success ? (
 		<ResetPasswordSuccessCard />
+	) : tokenError ? (
+		<ResetPasswordFailureCard error={tokenError} />
 	) : (
 		<section className='reset-password-wrapper'>
 			<div className='reset-password-page'>

@@ -11,7 +11,7 @@ function Profile() {
 	const [repeatNewPassword, setRepeatNewPassword] = useState('');
 
 	return (
-		<div className='profile-cont'>
+		<div className='profile-cont' data-testid='testid-profile'>
 			<div className='profile-sub-cont'>
 				<h2 className='profile-heading'>Profile</h2>
 				<div className='profile-border-bottom'></div>

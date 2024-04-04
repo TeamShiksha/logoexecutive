@@ -15,7 +15,7 @@ function ApiKeyForm({
 					type='text'
 					name='apikey'
 					value={inputValue}
-					label='Description for API Key'
+					label='Description For API Key'
 					onChange={(e) => {
 						setInputValue(e.target.value);
 						setErrorMessage('');

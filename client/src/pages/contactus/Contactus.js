@@ -1,8 +1,8 @@
 import {useState} from 'react';
 import {FiArrowRight} from 'react-icons/fi';
 import CustomInput from '../../components/common/input/CustomInput';
-import './Contactus.css';
 import {Link} from 'react-router-dom';
+import './Contactus.css';
 
 function Contactus() {
 	const [name, setName] = useState('');

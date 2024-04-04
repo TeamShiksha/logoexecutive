@@ -5,10 +5,6 @@ import {footerColumns} from '../../constants';
 import './Footer.css';
 
 const Footer = () => {
-	function navigateToTeamShiksa() {
-		window.open('https://team.shiksha', '_blank');
-	}
-
 	return (
 		<footer className='footer'>
 			<section className='footer-left'>
@@ -32,7 +28,12 @@ const Footer = () => {
 						Size
 					</h4>
 				</div>
-				<section className='poweredBy' onClick={navigateToTeamShiksa}>
+				<section
+					className='poweredBy'
+					onClick={() => {
+						window.open('https://team.shiksha', '_blank');
+					}}
+				>
 					Powered By
 					<img src={teamShiksha} alt='TeamShiksha Logo' />
 				</section>

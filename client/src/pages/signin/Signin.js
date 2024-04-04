@@ -7,7 +7,7 @@ import './Signin.css';
 function Signin() {
 	const {isAuthenticated} = useContext(AuthContext);
 	return !isAuthenticated ? (
-		<div className='login-main'>
+		<div className='login-main' data-testid='testid-signin'>
 			<Signincard />
 		</div>
 	) : (

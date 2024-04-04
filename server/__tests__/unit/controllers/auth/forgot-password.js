@@ -59,7 +59,7 @@ describe("/forgot-password", () => {
     expect(response.body).toEqual({
       error: STATUS_CODES[422],
       statusCode: 422,
-      message: "Invalid email.",
+      message: "Invalid Email.",
     });
   });
 

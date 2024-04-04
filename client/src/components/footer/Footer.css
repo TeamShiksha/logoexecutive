@@ -88,6 +88,15 @@
 	}
 
 	.footer-left {
+		width: 100%;
 		border-right: none;
+	}
+}
+
+@media screen and (max-width: 480px) {
+	.footer-left {
+		flex-direction: column;
+		width: fit-content;
+		align-items: flex-start;
 	}
 }

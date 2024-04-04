@@ -1,21 +1,48 @@
 import {useState} from 'react';
 import CustomInput from '../common/input/CustomInput';
 import './Profile.css';
+import {useApi} from '../../hooks/useApi';
 
 function Profile() {
-	const [firstName, setfirstName] = useState('');
-	const [lastName, setlastName] = useState('');
+	const [firstName, setFirstName] = useState('');
+	const [lastName, setLastName] = useState('');
 	const [email, setEmail] = useState('');
+	const [errorMessage, setErrorMessage] = useState('');
 	const [oldPassword, setOldPassword] = useState('');
 	const [newPassword, setNewPassword] = useState('');
 	const [repeatNewPassword, setRepeatNewPassword] = useState('');
+
+	const {loading, errorMsg, makeRequest} = useApi(
+		{
+			url: 'api/user/update-profile',
+			data: {firstName, lastName, email},
+			method: 'patch',
+		},
+		true,
+	);
+
+	const handleUpdateProfile = async (e) => {
+		e.preventDefault();
+		try {
+			const success = await makeRequest();
+			if (success) {
+				setFirstName('');
+				setLastName('');
+				setEmail('');
+				setErrorMessage('');
+			}
+		} catch (error) {
+			console.error('Failed to update profile: ', error);
+			setErrorMessage(errorMessage || errorMsg || 'Error updating profile');
+		}
+	};
 
 	return (
 		<div className='profile-cont' data-testid='testid-profile'>
 			<div className='profile-sub-cont'>
 				<h2 className='profile-heading'>Profile</h2>
 				<div className='profile-border-bottom'></div>
-				<form>
+				<form onSubmit={handleUpdateProfile}>
 					<CustomInput
 						name='first name'
 						type='text'
@@ -23,7 +50,8 @@ function Profile() {
 						required
 						label='first name'
 						value={firstName}
-						onChange={(e) => setfirstName(e.target.value)}
+						disabled={loading}
+						onChange={(e) => setFirstName(e.target.value)}
 					/>
 					<CustomInput
 						name='last name'
@@ -32,7 +60,8 @@ function Profile() {
 						required
 						label='last name'
 						value={lastName}
-						onChange={(e) => setlastName(e.target.value)}
+						disabled={loading}
+						onChange={(e) => setLastName(e.target.value)}
 					/>
 					<CustomInput
 						name='email'
@@ -41,9 +70,10 @@ function Profile() {
 						label='email'
 						required
 						value={email}
+						disabled={loading}
 						onChange={(e) => setEmail(e.target.value)}
 					/>
-					<button className='profile-button' type='submit'>
+					<button className='profile-button' type='submit' disabled={loading}>
 						Save
 					</button>
 				</form>

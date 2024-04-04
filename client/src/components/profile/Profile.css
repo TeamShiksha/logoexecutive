@@ -45,6 +45,12 @@
 	font-weight: 500;
 }
 
+.profile-button:disabled {
+	background-color: var(--light-grey);
+	cursor: not-allowed;
+	opacity: 0.5;
+}
+
 @media screen and (max-width: 768px) {
 	.profile-cont {
 		padding: 32px 16px;

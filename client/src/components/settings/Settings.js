@@ -4,6 +4,16 @@ import './Settings.css';
 import {useApi} from '../../hooks/useApi';
 import {useNavigate} from 'react-router-dom';
 
+/**  questions
+ * 1. Close dialog on delete
+ * 2. To remove cookies from BE or FE?
+ * 3. To remove all localStorage?
+ * 4. To remove UserTokens?
+ * 5. To redirect?? Change get started to logout??
+ * 6. Check tests for Dashboard
+ * 7. Where to provide success message for deleted profile and updated profile
+ */
+
 function Settings() {
 	const [modalOpen, setModalOpen] = useState(false);
 	const navigate = useNavigate();
@@ -18,8 +28,8 @@ function Settings() {
 
 	const handleConfirm = async () => {
 		try {
-			const response = await makeRequest();
-			if (response?.data?.success) {
+			const success = await makeRequest();
+			if (success) {
 				localStorage.clear();
 				navigate('/');
 			}

@@ -147,7 +147,7 @@
 	font-weight: 500;
 }
 
-.api-key-container > button:disabled, 
+.api-key-container > button:disabled,
 .api-key-container > button:disabled:hover {
 	opacity: 0.5;
 	cursor: not-allowed;

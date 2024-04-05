@@ -61,12 +61,19 @@
 		"eslint-config-prettier": "^9.0.0",
 		"eslint-plugin-prettier": "^5.0.0",
 		"eslint-plugin-react": "^7.33.2",
+		"jest-mock-axios": "^4.7.3",
 		"jest-watch-typeahead": "0.6.5",
+		"msw": "^2.2.13",
 		"prettier": "^3.0.2"
 	},
 	"pre-commit": [
 		"lint",
 		"format",
 		"check"
-	]
+	],
+	"msw": {
+		"workerDirectory": [
+			"mock"
+		]
+	}
 }

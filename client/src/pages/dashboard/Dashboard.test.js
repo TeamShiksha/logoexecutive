@@ -46,7 +46,9 @@ describe('Dashboard Component', () => {
 		fireEvent.change(descriptionInput, {target: {value: 'Test API Key'}});
 		const generateButton = screen.getByText('Generate Key');
 		fireEvent.click(generateButton);
-		const errordocument = screen.getByText('Key Description cannot be more than 12 characters');
+		const errordocument = screen.getByText(
+			'Key Description cannot be more than 12 characters',
+		);
 		expect(errordocument).toBeInTheDocument();
 	});
 
@@ -61,7 +63,7 @@ describe('Dashboard Component', () => {
 		);
 		expect(errordocument).toBeInTheDocument();
 	});
-	
+
 	it('copies API key to clipboard', async () => {
 		global.navigator.clipboard = {
 			writeText: jest.fn(),

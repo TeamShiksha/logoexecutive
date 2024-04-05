@@ -13,19 +13,23 @@ import {instance, protectedInstance} from '../api/api_instance';
 export const useApi = (config, isProtected = false) => {
 	const [data, setData] = useState(null);
 	const [errorMsg, setErrorMsg] = useState('');
+	const [isSuccess, setIsSuccess] = useState(false);
 	const [loading, setLoading] = useState(false);
 
 	const makeRequest = async () => {
 		setErrorMsg(null);
+		setIsSuccess(false);
 		setLoading(true);
 		let success = false;
 		try {
 			const axiosInstance = isProtected ? protectedInstance : instance;
 			const response = await axiosInstance(config);
 			setData(response.data);
+			setIsSuccess(true);
 			success = true;
 		} catch (err) {
 			console.error(err);
+			setIsSuccess(false);
 			if (err?.response) {
 				setErrorMsg(err?.response?.data?.message);
 			} else {
@@ -37,5 +41,5 @@ export const useApi = (config, isProtected = false) => {
 		return success;
 	};
 
-	return {data, setData, errorMsg, loading, makeRequest};
+	return {data, setData, errorMsg, loading, makeRequest, isSuccess};
 };

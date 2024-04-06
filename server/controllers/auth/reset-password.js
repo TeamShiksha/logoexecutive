@@ -95,7 +95,7 @@ const patch = async (req, res, next) => {
         await deleteUserToken(deleteTokenRef);
         return res
           .status(200)
-          .json({ message: "Your password has been updated successfully." });
+          .json({ message: "Your password has been successfully reset. You can now sign in with your new password." });
       } else {
         return res.status(400).json({
           error: STATUS_CODES[400],

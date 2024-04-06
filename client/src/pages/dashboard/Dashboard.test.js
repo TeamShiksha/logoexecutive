@@ -32,6 +32,7 @@ describe('Dashboard Component', () => {
 		const deletedApiKeyDescription = screen.queryByText('Demo Key 1');
 		expect(deletedApiKeyDescription).not.toBeInTheDocument();
 	});
+
 	it('shows an error message when trying to generate a key without a description', async () => {
 		render(<Dashboard />);
 		const button = screen.getByText('Generate Key');
@@ -43,25 +44,27 @@ describe('Dashboard Component', () => {
 	it('shows an error message when trying to generate a key greater than 12 characters', () => {
 		render(<Dashboard />);
 		const descriptionInput = screen.getByLabelText('Description For API Key');
-		fireEvent.change(descriptionInput, {target: {value: 'Test API Key'}});
+		fireEvent.change(descriptionInput, {target: {value: 'Test API Key '}});
 		const generateButton = screen.getByText('Generate Key');
 		fireEvent.click(generateButton);
-		const errordocument = screen.getByText('Description cannot be more than 12 characters');
-		expect(errordocument).toBeInTheDocument();
+		const errordocument = screen.getByText(
+			'Description cannot be more than 12 characters',
+		);
+		expect(errordocument).toHaveClass('input-error');
 	});
 
 	it('shows an error message when trying to generate a key having numbers', () => {
 		render(<Dashboard />);
 		const descriptionInput = screen.getByLabelText('Description For API Key');
-		fireEvent.change(descriptionInput, {target: {value: 'Test API 1222'}});
+		fireEvent.change(descriptionInput, {target: {value: 'Test1222'}});
 		const generateButton = screen.getByText('Generate Key');
 		fireEvent.click(generateButton);
 		const errordocument = screen.getByText(
 			'Description must contain only alphabets and spaces',
 		);
-		expect(errordocument).toBeInTheDocument();
+		expect(errordocument).toHaveClass('input-error');
 	});
-	
+
 	it('copies API key to clipboard', async () => {
 		global.navigator.clipboard = {
 			writeText: jest.fn(),

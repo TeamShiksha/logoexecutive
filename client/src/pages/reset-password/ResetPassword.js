@@ -68,7 +68,7 @@ function ResetPassword() {
 					setCountdown((prevCount) => prevCount - 1);
 				} else {
 					clearInterval(timer);
-					navigate('/welcome');
+					navigate('/signin');
 				}
 			}, 1000);
 		}

@@ -1,7 +1,7 @@
 # Steps to Upload CloudFormation Template and Set Up AWS Cloud
 
 - Make sure you have your own AWS account. If not sign up [here](https://aws.amazon.com/free)
-- Download the `cft_dev_test_logoexecutive.yml` file from [here](https://github.com/TeamShiksha/logoexecutive-backend/tree/dev/templates)
+- Download the `cft_dev_test_logoexecutive.yml` file from [here](https://github.com/TeamShiksha/logoexecutive/tree/dev/server/templates)
 - Run the commands given below in git bash to generate public and private RSA keys for cloudformation template.
 
      ```bash
@@ -14,14 +14,14 @@
 - On the Create Stack page, select `Upload a template file`.
 - Choose the `cft_dev_test_logoexecutive.yml` file you downloaded earlier, and click on `Next`.
 
-![Specify Stack Details](/assets/uploadstack.png)
+![Specify Stack Details](./images/uploadstack.png)
 
 - Provide a `Stack Name`.
 - Inside `CDNPathInS3`, type `assets`. You can also choose other folder names where you want to keep the images.
 - Inside `EncodedRSAPublicKey`, paste the public key generated earlier.
 - Click on `Next`.
 
-![Specify Stack Options](/assets/setparameters.png)
+![Specify Stack Options](./images/setparameters.png)
 
 - On the `Review` page, check the checkbox inside the `Capabilities` section.
 - Click on `Submit`. You stack will start creating resources now.

@@ -75,7 +75,6 @@ The `ContactUs` collection in Firebase Firestore is designated for storing data 
 The `UserToken` collection in Firebase Firestore is dedicated to storing information related to user tokens. Each document in this collection represents a unique user token entry and includes the following fields:
 
 - **token**: _(String)_ Stores the actual user token string for authentication or authorization purposes.
-
 - **type**: _(String)_ Describes the purpose or type of the user token (e.g., FORGOT, VERIFY).
 - **userId**: _(Reference)_ References the user associated with the token, linking to the corresponding user document in the `Users` collection.
 - **userTokenId**: _(String)_ Serves as a unique identifier for referencing and identifying individual user tokens.

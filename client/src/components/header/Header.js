@@ -56,7 +56,9 @@ function Header() {
 				<h2>LogoExecutive</h2>
 			</Link>
 			<div className='navbar-container'>
-				{showNavBar && <Navbar navbarItems={navbarItems} />}
+				{showNavBar && (
+					<Navbar navbarItems={navbarItems} setShowAccount={setShowAccount} />
+				)}
 				<div className='cta-container'>
 					<button
 						onClick={
@@ -71,7 +73,12 @@ function Header() {
 						className='burger-menu'
 						data-testid='burger-menu'
 					/>
-					{showAccount && <Dropdown handleLogout={handleLogout} />}
+					{showAccount && (
+						<Dropdown
+							handleLogout={handleLogout}
+							toggleShowAccount={toggleShowAccount}
+						/>
+					)}
 				</div>
 			</div>
 		</header>

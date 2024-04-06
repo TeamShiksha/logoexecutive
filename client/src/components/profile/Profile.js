@@ -52,7 +52,6 @@ function Profile() {
 		}
 	};
 
-	console.log('validation', validationErrors);
 	return (
 		<div className='profile-cont' data-testid='testid-profile'>
 			<div className='profile-sub-cont'>
@@ -70,6 +69,7 @@ function Profile() {
 						name='first name'
 						type='text'
 						id='first name'
+						required
 						label='first name'
 						value={firstName}
 						disabled={loading}
@@ -79,6 +79,7 @@ function Profile() {
 						name='last name'
 						type='text'
 						id='last name'
+						required
 						label='last name'
 						value={lastName}
 						disabled={loading}
@@ -89,6 +90,7 @@ function Profile() {
 						type='email'
 						id='email'
 						label='email'
+						required
 						value={email}
 						disabled={loading}
 						onChange={(e) => setEmail(e.target.value)}

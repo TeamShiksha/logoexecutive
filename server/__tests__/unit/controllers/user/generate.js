@@ -44,13 +44,27 @@ describe("generate-key controller", () =>{
       .post(ENDPOINT)
       .set("cookie", `jwt=${mockToken}`)
       .send({
-        "payload": {
-          "keyDescription": "containingNumbers12345"
-        },
+        "keyDescription": "cont12345"
       });
     expect(response.status).toBe(422);
     expect(response.body).toEqual({
-      message: "keyDescription must contain only alphabets",
+      message: "Description must contain only alphabets and spaces",
+      statusCode: 422,
+      error: "Unprocessable payload",
+    });
+  });
+
+  it("Should return 422 response keyDescription format is invalid", async () => {
+    const mockToken = mockUser.generateJWT();
+    const response = await request(app)
+      .post(ENDPOINT)
+      .set("cookie", `jwt=${mockToken}`)
+      .send({
+        keyDescription: "contains Numbers random",
+      });
+    expect(response.status).toBe(422);
+    expect(response.body).toEqual({
+      message: "Description cannot be more than 12 characters",
       statusCode: 422,
       error: "Unprocessable payload",
     });

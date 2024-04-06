@@ -14,14 +14,14 @@
 - On the Create Stack page, select `Upload a template file`.
 - Choose the `cft_dev_test_logoexecutive.yml` file you downloaded earlier, and click on `Next`.
 
-![Specify Stack Details](./images/uploadstack.png)
+![Specify Stack Details](../images/uploadstack.png)
 
 - Provide a `Stack Name`.
 - Inside `CDNPathInS3`, type `assets`. You can also choose other folder names where you want to keep the images.
 - Inside `EncodedRSAPublicKey`, paste the public key generated earlier.
 - Click on `Next`.
 
-![Specify Stack Options](./images/setparameters.png)
+![Specify Stack Options](../images/setparameters.png)
 
 - On the `Review` page, check the checkbox inside the `Capabilities` section.
 - Click on `Submit`. You stack will start creating resources now.

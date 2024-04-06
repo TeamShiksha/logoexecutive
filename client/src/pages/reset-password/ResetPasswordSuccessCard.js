@@ -1,7 +1,6 @@
-import {NavLink} from 'react-router-dom';
 import './ResetPasswordSuccessCard.css';
 
-function ResetPasswordSuccessCard() {
+function ResetPasswordSuccessCard({countdown, successMsg}) {
 	return (
 		<section className='reset-success-card-wrapper'>
 			<div className='reset-success-card'>
@@ -20,16 +19,11 @@ function ResetPasswordSuccessCard() {
 					<polyline points='20 6 9 17 4 12'></polyline>
 				</svg>
 				<h3 className='reset-success-title'>Password Reset Successful</h3>
-				<p className='reset-success-message'>
-					Your password has been successfully reset. You can now sign in with
-					your new password.
-				</p>
-
-				<NavLink className='reset-success-link' to='/signin'>
-					<button className='reset-success-button' type='submit'>
-						Return to Sign In
-					</button>
-				</NavLink>
+				<p className='reset-success-message'>{successMsg}</p>
+				<div className='reset-success-countdown'>
+					<p>Redirecting to sign in </p>
+					<p>{countdown}</p>
+				</div>
 			</div>
 		</section>
 	);

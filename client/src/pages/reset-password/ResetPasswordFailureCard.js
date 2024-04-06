@@ -1,10 +1,9 @@
-import {NavLink} from 'react-router-dom';
 import './ResetPasswordSuccessCard.css';
 
 function ResetPasswordFailureCard({error}) {
 	return (
 		<section className='reset-success-card-wrapper'>
-			<div className='reset-success-card'>
+			<div className='reset-failure-card'>
 				<svg
 					xmlns='http://www.w3.org/2000/svg'
 					width='40'
@@ -20,15 +19,8 @@ function ResetPasswordFailureCard({error}) {
 					<line x1='18' y1='6' x2='6' y2='18'></line>
 					<line x1='6' y1='6' x2='18' y2='18'></line>
 				</svg>
-				<h3 className='reset-success-title'>{error}</h3>
-				<p className='reset-success-message'>
-					Your password has not been changed. Please try again later.
-				</p>
-				<NavLink className='reset-success-link' to='/signin'>
-					<button className='reset-success-button' type='submit'>
-						Return to Sign In
-					</button>
-				</NavLink>
+				<h3 className='reset-success-title'>Invalid Token</h3>
+				<p className='reset-success-message'>{error}</p>
 			</div>
 		</section>
 	);

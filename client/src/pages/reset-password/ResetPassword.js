@@ -12,11 +12,16 @@ function ResetPassword() {
 	const [confirmPassword, setConfirmPassword] = useState('');
 	const [errorMsg, setErrorMsg] = useState('');
 	const [success, setSuccess] = useState(false);
+	const [countdown, setCountdown] = useState(3);
 	const [token, setToken] = useState(null);
 	const navigate = useNavigate();
 	const location = useLocation();
 
-	const {makeRequest, errorMsg: apiErrorMsg} = useApi({
+	const {
+		makeRequest,
+		data,
+		errorMsg: apiErrorMsg,
+	} = useApi({
 		url: `api/auth/reset-password`,
 		method: 'patch',
 		data: {newPassword, confirmPassword, token},
@@ -43,25 +48,40 @@ function ResetPassword() {
 		}
 	};
 
-	const checkValidToken = async () => {
-		return await makeTokenRequest();
-	};
-
 	useEffect(() => {
 		let extractedToken = location?.search.replace('?token=', '');
 		if (extractedToken) {
-			let success = checkValidToken();
-			console.log(success);
-			if (success) {
-				setToken(extractedToken);
-			}
+			(async () => {
+				let success = await makeTokenRequest();
+				if (success) setToken(extractedToken);
+			})();
 		} else {
-			navigate('/signin');
+			navigate('/welcome');
 		}
 	}, []);
 
+	useEffect(() => {
+		let timer = null;
+		if (success) {
+			timer = setInterval(() => {
+				if (countdown > 0) {
+					setCountdown((prevCount) => prevCount - 1);
+				} else {
+					clearInterval(timer);
+					navigate('/welcome');
+				}
+			}, 1000);
+		}
+		return () => {
+			clearInterval(timer);
+		};
+	}, [success, countdown]);
+
 	return success ? (
-		<ResetPasswordSuccessCard />
+		<ResetPasswordSuccessCard
+			countdown={countdown}
+			successMsg={data?.message}
+		/>
 	) : tokenError ? (
 		<ResetPasswordFailureCard error={tokenError} />
 	) : (

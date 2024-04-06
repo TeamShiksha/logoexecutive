@@ -32,3 +32,10 @@ Follow [DEVELOPMENT Guide](DEVELOPMENT.md)
 
 ## Before pull request
 Before pull request make sure to follow proper procedure mentioned in [CONTRIBUTING](CONTRIBUTING.md)
+
+## Some guides
+- [Project Structure](./guides/BACKEND.md) - Back-end
+- [Project Structure](./guides/FRONTEND.md) - Front-end
+- [Firebase Collection](./guides/COLLECTIONS.md)
+- [AWS Setup](./guides/CLOUDFORMATION.md)
+- [Business APIs](./guides/BUSINESSAPI.md)

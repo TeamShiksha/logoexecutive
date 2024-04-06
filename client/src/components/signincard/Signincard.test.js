@@ -61,8 +61,6 @@ describe('Sign In Card Component', () => {
 		fireEvent.click(buttonElement);
 		expect(alertElement).toBeInTheDocument();
 		expect(alertElement).not.toHaveClass('hidden');
-		expect(alertElement).toHaveTextContent(
-			'Please enter a valid email address',
-		);
+		expect(alertElement).toHaveTextContent('Invalid email format');
 	});
 });

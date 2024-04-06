@@ -40,17 +40,17 @@ export const Dashboard = () => {
 
 	const validateForm = () => {
 		if (inputValue.trim() === '') {
-			setErrorMessage('Key Description cannot be empty');
+			setErrorMessage('Description cannot be empty');
 			return false;
 		}
 
 		if (inputValue.length > 12) {
-			setErrorMessage('Key Description cannot be more than 12 characters');
+			setErrorMessage('Description cannot be more than 12 characters');
 			return false;
 		}
 
 		if (inputValue.match(/^[a-zA-Z\s]+$/u) === null) {
-			setErrorMessage('Key Description must contain only alphabets and spaces');
+			setErrorMessage('Description must contain only alphabets and spaces');
 			return false;
 		}
 		return true;

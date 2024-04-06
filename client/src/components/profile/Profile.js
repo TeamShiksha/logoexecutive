@@ -7,7 +7,7 @@ function Profile() {
 	const [firstName, setFirstName] = useState('');
 	const [lastName, setLastName] = useState('');
 	const [email, setEmail] = useState('');
-	const [errorMessage, setErrorMessage] = useState('');
+	const [validationErrors, setValidationErrors] = useState('');
 	const [oldPassword, setOldPassword] = useState('');
 	const [newPassword, setNewPassword] = useState('');
 	const [repeatNewPassword, setRepeatNewPassword] = useState('');
@@ -21,33 +21,55 @@ function Profile() {
 		true,
 	);
 
+	const validateFormData = () => {
+		if (firstName && !/^[a-zA-Z]+$/.test(firstName)) {
+			return 'First name can only contain letters';
+		}
+		if (lastName && !/^[a-zA-Z]+$/.test(lastName)) {
+			return 'Last name can only contain letters';
+		}
+		if (email && !/\S+@\S+\.\S+/.test(email))
+			return 'Please enter a valid email';
+		return null;
+	};
+
 	const handleUpdateProfile = async (e) => {
 		e.preventDefault();
+		const errorMessage = validateFormData();
+		if (errorMessage) {
+			setValidationErrors(errorMessage);
+			return;
+		}
 		try {
 			const success = await makeRequest();
 			if (success) {
 				setFirstName('');
 				setLastName('');
 				setEmail('');
-				setErrorMessage('');
 			}
 		} catch (error) {
-			console.error('Failed to update profile: ', error);
-			setErrorMessage(errorMessage || errorMsg || 'Error updating profile');
+			console.log('error updating profile', error);
 		}
 	};
 
+	console.log('validation', validationErrors);
 	return (
 		<div className='profile-cont' data-testid='testid-profile'>
 			<div className='profile-sub-cont'>
 				<h2 className='profile-heading'>Profile</h2>
 				<div className='profile-border-bottom'></div>
+				<p
+					className={`input-error ${validationErrors || errorMsg ? 'block' : 'hidden'}`}
+					aria-live='assertive'
+					role='alert'
+				>
+					{validationErrors || errorMsg || ' '}
+				</p>
 				<form onSubmit={handleUpdateProfile}>
 					<CustomInput
 						name='first name'
 						type='text'
 						id='first name'
-						required
 						label='first name'
 						value={firstName}
 						disabled={loading}
@@ -57,7 +79,6 @@ function Profile() {
 						name='last name'
 						type='text'
 						id='last name'
-						required
 						label='last name'
 						value={lastName}
 						disabled={loading}
@@ -68,7 +89,6 @@ function Profile() {
 						type='email'
 						id='email'
 						label='email'
-						required
 						value={email}
 						disabled={loading}
 						onChange={(e) => setEmail(e.target.value)}

@@ -12,11 +12,11 @@ const generateKeyPayloadSchema = Joi.object().keys({
     .max(12)
     .regex(/^[a-zA-Z\s]+$/u)
     .messages({
-      "string.base": "Key description must be a string",
-      "string.empty": "Key description cannot be empty",
-      "string.max": "Key description cannot be more than 12 characters",
+      "string.base": "Description must be a string",
+      "string.empty": "Description cannot be empty",
+      "string.max": "Description cannot be more than 12 characters",
       "string.pattern.base":
-        "Key Description must contain only alphabets and spaces",
+        "Description must contain only alphabets and spaces",
     }),
 });
 
@@ -44,8 +44,7 @@ async function generateKeyController(req, res) {
 
     if (keyCount >= keyLimit) {
       return res.status(403).json({
-        message:
-          "The maximum limit for key generation has been reached. Please consider upgrading your subscription to generate additional keys.",
+        message: "Key limit reached. Upgrade plan.",
         statusCode: 403,
         error: "Forbidden",
       });

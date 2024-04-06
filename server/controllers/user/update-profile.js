@@ -1,6 +1,10 @@
 const Joi = require("joi");
 const { STATUS_CODES } = require("http");
-const { fetchUserByEmail, updateUser, createVerifyToken } = require("../../services");
+const {
+  fetchUserByEmail,
+  updateUser,
+  createVerifyToken,
+} = require("../../services");
 const { sendEmail } = require("../../utils/sendEmail");
 
 const changeNameEmailSchema = Joi.object().keys({
@@ -58,18 +62,19 @@ async function updateProfileController(req, res) {
       user.firstName === req.body.firstName &&
       user.lastName === req.body.lastName
     ) {
-      return res
-        .status(200)
-        .json({ status: 200, message: "The profile has been successfully updated." });
+      return res.status(200).json({
+        status: 200,
+        message: "The profile has been successfully updated.",
+      });
     }
 
     const changes = ["firstName", "lastName", "email"].map((field) =>
       user[field] !== req.body[field] ? req.body[field] : user[field]
     );
 
-    const successRes = [];
     await updateUser(changes, user);
-    successRes.push(STATUS_CODES[200]);
+
+    let successRes = "The profile has been successfully updated.";
 
     if (user.email !== req.body.email) {
       const verificationToken = await createVerifyToken(user.userId);
@@ -91,15 +96,14 @@ async function updateProfileController(req, res) {
         verificationToken.tokenURL.href
       );
 
-      successRes.push("The verification link for the new email has been successfully sent");
+      successRes =
+        "The verification link for the new email has been successfully sent";
 
       await sendEmail(
         user.email,
         "Verfication Link Sent to new email",
         " Please verify your new email address by clicking on the link sent to your new email address"
       );
-
-      successRes.push("The confirmation email has been successfully sent to the old email address.");
 
       return res.status(200).json({ status: 200, message: successRes });
     }

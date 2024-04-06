@@ -36,7 +36,7 @@ describe('Dashboard Component', () => {
 		render(<Dashboard />);
 		const button = screen.getByText('Generate Key');
 		fireEvent.click(button);
-		const errordocument = screen.getByText('Key Description cannot be empty');
+		const errordocument = screen.getByText('Description cannot be empty');
 		expect(errordocument).toBeInTheDocument();
 	});
 
@@ -46,7 +46,7 @@ describe('Dashboard Component', () => {
 		fireEvent.change(descriptionInput, {target: {value: 'Test API Key'}});
 		const generateButton = screen.getByText('Generate Key');
 		fireEvent.click(generateButton);
-		const errordocument = screen.getByText('Key Description cannot be more than 12 characters');
+		const errordocument = screen.getByText('Description cannot be more than 12 characters');
 		expect(errordocument).toBeInTheDocument();
 	});
 
@@ -57,7 +57,7 @@ describe('Dashboard Component', () => {
 		const generateButton = screen.getByText('Generate Key');
 		fireEvent.click(generateButton);
 		const errordocument = screen.getByText(
-			'Key Description must contain only alphabets and spaces',
+			'Description must contain only alphabets and spaces',
 		);
 		expect(errordocument).toBeInTheDocument();
 	});

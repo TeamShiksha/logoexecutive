@@ -12,7 +12,7 @@ function ApiKeyForm({
 	return (
 		<section className='dashboard-content-section'>
 			<form className='api-key-container ' onSubmit={handleGenerateKey}>
-				{errorMessage && <p className='custom-input-error'>{errorMessage}</p>}
+				{errorMessage && <p className='input-error'>{errorMessage}</p>}
 				<CustomInput
 					type='text'
 					name='apikey'

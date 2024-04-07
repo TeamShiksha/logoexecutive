@@ -2,7 +2,7 @@ import './ResetPasswordSuccessCard.css';
 
 function ResetPasswordSuccessCard({countdown, successMsg}) {
 	return (
-		<section className='reset-success-card-wrapper'>
+		<section className='reset-success-card-wrapper' role='reset-success-alert'>
 			<div className='reset-success-card'>
 				<svg
 					xmlns='http://www.w3.org/2000/svg'

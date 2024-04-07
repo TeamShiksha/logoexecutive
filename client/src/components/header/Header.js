@@ -1,4 +1,4 @@
-import {useContext, useEffect, useState} from 'react';
+import {useContext, useEffect, useRef, useState} from 'react';
 import {HiMenu} from 'react-icons/hi';
 import {Link, useNavigate} from 'react-router-dom';
 import logo from '../../assets/images/business-man-logo.webp';
@@ -17,6 +17,8 @@ function Header() {
 	const navbarItems = isAuthenticated
 		? loggedInNavbarItems
 		: loggedOutNavbarItems;
+
+	const dropdownRef = useRef(null);
 	const toggleShowNavBar = () => {
 		setShowAccount(false);
 		setShowNavBar((prev) => !prev);
@@ -46,9 +48,17 @@ function Header() {
 		};
 		window.addEventListener('resize', handleResize);
 		window.addEventListener('scroll', changeHeaderBg);
+		const handleClickOutside = (event) => {
+			if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+				setShowAccount(false);
+			}
+		};
+
+		document.addEventListener('mousedown', handleClickOutside);
 		return () => {
 			window.removeEventListener('resize', handleResize);
 			window.removeEventListener('scroll', changeHeaderBg);
+			document.removeEventListener('mousedown', handleClickOutside);
 		};
 	}, []);
 
@@ -59,9 +69,7 @@ function Header() {
 				<h2>LogoExecutive</h2>
 			</Link>
 			<div className='navbar-container'>
-				{showNavBar && (
-					<Navbar navbarItems={navbarItems} setShowAccount={setShowAccount} />
-				)}
+				{showNavBar && <Navbar navbarItems={navbarItems} />}
 				<div className='cta-container'>
 					<button onClick={handleHeaderButtonClick} className='cta-button'>
 						{isAuthenticated ? 'Account' : 'Get Started'}
@@ -72,10 +80,12 @@ function Header() {
 						data-testid='burger-menu'
 					/>
 					{showAccount && (
-						<Dropdown
-							handleLogout={handleLogout}
-							toggleShowAccount={toggleShowAccount}
-						/>
+						<ul className='dropdown' ref={dropdownRef}>
+							<Dropdown
+								handleLogout={handleLogout}
+								toggleShowAccount={toggleShowAccount}
+							/>
+						</ul>
 					)}
 				</div>
 			</div>

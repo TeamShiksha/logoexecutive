@@ -1,4 +1,4 @@
-import {Link, useNavigate} from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
 import PropTypes from 'prop-types';
 import DropDownItem from './DropDownItem';
 
@@ -14,7 +14,7 @@ const Dropdown = ({handleLogout, toggleShowAccount}) => {
 		navigate('/welcome');
 	};
 	return (
-		<ul className='dropdown'>
+		<>
 			<DropDownItem
 				key='profile'
 				option={'Profile'}
@@ -27,7 +27,7 @@ const Dropdown = ({handleLogout, toggleShowAccount}) => {
 				handleClick={handleLogoutClick}
 				testId={'logout-option'}
 			/>
-		</ul>
+		</>
 	);
 };
 

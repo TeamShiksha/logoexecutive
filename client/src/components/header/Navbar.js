@@ -1,19 +1,11 @@
 import PropTypes from 'prop-types';
 import {NavLink} from 'react-router-dom';
 
-function Navbar({navbarItems, setShowAccount}) {
-	const closeAccountDropdown = () => {
-		setShowAccount(false);
-	};
+function Navbar({navbarItems}) {
 	return (
 		<nav className='navbar-menu'>
 			{navbarItems?.map((item, index) => (
-				<NavLink
-					key={index}
-					to={item.link}
-					className='nav-links'
-					onClick={closeAccountDropdown}
-				>
+				<NavLink key={index} to={item.link} className='nav-links'>
 					{item.name}
 				</NavLink>
 			))}
@@ -28,7 +20,6 @@ Navbar.propTypes = {
 			link: PropTypes.string.isRequired,
 		}),
 	),
-	setShowAccount: PropTypes.func.isRequired,
 };
 
 export default Navbar;

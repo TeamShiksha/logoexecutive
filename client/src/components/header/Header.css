@@ -105,11 +105,10 @@
 	right: 0;
 	top: 60px;
 	box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-	font-size: 0.875rem;
-	min-width: 10rem;
-	padding: 0.5rem 0;
+	min-width: 160px;
+	padding: 8px 0;
 	background-color: #fff;
-	border-radius: 0.5rem;
+	border-radius: 8px;
 }
 .menu-items a {
 	text-decoration: none;
@@ -119,7 +118,7 @@
 	font-size: inherit;
 	color: black;
 	text-align: center;
-	padding: 0.7rem 1rem;
+	padding: 11px 16px;
 }
 
 .menu-items div:hover {

@@ -19,6 +19,7 @@ function Header() {
 		: loggedOutNavbarItems;
 
 	const dropdownRef = useRef(null);
+	const accountButtonRef = useRef(null);
 	const toggleShowNavBar = () => {
 		setShowAccount(false);
 		setShowNavBar((prev) => !prev);
@@ -49,7 +50,12 @@ function Header() {
 		window.addEventListener('resize', handleResize);
 		window.addEventListener('scroll', changeHeaderBg);
 		const handleClickOutside = (event) => {
-			if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+			if (
+				dropdownRef.current &&
+				!dropdownRef.current.contains(event.target) &&
+				accountButtonRef.current &&
+				!accountButtonRef.current.contains(event.target)
+			) {
 				setShowAccount(false);
 			}
 		};
@@ -71,7 +77,11 @@ function Header() {
 			<div className='navbar-container'>
 				{showNavBar && <Navbar navbarItems={navbarItems} />}
 				<div className='cta-container'>
-					<button onClick={handleHeaderButtonClick} className='cta-button'>
+					<button
+						onClick={handleHeaderButtonClick}
+						className='cta-button'
+						ref={accountButtonRef}
+					>
 						{isAuthenticated ? 'Account' : 'Get Started'}
 					</button>
 					<HiMenu

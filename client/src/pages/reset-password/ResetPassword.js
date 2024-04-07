@@ -16,9 +16,9 @@ function ResetPassword() {
 	const [token, setToken] = useState(null);
 	const navigate = useNavigate();
 	const location = useLocation();
-
 	const {
 		makeRequest,
+		loading,
 		data,
 		errorMsg: apiErrorMsg,
 	} = useApi({
@@ -31,6 +31,8 @@ function ResetPassword() {
 		method: 'get',
 	});
 
+	let emptyPassword = newPassword.length < 8 || newPassword.length > 30;
+	let submitButtonDisabled = emptyPassword || loading;
 	const handleSubmit = async (event) => {
 		event.preventDefault();
 		setErrorMsg('');
@@ -42,9 +44,7 @@ function ResetPassword() {
 				setErrorMsg(apiErrorMsg);
 			}
 		} else {
-			setErrorMsg(
-				"Passwords don't match! Please double-check and re-enter them.",
-			);
+			setErrorMsg('Passwords do not match!');
 		}
 	};
 
@@ -59,6 +59,8 @@ function ResetPassword() {
 			navigate('/welcome');
 		}
 	}, []);
+
+	console.log(loading);
 
 	useEffect(() => {
 		let timer = null;
@@ -76,7 +78,8 @@ function ResetPassword() {
 			clearInterval(timer);
 		};
 	}, [success, countdown]);
-
+	console.log(data);
+	console.log(success);
 	return success ? (
 		<ResetPasswordSuccessCard
 			countdown={countdown}
@@ -115,7 +118,11 @@ function ResetPassword() {
 						value={confirmPassword}
 						onChange={(e) => setConfirmPassword(e.target.value)}
 					/>
-					<button type='submit' className='reset-password-submit-button'>
+					<button
+						type='submit'
+						disabled={submitButtonDisabled}
+						className='reset-password-submit-button'
+					>
 						Submit
 					</button>
 				</form>

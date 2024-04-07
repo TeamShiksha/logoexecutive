@@ -8,7 +8,7 @@ const cors = require("cors");
 
 const privateRouteCORS = {
   origin: (origin, callback) => {
-    if(origin === process.env.BASE_URL || !origin) {
+    if (origin === "http://127.0.0.1:8888" || !origin) {
       callback(null, true);
     } else {
       callback(new Error("Not allowed by CORS"));
@@ -18,8 +18,8 @@ const privateRouteCORS = {
 };
 
 router.use("/auth", cors(privateRouteCORS), authRouter);
-router.use("/user", cors(privateRouteCORS),userRouter);
-router.use("/admin", cors(privateRouteCORS),adminRouter);
+router.use("/user", cors(privateRouteCORS), userRouter);
+router.use("/admin", cors(privateRouteCORS), adminRouter);
 router.use("/public", cors(privateRouteCORS), publicRouter);
 router.use("/business", logoRouter);
 router.use("/admin", cors(privateRouteCORS), adminRouter);

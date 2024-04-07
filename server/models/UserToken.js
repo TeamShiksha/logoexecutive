@@ -71,14 +71,9 @@ class UserToken {
    */
   get tokenURL() {
     let path, url;
-    if (this.type === UserTokenTypes.FORGOT) {
-      path = "/reset-password";
-      url = new URL(path, process.env.FE_BASE_URL);
-    }
-    if (this.type === UserTokenTypes.VERIFY) {
-      path = "/api/auth/verify";
-      url = new URL(path, process.env.BASE_URL);
-    }
+    if (this.type === UserTokenTypes.FORGOT) path = "/reset-password";
+    if (this.type === UserTokenTypes.VERIFY) path = "/verify";
+    url = new URL(path, process.env.BASE_URL);
     url.searchParams.append("token", this.token);
     return url;
   }

@@ -80,6 +80,7 @@ function Signincard() {
 			</p>
 			<form onSubmit={handleSubmit}>
 				<CustomInput
+					type='text'
 					className='inputs'
 					name='email'
 					label='email'

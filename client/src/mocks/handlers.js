@@ -1,12 +1,5 @@
-import {rest} from 'msw';
+import {signinHandler} from './handlers/sign-handler';
 
-export const handlers = [
-	rest.get('/api/user', (req, res, ctx) => {
-		return res(
-			ctx.json({
-				name: 'John Doe',
-				email: 'john.doe@example.com',
-			}),
-		);
-	}),
-];
+const handlers = [...signinHandler];
+
+export default handlers;

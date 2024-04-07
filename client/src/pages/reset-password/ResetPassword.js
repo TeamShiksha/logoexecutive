@@ -1,7 +1,6 @@
 import {useState, useEffect} from 'react';
 import CustomInput from '../../components/common/input/CustomInput';
 import ResetPasswordSuccessCard from './ResetPasswordSuccessCard';
-import ResetPasswordFailureCard from './ResetPasswordFailureCard';
 import {useLocation} from 'react-router';
 import {useApi} from '../../hooks/useApi';
 import {useNavigate} from 'react-router-dom';
@@ -62,8 +61,6 @@ function ResetPassword() {
 		}
 	}, []);
 
-	console.log(loading);
-
 	useEffect(() => {
 		let timer = null;
 		if (success) {
@@ -80,15 +77,12 @@ function ResetPassword() {
 			clearInterval(timer);
 		};
 	}, [success, countdown]);
-	console.log(data);
-	console.log(success);
-	return success ? (
+	return success || tokenError ? (
 		<ResetPasswordSuccessCard
 			countdown={countdown}
 			successMsg={data?.message}
+			errorMsg={tokenError}
 		/>
-	) : tokenError ? (
-		<ResetPasswordFailureCard error={tokenError} />
 	) : (
 		<section className='reset-password-wrapper'>
 			<div className='reset-password-page'>
@@ -112,6 +106,7 @@ function ResetPassword() {
 						type='password'
 						value={newPassword}
 						onChange={(e) => setNewPassword(e.target.value)}
+						disabled={loading}
 					/>
 					<CustomInput
 						name='confirm password'
@@ -119,6 +114,7 @@ function ResetPassword() {
 						type='password'
 						value={confirmPassword}
 						onChange={(e) => setConfirmPassword(e.target.value)}
+						disabled={loading}
 					/>
 					<button
 						type='submit'

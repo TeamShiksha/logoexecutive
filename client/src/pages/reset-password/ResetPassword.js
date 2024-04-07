@@ -31,11 +31,13 @@ function ResetPassword() {
 		method: 'get',
 	});
 
-	let emptyPassword = newPassword.length < 8 || newPassword.length > 30;
-	let submitButtonDisabled = emptyPassword || loading;
 	const handleSubmit = async (event) => {
 		event.preventDefault();
 		setErrorMsg('');
+		if (newPassword.length < 8 || newPassword.length > 30) {
+			setErrorMsg('Password must be between 8 and 30 characters long');
+			return;
+		}
 		if (confirmPassword === newPassword) {
 			let success = await makeRequest();
 			if (success) {
@@ -120,7 +122,7 @@ function ResetPassword() {
 					/>
 					<button
 						type='submit'
-						disabled={submitButtonDisabled}
+						disabled={loading}
 						className='reset-password-submit-button'
 					>
 						Submit

@@ -26,11 +26,14 @@ function Header() {
 	};
 	const handleLogout = () => {
 		logout();
-		navigate('/welcome');
 	};
 	const toggleShowAccount = () => {
 		if (window.innerWidth <= 1000) setShowNavBar(false);
 		setShowAccount((prev) => !prev);
+	};
+
+	const handleHeaderButtonClick = () => {
+		isAuthenticated ? toggleShowAccount() : navigate('/signin');
 	};
 
 	useEffect(() => {
@@ -60,12 +63,7 @@ function Header() {
 					<Navbar navbarItems={navbarItems} setShowAccount={setShowAccount} />
 				)}
 				<div className='cta-container'>
-					<button
-						onClick={
-							isAuthenticated ? toggleShowAccount : () => navigate('/signin')
-						}
-						className='cta-button'
-					>
+					<button onClick={handleHeaderButtonClick} className='cta-button'>
 						{isAuthenticated ? 'Account' : 'Get Started'}
 					</button>
 					<HiMenu

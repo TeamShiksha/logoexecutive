@@ -74,7 +74,7 @@ const patch = async (req, res, next) => {
     if (error) {
       return res.status(422).json({
         error: STATUS_CODES[422],
-        message: error.message,
+        message: "Password must be between 8 and 30 characters long",
         statusCode: 422
       });
     }

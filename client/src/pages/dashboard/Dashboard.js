@@ -9,17 +9,14 @@ const RANDOM_STRING_LENGTH = 36;
 
 function getUsedCalls(keys) {
 	let result = 0;
-
 	if (!keys) return result;
-
 	keys.forEach((key) => {
 		result += key.usageCount;
 	});
-
 	return result;
 }
 
-export const Dashboard = () => {
+function Dashboard() {
 	const [inputValue, setInputValue] = useState('');
 	const [errorMessage, setErrorMessage] = useState('');
 	const [copiedKey, setCopiedKey] = useState(null);
@@ -104,3 +101,5 @@ export const Dashboard = () => {
 		</div>
 	);
 };
+
+export default Dashboard;

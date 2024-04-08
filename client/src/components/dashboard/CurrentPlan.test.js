@@ -10,7 +10,6 @@ describe('CurrentPlan', () => {
 
 	it('Status - Inactive', () => {
 		render(<CurrentPlan subscriptionData={subscriptionData} />);
-
 		expect(screen.getByText('Current Plan')).toBeInTheDocument();
 		expect(screen.getByText('Inactive')).toBeInTheDocument();
 		expect(screen.getByText('Inactive')).not.toHaveClass('active');
@@ -24,7 +23,6 @@ describe('CurrentPlan', () => {
 	it('Status - Active', () => {
 		const data = {...subscriptionData, isActive: true};
 		render(<CurrentPlan subscriptionData={data} />);
-
 		expect(screen.getByText('Current Plan')).toBeInTheDocument();
 		expect(screen.getByText('Active')).toBeInTheDocument();
 		expect(screen.getByText('Active')).toHaveClass('active');
@@ -38,7 +36,6 @@ describe('CurrentPlan', () => {
 
 	it('Upgrade button - shows for hobby plan', () => {
 		render(<CurrentPlan subscriptionData={subscriptionData} />);
-
 		expect(screen.getByText('Upgrade Plan')).toBeInTheDocument();
 	});
 
@@ -48,7 +45,6 @@ describe('CurrentPlan', () => {
 			subscriptionType: SubscriptionTypes.TEAMS,
 		};
 		render(<CurrentPlan subscriptionData={data} />);
-
 		expect(screen.queryByText('Upgrade Plan')).toBeNull();
 	});
 });

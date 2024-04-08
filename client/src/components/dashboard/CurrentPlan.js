@@ -1,6 +1,6 @@
 import {SubscriptionTypes} from '../../constants';
 
-export default function CurrentPlan({subscriptionData}) {
+function CurrentPlan({subscriptionData}) {
 	return (
 		<div className='dashboard-content-item'>
 			<div className='current-plan-header'>
@@ -23,3 +23,5 @@ export default function CurrentPlan({subscriptionData}) {
 		</div>
 	);
 }
+
+export default CurrentPlan;

@@ -10,14 +10,12 @@ describe('ResetPasswordSuccessCard component', () => {
 				<ResetPasswordSuccessCard />
 			</MemoryRouter>,
 		);
-
 		expect(screen.getByText('Password Reset Successful')).toBeInTheDocument();
 		expect(
 			screen.getByText(
 				'Your password has been successfully reset. You can now sign in with your new password.',
 			),
 		).toBeInTheDocument();
-
 		const linkToSignIn = screen.getByRole('link', {name: 'Return to Sign In'});
 		expect(linkToSignIn).toBeInTheDocument();
 		expect(linkToSignIn).toHaveAttribute('href', '/signin');
@@ -30,10 +28,8 @@ describe('ResetPasswordSuccessCard component', () => {
 			</MemoryRouter>,
 			{history},
 		);
-
 		const linkToSignIn = screen.getByRole('link', {name: 'Return to Sign In'});
 		linkToSignIn.click();
-
 		expect(window.location.pathname).toBe('/');
 	});
 });

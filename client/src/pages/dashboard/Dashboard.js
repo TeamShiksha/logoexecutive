@@ -1,9 +1,10 @@
-import {useEffect, useState} from 'react';
+import {useContext, useEffect, useState} from 'react';
 import ApiKeyForm from '../../components/dashboard/ApiKeyForm';
 import ApiKeyTable from '../../components/dashboard/ApiKeyTable';
 import CurrentPlan from '../../components/dashboard/CurrentPlan';
 import Usage from '../../components/dashboard/Usage';
 import './Dashboard.css';
+import {UserContext} from '../../contexts/UserContext';
 
 const RANDOM_STRING_LENGTH = 36;
 
@@ -21,21 +22,14 @@ function Dashboard() {
 	const [errorMessage, setErrorMessage] = useState('');
 	const [copiedKey, setCopiedKey] = useState(null);
 	const [keys, setKeys] = useState([]);
-	const [dashboardData, setDashboardData] = useState();
+
+	const {userData} = useContext(UserContext);
 
 	useEffect(() => {
-		if (dashboardData?.keys) {
-			setKeys(dashboardData.keys);
+		if (userData?.keys) {
+			setKeys(userData.keys);
 		}
-	}, [dashboardData]);
-
-	useEffect(() => {
-		fetch('/api/user/data')
-			.then((res) => res.json())
-			.then((data) => {
-				setDashboardData(data.data);
-			});
-	}, []);
+	}, [userData]);
 
 	const handleGenerateKey = (e) => {
 		e.preventDefault();
@@ -74,10 +68,10 @@ function Dashboard() {
 		<div className='dashboard-container' data-testid='testid-dashboard'>
 			<div className='dashboard-content-container'>
 				<section className='dashboard-content-section'>
-					<CurrentPlan subscriptionData={dashboardData?.subscription} />
+					<CurrentPlan subscriptionData={userData?.subscription} />
 					<Usage
-						usedCalls={getUsedCalls(dashboardData?.keys)}
-						totalCalls={dashboardData?.subscription.usageLimit || 0}
+						usedCalls={getUsedCalls(userData?.keys)}
+						totalCalls={userData?.subscription.usageLimit || 0}
 					/>
 					<div className='generate-api'>
 						<h1 className='content-item-heading'>Generate your API key</h1>
@@ -100,6 +94,6 @@ function Dashboard() {
 			</div>
 		</div>
 	);
-};
+}
 
 export default Dashboard;

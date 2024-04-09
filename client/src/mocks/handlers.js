@@ -1,4 +1,4 @@
-import {signinHandler} from './handlers/sign-handler';
+import {signinHandler} from './handlers/signin-handler';
 
 const handlers = [...signinHandler];
 

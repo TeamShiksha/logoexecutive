@@ -34,13 +34,13 @@ describe('Header', () => {
 		expect(screen.getByText('LogoExecutive')).toBeInTheDocument();
 	});
 
-	test('should show Dashboard, Docs, Pricing, About, and Logout links when user is logged in', () => {
+	test('should show Dashboard, Docs, Pricing, About, and Account links when user is logged in', () => {
 		renderHeader(true);
 		expect(screen.getByText('Dashboard')).toBeInTheDocument();
 		expect(screen.getByText('Docs')).toBeInTheDocument();
 		expect(screen.getByText('Pricing')).toBeInTheDocument();
 		expect(screen.getByText('About')).toBeInTheDocument();
-		expect(screen.getByText('Logout')).toBeInTheDocument();
+		expect(screen.getByText('Account')).toBeInTheDocument();
 	});
 
 	test('should show Home, Demo, Pricing, About, and Get Started links when user is logged out', () => {
@@ -50,14 +50,6 @@ describe('Header', () => {
 		expect(screen.getByText('Pricing')).toBeInTheDocument();
 		expect(screen.getByText('About')).toBeInTheDocument();
 		expect(screen.getByText('Get Started')).toBeInTheDocument();
-	});
-
-	test('should call handleLogout and navigate to /welcome when Logout button is clicked', () => {
-		renderHeader(true);
-		const logoutButton = screen.getByText('Logout');
-		fireEvent.click(logoutButton);
-		expect(mockLogout).toHaveBeenCalled();
-		expect(navigate).toHaveBeenCalledWith('/welcome');
 	});
 
 	test('should navigate to /signin when Get Started button is clicked', () => {

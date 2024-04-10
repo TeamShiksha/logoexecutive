@@ -64,6 +64,7 @@
 	display: flex;
 	align-items: center;
 	gap: 28px;
+	position: relative;
 }
 
 .cta-button {
@@ -99,6 +100,31 @@
 	transition: 200ms ease-in-out;
 }
 
+.dropdown {
+	position: absolute;
+	right: 0;
+	top: 60px;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+	min-width: 160px;
+	padding: 8px 0;
+	background-color: #fff;
+	border-radius: 8px;
+}
+.menu-items a {
+	text-decoration: none;
+}
+.menu-items div {
+	cursor: pointer;
+	font-size: inherit;
+	color: black;
+	text-align: center;
+	padding: 11px 16px;
+}
+
+.menu-items div:hover {
+	background-color: #f2f2f2;
+}
+
 @media screen and (min-width: 1001px) {
 	.burger-menu {
 		display: none;
@@ -106,6 +132,9 @@
 }
 
 @media screen and (max-width: 1000px) {
+	.dropdown {
+		right: auto;
+	}
 	.navbar-menu {
 		display: flex;
 		flex-direction: column;

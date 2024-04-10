@@ -3,8 +3,8 @@ import ApiKeyForm from '../../components/dashboard/ApiKeyForm';
 import ApiKeyTable from '../../components/dashboard/ApiKeyTable';
 import CurrentPlan from '../../components/dashboard/CurrentPlan';
 import Usage from '../../components/dashboard/Usage';
-import './Dashboard.css';
 import {UserContext} from '../../contexts/UserContext';
+import './Dashboard.css';
 
 const RANDOM_STRING_LENGTH = 36;
 
@@ -22,7 +22,6 @@ function Dashboard() {
 	const [errorMessage, setErrorMessage] = useState('');
 	const [copiedKey, setCopiedKey] = useState(null);
 	const [keys, setKeys] = useState([]);
-
 	const {userData} = useContext(UserContext);
 
 	useEffect(() => {

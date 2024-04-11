@@ -5,7 +5,7 @@ import './Home.css';
 
 function Home() {
 	return (
-		<div className='home-container'>
+		<div data-testid='home-container' className='home-container'>
 			<HeroSection />
 			<Demo />
 			<FAQs />

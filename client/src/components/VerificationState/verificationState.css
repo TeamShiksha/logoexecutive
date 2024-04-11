@@ -1,0 +1,55 @@
+.card-wrapper {
+	margin: 100px 14px;
+	display: grid;
+	place-items: center;
+}
+
+.state-card {
+	max-width: 400px;
+	border-radius: var(--bradius);
+	border: var(--border);
+	box-shadow: var(--shadow);
+	padding: 24px;
+	text-align: center;
+}
+
+.state-icon {
+	margin: auto;
+	height: 48px;
+	width: 48px;
+	color: #48bb78;
+}
+
+.state-title {
+	margin-top: 4px;
+	color: var(--black);
+	font-size: 24px;
+	line-height: 32px;
+}
+
+.state-message {
+	color: var(--description);
+	font-size: 14px;
+	line-height: 20px;
+	margin: 4px 0px 48px;
+}
+
+.success-button {
+	background-color: var(--smooth-purple);
+	color: white;
+	min-height: 40px;
+	width: 100%;
+	font-weight: 500;
+	padding: 8px 16px;
+	border: none;
+	border-radius: 6px;
+	cursor: pointer;
+	font-size: 14px;
+	line-height: 20px;
+	margin-bottom: 16px;
+}
+
+.success-link {
+	text-decoration: none;
+	color: white;
+}

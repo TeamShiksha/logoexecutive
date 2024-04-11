@@ -1,33 +1,21 @@
 import {IconContext} from 'react-icons/lib';
 import {FaCheck} from 'react-icons/fa6';
 import {RxCross2} from 'react-icons/rx';
+import PropTypes from 'prop-types';
 import './ResponseCard.css';
 
-function ResponseCard({
-	countdown,
-	successMsg = false,
-	errorMsg = false,
-	title = '',
-}) {
+function ResponseCard({countdown, successMsg, errorMsg, title}) {
 	return (
 		<section className='reset-success-card-wrapper' role='reset-success-alert'>
 			{errorMsg ? (
 				<div className='reset-failure-card'>
-					<IconContext.Provider
-						value={{color: 'red', className: 'global-class-name'}}
-					>
-						<RxCross2 size={50} />
-					</IconContext.Provider>
+					<RxCross2 className='reset-failure-icon' />
 					<h3 className='reset-success-title'>{title}</h3>
 					<p className='reset-success-message'>{errorMsg}</p>
 				</div>
 			) : (
 				<div className='reset-success-card'>
-					<IconContext.Provider
-						value={{color: '#0bae69', className: 'global-class-name'}}
-					>
-						<FaCheck size={50} />
-					</IconContext.Provider>
+					<FaCheck className='reset-success-icon' />
 					<h3 className='reset-success-title'>{title}</h3>
 					<p className='reset-success-message'>{successMsg}</p>
 					<div className='reset-success-countdown'>
@@ -39,5 +27,12 @@ function ResponseCard({
 		</section>
 	);
 }
+
+ResponseCard.propTypes = {
+	title: PropTypes.string.isRequired,
+	successMsg: PropTypes.string.isRequired,
+	errorMsg: PropTypes.string.isRequired,
+	countdown: PropTypes.number.isRequired,
+};
 
 export default ResponseCard;

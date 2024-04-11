@@ -3,7 +3,7 @@ import {useLocation} from 'react-router';
 import {useNavigate} from 'react-router-dom';
 import CustomInput from '../../components/common/input/CustomInput';
 import {useApi} from '../../hooks/useApi';
-import ResponseCard from '../../genric/ResponseCard';
+import ResponseCard from '../../components/common/ResponseCard/ResponseCard';
 import './ResetPassword.css';
 
 function ResetPassword() {

@@ -5,7 +5,6 @@ import Dashboard from './dashboard/Dashboard';
 import ApiDocs from './docs/ApiDocs';
 import ForgotPassword from './forgot-password/ForgotPassword';
 import ResetPassword from './reset-password/ResetPassword';
-import ResponseCard from '../genric/ResponseCard';
 import Signin from './signin/Signin';
 import Signup from './signup/Signup';
 import Home from './welcome/Home';
@@ -21,7 +20,6 @@ export {
 	ForgotPassword,
 	Home,
 	ResetPassword,
-	ResponseCard,
 	Signin,
 	Signup,
 };

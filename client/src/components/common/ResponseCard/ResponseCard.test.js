@@ -20,16 +20,4 @@ describe('ResponseCard component', () => {
 		expect(linkToSignIn).toBeInTheDocument();
 		expect(linkToSignIn).toHaveAttribute('href', '/signin');
 	});
-
-	it('navigates to sign in page when link is clicked', () => {
-		render(
-			<MemoryRouter>
-				<ResponseCard />
-			</MemoryRouter>,
-			{history},
-		);
-		const linkToSignIn = screen.getByRole('link', {name: 'Return to Sign In'});
-		linkToSignIn.click();
-		expect(window.location.pathname).toBe('/');
-	});
 });

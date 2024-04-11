@@ -1,0 +1,59 @@
+.response-card-wrapper {
+	margin: 100px 14px;
+	display: grid;
+	place-items: center;
+}
+.response-failure-icon {
+	color: red;
+	width: 50px;
+	height: 50px;
+}
+
+.response-success-icon {
+	color: #0bae69;
+	width: 50px;
+	height: 50px;
+}
+
+.response-card {
+	width: 100%;
+	max-width: 400px;
+	border-radius: var(--bradius);
+	border: var(--border);
+	box-shadow: var(--shadow);
+	padding: 24px;
+	text-align: center;
+}
+.response-icon {
+	margin: auto;
+	height: 48px;
+	width: 48px;
+	color: #48bb78;
+}
+
+.response-countdown p {
+	padding: 5px;
+}
+.response-countdown {
+	font-size: 20px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	font-weight: 500;
+	color: var(--black);
+	border-radius: 50%;
+}
+
+.response-title {
+	margin-top: 4px;
+	color: var(--black);
+	font-size: 24px;
+	line-height: 32px;
+}
+
+.response-message {
+	color: var(--description);
+	font-size: 14px;
+	line-height: 20px;
+	margin: 4px 0px 48px;
+}

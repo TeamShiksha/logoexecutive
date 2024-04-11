@@ -31,7 +31,7 @@ describe('ResetPassword component', () => {
 		fireEvent.change(screen.getByLabelText('Confirm Password'), {
 			target: {value: 'password456'},
 		});
-		fireEvent.click(screen.getByRole('button', {name: 'Submit'}))
+		fireEvent.click(screen.getByRole('button', {name: 'Submit'}));
 		await waitFor(() => {
 			expect(
 				screen.getByText(

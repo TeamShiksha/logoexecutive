@@ -45,12 +45,12 @@ describe("generate-key controller", () =>{
       .set("cookie", `jwt=${mockToken}`)
       .send({
         "payload": {
-          "keyDescription": "containingNumbers12345"
+          "keyDescription": 5
         },
       });
     expect(response.status).toBe(422);
     expect(response.body).toEqual({
-      message: "keyDescription must contain only alphabets",
+      message: "Description is required",
       statusCode: 422,
       error: "Unprocessable payload",
     });

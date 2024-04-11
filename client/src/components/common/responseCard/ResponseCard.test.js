@@ -7,7 +7,11 @@ describe('ResponseCard component', () => {
 	it('renders success message and link to sign in page', () => {
 		render(
 			<MemoryRouter>
-				<ResponseCard />
+				<ResponseCard
+					countdown={3}
+					title='Password Reset Successful'
+					message='Your password has been successfully reset. You can now sign in with your new password.'
+				/>
 			</MemoryRouter>,
 		);
 		expect(screen.getByText('Password Reset Successful')).toBeInTheDocument();
@@ -16,8 +20,7 @@ describe('ResponseCard component', () => {
 				'Your password has been successfully reset. You can now sign in with your new password.',
 			),
 		).toBeInTheDocument();
-		const linkToSignIn = screen.getByRole('link', {name: 'Return to Sign In'});
+		const linkToSignIn = screen.getByText('Redirecting to sign in');
 		expect(linkToSignIn).toBeInTheDocument();
-		expect(linkToSignIn).toHaveAttribute('href', '/signin');
 	});
 });

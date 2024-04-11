@@ -38,16 +38,16 @@ function ResetPassword() {
 		if (newPassword.length < 8 || newPassword.length > 30) {
 			setErrorMsg('Password must be between 8 and 30 characters long');
 			return;
-		}
-		if (confirmPassword === newPassword) {
+		} else if (confirmPassword !== newPassword) {
+			setErrorMsg('Passwords do not match');
+			return;
+		} else {
 			let success = await makeRequest();
 			if (success) {
 				setSuccess(true);
 			} else {
 				setErrorMsg(apiErrorMsg);
 			}
-		} else {
-			setErrorMsg('Passwords do not match!');
 		}
 	};
 
@@ -61,6 +61,7 @@ function ResetPassword() {
 		} else {
 			navigate('/welcome');
 		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	useEffect(() => {
@@ -78,6 +79,7 @@ function ResetPassword() {
 		return () => {
 			clearInterval(timer);
 		};
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [success, countdown]);
 	return tokenError ? (
 		<ResponseCard

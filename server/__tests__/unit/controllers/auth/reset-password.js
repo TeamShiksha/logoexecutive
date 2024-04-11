@@ -177,7 +177,7 @@ describe("PATCH /auth/reset-password", () => {
     expect(response.status).toBe(422);
     expect(response.body).toEqual({
       error: STATUS_CODES[422],
-      message: "\"token\" is required",
+      message: "Token is required",
       statusCode: 422
     });
   });
@@ -197,7 +197,7 @@ describe("PATCH /auth/reset-password", () => {
     expect(response.status).toBe(422);
     expect(response.body).toEqual({
       error: STATUS_CODES[422],
-      message: "\"newPassword\" is required",
+      message: "New password is required",
       statusCode: 422
     });
   });
@@ -217,7 +217,7 @@ describe("PATCH /auth/reset-password", () => {
     expect(response.status).toBe(422);
     expect(response.body).toEqual({
       error: STATUS_CODES[422],
-      message: "\"confirmPassword\" is required",
+      message: "Confirm password is required",
       statusCode: 422
     });
   });

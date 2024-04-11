@@ -9,14 +9,13 @@ const generateKeyPayloadSchema = Joi.object().keys({
   keyDescription: Joi.string()
     .trim()
     .required()
-    .max(12)
-    .regex(/^[a-zA-Z\s]+$/u)
+    .max(20)
+    .regex(/^[\p{L}\s]+$/u)
     .messages({
-      "string.base": "Key description must be a string",
-      "string.empty": "Key description cannot be empty",
-      "string.max": "Key description cannot be more than 12 characters",
-      "string.pattern.base":
-        "Key Description must contain only alphabets and spaces",
+      "string.base": "Description must be a string",
+      "any.required": "Description is required",
+      "string.max": "Description must be 20 characters or fewer.",
+      "string.pattern.base": "Description must contain only alphabets and spaces",
     }),
 });
 

@@ -15,3 +15,8 @@ export const isValidPassword = (password) => {
 		hasSpecialCharacter.test(password)
 	);
 };
+
+export const isValidDescription = (description) => {
+	const regex = /^[a-zA-Z\s]*$/;
+	return regex.test(description);
+};

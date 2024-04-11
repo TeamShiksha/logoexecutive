@@ -6,7 +6,10 @@ const { fetchTokenFromId, deleteUserToken,
   updatePasswordService, fetchUserFromId } = require("../../services");
 
 const payloadSchema = Joi.object().keys({
-  token: Joi.string().required()
+  token: Joi.string().required().messages({
+    "string.base": "Token must be a string",
+    "string.empty": "Token is required",
+  }),
 });
 
 async function get(req, res, next) {
@@ -46,9 +49,22 @@ async function get(req, res, next) {
 
 
 const patchSchema = Joi.object().keys({
-  newPassword: Joi.string().trim().min(8).max(30).required(),
-  confirmPassword: Joi.string().trim().min(8).max(30).required(),
-  token: Joi.string().trim().required(),
+  newPassword: Joi.string().trim().min(8).max(30).required().messages({
+    "any.required": "New password is required",
+    "string.empty": "New password is required",
+    "string.max": "New password must be 30 characters or fewer",
+    "string.min": "New password must be at least 8 characters",
+  }),
+  confirmPassword: Joi.string().trim().min(8).max(30).required().messages({
+    "string.base": "Confirm password must be a string",
+    "any.required": "Confirm password is required",
+    "string.max": "Confirm password must be 30 characters or fewer",
+    "string.min": "Confirm password must be at least 8 characters",
+  }),
+  token: Joi.string().trim().required().messages({
+    "string.base": "Token must be a string",
+    "any.required": "Token is required",
+  }),
 });
 
 const patch = async (req, res, next) => {
@@ -74,7 +90,7 @@ const patch = async (req, res, next) => {
     if (error) {
       return res.status(422).json({
         error: STATUS_CODES[422],
-        message: "Password must be between 8 and 30 characters long",
+        message: error.message,
         statusCode: 422
       });
     }

@@ -33,29 +33,26 @@ describe('ResetPassword component', () => {
 		});
 		fireEvent.click(screen.getByRole('button', {name: 'Submit'}));
 		await waitFor(() => {
-			expect(
-				screen.getByText(
-					"Passwords don't match! Please double-check and re-enter them.",
-				),
-			).toBeInTheDocument();
+			expect(screen.getByText('Passwords do not match')).toBeInTheDocument();
 		});
 	});
 
-	it('submits form successfully if passwords match', async () => {
-		render(
-			<BrowserRouter>
-				<ResetPassword />
-			</BrowserRouter>,
-		);
-		fireEvent.change(screen.getByLabelText('New Password'), {
-			target: {value: 'password123'},
-		});
-		fireEvent.change(screen.getByLabelText('Confirm Password'), {
-			target: {value: 'password123'},
-		});
-		fireEvent.click(screen.getByRole('button', {name: 'Submit'}));
-		await waitFor(() => {
-			expect(screen.getByText('Password Reset Successful')).toBeInTheDocument();
-		});
-	});
+	// DO NOT DELETE, THIS TEST NEED TO BE ENABLED WITH MSW
+	// it('submits form successfully if passwords match', async () => {
+	// 	render(
+	// 		<BrowserRouter>
+	// 			<ResetPassword />
+	// 		</BrowserRouter>,
+	// 	);
+	// 	fireEvent.change(screen.getByLabelText('New Password'), {
+	// 		target: {value: 'password123'},
+	// 	});
+	// 	fireEvent.change(screen.getByLabelText('Confirm Password'), {
+	// 		target: {value: 'password123'},
+	// 	});
+	// 	fireEvent.click(screen.getByRole('button', {name: 'Submit'}));
+	// 	await waitFor(() => {
+	// 		expect(screen.getByText('Password Reset Successful')).toBeInTheDocument();
+	// 	});
+	// });
 });

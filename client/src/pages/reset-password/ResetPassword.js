@@ -1,27 +1,97 @@
-import {useState} from 'react';
+import {useState, useEffect} from 'react';
+import {useLocation} from 'react-router';
+import {useNavigate} from 'react-router-dom';
 import CustomInput from '../../components/common/input/CustomInput';
-import ResetPasswordSuccessCard from './ResetPasswordSuccessCard';
+import {useApi} from '../../hooks/useApi';
+import ResponseCard from '../../components/common/responseCard/ResponseCard';
 import './ResetPassword.css';
+import {FaCheck} from 'react-icons/fa6';
+import {RxCross2} from 'react-icons/rx';
 
 function ResetPassword() {
 	const [newPassword, setNewPassword] = useState('');
 	const [confirmPassword, setConfirmPassword] = useState('');
 	const [errorMsg, setErrorMsg] = useState('');
 	const [success, setSuccess] = useState(false);
-	const handleSubmit = (event) => {
+	const [countdown, setCountdown] = useState(3);
+	const [token, setToken] = useState(null);
+	const navigate = useNavigate();
+	const location = useLocation();
+	const {
+		makeRequest,
+		loading,
+		data,
+		errorMsg: apiErrorMsg,
+	} = useApi({
+		url: `api/auth/reset-password`,
+		method: 'patch',
+		data: {newPassword, confirmPassword, token},
+	});
+	const {makeRequest: makeTokenRequest, errorMsg: tokenError} = useApi({
+		url: `api/auth/reset-password${location?.search}`,
+		method: 'get',
+	});
+
+	const handleSubmit = async (event) => {
 		event.preventDefault();
 		setErrorMsg('');
-		if (newPassword === confirmPassword) {
-			setSuccess(true);
+		if (newPassword.length < 8 || newPassword.length > 30) {
+			setErrorMsg('Password must be between 8 and 30 characters long');
+			return;
+		}
+		if (confirmPassword === newPassword) {
+			let success = await makeRequest();
+			if (success) {
+				setSuccess(true);
+			} else {
+				setErrorMsg(apiErrorMsg);
+			}
 		} else {
-			setErrorMsg(
-				"Passwords don't match! Please double-check and re-enter them.",
-			);
+			setErrorMsg('Passwords do not match!');
 		}
 	};
 
-	return success ? (
-		<ResetPasswordSuccessCard />
+	useEffect(() => {
+		let extractedToken = location?.search.replace('?token=', '');
+		if (extractedToken) {
+			(async () => {
+				let success = await makeTokenRequest();
+				if (success) setToken(extractedToken);
+			})();
+		} else {
+			navigate('/welcome');
+		}
+	}, []);
+
+	useEffect(() => {
+		let timer = null;
+		if (success) {
+			timer = setInterval(() => {
+				if (countdown > 0) {
+					setCountdown((prevCount) => prevCount - 1);
+				} else {
+					clearInterval(timer);
+					navigate('/signin');
+				}
+			}, 1000);
+		}
+		return () => {
+			clearInterval(timer);
+		};
+	}, [success, countdown]);
+	return tokenError ? (
+		<ResponseCard
+			message={tokenError}
+			Icon={<RxCross2 className='response-failure-icon' />}
+			title={'Invalid Token'}
+		/>
+	) : success ? (
+		<ResponseCard
+			countdown={countdown}
+			message={data?.message}
+			Icon={<FaCheck className='response-success-icon' />}
+			title={'Password Reset Successful'}
+		/>
 	) : (
 		<section className='reset-password-wrapper'>
 			<div className='reset-password-page'>
@@ -45,6 +115,7 @@ function ResetPassword() {
 						type='password'
 						value={newPassword}
 						onChange={(e) => setNewPassword(e.target.value)}
+						disabled={loading}
 					/>
 					<CustomInput
 						name='confirm password'
@@ -52,8 +123,13 @@ function ResetPassword() {
 						type='password'
 						value={confirmPassword}
 						onChange={(e) => setConfirmPassword(e.target.value)}
+						disabled={loading}
 					/>
-					<button type='submit' className='reset-password-submit-button'>
+					<button
+						type='submit'
+						disabled={loading}
+						className='reset-password-submit-button'
+					>
 						Submit
 					</button>
 				</form>

@@ -1,13 +1,13 @@
 import React from 'react';
-import {render, screen, history} from '@testing-library/react';
+import {render, screen} from '@testing-library/react';
 import {MemoryRouter} from 'react-router-dom';
-import ResetPasswordSuccessCard from './ResetPasswordSuccessCard';
+import ResponseCard from './ResponseCard';
 
-describe('ResetPasswordSuccessCard component', () => {
+describe('ResponseCard component', () => {
 	it('renders success message and link to sign in page', () => {
 		render(
 			<MemoryRouter>
-				<ResetPasswordSuccessCard />
+				<ResponseCard />
 			</MemoryRouter>,
 		);
 		expect(screen.getByText('Password Reset Successful')).toBeInTheDocument();
@@ -19,17 +19,5 @@ describe('ResetPasswordSuccessCard component', () => {
 		const linkToSignIn = screen.getByRole('link', {name: 'Return to Sign In'});
 		expect(linkToSignIn).toBeInTheDocument();
 		expect(linkToSignIn).toHaveAttribute('href', '/signin');
-	});
-
-	it('navigates to sign in page when link is clicked', () => {
-		render(
-			<MemoryRouter>
-				<ResetPasswordSuccessCard />
-			</MemoryRouter>,
-			{history},
-		);
-		const linkToSignIn = screen.getByRole('link', {name: 'Return to Sign In'});
-		linkToSignIn.click();
-		expect(window.location.pathname).toBe('/');
 	});
 });

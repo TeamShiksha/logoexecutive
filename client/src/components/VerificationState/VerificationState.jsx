@@ -25,7 +25,7 @@ function VerificationState({loading, isSuccess, errorMsg, successMessage}) {
 		<section data-testid='verification-card' className='card-wrapper'>
 			<div className='state-card'>
 				{loading ? (
-					<h3 className='success-title'>Loading...</h3>
+					<h3 className='state-title'>Loading...</h3>
 				) : isSuccess ? (
 					<>
 						<svg
@@ -39,6 +39,7 @@ function VerificationState({loading, isSuccess, errorMsg, successMessage}) {
 							strokeLinecap='round'
 							strokeLinejoin='round'
 							className='state-icon'
+							data-testid='success-icon'
 						>
 							<polyline points='20 6 9 17 4 12'></polyline>
 						</svg>
@@ -58,12 +59,13 @@ function VerificationState({loading, isSuccess, errorMsg, successMessage}) {
 							strokeLinecap='round'
 							strokeLinejoin='round'
 							className='error-icon'
+							data-testid='error-icon'
 						>
 							<line x1='18' y1='6' x2='6' y2='18'></line>
 							<line x1='6' y1='6' x2='18' y2='18'></line>
 						</svg>
-						<h3 className='success-title'>{errorMsg}</h3>
-						<p className='success-message'>Failed to verify your account</p>
+						<h3 className='state-title'>{errorMsg}</h3>
+						<p className='state-message'>Failed to verify your account</p>
 					</>
 				)}
 			</div>

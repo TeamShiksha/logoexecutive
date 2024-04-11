@@ -1,9 +1,9 @@
 import {useState, useEffect} from 'react';
-import CustomInput from '../../components/common/input/CustomInput';
-import ResetPasswordSuccessCard from './ResetPasswordSuccessCard';
 import {useLocation} from 'react-router';
-import {useApi} from '../../hooks/useApi';
 import {useNavigate} from 'react-router-dom';
+import CustomInput from '../../components/common/input/CustomInput';
+import {useApi} from '../../hooks/useApi';
+import ResponseCard from '../../genric/ResponseCard';
 import './ResetPassword.css';
 
 function ResetPassword() {
@@ -78,10 +78,11 @@ function ResetPassword() {
 		};
 	}, [success, countdown]);
 	return success || tokenError ? (
-		<ResetPasswordSuccessCard
+		<ResponseCard
 			countdown={countdown}
 			successMsg={data?.message}
 			errorMsg={tokenError}
+			title={tokenError ? 'Invalid Token' : 'Password Reset Successful'}
 		/>
 	) : (
 		<section className='reset-password-wrapper'>

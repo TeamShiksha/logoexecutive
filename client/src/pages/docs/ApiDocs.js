@@ -19,7 +19,7 @@ function ApiDocs() {
 	useEffect(() => {
 		const fetchMarkdown = async () => {
 			try {
-				const res = await import(`../../assets/markdown/${file_name}`);
+				const res = await import(`../../../../docs/${file_name}`);
 				const response = await fetch(res.default);
 				const text = await response.text();
 				setPost(text);

@@ -5,6 +5,8 @@ import CustomInput from '../../components/common/input/CustomInput';
 import {useApi} from '../../hooks/useApi';
 import ResponseCard from '../../components/common/responseCard/ResponseCard';
 import './ResetPassword.css';
+import {FaCheck} from 'react-icons/fa6';
+import {RxCross2} from 'react-icons/rx';
 
 function ResetPassword() {
 	const [newPassword, setNewPassword] = useState('');
@@ -77,12 +79,18 @@ function ResetPassword() {
 			clearInterval(timer);
 		};
 	}, [success, countdown]);
-	return success || tokenError ? (
+	return tokenError ? (
+		<ResponseCard
+			message={tokenError}
+			Icon={<RxCross2 className='response-failure-icon' />}
+			title={'Invalid Token'}
+		/>
+	) : success ? (
 		<ResponseCard
 			countdown={countdown}
-			successMsg={data?.message}
-			errorMsg={tokenError}
-			title={tokenError ? 'Invalid Token' : 'Password Reset Successful'}
+			message={data?.message}
+			Icon={<FaCheck className='response-success-icon' />}
+			title={'Password Reset Successful'}
 		/>
 	) : (
 		<section className='reset-password-wrapper'>

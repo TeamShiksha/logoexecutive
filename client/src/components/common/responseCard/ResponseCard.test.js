@@ -1,5 +1,5 @@
 import React from 'react';
-import {render, screen, history} from '@testing-library/react';
+import {render, screen} from '@testing-library/react';
 import {MemoryRouter} from 'react-router-dom';
 import ResponseCard from './ResponseCard';
 

@@ -1,4 +1,4 @@
-.response-success-card-wrapper {
+.response-card-wrapper {
 	margin: 100px 14px;
 	display: grid;
 	place-items: center;
@@ -15,15 +15,7 @@
 	height: 50px;
 }
 
-.response-success-card {
-	max-width: 400px;
-	border-radius: var(--bradius);
-	border: var(--border);
-	box-shadow: var(--shadow);
-	padding: 24px;
-	text-align: center;
-}
-.response-failure-card {
+.response-card {
 	width: 100%;
 	max-width: 400px;
 	border-radius: var(--bradius);
@@ -32,17 +24,17 @@
 	padding: 24px;
 	text-align: center;
 }
-.response-success-icon {
+.response-icon {
 	margin: auto;
 	height: 48px;
 	width: 48px;
 	color: #48bb78;
 }
 
-.response-success-countdown p {
+.response-countdown p {
 	padding: 5px;
 }
-.response-success-countdown {
+.response-countdown {
 	font-size: 20px;
 	display: flex;
 	justify-content: center;
@@ -52,36 +44,16 @@
 	border-radius: 50%;
 }
 
-.response-success-title {
+.response-title {
 	margin-top: 4px;
 	color: var(--black);
 	font-size: 24px;
 	line-height: 32px;
 }
 
-.response-success-message {
+.response-message {
 	color: var(--description);
 	font-size: 14px;
 	line-height: 20px;
 	margin: 4px 0px 48px;
-}
-
-.response-success-button {
-	background-color: var(--smooth-purple);
-	color: white;
-	min-height: 40px;
-	width: 100%;
-	font-weight: 500;
-	padding: 8px 16px;
-	border: none;
-	border-radius: 6px;
-	cursor: pointer;
-	font-size: 14px;
-	line-height: 20px;
-	margin-bottom: 16px;
-}
-
-.response-success-link {
-	text-decoration: none;
-	color: white;
 }

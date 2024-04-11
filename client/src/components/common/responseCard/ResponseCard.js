@@ -1,40 +1,30 @@
-import {FaCheck} from 'react-icons/fa6';
-import {RxCross2} from 'react-icons/rx';
 import PropTypes from 'prop-types';
 import './ResponseCard.css';
 
-function ResponseCard({countdown, successMsg, errorMsg, title}) {
+function ResponseCard({countdown, message, title, Icon}) {
 	return (
-		<section
-			className='response-success-card-wrapper'
-			role='response-success-alert'
-		>
-			{errorMsg ? (
-				<div className='response-failure-card'>
-					<RxCross2 className='response-failure-icon' />
-					<h3 className='response-success-title'>{title}</h3>
-					<p className='response-success-message'>{errorMsg}</p>
-				</div>
-			) : (
-				<div className='response-success-card'>
-					<FaCheck className='response-success-icon' />
-					<h3 className='response-success-title'>{title}</h3>
-					<p className='response-success-message'>{successMsg}</p>
-					<div className='response-success-countdown'>
+		<section className='response-card-wrapper' role='response-alert'>
+			<div className='response-card'>
+				{Icon}
+				<h3 className='response-title'>{title}</h3>
+				<p className='response-message'>{message}</p>
+
+				{countdown && (
+					<div className='response-countdown'>
 						<p>Redirecting to sign in </p>
 						<p>{countdown}</p>
 					</div>
-				</div>
-			)}
+				)}
+			</div>
 		</section>
 	);
 }
 
 ResponseCard.propTypes = {
 	title: PropTypes.string.isRequired,
-	successMsg: PropTypes.string.isRequired,
-	errorMsg: PropTypes.string.isRequired,
-	countdown: PropTypes.number.isRequired,
+	message: PropTypes.string.isRequired,
+	Icon: PropTypes.element.isRequired,
+	countdown: PropTypes.number,
 };
 
 export default ResponseCard;

@@ -1,13 +1,13 @@
 import React from 'react';
 import {render, screen, history} from '@testing-library/react';
 import {MemoryRouter} from 'react-router-dom';
-import ResetPasswordSuccessCard from './ResetPasswordSuccessCard';
+import ResponseCard from './ResponseCard';
 
-describe('ResetPasswordSuccessCard component', () => {
+describe('ResponseCard component', () => {
 	it('renders success message and link to sign in page', () => {
 		render(
 			<MemoryRouter>
-				<ResetPasswordSuccessCard />
+				<ResponseCard />
 			</MemoryRouter>,
 		);
 		expect(screen.getByText('Password Reset Successful')).toBeInTheDocument();
@@ -24,7 +24,7 @@ describe('ResetPasswordSuccessCard component', () => {
 	it('navigates to sign in page when link is clicked', () => {
 		render(
 			<MemoryRouter>
-				<ResetPasswordSuccessCard />
+				<ResponseCard />
 			</MemoryRouter>,
 			{history},
 		);

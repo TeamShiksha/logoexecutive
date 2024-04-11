@@ -1,21 +1,21 @@
-.reset-success-card-wrapper {
+.response-success-card-wrapper {
 	margin: 100px 14px;
 	display: grid;
 	place-items: center;
 }
-.reset-failure-icon {
+.response-failure-icon {
 	color: red;
 	width: 50px;
 	height: 50px;
 }
 
-.reset-success-icon {
+.response-success-icon {
 	color: #0bae69;
 	width: 50px;
 	height: 50px;
 }
 
-.reset-success-card {
+.response-success-card {
 	max-width: 400px;
 	border-radius: var(--bradius);
 	border: var(--border);
@@ -23,7 +23,7 @@
 	padding: 24px;
 	text-align: center;
 }
-.reset-failure-card {
+.response-failure-card {
 	width: 100%;
 	max-width: 400px;
 	border-radius: var(--bradius);
@@ -32,17 +32,17 @@
 	padding: 24px;
 	text-align: center;
 }
-.reset-success-icon {
+.response-success-icon {
 	margin: auto;
 	height: 48px;
 	width: 48px;
 	color: #48bb78;
 }
 
-.reset-success-countdown p {
+.response-success-countdown p {
 	padding: 5px;
 }
-.reset-success-countdown {
+.response-success-countdown {
 	font-size: 20px;
 	display: flex;
 	justify-content: center;
@@ -52,21 +52,21 @@
 	border-radius: 50%;
 }
 
-.reset-success-title {
+.response-success-title {
 	margin-top: 4px;
 	color: var(--black);
 	font-size: 24px;
 	line-height: 32px;
 }
 
-.reset-success-message {
+.response-success-message {
 	color: var(--description);
 	font-size: 14px;
 	line-height: 20px;
 	margin: 4px 0px 48px;
 }
 
-.reset-success-button {
+.response-success-button {
 	background-color: var(--smooth-purple);
 	color: white;
 	min-height: 40px;
@@ -81,7 +81,7 @@
 	margin-bottom: 16px;
 }
 
-.reset-success-link {
+.response-success-link {
 	text-decoration: none;
 	color: white;
 }

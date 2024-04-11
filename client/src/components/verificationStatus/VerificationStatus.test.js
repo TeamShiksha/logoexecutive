@@ -11,7 +11,7 @@ describe('VerificationStatus Component', () => {
 		jest.clearAllMocks();
 	});
 
-	it.skip('renders "Email has been verified successfully" message when token is valid', async () => {
+	it('renders "Email has been verified successfully" message when token is valid', async () => {
 		useApi.mockReturnValue({
 			errorMsg: null,
 			makeRequest: jest.fn(),
@@ -26,11 +26,13 @@ describe('VerificationStatus Component', () => {
 		);
 
 		await waitFor(() => {
-			expect(screen.getByTestId('success-card')).toBeInTheDocument();
+			expect(
+				screen.getByText('Email verified successfully'),
+			).toBeInTheDocument();
 		});
 	});
 
-	it.skip('renders error message message when token is invalid', async () => {
+	it('renders error message message when token is invalid', async () => {
 		useApi.mockReturnValue({
 			errorMsg: 'Invalid Token',
 			makeRequest: jest.fn(),
@@ -45,8 +47,7 @@ describe('VerificationStatus Component', () => {
 		);
 
 		await waitFor(() => {
-			expect(screen.getByTestId('failure-card')).toBeInTheDocument();
+			expect(screen.getByText('Invalid Token')).toBeInTheDocument();
 		});
-		expect(screen.getByText('Invalid Token')).toBeInTheDocument();
 	});
 });

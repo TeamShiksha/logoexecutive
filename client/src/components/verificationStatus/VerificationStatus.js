@@ -1,10 +1,8 @@
 import './VerificationStatus.css';
 import {useApi} from '../../hooks/useApi';
 import {useEffectOnce} from '../../hooks/useEffectOnce';
-import EmailVerificationSuccessCard from '../VerificationStatusCard/SuccessCard';
 import VerificationState from '../VerificationState/VerificationState';
-// import EmailVerificationSuccessCard from '../SuccessCards/SuccessCard';
-// import ResetPasswordFailureCard from '../SuccessCards/FailureCard';
+
 function VerificationStatus(props) {
 	const {token} = props;
 	const {errorMsg, makeRequest, loading, isSuccess} = useApi(

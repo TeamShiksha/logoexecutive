@@ -2,7 +2,7 @@ const Joi = require("joi");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const { STATUS_CODES } = require("http");
-const { fetchTokenFromId, deleteUserToken, 
+const { fetchTokenFromId, deleteUserToken,
   updatePasswordService, fetchUserFromId } = require("../../services");
 
 const payloadSchema = Joi.object().keys({
@@ -12,8 +12,7 @@ const payloadSchema = Joi.object().keys({
 async function get(req, res, next) {
   try {
     const { error, value } = payloadSchema.validate(req.query);
-
-    if(error)
+    if (error)
       return res.status(422).json({
         error: STATUS_CODES[422],
         message: error.message,
@@ -21,26 +20,25 @@ async function get(req, res, next) {
       });
 
     const userToken = await fetchTokenFromId(value.token);
-    if(!userToken)
+    if (!userToken)
       return res.status(404).json({
         error: STATUS_CODES[404],
         message: "User Token not found",
         statusCode: 404
       });
 
-    if(userToken.isExpired())
+    if (userToken.isExpired())
       return res.status(403).json({
         error: STATUS_CODES[403],
-        message: "User Token is expired",
+        message: "Token expired",
         statusCode: 403,
       });
 
     res.cookie("resetPasswordSession", jwt.sign({ userId: userToken.userId, token: userToken.token }, process.env.JWT_SECRET));
-		
-    const redirectURL = new URL("/reset-password", process.env.BASE_URL);
-    redirectURL.searchParams.append("token", userToken.token);
 
-    return res.redirect(302, redirectURL.href);
+    return res.status(200).json({
+      message: "Token is verified successfully",
+    });
   } catch (err) {
     next(err);
   }
@@ -60,8 +58,8 @@ const patch = async (req, res, next) => {
 
     if (!resetPasswordSession) {
       return res.status(401).json({
-        error: "Unauthorized",
-        message: "User not signed in",
+        error: STATUS_CODES[401],
+        message: "User is not signed in",
         statusCode: 401,
       });
     }
@@ -76,7 +74,7 @@ const patch = async (req, res, next) => {
     if (error) {
       return res.status(422).json({
         error: STATUS_CODES[422],
-        message: error.message,
+        message: "Password must be between 8 and 30 characters long",
         statusCode: 422
       });
     }
@@ -97,7 +95,7 @@ const patch = async (req, res, next) => {
         await deleteUserToken(deleteTokenRef);
         return res
           .status(200)
-          .json({ message: "Your password has been updated successfully." });
+          .json({ message: "Your password has been successfully reset. You can now sign in with your new password." });
       } else {
         return res.status(400).json({
           error: STATUS_CODES[400],

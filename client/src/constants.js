@@ -178,3 +178,9 @@ export const INITIAL_SIGNIN_FORM_DATA = {
 	email: '',
 	password: '',
 };
+
+export const SubscriptionTypes = {
+	HOBBY: 'HOBBY',
+	PRO: 'PRO',
+	TEAMS: 'TEAMS',
+};

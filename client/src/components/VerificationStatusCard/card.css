@@ -1,10 +1,10 @@
-.reset-success-card-wrapper {
+.success-card-wrapper {
 	margin: 100px 14px;
 	display: grid;
 	place-items: center;
 }
 
-.reset-success-card {
+.success-card {
 	max-width: 400px;
 	border-radius: var(--bradius);
 	border: var(--border);
@@ -13,28 +13,28 @@
 	text-align: center;
 }
 
-.reset-success-icon {
+.success-icon {
 	margin: auto;
 	height: 48px;
 	width: 48px;
 	color: #48bb78;
 }
 
-.reset-success-title {
+.success-title {
 	margin-top: 4px;
 	color: var(--black);
 	font-size: 24px;
 	line-height: 32px;
 }
 
-.reset-success-message {
+.success-message {
 	color: var(--description);
 	font-size: 14px;
 	line-height: 20px;
 	margin: 4px 0px 48px;
 }
 
-.reset-success-button {
+.success-button {
 	background-color: var(--smooth-purple);
 	color: white;
 	min-height: 40px;
@@ -49,7 +49,7 @@
 	margin-bottom: 16px;
 }
 
-.reset-success-link {
+.success-link {
 	text-decoration: none;
 	color: white;
 }

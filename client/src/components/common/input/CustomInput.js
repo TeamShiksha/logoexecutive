@@ -19,7 +19,6 @@ function CustomInput({
 				name={name}
 				value={value}
 				onChange={onChange}
-				required
 				className={`custom-input ${className}`}
 				{...rest}
 			/>

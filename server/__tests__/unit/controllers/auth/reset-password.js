@@ -1,7 +1,7 @@
 const request = require("supertest");
 const app = require("../../../../app");
 const { STATUS_CODES } = require("http");
-const { Users, UserToken} = require("../../../../models");
+const { Users, UserToken } = require("../../../../models");
 const { mockUserTokens } = require("../../../../utils/mocks/UserToken");
 const { UserTokenService, UserService } = require("../../../../services");
 
@@ -77,12 +77,12 @@ describe("GET /auth/reset-password", () => {
     expect(response.status).toBe(403);
     expect(response.body).toEqual({
       error: STATUS_CODES[403],
-      message: "User Token is expired",
+      message: "Token expired",
       statusCode: 403
     });
   });
 
-  it("302 - User Token is valid", async () => {
+  it("200 - User Token is valid", async () => {
     jest.spyOn(UserTokenService, "fetchTokenFromId").mockImplementation(() => new UserToken({
       createdAt: new Date("01-01-2001"),
       expireAt: new Date("02-01-20075"),
@@ -94,13 +94,15 @@ describe("GET /auth/reset-password", () => {
 
     const response = await request(app).get(ENDPOINT).query({ token: "1235" });
 
-    expect(response.status).toBe(302);
-    expect(response.header.location).toBe("https://clienturl.com/reset-password?token=123");
+    expect(response.status).toBe(200);
     expect(response.header["set-cookie"][0]).toMatch(/resetPasswordSession=/);
+    expect(response.body).toEqual({
+      message: "Token is verified successfully",
+    });
   });
 
   it("500 - Unexpected errors", async () => {
-    jest.spyOn(UserTokenService, "fetchTokenFromId").mockImplementation(() => {throw new Error("Unexpected error");});
+    jest.spyOn(UserTokenService, "fetchTokenFromId").mockImplementation(() => { throw new Error("Unexpected error"); });
 
     const response = await request(app).get(ENDPOINT).query({ token: "1235" });
 
@@ -273,6 +275,6 @@ describe("PATCH /auth/reset-password", () => {
       .send(resetPasswordPayload);
 
     expect(response.status).toBe(200);
-    expect(response.body).toEqual({ message: "Your password has been updated successfully." });
+    expect(response.body).toEqual({ message: "Your password has been successfully reset. You can now sign in with your new password." });
   });
 });

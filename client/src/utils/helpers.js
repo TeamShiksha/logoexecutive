@@ -16,7 +16,7 @@ export const isValidPassword = (password) => {
 	);
 };
 
-export const isValidDescription = (description) => {
+export const isLettersAndSpacesOnly = (description) => {
 	const regex = /^[a-zA-Z\s]*$/;
 	return regex.test(description);
 };

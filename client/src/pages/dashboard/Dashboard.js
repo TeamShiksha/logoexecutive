@@ -3,7 +3,7 @@ import ApiKeyForm from '../../components/dashboard/ApiKeyForm';
 import ApiKeyTable from '../../components/dashboard/ApiKeyTable';
 import CurrentPlan from '../../components/dashboard/CurrentPlan';
 import Usage from '../../components/dashboard/Usage';
-import {isValidDescription} from '../../utils/helpers';
+import {isLettersAndSpacesOnly} from '../../utils/helpers';
 import {UserContext} from '../../contexts/UserContext';
 import './Dashboard.css';
 
@@ -40,7 +40,7 @@ function Dashboard() {
 		if (inputValue.trim().length > 20) {
 			setErrorMessage('Description cannot be more than 20 characters');
 			return;
-		} else if (!isValidDescription(inputValue)) {
+		} else if (!isLettersAndSpacesOnly(inputValue)) {
 			setErrorMessage('Description must contain only alphabets and spaces');
 			return;
 		}

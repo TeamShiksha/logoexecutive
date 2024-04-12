@@ -4,9 +4,9 @@ import {useNavigate} from 'react-router-dom';
 import CustomInput from '../../components/common/input/CustomInput';
 import {useApi} from '../../hooks/useApi';
 import ResponseCard from '../../components/common/responseCard/ResponseCard';
-import './ResetPassword.css';
 import {FaCheck} from 'react-icons/fa6';
 import {RxCross2} from 'react-icons/rx';
+import './ResetPassword.css';
 
 function ResetPassword() {
 	const [newPassword, setNewPassword] = useState('');

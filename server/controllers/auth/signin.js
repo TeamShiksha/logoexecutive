@@ -8,8 +8,15 @@ const signinPayloadSchema = Joi.object().keys({
     .trim()
     .required()
     .regex(/^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/)
-    .message("Invalid email"),
-  password: Joi.string().trim().required().min(8).max(30),
+    .messages({
+      "string.base": "Email must be a string",
+      "any.required": "Email is required",
+      "string.pattern.base": "Invalid email",
+    }),
+  password: Joi.string().trim().required().messages({
+    "string.base": "Password must be a string",
+    "any.required": "Password is required"
+  }),
 });
 
 async function signinController(req, res, next) {
@@ -28,7 +35,7 @@ async function signinController(req, res, next) {
     if (!user)
       return res.status(401).json({
         error: STATUS_CODES[401],
-        message: "Incorrect email or password.",
+        message: "Email does not exist",
         statusCode: 401,
       });
 
@@ -43,13 +50,13 @@ async function signinController(req, res, next) {
     if (!matchPassword) {
       return res.status(401).json({
         error: STATUS_CODES[401],
-        message: "Incorrect email or password.",
+        message: "Incorrect email or password",
         statusCode: 401,
       });
     }
 
     res.cookie("jwt", user.generateJWT(), { expires: dayjs().add(1, "day").toDate() });
-    return res.status(200).json({ message: "Sign-in successful" });
+    return res.status(200).json({ message: "Sign In Successful" });
   } catch (err) {
     next(err);
   }

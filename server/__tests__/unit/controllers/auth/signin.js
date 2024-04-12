@@ -38,20 +38,20 @@ describe("Signin Controller", () => {
     });
   });
 
-  it("422 - email is required", async () => {
+  it("422 - Email is required", async () => {
     const response = await request(app)
       .post(ENDPOINT)
       .send({ user: "hello world" });
 
     expect(response.status).toBe(422);
     expect(response.body).toEqual({
-      message: "\"email\" is required",
+      message: "Email is required",
       statusCode: 422,
       error: STATUS_CODES[422],
     });
   });
 
-  it("422 - email is not valid", async () => {
+  it("422 - Invalid email", async () => {
     const response = await request(app)
       .post(ENDPOINT)
       .send({ email: "**BAD STRING**" });
@@ -64,7 +64,7 @@ describe("Signin Controller", () => {
     });
   });
 
-  it("422 - password is required", async () => {
+  it("422 - Password is required", async () => {
     const response = await request(app).post(ENDPOINT).send({
       email: "john@doe.com"
     });
@@ -72,42 +72,27 @@ describe("Signin Controller", () => {
     expect(response.status).toBe(422);
     expect(response.body).toEqual({
       error: STATUS_CODES[422],
-      message: "\"password\" is required",
+      message: "Password is required",
       statusCode: 422
     });
   });
 
-  it("422 - password should be more than 8 characters", async () => {
+  it("422 - Password must be a string", async () => {
     const response = await request(app).post(ENDPOINT).send({
       email: "john@doe.com",
-      password: "john"
+      password: 5
     });
 
     expect(response.status).toBe(422);
     expect(response.body).toEqual({
       error: STATUS_CODES[422],
-      message: "\"password\" length must be at least 8 characters long",
+      message: "Password must be a string",
       statusCode: 422
     });
   });
 
-  it("422 - password should be more than 8 characters", async () => {
-    const response = await request(app).post(ENDPOINT).send({
-      email: "john@doe.com",
-      password: "john's very long password, to fail the test"
-    });
-
-    expect(response.status).toBe(422);
-    expect(response.body).toEqual({
-      error: STATUS_CODES[422],
-      message: "\"password\" length must be less than or equal to 30 characters long",
-      statusCode: 422
-    });
-  });
-
-  it("401 - Email or Password incorrect (email does not exist)", async ()  => {
+  it("401 - Email does not exist", async ()  => {
     jest.spyOn(UserService, "fetchUserByEmail").mockImplementation(() => null);
-
     const response = await request(app).post(ENDPOINT).send({
       email: "john@doe.com",
       password: "john password"
@@ -116,14 +101,13 @@ describe("Signin Controller", () => {
     expect(response.status).toBe(401);
     expect(response.body).toEqual({
       error: STATUS_CODES[401],
-      message: "Incorrect email or password.",
+      message: "Email does not exist",
       statusCode: 401
     });
   });
 
-  it("401 - User not verified", async () => {
+  it("401 - Email not verified", async () => {
     jest.spyOn(UserService, "fetchUserByEmail").mockImplementation(() => new Users(mockUsers[0]));
-
     const response = await request(app).post(ENDPOINT).send({
       email: "john.doe@example.com",
       password: "password122"
@@ -137,9 +121,8 @@ describe("Signin Controller", () => {
     });
   });
 
-  it("401 - Email or Password incorrect (password does not match)", async () => {
+  it("401 - Incorrect email or password", async () => {
     jest.spyOn(UserService, "fetchUserByEmail").mockImplementation(() => new Users(mockUsers[1]));
-
     const response = await request(app).post(ENDPOINT).send({
       email: "john.doe@example.com",
       password: "password122"
@@ -148,14 +131,13 @@ describe("Signin Controller", () => {
     expect(response.status).toBe(401);
     expect(response.body).toEqual({
       error: STATUS_CODES[401],
-      message: "Incorrect email or password.",
+      message: "Incorrect email or password",
       statusCode: 401
     });
   });
 
   it("500 - Unexpected errors", async () => {
     jest.spyOn(UserService, "fetchUserByEmail").mockImplementation(() => {throw new Error("Unexected error");});
-
     const response = await request(app).post(ENDPOINT).send({
       email: "johndoe@example.com",
       password: "password122"
@@ -169,15 +151,14 @@ describe("Signin Controller", () => {
     });
   });
 
-  it("200 - Success path", async () => {
+  it("200 - Sign In Successful", async () => {
     jest.spyOn(UserService, "fetchUserByEmail").mockImplementation(() => new Users(mockUsers[1]));
-
     const response = await request(app).post(ENDPOINT).send({
       email: "johndoe@example.com",
       password: "password123"
     });
 
     expect(response.status).toBe(200);
-    expect(response.body.message).toBe("Sign-in successful");
+    expect(response.body.message).toBe("Sign In Successful");
   });
 });

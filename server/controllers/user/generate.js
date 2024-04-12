@@ -14,12 +14,12 @@ const generateKeyPayloadSchema = Joi.object().keys({
     .messages({
       "string.base": "Description must be a string",
       "any.required": "Description is required",
-      "string.max": "Description must be 20 characters or fewer.",
+      "string.max": "Description must be 20 characters or fewer",
       "string.pattern.base": "Description must contain only alphabets and spaces",
     }),
 });
 
-async function generateKeyController(req, res) {
+async function generateKeyController(req, res, next) {
   try {
     const { keyDescription } = req.body;
     const { error } = generateKeyPayloadSchema.validate({ keyDescription });
@@ -44,7 +44,7 @@ async function generateKeyController(req, res) {
     if (keyCount >= keyLimit) {
       return res.status(403).json({
         message:
-          "The maximum limit for key generation has been reached. Please consider upgrading your subscription to generate additional keys.",
+          "The maximum limit for key generation has been reached. Please consider upgrading your subscription to generate additional keys",
         statusCode: 403,
         error: "Forbidden",
       });
@@ -60,7 +60,7 @@ async function generateKeyController(req, res) {
       return res.status(409).json({
         message: "Please provide a different key description",
         statusCode: 409,
-        error: "Unprocessable payload",
+        error: "Conflict",
       });
     }
 
@@ -73,14 +73,13 @@ async function generateKeyController(req, res) {
     const userKeyData = UserKey.data;
     if (userKeyData) {
       return res.status(200).json({
-        message: "The key has been successfully generated!",
+        message: "Key generated successfully",
         statusCode: 200,
         data: userKeyData,
       });
     }
   } catch (err) {
-    console.log(err);
-    throw err;
+    next(err);
   }
 }
 

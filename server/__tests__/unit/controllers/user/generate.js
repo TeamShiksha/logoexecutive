@@ -22,6 +22,7 @@ jest.mock("../../../../services/Keys", () => ({
 jest.mock("../../../../services/Subscriptions", () => ({
   fetchSubscriptionByuserid: jest.fn(),
 }));
+
 const ENDPOINT = "/api/user/generate";
 
 describe("generate-key controller", () =>{
@@ -43,7 +44,7 @@ describe("generate-key controller", () =>{
     expect(response.body).toEqual({
       error: STATUS_CODES[500],
       message: "Not allowed by CORS",
-      statusCode: 500
+      statusCode: 500,
     });
   });
 
@@ -57,7 +58,7 @@ describe("generate-key controller", () =>{
     expect(response.status).toBe(422);
     expect(response.body).toEqual({
       message: "Description is required",
-      statusCode: 422,
+      statusCode: STATUS_CODES[422],
       error: "Unprocessable payload",
     });
   });
@@ -72,7 +73,7 @@ describe("generate-key controller", () =>{
     expect(response.status).toBe(422);
     expect(response.body).toEqual({
       message: "Description must be a string",
-      statusCode: 422,
+      statusCode: STATUS_CODES[422],
       error: "Unprocessable payload",
     });
   });
@@ -87,7 +88,7 @@ describe("generate-key controller", () =>{
     expect(response.status).toBe(422);
     expect(response.body).toEqual({
       message: "Description must be 20 characters or fewer",
-      statusCode: 422,
+      statusCode: STATUS_CODES[422],
       error: "Unprocessable payload",
     });
   });
@@ -102,7 +103,7 @@ describe("generate-key controller", () =>{
     expect(response.status).toBe(422);
     expect(response.body).toEqual({
       message: "Description must contain only alphabets and spaces",
-      statusCode: 422,
+      statusCode: STATUS_CODES[422],
       error: "Unprocessable payload",
     });
   });
@@ -117,7 +118,7 @@ describe("generate-key controller", () =>{
     expect(response.status).toBe(422);
     expect(response.body).toEqual({
       message: "Description must contain only alphabets and spaces",
-      statusCode: 422,
+      statusCode: STATUS_CODES[422],
       error: "Unprocessable payload",
     });
   });
@@ -132,10 +133,11 @@ describe("generate-key controller", () =>{
       .post(ENDPOINT)
       .set("cookie", `jwt=${mockToken}`)
       .send({ keyDescription: "Existing Description" });
+
     expect(response.status).toBe(409);
     expect(response.body).toEqual({
       message: "Please provide a different key description",
-      statusCode: 409,
+      statusCode: STATUS_CODES[409],
       error: "Conflict",
     });
   });
@@ -151,10 +153,11 @@ describe("generate-key controller", () =>{
       .post(ENDPOINT)
       .set("cookie", `jwt=${mockToken}`)
       .send({ keyDescription: "Another Description" });
+
     expect(response.status).toBe(403);
     expect(response.body).toEqual({
       message: "The maximum limit for key generation has been reached. Please consider upgrading your subscription to generate additional keys",
-      statusCode: 403,
+      statusCode: STATUS_CODES[403],
       error: "Forbidden",
     });
   });
@@ -171,7 +174,7 @@ describe("generate-key controller", () =>{
     expect(response.body).toEqual({
       error: STATUS_CODES[500],
       message: "Unexected error",
-      statusCode: 500
+      statusCode: 500,
     });
   });
 
@@ -188,10 +191,11 @@ describe("generate-key controller", () =>{
       .post(ENDPOINT)
       .set("cookie", `jwt=${mockToken}`)
       .send({ keyDescription: "Another Description" });
+
     expect(response.status).toBe(200);
     expect(response.body).toEqual({
       message: "Key generated successfully",
-      statusCode: 200,
+      statusCode: STATUS_CODES[200],
       data: {
         keyId: "1",
         keyDescription: "Another Description",
@@ -217,10 +221,11 @@ describe("generate-key controller", () =>{
       .post(ENDPOINT)
       .set("cookie", `jwt=${mockToken}`)
       .send({ keyDescription: "Another Description" });
+
     expect(response.status).toBe(200);
     expect(response.body).toEqual({
       message: "Key generated successfully",
-      statusCode: 200,
+      statusCode: STATUS_CODES[200],
       data: {
         keyId: "2",
         keyDescription: "Another Description",

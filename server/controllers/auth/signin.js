@@ -26,32 +26,32 @@ async function signinController(req, res, next) {
     if (!!error)
       return res.status(422).json({
         message: error.message,
-        statusCode: 422,
-        error: STATUS_CODES[422],
+        statusCode: STATUS_CODES[422],
+        error: "Unprocessable payload",
       });
 
     const { email, password } = value;
     const user = await fetchUserByEmail(email);
     if (!user)
-      return res.status(401).json({
-        error: STATUS_CODES[401],
-        message: "Email does not exist",
-        statusCode: 401,
+      return res.status(404).json({
+        error: "Not found",
+        message: "Incorrect email or password",
+        statusCode: STATUS_CODES[404],
       });
 
     if(!user.isVerified)
-      return res.status(401).json({
-        error: STATUS_CODES[401],
+      return res.status(403).json({
+        error: "Forbidden",
         message: "Email not verified",
-        statusCode: 401
+        statusCode: STATUS_CODES[403]
       });
 
     const matchPassword = await user.matchPassword(password);
     if (!matchPassword) {
       return res.status(401).json({
-        error: STATUS_CODES[401],
+        error: "Unauthorized",
         message: "Incorrect email or password",
-        statusCode: 401,
+        statusCode: STATUS_CODES[401],
       });
     }
 

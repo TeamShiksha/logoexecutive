@@ -1,4 +1,5 @@
 const Joi = require("joi");
+const { STATUS_CODES } = require("http");
 const {
   createKey,
   fetchKeysByuserid,
@@ -10,7 +11,7 @@ const generateKeyPayloadSchema = Joi.object().keys({
     .trim()
     .required()
     .max(20)
-    .regex(/^[\p{L}\s]+$/u)
+    .regex(/^[a-zA-Z\s]*$/)
     .messages({
       "string.base": "Description must be a string",
       "any.required": "Description is required",
@@ -27,7 +28,7 @@ async function generateKeyController(req, res, next) {
     if (error) {
       return res.status(422).json({
         message: error.message,
-        statusCode: 422,
+        statusCode: STATUS_CODES[422],
         error: "Unprocessable payload",
       });
     }
@@ -45,7 +46,7 @@ async function generateKeyController(req, res, next) {
       return res.status(403).json({
         message:
           "The maximum limit for key generation has been reached. Please consider upgrading your subscription to generate additional keys",
-        statusCode: 403,
+        statusCode: STATUS_CODES[403],
         error: "Forbidden",
       });
     }
@@ -59,7 +60,7 @@ async function generateKeyController(req, res, next) {
     if (duplicateKeyDescription) {
       return res.status(409).json({
         message: "Please provide a different key description",
-        statusCode: 409,
+        statusCode: STATUS_CODES[409],
         error: "Conflict",
       });
     }
@@ -74,7 +75,7 @@ async function generateKeyController(req, res, next) {
     if (userKeyData) {
       return res.status(200).json({
         message: "Key generated successfully",
-        statusCode: 200,
+        statusCode: STATUS_CODES[200],
         data: userKeyData,
       });
     }

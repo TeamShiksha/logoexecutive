@@ -61,7 +61,6 @@ function ResetPassword() {
 		} else {
 			navigate('/welcome');
 		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	useEffect(() => {
@@ -79,7 +78,6 @@ function ResetPassword() {
 		return () => {
 			clearInterval(timer);
 		};
-		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [success, countdown]);
 	return tokenError ? (
 		<ResponseCard

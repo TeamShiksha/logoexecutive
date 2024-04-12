@@ -46,8 +46,8 @@ describe("Signin Controller", () => {
     expect(response.status).toBe(422);
     expect(response.body).toEqual({
       message: "Email is required",
-      statusCode: 422,
-      error: STATUS_CODES[422],
+      statusCode: STATUS_CODES[422],
+      error: "Unprocessable payload",
     });
   });
 
@@ -59,8 +59,8 @@ describe("Signin Controller", () => {
     expect(response.status).toBe(422);
     expect(response.body).toEqual({
       message: "Invalid email",
-      statusCode: 422,
-      error: STATUS_CODES[422],
+      statusCode: STATUS_CODES[422],
+      error: "Unprocessable payload",
     });
   });
 
@@ -71,9 +71,9 @@ describe("Signin Controller", () => {
 
     expect(response.status).toBe(422);
     expect(response.body).toEqual({
-      error: STATUS_CODES[422],
+      error: "Unprocessable payload",
       message: "Password is required",
-      statusCode: 422
+      statusCode: STATUS_CODES[422]
     });
   });
 
@@ -85,39 +85,39 @@ describe("Signin Controller", () => {
 
     expect(response.status).toBe(422);
     expect(response.body).toEqual({
-      error: STATUS_CODES[422],
+      error: "Unprocessable payload",
       message: "Password must be a string",
-      statusCode: 422
+      statusCode: STATUS_CODES[422]
     });
   });
 
-  it("401 - Email does not exist", async ()  => {
+  it("404 - Email does not exist", async ()  => {
     jest.spyOn(UserService, "fetchUserByEmail").mockImplementation(() => null);
     const response = await request(app).post(ENDPOINT).send({
       email: "john@doe.com",
       password: "john password"
     });
 
-    expect(response.status).toBe(401);
+    expect(response.status).toBe(404);
     expect(response.body).toEqual({
-      error: STATUS_CODES[401],
-      message: "Email does not exist",
-      statusCode: 401
+      error: "Not found",
+      message: "Incorrect email or password",
+      statusCode: STATUS_CODES[404]
     });
   });
 
-  it("401 - Email not verified", async () => {
+  it("403 - Email not verified", async () => {
     jest.spyOn(UserService, "fetchUserByEmail").mockImplementation(() => new Users(mockUsers[0]));
     const response = await request(app).post(ENDPOINT).send({
       email: "john.doe@example.com",
       password: "password122"
     });
 
-    expect(response.status).toBe(401);
+    expect(response.status).toBe(403);
     expect(response.body).toEqual({
-      error: STATUS_CODES[401],
+      error: "Forbidden",
       message: "Email not verified",
-      statusCode: 401
+      statusCode: STATUS_CODES[403]
     });
   });
 
@@ -130,9 +130,9 @@ describe("Signin Controller", () => {
 
     expect(response.status).toBe(401);
     expect(response.body).toEqual({
-      error: STATUS_CODES[401],
+      error: "Unauthorized",
       message: "Incorrect email or password",
-      statusCode: 401
+      statusCode: STATUS_CODES[401]
     });
   });
 

@@ -31,7 +31,6 @@ async function forgotPasswordController(req, res, next) {
       });
 
     const { email } = value;
-
     const user = await fetchUserByEmail(email);
     if (!user)
       return res.status(404).json({
@@ -49,7 +48,6 @@ async function forgotPasswordController(req, res, next) {
       });
 
     const mail = mailText(userToken.tokenURL.href);
-
     const nodeMailerRes = await sendEmail(user.email, mail.subject, mail.body);
     if (!nodeMailerRes.success)
       return res.status(500).json({
@@ -58,7 +56,9 @@ async function forgotPasswordController(req, res, next) {
         statusCode: STATUS_CODES[500],
       });
 
-    return res.status(200).json({ message: "Successfully sent email" });
+    return res.status(200).json({ 
+      message: "Please check your email for a password reset link. If it's not there, check your spam folder"
+    });
   } catch (err) {
     next(err);
   }

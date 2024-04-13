@@ -36,9 +36,9 @@ async function generateKeyController(req, res, next) {
     const subscription = await fetchSubscriptionByuserid(userId);
     const keyLimit = subscription.keyLimit;
 
-    var keyCount = 1;
+    let keyCount = 1;
     const keysObject = (await fetchKeysByuserid(userId)) || [];
-    if (keysObject != null) {
+    if (keysObject) {
       keyCount = keysObject.length;
     }
 

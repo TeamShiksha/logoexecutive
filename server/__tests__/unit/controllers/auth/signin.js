@@ -86,7 +86,7 @@ describe("Signin Controller", () => {
     expect(response.status).toBe(422);
     expect(response.body).toEqual({
       error: "Unprocessable payload",
-      message: "Password must be a string",
+      message: "Password must be string",
       statusCode: STATUS_CODES[422]
     });
   });

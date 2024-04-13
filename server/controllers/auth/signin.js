@@ -14,7 +14,7 @@ const signinPayloadSchema = Joi.object().keys({
       "string.pattern.base": "Invalid email",
     }),
   password: Joi.string().trim().required().messages({
-    "string.base": "Password must be a string",
+    "string.base": "Password must be string",
     "any.required": "Password is required"
   }),
 });

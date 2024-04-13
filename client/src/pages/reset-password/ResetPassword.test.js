@@ -33,7 +33,49 @@ describe('ResetPassword component', () => {
 		});
 		fireEvent.click(screen.getByRole('button', {name: 'Submit'}));
 		await waitFor(() => {
-			expect(screen.getByText('Passwords do not match')).toBeInTheDocument();
+			expect(
+				screen.getByText('Password and Confirm password do not match'),
+			).toBeInTheDocument();
+		});
+	});
+
+	it('Length less than 8', async () => {
+		render(
+			<BrowserRouter>
+				<ResetPassword />
+			</BrowserRouter>,
+		);
+		fireEvent.change(screen.getByLabelText('New Password'), {
+			target: {value: '1234'},
+		});
+		fireEvent.change(screen.getByLabelText('Confirm Password'), {
+			target: {value: '1234'},
+		});
+		fireEvent.click(screen.getByRole('button', {name: 'Submit'}));
+		await waitFor(() => {
+			expect(
+				screen.getByText('Password must be at least 8 characters'),
+			).toBeInTheDocument();
+		});
+	});
+
+	it('Length greater than 30', async () => {
+		render(
+			<BrowserRouter>
+				<ResetPassword />
+			</BrowserRouter>,
+		);
+		fireEvent.change(screen.getByLabelText('New Password'), {
+			target: {value: 'SOmelongpassw0rDGreAter6Than30CharcateersLong'},
+		});
+		fireEvent.change(screen.getByLabelText('Confirm Password'), {
+			target: {value: 'SOmelongpassw0rDGreAter6Than30CharcateersLong'},
+		});
+		fireEvent.click(screen.getByRole('button', {name: 'Submit'}));
+		await waitFor(() => {
+			expect(
+				screen.getByText('Password must be 30 characters or fewer'),
+			).toBeInTheDocument();
 		});
 	});
 

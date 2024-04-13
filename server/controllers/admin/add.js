@@ -41,7 +41,7 @@ const addAdminController = async (req, res, next) => {
       return res.status(204).json();
     }
     return res.status(200).json({
-      status: 200,
+      statusCode: STATUS_CODES[200],
       message: "The user has been granted admin privileges"
     });
   }

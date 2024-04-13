@@ -1,17 +1,17 @@
 import {waitFor, fireEvent, render, screen} from '@testing-library/react';
-import {BrowserRouter} from 'react-router-dom';
+import {BrowserRouter, Navigate} from 'react-router-dom';
 import Signup from './Signup';
 import {AuthContext} from '../../contexts/AuthContext';
-import {setupServer} from 'msw/node';
-import handlers from '../../mocks/handlers.js';
-import {signupHandler} from '../../mocks/handlers/signup-handler';
 
-const server = setupServer(...handlers);
+jest.mock('react-router-dom', () => ({
+	...jest.requireActual('react-router-dom'),
+	Navigate: jest.fn(() => null),
+}));
 
 describe('Signup', () => {
-	const renderSignup = () => {
+	const renderSignup = (isAuthenticated) => {
 		render(
-			<AuthContext.Provider value={false}>
+			<AuthContext.Provider value={{isAuthenticated}}>
 				<BrowserRouter>
 					<Signup />
 				</BrowserRouter>
@@ -19,7 +19,7 @@ describe('Signup', () => {
 		);
 	};
 	it('should render Signup UI on Screen', () => {
-		renderSignup();
+		renderSignup(false);
 		expect(screen.getByText('Sign up for free')).toBeInTheDocument();
 		expect(screen.getByLabelText('First Name')).toBeInTheDocument();
 		expect(screen.getByLabelText('Last Name')).toBeInTheDocument();
@@ -34,7 +34,7 @@ describe('Signup', () => {
 	});
 
 	it('should throw an error if either any of the field value is missing', () => {
-		renderSignup();
+		renderSignup(false);
 
 		const firstName = screen.getByLabelText('First Name');
 		const lastName = screen.getByLabelText('Last Name');
@@ -57,7 +57,7 @@ describe('Signup', () => {
 	});
 
 	it("should throw an error if the user's input field does not have correct length value", () => {
-		renderSignup();
+		renderSignup(false);
 
 		const firstName = screen.getByLabelText('First Name');
 		const lastName = screen.getByLabelText('Last Name');
@@ -90,7 +90,7 @@ describe('Signup', () => {
 	});
 
 	it('should throw an error if input value format is invalid', () => {
-		renderSignup();
+		renderSignup(false);
 
 		const firstName = screen.getByLabelText('First Name');
 		const lastName = screen.getByLabelText('Last Name');
@@ -131,7 +131,7 @@ describe('Signup', () => {
 	});
 
 	it('should throw an error if users password dont match', () => {
-		renderSignup();
+		renderSignup(false);
 
 		const firstName = screen.getByLabelText('First Name');
 		const lastName = screen.getByLabelText('Last Name');
@@ -151,9 +151,7 @@ describe('Signup', () => {
 	});
 
 	it('should register a user successfully', async () => {
-		server.use(signupHandler);
-
-		renderSignup();
+		renderSignup(false);
 
 		const firstName = screen.getByLabelText('First Name');
 		const lastName = screen.getByLabelText('Last Name');
@@ -176,5 +174,11 @@ describe('Signup', () => {
 				),
 			).toHaveClass('signup-success');
 		});
+	});
+
+	it('should navigate to dashboard', () => {
+		renderSignup(true);
+		expect(Navigate).toHaveBeenCalledTimes(1);
+		expect(Navigate).toHaveBeenCalledWith({to: '/dashboard'}, {});
 	});
 });

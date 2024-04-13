@@ -3,7 +3,7 @@ import './ResponseCard.css';
 
 function ResponseCard({countdown, message, title, Icon}) {
 	return (
-		<section className='response-card-wrapper' role='response-alert'>
+		<section className='response-card-wrapper'>
 			<div className='response-card'>
 				{Icon}
 				<h3 className='response-title'>{title}</h3>

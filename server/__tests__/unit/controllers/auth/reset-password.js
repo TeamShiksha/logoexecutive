@@ -27,11 +27,10 @@ describe("GET /auth/reset-password", () => {
     delete process.env.JWT_SECRET;
   });
 
-  it("500 - CORS", async () => {
+  it("500 - Not allowed by CORS", async () => {
     const response = await request(app)
       .post(ENDPOINT)
       .set("Origin", "http://invalidcorsorigin.com");
-
     expect(response.status).toBe(500);
     expect(response.body).toEqual({
       error: STATUS_CODES[500], message: "Not allowed by CORS",
@@ -39,31 +38,30 @@ describe("GET /auth/reset-password", () => {
     });
   });
 
-  it("422 - token missing", async () => {
+  it("422 - Token is required", async () => {
     const response = await request(app).get(ENDPOINT);
 
     expect(response.status).toBe(422);
     expect(response.body).toEqual({
-      error: STATUS_CODES[422],
-      message: "\"token\" is required",
-      statusCode: 422
+      error: "Unprocessable payload",
+      message: "Token is required",
+      statusCode: STATUS_CODES[422]
     });
   });
 
   it("404 - User Token not found", async () => {
     jest.spyOn(UserTokenService, "fetchTokenFromId").mockImplementation(() => null);
-
     const response = await request(app).get(ENDPOINT).query({ token: "1235" });
 
     expect(response.status).toBe(404);
     expect(response.body).toEqual({
-      error: STATUS_CODES[404],
+      error: "Not Found",
       message: "User Token not found",
-      statusCode: 404
+      statusCode: STATUS_CODES[404],
     });
   });
 
-  it("403 - User Token is expired", async () => {
+  it("403 - Token expired", async () => {
     jest.spyOn(UserTokenService, "fetchTokenFromId").mockImplementation(() => new UserToken({
       createdAt: new Date("01-01-2001"),
       expireAt: new Date("01-01-2001"),
@@ -76,34 +74,14 @@ describe("GET /auth/reset-password", () => {
     const response = await request(app).get(ENDPOINT).query({ token: "1235" });
     expect(response.status).toBe(403);
     expect(response.body).toEqual({
-      error: STATUS_CODES[403],
+      error: "Expired",
       message: "Token expired",
-      statusCode: 403
-    });
-  });
-
-  it("200 - User Token is valid", async () => {
-    jest.spyOn(UserTokenService, "fetchTokenFromId").mockImplementation(() => new UserToken({
-      createdAt: new Date("01-01-2001"),
-      expireAt: new Date("02-01-20075"),
-      token: "123",
-      type: "FORGOT",
-      userId: "12342",
-      userTokenId: "241254",
-    }));
-
-    const response = await request(app).get(ENDPOINT).query({ token: "1235" });
-
-    expect(response.status).toBe(200);
-    expect(response.header["set-cookie"][0]).toMatch(/resetPasswordSession=/);
-    expect(response.body).toEqual({
-      message: "Token is verified successfully",
+      statusCode: STATUS_CODES[403],
     });
   });
 
   it("500 - Unexpected errors", async () => {
     jest.spyOn(UserTokenService, "fetchTokenFromId").mockImplementation(() => { throw new Error("Unexpected error"); });
-
     const response = await request(app).get(ENDPOINT).query({ token: "1235" });
 
     expect(response.status).toBe(500);
@@ -113,35 +91,48 @@ describe("GET /auth/reset-password", () => {
       statusCode: 500
     });
   });
+
+  it("200 - Token is verified successfully", async () => {
+    jest.spyOn(UserTokenService, "fetchTokenFromId").mockImplementation(() => new UserToken({
+      createdAt: new Date("01-01-2001"),
+      expireAt: new Date("02-01-20075"),
+      token: "123",
+      type: "FORGOT",
+      userId: "12342",
+      userTokenId: "241254",
+    }));
+    const response = await request(app).get(ENDPOINT).query({ token: "1235" });
+
+    expect(response.status).toBe(200);
+    expect(response.header["set-cookie"][0]).toMatch(/resetPasswordSession=/);
+    expect(response.body).toEqual({
+      message: "Token is verified successfully",
+    });
+  });
 });
 
 describe("PATCH /auth/reset-password", () => {
-  const ENDPOINT = "/api/auth/reset-password";
-
   const resetPasswordPayload = {
     newPassword: "@Rtyu678KMh",
     confirmPassword: "@Rtyu678KMh",
     token: mockUserTokens[2].token,
   };
-
   const mockUserModel = new Users(mockUserTokens[0]);
 
   beforeAll(() => {
     process.env.BASE_URL = "https://example.com";
     process.env.JWT_SECRET = "my_secret";
   });
-
   afterAll(() => {
     delete process.env.BASE_URL;
     delete process.env.JWT_SECRET;
   });
-
   afterEach(() => {
     jest.clearAllMocks();
     jest.restoreAllMocks();
   });
 
-  it("500 - CORS", async () => {
+  it("500 - Not allowed by CORS", async () => {
     const response = await request(app)
       .post(ENDPOINT)
       .set("Origin", "http://invalidcorsorigin.com");
@@ -162,13 +153,12 @@ describe("PATCH /auth/reset-password", () => {
     expect(response.status).toBe(401);
   });
 
-  it("422 - token is required", async () => {
+  it("422 - Token is required", async () => {
     const mockToken = mockUserModel.generateJWT();
     const mockBody = {
       newPassword: "@Rtyu678KMh",
       confirmPassword: "@Rtyu678KMh",
     };
-
     const response = await request(app)
       .patch(ENDPOINT)
       .set("cookie", `resetPasswordSession=${mockToken}`)
@@ -176,19 +166,18 @@ describe("PATCH /auth/reset-password", () => {
 
     expect(response.status).toBe(422);
     expect(response.body).toEqual({
-      error: STATUS_CODES[422],
-      message: "\"token\" is required",
-      statusCode: 422
+      error: "Unprocessable payload",
+      message: "Token is required",
+      statusCode: STATUS_CODES[422],
     });
   });
 
-  it("422 - newPassword is required", async () => {
+  it("422 - New password is required", async () => {
     const mockToken = mockUserModel.generateJWT();
     const mockBody = {
       token: "6dc1ff1a95e04dcdb347269ed15575bc",
       confirmPassword: "@Rtyu678KMh",
     };
-
     const response = await request(app)
       .patch(ENDPOINT)
       .set("cookie", `resetPasswordSession=${mockToken}`)
@@ -196,19 +185,18 @@ describe("PATCH /auth/reset-password", () => {
 
     expect(response.status).toBe(422);
     expect(response.body).toEqual({
-      error: STATUS_CODES[422],
-      message: "\"newPassword\" is required",
-      statusCode: 422
+      error: "Unprocessable payload",
+      message: "New password is required",
+      statusCode: STATUS_CODES[422]
     });
   });
 
-  it("422 - confirmPassword is required", async () => {
+  it("422 - Confirm password is required", async () => {
     const mockToken = mockUserModel.generateJWT();
     const mockBody = {
       token: "6dc1ff1a95e04dcdb347269ed15575bc",
       newPassword: "@Rtyu678KMh",
     };
-
     const response = await request(app)
       .patch(ENDPOINT)
       .set("cookie", `resetPasswordSession=${mockToken}`)
@@ -216,30 +204,22 @@ describe("PATCH /auth/reset-password", () => {
 
     expect(response.status).toBe(422);
     expect(response.body).toEqual({
-      error: STATUS_CODES[422],
-      message: "\"confirmPassword\" is required",
-      statusCode: 422
+      error: "Unprocessable payload",
+      message: "Confirm password is required",
+      statusCode: STATUS_CODES[422]
     });
   });
 
-  it("403 - token mismatch", async () => {
+  it("403 - Invalid credentials", async () => {
     const mockToken = mockUserModel.generateJWT();
     const mockBody = {
       newPassword: "@Rtyu678KMh",
       confirmPassword: "@Rtyu678KMh",
       token: "6dc1ff1a95e04dcdb847269ed15575fg",
     };
-
-    jest
-      .spyOn(UserService, "fetchUserFromId")
-      .mockImplementation(() => mockUserModel);
-    jest
-      .spyOn(UserService, "updatePasswordService")
-      .mockImplementation(() => mockUserModel);
-    jest
-      .spyOn(UserTokenService, "fetchTokenFromId")
-      .mockImplementation(() => new UserToken(mockUserTokens[2]));
-
+    jest.spyOn(UserService, "fetchUserFromId").mockImplementation(() => mockUserModel);
+    jest.spyOn(UserService, "updatePasswordService").mockImplementation(() => mockUserModel);
+    jest.spyOn(UserTokenService, "fetchTokenFromId").mockImplementation(() => new UserToken(mockUserTokens[2]));
     const response = await request(app)
       .patch(ENDPOINT)
       .set("cookie", `resetPasswordSession=${mockToken}`)
@@ -249,26 +229,74 @@ describe("PATCH /auth/reset-password", () => {
     expect(response.body).toEqual({
       error: "Forbidden",
       message: "Invalid credentials",
-      statusCode: 403,
+      statusCode: STATUS_CODES[403],
     });
   });
 
-  it("200 - Success", async () => {
+  it("500 - Unexected error", async () => {
     const mockToken = mockUserModel.generateJWT();
+    const mockBody = {
+      newPassword: "@Rtyu678KMh",
+      confirmPassword: "@Rtyu678KMh",
+      token: "6dc1ff1a95e04dcdb847269ed15575fg",
+    };
+    jest.spyOn(UserService, "fetchUserFromId").mockImplementation(() => {throw new Error("Unexected error");});
+    const response = await request(app)
+      .patch(ENDPOINT)
+      .set("cookie", `resetPasswordSession=${mockToken}`)
+      .send(mockBody);
 
-    jest
-      .spyOn(UserService, "fetchUserFromId")
-      .mockImplementation(() => mockUserModel);
-    jest
-      .spyOn(UserService, "updatePasswordService")
-      .mockImplementation(() => mockUserModel);
-    jest
-      .spyOn(UserTokenService, "fetchTokenFromId")
-      .mockImplementation(() => new UserToken(mockUserTokens[2]));
-    jest
-      .spyOn(UserTokenService, "deleteUserToken")
-      .mockImplementation(() => new UserToken(mockUserTokens[2]));
+    expect(response.status).toBe(500);
+    expect(response.body).toEqual({
+      error: STATUS_CODES[500],
+      message: "Unexected error",
+      statusCode: 500
+    });
+  });
 
+  it("400 - Password and Confirm password do not match", async () => {
+    const mockToken = mockUserModel.generateJWT();
+    const mockBody = {
+      newPassword: "@Rtyu678KMh",
+      confirmPassword: "@Rtyu1678KMh",
+      token: "6dc1ff1a95e04dcdb847269ed15575fg",
+    };
+    const response = await request(app)
+      .patch(ENDPOINT)
+      .set("cookie", `resetPasswordSession=${mockToken}`)
+      .send(mockBody);
+
+    expect(response.status).toBe(400);
+    expect(response.body).toEqual({
+      error: "Bad request",
+      message: "Password and Confirm password do not match",
+      statusCode: STATUS_CODES[400],
+    });
+  });
+
+  it("200 - Failed to update password", async () => {
+    const mockToken = mockUserModel.generateJWT();
+    jest.spyOn(UserService, "fetchUserFromId").mockImplementation(() => mockUserModel);
+    jest.spyOn(UserService, "updatePasswordService").mockImplementation(() => false);
+    const response = await request(app)
+      .patch(ENDPOINT)
+      .set("cookie", `resetPasswordSession=${mockToken}`)
+      .send(resetPasswordPayload);
+
+    expect(response.status).toBe(400);
+    expect(response.body).toEqual({
+      error: "Bad request",
+      message: "Failed to update password",
+      statusCode: STATUS_CODES[400],
+    });
+  });
+
+  it("200 - Your password has been successfully reset", async () => {
+    const mockToken = mockUserModel.generateJWT();
+    jest.spyOn(UserService, "fetchUserFromId").mockImplementation(() => mockUserModel);
+    jest.spyOn(UserService, "updatePasswordService").mockImplementation(() => mockUserModel);
+    jest.spyOn(UserTokenService, "fetchTokenFromId").mockImplementation(() => new UserToken(mockUserTokens[2]));
+    jest.spyOn(UserTokenService, "deleteUserToken").mockImplementation(() => new UserToken(mockUserTokens[2]));
     const response = await request(app)
       .patch(ENDPOINT)
       .set("cookie", `resetPasswordSession=${mockToken}`)

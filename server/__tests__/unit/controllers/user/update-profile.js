@@ -47,7 +47,7 @@ describe("UpdateProfile Controller", () => {
       });
     }, 5000);
 
-    it("500 - CORS", async () => {
+    it("500 - Not allowed by CORS", async () => {
       const response = await request(app)
         .post(ENDPOINT)
         .set("Origin", "http://invalidcorsorigin.com");

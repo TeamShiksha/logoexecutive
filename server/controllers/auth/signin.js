@@ -8,8 +8,15 @@ const signinPayloadSchema = Joi.object().keys({
     .trim()
     .required()
     .regex(/^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/)
-    .message("Invalid email"),
-  password: Joi.string().trim().required().min(8).max(30),
+    .messages({
+      "string.base": "Email must be a string",
+      "any.required": "Email is required",
+      "string.pattern.base": "Invalid email",
+    }),
+  password: Joi.string().trim().required().messages({
+    "string.base": "Password must be string",
+    "any.required": "Password is required"
+  }),
 });
 
 async function signinController(req, res, next) {
@@ -19,37 +26,37 @@ async function signinController(req, res, next) {
     if (!!error)
       return res.status(422).json({
         message: error.message,
-        statusCode: 422,
-        error: STATUS_CODES[422],
+        statusCode: STATUS_CODES[422],
+        error: "Unprocessable payload",
       });
 
     const { email, password } = value;
     const user = await fetchUserByEmail(email);
     if (!user)
-      return res.status(401).json({
-        error: STATUS_CODES[401],
-        message: "Incorrect email or password.",
-        statusCode: 401,
+      return res.status(404).json({
+        error: "Not found",
+        message: "Incorrect email or password",
+        statusCode: STATUS_CODES[404],
       });
 
     if(!user.isVerified)
-      return res.status(401).json({
-        error: STATUS_CODES[401],
+      return res.status(403).json({
+        error: "Forbidden",
         message: "Email not verified",
-        statusCode: 401
+        statusCode: STATUS_CODES[403]
       });
 
     const matchPassword = await user.matchPassword(password);
     if (!matchPassword) {
       return res.status(401).json({
-        error: STATUS_CODES[401],
-        message: "Incorrect email or password.",
-        statusCode: 401,
+        error: "Unauthorized",
+        message: "Incorrect email or password",
+        statusCode: STATUS_CODES[401],
       });
     }
 
     res.cookie("jwt", user.generateJWT(), { expires: dayjs().add(1, "day").toDate() });
-    return res.status(200).json({ message: "Sign-in successful" });
+    return res.status(200).json({ message: "Sign In Successful" });
   } catch (err) {
     next(err);
   }

@@ -29,7 +29,7 @@
 	"scripts": {
 		"start": "react-scripts start",
 		"build": "react-scripts build",
-		"test": "react-scripts test",
+		"test": "react-scripts test --watchAll=false --silent",
 		"eject": "react-scripts eject",
 		"lint": "eslint .",
 		"lint:fix": "eslint --fix .",
@@ -41,7 +41,10 @@
 		"extends": [
 			"react-app",
 			"react-app/jest"
-		]
+		],
+		"rules": {
+			"react-hooks/exhaustive-deps": "off"
+		}
 	},
 	"browserslist": {
 		"production": [

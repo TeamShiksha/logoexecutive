@@ -47,7 +47,7 @@ describe("Signup Controller", () => {
     jest.restoreAllMocks();
   });
 
-  it("500 - CORS", async () => {
+  it("500 - Not allowed by CORS", async () => {
     const response = await request(app)
       .get(ENDPOINT)
       .set("Origin", "http://invalidcorsorigin.com");

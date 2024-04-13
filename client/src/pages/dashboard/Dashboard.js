@@ -3,6 +3,7 @@ import ApiKeyForm from '../../components/dashboard/ApiKeyForm';
 import ApiKeyTable from '../../components/dashboard/ApiKeyTable';
 import CurrentPlan from '../../components/dashboard/CurrentPlan';
 import Usage from '../../components/dashboard/Usage';
+import {isLettersAndSpacesOnly} from '../../constants';
 import {UserContext} from '../../contexts/UserContext';
 import './Dashboard.css';
 
@@ -36,16 +37,36 @@ function Dashboard() {
 			setErrorMessage('Description cannot be empty');
 			return;
 		}
+		if (inputValue.trim().length > 20) {
+			setErrorMessage('Description cannot be more than 20 characters');
+			return;
+		} else if (!isLettersAndSpacesOnly.test(inputValue)) {
+			setErrorMessage('Description must contain only alphabets and spaces');
+			return;
+		}
 		const newKey = {
-			description: inputValue,
-			apiKey:
+			keyId:
 				Math.random()
 					.toString(RANDOM_STRING_LENGTH)
 					.substring(2, RANDOM_STRING_LENGTH) +
 				Math.random()
 					.toString(RANDOM_STRING_LENGTH)
 					.substring(2, RANDOM_STRING_LENGTH),
-			createDate: new Date().toLocaleDateString('en-US', {
+			keyDescription: inputValue,
+			key:
+				Math.random()
+					.toString(RANDOM_STRING_LENGTH)
+					.substring(2, RANDOM_STRING_LENGTH) +
+				Math.random()
+					.toString(RANDOM_STRING_LENGTH)
+					.substring(2, RANDOM_STRING_LENGTH),
+			usageCount: 0,
+			createdAt: new Date().toLocaleDateString('en-US', {
+				day: '2-digit',
+				month: 'short',
+				year: 'numeric',
+			}),
+			updatedAt: new Date().toLocaleDateString('en-US', {
 				day: '2-digit',
 				month: 'short',
 				year: 'numeric',
@@ -56,7 +77,7 @@ function Dashboard() {
 		setErrorMessage('');
 	};
 	const handleDeleteKey = (apiKey) => {
-		setKeys(keys.filter((key) => key.apiKey !== apiKey));
+		setKeys(keys.filter((key) => key.key !== apiKey));
 	};
 	const handleCopyToClipboard = async (apiKey) => {
 		await navigator.clipboard.writeText(apiKey);

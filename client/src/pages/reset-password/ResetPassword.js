@@ -4,9 +4,9 @@ import {useNavigate} from 'react-router-dom';
 import CustomInput from '../../components/common/input/CustomInput';
 import {useApi} from '../../hooks/useApi';
 import ResponseCard from '../../components/common/responseCard/ResponseCard';
-import './ResetPassword.css';
 import {FaCheck} from 'react-icons/fa6';
 import {RxCross2} from 'react-icons/rx';
+import './ResetPassword.css';
 
 function ResetPassword() {
 	const [newPassword, setNewPassword] = useState('');
@@ -38,16 +38,16 @@ function ResetPassword() {
 		if (newPassword.length < 8 || newPassword.length > 30) {
 			setErrorMsg('Password must be between 8 and 30 characters long');
 			return;
-		}
-		if (confirmPassword === newPassword) {
+		} else if (confirmPassword !== newPassword) {
+			setErrorMsg('Passwords do not match');
+			return;
+		} else {
 			let success = await makeRequest();
 			if (success) {
 				setSuccess(true);
 			} else {
 				setErrorMsg(apiErrorMsg);
 			}
-		} else {
-			setErrorMsg('Passwords do not match!');
 		}
 	};
 

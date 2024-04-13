@@ -8,7 +8,11 @@ const forgotPasswordSchema = Joi.object().keys({
     .trim()
     .required()
     .regex(/^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/)
-    .message("Invalid Email."),
+    .messages({
+      "string.base": "Email must be string",
+      "any.required": "Email is required",
+      "string.pattern.base": "Invalid email",
+    }),
 });
 
 const mailText = (url) => ({
@@ -21,9 +25,9 @@ async function forgotPasswordController(req, res, next) {
     const { error, value } = forgotPasswordSchema.validate(req.body);
     if (error)
       return res.status(422).json({
-        error: STATUS_CODES[422],
+        error: "Unprocessable payload",
         message: error.message,
-        statusCode: 422
+        statusCode: STATUS_CODES[422],
       });
 
     const { email } = value;
@@ -31,17 +35,17 @@ async function forgotPasswordController(req, res, next) {
     const user = await fetchUserByEmail(email);
     if (!user)
       return res.status(404).json({
-        error: STATUS_CODES[404],
-        message: "Email does not exist.",
-        statusCode: 404
+        error: "Not Found",
+        message: "Email does not exist",
+        statusCode: STATUS_CODES[404],
       });
 
     const userToken = await createForgotToken(user.userId);
     if (!userToken)
       return res.status(503).json({
-        error: STATUS_CODES[503],
+        error: "Server unavailable",
         message: "Unable to process forgot password request",
-        statusCode: 503,
+        statusCode: STATUS_CODES[503],
       });
 
     const mail = mailText(userToken.tokenURL.href);
@@ -49,9 +53,9 @@ async function forgotPasswordController(req, res, next) {
     const nodeMailerRes = await sendEmail(user.email, mail.subject, mail.body);
     if (!nodeMailerRes.success)
       return res.status(500).json({
-        error: STATUS_CODES[500],
+        error: "Internal server error",
         message: "Failed to send email",
-        statusCode: 500,
+        statusCode: STATUS_CODES[500],
       });
 
     return res.status(200).json({ message: "Successfully sent email" });

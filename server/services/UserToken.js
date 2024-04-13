@@ -38,19 +38,8 @@ async function createForgotToken(userId) {
 async function deleteUserToken(userToken) {
   const result = await userToken.userTokenRef.delete();
   if (!result)
-    return {
-      success: false,
-      data: {
-        message: "Failed to delete token",
-      },
-    };
-  return {
-    success: true,
-    data: {
-      message: "Successfully deleted token",
-      data: result,
-    },
-  };
+    return false;
+  return true;
 }
 
 /**

@@ -34,7 +34,7 @@ describe("GET - /user/data", () => {
     delete process.env.BASE_URL;
   });
 
-  it("500 - CORS", async () => {
+  it("500 - Not allowed by CORS", async () => {
     const response = await request(app)
       .get(ENDPOINT)
       .set("Origin", "http://invalidcorsorigin.com");

@@ -1,4 +1,3 @@
-/* eslint-disable testing-library/no-unnecessary-act */
 import {waitFor, fireEvent, render, screen} from '@testing-library/react';
 import {BrowserRouter} from 'react-router-dom';
 import Signup from './Signup';
@@ -6,21 +5,10 @@ import {AuthContext} from '../../contexts/AuthContext';
 import {setupServer} from 'msw/node';
 import handlers from '../../mocks/handlers.js';
 import {signupHandler} from '../../mocks/handlers/signup-handler';
-import {toHaveClass} from '@testing-library/jest-dom/matchers.js';
 
 const server = setupServer(...handlers);
 
 describe('Signup', () => {
-	beforeAll(() => {
-		server.listen();
-	});
-	afterEach(() => {
-		server.resetHandlers();
-	});
-	afterAll(() => {
-		server.close();
-	});
-
 	const renderSignup = () => {
 		render(
 			<AuthContext.Provider value={false}>

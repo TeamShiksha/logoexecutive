@@ -1,6 +1,11 @@
 const request = require("supertest");
+const { STATUS_CODES } = require("http");
+
 const {Users} = require("../../../../models/index");
 const { mockUsers } = require("../../../../utils/mocks/Users");
+const app = require("../../../../app");
+const { ImageService } = require("../../../../services");
+const { error } = require("console");
 
 jest.mock("../../../../middlewares/fileUpload", () => ({
   single: () => (req, res, next) => {
@@ -11,70 +16,54 @@ jest.mock("../../../../middlewares/fileUpload", () => ({
     next();
   },
 }));
-
-jest.mock("../../../../services/", () => ({
+jest.mock("../../../../services/Images", () => ({
   uploadToS3: jest.fn(),
   createImageData: jest.fn(),
 }));
 const ENDPOINT= "/api/admin/upload";
-const app = require("../../../../app");
 
 describe("adminUploadController", () => {
   beforeAll(() => {
     process.env.JWT_SECRET = "my_secret";
   });
-
   afterAll(() => {
     delete process.env.JWT_SECRET;
   });
 
-  it("should return 400 if imageName is invalid", async () => {
+  it("500 - CORS Error on invalid origin", async () => {
     const mockUserModel = new Users({ ...mockUsers[1], userType: "ADMIN" });
     const mockToken = mockUserModel.generateJWT();
+    const response = await request(app)
+      .options(ENDPOINT) 
+      .set("cookie", `jwt=${mockToken}`)
+      .set("Origin", "http://invalidcorsorigin.com");
 
+    expect(response.status).toBe(500);
+    expect(response.body).toEqual({
+      error: STATUS_CODES[500],
+      message: "Not allowed by CORS",
+      statusCode: 500
+    });
+  });
+
+  it("422 - Invalid image name. Should include extensions: .png, .jpg, .svg", async () => {
+    const mockUserModel = new Users({ ...mockUsers[1], userType: "ADMIN" });
+    const mockToken = mockUserModel.generateJWT();
     const response = await request(app)
       .post(ENDPOINT)
       .set("cookie", `jwt=${mockToken}`)
       .send({ imageName: "invalidImageName" });
 
-    expect(response.status).toBe(400);
+    expect(response.status).toBe(422);
     expect(response.body).toEqual({
-      error: "Bad Request",
-      message: "Invalid image name. It should include one of the following extensions: .png, .jpg, .svg",
-      status: 400,
+      statusCode: STATUS_CODES[422],
+      message: "Invalid image name. Should include extensions: .png, .jpg, .svg",
+      error: "Unprocessable payload",
     });
   });
 
-  it("should return 200 and the image data if the image is uploaded successfully", async () => {
-    const mockUserModel = new Users({ ...mockUsers[1], userType: "ADMIN" });
-    const { uploadToS3, createImageData } = require("../../../../services");
-    uploadToS3.mockResolvedValue("key");
-    createImageData.mockResolvedValue({
-      imageId: "id",
-      createdAt: new Date(),
-      updatedAt: new Date()
-    });
-
-    const mockToken = mockUserModel.generateJWT();
-
-    const response = await request(app)
-      .post(ENDPOINT)
-      .set("cookie", `jwt=${mockToken}`)
-      .send({ imageName: "validImageName.png" });
-
-    expect(response.status).toBe(200);
-    expect(response.body).toEqual({
-      message: "Image validImageName.png uploaded successfully to S3 bucket",
-      status: 200,
-      imageId: "id",
-      createdAt: expect.any(String),
-      updatedAt: expect.any(String)
-    });
-  });
-
-  it("should return 500 if jwt token is invalid", async () => {
+  it("500 - should return 500 if jwt token is invalid", async () => {
     const invalidToken = "invalidToken";
-  
     const response = await request(app)
       .post(ENDPOINT)
       .set("cookie", `jwt=${invalidToken}`)
@@ -88,27 +77,25 @@ describe("adminUploadController", () => {
     });
   });
   
-  it("should return 400 if payload is empty", async () => {
+  it("422 - Image name is required", async () => {
     const mockUserModel = new Users({ ...mockUsers[1], userType: "ADMIN" });
     const mockToken = mockUserModel.generateJWT();
-  
     const response = await request(app)
       .post(ENDPOINT)
       .set("cookie", `jwt=${mockToken}`)
       .send({});
   
-    expect(response.status).toBe(400);
+    expect(response.status).toBe(422);
     expect(response.body).toEqual({
-      status: 400,
+      statusCode: STATUS_CODES[422],
       message: "Image name is required",
-      error: "Bad Request"
+      error: "Unprocessable payload"
     });
   });
 
-  it("should return 400 if imageName is present but file is not", async () => {
+  it("422 - Image file is required", async () => {
     const mockUserModel = new Users({ ...mockUsers[1], userType: "ADMIN" });
     const mockToken = mockUserModel.generateJWT();
-
     jest.mock("../../../../middlewares/fileUpload", () => ({
       single: jest.fn().mockImplementation(() => (req, res, next) => {
         req.file = null;
@@ -122,18 +109,17 @@ describe("adminUploadController", () => {
       .set("cookie", `jwt=${mockToken}`)
       .send({ imageName: "validImageName.png" });
   
-    expect(response.status).toBe(400);
+    expect(response.status).toBe(422);
     expect(response.body).toEqual({
-      error: "Bad Request",
+      error: "Unprocessable payload",
       message: "Image file is required",
-      status: 400,
+      statusCode: STATUS_CODES[422],
     });
   });
   
-  it("should return 400 if neither imageName nor file are present", async () => {
+  it("422 -  Image name is required", async () => {
     const mockUserModel = new Users({ ...mockUsers[1], userType: "ADMIN" });
     const mockToken = mockUserModel.generateJWT();
-  
     jest.mock("../../../../middlewares/fileUpload", () => ({
       single: jest.fn().mockImplementation(() => (req, res, next) => {
         req.file = null;
@@ -141,33 +127,93 @@ describe("adminUploadController", () => {
       }),
     }));
     jest.resetModules();
-    const app = require("../../../../app");
-  
     const response = await request(app)
       .post(ENDPOINT)
       .set("cookie", `jwt=${mockToken}`)
       .send({});
   
-    expect(response.status).toBe(400);
+    expect(response.status).toBe(422);
     expect(response.body).toEqual({
-      error: "Bad Request",
+      error: "Unprocessable payload",
       message: "Image name is required",
-      status: 400,
+      statusCode: STATUS_CODES[422],
     });
   });
 
-  it("should handle CORS correctly", async () => {
-    process.env.BASE_URL = "http://localhost:3000"; 
-  
+  it("500 - Image Upload Failed, try again later", async () => {
     const mockUserModel = new Users({ ...mockUsers[1], userType: "ADMIN" });
+    jest.spyOn(ImageService, "uploadToS3").mockResolvedValueOnce(false);
     const mockToken = mockUserModel.generateJWT();
-  
     const response = await request(app)
-      .options(ENDPOINT) 
+      .post(ENDPOINT)
       .set("cookie", `jwt=${mockToken}`)
-      .set("Access-Control-Request-Method", "POST") 
-      .set("Origin", process.env.BASE_URL);
-    expect(response.headers["access-control-allow-origin"]).toEqual(process.env.BASE_URL); 
-    expect(response.headers["access-control-allow-methods"]).toContain("POST"); 
+      .send({ imageName: "validImageName.png" });
+
+    expect(response.status).toBe(500);
+    expect(response.body).toEqual({
+      message: "Image Upload Failed, try again later",
+      statusCode: STATUS_CODES[500]
+    });
   });
+
+  it("500 - Failed to create record", async () => {
+    const mockUserModel = new Users({ ...mockUsers[1], userType: "ADMIN" });
+    jest.spyOn(ImageService, "uploadToS3").mockResolvedValueOnce(true);
+    jest.spyOn(ImageService, "createImageData").mockResolvedValueOnce(null);
+    const mockToken = mockUserModel.generateJWT();
+    const response = await request(app)
+      .post(ENDPOINT)
+      .set("cookie", `jwt=${mockToken}`)
+      .send({ imageName: "validImageName.png" });
+
+    expect(response.status).toBe(500);
+    expect(response.body).toEqual({
+      message: "Failed to create record",
+      statusCode: STATUS_CODES[500]
+    });
+  });
+
+  it("500 - Unexpected errors", async () => {
+    const mockUserModel = new Users({ ...mockUsers[1], userType: "ADMIN" });
+    jest.spyOn(ImageService, "uploadToS3").mockResolvedValueOnce(true);
+    jest.spyOn(ImageService, "createImageData").mockImplementation(() => {throw new Error("Unexected error");});
+    const mockToken = mockUserModel.generateJWT();
+    const response = await request(app)
+      .post(ENDPOINT)
+      .set("cookie", `jwt=${mockToken}`)
+      .send({ imageName: "validImageName.png" });
+
+    expect(response.status).toBe(500);
+    expect(response.body).toEqual({
+      error: STATUS_CODES[500],
+      message: "Unexected error",
+      statusCode: 500
+    });
+  });
+
+  it("200 - Upload successfully", async () => {
+    const mockUserModel = new Users({ ...mockUsers[1], userType: "ADMIN" });
+    jest.spyOn(ImageService, "uploadToS3").mockResolvedValueOnce(true);
+    jest.spyOn(ImageService, "createImageData").mockResolvedValueOnce({
+      imageId: "id",
+      createdAt: "sometimestamp",
+      updatedAt: "sometimestamp"
+    });
+    const mockToken = mockUserModel.generateJWT();
+    const response = await request(app)
+      .post(ENDPOINT)
+      .set("cookie", `jwt=${mockToken}`)
+      .send({ imageName: "validImageName.png" });
+
+    expect(response.status).toBe(200);
+    expect(response.body).toEqual({
+      message: "Upload successfully",
+      statusCode: STATUS_CODES[200],
+      data: {imageId: "id",
+        createdAt: expect.any(String),
+        updatedAt: expect.any(String)
+      }
+    });
+  });
+
 });

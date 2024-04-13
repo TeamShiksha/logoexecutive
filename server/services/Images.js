@@ -22,7 +22,7 @@ async function uploadToS3(file, imageName, extension) {
     await s3.send(new PutObjectCommand(uploadParams));
     return `${process.env.KEY}/${extension}/${imageName}`;
   } catch (error) {
-    console.error(`Failed to upload file to S3: ${error}`);
+    console.error(error);
     throw error; 
   }
 }

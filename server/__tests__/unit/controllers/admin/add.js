@@ -52,9 +52,9 @@ describe("setAdminController", () => {
 
     expect(response.status).toBe(422);
     expect(response.body).toEqual({
-      "statusCode": STATUS_CODES[422],
-      "message": "Invalid email",
-      "error": "Unprocessable payload"
+      statusCode: STATUS_CODES[422],
+      message: "Invalid email",
+      error: "Unprocessable payload"
     });
   });
 
@@ -66,9 +66,9 @@ describe("setAdminController", () => {
 
     expect(response.status).toBe(422);
     expect(response.body).toEqual({
-      "statusCode": STATUS_CODES[422],
-      "message": "Email is required",
-      "error": "Unprocessable payload"
+      statusCode: STATUS_CODES[422],
+      message: "Email is required",
+      error: "Unprocessable payload"
     });
   });
 
@@ -81,9 +81,9 @@ describe("setAdminController", () => {
 
     expect(response.status).toBe(422);
     expect(response.body).toEqual({
-      "statusCode": STATUS_CODES[422],
-      "message": "Email must be string",
-      "error": "Unprocessable payload"
+      statusCode: STATUS_CODES[422],
+      message: "Email must be string",
+      error: "Unprocessable payload"
     }); 
   });
 
@@ -96,9 +96,9 @@ describe("setAdminController", () => {
 
     expect(response.status).toBe(422);
     expect(response.body).toEqual({
-      "statusCode": STATUS_CODES[422],
-      "message": "Email length must be 50 or fewer",
-      "error": "Unprocessable payload"
+      statusCode: STATUS_CODES[422],
+      message: "Email length must be 50 or fewer",
+      error: "Unprocessable payload"
     }); 
   });
 
@@ -113,9 +113,9 @@ describe("setAdminController", () => {
 
     expect(response.status).toBe(401);
     expect(response.body).toEqual({
-      "statusCode": 401,
-      "message": "User not authorized",
-      "error": "Unauthorized"
+      statusCode: 401,
+      message: "User not authorized",
+      error: "Unauthorized"
     });
 
   });
@@ -131,9 +131,9 @@ describe("setAdminController", () => {
 
     expect(response.status).toBe(404);
     expect(response.body).toEqual({
-      "statusCode": STATUS_CODES[404],
-      "error": "Not Found",
-      "message": "User not found"
+      statusCode: STATUS_CODES[404],
+      error: "Not Found",
+      message: "User not found"
     });
 
   });
@@ -189,8 +189,8 @@ describe("setAdminController", () => {
 
     expect(response.status).toBe(200);
     expect(response.body).toEqual({
-      "message": "The user has been granted admin privileges",
-      "status": 200
+      message: "The user has been granted admin privileges",
+      statusCode: STATUS_CODES[200],
     });
 
   });

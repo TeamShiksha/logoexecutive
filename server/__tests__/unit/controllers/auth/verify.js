@@ -121,10 +121,6 @@ describe("GET /auth/verify", () => {
   });
 
   it("500 - Unexpected error", async () => {
-    const mockUserToken = new UserToken({
-      ...mockUserTokenVerify,
-      expireAt: Date.now(),
-    });
     jest.spyOn(UserTokenService, "fetchTokenFromId").mockImplementation(() => { throw new Error("Unexpected error"); });
     const response = await request(app)
       .get(ENDPOINT)

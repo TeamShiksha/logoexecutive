@@ -11,22 +11,44 @@ const signupPayloadSchema = Joi.object().keys({
     .min(1)
     .max(20)
     .regex(/^[^!@#$%^&*(){}\[\]\\\.;'",.<>/?`~|0-9]*$/)
-    .message("First name can only contain alphabets."),
+    .messages({
+      "string.base": "First name must be string",
+      "string.min": "First name cannot be empty",
+      "string.max": "First name length must be 20 or fewer",
+      "any.required": "First name is required",
+      "string.pattern.base": "First name should only contain alphabets",
+    }),
   lastName: Joi.string()
     .trim()
     .required()
     .min(1)
     .max(20)
     .regex(/^[^!@#$%^&*(){}\[\]\\\.;'",.<>/?`~|0-9]*$/)
-    .message("Last name can only contain alphabets."),
+    .messages({
+      "string.base": "Last name must be string",
+      "string.min": "Last name cannot be empty",
+      "string.max": "Last name must be 20 or fewer characters",
+      "any.required": "Last name is required",
+      "string.pattern.base": "Last name should only contain alphabets",
+    }),
   email: Joi.string()
     .trim()
     .required()
     .max(50)
     .regex(/^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/)
-    .message("Invalid email"),
-  password: Joi.string().trim().required().min(8).max(30),
-  confirmPassword: Joi.any().required().equal(Joi.ref("password")).messages({"any.only": "Passwords mismatch"}),
+    .messages({
+      "string.base": "Email must be a string",
+      "string.max": "Email lenght must be 50 or fewer",
+      "any.required": "Email is required",
+      "string.pattern.base": "Invalid email",
+    }),
+  password: Joi.string().trim().required().min(8).max(30).messages({
+    "string.base": "Password must be string",
+    "string.min": "Password must be at least 8 characters",
+    "string.max": "Password must be 30 characters or fewer",
+    "any.required": "Password is required"
+  }),
+  confirmPassword: Joi.any().required().equal(Joi.ref("password")).messages({"any.only": "Password and confirm password do not match"}),
 });
 
 async function signupController(req, res, next) {
@@ -103,7 +125,7 @@ async function signupController(req, res, next) {
 
     return res.status(201).json(
       {
-        message: "User created successfully. Verification email sent.",
+        message: "User created successfully. Verification email sent",
         statusCode: 201,
       },
     );

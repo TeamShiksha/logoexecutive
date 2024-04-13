@@ -1,6 +1,6 @@
 const { Keys } = require("../models");
 const { KeyCollection } = require("../utils/firestore");
-const {Timestamp} = require("firebase-admin/firestore");
+const { Timestamp } = require("firebase-admin/firestore");
 const { v4 } = require("uuid");
 
 async function createKey(data) {
@@ -14,7 +14,8 @@ async function createKey(data) {
       createdAt: Timestamp.now(),
       updatedAt: Timestamp.now(),
     };
-    const result = await KeyCollection.doc(keyData.keyId).set(keyData);
+
+    await KeyCollection.doc(keyData.keyId).set(keyData);
     const UserKey = new Keys(keyData);
     return UserKey;
   } catch (err) {
@@ -61,5 +62,5 @@ module.exports = {
   createKey,
   fetchKeysByuserid,
   destroyKey,
-  isAPIKeyPresent
+  isAPIKeyPresent,
 };

@@ -7,22 +7,26 @@ function ApiKeyForm({
 	errorMessage,
 	setErrorMessage,
 	handleGenerateKey,
+	loading,
 }) {
 	return (
 		<section className='dashboard-content-section'>
 			<form className='api-key-container ' onSubmit={handleGenerateKey}>
+				{errorMessage && <p className='custom-input-error'>{errorMessage}</p>}
 				<CustomInput
 					type='text'
 					name='apikey'
 					value={inputValue}
+					disabled={loading}
 					label='Description For API Key'
 					onChange={(e) => {
 						setInputValue(e.target.value);
 						setErrorMessage('');
 					}}
-					error={errorMessage}
 				/>
-				<button type='submit'>Generate Key</button>
+				<button type='submit' disabled={loading}>
+					Generate Key
+				</button>
 			</form>
 		</section>
 	);

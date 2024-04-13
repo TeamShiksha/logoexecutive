@@ -35,7 +35,7 @@ class Keys {
       key: this.key,
       usageCount: this.usageCount,
       createdAt: this.createdAt,
-      updatedAt: this.updatedAt
+      updatedAt: this.updatedAt,
     };
   }
 }

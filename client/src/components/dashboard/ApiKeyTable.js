@@ -17,11 +17,19 @@ function ApiKeyTable({keys, copiedKey, handleCopyToClipboard, deleteKey}) {
 						</tr>
 					</thead>
 					<tbody>
+						{!keys.length && (
+							<tr>
+								<td colSpan='4' className='no-keys'>
+									Your api keys will be visible here. click on generate key to
+									add new api key
+								</td>
+							</tr>
+						)}
 						{keys.map((key, index) => (
 							<tr key={index}>
-								<td>{key.description}</td>
+								<td>{key.keyDescription}</td>
 								<td className='api-key-column'>
-									{copiedKey === key.apiKey ? (
+									{copiedKey === key.key ? (
 										<div
 											className='api-key-copied'
 											data-testid='api-key-copied'
@@ -32,7 +40,7 @@ function ApiKeyTable({keys, copiedKey, handleCopyToClipboard, deleteKey}) {
 										<button
 											className='api-key-copy'
 											data-testid='api-key-copy'
-											onClick={() => handleCopyToClipboard(key.apiKey)}
+											onClick={() => handleCopyToClipboard(key.key)}
 										>
 											<FiCopy />
 										</button>
@@ -42,12 +50,18 @@ function ApiKeyTable({keys, copiedKey, handleCopyToClipboard, deleteKey}) {
 									<button
 										className='api-key-delete-button'
 										data-testid='api-key-delete'
-										onClick={() => deleteKey(key.apiKey)}
+										onClick={() => deleteKey(key.key)}
 									>
 										<MdDeleteOutline />
 									</button>
 								</td>
-								<td>{key.createDate}</td>
+								<td>
+									{new Date(key?.createdAt).toLocaleDateString('en-us', {
+										month: 'long',
+										day: 'numeric',
+										year: 'numeric',
+									}) || ''}
+								</td>
 							</tr>
 						))}
 					</tbody>

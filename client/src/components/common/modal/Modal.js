@@ -6,6 +6,7 @@ function Modal({
 	modalOpen,
 	children,
 	setModal,
+	handleConfirm,
 	showButtons,
 	containerClassName,
 }) {
@@ -34,7 +35,12 @@ function Modal({
 						<button className='modal-button' onClick={closeModal}>
 							Cancel
 						</button>
-						<button className='modal-button modal-ok-button'>Okay</button>
+						<button
+							className='modal-button modal-ok-button'
+							onClick={handleConfirm}
+						>
+							Okay
+						</button>
 					</footer>
 				)}
 			</div>

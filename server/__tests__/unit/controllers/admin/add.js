@@ -23,7 +23,7 @@ describe("setAdminController", () => {
     jest.resetAllMocks();
   });
 
-  it("500 - CORS Error on invalid origin", async () => {
+  it("500 - Not allowed by CORS", async () => {
     const mockEmail = "bill_@gmail.com";
     const mockPayload = {"email": mockEmail};
     const mockJWT = new Users(mockUsers[0]).generateJWT();

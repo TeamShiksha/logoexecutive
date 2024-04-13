@@ -30,7 +30,7 @@ describe("adminUploadController", () => {
     delete process.env.JWT_SECRET;
   });
 
-  it("500 - CORS Error on invalid origin", async () => {
+  it("500 -  Not allowed by CORS", async () => {
     const mockUserModel = new Users({ ...mockUsers[1], userType: "ADMIN" });
     const mockToken = mockUserModel.generateJWT();
     const response = await request(app)

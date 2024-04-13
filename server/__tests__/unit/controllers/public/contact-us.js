@@ -28,7 +28,7 @@ describe("contactUs controller", () =>{
     jest.restoreAllMocks();
   });
 
-  it("500 - CORS", async () => {
+  it("500 - Not allowed by CORS", async () => {
     const response = await request(app)
       .post("/api/public/contact-us")
       .set("Origin", "http://invalidcorsorigin.com");

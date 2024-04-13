@@ -145,7 +145,7 @@ describe("/forgot-password", () => {
       .send(mockPayload);
 
     expect(response.status).toBe(200);
-    expect(response.body).toEqual({ message: "Successfully sent email" });
+    expect(response.body).toEqual({ message: "Please check your email for a password reset link. If it's not there, check your spam folder" });
   });
 
 });

@@ -37,7 +37,6 @@ async function get(req, res, next) {
       });
 
     res.cookie("resetPasswordSession", jwt.sign({ userId: userToken.userId, token: userToken.token }, process.env.JWT_SECRET));
-
     return res.status(200).json({
       message: "Token is verified successfully",
     });
@@ -53,11 +52,9 @@ const patchSchema = Joi.object().keys({
     "string.max": "New password must be 30 characters or fewer",
     "string.min": "New password must be at least 8 characters",
   }),
-  confirmPassword: Joi.string().trim().min(8).max(30).required().messages({
-    "string.base": "Confirm password must be a string",
+  confirmPassword: Joi.string().required().equal(Joi.ref("newPassword")).messages({
+    "any.only": "Password and confirm password do not match",
     "any.required": "Confirm password is required",
-    "string.max": "Confirm password must be 30 characters or fewer",
-    "string.min": "Confirm password must be at least 8 characters",
   }),
   token: Joi.string().trim().required().messages({
     "string.base": "Token must be a string",
@@ -67,7 +64,6 @@ const patchSchema = Joi.object().keys({
 
 const patch = async (req, res, next) => {
   try {
-    const result = req.body;
     const { resetPasswordSession } = req.cookies;
     if (!resetPasswordSession) {
       return res.status(401).json({
@@ -82,7 +78,7 @@ const patch = async (req, res, next) => {
       process.env.JWT_SECRET
     );
     const { userId } = decodedData;
-    const { error, value } = patchSchema.validate(result);
+    const { error, value } = patchSchema.validate(req.body);
     if (error) {
       return res.status(422).json({
         error: "Unprocessable payload",
@@ -91,34 +87,26 @@ const patch = async (req, res, next) => {
       });
     }
 
-    if (value.confirmPassword === value.newPassword) {
-      const hashedPassword = await bcrypt.hash(value.newPassword, 10);
-      const userRef = await fetchUserFromId(userId);
-      const result = await updatePasswordService(userRef, hashedPassword);
-      if (result) {
-        let deleteTokenRef = await fetchTokenFromId(value.token);
-        if (deleteTokenRef === null || deleteTokenRef.token !== value.token) {
-          return res.status(403).json({
-            error: "Forbidden",
-            message: "Invalid credentials",
-            statusCode: STATUS_CODES[403],
-          });
-        }
-        await deleteUserToken(deleteTokenRef);
-        return res.status(200).json({ 
-          message: "Your password has been successfully reset. You can now sign in with your new password." 
-        });
-      } else {
-        return res.status(400).json({
-          error: "Bad request",
-          message: "Failed to update password",
-          statusCode: STATUS_CODES[400],
+    const hashedPassword = await bcrypt.hash(value.newPassword, 10);
+    const userRef = await fetchUserFromId(userId);
+    const result = await updatePasswordService(userRef, hashedPassword);
+    if (result) {
+      let deleteTokenRef = await fetchTokenFromId(value.token);
+      if (deleteTokenRef === null || deleteTokenRef.token !== value.token) {
+        return res.status(403).json({
+          error: "Forbidden",
+          message: "Invalid credentials",
+          statusCode: STATUS_CODES[403],
         });
       }
+      await deleteUserToken(deleteTokenRef);
+      return res.status(200).json({ 
+        message: "Your password has been successfully reset. You can now sign in with your new password." 
+      });
     } else {
       return res.status(400).json({
         error: "Bad request",
-        message: "Password and Confirm password do not match",
+        message: "Failed to update password",
         statusCode: STATUS_CODES[400],
       });
     }

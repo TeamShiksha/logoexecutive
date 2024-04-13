@@ -210,6 +210,26 @@ describe("PATCH /auth/reset-password", () => {
     });
   });
 
+  it("422 - Password and confirm password do not match", async () => {
+    const mockToken = mockUserModel.generateJWT();
+    const mockBody = {
+      token: "6dc1ff1a95e04dcdb347269ed15575bc",
+      newPassword: "@Rtyu678KMh",
+      confirmPassword: "@Rtyu678KMh1",
+    };
+    const response = await request(app)
+      .patch(ENDPOINT)
+      .set("cookie", `resetPasswordSession=${mockToken}`)
+      .send(mockBody);
+
+    expect(response.status).toBe(422);
+    expect(response.body).toEqual({
+      error: "Unprocessable payload",
+      message: "Password and confirm password do not match",
+      statusCode: STATUS_CODES[422]
+    });
+  });
+
   it("403 - Invalid credentials", async () => {
     const mockToken = mockUserModel.generateJWT();
     const mockBody = {
@@ -251,26 +271,6 @@ describe("PATCH /auth/reset-password", () => {
       error: STATUS_CODES[500],
       message: "Unexected error",
       statusCode: 500
-    });
-  });
-
-  it("400 - Password and Confirm password do not match", async () => {
-    const mockToken = mockUserModel.generateJWT();
-    const mockBody = {
-      newPassword: "@Rtyu678KMh",
-      confirmPassword: "@Rtyu1678KMh",
-      token: "6dc1ff1a95e04dcdb847269ed15575fg",
-    };
-    const response = await request(app)
-      .patch(ENDPOINT)
-      .set("cookie", `resetPasswordSession=${mockToken}`)
-      .send(mockBody);
-
-    expect(response.status).toBe(400);
-    expect(response.body).toEqual({
-      error: "Bad request",
-      message: "Password and Confirm password do not match",
-      statusCode: STATUS_CODES[400],
     });
   });
 

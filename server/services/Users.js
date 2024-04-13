@@ -115,18 +115,16 @@ async function updatePasswordService(user, hashNewPassword){
   }
 }
 
-/**
- * @param {User} user
- **/
 async function verifyUser(user) {
-  const result = await user.userRef.update({ isVerified: true });
-  if (!result) 
-    return { 
-      success: false, 
-      message: "Failed to verify the user" 
-    };
-  user.isVerified = true;
-  return { success: true, message: "Successfully verified the user" };
+  try {
+    const result = await user.userRef.update({ isVerified: true });
+    if (!result) 
+      return false;
+    return true;
+  } catch (err){
+    console.log(err);
+    throw err;
+  }
 }
 
 async function updateUser(updateProfile, user) {

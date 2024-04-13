@@ -10,9 +10,7 @@ const mockUserModel = new Users(mockUsers[0]);
 const mockUserTokenVerify = new UserToken(mockUserTokens[0]);
 
 jest.mock("../../../../services/UserToken", () => ({
-  deleteUserToken: jest.fn().mockImplementation(
-    () => new Promise((resolve) => resolve({ success: true })),
-  ),
+  deleteUserToken: jest.fn(),
   fetchTokenFromId: jest.fn(),
 }));
 jest.mock("../../../../services/Users", () => ({
@@ -26,17 +24,15 @@ describe("GET /auth/verify", () => {
   beforeAll(() => {
     process.env.BASE_URL = "http://validcorsorigin.com";
   });
-
   afterEach(() => {
     jest.clearAllMocks();
     jest.restoreAllMocks();
   });
-
   afterAll(() => {
     delete process.env.BASE_URL;
   });
 
-  it("500 - CORS", async () => {
+  it("500 - Not allowed by CORS", async () => {
     const response = await request(app)
       .get(ENDPOINT)
       .set("Origin", "http://invalidcorsorigin.com");
@@ -54,34 +50,31 @@ describe("GET /auth/verify", () => {
 
     expect(response.status).toBe(422);
     expect(response.body).toEqual({
-      error: STATUS_CODES[422],
+      error: "Unprocessable payload",
       message: "No token provided",
-      statusCode: 422,
+      statusCode: STATUS_CODES[422],
     });
   });
 
   it("400 - token does not exist", async () => {
     jest.spyOn(UserTokenService, "fetchTokenFromId").mockImplementation(() => null);
-
     const response = await request(app)
       .get(ENDPOINT)
       .query({ token: "token" });
 
     expect(response.status).toBe(400);
     expect(response.body).toEqual({
-      error: STATUS_CODES[400],
+      error: "Bad request",
       message: "Invalid token",
-      statusCode: 400,
+      statusCode: STATUS_CODES[400],
     });
   });
 
   it("403 - token is expired", async () => {
-    // create a copy of mockusertoken
     const mockUserToken = new UserToken({
       ...mockUserTokenVerify,
       expireAt: Date.now(),
     });
-
     jest.spyOn(UserTokenService, "fetchTokenFromId").mockImplementation(() => mockUserToken);
 
     const response = await request(app)
@@ -90,53 +83,83 @@ describe("GET /auth/verify", () => {
 
     expect(response.status).toBe(403);
     expect(response.body).toEqual({
-      error: STATUS_CODES[403],
+      error: "Forbidden",
       message: "Token expired",
-      statusCode: 403,
+      statusCode: STATUS_CODES[403],
     });
   });
 
   it("400 - User does not exist", async () => {
     jest.spyOn(UserTokenService, "fetchTokenFromId").mockImplementation(() => mockUserTokenVerify);
     jest.spyOn(UserService, "fetchUserFromId").mockImplementation(() => null);
-
     const response = await request(app)
       .get(ENDPOINT)
       .query({ token: "token" });
 
-    expect(response.status).toBe(400);
+    expect(response.status).toBe(404);
     expect(response.body).toEqual({
-      error: STATUS_CODES[400],
-      message: "User no longer exists",
-      statusCode: 400,
+      error: "Not Found",
+      message: "User doesn't exists",
+      statusCode: STATUS_CODES[404],
     });
   });
 
   it("500 - Verify service fails", async () => {
     jest.spyOn(UserTokenService, "fetchTokenFromId").mockImplementation(() => mockUserTokenVerify);
     jest.spyOn(UserService, "fetchUserFromId").mockImplementation(() => mockUserModel);
-    jest.spyOn(UserService, "verifyUser").mockImplementation(() => ({
-      success: false,
-      message: "Failed to verify user",
-    }));
-
+    jest.spyOn(UserService, "verifyUser").mockImplementation(false);
     const response = await request(app)
       .get(ENDPOINT)
       .query({ token: "token" });
 
     expect(response.status).toBe(500);
     expect(response.body).toEqual({
+      error: "Internal server error",
+      message: "Failed to verify user, try again",
+      statusCode: STATUS_CODES[500],
+    });
+  });
+
+  it("500 - Unexpected error", async () => {
+    const mockUserToken = new UserToken({
+      ...mockUserTokenVerify,
+      expireAt: Date.now(),
+    });
+    jest.spyOn(UserTokenService, "fetchTokenFromId").mockImplementation(() => { throw new Error("Unexpected error"); });
+    const response = await request(app)
+      .get(ENDPOINT)
+      .query({ token: "token" });
+
+    expect(response.status).toBe(500);
+    expect(response.body).toEqual({
+      message: "Unexpected error",
       error: STATUS_CODES[500],
-      message: "Failed to verify user",
       statusCode: 500,
     });
   });
 
-  it("Success 200 - User is verified", async () => {
+  it("500 - Internal server error", async () => {
     jest.spyOn(UserTokenService, "fetchTokenFromId").mockImplementation(() => mockUserTokenVerify);
     jest.spyOn(UserService, "fetchUserFromId").mockImplementation(() => mockUserModel);
-    jest.spyOn(UserService, "verifyUser").mockImplementation(() => ({ success: true }));
+    jest.spyOn(UserService, "verifyUser").mockResolvedValueOnce(true);
+    jest.spyOn(UserTokenService, "deleteUserToken").mockResolvedValueOnce(false);
+    const response = await request(app)
+      .get(ENDPOINT)
+      .query({ token: "token" });
 
+    expect(response.status).toBe(500);
+    expect(response.body).toEqual({
+      error: "Internal server error",
+      message: "Something went wrong",
+      statusCode: STATUS_CODES[500],
+    });
+  });
+
+  it("200 - Verification successful", async () => {
+    jest.spyOn(UserTokenService, "fetchTokenFromId").mockImplementation(() => mockUserTokenVerify);
+    jest.spyOn(UserService, "fetchUserFromId").mockImplementation(() => mockUserModel);
+    jest.spyOn(UserService, "verifyUser").mockResolvedValueOnce(true);
+    jest.spyOn(UserTokenService, "deleteUserToken").mockResolvedValueOnce(true);
     const response = await request(app)
       .get(ENDPOINT)
       .query({ token: "token" });
@@ -147,18 +170,4 @@ describe("GET /auth/verify", () => {
     });
   });
 
-  it("Error 500 - response from error handler", async () => {
-    jest.spyOn(UserTokenService, "fetchTokenFromId").mockImplementation(() => {throw new Error("Unexpected error");});
-
-    const response = await request(app)
-      .get(ENDPOINT)
-      .query({ token: "token" });
-
-    expect(response.status).toBe(500);
-    expect(response.body).toEqual({
-      error: STATUS_CODES[500],
-      message: "Unexpected error",
-      statusCode: 500,
-    });
-  });
 });

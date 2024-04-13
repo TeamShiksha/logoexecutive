@@ -22,123 +22,95 @@ describe("getLogoController", () => {
   beforeAll(() => {
     process.env.JWT_SECRET = "my_secret";
   });
-
   afterAll(() => {
     delete process.env.JWT_SECRET;
   });
-
   afterEach(() => {
     jest.resetAllMocks();
   });
 
-  it("Should return 422 if API Key is NOT present", async () => {
-
-    const mockToken = mockUserModel.generateJWT();
-
-    jest
-      .spyOn(KeyService, "isAPIKeyPresent")
-      .mockImplementation(() => true);
-
-    jest
-      .spyOn(ImageService, "fetchImageByCompanyFree")
-      .mockImplementation(() => mockCDNLink);
-
+  it("422 - API key is required", async () => {
     const mockQuery = {"companyName": "coupang"};
     const response = await request(app)
       .get(ENDPOINT)
-      .set("cookie", `jwt=${mockToken}`)
       .query(mockQuery);
+
     expect(response.status).toBe(422);
     expect(response.body).toEqual({
-      message: "Please provide proper Company name and API Key",
+      message: "API key is required",
       statusCode: 422,
       error: STATUS_CODES[422]
     });
   });
 
-  it("Should return 422 if company name is NOT present", async () => {
-
-    const mockToken = mockUserModel.generateJWT();
-
-    jest
-      .spyOn(KeyService, "isAPIKeyPresent")
-      .mockImplementation(() => true);
-
-    jest
-      .spyOn(ImageService, "fetchImageByCompanyFree")
-      .mockImplementation(() => mockCDNLink);
-
+  it("422 - Company name is required", async () => {
     const mockQuery = {"apiKey": "2B1B1BF5F9914BCD85A0B1122C71EDDB"};
     const response = await request(app)
       .get(ENDPOINT)
-      .set("cookie", `jwt=${mockToken}`)
       .query(mockQuery);
+
     expect(response.status).toBe(422);
     expect(response.body).toEqual({
-      message: "Please provide proper Company name and API Key",
+      message: "Company name is required",
       statusCode: 422,
       error: STATUS_CODES[422]
     });
   });
 
-  it("Should return 403 if API key is not valid", async () => {
-
-    const mockToken = mockUserModel.generateJWT();
-
+  it("403 - Invalid API key", async () => {
     const mockQuery = {"companyName": "coupang", "apiKey": "2B1B1BF5F9914BCD85A0B1122C71EDDC"};
     const response = await request(app)
       .get(ENDPOINT)
-      .set("cookie", `jwt=${mockToken}`)
       .query(mockQuery);
+
     expect(response.status).toBe(403);
     expect(response.body).toEqual({
-      message: "Given API key was not found",
+      message: "Invalid API key",
       statusCode: 403,
       error: STATUS_CODES[403]
     });
   });
 
-  it("Should return 404 if image is not found for given company name", async () => {
-
-    const mockToken = mockUserModel.generateJWT();
-
-    jest
-      .spyOn(KeyService, "isAPIKeyPresent")
-      .mockImplementation(() => true);
-
+  it("404 - Logo not available", async () => {
+    jest.spyOn(KeyService, "isAPIKeyPresent").mockImplementation(() => true);
     const mockQuery = {"companyName": "infibeam", "apiKey": "2B1B1BF5F9914BCD85A0B1122C71EDDB"};
     const response = await request(app)
       .get(ENDPOINT)
-      .set("cookie", `jwt=${mockToken}`)
       .query(mockQuery);
+
     expect(response.status).toBe(404);
     expect(response.body).toEqual({
-      message: "No image found for company name infibeam",
+      message: "Logo not available",
       statusCode: 404,
       error: STATUS_CODES[404]
     });
   });
 
-  it("Should return 200 if image is found for the company name with the correct API Key", async () => {
-
-    const mockToken = mockUserModel.generateJWT();
-
-    jest
-      .spyOn(KeyService, "isAPIKeyPresent")
-      .mockImplementation(() => true);
-
-    jest
-      .spyOn(ImageService, "fetchImageByCompanyFree")
-      .mockImplementation(() => mockCDNLink);
-
+  it("500 - Unexpected error", async () => {
+    jest.spyOn(KeyService, "isAPIKeyPresent").mockImplementation(() => {throw new Error("Unexpected error");});
     const mockQuery = {"companyName": "coupang", "apiKey": "2B1B1BF5F9914BCD85A0B1122C71EDDB"};
     const response = await request(app)
       .get(ENDPOINT)
-      .set("cookie", `jwt=${mockToken}`)
       .query(mockQuery);
+
+    expect(response.status).toBe(500);
+    expect(response.body).toEqual({
+      message: "Unexpected error",
+      error: STATUS_CODES[500],
+      statusCode: 500,
+    });
+  });
+
+  it("200 - CDN url created", async () => {
+    jest.spyOn(KeyService, "isAPIKeyPresent").mockImplementation(() => true);
+    jest.spyOn(ImageService, "fetchImageByCompanyFree").mockImplementation(() => mockCDNLink);
+    const mockQuery = {"companyName": "coupang", "apiKey": "2B1B1BF5F9914BCD85A0B1122C71EDDB"};
+    const response = await request(app)
+      .get(ENDPOINT)
+      .query(mockQuery);
+
     expect(response.status).toBe(200);
     expect(response.body).toEqual({
-      message: "Image Link successfully generated for coupang",
       statusCode: 200,
       data: mockCDNLink
     });

@@ -223,6 +223,22 @@ describe("Signup Controller", () => {
     });
   });
 
+  it("500 - Unexpected error", async () => {
+    jest.spyOn(UserService, "emailRecordExists").mockImplementation(() => {
+      throw new Error("Unexpected error");
+    });
+    const response = await request(app)
+      .post(ENDPOINT)
+      .send(mockValidPayload);
+
+    expect(response.status).toBe(500);
+    expect(response.body).toEqual({
+      message: "Unexpected error",
+      error: STATUS_CODES[500],
+      statusCode: 500,
+    });
+  });
+
   it("206 - Unexpected error occurred while creating subscription", async () => {
     jest.spyOn(UserService, "emailRecordExists").mockImplementation(() => false);
     jest.spyOn(UserService, "createUser").mockImplementation(() => mockUserModel);
@@ -238,7 +254,7 @@ describe("Signup Controller", () => {
     });
   });
 
-  it("206 - when failed to create user user token", async () => {
+  it("206 - User created successfully. Verification email failed to send.", async () => {
     jest.spyOn(UserService, "emailRecordExists").mockImplementation(() => false);
     jest.spyOn(UserService, "createUser").mockImplementation(() => mockUserModel);
     jest.spyOn(SubscriptionService, "createSubscription").mockImplementation(() => true);
@@ -255,7 +271,7 @@ describe("Signup Controller", () => {
     });
   });
 
-  it("206 - when failed to send verification email", async () => {
+  it("206 - User created successfully. Verification email failed to send", async () => {
     jest.spyOn(UserService, "emailRecordExists").mockImplementation(() => false);
     jest.spyOn(UserService, "createUser").mockImplementation(() => mockUserModel);
     jest.spyOn(SubscriptionService, "createSubscription").mockImplementation(() => true);
@@ -288,22 +304,6 @@ describe("Signup Controller", () => {
       message:
         "User created successfully. Verification email sent",
       statusCode: 201,
-    });
-  });
-
-  it("500 - Unexpected error", async () => {
-    jest.spyOn(UserService, "emailRecordExists").mockImplementation(() => {
-      throw new Error("Unexpected error");
-    });
-    const response = await request(app)
-      .post(ENDPOINT)
-      .send(mockValidPayload);
-
-    expect(response.status).toBe(500);
-    expect(response.body).toEqual({
-      message: "Unexpected error",
-      error: STATUS_CODES[500],
-      statusCode: 500,
     });
   });
 });

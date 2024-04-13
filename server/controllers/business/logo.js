@@ -5,16 +5,21 @@ const { isAPIKeyPresent, fetchImageByCompanyFree } = require("../../services");
 const getLogoQuerySchema = Joi.object({
   companyName: Joi.string()
     .regex(/^[A-Za-z0-9&-]+$/)
-    .required(),
-  apiKey: Joi.string().guid({ version: "uuidv4" }).required(),
+    .required().messages({
+      "any.required": "Company name is required",
+      "string.pattern.base": "Invalid name",
+    }),
+  apiKey: Joi.string().guid({ version: "uuidv4" }).required().messages({
+    "any.required": "API key is required"
+  }),
 });
 
 async function getLogoController(req, res, next) {
   try {
     const { error, value } = getLogoQuerySchema.validate(req.query);
-    if (error) {
+    if (!!error) {
       return res.status(422).json({
-        message: "Please provide proper Company name and API Key",
+        message: error.message,
         statusCode: 422,
         error: STATUS_CODES[422],
       });
@@ -24,7 +29,7 @@ async function getLogoController(req, res, next) {
     const apiKeyPresent = await isAPIKeyPresent(apiKey);
     if (!apiKeyPresent) {
       return res.status(403).json({
-        message: "Given API key was not found",
+        message: "Invalid API key",
         statusCode: 403,
         error: STATUS_CODES[403],
       });
@@ -33,14 +38,13 @@ async function getLogoController(req, res, next) {
     const imageUrl = await fetchImageByCompanyFree(companyName.toLowerCase());
     if (!imageUrl) {
       return res.status(404).json({
-        message: "No image found for company name " + companyName,
+        message: "Logo not available",
         statusCode: 404,
         error: STATUS_CODES[404],
       });
     }
 
     return res.status(200).json({
-      message: "Image Link successfully generated for " + companyName,
       statusCode: 200,
       data: imageUrl,
     });

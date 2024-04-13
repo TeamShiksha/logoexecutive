@@ -3,6 +3,7 @@ const { STATUS_CODES } = require("http");
 const app = require("../../../../app");
 const { Users } = require("../../../../models");
 const { mockUsers } = require("../../../../utils/mocks/Users");
+const signoutController = require("../../../../controllers/auth/signout");
 
 const ENDPOINT = "/api/auth/signout";
 
@@ -16,7 +17,7 @@ describe("/api/signout", () => {
     delete process.env.BASE_URL;
   });
 
-  it("500 - CORS", async () => {
+  it("500 - Not allowed by CORS", async () => {
     const response = await request(app)
       .get(ENDPOINT)
       .set("Origin", "http://invalidcorsorigin.com");
@@ -29,14 +30,14 @@ describe("/api/signout", () => {
     });
   });
 
-  it("401 - Auth cookie not present", async () => {
+  it("401 - Failed to validate user session", async () => {
     const response = await request(app).get(ENDPOINT);
 
     expect(response.status).toBe(400);
     expect(response.body).toEqual({
-      error: STATUS_CODES[400],
+      error: "Not Found",
       message: "Failed to validate user session",
-      statusCode: 400,
+      statusCode: STATUS_CODES[400],
     });
   });
 
@@ -45,7 +46,6 @@ describe("/api/signout", () => {
     const response = await request(app).get(ENDPOINT).set("Cookie", `jwt=${mockJWT}`);
 
     expect(response.status).toBe(205);
-    // Should contain jwt=; in the set-cookie value
     expect(response.headers["set-cookie"][0]).toMatch(/jwt=;*/);
   });
 });

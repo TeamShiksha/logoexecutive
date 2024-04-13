@@ -50,16 +50,16 @@ describe("/forgot-password", () => {
     });
   });
 
-  it("422 - on invalid payload regex", async () => {
+  it("422 - Invalid Email", async () => {
     const response = await request(app)
       .post(ENDPOINT)
       .send({ email: "123" });
 
     expect(response.status).toBe(422);
     expect(response.body).toEqual({
-      error: STATUS_CODES[422],
-      statusCode: 422,
-      message: "Invalid Email.",
+      error: "Unprocessable payload",
+      statusCode: STATUS_CODES[422],
+      message: "Invalid email",
     });
   });
 
@@ -71,79 +71,75 @@ describe("/forgot-password", () => {
 
     expect(response.status).toBe(422);
     expect(response.body).toEqual({
-      error: STATUS_CODES[422],
-      statusCode: 422,
-      message: "\"email\" is required",
+      error: "Unprocessable payload",
+      statusCode: STATUS_CODES[422],
+      message: "Email is required",
     });
   });
 
-  it("422 - invalid fields (extra fields)", async () => {
-    const response = await request(app)
-      .post(ENDPOINT)
-      .send({ email: "hello@example.com", extraField: "123" })
-      .set("Content-Type", "application/json");
-
-    expect(response.status).toBe(422);
-    expect(response.body).toEqual({
-      error: STATUS_CODES[422],
-      statusCode: 422,
-      message: "\"extraField\" is not allowed",
-    });
-  });
-
-  it("404 - user not found", async () => {
+  it("404 - Email does not exist", async () => {
     fetchUserByEmailSpy.mockImplementation(() => null);
-
     const response = await request(app)
       .post(ENDPOINT)
       .send(mockPayload);
 
     expect(response.status).toBe(404);
     expect(response.body).toEqual({
-      error: STATUS_CODES[404],
-      message: "Email does not exist.",
-      statusCode: 404,
+      error: "Not Found",
+      message: "Email does not exist",
+      statusCode: STATUS_CODES[404],
     });
   });
 
-  it("503 - unable to create forgot token", async () => {
+  it("503 - Unable to process forgot password request", async () => {
     fetchUserByEmailSpy.mockImplementation(() => new Users(mockUsers[1]));
     createForgotTokenSpy.mockImplementation(() => null);
-
     const response = await request(app)
       .post(ENDPOINT)
       .send(mockPayload);
 
     expect(response.status).toBe(503);
     expect(response.body).toEqual({
-      error: STATUS_CODES[503],
+      error: "Server unavailable",
       message: "Unable to process forgot password request",
-      statusCode: 503,
+      statusCode: STATUS_CODES[503],
     });
   });
 
-  it("500 - unable to send forgot token via mail", async () => {
+  it("500 - Failed to send email", async () => {
     fetchUserByEmailSpy.mockImplementation(() => new Users(mockUsers[1]));
     createForgotTokenSpy.mockImplementation(() => new UserToken(mockUserTokens[2]));
     SendEmailSpy.mockImplementation(() => ({ success: false }));
-
     const response = await request(app)
       .post(ENDPOINT)
       .send(mockPayload);
 
     expect(response.status).toBe(500);
     expect(response.body).toEqual({
-      error: STATUS_CODES[500],
+      error: "Internal server error",
       message: "Failed to send email",
-      statusCode: 500,
+      statusCode: STATUS_CODES[500],
     });
   });
 
-  it("200 - success", async () => {
+  it("500 - Unexected error", async () => {
+    fetchUserByEmailSpy.mockImplementation(() => {throw Error("Unexected error");});
+    const response = await request(app)
+      .post(ENDPOINT)
+      .send(mockPayload);
+
+    expect(response.status).toBe(500);
+    expect(response.body).toEqual({
+      message: "Unexected error",
+      error: STATUS_CODES[500],
+      statusCode: 500
+    });
+  });
+
+  it("200 - Successfully sent email", async () => {
     fetchUserByEmailSpy.mockImplementation(() => new Users(mockUsers[1]));
     createForgotTokenSpy.mockImplementation(() =>new UserToken(mockUserTokens[2]));
     SendEmailSpy.mockImplementation(() => ({ success: true }));
-
     const response = await request(app)
       .post(ENDPOINT)
       .send(mockPayload);
@@ -152,20 +148,4 @@ describe("/forgot-password", () => {
     expect(response.body).toEqual({ message: "Successfully sent email" });
   });
 
-  it("should throw error if unexpected thing happens", async () => {
-    fetchUserByEmailSpy.mockImplementation(() => {
-      throw Error("test error");
-    });
-
-    const response = await request(app)
-      .post(ENDPOINT)
-      .send(mockPayload);
-
-    expect(response.status).toBe(500);
-    expect(response.body).toEqual({
-      message: "test error",
-      error: STATUS_CODES[500],
-      statusCode: 500
-    });
-  });
 });

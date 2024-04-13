@@ -34,7 +34,7 @@ describe('VerificationStatus Component', () => {
 
 	it('renders error message message when token is invalid', async () => {
 		useApi.mockReturnValue({
-			errorMsg: 'Invalid Token',
+			errorMsg: 'Token Expired',
 			makeRequest: jest.fn(),
 			isSuccess: false,
 			loading: false,
@@ -47,7 +47,7 @@ describe('VerificationStatus Component', () => {
 		);
 
 		await waitFor(() => {
-			expect(screen.getByText('Invalid Token')).toBeInTheDocument();
+			expect(screen.getByText('Token Expired')).toBeInTheDocument();
 		});
 	});
 });

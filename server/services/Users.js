@@ -102,7 +102,7 @@ async function fetchUserFromId(userId) {
   }
 }
 
-async function updatePasswordService(user, hashNewPassword){
+async function updatePasswordbyUser(user, hashNewPassword){
   try {
     await user.userRef.update({
       password: hashNewPassword,
@@ -171,7 +171,7 @@ module.exports = {
   fetchUsers,
   fetchUserByEmail,
   createUser,
-  updatePasswordService,
+  updatePasswordbyUser,
   fetchUserFromId,
   verifyUser,
   updateUser,

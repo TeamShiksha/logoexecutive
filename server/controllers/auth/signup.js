@@ -48,7 +48,9 @@ const signupPayloadSchema = Joi.object().keys({
     "string.max": "Password must be 30 characters or fewer",
     "any.required": "Password is required"
   }),
-  confirmPassword: Joi.any().required().equal(Joi.ref("password")).messages({"any.only": "Password and confirm password do not match"}),
+  confirmPassword: Joi.any().required().equal(Joi.ref("password")).messages({
+    "any.only": "Password and confirm password do not match"
+  }),
 });
 
 async function signupController(req, res, next) {

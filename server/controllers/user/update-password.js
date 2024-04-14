@@ -3,7 +3,7 @@ const Joi = require("joi");
 const { STATUS_CODES } = require("http");
 const {
   fetchUserByEmail,
-  updatePasswordService,
+  updatePasswordbyUser,
 } = require("../../services");
 
 
@@ -11,26 +11,28 @@ const updatePasswordPayloadSchema = Joi.object().keys({
   currPassword: Joi.string()
     .trim()
     .required()
-    .min(8)
-    .max(30)
-    .message("Current password is not valid"),
-  
+    .messages({
+      "any.required": "Current password is required"
+    }),
   newPassword: Joi.string()
     .trim()
     .required()
     .min(8)
     .max(30)
-    .message("New password has invalid format"),
-  
+    .messages({
+      "string.base": "New password must be string",
+      "string.min": "New password must be at least 8 characters",
+      "string.max": "New password must be 30 characters or fewer",
+      "any.required": "New password is required"
+    }),
   confirmPassword: Joi.any().required().equal(Joi.ref("newPassword")).messages({
-    "any.only": "confirmPassword does not match newPassword",
+    "any.only": "Password and confirm password do not match"
   }),
 });
 
-async function updatePasswordController(req, res) {
+async function updatePasswordController(req, res, next) {
   try {
-    const { payload } = req.body;
-    const { error, value } = updatePasswordPayloadSchema.validate(payload);
+    const { error, value } = updatePasswordPayloadSchema.validate(req.body);
     if (error) {
       return res.status(422).json({
         message: error.message,
@@ -39,39 +41,35 @@ async function updatePasswordController(req, res) {
       });
     }
   
-    const { currPassword } = req.body.payload;
+    const { currPassword, newPassword } = value;
     const { email } = req.userData;
     const user = await fetchUserByEmail(email);
   
     const matchPassword = await user.matchPassword(currPassword);
     if (!matchPassword) {
       return res.status(400).json({
-        message: "The provided current password is incorrect.",
+        message: "Current password is incorrect",
         statusCode: 400,
         error: STATUS_CODES[400],
       });
     }
   
-    const { newPassword } = req.body.payload;
     const hashNewPassword = await bcrypt.hash(newPassword, 10);
-  
-    const result = updatePasswordService(user, hashNewPassword);
+    const result = await updatePasswordbyUser(user, hashNewPassword);
     if (result) {
       return res.status(200).json({
-        message: "Your password has been updated successfully.",
+        message: "Password updated successfully",
         statusCode: 200,
-        error: "OK",
       });
     } else {
       return res.status(500).json({
         message: "Unexpected error occured while updating password",
         statusCode: 500,
-        error: "Internal server error",
+        error: STATUS_CODES[500],
       });
     }
   } catch (err) {
-    console.log(err);
-    throw err;
+    next(err);
   }
 }
 

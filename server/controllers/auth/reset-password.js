@@ -3,7 +3,7 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const { STATUS_CODES } = require("http");
 const { fetchTokenFromId, deleteUserToken,
-  updatePasswordService, fetchUserFromId } = require("../../services");
+  updatePasswordbyUser, fetchUserFromId } = require("../../services");
 
 const payloadSchema = Joi.object().keys({
   token: Joi.string().trim().required().messages({
@@ -89,7 +89,7 @@ const patch = async (req, res, next) => {
 
     const hashedPassword = await bcrypt.hash(value.newPassword, 10);
     const userRef = await fetchUserFromId(userId);
-    const result = await updatePasswordService(userRef, hashedPassword);
+    const result = await updatePasswordbyUser(userRef, hashedPassword);
     if (result) {
       let deleteTokenRef = await fetchTokenFromId(value.token);
       if (deleteTokenRef === null || deleteTokenRef.token !== value.token) {

@@ -11,7 +11,7 @@ jest.mock("../../../../services/UserToken", () => ({
 }));
 jest.mock("../../../../services/Users", () => ({
   fetchUserFromId: jest.fn(),
-  updatePasswordService: jest.fn(),
+  updatePasswordbyUser: jest.fn(),
 }));
 
 const ENDPOINT = "/api/auth/reset-password";
@@ -238,7 +238,7 @@ describe("PATCH /auth/reset-password", () => {
       token: "6dc1ff1a95e04dcdb847269ed15575fg",
     };
     jest.spyOn(UserService, "fetchUserFromId").mockImplementation(() => mockUserModel);
-    jest.spyOn(UserService, "updatePasswordService").mockImplementation(() => mockUserModel);
+    jest.spyOn(UserService, "updatePasswordbyUser").mockImplementation(() => mockUserModel);
     jest.spyOn(UserTokenService, "fetchTokenFromId").mockImplementation(() => new UserToken(mockUserTokens[2]));
     const response = await request(app)
       .patch(ENDPOINT)
@@ -277,7 +277,7 @@ describe("PATCH /auth/reset-password", () => {
   it("200 - Failed to update password", async () => {
     const mockToken = mockUserModel.generateJWT();
     jest.spyOn(UserService, "fetchUserFromId").mockImplementation(() => mockUserModel);
-    jest.spyOn(UserService, "updatePasswordService").mockImplementation(() => false);
+    jest.spyOn(UserService, "updatePasswordbyUser").mockImplementation(() => false);
     const response = await request(app)
       .patch(ENDPOINT)
       .set("cookie", `resetPasswordSession=${mockToken}`)
@@ -294,7 +294,7 @@ describe("PATCH /auth/reset-password", () => {
   it("200 - Your password has been successfully reset", async () => {
     const mockToken = mockUserModel.generateJWT();
     jest.spyOn(UserService, "fetchUserFromId").mockImplementation(() => mockUserModel);
-    jest.spyOn(UserService, "updatePasswordService").mockImplementation(() => mockUserModel);
+    jest.spyOn(UserService, "updatePasswordbyUser").mockImplementation(() => mockUserModel);
     jest.spyOn(UserTokenService, "fetchTokenFromId").mockImplementation(() => new UserToken(mockUserTokens[2]));
     jest.spyOn(UserTokenService, "deleteUserToken").mockImplementation(() => new UserToken(mockUserTokens[2]));
     const response = await request(app)

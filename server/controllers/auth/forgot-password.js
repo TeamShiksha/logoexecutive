@@ -25,39 +25,41 @@ async function forgotPasswordController(req, res, next) {
     const { error, value } = forgotPasswordSchema.validate(req.body);
     if (error)
       return res.status(422).json({
-        error: "Unprocessable payload",
+        error: STATUS_CODES[422],
         message: error.message,
-        statusCode: STATUS_CODES[422],
+        statusCode: 422,
       });
 
     const { email } = value;
     const user = await fetchUserByEmail(email);
     if (!user)
       return res.status(404).json({
-        error: "Not Found",
+        error: STATUS_CODES[404],
         message: "Email does not exist",
-        statusCode: STATUS_CODES[404],
+        statusCode: 404,
       });
 
     const userToken = await createForgotToken(user.userId);
     if (!userToken)
       return res.status(503).json({
-        error: "Server unavailable",
+        error: STATUS_CODES[503],
         message: "Unable to process forgot password request",
-        statusCode: STATUS_CODES[503],
+        statusCode: 503,
       });
 
     const mail = mailText(userToken.tokenURL.href);
     const nodeMailerRes = await sendEmail(user.email, mail.subject, mail.body);
     if (!nodeMailerRes.success)
       return res.status(500).json({
-        error: "Internal server error",
+        error: STATUS_CODES[500],
         message: "Failed to send email",
-        statusCode: STATUS_CODES[500],
+        statusCode: 500,
       });
 
-    return res.status(200).json({ 
-      message: "Please check your email for a password reset link. If it's not there, check your spam folder"
+    return res.status(200).json({
+      statusCode: 200,
+      message:
+        "Please check your email for a password reset link. If it's not there, check your spam folder",
     });
   } catch (err) {
     next(err);

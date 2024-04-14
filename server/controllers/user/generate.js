@@ -28,8 +28,8 @@ async function generateKeyController(req, res, next) {
     if (error) {
       return res.status(422).json({
         message: error.message,
-        statusCode: STATUS_CODES[422],
-        error: "Unprocessable payload",
+        statusCode: 422,
+        error: STATUS_CODES[422],
       });
     }
     const { userId } = req.userData;
@@ -44,8 +44,8 @@ async function generateKeyController(req, res, next) {
       return res.status(403).json({
         message:
           "The maximum limit for key generation has been reached. Please consider upgrading your subscription to generate additional keys",
-        statusCode: STATUS_CODES[403],
-        error: "Forbidden",
+        statusCode: 403,
+        error: STATUS_CODES[403],
       });
     }
 
@@ -57,8 +57,8 @@ async function generateKeyController(req, res, next) {
     if (duplicateKeyDescription) {
       return res.status(409).json({
         message: "Please provide a different key description",
-        statusCode: STATUS_CODES[409],
-        error: "Conflict",
+        statusCode: 409,
+        error: STATUS_CODES[409],
       });
     }
 
@@ -69,7 +69,7 @@ async function generateKeyController(req, res, next) {
     const UserKey = await createKey(data);
     return res.status(200).json({
       message: "Key generated successfully",
-      statusCode: STATUS_CODES[200],
+      statusCode: 200,
       data: UserKey.data,
     });
   } catch (err) {

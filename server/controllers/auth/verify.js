@@ -1,55 +1,59 @@
 const { STATUS_CODES } = require("http");
-const { verifyUser, fetchUserFromId, 
-  fetchTokenFromId, deleteUserToken } = require("../../services");
+const {
+  verifyUser,
+  fetchUserFromId,
+  fetchTokenFromId,
+  deleteUserToken,
+} = require("../../services");
 
 async function verifyTokenController(req, res, next) {
   try {
     const { token } = req.query;
     if (!token) {
       return res.status(422).json({
-        error: "Unprocessable payload",
+        error: STATUS_CODES[422],
         message: "No token provided",
-        statusCode: STATUS_CODES[422],
+        statusCode: 422,
       });
     }
 
     const userToken = await fetchTokenFromId(token);
     if (!userToken)
       return res.status(400).json({
-        error: "Bad request",
+        error: STATUS_CODES[400],
         message: "Invalid token",
-        statusCode: STATUS_CODES[400],
+        statusCode: 400,
       });
 
     if (userToken.isExpired())
       return res.status(403).json({
-        error: "Forbidden",
+        error: STATUS_CODES[403],
         message: "Token expired",
-        statusCode: STATUS_CODES[403],
+        statusCode: 403,
       });
 
     const user = await fetchUserFromId(userToken.userId);
     if (!user)
       return res.status(404).json({
-        error: "Not Found",
+        error: STATUS_CODES[404],
         message: "User doesn't exists",
-        statusCode: STATUS_CODES[404],
+        statusCode: 404,
       });
 
     const verifyResult = await verifyUser(user);
     if (!verifyResult)
       return res.status(500).json({
-        error: "Internal server error",
+        error: STATUS_CODES[500],
         message: "Failed to verify user, try again",
-        statusCode: STATUS_CODES[500],
+        statusCode: 500,
       });
 
     const result = await deleteUserToken(userToken);
-    if (!result){
+    if (!result) {
       return res.status(500).json({
-        error: "Internal server error",
+        error: STATUS_CODES[500],
         message: "Something went wrong",
-        statusCode: STATUS_CODES[500],
+        statusCode: 500,
       });
     }
 

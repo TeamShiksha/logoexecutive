@@ -25,7 +25,7 @@ jest.mock("../../../../services/Subscriptions", () => ({
 
 const ENDPOINT = "/api/user/generate";
 
-describe("generate-key controller", () =>{
+describe("generate-key controller", () => {
   beforeAll(() => {
     process.env.JWT_SECRET = "my_secret";
     process.env.BASE_URL = "http://validcorsorigin.com";
@@ -48,22 +48,22 @@ describe("generate-key controller", () =>{
     });
   });
 
-  it ("422 - Description is required", async() =>{
+  it("422 - Description is required", async () => {
     const mockToken = mockUser.generateJWT();
     const response = await request(app)
       .post(ENDPOINT)
       .set("cookie", `jwt=${mockToken}`)
       .send({});
-      
+
     expect(response.status).toBe(422);
     expect(response.body).toEqual({
       message: "Description is required",
-      statusCode: STATUS_CODES[422],
-      error: "Unprocessable payload",
+      statusCode: 422,
+      error: STATUS_CODES[422],
     });
   });
 
-  it ("422 -  Description must be a string", async() =>{
+  it("422 -  Description must be a string", async () => {
     const mockToken = mockUser.generateJWT();
     const response = await request(app)
       .post(ENDPOINT)
@@ -73,12 +73,12 @@ describe("generate-key controller", () =>{
     expect(response.status).toBe(422);
     expect(response.body).toEqual({
       message: "Description must be a string",
-      statusCode: STATUS_CODES[422],
-      error: "Unprocessable payload",
+      statusCode: 422,
+      error: STATUS_CODES[422],
     });
   });
 
-  it ("422 -  Description must be 20 characters or fewer", async() =>{
+  it("422 -  Description must be 20 characters or fewer", async () => {
     const mockToken = mockUser.generateJWT();
     const response = await request(app)
       .post(ENDPOINT)
@@ -88,12 +88,12 @@ describe("generate-key controller", () =>{
     expect(response.status).toBe(422);
     expect(response.body).toEqual({
       message: "Description must be 20 characters or fewer",
-      statusCode: STATUS_CODES[422],
-      error: "Unprocessable payload",
+      statusCode: 422,
+      error: STATUS_CODES[422],
     });
   });
 
-  it ("422 -  Description must contain only alphabets and spaces", async() =>{
+  it("422 -  Description must contain only alphabets and spaces", async () => {
     const mockToken = mockUser.generateJWT();
     const response = await request(app)
       .post(ENDPOINT)
@@ -103,12 +103,12 @@ describe("generate-key controller", () =>{
     expect(response.status).toBe(422);
     expect(response.body).toEqual({
       message: "Description must contain only alphabets and spaces",
-      statusCode: STATUS_CODES[422],
-      error: "Unprocessable payload",
+      statusCode: 422,
+      error: STATUS_CODES[422],
     });
   });
 
-  it ("200 -  Description must contain only alphabets and spaces", async() =>{
+  it("200 -  Description must contain only alphabets and spaces", async () => {
     const mockToken = mockUser.generateJWT();
     const response = await request(app)
       .post(ENDPOINT)
@@ -118,17 +118,19 @@ describe("generate-key controller", () =>{
     expect(response.status).toBe(422);
     expect(response.body).toEqual({
       message: "Description must contain only alphabets and spaces",
-      statusCode: STATUS_CODES[422],
-      error: "Unprocessable payload",
+      statusCode: 422,
+      error: STATUS_CODES[422],
     });
   });
 
-  it ("409 - Please provide a different key description", async() =>{
+  it("409 - Please provide a different key description", async () => {
     const mockToken = mockUser.generateJWT();
-    jest.spyOn(SubscriptionService, "fetchSubscriptionByuserid").mockResolvedValueOnce({keyLimit: 2});
-    jest.spyOn(KeyService, "fetchKeysByuserid").mockResolvedValueOnce([
-      { keyDescription: "Existing Description" }
-    ]);
+    jest
+      .spyOn(SubscriptionService, "fetchSubscriptionByuserid")
+      .mockResolvedValueOnce({ keyLimit: 2 });
+    jest
+      .spyOn(KeyService, "fetchKeysByuserid")
+      .mockResolvedValueOnce([{ keyDescription: "Existing Description" }]);
     let response = await request(app)
       .post(ENDPOINT)
       .set("cookie", `jwt=${mockToken}`)
@@ -137,18 +139,22 @@ describe("generate-key controller", () =>{
     expect(response.status).toBe(409);
     expect(response.body).toEqual({
       message: "Please provide a different key description",
-      statusCode: STATUS_CODES[409],
-      error: "Conflict",
+      statusCode: 409,
+      error: STATUS_CODES[409],
     });
   });
 
-  it ("403 - Maximum limit reached", async() =>{
+  it("403 - Maximum limit reached", async () => {
     const mockToken = mockUser.generateJWT();
-    jest.spyOn(SubscriptionService, "fetchSubscriptionByuserid").mockResolvedValueOnce({keyLimit: 2});
-    jest.spyOn(KeyService, "fetchKeysByuserid").mockResolvedValueOnce([
-      { keyDescription: "Existing Description" },
-      { keyDescription: "Someother Description" }
-    ]);
+    jest
+      .spyOn(SubscriptionService, "fetchSubscriptionByuserid")
+      .mockResolvedValueOnce({ keyLimit: 2 });
+    jest
+      .spyOn(KeyService, "fetchKeysByuserid")
+      .mockResolvedValueOnce([
+        { keyDescription: "Existing Description" },
+        { keyDescription: "Someother Description" },
+      ]);
     const response = await request(app)
       .post(ENDPOINT)
       .set("cookie", `jwt=${mockToken}`)
@@ -156,15 +162,20 @@ describe("generate-key controller", () =>{
 
     expect(response.status).toBe(403);
     expect(response.body).toEqual({
-      message: "The maximum limit for key generation has been reached. Please consider upgrading your subscription to generate additional keys",
-      statusCode: STATUS_CODES[403],
-      error: "Forbidden",
+      message:
+        "The maximum limit for key generation has been reached. Please consider upgrading your subscription to generate additional keys",
+      statusCode: 403,
+      error: STATUS_CODES[403],
     });
   });
 
   it("500 - Unexpected error", async () => {
     const mockToken = mockUser.generateJWT();
-    jest.spyOn(SubscriptionService, "fetchSubscriptionByuserid").mockImplementation(() => {throw new Error("Unexected error");});
+    jest
+      .spyOn(SubscriptionService, "fetchSubscriptionByuserid")
+      .mockImplementation(() => {
+        throw new Error("Unexected error");
+      });
     const response = await request(app)
       .post(ENDPOINT)
       .set("cookie", `jwt=${mockToken}`)
@@ -178,15 +189,19 @@ describe("generate-key controller", () =>{
     });
   });
 
-  it ("200 - Key generated successfully", async() =>{
+  it("200 - Key generated successfully", async () => {
     const mockToken = mockUser.generateJWT();
-    jest.spyOn(SubscriptionService, "fetchSubscriptionByuserid").mockResolvedValueOnce({keyLimit: 2});
+    jest
+      .spyOn(SubscriptionService, "fetchSubscriptionByuserid")
+      .mockResolvedValueOnce({ keyLimit: 2 });
     jest.spyOn(KeyService, "fetchKeysByuserid").mockResolvedValueOnce([]);
-    jest.spyOn(KeyService, "createKey").mockResolvedValueOnce({ data: {
-      keyId: "1",
-      keyDescription: "Another Description",
-      key: "SOMEKEYAPIKEY"
-    }});
+    jest.spyOn(KeyService, "createKey").mockResolvedValueOnce({
+      data: {
+        keyId: "1",
+        keyDescription: "Another Description",
+        key: "SOMEKEYAPIKEY",
+      },
+    });
     const response = await request(app)
       .post(ENDPOINT)
       .set("cookie", `jwt=${mockToken}`)
@@ -195,28 +210,34 @@ describe("generate-key controller", () =>{
     expect(response.status).toBe(200);
     expect(response.body).toEqual({
       message: "Key generated successfully",
-      statusCode: STATUS_CODES[200],
+      statusCode: 200,
       data: {
         keyId: "1",
         keyDescription: "Another Description",
-        key: "SOMEKEYAPIKEY"
+        key: "SOMEKEYAPIKEY",
       },
     });
   });
 
-  it ("200 - Key generated successfully [Already 1 key Exists]", async() =>{
+  it("200 - Key generated successfully [Already 1 key Exists]", async () => {
     const mockToken = mockUser.generateJWT();
-    jest.spyOn(SubscriptionService, "fetchSubscriptionByuserid").mockResolvedValueOnce({keyLimit: 2});
-    jest.spyOn(KeyService, "fetchKeysByuserid").mockResolvedValueOnce([{
-      keyId: "1",
-      keyDescription: "Old Description",
-      key: "SOMEKEYAPIKEY"
-    }]);
-    jest.spyOn(KeyService, "createKey").mockResolvedValueOnce({ data: {
-      keyId: "2",
-      keyDescription: "Another Description",
-      key: "SOMEKEYAPIKEY"
-    }});
+    jest
+      .spyOn(SubscriptionService, "fetchSubscriptionByuserid")
+      .mockResolvedValueOnce({ keyLimit: 2 });
+    jest.spyOn(KeyService, "fetchKeysByuserid").mockResolvedValueOnce([
+      {
+        keyId: "1",
+        keyDescription: "Old Description",
+        key: "SOMEKEYAPIKEY",
+      },
+    ]);
+    jest.spyOn(KeyService, "createKey").mockResolvedValueOnce({
+      data: {
+        keyId: "2",
+        keyDescription: "Another Description",
+        key: "SOMEKEYAPIKEY",
+      },
+    });
     const response = await request(app)
       .post(ENDPOINT)
       .set("cookie", `jwt=${mockToken}`)
@@ -225,11 +246,11 @@ describe("generate-key controller", () =>{
     expect(response.status).toBe(200);
     expect(response.body).toEqual({
       message: "Key generated successfully",
-      statusCode: STATUS_CODES[200],
+      statusCode: 200,
       data: {
         keyId: "2",
         keyDescription: "Another Description",
-        key: "SOMEKEYAPIKEY"
+        key: "SOMEKEYAPIKEY",
       },
     });
   });

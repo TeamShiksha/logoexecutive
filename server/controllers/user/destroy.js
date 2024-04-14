@@ -5,7 +5,7 @@ const { destroyKey } = require("../../services");
 const destroyKeyPayloadSchema = Joi.object({
   keyId: Joi.string().guid({ version: "uuidv4" }).required().messages({
     "string.guid": "Key ID must be a valid UUID",
-    "any.required": "Key ID is required"
+    "any.required": "Key ID is required",
   }),
 });
 
@@ -15,11 +15,11 @@ async function destroyKeyController(req, res, next) {
     if (error) {
       return res.status(422).json({
         message: error.message,
-        statusCode: STATUS_CODES[422],
-        error: "Unprocessable payload",
+        statusCode: 422,
+        error: STATUS_CODES[422],
       });
     }
-  
+
     const { keyId } = value;
     const destroyed = await destroyKey(keyId);
     if (destroyed) {
@@ -32,7 +32,7 @@ async function destroyKeyController(req, res, next) {
         message: "Key not found or could not be deleted",
         statusCode: STATUS_CODES[404],
       });
-    } 
+    }
   } catch (err) {
     next(err);
   }

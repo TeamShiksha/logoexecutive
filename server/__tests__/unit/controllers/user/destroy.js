@@ -16,12 +16,12 @@ const mockUser = new Users({
   createdAt: Timestamp.now().toDate(),
 });
 jest.mock("../../../../services/Keys", () => ({
-  destroyKey: jest.fn()
+  destroyKey: jest.fn(),
 }));
 
 const ENDPOINT = "/api/user/destroy";
 
-describe("generate-key controller", () =>{
+describe("generate-key controller", () => {
   beforeAll(() => {
     process.env.JWT_SECRET = "my_secret";
     process.env.BASE_URL = "http://validcorsorigin.com";
@@ -48,14 +48,14 @@ describe("generate-key controller", () =>{
     const mockToken = mockUser.generateJWT();
     const response = await request(app)
       .delete(ENDPOINT)
-      .query({ keyId: "90" }) 
+      .query({ keyId: "90" })
       .set("cookie", `jwt=${mockToken}`);
 
     expect(response.status).toBe(422);
     expect(response.body).toEqual({
       message: "Key ID must be a valid UUID",
-      statusCode: STATUS_CODES[422],
-      error: "Unprocessable payload",
+      statusCode: 422,
+      error: STATUS_CODES[422],
     });
   });
 
@@ -69,14 +69,16 @@ describe("generate-key controller", () =>{
     expect(response.status).toBe(422);
     expect(response.body).toEqual({
       message: "Key ID is required",
-      statusCode: STATUS_CODES[422],
-      error: "Unprocessable payload",
+      statusCode: 422,
+      error: STATUS_CODES[422],
     });
   });
 
   it("500 - Unexpected error", async () => {
     const mockToken = mockUser.generateJWT();
-    jest.spyOn(KeyService, "destroyKey").mockImplementation(() => {throw new Error("Unexected error");});
+    jest.spyOn(KeyService, "destroyKey").mockImplementation(() => {
+      throw new Error("Unexected error");
+    });
     const response = await request(app)
       .delete(ENDPOINT)
       .set("cookie", `jwt=${mockToken}`)
@@ -101,7 +103,7 @@ describe("generate-key controller", () =>{
     expect(response.status).toBe(404);
     expect(response.body).toEqual({
       message: "Key not found or could not be deleted",
-      statusCode: STATUS_CODES[404]
+      statusCode: STATUS_CODES[404],
     });
   });
 
@@ -117,8 +119,7 @@ describe("generate-key controller", () =>{
     expect(response.status).toBe(200);
     expect(response.body).toEqual({
       message: "Key deleted successfully",
-      statusCode: STATUS_CODES[200]
+      statusCode: STATUS_CODES[200],
     });
   });
-
 });

@@ -5,9 +5,9 @@ function signoutController(req, res) {
     const { jwt } = req.cookies;
     if (!jwt) {
       return res.status(400).json({
-        error: "Not Found",
+        error: STATUS_CODES[400],
         message: "Failed to validate user session",
-        statusCode: STATUS_CODES[400],
+        statusCode: 400,
       });
     }
 

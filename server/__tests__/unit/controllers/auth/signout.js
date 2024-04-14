@@ -26,7 +26,7 @@ describe("/api/signout", () => {
     expect(response.body).toEqual({
       error: STATUS_CODES[500],
       message: "Not allowed by CORS",
-      statusCode: 500
+      statusCode: 500,
     });
   });
 
@@ -35,15 +35,17 @@ describe("/api/signout", () => {
 
     expect(response.status).toBe(400);
     expect(response.body).toEqual({
-      error: "Not Found",
+      error: STATUS_CODES[400],
       message: "Failed to validate user session",
-      statusCode: STATUS_CODES[400],
+      statusCode: 400,
     });
   });
 
   it("205 - Successful signout", async () => {
     const mockJWT = new Users(mockUsers[0]).generateJWT();
-    const response = await request(app).get(ENDPOINT).set("Cookie", `jwt=${mockJWT}`);
+    const response = await request(app)
+      .get(ENDPOINT)
+      .set("Cookie", `jwt=${mockJWT}`);
 
     expect(response.status).toBe(205);
     expect(response.headers["set-cookie"][0]).toMatch(/jwt=;*/);

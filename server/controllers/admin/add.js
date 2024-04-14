@@ -8,7 +8,7 @@ const addAdminSchema = Joi.object().keys({
     .required()
     .max(50)
     .regex(/^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/)
-    .messages({ 
+    .messages({
       "string.base": "Email must be string",
       "string.max": "Email length must be 50 or fewer",
       "string.pattern.base": "Invalid email",
@@ -17,35 +17,34 @@ const addAdminSchema = Joi.object().keys({
 });
 
 const addAdminController = async (req, res, next) => {
-  try{
+  try {
     const email = req.body.email;
     const { error } = addAdminSchema.validate(req.body);
     if (error) {
       return res.status(422).json({
-        statusCode: STATUS_CODES[422],
+        statusCode: 422,
         message: error.message,
-        error: "Unprocessable payload",
+        error: STATUS_CODES[422],
       });
     }
 
     const response = await setUserAdmin(email);
     if (!response) {
       return res.status(404).json({
-        statusCode: STATUS_CODES[404],
+        statusCode: 404,
         message: "User not found",
-        error: "Not Found",
+        error: STATUS_CODES[404],
       });
     }
 
-    if (!response.isNewAdmin){
+    if (!response.isNewAdmin) {
       return res.status(204).json();
     }
     return res.status(200).json({
-      statusCode: STATUS_CODES[200],
-      message: "The user has been granted admin privileges"
+      statusCode: 200,
+      message: "The user has been granted admin privileges",
     });
-  }
-  catch(err){
+  } catch (err) {
     next(err);
   }
 };

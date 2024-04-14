@@ -17,8 +17,8 @@ import {
 } from './pages';
 import ScrollToAnchor from './utils/ScrollToAnchor';
 import ProtectedRoute from './utils/ProtectedRoute';
-import './App.css';
 import NotFound from './components/notfound/NotFound';
+import './App.css';
 
 function App() {
 	return (

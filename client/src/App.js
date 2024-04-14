@@ -17,6 +17,7 @@ import {
 } from './pages';
 import ScrollToAnchor from './utils/ScrollToAnchor';
 import ProtectedRoute from './utils/ProtectedRoute';
+import NotFound from './components/notfound/NotFound';
 import './App.css';
 
 function App() {
@@ -59,6 +60,7 @@ function App() {
 						</ProtectedRoute>
 					}
 				/>
+				<Route path='*' element={<NotFound />} />
 			</Routes>
 			<Footer />
 		</div>

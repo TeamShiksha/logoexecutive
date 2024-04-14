@@ -1,3 +1,4 @@
+const { STATUS_CODES } = require("http");
 const routeNotFound = require("../../../middlewares/routeNotFound");
 
 describe("routeNotFound middleware", () => {
@@ -21,7 +22,7 @@ describe("routeNotFound middleware", () => {
     expect(res.json).toHaveBeenCalledWith({
       statusCode: 404,
       message: "route not found",
-      error: "not found",
+      error: STATUS_CODES[404],
     });
     expect(next).toHaveBeenCalled();
   });

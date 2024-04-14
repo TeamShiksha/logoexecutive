@@ -1,6 +1,10 @@
 const Joi = require("joi");
 const { STATUS_CODES } = require("http");
-const { fetchUserByEmail, updateUser, createVerifyToken } = require("../../services");
+const {
+  fetchUserByEmail,
+  updateUser,
+  createVerifyToken,
+} = require("../../services");
 const { sendEmail } = require("../../utils/sendEmail");
 
 const changeNameEmailSchema = Joi.object().keys({
@@ -10,100 +14,61 @@ const changeNameEmailSchema = Joi.object().keys({
     .min(1)
     .max(20)
     .regex(/^[^!@#$%^&*(){}\[\]\\\.;'",.<>/?`~|0-9]*$/)
-    .message("firstName should not contain any special character or number"),
+    .messages({
+      "string.base": "First name must be string",
+      "string.min": "First name cannot be empty",
+      "string.max": "First name length must be 20 or fewer",
+      "any.required": "First name is required",
+      "string.pattern.base": "First name should only contain alphabets",
+    }),
   lastName: Joi.string()
     .trim()
     .required()
     .min(1)
     .max(20)
     .regex(/^[^!@#$%^&*(){}\[\]\\\.;'",.<>/?`~|0-9]*$/)
-    .message("lastName should not contain any special character or number"),
-  email: Joi.string()
-    .trim()
-    .required()
-    .max(50)
-    .regex(/^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/)
-    .message("email must be a valid email address"),
+    .messages({
+      "string.base": "Last name must be string",
+      "string.min": "Last name cannot be empty",
+      "string.max": "Last name must be 20 or fewer characters",
+      "any.required": "Last name is required",
+      "string.pattern.base": "Last name should only contain alphabets",
+    }),
 });
 
-async function updateProfileController(req, res) {
+async function updateProfileController(req, res, next) {
   try {
-    const { firstName, lastName, email } = req.body;
-    const { error } = changeNameEmailSchema.validate({
-      firstName,
-      lastName,
-      email,
-    });
-
-    if (error) {
+    const { firstName, lastName } = req.body;
+    const { error } = changeNameEmailSchema.validate(req.body);
+    if (!!error) {
       return res.status(422).json({
-        status: 422,
-        message: error.details[0].message,
+        statusCode: 422,
+        message: error.message,
         error: STATUS_CODES[422],
       });
     }
 
     const user = await fetchUserByEmail(req.userData.email);
-
     if (!user) {
       return res.status(404).json({
-        status: 404,
+        statusCode: 404,
         error: STATUS_CODES[404],
-        message: "User not found.",
+        message: "User not found",
       });
     }
 
-    if (
-      user.email === req.body.email &&
-      user.firstName === req.body.firstName &&
-      user.lastName === req.body.lastName
-    ) {
-      return res
-        .status(200)
-        .json({ status: 200, message: "The profile has been successfully updated." });
-    }
-
-    const changes = ["firstName", "lastName", "email"].map((field) =>
-      user[field] !== req.body[field] ? req.body[field] : user[field]
-    );
-
-    const successRes = [];
-    await updateUser(changes, user);
-    successRes.push(STATUS_CODES[200]);
-
-    if (user.email !== req.body.email) {
-      const verificationToken = await createVerifyToken(user.userId);
-      if (!verificationToken)
-        return res.status(500).json([
-          {
-            message: "Failed to create email verification token",
-            error: STATUS_CODES[500],
-            statusCode: 500,
-          },
-        ]);
-      await user.userRef.update({
-        isVerified: false,
+    const profileupdated = await updateUser({ firstName, lastName }, user);
+    if (!profileupdated) {
+      return res.status(500).json({
+        statusCode: 500,
+        message: "Failed to updated profile",
+        error: STATUS_CODES[500],
       });
-
-      await sendEmail(
-        req.body.email,
-        "Change email and name",
-        verificationToken.tokenURL.href
-      );
-
-      successRes.push("The verification link for the new email has been successfully sent");
-
-      await sendEmail(
-        user.email,
-        "Verfication Link Sent to new email",
-        " Please verify your new email address by clicking on the link sent to your new email address"
-      );
-
-      successRes.push("The confirmation email has been successfully sent to the old email address.");
-
-      return res.status(200).json({ status: 200, message: successRes });
     }
-    return res.status(200).json({ status: 200, message: successRes });
+    return res.status(200).json({
+      statusCode: 200,
+      message: "Profile updated successfully",
+    });
   } catch (error) {
     next(error);
   }

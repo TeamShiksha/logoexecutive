@@ -7,7 +7,7 @@ import ForgotPassword from './forgot-password/ForgotPassword';
 import ResetPassword from './reset-password/ResetPassword';
 import Signin from './signin/Signin';
 import Signup from './signup/Signup';
-import Home from './welcome/Home';
+import Home from './home/Home';
 import AdminDashboard from './admin/Admin';
 
 export {

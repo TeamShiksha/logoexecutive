@@ -23,7 +23,7 @@ function ResponseCard({countdown, message, title, Icon}) {
 ResponseCard.propTypes = {
 	title: PropTypes.string.isRequired,
 	message: PropTypes.string.isRequired,
-	Icon: PropTypes.element.isRequired,
+	Icon: PropTypes.element,
 	countdown: PropTypes.number,
 };
 

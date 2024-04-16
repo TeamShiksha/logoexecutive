@@ -1,0 +1,6 @@
+.reset-success-card-wrapper {
+	margin: 100px 14px;
+	padding: 30px;
+	display: grid;
+	place-items: center;
+}

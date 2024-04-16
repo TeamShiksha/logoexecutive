@@ -1,6 +1,10 @@
 const { STATUS_CODES } = require("http");
-const { verifyUser, fetchUserFromId, 
-  fetchTokenFromId, deleteUserToken } = require("../../services");
+const {
+  verifyUser,
+  fetchUserFromId,
+  fetchTokenFromId,
+  deleteUserToken,
+} = require("../../services");
 
 async function verifyTokenController(req, res, next) {
   try {
@@ -30,24 +34,28 @@ async function verifyTokenController(req, res, next) {
 
     const user = await fetchUserFromId(userToken.userId);
     if (!user)
-      return res.status(400).json({
-        error: STATUS_CODES[400],
-        message: "User no longer exists",
-        statusCode: 400,
+      return res.status(404).json({
+        error: STATUS_CODES[404],
+        message: "User doesn't exists",
+        statusCode: 404,
       });
 
     const verifyResult = await verifyUser(user);
-    if (!verifyResult.success)
+    if (!verifyResult)
       return res.status(500).json({
         error: STATUS_CODES[500],
-        message: verifyResult.message,
+        message: "Failed to verify user, try again",
         statusCode: 500,
       });
 
-    deleteUserToken(userToken).then((result) => {
-      if (!result.success)
-        console.error(`Token id:${userToken.token} could not be deleted`);
-    });
+    const result = await deleteUserToken(userToken);
+    if (!result) {
+      return res.status(500).json({
+        error: STATUS_CODES[500],
+        message: "Something went wrong",
+        statusCode: 500,
+      });
+    }
 
     return res.status(200).json({ message: "Verification successful" });
   } catch (err) {

@@ -47,7 +47,7 @@ describe("Signup Controller", () => {
     jest.restoreAllMocks();
   });
 
-  it("500 - CORS", async () => {
+  it("500 - Not allowed by CORS", async () => {
     const response = await request(app)
       .get(ENDPOINT)
       .set("Origin", "http://invalidcorsorigin.com");
@@ -60,153 +60,157 @@ describe("Signup Controller", () => {
     });
   });
 
-  it("422 - when payload has missing fields", async () => {
+  it("422 - First name is required", async () => {
     const response = await request(app)
       .post(ENDPOINT)
       .send({ user: "hello world" });
 
     expect(response.status).toBe(422);
-    expect(response.body).toEqual(
-      {
-        message: "\"firstName\" is required",
-        statusCode: 422,
-        error: STATUS_CODES[422],
-      },
-    );
+    expect(response.body).toEqual({
+      message: "First name is required",
+      statusCode: 422,
+      error: STATUS_CODES[422],
+    });
   });
 
-  it("422 - when firstName contains special characters", async () => {
+  it("422 - Last name is required", async () => {
+    const response = await request(app)
+      .post(ENDPOINT)
+      .send({ firstName: "hello world" });
+
+    expect(response.status).toBe(422);
+    expect(response.body).toEqual({
+      message: "Last name is required",
+      statusCode: 422,
+      error: STATUS_CODES[422],
+    });
+  });
+
+  it("422 - Email is required", async () => {
+    const response = await request(app)
+      .post(ENDPOINT)
+      .send({ 
+        firstName: "hello world",
+        lastName: "hello world"
+      });
+
+    expect(response.status).toBe(422);
+    expect(response.body).toEqual({
+      message: "Email is required",
+      statusCode: 422,
+      error: STATUS_CODES[422],
+    });
+  });
+
+  it("422 - First name should only contain alphbets", async () => {
     const mockPayload = { ...mockValidPayload, firstName: "J*e" };
-
     const response = await request(app)
       .post(ENDPOINT)
       .send(mockPayload);
 
     expect(response.status).toBe(422);
-    expect(response.body).toEqual(
-      {
-        message: "First name can only contain alphabets.",
-        statusCode: 422,
-        error: STATUS_CODES[422],
-      },
-    );
+    expect(response.body).toEqual({
+      message: "First name should only contain alphabets",
+      statusCode: 422,
+      error: STATUS_CODES[422],
+    });
   });
 
-  it("422 - when lastName contains special characters", async () => {
+  it("422 - Last name should only contain alphabets", async () => {
     const mockPayload = { ...mockValidPayload, lastName: "D*e" };
-
     const response = await request(app)
       .post(ENDPOINT)
       .send(mockPayload);
 
     expect(response.status).toBe(422);
-    expect(response.body).toEqual(
-      {
-        message: "Last name can only contain alphabets.",
-        statusCode: 422,
-        error: STATUS_CODES[422],
-      },
-    );
+    expect(response.body).toEqual({
+      message: "Last name should only contain alphabets",
+      statusCode: 422,
+      error: STATUS_CODES[422],
+    });
   });
 
-  it("422 - when email is invalid", async () => {
+  it("422 - Invalid email", async () => {
     const mockPayload = { ...mockValidPayload, email: "johnDoe" };
-
     const response = await request(app)
       .post(ENDPOINT)
       .send(mockPayload);
 
     expect(response.status).toBe(422);
-    expect(response.body).toEqual(
-      {
-        message: "Invalid email",
-        statusCode: 422,
-        error: STATUS_CODES[422],
-      },
-    );
+    expect(response.body).toEqual({
+      message: "Invalid email",
+      statusCode: 422,
+      error: STATUS_CODES[422],
+    });
   });
 
-  it("422 - when password is invalid (too short)", async () => {
+  it("422 - Password must be at least 8 characters", async () => {
     const mockPayload = { ...mockValidPayload, password: "johnDoe" };
-
     const response = await request(app)
       .post(ENDPOINT)
       .send(mockPayload);
 
     expect(response.status).toBe(422);
-    expect(response.body).toEqual(
-      {
-        message: "\"password\" length must be at least 8 characters long",
-        statusCode: 422,
-        error: STATUS_CODES[422],
-      },
-    );
+    expect(response.body).toEqual({
+      message: "Password must be at least 8 characters",
+      statusCode: 422,
+      error: STATUS_CODES[422],
+    });
   });
 
-  it("422 - when password is invalid (too long)", async () => {
+  it("422 - Password must be 30 characters or fewer", async () => {
     const mockPayload = {
       ...mockValidPayload,
       password: "areallylongstringaspasswordover30characterslong",
     };
-
     const response = await request(app)
       .post(ENDPOINT)
       .send(mockPayload);
 
     expect(response.status).toBe(422);
-    expect(response.body).toEqual(
-      {
-        message:
-          "\"password\" length must be less than or equal to 30 characters long",
-        statusCode: 422,
-        error: STATUS_CODES[422],
-      },
-    );
+    expect(response.body).toEqual({
+      message: "Password must be 30 characters or fewer",
+      statusCode: 422,
+      error: STATUS_CODES[422],
+    });
   });
 
-  it("422 - when confirm password doesn't match", async () => {
+  it("422 - Password and confirm password do not match", async () => {
     const mockPayload = {
       ...mockValidPayload,
       confirmPassword: "randompassword",
     };
-
     const response = await request(app)
       .post(ENDPOINT)
       .send(mockPayload);
 
     expect(response.status).toBe(422);
-    expect(response.body).toEqual(
-      {
-        message: "Passwords mismatch",
-        statusCode: 422,
-        error: STATUS_CODES[422],
-      },
-    );
+    expect(response.body).toEqual({
+      message: "Password and confirm password do not match",
+      statusCode: 422,
+      error: STATUS_CODES[422],
+    });
   });
 
-  it("400 - when email already exists in db", async () => {
+  it("400 - Email already exists", async () => {
     jest.spyOn(UserService, "emailRecordExists").mockImplementation(() => true);
-
     const response = await request(app)
       .post(ENDPOINT)
       .send(mockValidPayload);
 
     expect(response.status).toBe(400);
-    expect(response.body).toEqual(
-      {
-        message: "Email already exists",
-        statusCode: 400,
-        error: STATUS_CODES[400],
-      },
-    );
+    expect(response.body).toEqual({
+      message: "Email already exists",
+      statusCode: 400,
+      error: STATUS_CODES[400],
+    });
   });
 
-  it("500 - when failed to create user", async () => {
+  it("500 - Unexpected error occurred while creating user", async () => {
     jest
       .spyOn(UserService, "emailRecordExists")
       .mockImplementation(() => false);
     jest.spyOn(UserService, "createUser").mockImplementation(() => null);
-
     const response = await request(app)
       .post(ENDPOINT)
       .send(mockValidPayload);
@@ -219,43 +223,42 @@ describe("Signup Controller", () => {
     });
   });
 
-  it("206 - when failed to create user subscription", async () => {
-    jest
-      .spyOn(UserService, "emailRecordExists")
-      .mockImplementation(() => false);
-    jest
-      .spyOn(UserService, "createUser")
-      .mockImplementation(() => mockUserModel);
-    jest
-      .spyOn(SubscriptionService, "createSubscription")
-      .mockImplementation(() => null);
+  it("500 - Unexpected error", async () => {
+    jest.spyOn(UserService, "emailRecordExists").mockImplementation(() => {
+      throw new Error("Unexpected error");
+    });
+    const response = await request(app)
+      .post(ENDPOINT)
+      .send(mockValidPayload);
 
+    expect(response.status).toBe(500);
+    expect(response.body).toEqual({
+      message: "Unexpected error",
+      error: STATUS_CODES[500],
+      statusCode: 500,
+    });
+  });
+
+  it("206 - Unexpected error occurred while creating subscription", async () => {
+    jest.spyOn(UserService, "emailRecordExists").mockImplementation(() => false);
+    jest.spyOn(UserService, "createUser").mockImplementation(() => mockUserModel);
+    jest.spyOn(SubscriptionService, "createSubscription").mockImplementation(() => null);
     const response = await request(app)
       .post(ENDPOINT)
       .send(mockValidPayload);
 
     expect(response.status).toBe(206);
     expect(response.body).toEqual({
-      message:
-        "Successfully created user but Unexpected error occurred while creating subscription",
+      message: "Successfully created user but Unexpected error occurred while creating subscription",
       statusCode: 201,
     });
   });
 
-  it("206 - when failed to create user user token", async () => {
-    jest
-      .spyOn(UserService, "emailRecordExists")
-      .mockImplementation(() => false);
-    jest
-      .spyOn(UserService, "createUser")
-      .mockImplementation(() => mockUserModel);
-    jest
-      .spyOn(SubscriptionService, "createSubscription")
-      .mockImplementation(() => true);
-    jest
-      .spyOn(UserTokenService, "createVerifyToken")
-      .mockImplementation(() => null);
-
+  it("206 - User created successfully. Verification email failed to send.", async () => {
+    jest.spyOn(UserService, "emailRecordExists").mockImplementation(() => false);
+    jest.spyOn(UserService, "createUser").mockImplementation(() => mockUserModel);
+    jest.spyOn(SubscriptionService, "createSubscription").mockImplementation(() => true);
+    jest.spyOn(UserTokenService, "createVerifyToken").mockImplementation(() => null);
     const response = await request(app)
       .post(ENDPOINT)
       .send(mockValidPayload);
@@ -268,26 +271,16 @@ describe("Signup Controller", () => {
     });
   });
 
-  it("206 - when failed to send verification email", async () => {
-    jest
-      .spyOn(UserService, "emailRecordExists")
-      .mockImplementation(() => false);
-    jest
-      .spyOn(UserService, "createUser")
-      .mockImplementation(() => mockUserModel);
-    jest
-      .spyOn(SubscriptionService, "createSubscription")
-      .mockImplementation(() => true);
-    jest
-      .spyOn(UserTokenService, "createVerifyToken")
-      .mockImplementation(() => mockUserTokenVerify);
-    jest
-      .spyOn(SendEmailService, "sendEmail")
-      .mockImplementation(() => ({ success: false }));
-
+  it("206 - User created successfully. Verification email failed to send", async () => {
+    jest.spyOn(UserService, "emailRecordExists").mockImplementation(() => false);
+    jest.spyOn(UserService, "createUser").mockImplementation(() => mockUserModel);
+    jest.spyOn(SubscriptionService, "createSubscription").mockImplementation(() => true);
+    jest.spyOn(UserTokenService, "createVerifyToken").mockImplementation(() => mockUserTokenVerify);
+    jest.spyOn(SendEmailService, "sendEmail").mockImplementation(() => ({ success: false }));
     const response = await request(app)
       .post(ENDPOINT)
       .send(mockValidPayload);
+
     expect(response.status).toBe(206);
     expect(response.body).toEqual({
       message:
@@ -296,22 +289,12 @@ describe("Signup Controller", () => {
     });
   });
 
-  it("Success 201", async () => {
-    jest
-      .spyOn(UserService, "emailRecordExists")
-      .mockImplementation(() => false);
-    jest
-      .spyOn(UserService, "createUser")
-      .mockImplementation(() => mockUserModel);
-    jest
-      .spyOn(SubscriptionService, "createSubscription")
-      .mockImplementation(() => true);
-    jest
-      .spyOn(UserTokenService, "createVerifyToken")
-      .mockImplementation(() => mockUserTokenVerify);
-    jest
-      .spyOn(SendEmailService, "sendEmail")
-      .mockImplementation(() => ({ success: true }));
+  it("201 - User created successfully. Verification email sent.", async () => {
+    jest.spyOn(UserService, "emailRecordExists").mockImplementation(() => false);
+    jest.spyOn(UserService, "createUser").mockImplementation(() => mockUserModel);
+    jest.spyOn(SubscriptionService, "createSubscription").mockImplementation(() => true);
+    jest.spyOn(UserTokenService, "createVerifyToken").mockImplementation(() => mockUserTokenVerify);
+    jest.spyOn(SendEmailService, "sendEmail").mockImplementation(() => ({ success: true }));
     const response = await request(app)
       .post(ENDPOINT)
       .send(mockValidPayload);
@@ -319,25 +302,8 @@ describe("Signup Controller", () => {
     expect(response.status).toBe(201);
     expect(response.body).toEqual({
       message:
-        "User created successfully. Verification email sent.",
+        "User created successfully. Verification email sent",
       statusCode: 201,
-    });
-  });
-
-  it("Error 500 - Unexpected error", async () => {
-    jest.spyOn(UserService, "emailRecordExists").mockImplementation(() => {
-      throw new Error("Unexpected error");
-    });
-
-    const response = await request(app)
-      .post(ENDPOINT)
-      .send(mockValidPayload);
-
-    expect(response.status).toBe(500);
-    expect(response.body).toEqual({
-      message: "Unexpected error",
-      error: STATUS_CODES[500],
-      statusCode: 500,
     });
   });
 });

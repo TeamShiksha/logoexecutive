@@ -3,6 +3,7 @@ const { STATUS_CODES } = require("http");
 const app = require("../../../../app");
 const { Users } = require("../../../../models");
 const { mockUsers } = require("../../../../utils/mocks/Users");
+const signoutController = require("../../../../controllers/auth/signout");
 
 const ENDPOINT = "/api/auth/signout";
 
@@ -16,7 +17,7 @@ describe("/api/signout", () => {
     delete process.env.BASE_URL;
   });
 
-  it("500 - CORS", async () => {
+  it("500 - Not allowed by CORS", async () => {
     const response = await request(app)
       .get(ENDPOINT)
       .set("Origin", "http://invalidcorsorigin.com");
@@ -25,11 +26,11 @@ describe("/api/signout", () => {
     expect(response.body).toEqual({
       error: STATUS_CODES[500],
       message: "Not allowed by CORS",
-      statusCode: 500
+      statusCode: 500,
     });
   });
 
-  it("401 - Auth cookie not present", async () => {
+  it("401 - Failed to validate user session", async () => {
     const response = await request(app).get(ENDPOINT);
 
     expect(response.status).toBe(400);
@@ -42,10 +43,11 @@ describe("/api/signout", () => {
 
   it("205 - Successful signout", async () => {
     const mockJWT = new Users(mockUsers[0]).generateJWT();
-    const response = await request(app).get(ENDPOINT).set("Cookie", `jwt=${mockJWT}`);
+    const response = await request(app)
+      .get(ENDPOINT)
+      .set("Cookie", `jwt=${mockJWT}`);
 
     expect(response.status).toBe(205);
-    // Should contain jwt=; in the set-cookie value
     expect(response.headers["set-cookie"][0]).toMatch(/jwt=;*/);
   });
 });

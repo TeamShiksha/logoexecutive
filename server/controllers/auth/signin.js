@@ -8,8 +8,15 @@ const signinPayloadSchema = Joi.object().keys({
     .trim()
     .required()
     .regex(/^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/)
-    .message("Invalid email"),
-  password: Joi.string().trim().required().min(8).max(30),
+    .messages({
+      "string.base": "Email must be a string",
+      "any.required": "Email is required",
+      "string.pattern.base": "Invalid email",
+    }),
+  password: Joi.string().trim().required().messages({
+    "string.base": "Password must be string",
+    "any.required": "Password is required",
+  }),
 });
 
 async function signinController(req, res, next) {
@@ -26,30 +33,32 @@ async function signinController(req, res, next) {
     const { email, password } = value;
     const user = await fetchUserByEmail(email);
     if (!user)
-      return res.status(401).json({
-        error: STATUS_CODES[401],
-        message: "Incorrect email or password.",
-        statusCode: 401,
+      return res.status(404).json({
+        error: STATUS_CODES[404],
+        message: "Incorrect email or password",
+        statusCode: 404,
       });
 
-    if(!user.isVerified)
-      return res.status(401).json({
-        error: STATUS_CODES[401],
+    if (!user.isVerified)
+      return res.status(403).json({
+        error: STATUS_CODES[403],
         message: "Email not verified",
-        statusCode: 401
+        statusCode: 403,
       });
 
     const matchPassword = await user.matchPassword(password);
     if (!matchPassword) {
       return res.status(401).json({
         error: STATUS_CODES[401],
-        message: "Incorrect email or password.",
+        message: "Incorrect email or password",
         statusCode: 401,
       });
     }
 
-    res.cookie("jwt", user.generateJWT(), { expires: dayjs().add(1, "day").toDate() });
-    return res.status(200).json({ message: "Sign-in successful" });
+    res.cookie("jwt", user.generateJWT(), {
+      expires: dayjs().add(1, "day").toDate(),
+    });
+    return res.status(200).json({ message: "Sign In Successful" });
   } catch (err) {
     next(err);
   }

@@ -1,4 +1,5 @@
 import {rest} from 'msw';
+import {STATUS_CODES} from 'http';
 
 export const signinHandler = [
 	rest.post('/api/auth/signin', (req, res, ctx) => {
@@ -10,7 +11,7 @@ export const signinHandler = [
 				ctx.json({
 					message: 'Email not verified',
 					statusCode: 401,
-					error: 'Unauthorized',
+					error: STATUS_CODES[401],
 				}),
 			);
 		}
@@ -21,7 +22,7 @@ export const signinHandler = [
 				ctx.json({
 					message: 'Incorrect email or password.',
 					statusCode: 401,
-					error: 'Unauthorized',
+					error: STATUS_CODES[401],
 				}),
 			);
 		}

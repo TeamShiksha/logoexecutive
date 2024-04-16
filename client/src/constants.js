@@ -184,3 +184,5 @@ export const SubscriptionTypes = {
 	PRO: 'PRO',
 	TEAMS: 'TEAMS',
 };
+
+export const isLettersAndSpacesOnly = /^[a-zA-Z\s]*$/;

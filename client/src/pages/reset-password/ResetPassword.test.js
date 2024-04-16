@@ -34,28 +34,67 @@ describe('ResetPassword component', () => {
 		fireEvent.click(screen.getByRole('button', {name: 'Submit'}));
 		await waitFor(() => {
 			expect(
-				screen.getByText(
-					"Passwords don't match! Please double-check and re-enter them.",
-				),
+				screen.getByText('Password and Confirm password do not match'),
 			).toBeInTheDocument();
 		});
 	});
 
-	it('submits form successfully if passwords match', async () => {
+	it('Length less than 8', async () => {
 		render(
 			<BrowserRouter>
 				<ResetPassword />
 			</BrowserRouter>,
 		);
 		fireEvent.change(screen.getByLabelText('New Password'), {
-			target: {value: 'password123'},
+			target: {value: '1234'},
 		});
 		fireEvent.change(screen.getByLabelText('Confirm Password'), {
-			target: {value: 'password123'},
+			target: {value: '1234'},
 		});
 		fireEvent.click(screen.getByRole('button', {name: 'Submit'}));
 		await waitFor(() => {
-			expect(screen.getByText('Password Reset Successful')).toBeInTheDocument();
+			expect(
+				screen.getByText('Password must be at least 8 characters'),
+			).toBeInTheDocument();
 		});
 	});
+
+	it('Length greater than 30', async () => {
+		render(
+			<BrowserRouter>
+				<ResetPassword />
+			</BrowserRouter>,
+		);
+		fireEvent.change(screen.getByLabelText('New Password'), {
+			target: {value: 'SOmelongpassw0rDGreAter6Than30CharcateersLong'},
+		});
+		fireEvent.change(screen.getByLabelText('Confirm Password'), {
+			target: {value: 'SOmelongpassw0rDGreAter6Than30CharcateersLong'},
+		});
+		fireEvent.click(screen.getByRole('button', {name: 'Submit'}));
+		await waitFor(() => {
+			expect(
+				screen.getByText('Password must be 30 characters or fewer'),
+			).toBeInTheDocument();
+		});
+	});
+
+	// DO NOT DELETE, THIS TEST NEED TO BE ENABLED WITH MSW
+	// it('submits form successfully if passwords match', async () => {
+	// 	render(
+	// 		<BrowserRouter>
+	// 			<ResetPassword />
+	// 		</BrowserRouter>,
+	// 	);
+	// 	fireEvent.change(screen.getByLabelText('New Password'), {
+	// 		target: {value: 'password123'},
+	// 	});
+	// 	fireEvent.change(screen.getByLabelText('Confirm Password'), {
+	// 		target: {value: 'password123'},
+	// 	});
+	// 	fireEvent.click(screen.getByRole('button', {name: 'Submit'}));
+	// 	await waitFor(() => {
+	// 		expect(screen.getByText('Password Reset Successful')).toBeInTheDocument();
+	// 	});
+	// });
 });

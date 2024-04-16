@@ -52,13 +52,13 @@ export default function Verification() {
 							countdown={countdown}
 							message={data?.message}
 							Icon={<FaCheck className='response-success-icon' />}
-							title={'Email verified successfully'}
+							title={'Email Verification'}
 						/>
 					) : (
 						<ResponseCard
 							message={errorMsg}
 							Icon={<RxCross2 className='response-failure-icon' />}
-							title={'Invalid Token'}
+							title={'Email Verification'}
 						/>
 					)}
 				</section>

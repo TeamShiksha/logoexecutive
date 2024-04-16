@@ -36,12 +36,15 @@ describe('VerificationStatus Component', () => {
 		});
 	});
 
-	it('renders "Email has been verified successfully" message when token is valid', async () => {
+	it('renders "Verification successful" message when token is valid', async () => {
 		useApi.mockReturnValue({
 			errorMsg: null,
 			makeRequest: jest.fn(),
 			isSuccess: true,
 			loading: false,
+			data: {
+				message: 'Verification successful',
+			},
 		});
 		const token = 'exampleToken';
 		const queryParams = new URLSearchParams();
@@ -57,9 +60,7 @@ describe('VerificationStatus Component', () => {
 		);
 
 		await waitFor(() => {
-			expect(
-				screen.getByText('Email verified successfully'),
-			).toBeInTheDocument();
+			expect(screen.getByText('Verification successful')).toBeInTheDocument();
 		});
 	});
 

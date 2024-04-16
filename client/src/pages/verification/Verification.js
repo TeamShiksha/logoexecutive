@@ -2,7 +2,6 @@ import './Verification.css';
 import {useApi} from '../../hooks/useApi';
 import {useNavigate, useLocation, Navigate} from 'react-router-dom';
 import {useState, useEffect} from 'react';
-import {useEffectOnce} from '../../hooks/useEffectOnce';
 import {FaCheck} from 'react-icons/fa6';
 import {RxCross2} from 'react-icons/rx';
 import ResponseCard from '../../components/common/responseCard/ResponseCard';
@@ -38,14 +37,16 @@ export default function Verification() {
 		};
 	}, [isSuccess, countdown, navigate]);
 
-	useEffectOnce(makeRequest, []);
+	useEffect(() => {
+		makeRequest();
+	}, []);
 
 	return (
 		<div className='main'>
 			{token.length > 0 ? (
 				<section data-testid='verificationStatus'>
 					{loading ? (
-						<ResponseCard title={'Loading...'} />
+						<ResponseCard title={'Email Verification'} message='Verifying...' />
 					) : isSuccess ? (
 						<ResponseCard
 							countdown={countdown}

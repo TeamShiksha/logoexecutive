@@ -66,7 +66,7 @@ describe('Sign In Card Component', () => {
 		expect(alertElement).toHaveClass('hidden');
 		fireEvent.click(buttonElement);
 		expect(alertElement).not.toHaveClass('hidden');
-		expect(alertElement).toHaveTextContent('Invalid email format.');
+		expect(alertElement).toHaveTextContent('Invalid email format');
 	});
 
 	test('Empty email address should throw error', () => {
@@ -79,7 +79,7 @@ describe('Sign In Card Component', () => {
 		expect(alertElement).toHaveClass('hidden');
 		fireEvent.click(buttonElement);
 		expect(alertElement).not.toHaveClass('hidden');
-		expect(alertElement).toHaveTextContent('Email is required.');
+		expect(alertElement).toHaveTextContent('Email is required');
 	});
 
 	test('Long email address should throw error', () => {
@@ -93,7 +93,7 @@ describe('Sign In Card Component', () => {
 		fireEvent.click(buttonElement);
 		expect(alertElement).not.toHaveClass('hidden');
 		expect(alertElement).toHaveTextContent(
-			'Email should not be more than 50 characters long.',
+			'Email should not be more than 50 characters long',
 		);
 	});
 
@@ -109,7 +109,7 @@ describe('Sign In Card Component', () => {
 		expect(alertElement).toHaveClass('hidden');
 		fireEvent.click(buttonElement);
 		expect(alertElement).not.toHaveClass('hidden');
-		expect(alertElement).toHaveTextContent('Password is required.');
+		expect(alertElement).toHaveTextContent('Password is required');
 	});
 
 	test('Short password should throw error', () => {
@@ -125,7 +125,7 @@ describe('Sign In Card Component', () => {
 		fireEvent.click(buttonElement);
 		expect(alertElement).not.toHaveClass('hidden');
 		expect(alertElement).toHaveTextContent(
-			'Password should be 8 to 30 characters long.',
+			'Password should be 8 to 30 characters long',
 		);
 	});
 
@@ -142,7 +142,7 @@ describe('Sign In Card Component', () => {
 		fireEvent.click(buttonElement);
 		expect(alertElement).not.toHaveClass('hidden');
 		expect(alertElement).toHaveTextContent(
-			'Password should contain at least one uppercase letter, one lowercase letter, one digit, and one special character.',
+			'Password should contain at least one uppercase letter, one lowercase letter, one digit, and one special character',
 		);
 	});
 

@@ -78,7 +78,7 @@ function Signincard() {
 			>
 				{validationErrors || errorMsg || ' '}
 			</p>
-			<form onSubmit={handleSubmit}>
+			<form onSubmit={handleSubmit} noValidate>
 				<CustomInput
 					type='text'
 					className='inputs'

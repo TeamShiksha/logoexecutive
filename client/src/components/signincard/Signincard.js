@@ -37,18 +37,18 @@ function Signincard() {
 
 	const validateFormData = () => {
 		if (formData.email === '') {
-			return 'Email is required.';
+			return 'Email is required';
 		} else if (formData.email.length > 50) {
-			return 'Email should not be more than 50 characters long.';
+			return 'Email should not be more than 50 characters long';
 		} else if (!isValidEmail(formData.email)) {
-			return 'Invalid email format.';
+			return 'Invalid email format';
 		}
 		if (formData.password === '') {
-			return 'Password is required.';
+			return 'Password is required';
 		} else if (formData.password.length < 8 || formData.password.length > 30) {
-			return 'Password should be 8 to 30 characters long.';
+			return 'Password should be 8 to 30 characters long';
 		} else if (!isValidPassword(formData.password)) {
-			return 'Password should contain at least one uppercase letter, one lowercase letter, one digit, and one special character.';
+			return 'Password should contain at least one uppercase letter, one lowercase letter, one digit, and one special character';
 		}
 	};
 
@@ -102,7 +102,7 @@ function Signincard() {
 					aria-label='Sign in to Dashboard'
 					disabled={loading}
 				>
-					Login
+					SignIn
 				</button>
 			</form>
 			<section className='input-actiontext'>

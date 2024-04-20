@@ -1,11 +1,8 @@
 import React from 'react';
 import {MemoryRouter, Routes, Route} from 'react-router-dom';
 import {render, waitFor, screen} from '@testing-library/react';
-import {useApi} from '../../hooks/useApi';
 import Home from '../home/Home';
 import Verification from './Verification';
-
-jest.mock('../../hooks/useApi');
 
 describe('VerificationStatus Component', () => {
 	beforeEach(() => {
@@ -13,12 +10,6 @@ describe('VerificationStatus Component', () => {
 	});
 
 	it('should nvigate to welcome page when token is not provided', async () => {
-		useApi.mockReturnValue({
-			errorMsg: null,
-			makeRequest: jest.fn(),
-			isSuccess: true,
-			loading: false,
-		});
 		const token = 'exampleToken';
 		const queryParams = new URLSearchParams();
 		queryParams.append('token', token);
@@ -37,15 +28,6 @@ describe('VerificationStatus Component', () => {
 	});
 
 	it('renders "Verification successful" message when token is valid', async () => {
-		useApi.mockReturnValue({
-			errorMsg: null,
-			makeRequest: jest.fn(),
-			isSuccess: true,
-			loading: false,
-			data: {
-				message: 'Verification successful',
-			},
-		});
 		const token = 'exampleToken';
 		const queryParams = new URLSearchParams();
 		queryParams.append('token', token);
@@ -65,14 +47,7 @@ describe('VerificationStatus Component', () => {
 	});
 
 	it('renders error message message when token is invalid', async () => {
-		useApi.mockReturnValue({
-			errorMsg: 'Token Expired',
-			makeRequest: jest.fn(),
-			isSuccess: false,
-			loading: false,
-		});
-
-		const token = 'exampleToken';
+		const token = 'malformedToken';
 		const queryParams = new URLSearchParams();
 		queryParams.append('token', token);
 		const url = `/verify?${queryParams.toString()}`;

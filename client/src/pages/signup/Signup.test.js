@@ -114,9 +114,7 @@ describe('Signup', () => {
 		fireEvent.change(confirmPassword, {target: {value: ''}});
 		fireEvent.click(registerButton);
 
-		expect(screen.getByText('Password is required')).toHaveClass(
-			'input-error',
-		);
+		expect(screen.getByText('Password is required')).toHaveClass('input-error');
 	});
 
 	it("should throw an error if the user's first name does not have correct length value", () => {
@@ -306,9 +304,7 @@ describe('Signup', () => {
 		fireEvent.change(confirmPassword, {target: {value: 'abcdefghijk'}});
 		fireEvent.click(registerButton);
 
-		expect(screen.getByText('Invalid email format')).toHaveClass(
-			'input-error',
-		);
+		expect(screen.getByText('Invalid email format')).toHaveClass('input-error');
 	});
 
 	it('should throw an error if password value format is invalid', () => {

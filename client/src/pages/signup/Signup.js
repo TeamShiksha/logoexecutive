@@ -64,7 +64,9 @@ function Signup() {
 			errors.password =
 				'Password should contain at least one uppercase letter, one lowercase letter, one digit, and one special character';
 		}
-		if (formData.confirmPassword !== formData.password) {
+		if (formData.confirmPassword === '') {
+			errors.confirmPassword = 'Confirm password is required';
+		} else if (formData.confirmPassword !== formData.password) {
 			errors.confirmPassword = 'Passwords do not match';
 		}
 		return errors;

@@ -55,7 +55,7 @@ describe('Contact Us Component', () => {
 
 	it('renders arrow icon next to Get a demo link', () => {
 		renderContactUs();
-		const arrowIcon =screen.getByTestId('contact-arrow-icon');
+		const arrowIcon = screen.getByTestId('contact-arrow-icon');
 		expect(arrowIcon).toBeInTheDocument();
-	  });
+	});
 });

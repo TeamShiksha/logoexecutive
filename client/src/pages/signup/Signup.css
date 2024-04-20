@@ -1,4 +1,5 @@
 .form-title {
+	width: 300px;
 	color: var(--black);
 	margin-top: 30px;
 	font-size: 2rem;
@@ -82,7 +83,7 @@
 .input-error {
 	height: auto;
 	margin-top: 16px;
-	max-width: 300px;
+	width: 300px;
 	display: flex;
 	align-items: flex-end;
 	color: #ff3333;
@@ -100,7 +101,10 @@
 }
 
 .input-actiontext {
+	width: 300px;
 	margin: 10px 0px 30px;
+	display: flex;
+	justify-content: flex-start;
 }
 
 .input-actiontext-link {

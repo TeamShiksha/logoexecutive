@@ -19,7 +19,7 @@ function Signup() {
 
 	const handleChange = (event) => {
 		const {name, value} = event.target;
-		const trimmedValue = value.trim();
+		const trimmedValue = name === 'firstName' ? value : value.trim();
 		setFormData((prevData) => ({
 			...prevData,
 			[name]: trimmedValue,
@@ -34,7 +34,7 @@ function Signup() {
 		const errors = {};
 		if (formData.firstName === '') {
 			errors.firstName = 'First name is required.';
-		} else if (/[^a-zA-Z]/.test(formData.firstName)) {
+		} else if (/[^a-zA-Z\s]/.test(formData.firstName)) {
 			errors.firstName = 'First name should only contain alphabets.';
 		} else if (
 			formData.firstName.length < 1 ||
@@ -96,11 +96,11 @@ function Signup() {
 				<form onSubmit={handleSubmit} noValidate className='form-box'>
 					<h2 className='form-title'>Sign up for free</h2>
 					<p
-						className={`input-error ${errorMsg ? '' : 'hidden'}`}
+						className={`input-error ${Object.values(validationErrors).length > 0 || errorMsg ? '' : 'hidden'}`}
 						aria-live='assertive'
 						role='alert'
 					>
-						{errorMsg || ' '}
+						{Object.values(validationErrors)[0] || errorMsg || ' '}
 					</p>
 					{isSignUpSuccess && <p className='signup-success'>{data.message}</p>}
 					<div className='input-group'>
@@ -117,7 +117,6 @@ function Signup() {
 						<label className='user-label' htmlFor='firstName'>
 							First Name
 						</label>
-						<p className='error'>{validationErrors.firstName}</p>
 					</div>
 					<div className='input-group'>
 						<input
@@ -133,7 +132,6 @@ function Signup() {
 						<label className='user-label' htmlFor='lastName'>
 							Last Name
 						</label>
-						<p className='error'>{validationErrors.lastName}</p>
 					</div>
 					<div className='input-group'>
 						<input
@@ -149,7 +147,6 @@ function Signup() {
 						<label className='user-label' htmlFor='email'>
 							Email
 						</label>
-						<p className='error'>{validationErrors.email}</p>
 					</div>
 					<div className='input-group'>
 						<input
@@ -165,7 +162,6 @@ function Signup() {
 						<label className='user-label' htmlFor='password'>
 							Password
 						</label>
-						<p className='error'>{validationErrors.password}</p>
 					</div>
 					<div className='input-group'>
 						<input
@@ -181,7 +177,6 @@ function Signup() {
 						<label className='user-label' htmlFor='confirmPassword'>
 							Confirm Password
 						</label>
-						<p className='error'>{validationErrors.confirmPassword}</p>
 					</div>
 					<div className='input-group'>
 						<button type='submit' className='submit-button' disabled={loading}>

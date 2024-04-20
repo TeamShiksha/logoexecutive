@@ -50,7 +50,7 @@ describe('Signup', () => {
 		fireEvent.change(confirmPassword, {target: {value: ''}});
 		fireEvent.click(registerButton);
 
-		expect(screen.getByText('First name is required.')).toHaveClass(
+		expect(screen.getByText('First name is required')).toHaveClass(
 			'input-error',
 		);
 	});
@@ -72,7 +72,7 @@ describe('Signup', () => {
 		fireEvent.change(confirmPassword, {target: {value: ''}});
 		fireEvent.click(registerButton);
 
-		expect(screen.getByText('Last name is required.')).toHaveClass(
+		expect(screen.getByText('Last name is required')).toHaveClass(
 			'input-error',
 		);
 	});
@@ -94,7 +94,7 @@ describe('Signup', () => {
 		fireEvent.change(confirmPassword, {target: {value: ''}});
 		fireEvent.click(registerButton);
 
-		expect(screen.getByText('Email is required.')).toHaveClass('input-error');
+		expect(screen.getByText('Email is required')).toHaveClass('input-error');
 	});
 
 	it('should throw an error if password is missing', () => {
@@ -114,7 +114,7 @@ describe('Signup', () => {
 		fireEvent.change(confirmPassword, {target: {value: ''}});
 		fireEvent.click(registerButton);
 
-		expect(screen.getByText('Password is required.')).toHaveClass(
+		expect(screen.getByText('Password is required')).toHaveClass(
 			'input-error',
 		);
 	});
@@ -139,7 +139,7 @@ describe('Signup', () => {
 		fireEvent.click(registerButton);
 
 		expect(
-			screen.getByText('First name should be 1 to 20 characters long.'),
+			screen.getByText('First name should be 1 to 20 characters long'),
 		).toHaveClass('input-error');
 	});
 
@@ -163,7 +163,7 @@ describe('Signup', () => {
 		fireEvent.click(registerButton);
 
 		expect(
-			screen.getByText('Last name should be 1 to 20 characters long.'),
+			screen.getByText('Last name should be 1 to 20 characters long'),
 		).toHaveClass('input-error');
 	});
 
@@ -187,7 +187,7 @@ describe('Signup', () => {
 		fireEvent.click(registerButton);
 
 		expect(
-			screen.getByText('Email should not be more than 50 characters long.'),
+			screen.getByText('Email should not be more than 50 characters long'),
 		).toHaveClass('input-error');
 	});
 
@@ -211,7 +211,7 @@ describe('Signup', () => {
 		fireEvent.click(registerButton);
 
 		expect(
-			screen.getByText('Password should be 8 to 30 characters long.'),
+			screen.getByText('Password should be 8 to 30 characters long'),
 		).toHaveClass('input-error');
 	});
 
@@ -243,7 +243,7 @@ describe('Signup', () => {
 		fireEvent.click(registerButton);
 
 		expect(
-			screen.getByText('First name should only contain alphabets.'),
+			screen.getByText('First name should only contain alphabets'),
 		).toHaveClass('input-error');
 	});
 
@@ -275,7 +275,7 @@ describe('Signup', () => {
 		fireEvent.click(registerButton);
 
 		expect(
-			screen.getByText('Last name should only contain alphabets.'),
+			screen.getByText('Last name should only contain alphabets'),
 		).toHaveClass('input-error');
 	});
 
@@ -306,7 +306,7 @@ describe('Signup', () => {
 		fireEvent.change(confirmPassword, {target: {value: 'abcdefghijk'}});
 		fireEvent.click(registerButton);
 
-		expect(screen.getByText('Invalid email format.')).toHaveClass(
+		expect(screen.getByText('Invalid email format')).toHaveClass(
 			'input-error',
 		);
 	});
@@ -340,7 +340,7 @@ describe('Signup', () => {
 
 		expect(
 			screen.getByText(
-				'Password should contain at least one uppercase letter, one lowercase letter, one digit, and one special character.',
+				'Password should contain at least one uppercase letter, one lowercase letter, one digit, and one special character',
 			),
 		).toHaveClass('input-error');
 	});
@@ -362,7 +362,7 @@ describe('Signup', () => {
 		fireEvent.change(confirmPassword, {target: {value: 'Def@1234'}});
 		fireEvent.click(registerButton);
 
-		expect(screen.getByText('Passwords do not match.')).toHaveClass(
+		expect(screen.getByText('Passwords do not match')).toHaveClass(
 			'input-error',
 		);
 	});

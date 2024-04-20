@@ -83,6 +83,7 @@
 .input-error {
 	height: auto;
 	margin-top: 16px;
+	margin-bottom: 10px;
 	width: 300px;
 	display: flex;
 	align-items: flex-end;
@@ -101,10 +102,7 @@
 }
 
 .input-actiontext {
-	width: 300px;
 	margin: 10px 0px 30px;
-	display: flex;
-	justify-content: flex-start;
 }
 
 .input-actiontext-link {

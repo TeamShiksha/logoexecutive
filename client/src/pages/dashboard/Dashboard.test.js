@@ -38,9 +38,10 @@ describe('Dashboard Component', () => {
 			updatedAt: '2024-04-11T10:24:38.501Z',
 		},
 	};
+	const fetchUserData = jest.fn();
 	const renderDashboard = () => {
 		render(
-			<UserContext.Provider value={{userData: mockUserData}}>
+			<UserContext.Provider value={{userData: mockUserData, fetchUserData}}>
 				<Dashboard />
 			</UserContext.Provider>,
 		);

@@ -23,7 +23,11 @@ function Dashboard() {
 	const [errorMessage, setErrorMessage] = useState('');
 	const [copiedKey, setCopiedKey] = useState(null);
 	const [keys, setKeys] = useState([]);
-	const {userData} = useContext(UserContext);
+	const {userData, fetchUserData} = useContext(UserContext);
+
+	useEffect(() => {
+		fetchUserData();
+	}, []);
 
 	useEffect(() => {
 		if (userData?.keys) {

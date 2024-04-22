@@ -2,14 +2,20 @@ import React from 'react';
 import {render, screen, fireEvent} from '@testing-library/react';
 import Settings from './Settings';
 import {BrowserRouter} from 'react-router-dom';
+import {AuthContext} from '../../contexts/AuthContext';
 
 describe('Settings component', () => {
-	test('renders settings component', () => {
+	const mockLogout = jest.fn();
+	const renderer = () =>
 		render(
-			<BrowserRouter>
-				<Settings />
-			</BrowserRouter>,
+			<AuthContext.Provider value={{isAuthenticated: true, logout: mockLogout}}>
+				<BrowserRouter>
+					<Settings />
+				</BrowserRouter>
+			</AuthContext.Provider>,
 		);
+	test('renders settings component', () => {
+		renderer();
 
 		const headingElement = screen.getByText(/Settings/i);
 		expect(headingElement).toBeInTheDocument();
@@ -22,11 +28,7 @@ describe('Settings component', () => {
 	});
 
 	test('opens modal when delete button is clicked', () => {
-		render(
-			<BrowserRouter>
-				<Settings />
-			</BrowserRouter>,
-		);
+		renderer();
 
 		const modalElement = screen.queryByText(/Are you sure?/i);
 		expect(modalElement).not.toBeInTheDocument();

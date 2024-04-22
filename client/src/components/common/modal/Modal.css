@@ -3,6 +3,7 @@
 	width: 100%;
 	background: linear-gradient(90deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.3));
 	z-index: 1;
+	backdrop-filter: blur(2px);
 	position: fixed;
 	inset: 0;
 	display: flex;

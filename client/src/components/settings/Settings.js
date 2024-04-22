@@ -1,13 +1,16 @@
-import {useState} from 'react';
+import {useContext, useState} from 'react';
 import Modal from '../common/modal/Modal';
 import './Settings.css';
 import {useApi} from '../../hooks/useApi';
 import {useNavigate} from 'react-router-dom';
+import {AuthContext} from '../../contexts/AuthContext';
 
 function Settings() {
 	const [modalOpen, setModalOpen] = useState(false);
+	const [showDeleteResponseModal, setShowDeleteResponseModal] = useState(false);
 	const navigate = useNavigate();
-	const {makeRequest, error} = useApi({
+	const {logout} = useContext(AuthContext);
+	const {makeRequest, error, data} = useApi({
 		url: 'api/user/delete',
 		method: 'delete',
 	});
@@ -19,9 +22,16 @@ function Settings() {
 	const handleConfirm = async () => {
 		try {
 			const response = await makeRequest();
-			if (response?.data?.success) {
-				localStorage.clear();
-				navigate('/');
+
+			if (response) {
+				setModalOpen(false);
+				setShowDeleteResponseModal(true);
+
+				setTimeout(() => {
+					logout();
+					navigate('/');
+					localStorage.clear();
+				}, 3000);
 			}
 		} catch (error) {
 			console.error('Failed to delete account: ', error);
@@ -54,6 +64,11 @@ function Settings() {
 					our services.
 				</p>
 			</Modal>
+			{showDeleteResponseModal && (
+				<Modal modalOpen showButtons={false} showCloseIcon={false}>
+					<p>{data?.message}</p>
+				</Modal>
+			)}
 		</section>
 	);
 }

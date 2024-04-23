@@ -1,5 +1,4 @@
 import React from 'react';
-import {server} from '../../mocks/server';
 import {render, fireEvent, waitFor, screen} from '@testing-library/react';
 import {BrowserRouter} from 'react-router-dom';
 import ResetPassword from './ResetPassword';
@@ -22,6 +21,7 @@ describe('ResetPassword component', () => {
 				<ResetPassword />
 			</BrowserRouter>,
 		);
+	
 		expect(screen.getByText('Reset Password')).toBeInTheDocument();
 		expect(
 			screen.getByText('Enter your new password below'),
@@ -37,6 +37,7 @@ describe('ResetPassword component', () => {
 				<ResetPassword />
 			</BrowserRouter>,
 		);
+
 		fireEvent.change(screen.getByLabelText('New Password'), {
 			target: {value: 'password123'},
 		});
@@ -57,6 +58,7 @@ describe('ResetPassword component', () => {
 				<ResetPassword />
 			</BrowserRouter>,
 		);
+
 		fireEvent.change(screen.getByLabelText('New Password'), {
 			target: {value: '1234'},
 		});
@@ -77,6 +79,7 @@ describe('ResetPassword component', () => {
 				<ResetPassword />
 			</BrowserRouter>,
 		);
+
 		fireEvent.change(screen.getByLabelText('New Password'), {
 			target: {value: 'SOmelongpassw0rDGreAter6Than30CharcateersLong'},
 		});
@@ -89,18 +92,17 @@ describe('ResetPassword component', () => {
 				screen.getByText('Password must be 30 characters or fewer'),
 			).toBeInTheDocument();
 		});
-		console.log(server);
 	});
 
 	it('navigates to /welcome when token is not provided', () => {
 		useLocation.mockReturnValue({search: ''});
 		const navigate = useNavigate();
-
 		render(
 			<BrowserRouter>
 				<ResetPassword />
 			</BrowserRouter>,
 		);
+
 		expect(navigate).toHaveBeenCalledWith('/welcome');
 	});
 
@@ -111,6 +113,7 @@ describe('ResetPassword component', () => {
 				<ResetPassword />
 			</BrowserRouter>,
 		);
+
 		fireEvent.change(screen.getByLabelText('New Password'), {
 			target: {value: 'password123'},
 		});

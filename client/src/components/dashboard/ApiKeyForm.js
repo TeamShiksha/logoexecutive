@@ -11,7 +11,11 @@ function ApiKeyForm({
 }) {
 	return (
 		<section className='dashboard-content-section'>
-			<form className='api-key-container ' onSubmit={handleGenerateKey}>
+			<form
+				className='api-key-container '
+				onSubmit={handleGenerateKey}
+				noValidate
+			>
 				{errorMessage && <p className='custom-input-error'>{errorMessage}</p>}
 				<CustomInput
 					type='text'

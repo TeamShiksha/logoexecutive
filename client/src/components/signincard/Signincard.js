@@ -102,7 +102,7 @@ function Signincard() {
 					aria-label='Sign in to Dashboard'
 					disabled={loading}
 				>
-					SignIn
+					Sign In
 				</button>
 			</form>
 			<section className='input-actiontext'>

@@ -2,7 +2,6 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
 import {BrowserRouter} from 'react-router-dom';
-import reportWebVitals from './reportWebVitals';
 import {AuthProvider} from './contexts/AuthContext';
 import {UserProvider} from './contexts/UserContext';
 import './index.css';
@@ -20,5 +19,3 @@ root.render(
 		</AuthProvider>
 	</React.StrictMode>,
 );
-
-reportWebVitals();

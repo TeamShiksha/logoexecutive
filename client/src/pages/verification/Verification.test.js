@@ -1,15 +1,21 @@
 import React from 'react';
-import {MemoryRouter, Routes, Route} from 'react-router-dom';
+import {MemoryRouter, Routes, Route, useNavigate} from 'react-router-dom';
 import {render, waitFor, screen} from '@testing-library/react';
 import Home from '../home/Home';
 import Verification from './Verification';
+import * as router from 'react-router';
 
 describe('VerificationStatus Component', () => {
+	const navigate = jest.fn();
 	beforeEach(() => {
-		jest.clearAllMocks();
+		jest.spyOn(router, 'useNavigate').mockImplementation(() => navigate);
 	});
 
-	it('should nvigate to welcome page when token is not provided', async () => {
+	afterAll(() => {
+		jest.restoreAllMocks();
+	});
+
+	it('should navigate to welcome page when token is not provided', async () => {
 		const token = 'exampleToken';
 		const queryParams = new URLSearchParams();
 		queryParams.append('token', token);
@@ -23,8 +29,12 @@ describe('VerificationStatus Component', () => {
 			</MemoryRouter>,
 		);
 		await waitFor(() => {
-			expect(screen.getByTestId('home-container')).toBeInTheDocument();
+			expect(navigate).not.toHaveBeenCalled();
 		});
+		setTimeout(() => {
+			expect(navigate).toHaveBeenCalledWith('/welcome');
+		}, 3000);
+		expect(screen.getByTestId('home-container')).toBeInTheDocument();
 	});
 
 	it('renders "Verification successful" message when token is valid', async () => {
@@ -40,7 +50,6 @@ describe('VerificationStatus Component', () => {
 				</Routes>
 			</MemoryRouter>,
 		);
-
 		await waitFor(() => {
 			expect(screen.getByText('Verification successful')).toBeInTheDocument();
 		});

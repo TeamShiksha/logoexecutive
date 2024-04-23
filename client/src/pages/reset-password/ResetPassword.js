@@ -6,6 +6,7 @@ import {useApi} from '../../hooks/useApi';
 import ResponseCard from '../../components/common/responseCard/ResponseCard';
 import {FaCheck} from 'react-icons/fa6';
 import {RxCross2} from 'react-icons/rx';
+import useCountdownTimer from '../../hooks/useCountdownTimer';
 import './ResetPassword.css';
 
 function ResetPassword() {
@@ -66,22 +67,7 @@ function ResetPassword() {
 		}
 	}, []);
 
-	useEffect(() => {
-		let timer = null;
-		if (success) {
-			timer = setInterval(() => {
-				if (countdown > 0) {
-					setCountdown((prevCount) => prevCount - 1);
-				} else {
-					clearInterval(timer);
-					navigate('/signin');
-				}
-			}, 1000);
-		}
-		return () => {
-			clearInterval(timer);
-		};
-	}, [success, countdown]);
+	useCountdownTimer(success, navigate, countdown, setCountdown, '/signin');
 	return tokenError ? (
 		<ResponseCard
 			message={tokenError}

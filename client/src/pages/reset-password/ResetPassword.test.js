@@ -1,9 +1,21 @@
 import React from 'react';
+import {server} from '../../mocks/server';
 import {render, fireEvent, waitFor, screen} from '@testing-library/react';
 import {BrowserRouter} from 'react-router-dom';
 import ResetPassword from './ResetPassword';
+import {useLocation, useNavigate} from 'react-router-dom';
+
+jest.mock('react-router', () => ({
+	...jest.requireActual('react-router'),
+	useNavigate: jest.fn(),
+	useLocation: jest.fn(),
+}));
 
 describe('ResetPassword component', () => {
+	beforeEach(() => {
+		useNavigate.mockReturnValue(jest.fn());
+	});
+
 	it('renders reset password form', () => {
 		render(
 			<BrowserRouter>
@@ -77,24 +89,42 @@ describe('ResetPassword component', () => {
 				screen.getByText('Password must be 30 characters or fewer'),
 			).toBeInTheDocument();
 		});
+		console.log(server);
 	});
 
-	// DO NOT DELETE, THIS TEST NEED TO BE ENABLED WITH MSW
-	// it('submits form successfully if passwords match', async () => {
-	// 	render(
-	// 		<BrowserRouter>
-	// 			<ResetPassword />
-	// 		</BrowserRouter>,
-	// 	);
-	// 	fireEvent.change(screen.getByLabelText('New Password'), {
-	// 		target: {value: 'password123'},
-	// 	});
-	// 	fireEvent.change(screen.getByLabelText('Confirm Password'), {
-	// 		target: {value: 'password123'},
-	// 	});
-	// 	fireEvent.click(screen.getByRole('button', {name: 'Submit'}));
-	// 	await waitFor(() => {
-	// 		expect(screen.getByText('Password Reset Successful')).toBeInTheDocument();
-	// 	});
-	// });
+	it('navigates to /welcome when token is not provided', () => {
+		useLocation.mockReturnValue({search: ''});
+		const navigate = useNavigate();
+
+		render(
+			<BrowserRouter>
+				<ResetPassword />
+			</BrowserRouter>,
+		);
+		expect(navigate).toHaveBeenCalledWith('/welcome');
+	});
+
+	it('submits form successfully if passwords match', async () => {
+		useLocation.mockReturnValue({search: '?token=123'});
+		render(
+			<BrowserRouter>
+				<ResetPassword />
+			</BrowserRouter>,
+		);
+		fireEvent.change(screen.getByLabelText('New Password'), {
+			target: {value: 'password123'},
+		});
+		fireEvent.change(screen.getByLabelText('Confirm Password'), {
+			target: {value: 'password123'},
+		});
+		fireEvent.click(screen.getByRole('button', {name: 'Submit'}));
+
+		await waitFor(() => {
+			expect(
+				screen.getByText(
+					'Your password has been successfully reset. You can now sign in with your new password.',
+				),
+			).toBeInTheDocument();
+		});
+	});
 });

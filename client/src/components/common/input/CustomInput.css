@@ -8,7 +8,7 @@
 	background: none;
 	padding: 12px;
 	font-size: 16px;
-	width: 300px;
+	width: 100%;
 	box-sizing: border-box;
 	transition: border 300ms cubic-bezier(0.4, 0, 0.2, 1);
 	border-radius: var(--bradius);
@@ -41,10 +41,4 @@
 	padding: 0 0.2em;
 	font-weight: 600;
 	cursor: default;
-}
-
-.custom-input-error {
-	color: #ff3333;
-	font-size: 16px;
-	margin-top: 6px;
 }

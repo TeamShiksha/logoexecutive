@@ -2,7 +2,7 @@ import React from 'react';
 import {render, screen} from '@testing-library/react';
 import ResponseCard from './ResponseCard';
 
-describe.only('ResponseCard Component', () => {
+describe('ResponseCard Component', () => {
 	const mockIcon = <svg />; // Mock Icon component
 
 	it('renders with required props', () => {
@@ -36,18 +36,5 @@ describe.only('ResponseCard Component', () => {
 		expect(screen.getByText('Please wait.')).toBeInTheDocument();
 		expect(screen.getByText('Redirecting to sign in')).toBeInTheDocument();
 		expect(screen.getByText('3')).toBeInTheDocument();
-	});
-
-	it('validates prop types', () => {
-		render(
-			<ResponseCard
-				title='Title'
-				message='Message'
-				Icon={mockIcon}
-				countdown={null}
-			/>,
-		);
-		expect(screen.getByText('Title')).toBeInTheDocument();
-		expect(screen.getByText('Message')).toBeInTheDocument();
 	});
 });

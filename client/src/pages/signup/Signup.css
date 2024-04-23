@@ -1,4 +1,5 @@
 .form-title {
+	width: 300px;
 	color: var(--black);
 	margin-top: 30px;
 	font-size: 2rem;
@@ -82,7 +83,8 @@
 .input-error {
 	height: auto;
 	margin-top: 16px;
-	max-width: 300px;
+	margin-bottom: 10px;
+	width: 300px;
 	display: flex;
 	align-items: flex-end;
 	color: #ff3333;

@@ -61,7 +61,10 @@ function Contactus() {
 						</p>
 						<div className='custom-link'>
 							<Link to='/welcome#demo'>Get a demo</Link>
-							<FiArrowRight className='contact-arrow-icon' />
+							<FiArrowRight
+								className='contact-arrow-icon'
+								data-testid='contact-arrow-icon'
+							/>
 						</div>
 					</div>
 				</div>

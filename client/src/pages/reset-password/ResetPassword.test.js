@@ -21,7 +21,7 @@ describe('ResetPassword component', () => {
 				<ResetPassword />
 			</BrowserRouter>,
 		);
-	
+
 		expect(screen.getByText('Reset Password')).toBeInTheDocument();
 		expect(
 			screen.getByText('Enter your new password below'),

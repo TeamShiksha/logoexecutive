@@ -1,5 +1,5 @@
 import React from 'react';
-import {MemoryRouter, Routes, Route, useNavigate} from 'react-router-dom';
+import {MemoryRouter, Routes, Route} from 'react-router-dom';
 import {render, waitFor, screen} from '@testing-library/react';
 import Home from '../home/Home';
 import Verification from './Verification';

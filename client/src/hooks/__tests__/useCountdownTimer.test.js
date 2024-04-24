@@ -1,5 +1,5 @@
 import {renderHook, act} from '@testing-library/react-hooks';
-import useCountdownTimer from '../useCountdownTimer'; // Assuming this is the correct import path for your custom hook
+import useCountdownTimer from '../useCountdownTimer';
 
 jest.useFakeTimers();
 

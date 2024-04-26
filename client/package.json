@@ -59,6 +59,7 @@
 		]
 	},
 	"devDependencies": {
+		"@testing-library/react-hooks": "^8.0.1",
 		"@babel/plugin-transform-private-property-in-object": "^7.22.11",
 		"eslint": "^8.47.0",
 		"eslint-config-prettier": "^9.0.0",

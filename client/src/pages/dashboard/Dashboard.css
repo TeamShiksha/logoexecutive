@@ -20,6 +20,11 @@
 	display: flex;
 	gap: 32px;
 }
+.custom-input-error {
+	color: #ff3333;
+	font-size: 16px;
+	margin-top: 6px;
+}
 
 .dashboard-content-item {
 	box-shadow: var(--shadow);

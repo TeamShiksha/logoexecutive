@@ -26,7 +26,7 @@ function Dashboard() {
 	const {data, errorMsg, makeRequest, isSuccess} = useApi({
 		url: `api/user/generate`,
 		method: 'post',
-		data: { keyDescription : inputValue },
+		data: {keyDescription: inputValue},
 	});
 
 	useEffect(() => {
@@ -47,8 +47,8 @@ function Dashboard() {
 				key: data.data.key,
 				usageCount: data.data.usageCount,
 				createdAt: data.data.createdAt,
-				updatedAt: data.data.updatedAt
-			}
+				updatedAt: data.data.updatedAt,
+			};
 			setKeys([newKey, ...keys]);
 			setErrorMessage('');
 		}
@@ -69,10 +69,10 @@ function Dashboard() {
 			return;
 		}
 		const success = await makeRequest();
-		if(!success) {
+		if (!success) {
 			setErrorMessage(errorMsg);
 		}
-	};
+	}
 
 	const handleDeleteKey = (apiKey) => {
 		setKeys(keys.filter((key) => key.key !== apiKey));

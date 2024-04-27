@@ -5,6 +5,7 @@ import {useState, useEffect} from 'react';
 import {FaCheck} from 'react-icons/fa6';
 import {RxCross2} from 'react-icons/rx';
 import ResponseCard from '../../components/common/responseCard/ResponseCard';
+import useCountdownTimer from '../../hooks/useCountdownTimer';
 
 export default function Verification() {
 	const location = useLocation();
@@ -20,23 +21,7 @@ export default function Verification() {
 		},
 		true,
 	);
-	useEffect(() => {
-		let timer = null;
-		if (isSuccess) {
-			timer = setInterval(() => {
-				if (countdown > 1) {
-					setCountdown((prevCount) => prevCount - 1);
-				} else {
-					clearInterval(timer);
-					navigate('/welcome');
-				}
-			}, 1000);
-		}
-		return () => {
-			clearInterval(timer);
-		};
-	}, [isSuccess, countdown, navigate]);
-
+	useCountdownTimer(isSuccess, navigate, countdown, setCountdown);
 	useEffect(() => {
 		makeRequest();
 	}, []);

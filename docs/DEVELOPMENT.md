@@ -11,7 +11,7 @@ This document provides step-by-step instructions for cloning and running the pro
 ## Clone and install dependencies
 Execute the following commands sequentially to clone the project and install all its dependencies:
 ```sh
-git clone https://github.com/FrontendArmy/logoexecutive-backend.git
+git clone https://github.com/TeamShiksha/logoexecutive.git
 cd logoexecutive-backend
 yarn install
 ```
@@ -37,7 +37,7 @@ Substitute the right-hand value of each environment variable with the correspond
 - Securely store this generated password in a safe location for use.
 
 ## AWS setup
-- Follow the guide given [here](https://github.com/TeamShiksha/logoexecutive-docs/blob/main/guides/cloudformation.md) for setting up AWS.
+- Follow the guide given [here](./guides/CLOUDFORMATION.md) for setting up AWS.
 
 ## Firebase setup
 - Sign in to [firebase](https://firebase.google.com/)  using your Google account and go to the Firebase console.

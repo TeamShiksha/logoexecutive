@@ -43,9 +43,3 @@
 	padding: 0 0.2em;
 	cursor: default;
 }
-
-.custom-input-error {
-	color: red;
-	font-size: small;
-	margin-top: 6px;
-}

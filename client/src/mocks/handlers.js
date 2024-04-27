@@ -6,8 +6,8 @@ import {emailVerificationHandler} from './handlers/emailVerification-handler';
 const handlers = [
 	...signinHandler,
 	...signupHandler,
-	...emailVerificationHandler
-  ...generateKeyHandler,
+	...emailVerificationHandler,
+  	...generateKeyHandler,
 ];
 
 export default handlers;

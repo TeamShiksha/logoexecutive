@@ -71,13 +71,17 @@ describe('Dashboard Component', () => {
 			expect(screen.getByText('Test API Key')).toBeInTheDocument();
 		});
 		const tableElement = screen.getByRole('table');
-		const keyRows = screen.queryAllByRole('row', { container: tableElement });
+		const keyRows = screen.queryAllByRole('row', {container: tableElement});
 		expect(keyRows).toHaveLength(3);
-		expect(screen.getAllByText(new Date().toLocaleDateString('en-US', {
-			day: '2-digit',
-			month: 'long',
-			year: 'numeric',
-		}))).toHaveLength(2);
+		expect(
+			screen.getAllByText(
+				new Date().toLocaleDateString('en-US', {
+					day: '2-digit',
+					month: 'long',
+					year: 'numeric',
+				}),
+			),
+		).toHaveLength(2);
 	});
 
 	it('Delete API key and remove from the list', () => {

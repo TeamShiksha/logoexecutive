@@ -137,7 +137,7 @@ async function verifyUser(user) {
 
 async function updateUser(updateProfile, user) {
   try {
-    const [firstName, lastName] = updateProfile;
+    const {firstName, lastName} = updateProfile;
     const userRef = user.userRef;
     const update = {
       firstName: firstName,
@@ -146,7 +146,7 @@ async function updateUser(updateProfile, user) {
     };
     const updated = await userRef.update(update);
     if (!updated) return false;
-    return false;
+    return true;
   } catch (err) {
     console.log(err);
     throw err;

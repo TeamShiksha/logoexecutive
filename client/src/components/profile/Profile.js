@@ -1,29 +1,107 @@
-import {useState} from 'react';
+import {useContext, useEffect, useState} from 'react';
 import CustomInput from '../common/input/CustomInput';
 import './Profile.css';
+import {UserContext} from '../../contexts/UserContext';
+import {INITIAL_UPDATE_PROFILE_FORM_DATA} from '../../constants';
+import {useApi} from '../../hooks/useApi';
 
 function Profile() {
-	const [firstName, setfirstName] = useState('');
-	const [lastName, setlastName] = useState('');
-	const [email, setEmail] = useState('');
+	const [updateProfileData, setUpdateProfileData] = useState(
+		INITIAL_UPDATE_PROFILE_FORM_DATA,
+	);
 	const [oldPassword, setOldPassword] = useState('');
 	const [newPassword, setNewPassword] = useState('');
 	const [repeatNewPassword, setRepeatNewPassword] = useState('');
+	const {userData, fetchUserData} = useContext(UserContext);
+	const [validationErrors, setValidationErrors] = useState({});
+	const {data, errorMsg, makeRequest, loading} = useApi({
+		url: `api/user/update-profile`,
+		method: 'patch',
+		data: {
+			firstName: updateProfileData.firstName,
+			lastName: updateProfileData.lastName,
+		},
+	});
+
+	useEffect(() => {
+		fetchUserData();
+	}, []);
+	useEffect(() => {
+		if (userData?.firstName)
+			setUpdateProfileData((prevData) => ({
+				...prevData,
+				firstName: userData.firstName,
+			}));
+		if (userData?.lastName)
+			setUpdateProfileData((prevData) => ({
+				...prevData,
+				lastName: userData.lastName,
+			}));
+		if (userData?.email)
+			setUpdateProfileData((prevData) => ({
+				...prevData,
+				email: userData.email,
+			}));
+	}, [userData]);
+
+	const validateFormData = () => {
+		if (updateProfileData.firstName === '') {
+			return {firstName: 'First name is required'};
+		} else if (/[^a-zA-Z\s]/.test(updateProfileData.firstName)) {
+			return {firstName: 'First name should only contain alphabets'};
+		} else if (
+			updateProfileData.firstName.length < 1 ||
+			updateProfileData.firstName.length > 20
+		) {
+			return {firstName: 'First name should be 1 to 20 characters long'};
+		}
+		if (updateProfileData.lastName === '') {
+			return {lastName: 'Last name is required'};
+		} else if (/[^a-zA-Z]/.test(updateProfileData.lastName)) {
+			return {lastName: 'Last name should only contain alphabets'};
+		} else if (
+			updateProfileData.lastName.length < 1 ||
+			updateProfileData.lastName.length > 20
+		) {
+			return {lastName: 'Last name should be 1 to 20 characters long'};
+		}
+		return null;
+	};
+	const handleUpdateProfile = async (e) => {
+		setValidationErrors(null);
+		e.preventDefault();
+		const error = validateFormData();
+		if (error && Object.keys(error).length > 0) {
+			setValidationErrors(error);
+		} else {
+			const success = await makeRequest();
+			if (success) {
+				setValidationErrors({});
+			}
+		}
+	};
 
 	return (
 		<div className='profile-cont' data-testid='testid-profile'>
 			<div className='profile-sub-cont'>
 				<h2 className='profile-heading'>Profile</h2>
 				<div className='profile-border-bottom'></div>
-				<form>
+				<form onSubmit={handleUpdateProfile}>
 					<CustomInput
 						name='first name'
 						type='text'
 						id='first name'
 						required
 						label='first name'
-						value={firstName}
-						onChange={(e) => setfirstName(e.target.value)}
+						value={updateProfileData.firstName}
+						disabled={loading}
+						onChange={(e) =>
+							setUpdateProfileData((prevData) => ({
+								...prevData,
+								firstName: e.target.value,
+							}))
+						}
+						error={validationErrors?.firstName || ''}
 					/>
 					<CustomInput
 						name='last name'
@@ -31,8 +109,15 @@ function Profile() {
 						id='last name'
 						required
 						label='last name'
-						value={lastName}
-						onChange={(e) => setlastName(e.target.value)}
+						value={updateProfileData.lastName}
+						disabled={loading}
+						onChange={(e) =>
+							setUpdateProfileData((prevData) => ({
+								...prevData,
+								lastName: e.target.value,
+							}))
+						}
+						error={validationErrors?.lastName || ''}
 					/>
 					<CustomInput
 						name='email'
@@ -40,8 +125,18 @@ function Profile() {
 						id='email'
 						label='email'
 						required
-						value={email}
-						onChange={(e) => setEmail(e.target.value)}
+						value={updateProfileData.email}
+						onChange={(e) =>
+							setUpdateProfileData((prevData) => ({
+								...prevData,
+								email: e.target.value,
+							}))
+						}
+						disabled={
+							loading ||
+							(updateProfileData.email && updateProfileData.email.length > 0)
+						}
+						error={validationErrors?.email || ''}
 					/>
 					<button className='profile-button' type='submit'>
 						Save

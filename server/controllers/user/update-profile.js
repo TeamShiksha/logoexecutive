@@ -61,7 +61,7 @@ async function updateProfileController(req, res, next) {
     if (!profileupdated) {
       return res.status(500).json({
         statusCode: 500,
-        message: "Failed to updated profile",
+        message: "Failed to update profile",
         error: STATUS_CODES[500],
       });
     }

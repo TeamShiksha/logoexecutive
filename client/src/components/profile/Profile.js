@@ -68,7 +68,7 @@ function Profile() {
 		return null;
 	};
 	const handleUpdateProfile = async (e) => {
-		setValidationErrors(null);
+		setValidationErrors({});
 		e.preventDefault();
 		const error = validateFormData();
 		if (error && Object.keys(error).length > 0) {
@@ -85,6 +85,13 @@ function Profile() {
 		<div className='profile-cont' data-testid='testid-profile'>
 			<div className='profile-sub-cont'>
 				<h2 className='profile-heading'>Profile</h2>
+				<p
+					className={`form-error ${Object.values(validationErrors).length > 0 || errorMsg ? '' : 'hidden'}`}
+					aria-live='assertive'
+					role='alert'
+				>
+					{Object.values(validationErrors)[0] || errorMsg || ' '}
+				</p>
 				<div className='profile-border-bottom'></div>
 				<form onSubmit={handleUpdateProfile}>
 					<CustomInput
@@ -101,7 +108,6 @@ function Profile() {
 								firstName: e.target.value,
 							}))
 						}
-						error={validationErrors?.firstName || ''}
 					/>
 					<CustomInput
 						name='last name'
@@ -117,7 +123,6 @@ function Profile() {
 								lastName: e.target.value,
 							}))
 						}
-						error={validationErrors?.lastName || ''}
 					/>
 					<CustomInput
 						name='email'
@@ -136,7 +141,6 @@ function Profile() {
 							loading ||
 							(updateProfileData.email && updateProfileData.email.length > 0)
 						}
-						error={validationErrors?.email || ''}
 					/>
 					<button className='profile-button' type='submit'>
 						Save

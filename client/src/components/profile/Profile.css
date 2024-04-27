@@ -45,6 +45,18 @@
 	font-weight: 500;
 }
 
+.form-error {
+	height: auto;
+	margin-top: 15px;
+	display: flex;
+	align-items: flex-end;
+	color: #ff3333;
+}
+
+.form-error.hidden {
+	display: none;
+}
+
 @media screen and (max-width: 768px) {
 	.profile-cont {
 		padding: 32px 16px;

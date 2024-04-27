@@ -7,7 +7,7 @@ const handlers = [
 	...signinHandler,
 	...signupHandler,
 	...emailVerificationHandler,
-  	...generateKeyHandler,
+	...generateKeyHandler,
 ];
 
 export default handlers;

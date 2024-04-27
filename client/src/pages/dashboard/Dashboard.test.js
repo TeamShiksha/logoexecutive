@@ -1,5 +1,5 @@
 import React from 'react';
-import {render, screen, fireEvent} from '@testing-library/react';
+import {render, screen, fireEvent, waitFor} from '@testing-library/react';
 import Dashboard from './Dashboard';
 import {UserContext} from '../../contexts/UserContext';
 
@@ -60,15 +60,26 @@ describe('Dashboard Component', () => {
 		const apiKeyTableComponent = screen.getByText('DESCRIPTION');
 		expect(apiKeyTableComponent).toBeInTheDocument();
 	});
-	it('generates API key and adds to the list', () => {
+
+	it('generates API key and adds to the list', async () => {
 		renderDashboard();
 		const descriptionInput = screen.getByLabelText('Description For API Key');
 		fireEvent.change(descriptionInput, {target: {value: 'Test API Key'}});
 		const generateButton = screen.getByText('Generate Key');
 		fireEvent.click(generateButton);
-		const apiKeyDescription = screen.getByText('Test API Key');
-		expect(apiKeyDescription).toBeInTheDocument();
+		await waitFor(() => {
+			expect(screen.getByText('Test API Key')).toBeInTheDocument();
+		});
+		const tableElement = screen.getByRole('table');
+		const keyRows = screen.queryAllByRole('row', { container: tableElement });
+		expect(keyRows).toHaveLength(3);
+		expect(screen.getAllByText(new Date().toLocaleDateString('en-US', {
+			day: '2-digit',
+			month: 'long',
+			year: 'numeric',
+		}))).toHaveLength(2);
 	});
+
 	it('Delete API key and remove from the list', () => {
 		renderDashboard();
 		const deleteButton = screen.getAllByTestId('api-key-delete');
@@ -76,6 +87,7 @@ describe('Dashboard Component', () => {
 		const deletedApiKeyDescription = screen.queryByText('Demo Key');
 		expect(deletedApiKeyDescription).not.toBeInTheDocument();
 	});
+
 	it('shows an error message when trying to generate a key without a description', async () => {
 		renderDashboard();
 		const button = screen.getByText('Generate Key');

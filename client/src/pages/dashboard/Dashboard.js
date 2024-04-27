@@ -6,8 +6,7 @@ import Usage from '../../components/dashboard/Usage';
 import {isLettersAndSpacesOnly} from '../../constants';
 import {UserContext} from '../../contexts/UserContext';
 import './Dashboard.css';
-
-const RANDOM_STRING_LENGTH = 36;
+import {useApi} from '../../hooks/useApi';
 
 function getUsedCalls(keys) {
 	let result = 0;
@@ -24,6 +23,11 @@ function Dashboard() {
 	const [copiedKey, setCopiedKey] = useState(null);
 	const [keys, setKeys] = useState([]);
 	const {userData, fetchUserData} = useContext(UserContext);
+	const {data, errorMsg, makeRequest, isSuccess} = useApi({
+		url: `api/user/generate`,
+		method: 'post',
+		data: { keyDescription : inputValue },
+	});
 
 	useEffect(() => {
 		fetchUserData();
@@ -35,7 +39,23 @@ function Dashboard() {
 		}
 	}, [userData]);
 
-	const handleGenerateKey = (e) => {
+	useEffect(() => {
+		if (isSuccess) {
+			const newKey = {
+				keyId: data.data.keyId,
+				keyDescription: inputValue,
+				key: data.data.key,
+				usageCount: data.data.usageCount,
+				createdAt: data.data.createdAt,
+				updatedAt: data.data.updatedAt
+			}
+			setKeys([newKey, ...keys]);
+			setErrorMessage('');
+		}
+		setInputValue('');
+	}, [isSuccess]);
+
+	async function handleGenerateKey(e) {
 		e.preventDefault();
 		if (inputValue.trim() === '') {
 			setErrorMessage('Description cannot be empty');
@@ -48,38 +68,12 @@ function Dashboard() {
 			setErrorMessage('Description must contain only alphabets and spaces');
 			return;
 		}
-		const newKey = {
-			keyId:
-				Math.random()
-					.toString(RANDOM_STRING_LENGTH)
-					.substring(2, RANDOM_STRING_LENGTH) +
-				Math.random()
-					.toString(RANDOM_STRING_LENGTH)
-					.substring(2, RANDOM_STRING_LENGTH),
-			keyDescription: inputValue,
-			key:
-				Math.random()
-					.toString(RANDOM_STRING_LENGTH)
-					.substring(2, RANDOM_STRING_LENGTH) +
-				Math.random()
-					.toString(RANDOM_STRING_LENGTH)
-					.substring(2, RANDOM_STRING_LENGTH),
-			usageCount: 0,
-			createdAt: new Date().toLocaleDateString('en-US', {
-				day: '2-digit',
-				month: 'short',
-				year: 'numeric',
-			}),
-			updatedAt: new Date().toLocaleDateString('en-US', {
-				day: '2-digit',
-				month: 'short',
-				year: 'numeric',
-			}),
-		};
-		setKeys([newKey, ...keys]);
-		setInputValue('');
-		setErrorMessage('');
+		const success = await makeRequest();
+		if(!success) {
+			setErrorMessage(errorMsg);
+		}
 	};
+
 	const handleDeleteKey = (apiKey) => {
 		setKeys(keys.filter((key) => key.key !== apiKey));
 	};

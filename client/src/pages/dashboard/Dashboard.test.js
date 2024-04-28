@@ -71,13 +71,45 @@ describe('Dashboard Component', () => {
 			expect(screen.getByText('Test API Key')).toBeInTheDocument();
 		});
 		const tableElement = screen.getByRole('table');
-		const keyRows = screen.queryAllByRole('row', { container: tableElement });
+		const keyRows = screen.queryAllByRole('row', {container: tableElement});
 		expect(keyRows).toHaveLength(3);
-		expect(screen.getAllByText(new Date().toLocaleDateString('en-US', {
-			day: '2-digit',
-			month: 'long',
-			year: 'numeric',
-		}))).toHaveLength(2);
+		expect(
+			screen.getAllByText(
+				new Date().toLocaleDateString('en-US', {
+					day: '2-digit',
+					month: 'long',
+					year: 'numeric',
+				}),
+			),
+		).toHaveLength(2);
+	});
+
+	it('Throws error when same key description is given again', async () => {
+		renderDashboard();
+		const descriptionInput = screen.getByLabelText('Description For API Key');
+		fireEvent.change(descriptionInput, {target: {value: 'Test API Key'}});
+		const generateButton = screen.getByText('Generate Key');
+		fireEvent.click(generateButton);
+		await waitFor(() => {
+			expect(
+				screen.getByText('Please provide a different key description'),
+			).toBeInTheDocument();
+		});
+	});
+
+	it('Throws limit error for keys more than 2', async () => {
+		renderDashboard();
+		const descriptionInput = screen.getByLabelText('Description For API Key');
+		fireEvent.change(descriptionInput, {target: {value: 'Test API Key'}});
+		const generateButton = screen.getByText('Generate Key');
+		fireEvent.click(generateButton);
+		await waitFor(() => {
+			expect(
+				screen.getByText(
+					'The maximum limit for key generation has been reached. Please consider upgrading your subscription to generate additional keys',
+				),
+			).toBeInTheDocument();
+		});
 	});
 
 	it('Delete API key and remove from the list', () => {

@@ -34,6 +34,5 @@
 		"test:client",
 		"lint",
 		"check:client"
-	],
-	"packageManager": "yarn@1.22.22"
+	]
 }

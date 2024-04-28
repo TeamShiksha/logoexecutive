@@ -1,14 +1,9 @@
 const { formExists, createForm } = require("../../../services");
 const { ContactUsCollection } = require("../../../utils/firestore");
-const { cleanDB } = require("../../../utils/cleanDB");
 const { ContactUs } = require("../../../models");
 const { mockContactUsForm } = require("../../../utils/mocks/contactUs");
 
 describe("formExists", () => {
-  afterEach(async function () {
-    await cleanDB();
-  });
-
   test("should return true if form activityStatus is true for given email", async () => {
     const user = await ContactUsCollection.doc(mockContactUsForm[1].contactId).set(mockContactUsForm[1]);
     const email = "active@gmail.com";
@@ -56,10 +51,6 @@ describe("formExists", () => {
 });
 
 describe("createForm", () => {
-  afterEach(async function () {
-    await cleanDB();
-  });
-
   it("should create a form in database and return the created form object", async () => {
     const formData = {
       name: "Aman",

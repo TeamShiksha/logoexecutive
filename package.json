@@ -19,10 +19,10 @@
 		"lint-fix:client": "yarn workspace client lint:fix",
 		"lint-fix": "concurrently \"yarn workspace server lint:fix\" \"yarn workspace client lint:fix\"",
 		"test": "concurrently \"yarn test:client\" \"yarn test:server\"",
-		"test:server": "yarn workspace server test",
+		"test:server": "yarn workspace server test-unit",
 		"test:client": "yarn workspace client test",
 		"format:client": "yarn workspace client format",
-		"check:client":"cd client && yarn run check",
+		"check:client": "cd client && yarn run check",
 		"coverage:client": "yarn workspace client coverage",
 		"coverage:server": "yarn workspace server coverage"
 	},
@@ -34,5 +34,6 @@
 		"test:client",
 		"lint",
 		"check:client"
-	]
+	],
+	"packageManager": "yarn@4.1.1+sha256.f3cc0eda8e5560e529c7147565b30faa43b4e472d90e8634d7134a37c7f59781"
 }

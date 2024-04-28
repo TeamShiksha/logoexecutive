@@ -41,21 +41,26 @@ function Dashboard() {
 
 	useEffect(() => {
 		if (isSuccess) {
+			const {keyId, keyDescription, key, usageCount, createdAt, updatedAt} =
+				data.data;
 			const newKey = {
-				keyId: data.data.keyId,
-				keyDescription: inputValue,
-				key: data.data.key,
-				usageCount: data.data.usageCount,
-				createdAt: data.data.createdAt,
-				updatedAt: data.data.updatedAt,
+				keyId,
+				keyDescription,
+				key,
+				usageCount,
+				createdAt,
+				updatedAt,
 			};
 			setKeys([newKey, ...keys]);
+			setInputValue('');
 		}
-		setInputValue('');
 	}, [isSuccess]);
 
 	useEffect(() => {
-		setErrorMessage(errorMsg);
+		if (errorMsg) {
+			setErrorMessage(errorMsg);
+			setInputValue('');
+		}
 	}, [errorMsg]);
 
 	async function handleGenerateKey(e) {

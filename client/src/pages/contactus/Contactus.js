@@ -47,14 +47,14 @@ function Contactus() {
 			return 'Name is required';
 		} else if (/[^a-zA-Z\s]/.test(trimmedName)) {
 			return 'Name should only contain alphabets';
-		} else if (trimmedName < 1 || trimmedName > 20) {
+		} else if (trimmedName.length < 1 || trimmedName.length > 20) {
 			return 'Name should be 1 to 20 characters long';
 		}
 
 		const trimmedEmail = formData.email;
 		if (trimmedEmail === '') {
 			return 'Email is required';
-		} else if (trimmedEmail > 50) {
+		} else if (trimmedEmail.length > 50) {
 			return 'Email should not be more than 50 characters long';
 		} else if (!isValidEmail(trimmedEmail)) {
 			return 'Invalid email format';

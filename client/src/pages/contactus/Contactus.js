@@ -28,7 +28,17 @@ function Contactus() {
 		if (isAuthenticated) {
 			fetchUserData();
 		}
-	}, []);
+	}, [isAuthenticated]);
+
+	useEffect(() => {
+		if (isAuthenticated && userData) {
+			setFormData((prevFormData) => ({
+				...prevFormData,
+				name: userData.firstName,
+				email: userData.email,
+			}));
+		}
+	}, [isAuthenticated, userData]);
 
 	const handleFormChange = (e) => {
 		setValidationError(null);
@@ -120,7 +130,7 @@ function Contactus() {
 							label='name'
 							type='text'
 							id='name'
-							value={isAuthenticated ? userData.firstName : formData.name}
+							value={formData.name}
 							onChange={handleFormChange}
 							disabled={loading}
 						/>
@@ -129,7 +139,7 @@ function Contactus() {
 							label='email'
 							type='text'
 							id='email'
-							value={isAuthenticated ? userData.email : formData.email}
+							value={formData.email}
 							onChange={handleFormChange}
 							disabled={loading}
 						/>

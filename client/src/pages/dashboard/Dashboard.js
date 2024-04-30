@@ -10,8 +10,7 @@ import {useApi} from '../../hooks/useApi';
 
 function getUsedCalls(keys) {
 	let result = 0;
-	if (!keys) return result;
-	keys.forEach((key) => {
+	keys?.forEach((key) => {
 		result += key.usageCount;
 	});
 	return result;

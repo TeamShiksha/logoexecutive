@@ -82,6 +82,7 @@ describe('Dashboard Component', () => {
 				}),
 			),
 		).toHaveLength(2);
+		expect(descriptionInput).toHaveValue('');
 	});
 
 	it('Throws error when same key description is given again', async () => {

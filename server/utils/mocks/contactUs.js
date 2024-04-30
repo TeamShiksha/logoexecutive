@@ -1,6 +1,5 @@
 const { Timestamp } = require("firebase-admin/firestore");
 
-// Generic form
 const mockContactUsForm = [
   {
     email: "nonactive@gmail.com",

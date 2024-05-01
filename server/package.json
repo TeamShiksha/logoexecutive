@@ -9,6 +9,7 @@
     "lint:fix": "eslint --fix .",
     "test": "jest --watchAll=false --silent",
     "unit": "cross-env NODE_ENV=test jest unit",
+    "test-unit": "sh utils/scripts/tests/testUnit.sh",
     "coverage": "jest --coverage --watchAll=false"
   },
   "dependencies": {

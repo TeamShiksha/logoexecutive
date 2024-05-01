@@ -19,15 +19,16 @@
 		"lint-fix:client": "yarn workspace client lint:fix",
 		"lint-fix": "concurrently \"yarn workspace server lint:fix\" \"yarn workspace client lint:fix\"",
 		"test": "concurrently \"yarn test:client\" \"yarn test:server\"",
-		"test:server": "yarn workspace server test",
+		"test:server": "yarn workspace server test-unit",
 		"test:client": "yarn workspace client test",
 		"format:client": "yarn workspace client format",
-		"check:client":"cd client && yarn run check",
+		"check:client": "cd client && yarn run check",
 		"coverage:client": "yarn workspace client coverage",
 		"coverage:server": "yarn workspace server coverage"
 	},
 	"devDependencies": {
-		"concurrently": "^8.2.2"
+		"concurrently": "^8.2.2",
+		"firebase-tools": "^13.7.5"
 	},
 	"pre-commit": [
 		"test:server",

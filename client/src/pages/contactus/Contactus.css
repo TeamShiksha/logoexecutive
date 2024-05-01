@@ -5,7 +5,7 @@
 .contact-subcont-first {
 	text-align: left;
 	color: var(--smooth-purple);
-	margin-bottom: 3rem;
+	margin-bottom: 1.6rem;
 	font-size: 2rem;
 }
 
@@ -66,12 +66,14 @@
 }
 
 .textarea:focus,
+.textarea:valid,
 .textarea:active {
 	outline: none;
 	border: solid 2px var(--smooth-purple);
 }
 
 .textarea:focus ~ .message-label,
+.textarea:valid ~ .message-label,
 .textarea:active ~ .message-label {
 	color: var(--smooth-purple);
 	transform: translateY(-50%) scale(0.8);
@@ -166,6 +168,16 @@
 
 .contact-social-icons svg {
 	font-size: 20px;
+}
+
+.contact-password-error {
+	color: #f33;
+	line-height: 24px;
+}
+
+.contact-password-success {
+	color: #34a853;
+	line-height: 24px;
 }
 
 @media screen and (max-width: 1024px) {

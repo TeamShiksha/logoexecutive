@@ -115,10 +115,10 @@ describe('ResetPassword component', () => {
 		);
 
 		fireEvent.change(screen.getByLabelText('New Password'), {
-			target: {value: 'password123'},
+			target: {value: '123456789'},
 		});
 		fireEvent.change(screen.getByLabelText('Confirm Password'), {
-			target: {value: 'password123'},
+			target: {value: '123456789'},
 		});
 		fireEvent.click(screen.getByRole('button', {name: 'Submit'}));
 
@@ -128,6 +128,25 @@ describe('ResetPassword component', () => {
 					'Your password has been successfully reset. You can now sign in with your new password.',
 				),
 			).toBeInTheDocument();
+		});
+	});
+
+	it('displays an error message for invalid token', async () => {
+		render(
+			<BrowserRouter>
+				<ResetPassword />
+			</BrowserRouter>,
+		);
+
+		fireEvent.change(screen.getByLabelText('New Password'), {
+			target: {value: 'password@123'},
+		});
+		fireEvent.change(screen.getByLabelText('Confirm Password'), {
+			target: {value: 'password@123'},
+		});
+		fireEvent.click(screen.getByRole('button', {name: 'Submit'}));
+		await waitFor(() => {
+			expect(screen.getByText('Internal Server Error')).toBeInTheDocument();
 		});
 	});
 });

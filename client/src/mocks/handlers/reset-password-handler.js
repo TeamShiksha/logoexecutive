@@ -16,12 +16,22 @@ export const resetPasswordHandler = [
 			);
 		}
 
-		if (newPassword === confirmPassword) {
+		if (newPassword === '123456789') {
 			return res(
 				ctx.status(200),
 				ctx.json({
 					message:
 						'Your password has been successfully reset. You can now sign in with your new password.',
+				}),
+			);
+		}
+		if (newPassword === 'password@123') {
+			return res(
+				ctx.status(500),
+				ctx.json({
+					message: 'Internal Server Error',
+					statusCode: 500,
+					error: STATUS_CODES[500],
 				}),
 			);
 		}

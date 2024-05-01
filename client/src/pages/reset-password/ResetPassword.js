@@ -28,10 +28,15 @@ function ResetPassword() {
 		method: 'patch',
 		data: {newPassword, confirmPassword, token},
 	});
+
 	const {makeRequest: makeTokenRequest, errorMsg: tokenError} = useApi({
 		url: `api/auth/reset-password${location?.search}`,
 		method: 'get',
 	});
+
+	useEffect(() => {
+		setErrorMsg(apiErrorMsg);
+	}, [apiErrorMsg]);
 
 	const handleSubmit = async (event) => {
 		event.preventDefault();
@@ -49,8 +54,6 @@ function ResetPassword() {
 			let success = await makeRequest();
 			if (success) {
 				setSuccess(true);
-			} else {
-				setErrorMsg(apiErrorMsg);
 			}
 		}
 	};
@@ -98,6 +101,7 @@ function ResetPassword() {
 						{errorMsg}
 					</p>
 				)}
+
 				<form onSubmit={handleSubmit}>
 					<CustomInput
 						name='new password'

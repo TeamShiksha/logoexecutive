@@ -15,3 +15,13 @@ export const isValidPassword = (password) => {
 		hasSpecialCharacter.test(password)
 	);
 };
+
+export const isSQLInjectionAttempt = (message) => {
+	const sqlInjectionRegex = /(')|(--)|(\/\*)|(\bSELECT\b)|\bunion\b/i;
+	return sqlInjectionRegex.test(message);
+};
+
+export const isValidMessage = (message) => {
+	const messageRegex = /^[^!@#$%^&*(){}[\]\\.;'",.<>/?`~|0-9]*$/;
+	return messageRegex.test(message);
+};

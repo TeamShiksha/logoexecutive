@@ -19,7 +19,7 @@
 		"lint-fix:client": "yarn workspace client lint:fix",
 		"lint-fix": "concurrently \"yarn workspace server lint:fix\" \"yarn workspace client lint:fix\"",
 		"test": "concurrently \"yarn test:client\" \"yarn test:server\"",
-		"test:server": "yarn workspace server test-unit",
+		"test:server": "yarn workspace server test",
 		"test:client": "yarn workspace client test",
 		"format:client": "yarn workspace client format",
 		"check:client": "cd client && yarn run check",

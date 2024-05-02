@@ -54,24 +54,25 @@ describe('Profile component', () => {
 	};
 	it('renders without crashing', () => {
 		renderProfile();
+
 		expect(screen.getByText('Profile')).toBeInTheDocument();
 		expect(screen.getByText('Change Password')).toBeInTheDocument();
 	});
 
 	it('updates first name on input change', () => {
-		
 		renderProfile();
+
 		const firstNameInput = screen.getByLabelText('first name');
-		fireEvent.change(firstNameInput, { target: { value: 'John' } });
-		
+		fireEvent.change(firstNameInput, {target: {value: 'John'}});
+
 		expect(firstNameInput.value).toBe('John');
 	});
 
 	it('updates last name on input change', () => {
-		
 		renderProfile();
+
 		const lastNameInput = screen.getByLabelText('last name');
-		fireEvent.change(lastNameInput, { target: { value: 'Doe' } });
+		fireEvent.change(lastNameInput, {target: {value: 'Doe'}});
 
 		expect(lastNameInput.value).toBe('Doe');
 	});
@@ -116,7 +117,47 @@ describe('Profile component', () => {
 		).toHaveClass('form-error');
 	});
 
-	it('should update the user first name and last name successfully', async()=>{
+	it("should throw an error if the user's first name does not have correct length value", () => {
+		renderProfile();
+
+		const firstName = screen.getByLabelText('first name');
+		const lastName = screen.getByLabelText('last name');
+		const saveButton = screen.getByTestId('profile-button');
+
+		fireEvent.change(firstName, {
+			target: {value: 'loremIpsumissimplydummy'},
+		});
+		fireEvent.change(lastName, {
+			target: {value: 'loremIpsumissimplydummy'},
+		});
+		fireEvent.click(saveButton);
+
+		expect(
+			screen.getByText('First name should be 1 to 20 characters long'),
+		).toHaveClass('form-error');
+	});
+
+	it("should throw an error if the user's last name does not have correct length value", () => {
+		renderProfile();
+
+		const firstName = screen.getByLabelText('first name');
+		const lastName = screen.getByLabelText('last name');
+		const saveButton = screen.getByTestId('profile-button');
+
+		fireEvent.change(firstName, {
+			target: {value: 'dummy'},
+		});
+		fireEvent.change(lastName, {
+			target: {value: 'loremIpsumissimplydummy'},
+		});
+		fireEvent.click(saveButton);
+
+		expect(
+			screen.getByText('Last name should be 1 to 20 characters long'),
+		).toHaveClass('form-error');
+	});
+
+	it('should update the user first name and last name successfully', async () => {
 		renderProfile();
 
 		const firstName = screen.getByLabelText('first name');
@@ -132,11 +173,9 @@ describe('Profile component', () => {
 		fireEvent.click(saveButton);
 
 		await waitFor(() => {
-			expect(
-				screen.getByText(
-					/Profile Updated Successfully/i,
-				),
-			).toHaveClass('profile-update-success');
+			expect(screen.getByText(/Profile Updated Successfully/i)).toHaveClass(
+				'profile-update-success',
+			);
 		});
-	})
+	});
 });

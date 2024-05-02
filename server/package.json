@@ -7,9 +7,9 @@
     "start": "cross-env NODE_ENV=development netlify dev",
     "lint": "eslint .",
     "lint:fix": "eslint --fix .",
-    "test": "jest --watchAll=false --silent",
+    "test": "firebase emulators:exec \"jest --watchAll=false --silent\" --project=logoexecutive-d1e9a",
     "unit": "cross-env NODE_ENV=test jest unit",
-    "coverage": "jest --coverage --watchAll=false"
+    "coverage": "firebase emulators:exec \"jest --coverage --watchAll=false\" --project=logoexecutive-d1e9a"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.472.0",

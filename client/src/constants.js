@@ -179,6 +179,12 @@ export const INITIAL_SIGNIN_FORM_DATA = {
 	password: '',
 };
 
+export const INITIAL_CONTACTUS_FORM_DATA = {
+	name: '',
+	email: '',
+	message: '',
+};
+
 export const SubscriptionTypes = {
 	HOBBY: 'HOBBY',
 	PRO: 'PRO',

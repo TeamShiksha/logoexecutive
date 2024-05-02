@@ -1,5 +1,5 @@
 import React from 'react';
-import {render, fireEvent, screen} from '@testing-library/react';
+import {render, fireEvent, screen, waitFor} from '@testing-library/react';
 import Profile from './Profile';
 import {AuthContext} from '../../contexts/AuthContext';
 import {UserContext} from '../../contexts/UserContext';
@@ -57,4 +57,86 @@ describe('Profile component', () => {
 		expect(screen.getByText('Profile')).toBeInTheDocument();
 		expect(screen.getByText('Change Password')).toBeInTheDocument();
 	});
+
+	it('updates first name on input change', () => {
+		
+		renderProfile();
+		const firstNameInput = screen.getByLabelText('first name');
+		fireEvent.change(firstNameInput, { target: { value: 'John' } });
+		
+		expect(firstNameInput.value).toBe('John');
+	});
+
+	it('updates last name on input change', () => {
+		
+		renderProfile();
+		const lastNameInput = screen.getByLabelText('last name');
+		fireEvent.change(lastNameInput, { target: { value: 'Doe' } });
+
+		expect(lastNameInput.value).toBe('Doe');
+	});
+
+	it('should throw an error if first name value format is invalid', () => {
+		renderProfile();
+
+		const firstName = screen.getByLabelText('first name');
+		const lastName = screen.getByLabelText('last name');
+		const saveButton = screen.getByTestId('profile-button');
+
+		fireEvent.change(firstName, {
+			target: {value: 'jhon@'},
+		});
+		fireEvent.change(lastName, {
+			target: {value: '12Doe'},
+		});
+		fireEvent.click(saveButton);
+
+		expect(
+			screen.getByText('First name should only contain alphabets'),
+		).toHaveClass('form-error');
+	});
+
+	it('should throw an error if last name value format is invalid', () => {
+		renderProfile();
+
+		const firstName = screen.getByLabelText('first name');
+		const lastName = screen.getByLabelText('last name');
+		const saveButton = screen.getByTestId('profile-button');
+
+		fireEvent.change(firstName, {
+			target: {value: 'dummy'},
+		});
+		fireEvent.change(lastName, {
+			target: {value: '12Doe'},
+		});
+		fireEvent.click(saveButton);
+
+		expect(
+			screen.getByText('Last name should only contain alphabets'),
+		).toHaveClass('form-error');
+	});
+
+	it('should update the user first name and last name successfully', async()=>{
+		renderProfile();
+
+		const firstName = screen.getByLabelText('first name');
+		const lastName = screen.getByLabelText('last name');
+		const saveButton = screen.getByTestId('profile-button');
+
+		fireEvent.change(firstName, {
+			target: {value: 'Anoop'},
+		});
+		fireEvent.change(lastName, {
+			target: {value: 'Singh'},
+		});
+		fireEvent.click(saveButton);
+
+		await waitFor(() => {
+			expect(
+				screen.getByText(
+					/Profile Updated Successfully/i,
+				),
+			).toHaveClass('profile-update-success');
+		});
+	})
 });

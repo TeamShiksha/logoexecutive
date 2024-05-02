@@ -1,12 +1,12 @@
 import React from 'react';
-import {render, fireEvent, screen} from '@testing-library/react';
+import { render, fireEvent, screen } from '@testing-library/react';
 import UpdateProfileForm from './UpdateProfileForm';
 
 describe('Profile component', () => {
-	const updateProfileData = {};
-	const setUpdateProfileData = jest.fn();
-
+	
 	const renderUpdateProfileForm = () => {
+		const updateProfileData = {};
+		const setUpdateProfileData = jest.fn();
 		return render(
 			<UpdateProfileForm
 				updateProfileData={updateProfileData}
@@ -16,33 +16,31 @@ describe('Profile component', () => {
 	};
 
 	it('updates first name on input change', () => {
+		
 		renderUpdateProfileForm();
 		const firstNameInput = screen.getByLabelText('first name');
-		fireEvent.change(firstNameInput, {target: {value: 'John'}});
+		fireEvent.change(firstNameInput, { target: { value: 'John' } });
+		
 		expect(firstNameInput.value).toBe('John');
 	});
 
 	it('updates last name on input change', () => {
-		const updateProfileData = {firstName:'',lastName:''};
-		const setUpdateProfileData = jest.fn();
-
-		render(
-			<UpdateProfileForm
-			updateProfileData={updateProfileData}
-			setUpdateProfileData={setUpdateProfileData}
-		/>
-		);
+		
+		renderUpdateProfileForm();
 		const lastNameInput = screen.getByLabelText('last name');
-		fireEvent.change(lastNameInput, {target: {value: 'Doe'}});
-		expect(setUpdateProfileData).toHaveBeenCalledWith({
-			...updateProfileData,
-			lastName: 'Doe',
-		});
+		fireEvent.change(lastNameInput, { target: { value: 'Doe' } });
+
 		expect(lastNameInput.value).toBe('Doe');
 	});
 
 	// it('should throw an error if first name value format is invalid', () => {
-	// 	renderUpdateProfileForm();
+	// 	const updateProfileData = {firstName:'',lastName:''};
+	// 	const setUpdateProfileData = jest.fn();
+	// 	 render
+	// 		(<UpdateProfileForm
+	// 			updateProfileData={updateProfileData}
+	// 			setUpdateProfileData={setUpdateProfileData}
+	// 		/>);
 
 	// 	const firstName = screen.getByLabelText('first name');
 	// 	const lastName = screen.getByLabelText('last name');

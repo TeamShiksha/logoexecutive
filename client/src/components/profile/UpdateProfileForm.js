@@ -112,7 +112,7 @@ const UpdateProfileForm = ({updateProfileData, setUpdateProfileData}) => {
 						(updateProfileData.email && updateProfileData.email.length > 0)
 					}
 				/>
-				<button className='profile-button' type='submit'>
+				<button className='profile-button' type='submit' data-testid='profile-button'>
 					Save
 				</button>
 			</form>

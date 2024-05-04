@@ -92,4 +92,25 @@ describe('Drag and Drop Component', () => {
 		const modalElement = screen.queryByTestId('modal-bg');
 		expect(modalElement).toBeNull();
 	});
+
+    test('revokeObjectURL is called on component unmount', () => {
+        const mockCreateObjectURL = jest.fn(() => "https://image.com/1.jpg");
+        const mockRevokeObjectURL = jest.fn();
+        global.URL.createObjectURL = mockCreateObjectURL;
+        global.URL.revokeObjectURL = mockRevokeObjectURL;
+        const { unmount } = render(<DragAndDrop setUploadedImages={dragFunction} />);
+        const imageUploadElement = screen.getByTestId('file-upload');
+        const mockFile = new File(['fileContent'], 'image.jpg', { type: 'image/jpeg' });
+        userEvent.upload(imageUploadElement, mockFile);
+        expect(mockCreateObjectURL).toHaveBeenCalledWith(mockFile);
+        unmount();
+        expect(mockRevokeObjectURL).toHaveBeenCalledWith("https://image.com/1.jpg");
+    });
+
+    test('Updating image name should work as expected', () => {
+        render(<DragAndDrop setUploadedImages={dragFunction} />);
+        const imageNameInput = screen.getByTestId('file-upload');
+        fireEvent.change(imageNameInput, {target:{value:"newImage.jpg"}})
+        expect(imageNameInput.value).toBe('newImage.jpg');
+    });
 });

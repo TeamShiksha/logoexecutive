@@ -77,6 +77,42 @@ describe('Profile component', () => {
 		expect(lastNameInput.value).toBe('Doe');
 	});
 
+	it('should alert if first name is empty', () => {
+		renderProfile();
+
+		const firstName = screen.getByLabelText('first name');
+		const lastName = screen.getByLabelText('last name');
+		const saveButton = screen.getByTestId('profile-button');
+
+		fireEvent.change(firstName, {
+			target: {value: ''},
+		});
+		fireEvent.change(lastName, {
+			target: {value: '12Doe'},
+		});
+		fireEvent.click(saveButton);
+
+		expect(firstName.validity.valueMissing).toBe(true);
+	});
+
+	it('should alert if last name is empty', () => {
+		renderProfile();
+
+		const firstName = screen.getByLabelText('first name');
+		const lastName = screen.getByLabelText('last name');
+		const saveButton = screen.getByTestId('profile-button');
+
+		fireEvent.change(firstName, {
+			target: {value: 'John'},
+		});
+		fireEvent.change(lastName, {
+			target: {value: ''},
+		});
+		fireEvent.click(saveButton);
+
+		expect(lastName.validity.valueMissing).toBe(true);
+	});
+
 	it('should throw an error if first name value format is invalid', () => {
 		renderProfile();
 

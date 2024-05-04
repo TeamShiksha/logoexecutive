@@ -3,11 +3,12 @@ import Footer from './components/footer/Footer';
 import Header from './components/header/Header';
 import Pricing from './components/pricing/Pricing';
 import Verification from './pages/verification/Verification';
+import ApiDocs from './pages/docs/ApiDocs';
 import {
 	About,
 	Account,
 	// AdminDashboard,
-	ApiDocs,
+	// ApiDocs,
 	Contactus,
 	Dashboard,
 	ForgotPassword,

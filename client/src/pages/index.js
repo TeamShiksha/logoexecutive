@@ -2,7 +2,6 @@ import About from './about/About';
 import Account from './account/Account';
 import Contactus from './contactus/Contactus';
 import Dashboard from './dashboard/Dashboard';
-import ApiDocs from './docs/ApiDocs';
 import ForgotPassword from './forgot-password/ForgotPassword';
 import ResetPassword from './reset-password/ResetPassword';
 import Signin from './signin/Signin';
@@ -14,7 +13,6 @@ export {
 	About,
 	Account,
 	AdminDashboard,
-	ApiDocs,
 	Contactus,
 	Dashboard,
 	ForgotPassword,

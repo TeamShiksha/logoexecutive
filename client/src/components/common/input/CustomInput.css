@@ -41,5 +41,6 @@
 	transform: translateY(-50%) scale(0.8);
 	background-color: var(--white);
 	padding: 0 0.2em;
+	font-weight: 600;
 	cursor: default;
 }

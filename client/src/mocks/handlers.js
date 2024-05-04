@@ -4,14 +4,20 @@ import {signupHandler} from './handlers/signup-handler';
 import {emailVerificationHandler} from './handlers/emailVerification-handler';
 import {updateProfileHandler} from './handlers/updateProfile-handler';
 import {contactUsHandler} from './handlers/contactUs-handler';
+import {signOutHandler} from './handlers/signout-handler';
+import {userDataHandler} from './handlers/userData-handler';
+import {forgotPasswordHandler} from './handlers/forgot-password-handler';
 
 const handlers = [
 	...signinHandler,
 	...signupHandler,
+	...signOutHandler,
 	...emailVerificationHandler,
 	...updateProfileHandler,
 	...resetPasswordHandler,
 	...contactUsHandler,
+	...userDataHandler,
+	...forgotPasswordHandler,
 ];
 
 export default handlers;

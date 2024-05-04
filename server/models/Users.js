@@ -65,7 +65,7 @@ class Users {
    * @param {string} userData.password
    * @param {string} userData.userType
    **/
-  static async NewUser (userData) {
+  static async NewUser(userData) {
     try {
       const { email, firstName, lastName, password } = userData;
       if (!email || !firstName || !lastName || !password) {
@@ -81,13 +81,12 @@ class Users {
         password: hashedPassword,
         createdAt: Timestamp.now(),
         updatedAt: Timestamp.now(),
-        isVerified: false
+        isVerified: false,
       };
     } catch (err) {
-      console.log(err);
-      return null;
+      throw err;
     }
-  };
+  }
 
   /**
    * Returns true or false if the password provided matches the user's password

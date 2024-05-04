@@ -5,6 +5,7 @@ import {emailVerificationHandler} from './handlers/emailVerification-handler';
 import {contactUsHandler} from './handlers/contactUs-handler';
 import {signOutHandler} from './handlers/signout-handler';
 import {userDataHandler} from './handlers/userData-handler';
+import {forgotPasswordHandler} from './handlers/forgot-password-handler';
 
 const handlers = [
 	...signinHandler,
@@ -14,6 +15,7 @@ const handlers = [
 	...resetPasswordHandler,
 	...contactUsHandler,
 	...userDataHandler,
+	...forgotPasswordHandler,
 ];
 
 export default handlers;

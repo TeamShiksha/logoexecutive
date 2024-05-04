@@ -8,7 +8,6 @@ import {
 	About,
 	Account,
 	// AdminDashboard,
-	// ApiDocs,
 	Contactus,
 	Dashboard,
 	ForgotPassword,

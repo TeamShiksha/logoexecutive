@@ -178,4 +178,27 @@ describe('Profile component', () => {
 			);
 		});
 	});
+
+	it('updates old password on input change', () => {
+		renderProfile();
+		const oldPasswordInput = screen.getByLabelText('old password');
+		fireEvent.change(oldPasswordInput, {target: {value: 'oldPassword123'}});
+		expect(oldPasswordInput.value).toBe('oldPassword123');
+	});
+
+	it('updates new password on input change', () => {
+		renderProfile();
+		const newPasswordInput = screen.getByLabelText('new password');
+		fireEvent.change(newPasswordInput, {target: {value: 'newPassword456'}});
+		expect(newPasswordInput.value).toBe('newPassword456');
+	});
+
+	it('updates repeat new password on input change', () => {
+		renderProfile();
+		const repeatNewPasswordInput = screen.getByLabelText('repeat new password');
+		fireEvent.change(repeatNewPasswordInput, {
+			target: {value: 'newPassword456'},
+		});
+		expect(repeatNewPasswordInput.value).toBe('newPassword456');
+	});
 });

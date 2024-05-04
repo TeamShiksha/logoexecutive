@@ -12,15 +12,15 @@ function Profile() {
 	const {userData, fetchUserData} = useContext(UserContext);
 	const [updateProfileValidationErrors, setUpdateProfileValidationErrors] =
 		useState({});
-	const {data, errorMsg, makeRequest, loading} = useApi({
-		url: `api/user/update-profile`,
-		method: 'patch',
-		data: {
-			firstName: updateProfileData.firstName,
-			lastName: updateProfileData.lastName,
-		},
-	});
-	const [isUpdateProfileSuccess, setIsUpdateProfileSuccess] = useState(false);
+	const {data, errorMsg, makeRequest, loading, isSuccess, setIsSuccess} =
+		useApi({
+			url: `api/user/update-profile`,
+			method: 'patch',
+			data: {
+				firstName: updateProfileData.firstName,
+				lastName: updateProfileData.lastName,
+			},
+		});
 	const [oldPassword, setOldPassword] = useState('');
 	const [newPassword, setNewPassword] = useState('');
 	const [repeatNewPassword, setRepeatNewPassword] = useState('');
@@ -49,7 +49,7 @@ function Profile() {
 		return null;
 	};
 	const handleUpdateProfile = async (e) => {
-		setIsUpdateProfileSuccess(false);
+		setIsSuccess(false);
 		setUpdateProfileValidationErrors({});
 		e.preventDefault();
 		const error = validateUpdateProfileFormData();
@@ -59,7 +59,6 @@ function Profile() {
 			const success = await makeRequest();
 			if (success) {
 				setUpdateProfileValidationErrors({});
-				setIsUpdateProfileSuccess(true);
 			}
 		}
 	};
@@ -101,11 +100,11 @@ function Profile() {
 			<div className='profile-sub-cont'>
 				<h2 className='profile-heading'>Profile</h2>
 				<p
-					className={`${isUpdateProfileSuccess ? 'profile-update-success' : 'form-error'} ${Object.values(updateProfileValidationErrors).length > 0 || errorMsg ? '' : 'hidden'}`}
+					className={`${isSuccess ? 'profile-update-success' : 'form-error'} ${Object.values(updateProfileValidationErrors).length > 0 || errorMsg ? '' : 'hidden'}`}
 					aria-live='assertive'
 					role='alert'
 				>
-					{(isUpdateProfileSuccess && data.message) ||
+					{(isSuccess && data.message) ||
 						Object.values(updateProfileValidationErrors)[0] ||
 						errorMsg ||
 						' '}

@@ -107,10 +107,22 @@ describe('Drag and Drop Component', () => {
         expect(mockRevokeObjectURL).toHaveBeenCalledWith("https://image.com/1.jpg");
     });
 
-    test('Updating image name should work as expected', () => {
-        render(<DragAndDrop setUploadedImages={dragFunction} />);
-        const imageNameInput = screen.getByTestId('file-upload');
-        fireEvent.change(imageNameInput, {target:{value:"newImage.jpg"}})
-        expect(imageNameInput.value).toBe('newImage.jpg');
-    });
+	test('No action is taken if no files are selected', () => {
+		render(<DragAndDrop setUploadedImages={dragFunction} />);
+		const fileInput = screen.getByTestId('file-upload');
+		fireEvent.change(fileInput, { target: { files: [] } });
+		expect(dragFunction).not.toHaveBeenCalled();
+		const modal = screen.queryByTestId('preview-modal');
+		expect(modal).not.toBeInTheDocument();
+	});
+
+    test('File name should be updated correctly', () => {
+		render(<DragAndDrop setUploadedImages={dragFunction} />);
+		const fileInput = screen.getByTestId('file-upload');
+		const newFile = new File(['content'], 'newImage.jpg', { type: 'image/jpeg' });
+		fireEvent.change(fileInput, { target: { files: [newFile] } });
+		const inputElement = screen.getByLabelText('Image name');
+		fireEvent.change(inputElement, { target: { value: 'updatedImage.jpg' } });
+    	expect(inputElement.value).toBe('updatedImage.jpg');
+	});
 });

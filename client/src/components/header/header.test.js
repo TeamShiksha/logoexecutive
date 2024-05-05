@@ -99,17 +99,17 @@ describe('Header', () => {
 	});
 
 	test('should handle logout when logout button is clicked', () => {
-        renderHeader(true);
-        fireEvent.click(screen.getByText('Account')); 
-        fireEvent.click(screen.getByText('Logout'));
-        expect(mockLogout).toHaveBeenCalled();
-    });
+		renderHeader(true);
+		fireEvent.click(screen.getByText('Account'));
+		fireEvent.click(screen.getByText('Logout'));
+		expect(mockLogout).toHaveBeenCalled();
+	});
 
 	test('should close the account dropdown when clicking outside of dropdown and account button', async () => {
 		renderHeader(true);
 		const accountButton = screen.getByText('Account');
-		fireEvent.click(accountButton); 
-		const dropdown = screen.getByRole('list'); 
+		fireEvent.click(accountButton);
+		const dropdown = screen.getByRole('list');
 		expect(dropdown).toBeInTheDocument();
 		fireEvent.mouseDown(document.body);
 		expect(screen.queryByRole('list')).not.toBeInTheDocument();

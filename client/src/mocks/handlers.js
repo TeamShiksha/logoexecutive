@@ -6,7 +6,7 @@ import {contactUsHandler} from './handlers/contactUs-handler';
 import {signOutHandler} from './handlers/signout-handler';
 import {userDataHandler} from './handlers/userData-handler';
 import {forgotPasswordHandler} from './handlers/forgot-password-handler';
-import {generateKeyHandler}  from './handlers/generate_key-handler';
+import {generateKeyHandler} from './handlers/generate_key-handler';
 
 const handlers = [
 	...signinHandler,
@@ -17,7 +17,7 @@ const handlers = [
 	...contactUsHandler,
 	...userDataHandler,
 	...forgotPasswordHandler,
-	...generateKeyHandler
+	...generateKeyHandler,
 ];
 
 export default handlers;

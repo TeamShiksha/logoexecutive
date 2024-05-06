@@ -7,31 +7,36 @@ const { SubscriptionCollection } = require("../utils/firestore");
 async function createSubscription(userId) {
   try {
     const subscriptionData = Subscriptions.NewSubscription(userId);
-    const result = await SubscriptionCollection.doc(subscriptionData.subscriptionId).set(subscriptionData);
+    const result = await SubscriptionCollection.doc(
+      subscriptionData.subscriptionId
+    ).set(subscriptionData);
 
     const UserSubscription = new Subscriptions(subscriptionData);
     return UserSubscription;
   } catch (err) {
-    console.log(err);
     throw err;
   }
 }
- 
+
 async function fetchSubscriptionByuserid(userId) {
   try {
-    const subscriptionRef = await SubscriptionCollection.where("userId", "==", userId)
-      .limit(1).get();
+    const subscriptionRef = await SubscriptionCollection.where(
+      "userId",
+      "==",
+      userId
+    )
+      .limit(1)
+      .get();
     if (subscriptionRef.empty) return null;
     const subscription = new Subscriptions(subscriptionRef.docs[0].data());
 
     return subscription;
   } catch (err) {
-    console.log(err);
     throw err;
   }
 }
 
 module.exports = {
   createSubscription,
-  fetchSubscriptionByuserid
+  fetchSubscriptionByuserid,
 };

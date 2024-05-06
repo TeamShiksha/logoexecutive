@@ -90,4 +90,37 @@ describe('Header', () => {
 		fireEvent.resize(global.window);
 		expect(screen.getByRole('navigation')).toBeInTheDocument();
 	});
+
+	test('should hide navigation bar when window width is less than or equal to 1000', () => {
+		renderHeader(true);
+		global.window.innerWidth = 1000;
+		fireEvent.resize(global.window);
+		expect(screen.queryByRole('navigation')).toBeNull();
+	});
+
+	test('should handle logout when logout button is clicked', () => {
+		renderHeader(true);
+		fireEvent.click(screen.getByText('Account'));
+		fireEvent.click(screen.getByText('Logout'));
+		expect(mockLogout).toHaveBeenCalled();
+	});
+
+	test('should close the account dropdown when clicking outside of dropdown and account button', async () => {
+		renderHeader(true);
+		const accountButton = screen.getByText('Account');
+		fireEvent.click(accountButton);
+		const dropdown = screen.getByRole('list');
+		expect(dropdown).toBeInTheDocument();
+		fireEvent.mouseDown(document.body);
+		expect(screen.queryByRole('list')).not.toBeInTheDocument();
+	});
+
+	test('should keep the account dropdown open when clicking inside the dropdown', () => {
+		renderHeader(true);
+		const accountButton = screen.getByText('Account');
+		fireEvent.click(accountButton);
+		const dropdown = screen.getByRole('list');
+		fireEvent.mouseDown(dropdown);
+		expect(screen.getByRole('list')).toBeInTheDocument();
+	});
 });

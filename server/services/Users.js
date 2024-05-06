@@ -15,7 +15,6 @@ async function emailRecordExists(email) {
     const userRef = await UserCollection.where("email", "==", email).get();
     return !userRef.empty;
   } catch (err) {
-    console.log(err);
     throw err;
   }
 }
@@ -33,7 +32,6 @@ async function fetchUsers() {
       data: users,
     };
   } catch (err) {
-    console.log(err);
     throw err;
   }
 }
@@ -54,7 +52,6 @@ async function fetchUserByEmail(email) {
     });
     return user;
   } catch (err) {
-    console.log(err);
     throw err;
   }
 }
@@ -85,7 +82,6 @@ async function createUser(user) {
     const createdUser = new Users(newUser);
     return createdUser;
   } catch (err) {
-    console.log(err);
     throw err;
   }
 }
@@ -106,7 +102,6 @@ async function fetchUserFromId(userId) {
       userRef: userSnapshot.docs[0].ref,
     });
   } catch (err) {
-    console.log(err);
     throw err;
   }
 }
@@ -119,7 +114,6 @@ async function updatePasswordbyUser(user, hashNewPassword) {
     });
     return true;
   } catch (err) {
-    console.log(err);
     throw err;
   }
 }
@@ -130,7 +124,6 @@ async function verifyUser(user) {
     if (!result) return false;
     return true;
   } catch (err) {
-    console.log(err);
     throw err;
   }
 }
@@ -148,7 +141,6 @@ async function updateUser(updateProfile, user) {
     if (!updated) return false;
     return false;
   } catch (err) {
-    console.log(err);
     throw err;
   }
 }
@@ -181,7 +173,6 @@ async function deleteUserAccount(userId) {
       }
     });
   } catch (err) {
-    console.log(err);
     throw err;
   }
 }

@@ -20,7 +20,7 @@ function ApiKeyTable({keys, copiedKey, handleCopyToClipboard, deleteKey}) {
 						{!keys.length && (
 							<tr>
 								<td colSpan='4' className='no-keys'>
-									Your api keys will be visible here. click on generate key to
+									Your api keys will be visible here, click on generate key to
 									add new api key
 								</td>
 							</tr>

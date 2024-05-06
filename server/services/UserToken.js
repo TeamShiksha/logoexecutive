@@ -26,7 +26,6 @@ async function createForgotToken(userId) {
     if (!result) return null;
     return new UserToken(newUserForgotToken);
   } catch (err) {
-    console.log(err);
     throw err;
   }
 }
@@ -37,8 +36,7 @@ async function createForgotToken(userId) {
  **/
 async function deleteUserToken(userToken) {
   const result = await userToken.userTokenRef.delete();
-  if (!result)
-    return false;
+  if (!result) return false;
   return true;
 }
 
@@ -63,7 +61,6 @@ async function createVerifyToken(userId) {
     if (!result) return null;
     return new UserToken(newUserVerifyToken);
   } catch (err) {
-    console.log(err);
     throw err;
   }
 }
@@ -80,7 +77,6 @@ async function fetchTokenFromId(token) {
       userTokenRef: userTokenDoc.ref,
     });
   } catch (err) {
-    console.log(err);
     throw err;
   }
 }
@@ -99,7 +95,6 @@ async function fetchTokenFromUserid(userid) {
     });
     return getTokenDoc;
   } catch (err) {
-    console.log(err);
     throw err;
   }
 }

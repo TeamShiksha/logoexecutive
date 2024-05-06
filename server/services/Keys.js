@@ -19,7 +19,6 @@ async function createKey(data) {
     const UserKey = new Keys(keyData);
     return UserKey;
   } catch (err) {
-    console.log(err);
     throw err;
   }
 }
@@ -29,10 +28,9 @@ async function fetchKeysByuserid(userId) {
     const keyRef = await KeyCollection.where("userId", "==", userId).get();
     if (keyRef.empty) return null;
 
-    const keys = keyRef.docs.map(doc => new Keys(doc.data()));
+    const keys = keyRef.docs.map((doc) => new Keys(doc.data()));
     return keys;
   } catch (err) {
-    console.log(err);
     throw err;
   }
 }
@@ -43,7 +41,6 @@ async function isAPIKeyPresent(apiKey) {
     if (keyRef.empty) return false;
     return true;
   } catch (err) {
-    console.log(err);
     throw err;
   }
 }
@@ -53,7 +50,6 @@ async function destroyKey(keyId) {
     const keyRef = await KeyCollection.doc(keyId).delete();
     return true;
   } catch (err) {
-    console.log(err);
     throw err;
   }
 }

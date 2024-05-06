@@ -76,7 +76,7 @@ describe('Dashboard Component', () => {
 		expect(
 			screen.getAllByText(
 				new Date().toLocaleDateString('en-US', {
-					day: '2-digit',
+					day: 'numeric',
 					month: 'long',
 					year: 'numeric',
 				}),

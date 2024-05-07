@@ -28,9 +28,9 @@ describe('Drag and Drop Component', () => {
 		expect(imageUploadElement.files[0].name).toBe('image.jpg');
 		expect(imageUploadElement.files[0].type).toBe('image/jpeg');
 		expect(screen.queryByTestId('image-error')).toBeNull();
-		// const fileName = screen.getByRole('button', {name: 'Upload'});
-		// expect(fileName).toBeInTheDocument();
-		// expect(screen.getByTestId('image-preview')).toBeInTheDocument();
+		const fileName = screen.getByRole('button', {name: 'Upload'});
+		expect(fileName).toBeInTheDocument();
+		expect(screen.getByTestId('image-preview')).toBeInTheDocument();
 	});
 
 	test('Drag over and check if the text changes', () => {

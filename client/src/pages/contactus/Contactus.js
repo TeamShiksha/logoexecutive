@@ -28,7 +28,7 @@ function Contactus() {
 		if (isAuthenticated) {
 			fetchUserData();
 		}
-	}, [isAuthenticated]);
+	}, [isAuthenticated, errorMsg, isSuccess]);
 
 	useEffect(() => {
 		if (isAuthenticated && userData) {
@@ -160,7 +160,9 @@ function Contactus() {
 							message
 						</label>
 					</div>
-					<button className='contact-button'>Send Message</button>
+					<button className='contact-button' disabled={loading}>
+						Send Message
+					</button>
 				</form>
 				<div className='contact-subcont-second-sec-col'>
 					<div className='contact-get-in-touch contact-text'>

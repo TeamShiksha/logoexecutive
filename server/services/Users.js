@@ -139,7 +139,7 @@ async function updateUser(updateProfile, user) {
     };
     const updated = await userRef.update(update);
     if (!updated) return false;
-    return false;
+    return true;
   } catch (err) {
     throw err;
   }

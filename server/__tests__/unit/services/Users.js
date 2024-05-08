@@ -7,7 +7,7 @@ const { emailRecordExists,
   verifyUser,
   updateUser,
   deleteUserAccount, } = require("../../../services");
-const { UserCollection, db } = require("../../../utils/firestore");
+const { UserCollection, db, SubscriptionCollection, KeyCollection } = require("../../../utils/firestore");
 const { Users } = require("../../../models");
 const { mockUsers } = require("../../../utils/mocks/Users");
 
@@ -31,6 +31,16 @@ describe("emailRecordExists", () => {
     const exists = await emailRecordExists(mockUsers[2].email);
     expect(exists).toBe(false);
   });
+
+  test("should throw an error if Firestore operation fails", async () => {
+    const errorMessage = "Firestore operation failed";
+    jest.spyOn(UserCollection, "where").mockReturnValue({
+      get: jest.fn().mockRejectedValue(new Error(errorMessage))
+    });
+
+    await expect(emailRecordExists(mockUsers[0].email)).rejects.toThrow(errorMessage);
+  });
+
 });
 
 describe("fetchUsers", () => {
@@ -63,9 +73,15 @@ describe("fetchUsers", () => {
     for (let user = 0; user < mockUsers.length; user++) {
       expect(result.data[user].email).toBe(mockUsers[user].email);
     }
-    // expect(result.data[0].email).toBe(mockUsers[0].email);
-    // expect(result.data[1].email).toBe(mockUsers[1].email);
   });
+
+  it("should throw an error if an error occurs while fetching users", async () => {
+    const errorMessage = "Firestore operation failed";
+    jest.spyOn(UserCollection, "get").mockRejectedValueOnce(new Error(errorMessage));
+
+    await expect(fetchUsers()).rejects.toThrow(errorMessage);
+  });
+
 });
 
 describe("fetchUserByEmail", () => {
@@ -103,6 +119,17 @@ describe("fetchUserByEmail", () => {
     const exists = await emailRecordExists(mockUsers[2].email);
     expect(exists).toBe(false);
   });
+
+  it("should throw an error if an error occurs while fetching user by email", async () => {
+    const errorMessage = "Firestore operation failed";
+    jest.spyOn(UserCollection, "where").mockReturnValueOnce({
+      limit: jest.fn().mockReturnValueOnce({
+        get: jest.fn().mockRejectedValueOnce(new Error(errorMessage))
+      })
+    });
+
+    await expect(fetchUserByEmail(mockUsers[0].email)).rejects.toThrow(errorMessage);
+  });
 });
 
 describe("createUser", () => {
@@ -126,6 +153,14 @@ describe("createUser", () => {
     expect(createdUser).toBeNull();
   });
 
+  it("should return null if data is improper", async () => {
+    const mockUser = mockUsers[0];
+    jest.spyOn(Users, "NewUser").mockReturnValueOnce(null);
+
+    const createdUser = await createUser(mockUser);
+    expect(createdUser).toBeNull();
+  });
+
   it("should throw an error if Firestore operation fails", async () => {
     jest.spyOn(Users, "NewUser").mockReturnValueOnce(mockUsers[0]);
     jest.spyOn(UserCollection, "doc").mockImplementationOnce(() => {
@@ -144,6 +179,15 @@ describe("updatePasswordbyUser", () => {
     const updated = await updatePasswordbyUser({ userRef: mockUserRef }, "newhashedpassword");
     expect(updated).toBe(true);
   });
+
+  it("should throw an error if an error occurs while updating user password", async () => {
+    const errorMessage = "Firestore operation failed";
+    const mockUserRef = { update: jest.fn().mockRejectedValueOnce(new Error(errorMessage)) };
+    jest.spyOn(UserCollection, "doc").mockReturnValue(mockUserRef);
+
+    await expect(updatePasswordbyUser({ userRef: mockUserRef }, "newhashedpassword")).rejects.toThrow(errorMessage);
+  });
+
 });
 
 describe("fetchUserFromId", () => {
@@ -201,6 +245,16 @@ describe("verifyUser", () => {
     const verified = await verifyUser({ userRef: mockUserRef });
     expect(verified).toBe(false);
   });
+
+  it("should throw an error if an error occurs while verifying user", async () => {
+    const errorMessage = "Firestore operation failed";
+    const mockUserRef = { update: jest.fn().mockRejectedValueOnce(new Error(errorMessage)) };
+
+    const user = { userRef: mockUserRef };
+
+    await expect(verifyUser(user)).rejects.toThrow(errorMessage);
+  });
+
 });
 
 describe("updateUser", () => {
@@ -219,6 +273,16 @@ describe("updateUser", () => {
     const updated = await updateUser(["NewFirstName", "NewLastName"], { userRef: mockUserRef });
     expect(updated).toBe(false);
   });
+
+  it("should throw an error if an error occurs while updating user profile", async () => {
+    const errorMessage = "Firestore operation failed";
+    const mockUserRef = { update: jest.fn().mockRejectedValueOnce(new Error(errorMessage)) };
+    const user = { userRef: mockUserRef };
+    const updateProfile = ["John", "Doe"];
+
+    await expect(updateUser(updateProfile, user)).rejects.toThrow(errorMessage);
+  });
+
 });
 
 describe("deleteUserAccount", () => {
@@ -240,5 +304,70 @@ describe("deleteUserAccount", () => {
 
     await expect(deleteUserAccount(mockUsers[0].userId)).rejects.toThrow("Firestore transaction failed");
   });
+
+  it("should delete user account and related data from multiple collections within a Firestore transaction", async () => {
+    const userId = "mockUserId";
+
+    // Mock user snapshot and document reference
+    const mockUserDocRef = { delete: jest.fn() };
+    const mockUserSnapshot = {
+      empty: false,
+      docs: [{ ref: mockUserDocRef }],
+    };
+
+    // Mock subscription snapshot and document references
+    const mockSubscriptionDocs = [{ ref: { delete: jest.fn() } }];
+    const mockSubscriptionSnapshot = {
+      forEach: (callback) => {
+        mockSubscriptionDocs.forEach(callback);
+      },
+    };
+
+    // Mock key snapshot and document references
+    const mockKeyDocs = [{ ref: { delete: jest.fn() } }];
+    const mockKeySnapshot = {
+      empty: false,
+      forEach: (callback) => {
+        mockKeyDocs.forEach(callback);
+      },
+    };
+
+    jest.spyOn(UserCollection, "where").mockReturnValueOnce({
+      limit: jest.fn().mockReturnValue({
+        get: jest.fn().mockResolvedValue(mockUserSnapshot),
+      }),
+    });
+
+    jest.spyOn(SubscriptionCollection, "where").mockReturnValueOnce({
+      get: jest.fn().mockResolvedValueOnce(mockSubscriptionSnapshot),
+    });
+
+    jest.spyOn(KeyCollection, "where").mockReturnValueOnce({
+      get: jest.fn().mockResolvedValueOnce(mockKeySnapshot),
+    });
+
+    // Mocking the runTransaction method of the Firestore database
+    jest.spyOn(db, "runTransaction").mockImplementationOnce(async (callback) => {
+      const mockTransaction = { delete: jest.fn() };
+      await callback(mockTransaction);
+
+      // Verify that transaction.delete is called with the correct document references
+      expect(mockTransaction.delete).toHaveBeenCalledWith(mockUserDocRef);
+      mockSubscriptionDocs.forEach((doc) => {
+        expect(mockTransaction.delete).toHaveBeenCalledWith(doc.ref);
+      });
+      mockKeyDocs.forEach((doc) => {
+        expect(mockTransaction.delete).toHaveBeenCalledWith(doc.ref);
+      });
+    });
+
+    await deleteUserAccount(userId);
+
+    // Verify that UserCollection.where, SubscriptionCollection.where, and KeyCollection.where are called with the correct parameters
+    expect(UserCollection.where).toHaveBeenCalledWith("userId", "==", userId);
+    expect(SubscriptionCollection.where).toHaveBeenCalledWith("userId", "==", userId);
+    expect(KeyCollection.where).toHaveBeenCalledWith("userId", "==", userId);
+  });
+
 });
 

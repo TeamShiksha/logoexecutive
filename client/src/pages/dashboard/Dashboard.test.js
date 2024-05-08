@@ -39,9 +39,9 @@ describe('Dashboard Component', () => {
 		},
 	};
 	const fetchUserData = jest.fn();
-	const renderDashboard = () => {
+	const renderDashboard = (userData = mockUserData) => {
 		render(
-			<UserContext.Provider value={{userData: mockUserData, fetchUserData}}>
+			<UserContext.Provider value={{userData, fetchUserData}}>
 				<Dashboard />
 			</UserContext.Provider>,
 		);
@@ -83,6 +83,64 @@ describe('Dashboard Component', () => {
 			),
 		).toHaveLength(2);
 		expect(descriptionInput).toHaveValue('');
+	});
+
+	it('checks if no keys are displayed when there are no keys', async () => {
+		const mockNullData = {
+			firstName: 'Aasish',
+			lastName: 'M',
+			email: 'aasishnilambur@gmail.com',
+			userId: '99234290-a33b-40d1-a5d4-888e86d06cd1',
+			userType: 'CUSTOMER',
+			keys: null,
+			subscription: {
+				subscriptionId: '4d6544e3-8f5d-4ad8-bae5-46ea61e2b842',
+				subscriptionType: 'HOBBY',
+				keyLimit: 2,
+				usageLimit: 400,
+				isActive: false,
+				createdAt: '2024-04-11T10:24:38.501Z',
+				updatedAt: '2024-04-11T10:24:38.501Z',
+			},
+		};
+		renderDashboard(mockNullData);
+		await waitFor(() => {
+			expect(fetchUserData).toHaveBeenCalled();
+		});
+		expect(
+			screen.getByText(
+				'Your api keys will be visible here, click on generate key to add new api key',
+			),
+		).toBeInTheDocument();
+		const tableElement = screen.getByRole('table');
+		const keyRows = screen.queryAllByRole('row', {container: tableElement});
+		expect(keyRows).toHaveLength(2);
+		// expect(screen.getByText(mockNullData.subscription.usageLimit + ' calls')).toHaveClass('data');
+	});
+
+	it('Check if used calls and total calls are being rendered', () => {
+		const mockNullData = {
+			firstName: 'Aasish',
+			lastName: 'M',
+			email: 'aasishnilambur@gmail.com',
+			userId: '99234290-a33b-40d1-a5d4-888e86d06cd1',
+			userType: 'CUSTOMER',
+			keys: null,
+			subscription: {
+				subscriptionId: '4d6544e3-8f5d-4ad8-bae5-46ea61e2b842',
+				subscriptionType: 'HOBBY',
+				keyLimit: 2,
+				usageLimit: 400,
+				isActive: false,
+				createdAt: '2024-04-11T10:24:38.501Z',
+				updatedAt: '2024-04-11T10:24:38.501Z',
+			},
+		};
+		renderDashboard(mockNullData);
+		expect(screen.getByText('0 calls')).toBeInTheDocument();
+		expect(
+			screen.getByText(mockNullData.subscription.usageLimit + ' calls'),
+		).toHaveClass('data');
 	});
 
 	it('Throws error when same key description is given again', async () => {

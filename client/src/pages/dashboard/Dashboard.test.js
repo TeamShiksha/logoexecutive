@@ -115,7 +115,6 @@ describe('Dashboard Component', () => {
 		const tableElement = screen.getByRole('table');
 		const keyRows = screen.queryAllByRole('row', {container: tableElement});
 		expect(keyRows).toHaveLength(2);
-		// expect(screen.getByText(mockNullData.subscription.usageLimit + ' calls')).toHaveClass('data');
 	});
 
 	it('Check if used calls and total calls are being rendered', () => {

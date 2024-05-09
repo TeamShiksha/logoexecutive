@@ -22,16 +22,12 @@ function Settings() {
 	const openModal = () => setModalOpen(true);
 
 	const handleConfirm = async () => {
-		try {
-			const response = await makeRequest();
-			if (response) {
-				setModalOpen(false);
-				setTimeout(() => {
-					logout();
-				}, 3000);
-			}
-		} catch (error) {
-			console.error('Failed to delete account: ', error);
+		const response = await makeRequest();
+		if (response) {
+			setModalOpen(false);
+			setTimeout(() => {
+				logout();
+			}, 3000);
 		}
 	};
 
@@ -92,7 +88,7 @@ function Settings() {
 					setModal={setShowDeleteResponseModal}
 				>
 					<p className='delete-error-msg'>
-						Something went wrong. Please try after some time.
+						Something went wrong. Please try again later.
 					</p>
 				</Modal>
 			)}

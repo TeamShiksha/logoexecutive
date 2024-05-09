@@ -77,6 +77,15 @@ describe('Profile component', () => {
 		expect(lastNameInput.value).toBe('Doe');
 	});
 
+	it('updates email on input change', () => {
+		renderProfile();
+
+		const email = screen.getByLabelText('email');
+		fireEvent.change(email, {target: {value: 'abc@gmail.com'}});
+
+		expect(email.value).toBe('abc@gmail.com');
+	});
+
 	it('should alert if first name is empty', () => {
 		renderProfile();
 
@@ -193,6 +202,48 @@ describe('Profile component', () => {
 		).toHaveClass('form-error');
 	});
 
+	it('should trigger fetchUserData on component mount', () => {
+		renderProfile();
+
+		expect(fetchUserData).toHaveBeenCalled();
+	});
+
+	it('should update state with userData on userData change', () => {
+		const {rerender} = render(
+			<AuthContext.Provider value={true}>
+				<UserContext.Provider value={{userData: {}, fetchUserData}}>
+					<BrowserRouter>
+						<Profile />
+					</BrowserRouter>
+				</UserContext.Provider>
+			</AuthContext.Provider>,
+		);
+
+		const newUserData = {
+			firstName: 'John',
+			lastName: 'Doe',
+			email: 'john@example.com',
+		};
+
+		rerender(
+			<AuthContext.Provider value={true}>
+				<UserContext.Provider value={{userData: newUserData, fetchUserData}}>
+					<BrowserRouter>
+						<Profile />
+					</BrowserRouter>
+				</UserContext.Provider>
+			</AuthContext.Provider>,
+		);
+
+		const firstNameInput = screen.getByLabelText('first name');
+		const lastNameInput = screen.getByLabelText('last name');
+		const emailInput = screen.getByLabelText('email');
+
+		expect(firstNameInput.value).toBe('John');
+		expect(lastNameInput.value).toBe('Doe');
+		expect(emailInput.value).toBe('john@example.com');
+	});
+
 	it('should update the user first name and last name successfully', async () => {
 		renderProfile();
 
@@ -212,6 +263,28 @@ describe('Profile component', () => {
 			expect(screen.getByText(/Profile Updated Successfully/i)).toHaveClass(
 				'profile-update-success',
 			);
+		});
+	});
+
+	it('displays error message when first name is invalid', async () => {
+		renderProfile();
+
+		const firstName = screen.getByLabelText('first name');
+		const lastName = screen.getByLabelText('last name');
+		const saveButton = screen.getByTestId('profile-button');
+
+		fireEvent.change(firstName, {
+			target: {value: 'abc123'},
+		});
+		fireEvent.change(lastName, {
+			target: {value: 'Singh'},
+		});
+		fireEvent.click(saveButton);
+
+		await waitFor(() => {
+			expect(
+				screen.getByText(/First name should only contain alphabets/i),
+			).toBeInTheDocument();
 		});
 	});
 

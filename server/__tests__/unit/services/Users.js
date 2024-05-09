@@ -307,15 +307,12 @@ describe("deleteUserAccount", () => {
 
   it("should delete user account and related data from multiple collections within a Firestore transaction", async () => {
     const userId = "mockUserId";
-
-    // Mock user snapshot and document reference
     const mockUserDocRef = { delete: jest.fn() };
     const mockUserSnapshot = {
       empty: false,
       docs: [{ ref: mockUserDocRef }],
     };
 
-    // Mock subscription snapshot and document references
     const mockSubscriptionDocs = [{ ref: { delete: jest.fn() } }];
     const mockSubscriptionSnapshot = {
       forEach: (callback) => {
@@ -323,7 +320,6 @@ describe("deleteUserAccount", () => {
       },
     };
 
-    // Mock key snapshot and document references
     const mockKeyDocs = [{ ref: { delete: jest.fn() } }];
     const mockKeySnapshot = {
       empty: false,
@@ -346,12 +342,10 @@ describe("deleteUserAccount", () => {
       get: jest.fn().mockResolvedValueOnce(mockKeySnapshot),
     });
 
-    // Mocking the runTransaction method of the Firestore database
     jest.spyOn(db, "runTransaction").mockImplementationOnce(async (callback) => {
       const mockTransaction = { delete: jest.fn() };
       await callback(mockTransaction);
 
-      // Verify that transaction.delete is called with the correct document references
       expect(mockTransaction.delete).toHaveBeenCalledWith(mockUserDocRef);
       mockSubscriptionDocs.forEach((doc) => {
         expect(mockTransaction.delete).toHaveBeenCalledWith(doc.ref);
@@ -363,7 +357,6 @@ describe("deleteUserAccount", () => {
 
     await deleteUserAccount(userId);
 
-    // Verify that UserCollection.where, SubscriptionCollection.where, and KeyCollection.where are called with the correct parameters
     expect(UserCollection.where).toHaveBeenCalledWith("userId", "==", userId);
     expect(SubscriptionCollection.where).toHaveBeenCalledWith("userId", "==", userId);
     expect(KeyCollection.where).toHaveBeenCalledWith("userId", "==", userId);

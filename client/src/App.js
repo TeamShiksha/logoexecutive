@@ -7,7 +7,7 @@ import ApiDocs from './pages/docs/ApiDocs';
 import {
 	About,
 	Account,
-	// AdminDashboard,
+	AdminDashboard,
 	Contactus,
 	Dashboard,
 	ForgotPassword,
@@ -46,14 +46,7 @@ function App() {
 						</ProtectedRoute>
 					}
 				/>
-				{/* <Route
-					path='/admin'
-					element={
-						<ProtectedRoute>
-							<AdminDashboard />
-						</ProtectedRoute>
-					}
-				/> */}
+				<Route path='/admin' element={<AdminDashboard />} />
 				<Route
 					path='/dashboard'
 					element={

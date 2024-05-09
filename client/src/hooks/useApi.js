@@ -30,7 +30,7 @@ export const useApi = (config, isProtected = false) => {
 		} catch (err) {
 			console.error(err);
 			setIsSuccess(false);
-			if (err?.response) {
+			if (err?.response?.data?.message) {
 				setErrorMsg(err?.response?.data?.message);
 			} else {
 				setErrorMsg(err?.message);

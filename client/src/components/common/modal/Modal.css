@@ -54,3 +54,8 @@
 	color: var(--white);
 	background-color: rgba(255, 0, 0, 0.7);
 }
+
+.modal-ok-button:disabled {
+	opacity: 0.6;
+	cursor: not-allowed;
+}

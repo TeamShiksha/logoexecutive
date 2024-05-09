@@ -1,7 +1,13 @@
 import PropTypes from 'prop-types';
 import './ResponseCard.css';
 
-function ResponseCard({countdown, message, title, Icon}) {
+function ResponseCard({
+	countdown,
+	message,
+	title,
+	Icon,
+	redirectTo = '/sign in',
+}) {
 	return (
 		<section className='response-card-wrapper'>
 			<div className='response-card'>
@@ -11,7 +17,7 @@ function ResponseCard({countdown, message, title, Icon}) {
 
 				{countdown && (
 					<div className='response-countdown'>
-						<p>Redirecting to sign in </p>
+						<p>Redirecting to {redirectTo} </p>
 						<p>{countdown}</p>
 					</div>
 				)}
@@ -25,6 +31,7 @@ ResponseCard.propTypes = {
 	message: PropTypes.string.isRequired,
 	Icon: PropTypes.element,
 	countdown: PropTypes.number,
+	redirectTo: PropTypes.string,
 };
 
 export default ResponseCard;

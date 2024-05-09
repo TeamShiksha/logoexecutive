@@ -10,6 +10,7 @@ function Modal({
 	showButtons,
 	containerClassName,
 	showCloseIcon = true,
+	loading,
 }) {
 	const closeModal = () => setModal(false);
 	const stopPropagation = (event) => event.stopPropagation();
@@ -41,6 +42,7 @@ function Modal({
 						<button
 							className='modal-button modal-ok-button'
 							onClick={handleConfirm}
+							disabled={loading}
 						>
 							Okay
 						</button>
@@ -58,6 +60,8 @@ Modal.propTypes = {
 	showButtons: PropTypes.bool,
 	containerClassName: PropTypes.string,
 	showCloseIcon: PropTypes.bool,
+	handleConfirm: PropTypes.func,
+	loading: PropTypes.bool,
 };
 
 export default Modal;

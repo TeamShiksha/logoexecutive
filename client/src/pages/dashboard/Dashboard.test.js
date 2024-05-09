@@ -1,5 +1,5 @@
 import React from 'react';
-import {render, screen, fireEvent} from '@testing-library/react';
+import {render, screen, fireEvent, waitFor} from '@testing-library/react';
 import Dashboard from './Dashboard';
 import {UserContext} from '../../contexts/UserContext';
 
@@ -39,9 +39,9 @@ describe('Dashboard Component', () => {
 		},
 	};
 	const fetchUserData = jest.fn();
-	const renderDashboard = () => {
+	const renderDashboard = (userData = mockUserData) => {
 		render(
-			<UserContext.Provider value={{userData: mockUserData, fetchUserData}}>
+			<UserContext.Provider value={{userData, fetchUserData}}>
 				<Dashboard />
 			</UserContext.Provider>,
 		);
@@ -60,15 +60,116 @@ describe('Dashboard Component', () => {
 		const apiKeyTableComponent = screen.getByText('DESCRIPTION');
 		expect(apiKeyTableComponent).toBeInTheDocument();
 	});
-	it('generates API key and adds to the list', () => {
+
+	it('generates API key and adds to the list', async () => {
 		renderDashboard();
 		const descriptionInput = screen.getByLabelText('Description For API Key');
 		fireEvent.change(descriptionInput, {target: {value: 'Test API Key'}});
 		const generateButton = screen.getByText('Generate Key');
 		fireEvent.click(generateButton);
-		const apiKeyDescription = screen.getByText('Test API Key');
-		expect(apiKeyDescription).toBeInTheDocument();
+		await waitFor(() => {
+			expect(screen.getByText('Test API Key')).toBeInTheDocument();
+		});
+		const tableElement = screen.getByRole('table');
+		const keyRows = screen.queryAllByRole('row', {container: tableElement});
+		expect(keyRows).toHaveLength(3);
+		expect(
+			screen.getAllByText(
+				new Date().toLocaleDateString('en-US', {
+					day: 'numeric',
+					month: 'long',
+					year: 'numeric',
+				}),
+			),
+		).toHaveLength(2);
+		expect(descriptionInput).toHaveValue('');
 	});
+
+	it('checks if no keys are displayed when there are no keys', async () => {
+		const mockNullData = {
+			firstName: 'Aasish',
+			lastName: 'M',
+			email: 'aasishnilambur@gmail.com',
+			userId: '99234290-a33b-40d1-a5d4-888e86d06cd1',
+			userType: 'CUSTOMER',
+			keys: null,
+			subscription: {
+				subscriptionId: '4d6544e3-8f5d-4ad8-bae5-46ea61e2b842',
+				subscriptionType: 'HOBBY',
+				keyLimit: 2,
+				usageLimit: 400,
+				isActive: false,
+				createdAt: '2024-04-11T10:24:38.501Z',
+				updatedAt: '2024-04-11T10:24:38.501Z',
+			},
+		};
+		renderDashboard(mockNullData);
+		await waitFor(() => {
+			expect(fetchUserData).toHaveBeenCalled();
+		});
+		expect(
+			screen.getByText(
+				'Your api keys will be visible here, click on generate key to add new api key',
+			),
+		).toBeInTheDocument();
+		const tableElement = screen.getByRole('table');
+		const keyRows = screen.queryAllByRole('row', {container: tableElement});
+		expect(keyRows).toHaveLength(2);
+	});
+
+	it('Check if used calls and total calls are being rendered', () => {
+		const mockNullData = {
+			firstName: 'Aasish',
+			lastName: 'M',
+			email: 'aasishnilambur@gmail.com',
+			userId: '99234290-a33b-40d1-a5d4-888e86d06cd1',
+			userType: 'CUSTOMER',
+			keys: null,
+			subscription: {
+				subscriptionId: '4d6544e3-8f5d-4ad8-bae5-46ea61e2b842',
+				subscriptionType: 'HOBBY',
+				keyLimit: 2,
+				usageLimit: 400,
+				isActive: false,
+				createdAt: '2024-04-11T10:24:38.501Z',
+				updatedAt: '2024-04-11T10:24:38.501Z',
+			},
+		};
+		renderDashboard(mockNullData);
+		expect(screen.getByText('0 calls')).toBeInTheDocument();
+		expect(
+			screen.getByText(mockNullData.subscription.usageLimit + ' calls'),
+		).toHaveClass('data');
+	});
+
+	it('Throws error when same key description is given again', async () => {
+		renderDashboard();
+		const descriptionInput = screen.getByLabelText('Description For API Key');
+		fireEvent.change(descriptionInput, {target: {value: 'Test API Key'}});
+		const generateButton = screen.getByText('Generate Key');
+		fireEvent.click(generateButton);
+		await waitFor(() => {
+			expect(
+				screen.getByText('Please provide a different key description'),
+			).toBeInTheDocument();
+		});
+	});
+
+	it('Throws limit error for keys more than 2', async () => {
+		renderDashboard();
+		const descriptionInput = screen.getByLabelText('Description For API Key');
+		fireEvent.change(descriptionInput, {target: {value: 'Test API Key'}});
+		const generateButton = screen.getByText('Generate Key');
+		fireEvent.click(generateButton);
+		await waitFor(() => {
+			expect(
+				screen.getByText(
+					'The maximum limit for key generation has been reached. Please consider upgrading your subscription to generate additional keys',
+				),
+			).toBeInTheDocument();
+		});
+	});
+
 	it('Delete API key and remove from the list', () => {
 		renderDashboard();
 		const deleteButton = screen.getAllByTestId('api-key-delete');
@@ -76,6 +177,7 @@ describe('Dashboard Component', () => {
 		const deletedApiKeyDescription = screen.queryByText('Demo Key');
 		expect(deletedApiKeyDescription).not.toBeInTheDocument();
 	});
+
 	it('shows an error message when trying to generate a key without a description', async () => {
 		renderDashboard();
 		const button = screen.getByText('Generate Key');

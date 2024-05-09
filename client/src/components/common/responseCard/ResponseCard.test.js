@@ -3,7 +3,7 @@ import {render, screen} from '@testing-library/react';
 import ResponseCard from './ResponseCard';
 
 describe('ResponseCard Component', () => {
-	const mockIcon = <svg />; // Mock Icon component
+	const mockIcon = <svg />;
 
 	it('renders with required props', () => {
 		render(
@@ -29,12 +29,13 @@ describe('ResponseCard Component', () => {
 				message='Please wait.'
 				Icon={mockIcon}
 				countdown={3}
+				redirectTo='home page'
 			/>,
 		);
 
 		expect(screen.getByText('Redirecting...')).toBeInTheDocument();
 		expect(screen.getByText('Please wait.')).toBeInTheDocument();
-		expect(screen.getByText('Redirecting to sign in')).toBeInTheDocument();
+		expect(screen.getByText('Redirecting to home page')).toBeInTheDocument();
 		expect(screen.getByText('3')).toBeInTheDocument();
 	});
 });

@@ -9,6 +9,8 @@ function Modal({
 	handleConfirm,
 	showButtons,
 	containerClassName,
+	showCloseIcon = true,
+	loading,
 }) {
 	const closeModal = () => setModal(false);
 	const stopPropagation = (event) => event.stopPropagation();
@@ -24,11 +26,13 @@ function Modal({
 				className={`modal-container ${containerClassName || ''}`}
 				onClick={stopPropagation}
 			>
-				<IoIosCloseCircleOutline
-					className='modal-close'
-					onClick={closeModal}
-					data-testid='modal-close'
-				/>
+				{showCloseIcon && (
+					<IoIosCloseCircleOutline
+						className='modal-close'
+						onClick={closeModal}
+						data-testid='modal-close'
+					/>
+				)}
 				<div className='modal-content'>{children}</div>
 				{showButtons && (
 					<footer className='modal-buttons-container'>
@@ -38,6 +42,7 @@ function Modal({
 						<button
 							className='modal-button modal-ok-button'
 							onClick={handleConfirm}
+							disabled={loading}
 						>
 							Okay
 						</button>
@@ -54,6 +59,9 @@ Modal.propTypes = {
 	setModal: PropTypes.func,
 	showButtons: PropTypes.bool,
 	containerClassName: PropTypes.string,
+	showCloseIcon: PropTypes.bool,
+	handleConfirm: PropTypes.func,
+	loading: PropTypes.bool,
 };
 
 export default Modal;

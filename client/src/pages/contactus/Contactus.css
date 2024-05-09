@@ -98,6 +98,11 @@
 	background-color: #615ae7;
 }
 
+.contact-button:disabled {
+	opacity: 0.6;
+	cursor: not-allowed;
+}
+
 .contact-subcont-second {
 	display: flex;
 

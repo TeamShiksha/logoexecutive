@@ -3,6 +3,7 @@
 	width: 100%;
 	background: linear-gradient(90deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.3));
 	z-index: 1;
+	backdrop-filter: blur(2px);
 	position: fixed;
 	inset: 0;
 	display: flex;
@@ -52,4 +53,9 @@
 .modal-ok-button {
 	color: var(--white);
 	background-color: rgba(255, 0, 0, 0.7);
+}
+
+.modal-ok-button:disabled {
+	opacity: 0.6;
+	cursor: not-allowed;
 }

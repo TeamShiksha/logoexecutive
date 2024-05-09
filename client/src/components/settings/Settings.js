@@ -1,32 +1,46 @@
-import {useState} from 'react';
+import {useContext, useEffect, useState} from 'react';
 import Modal from '../common/modal/Modal';
-import './Settings.css';
 import {useApi} from '../../hooks/useApi';
 import {useNavigate} from 'react-router-dom';
+import {AuthContext} from '../../contexts/AuthContext';
+import useCountdownTimer from '../../hooks/useCountdownTimer';
+import ResponseCard from '../common/responseCard/ResponseCard';
+import {FaCheck} from 'react-icons/fa6';
+import './Settings.css';
 
 function Settings() {
 	const [modalOpen, setModalOpen] = useState(false);
+	const [showDeleteResponseModal, setShowDeleteResponseModal] = useState(false);
+	const [countdown, setCountdown] = useState(3);
 	const navigate = useNavigate();
-	const {makeRequest, error} = useApi({
+	const {logout} = useContext(AuthContext);
+	const {data, errorMsg, loading, makeRequest, isSuccess} = useApi({
 		url: 'api/user/delete',
 		method: 'delete',
 	});
 
-	if (error) return;
-
 	const openModal = () => setModalOpen(true);
 
 	const handleConfirm = async () => {
-		try {
-			const response = await makeRequest();
-			if (response?.data?.success) {
-				localStorage.clear();
-				navigate('/');
-			}
-		} catch (error) {
-			console.error('Failed to delete account: ', error);
+		const response = await makeRequest();
+		if (response) {
+			setModalOpen(false);
+			setTimeout(() => {
+				logout();
+			}, 3000);
 		}
 	};
+
+	useEffect(() => {
+		if (errorMsg) {
+			setShowDeleteResponseModal(true);
+			setModalOpen(false);
+		} else {
+			setShowDeleteResponseModal(false);
+		}
+	}, [errorMsg]);
+
+	useCountdownTimer(isSuccess, navigate, countdown, setCountdown);
 
 	return (
 		<section className='settings' data-testid='testid-settings'>
@@ -46,6 +60,7 @@ function Settings() {
 				setModal={setModalOpen}
 				showButtons={true}
 				handleConfirm={handleConfirm}
+				loading={loading}
 			>
 				<h2>Are you sure?</h2>
 				<p className='settings-confirm-message'>
@@ -54,6 +69,29 @@ function Settings() {
 					our services.
 				</p>
 			</Modal>
+			{isSuccess && (
+				<div className='settings-success-bg'>
+					<ResponseCard
+						countdown={countdown}
+						message={data?.message}
+						Icon={<FaCheck className='response-success-icon' />}
+						title={'Delete Account Successful'}
+						redirectTo='home page'
+					/>
+				</div>
+			)}
+			{showDeleteResponseModal && (
+				<Modal
+					modalOpen={showDeleteResponseModal}
+					showButtons={false}
+					showCloseIcon={true}
+					setModal={setShowDeleteResponseModal}
+				>
+					<p className='delete-error-msg'>
+						Something went wrong. Please try again later.
+					</p>
+				</Modal>
+			)}
 		</section>
 	);
 }

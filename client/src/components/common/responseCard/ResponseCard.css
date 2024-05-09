@@ -23,6 +23,7 @@
 	box-shadow: var(--shadow);
 	padding: 24px;
 	text-align: center;
+	background-color: white;
 }
 .response-icon {
 	margin: auto;

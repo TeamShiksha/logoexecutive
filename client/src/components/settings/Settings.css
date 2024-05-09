@@ -41,6 +41,24 @@
 	margin-top: 10px;
 }
 
+.settings-success-bg {
+	height: 100%;
+	width: 100%;
+	background: linear-gradient(90deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.3));
+	z-index: 1;
+	-webkit-backdrop-filter: blur(2px);
+	backdrop-filter: blur(2px);
+	position: fixed;
+	inset: 0;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.delete-error-msg {
+	color: var(--error);
+}
+
 @media screen and (max-width: 768px) {
 	.settings {
 		padding: 32px 16px;

@@ -192,3 +192,9 @@ export const SubscriptionTypes = {
 };
 
 export const isLettersAndSpacesOnly = /^[a-zA-Z\s]*$/;
+
+export const INITIAL_UPDATE_PROFILE_FORM_DATA = {
+	firstName: '',
+	lastName: '',
+	email: '',
+};

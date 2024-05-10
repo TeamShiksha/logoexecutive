@@ -115,7 +115,7 @@ describe("UpdateProfile Controller", () => {
     });
   });
 
-  it("500 - Failed to updated profile", async () => {
+  it("500 - Failed to update profile", async () => {
     jest.spyOn(UserService, "fetchUserByEmail").mockResolvedValueOnce(() => {
       new Users(mockUsers[0]);
     });
@@ -132,7 +132,7 @@ describe("UpdateProfile Controller", () => {
     expect(response.status).toBe(500);
     expect(response.body).toEqual({
       statusCode: 500,
-      message: "Failed to updated profile",
+      message: "Failed to update profile",
       error: STATUS_CODES[500],
     });
   });

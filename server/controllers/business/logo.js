@@ -4,7 +4,7 @@ const { isAPIKeyPresent, fetchImageByCompanyFree } = require("../../services");
 
 const getLogoQuerySchema = Joi.object({
   companyName: Joi.string()
-    .regex(/^[A-Za-z0-9&-]+$/)
+    .regex(/^[A-Za-z0-9&-/:.]+$/)
     .required().messages({
       "any.required": "Company name is required",
       "string.pattern.base": "Invalid name",
@@ -35,7 +35,8 @@ async function getLogoController(req, res, next) {
       });
     }
 
-    const imageUrl = await fetchImageByCompanyFree(companyName.toLowerCase());
+    let company = companyName.replace(/.+\/\/|www.|\..+/g, "");
+    const imageUrl = await fetchImageByCompanyFree(company.toLowerCase());
     if (!imageUrl) {
       return res.status(404).json({
         message: "Logo not available",

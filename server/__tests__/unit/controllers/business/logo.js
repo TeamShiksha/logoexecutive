@@ -115,4 +115,35 @@ describe("getLogoController", () => {
       data: mockCDNLink
     });
   });
+
+  it("Success response when domain name is given", async () => {
+    jest.spyOn(KeyService, "isAPIKeyPresent").mockImplementation(() => true);
+    jest.spyOn(ImageService, "fetchImageByCompanyFree").mockImplementation(() => mockCDNLink);
+    const mockQuery = {"companyName": "www.coupang.com", "apiKey": "2B1B1BF5F9914BCD85A0B1122C71EDDB"};
+    const response = await request(app)
+      .get(ENDPOINT)
+      .query(mockQuery);
+
+    expect(response.status).toBe(200);
+    expect(response.body).toEqual({
+      statusCode: 200,
+      data: mockCDNLink
+    });
+  });
+
+  it("Success when company url is given", async () => {
+    jest.spyOn(KeyService, "isAPIKeyPresent").mockImplementation(() => true);
+    jest.spyOn(ImageService, "fetchImageByCompanyFree").mockImplementation(() => mockCDNLink);
+    const mockQuery = {"companyName": "https://www.coupang.com", "apiKey": "2B1B1BF5F9914BCD85A0B1122C71EDDB"};
+    const response = await request(app)
+      .get(ENDPOINT)
+      .query(mockQuery);
+
+    expect(response.status).toBe(200);
+    expect(response.body).toEqual({
+      statusCode: 200,
+      data: mockCDNLink
+    });
+  });
+
 });

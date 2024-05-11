@@ -5,8 +5,6 @@ const { KeyService, ImageService } = require("../../../../services");
 const { mockUsers } = require("../../../../utils/mocks/Users");
 const User = require("../../../../models/Users");
 
-const mockUserModel = new User(mockUsers[0]);
-
 jest.mock("../../../../services/Keys", () => ({
   isAPIKeyPresent: jest.fn()
 }));

@@ -1,6 +1,6 @@
 const { S3Client, PutObjectCommand } = require("@aws-sdk/client-s3");
 const {Images}= require("../models");
-const { ImageCollection } = require("../utils/firestore");
+const { db:firestore, ImageCollection } = require("../utils/firestore");
 const { cloudFrontSignedURL } = require("../utils/cloudFront");
 
 const s3 = new S3Client({
@@ -29,7 +29,7 @@ async function uploadToS3(file, imageName, extension) {
 
 async function fetchImageByCompanyFree(company) {
   try{
-    const imageCDNUrl = await firestore.runTransaction(async (transaction) => {
+    const imageCDNUrl = await firestore.runTransaction(async () => {
       const imageRef = await ImageCollection.where("imageUrl", ">=", company).
         where("imageUrl", "<=", company + "\uf8ff").get();
       if (imageRef.empty) return null;

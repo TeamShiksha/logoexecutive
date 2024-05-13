@@ -29,7 +29,7 @@ async function uploadToS3(file, imageName, extension) {
 
 async function fetchImageByCompanyFree(company) {
   try{
-    const imageCDNUrl = await firestore.runTransaction(async (transaction) => {
+    const imageCDNUrl = await firestore.runTransaction(async () => {
       const imageRef = await ImageCollection.where("imageUrl", ">=", company).
         where("imageUrl", "<=", company + "\uf8ff").get();
       if (imageRef.empty) return null;

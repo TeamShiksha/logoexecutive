@@ -63,4 +63,22 @@ describe('useCountdownTimer', () => {
 			expect(result.current).toBe(1);
 		}, 2000);
 	});
+
+	it('should clear interval and navigate when countdown reaches 0', () => {
+		const navigateMock = jest.fn();
+		let countdown = 1;
+		const setCountdownMock = jest.fn().mockImplementation((value) => {
+			countdown = value;
+		});
+		const {result} = renderHook(() =>
+			useCountdownTimer(true, navigateMock, countdown, setCountdownMock),
+		);
+		act(() => {
+			jest.advanceTimersByTime(1000);
+		});
+		setTimeout(() => {
+			expect(result.current).toBe(0);
+		}, 1000);
+		expect(navigateMock).toHaveBeenCalledWith('/welcome');
+	});
 });

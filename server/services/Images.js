@@ -23,7 +23,7 @@ async function uploadToS3(file, imageName, extension) {
     return `${process.env.KEY}/${extension}/${imageName}`;
   } catch (error) {
     console.error(error);
-    throw error; 
+    throw error;
   }
 }
 
@@ -42,6 +42,20 @@ async function fetchImageByCompanyFree(company) {
   }
   catch (err) {
     throw err;
+  }
+}
+
+async function getImagesByUserId(userId) {
+  try {
+    const imagesSnapshot = await ImageCollection.where("uploadedBy", "==", userId).get();
+    const images = imagesSnapshot.docs.map(doc => {
+      const { domainame,imageId, createdAt, updatedAt } = doc.data();
+      return { domainame, imageId, createdAt:createdAt.toDate(), updatedAt:updatedAt.toDate() };
+    });
+    if (images.length === 0) return null;
+    return images;
+  } catch (error) {
+    throw error;
   }
 }
 
@@ -67,4 +81,4 @@ async function createImageData(domainame, uploadedBy, extension) {
 }
 
 
-module.exports = { createImageData, fetchImageByCompanyFree, uploadToS3 };
+module.exports = { createImageData, fetchImageByCompanyFree, uploadToS3, getImagesByUserId };

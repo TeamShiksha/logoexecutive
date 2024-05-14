@@ -46,7 +46,7 @@ describe("GET /admin/images", () => {
   it("500 - Unexpected errors", async () => {
     const mockJWT = new Users(mockUsers[2]).generateJWT();
     jest.spyOn(UserService, "fetchUserFromId").mockImplementation(() => {
-      throw new Error("Unexected error");
+      throw new Error("Unexpected error");
     });
     const response = await request(app)
       .get(ENDPOINT)
@@ -54,7 +54,7 @@ describe("GET /admin/images", () => {
     expect(response.status).toBe(500);
     expect(response.body).toEqual({
       error: STATUS_CODES[500],
-      message: "Unexected error",
+      message: "Unexpected error",
       statusCode: 500,
     });
   });

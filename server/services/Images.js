@@ -49,8 +49,12 @@ async function getImagesByUserId(userId) {
   try {
     const imagesSnapshot = await ImageCollection.where("uploadedBy", "==", userId).get();
     const images = imagesSnapshot.docs.map(doc => {
-      const { domainame,imageId, createdAt, updatedAt } = doc.data();
-      return { domainame, imageId, createdAt:createdAt.toDate(), updatedAt:updatedAt.toDate() };
+      return {
+        domainame: doc.data().domainame,
+        imageId: doc.data().imageId,
+        createdAt: doc.data().createdAt.toDate(),
+        updatedAt: doc.data().updatedAt.toDate()
+      };
     });
     if (images.length === 0) return null;
     return images;

@@ -310,4 +310,55 @@ describe('Profile component', () => {
 		});
 		expect(repeatNewPasswordInput.value).toBe('newPassword456');
 	});
+
+	it('display error when password is invalid', async () => {
+		renderProfile();
+		const oldPasswordInput = screen.getByTestId('old-password');
+		const newPasswordInput = screen.getByTestId('new-password');
+		const repeatNewPasswordInput = screen.getByTestId('repeat-new-password');
+		const passwordError = screen.getByTestId('password-error');
+
+		//Invalid old password
+		fireEvent.change(oldPasswordInput, {target: {value: '1234'}});
+		expect(passwordError).toHaveTextContent('Invalid old password');
+
+		//Invalid new password
+		fireEvent.change(oldPasswordInput, {target: {value: 'oldPassword@123'}});
+		fireEvent.change(newPasswordInput, {target: {value: '123'}});
+		expect(passwordError).toHaveTextContent('Invalid new password');
+
+		//Password does not match
+		fireEvent.change(newPasswordInput, {target: {value: 'newPassword@123'}});
+		expect(passwordError).toHaveTextContent('Password does not match');
+
+		//New password cannot be same as old password
+		fireEvent.change(newPasswordInput, {target: {value: 'newPassword@123'}});
+		fireEvent.change(repeatNewPasswordInput, {
+			target: {value: 'newPassword@123'},
+		});
+		fireEvent.change(oldPasswordInput, {target: {value: 'newPassword@123'}});
+		expect(passwordError).toHaveTextContent(
+			'New password cannot be same as old password',
+		);
+	});
+	it('should update the password successfully', async () => {
+		renderProfile();
+		const oldPasswordInput = screen.getByTestId('old-password');
+		const newPasswordInput = screen.getByTestId('new-password');
+		const repeatNewPasswordInput = screen.getByTestId('repeat-new-password');
+		const saveButton = screen.getByTestId('change-password-button');
+
+		fireEvent.change(oldPasswordInput, {target: {value: 'oldPassword@123'}});
+		fireEvent.change(newPasswordInput, {target: {value: 'newPassword@456'}});
+		fireEvent.change(repeatNewPasswordInput, {
+			target: {value: 'newPassword@456'},
+		});
+		fireEvent.click(saveButton);
+
+		await waitFor(() => {
+			expect(screen.getByText(/Profile Updated Successfully/i)).toHaveClass(
+				'profile-update-success',
+			);
+		});
+	});
 });

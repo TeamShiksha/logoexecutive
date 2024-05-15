@@ -198,3 +198,5 @@ export const INITIAL_UPDATE_PROFILE_FORM_DATA = {
 	lastName: '',
 	email: '',
 };
+export const isValidPassword =
+	/^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*\W)(?!.* ).{8,16}$/;

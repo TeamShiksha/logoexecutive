@@ -1,9 +1,10 @@
-import {useContext, useEffect, useState} from 'react';
+import {useContext, useEffect, useState, useRef} from 'react';
 import './Profile.css';
 import {UserContext} from '../../contexts/UserContext';
 import {INITIAL_UPDATE_PROFILE_FORM_DATA} from '../../constants';
 import {useApi} from '../../hooks/useApi';
 import CustomInput from '../common/input/CustomInput';
+import {isValidPassword} from '../../constants';
 
 function Profile() {
 	const [updateProfileData, setUpdateProfileData] = useState(
@@ -12,18 +13,49 @@ function Profile() {
 	const {userData, fetchUserData} = useContext(UserContext);
 	const [updateProfileValidationErrors, setUpdateProfileValidationErrors] =
 		useState({});
+	const [oldPassword, setOldPassword] = useState('');
+	const [errorMessage, setErroMessage] = useState('');
+	const [newPassword, setNewPassword] = useState('');
+	const [repeatNewPassword, setRepeatNewPassword] = useState('');
+	const didInputChanged = useRef(false);
 	const {data, errorMsg, makeRequest, loading, isSuccess, setIsSuccess} =
 		useApi({
 			url: `api/user/update-profile`,
 			method: 'patch',
 			data: {
-				firstName: updateProfileData.firstName,
-				lastName: updateProfileData.lastName,
+				...(updateProfileData.firstName && {
+					firstName: updateProfileData.firstName,
+				}),
+				...(updateProfileData.lastName && {
+					lastName: updateProfileData.lastName,
+				}),
+				...(oldPassword && {oldPassword: oldPassword}),
+				...(newPassword && {newPassword: newPassword}),
 			},
 		});
-	const [oldPassword, setOldPassword] = useState('');
-	const [newPassword, setNewPassword] = useState('');
-	const [repeatNewPassword, setRepeatNewPassword] = useState('');
+
+	function onSubmitHandler(e) {
+		e.preventDefault();
+		makeRequest();
+	}
+	useEffect(() => {
+		if (oldPassword || newPassword || repeatNewPassword) {
+			didInputChanged.current = true;
+		}
+		if (didInputChanged.current) {
+			if (!oldPassword.match(isValidPassword)) {
+				setErroMessage('Invalid old password');
+			} else if (!newPassword.match(isValidPassword)) {
+				setErroMessage('Invalid new password');
+			} else if (newPassword !== repeatNewPassword) {
+				setErroMessage('Password does not match');
+			} else if (oldPassword === newPassword) {
+				setErroMessage('New password cannot be same as old password');
+			} else {
+				setErroMessage('');
+			}
+		}
+	}, [oldPassword, newPassword, repeatNewPassword]);
 
 	const validateUpdateProfileFormData = () => {
 		if (updateProfileData.firstName === '') {
@@ -154,11 +186,14 @@ function Profile() {
 			</div>
 			<div className='profile-sub-cont'>
 				<h2 className='profile-heading'>Change Password</h2>
-				<div className='profile-border-bottom'></div>
-				<form>
+				<div className='profile-border-bottom input-errors'>
+					<span data-testid='password-error'>{errorMessage}</span>
+				</div>
+				<form onSubmit={onSubmitHandler}>
 					<CustomInput
 						name='old password'
 						type='password'
+						data-testid='old-password'
 						id='old password'
 						label='old password'
 						value={oldPassword}
@@ -170,6 +205,7 @@ function Profile() {
 						name='new password'
 						type='password'
 						id='new password'
+						data-testid='new-password'
 						label='new password'
 						value={newPassword}
 						required
@@ -180,12 +216,20 @@ function Profile() {
 						name='repeat new password'
 						type='password'
 						id='repeat new password'
+						data-testid='repeat-new-password'
 						label='repeat new password'
 						value={repeatNewPassword}
 						required
 						onChange={(e) => setRepeatNewPassword(e.target.value)}
 					/>
-					<button className='profile-button' type='submit'>
+					<button
+						disabled={
+							errorMessage || !oldPassword || !newPassword || !repeatNewPassword
+						}
+						className='profile-button'
+						type='submit'
+						data-testid='change-password-button'
+					>
 						Save
 					</button>
 				</form>

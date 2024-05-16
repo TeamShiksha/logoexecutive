@@ -1,6 +1,6 @@
 const { S3Client, PutObjectCommand } = require("@aws-sdk/client-s3");
 const {Images}= require("../models");
-const { ImageCollection } = require("../utils/firestore");
+const { db:firestore,ImageCollection } = require("../utils/firestore");
 const { cloudFrontSignedURL } = require("../utils/cloudFront");
 
 const s3 = new S3Client({
@@ -17,7 +17,7 @@ async function uploadToS3(file, imageName, extension) {
     Body: file.buffer,
     Key: `${process.env.KEY}/${extension}/${imageName}`,
   };
-
+  
   try {
     await s3.send(new PutObjectCommand(uploadParams));
     return `${process.env.KEY}/${extension}/${imageName}`;
@@ -30,11 +30,11 @@ async function uploadToS3(file, imageName, extension) {
 async function fetchImageByCompanyFree(company) {
   try{
     const imageCDNUrl = await firestore.runTransaction(async (transaction) => {
-      const imageRef = await ImageCollection.where("imageUrl", ">=", company).
-        where("imageUrl", "<=", company + "\uf8ff").get();
+      const imageRef = await ImageCollection.where("domainame", ">=", company).
+        where("domainame", "<=", company + "\uf8ff").get();
       if (imageRef.empty) return null;
       const doc = imageRef.docs[0];
-      const imageUrl = doc.data().imageUrl;
+      const imageUrl = doc.data().domainame;
       const cloudFrontUrl = cloudFrontSignedURL(`/${imageUrl}`).data;
       return cloudFrontUrl;
     });
@@ -48,6 +48,7 @@ async function fetchImageByCompanyFree(company) {
 async function getImagesByUserId(userId) {
   try {
     const imagesSnapshot = await ImageCollection.where("uploadedBy", "==", userId).get();
+    if (imagesSnapshot.empty) return null;
     const images = imagesSnapshot.docs.map(doc => {
       return {
         domainame: doc.data().domainame,
@@ -56,7 +57,6 @@ async function getImagesByUserId(userId) {
         updatedAt: doc.data().updatedAt.toDate()
       };
     });
-    if (images.length === 0) return null;
     return images;
   } catch (error) {
     throw error;

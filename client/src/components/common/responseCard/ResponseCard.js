@@ -6,7 +6,7 @@ function ResponseCard({
 	message,
 	title,
 	Icon,
-	redirectTo = '/sign in',
+	redirectTo = 'sign in',
 }) {
 	return (
 		<section className='response-card-wrapper'>

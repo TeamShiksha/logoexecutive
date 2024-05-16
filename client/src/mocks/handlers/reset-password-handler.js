@@ -1,4 +1,4 @@
-import {rest} from 'msw';
+import {rest, HttpResponse} from 'msw';
 import {STATUS_CODES} from 'http';
 
 export const resetPasswordHandler = [
@@ -34,6 +34,9 @@ export const resetPasswordHandler = [
 					error: STATUS_CODES[500],
 				}),
 			);
+		}
+		if (newPassword === 'network@123') {
+			return HttpResponse.error();
 		}
 	}),
 ];

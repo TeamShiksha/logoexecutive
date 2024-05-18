@@ -25,7 +25,7 @@ router.use("/auth", cors(privateRouteCORS), authRouter);
 router.use("/user", cors(privateRouteCORS), userRouter);
 router.use("/admin", cors(privateRouteCORS), adminRouter);
 router.use("/public", cors(privateRouteCORS), publicRouter);
-router.use("/business", logoRouter);
+router.use("/business", cors(privateRouteCORS), logoRouter);
 router.use("/admin", cors(privateRouteCORS), adminRouter);
 
 module.exports = router;

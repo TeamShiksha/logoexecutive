@@ -79,6 +79,20 @@ describe("getLogoController", () => {
     });
   });
 
+  it("500 - Not allowed by CORS", async () => {
+    const mockQuery = {"domain": "coupang"};
+    const response = await request(app)
+      .get(ENDPOINT)
+      .set("Origin", "http://invalidcorsorigin.com")
+      .query(mockQuery);
+    expect(response.status).toBe(500);
+    expect(response.body).toEqual({
+      error: STATUS_CODES[500],
+      message: "Not allowed by CORS",
+      statusCode: 500,
+    });
+  });
+
   it("200 - CDN url created for company name", async () => {
     jest.spyOn(ImageService, "fetchImageByCompanyFree").mockImplementation(() => mockCDNLink);
     const mockQuery = {"domain": "coupang"};

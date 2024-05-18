@@ -30,11 +30,11 @@ async function uploadToS3(file, imageName, extension) {
 async function fetchImageByCompanyFree(company) {
   try{
     const imageCDNUrl = await firestore.runTransaction(async () => {
-      const imageRef = await ImageCollection.where("imageUrl", ">=", company).
-        where("imageUrl", "<=", company + "\uf8ff").get();
+      const imageRef = await ImageCollection.where("domainame", "==", company).get();
       if (imageRef.empty) return null;
       const doc = imageRef.docs[0];
-      const imageUrl = doc.data().imageUrl;
+      const extension = doc.data().extension;
+      const imageUrl = doc.data().domainame + `.${extension}`;
       const cloudFrontUrl = cloudFrontSignedURL(`/${imageUrl}`).data;
       return cloudFrontUrl;
     });
@@ -65,6 +65,5 @@ async function createImageData(domainame, uploadedBy, extension) {
     throw error;
   }
 }
-
 
 module.exports = { createImageData, fetchImageByCompanyFree, uploadToS3 };

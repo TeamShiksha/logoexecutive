@@ -27,14 +27,14 @@ async function uploadToS3(file, imageName, extension) {
   }
 }
 
-async function fetchImageByCompanyFree(company) {
+async function fetchImageByCompanyFree(company, default_extension="png") {
   try{
     const imageCDNUrl = await firestore.runTransaction(async () => {
-      const imageRef = await ImageCollection.where("domainame", "==", company).get();
+      const imageRef = await ImageCollection.where("domainame", "==", company)
+        .where("extension", "==", default_extension).get();
       if (imageRef.empty) return null;
       const doc = imageRef.docs[0];
-      const extension = doc.data().extension;
-      const imageUrl = doc.data().domainame + `.${extension}`;
+      const imageUrl = doc.data().domainame + `.${default_extension}`;
       const cloudFrontUrl = cloudFrontSignedURL(`/${imageUrl}`).data;
       return cloudFrontUrl;
     });

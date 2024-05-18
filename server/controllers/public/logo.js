@@ -1,6 +1,6 @@
 const Joi = require("joi");
 const { STATUS_CODES } = require("http");
-const { isAPIKeyPresent, fetchImageByCompanyFree } = require("../../services");
+const { fetchImageByCompanyFree } = require("../../services");
 
 const getLogoQuerySchema = Joi.object({
   domain: Joi.string()
@@ -8,13 +8,10 @@ const getLogoQuerySchema = Joi.object({
     .required().messages({
       "any.required": "Domain is required",
       "string.pattern.base": "Invalid domain",
-    }),
-  API_KEY: Joi.string().guid({ version: "uuidv4" }).required().messages({
-    "any.required": "API key is required"
-  }),
+    })
 });
 
-async function getLogoController(req, res, next) {
+async function demoLogoController(req, res, next) {
   try {
     const { error, value } = getLogoQuerySchema.validate(req.query);
     if (!!error) {
@@ -25,15 +22,7 @@ async function getLogoController(req, res, next) {
       });
     }
 
-    const { domain, API_KEY } = value;
-    const apiKeyPresent = await isAPIKeyPresent(API_KEY);
-    if (!apiKeyPresent) {
-      return res.status(403).json({
-        message: "Invalid API key",
-        statusCode: 403,
-        error: STATUS_CODES[403],
-      });
-    }
+    const { domain } = value;
 
     let company = domain.replace(/.+\/\/|www.|\..+/g, "").toLowerCase();
     const imageUrl = await fetchImageByCompanyFree(company);
@@ -54,4 +43,4 @@ async function getLogoController(req, res, next) {
   }
 }
 
-module.exports = getLogoController;
+module.exports = demoLogoController;

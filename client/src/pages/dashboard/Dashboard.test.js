@@ -61,6 +61,16 @@ describe('Dashboard Component', () => {
 		expect(apiKeyTableComponent).toBeInTheDocument();
 	});
 
+	it('Delete API key and removes it from the list', async () => {
+		renderDashboard();
+		const deleteButton = screen.getAllByTestId('api-key-delete');
+		const deletedApiKeyDescription = screen.queryByText('Demo Key');
+		fireEvent.click(deleteButton[0]);
+		await waitFor(() => {
+			expect(deletedApiKeyDescription).not.toBeInTheDocument();
+		});
+	});
+
 	it('generates API key and adds to the list', async () => {
 		renderDashboard();
 		const descriptionInput = screen.getByLabelText('Description For API Key');
@@ -168,14 +178,6 @@ describe('Dashboard Component', () => {
 				),
 			).toBeInTheDocument();
 		});
-	});
-
-	it('Delete API key and remove from the list', () => {
-		renderDashboard();
-		const deleteButton = screen.getAllByTestId('api-key-delete');
-		fireEvent.click(deleteButton[0]);
-		const deletedApiKeyDescription = screen.queryByText('Demo Key');
-		expect(deletedApiKeyDescription).not.toBeInTheDocument();
 	});
 
 	it('shows an error message when trying to generate a key without a description', async () => {

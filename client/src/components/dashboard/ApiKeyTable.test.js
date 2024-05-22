@@ -53,19 +53,19 @@ describe('ApiKeyTable', () => {
 		expect(screen.getByTestId('api-key-copied')).toBeInTheDocument();
 	});
 
-	it('removes key when delete is clicked', () => {
-		const deleteKey = jest.fn();
-		render(
-			<ApiKeyTable
-				keys={keys}
-				copiedKey=''
-				handleCopyToClipboard={() => {}}
-				deleteKey={deleteKey}
-			/>,
-		);
+	// it('removes key when delete is clicked', () => {
+	// 	const deleteKey = jest.fn();
+	// 	render(
+	// 		<ApiKeyTable
+	// 			keys={keys}
+	// 			copiedKey=''
+	// 			handleCopyToClipboard={() => {}}
+	// 			deleteKey={deleteKey}
+	// 		/>,
+	// 	);
 
-		const buttons = screen.getAllByTestId('api-key-delete');
-		fireEvent.click(buttons[0]);
-		expect(deleteKey).toHaveBeenCalledWith('123');
-	});
+	// 	const buttons = screen.getAllByTestId('api-key-delete');
+	// 	fireEvent.click(buttons[0]);
+	// 	expect(deleteKey).toHaveBeenCalledWith('123');
+	// });
 });

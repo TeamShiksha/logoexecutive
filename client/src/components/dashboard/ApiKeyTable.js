@@ -50,7 +50,7 @@ function ApiKeyTable({keys, copiedKey, handleCopyToClipboard, deleteKey}) {
 									<button
 										className='api-key-delete-button'
 										data-testid='api-key-delete'
-										onClick={() => deleteKey(key.key)}
+										onClick={() => deleteKey(key.keyId)}
 									>
 										<MdDeleteOutline />
 									</button>

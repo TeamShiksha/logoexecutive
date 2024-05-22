@@ -5,8 +5,8 @@ import CurrentPlan from '../../components/dashboard/CurrentPlan';
 import Usage from '../../components/dashboard/Usage';
 import {isLettersAndSpacesOnly} from '../../constants';
 import {UserContext} from '../../contexts/UserContext';
-import './Dashboard.css';
 import {useApi} from '../../hooks/useApi';
+import './Dashboard.css';
 
 function getUsedCalls(keys) {
 	let result = 0;
@@ -18,6 +18,7 @@ function getUsedCalls(keys) {
 
 function Dashboard() {
 	const [inputValue, setInputValue] = useState('');
+	const [deletedKey, setDeletedKey] = useState('');
 	const [errorMessage, setErrorMessage] = useState('');
 	const [copiedKey, setCopiedKey] = useState(null);
 	const [keys, setKeys] = useState([]);
@@ -26,6 +27,11 @@ function Dashboard() {
 		url: `api/user/generate`,
 		method: 'post',
 		data: {keyDescription: inputValue},
+	});
+	const {data: deleteKeyData, makeRequest: makeDeleteRequest} = useApi({
+		url: `api/user/destroy`,
+		method: 'delete',
+		params: {keyId: deletedKey},
 	});
 
 	useEffect(() => {
@@ -53,6 +59,20 @@ function Dashboard() {
 		}
 	}, [userData, isSuccess, errorMsg]);
 
+	useEffect(() => {
+		const deleteKeyFunction = async () => {
+			if (deletedKey) {
+				const success = await makeDeleteRequest();
+				if (success) {
+					setKeys(keys.filter((key) => key.keyId !== deletedKey));
+				} else {
+					setErrorMessage(deleteKeyData?.message);
+				}
+			}
+		};
+		deleteKeyFunction();
+	}, [deletedKey]);
+
 	async function handleGenerateKey(e) {
 		e.preventDefault();
 		if (inputValue.trim() === '') {
@@ -69,8 +89,8 @@ function Dashboard() {
 		await makeRequest();
 	}
 
-	const handleDeleteKey = (apiKey) => {
-		setKeys(keys.filter((key) => key.key !== apiKey));
+	const handleDeleteKey = async (apiKeyId) => {
+		setDeletedKey(apiKeyId);
 	};
 	const handleCopyToClipboard = async (apiKey) => {
 		await navigator.clipboard.writeText(apiKey);

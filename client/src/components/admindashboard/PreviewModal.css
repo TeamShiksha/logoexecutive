@@ -37,6 +37,13 @@
 	font-weight: bold;
 }
 
+.image-upload-error {
+	color: var(--error);
+	line-height: 24px;
+	margin-bottom: 16px;
+	font-weight: bold;
+}
+
 .preview-container img {
 	width: 100%;
 	height: auto;

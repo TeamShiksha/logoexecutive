@@ -17,8 +17,11 @@ describe('Image Table Component', () => {
 	test('Images should not be listed if there are no images', () => {
 		render(<ImageTable uploadedImages={[]} />);
 		const tableElement = screen.getByRole('table');
+		const noImagesText =
+			'Your uploaded images will be visible here, drag and drop or click to upload.';
 		const imageRows = screen.queryAllByRole('row', {container: tableElement});
-		expect(imageRows).toHaveLength(1);
+		expect(imageRows).toHaveLength(2);
+		expect(screen.getByText(noImagesText)).toBeInTheDocument();
 	});
 
 	test('All Images should be listed if images are provided', () => {

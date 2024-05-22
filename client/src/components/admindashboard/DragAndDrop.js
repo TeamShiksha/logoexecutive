@@ -4,11 +4,10 @@ import useFileHandler from '../../hooks/useFileHandler';
 import PreviewModal from './PreviewModal';
 import './DragAndDrop.css';
 
-function DragAndDrop({setUploadedImages}) {
+function DragAndDrop({fetchUploadedImages}) {
 	const validImageFormats = ['jpg', 'png', 'svg'];
 	const [isDragging, setIsDragging] = useState(false);
 	const [isModalOpen, setIsModalOpen] = useState(false);
-	const [isUploadSuccessfull, setIsUploadSuccessfull] = useState(false);
 	const fileInputRef = useRef(null);
 	const {
 		file: image,
@@ -26,11 +25,15 @@ function DragAndDrop({setUploadedImages}) {
 		};
 	}, [image]);
 
+	function resetModal(modalStatus) {
+		setIsModalOpen(modalStatus);
+		setImage(null);
+	}
+
 	function handleFileSelection() {
 		fileInputRef.current.click();
 	}
 	function onFileSelect(event) {
-		setIsUploadSuccessfull(false);
 		const files = event.target.files;
 		if (files.length === 0) return;
 		const file = files[0];
@@ -38,7 +41,7 @@ function DragAndDrop({setUploadedImages}) {
 	}
 	function handleImageNameChange(event) {
 		setImage((prev) => {
-			return {name: event.target.value, url: prev.url};
+			return {...prev, name: event.target.value};
 		});
 	}
 	function handleDragLeave(event) {
@@ -52,7 +55,6 @@ function DragAndDrop({setUploadedImages}) {
 	}
 	function handleOnDrop(event) {
 		event.preventDefault();
-		setIsUploadSuccessfull(false);
 		setIsDragging(false);
 		const files = event.dataTransfer.files;
 		if (files.length === 0) return;
@@ -80,6 +82,7 @@ function DragAndDrop({setUploadedImages}) {
 				)}
 				<input
 					ref={fileInputRef}
+					key={Math.random()}
 					onChange={onFileSelect}
 					name='file'
 					type='file'
@@ -99,10 +102,8 @@ function DragAndDrop({setUploadedImages}) {
 					image={image}
 					handleImageNameChange={handleImageNameChange}
 					isModalOpen={isModalOpen}
-					setIsModalOpen={setIsModalOpen}
-					isUploadSuccessfull={isUploadSuccessfull}
-					setIsUploadSuccessfull={setIsUploadSuccessfull}
-					setUploadedImages={setUploadedImages}
+					setIsModalOpen={resetModal}
+					fetchUploadedImages={fetchUploadedImages}
 				/>
 			)}
 		</section>
@@ -110,7 +111,7 @@ function DragAndDrop({setUploadedImages}) {
 }
 
 DragAndDrop.propTypes = {
-	setUploadedImages: PropTypes.func.isRequired,
+	fetchUploadedImages: PropTypes.func.isRequired,
 };
 
 export default DragAndDrop;

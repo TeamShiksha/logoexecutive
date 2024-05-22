@@ -65,7 +65,7 @@ describe("GET /admin/images", () => {
     const response = await request(app)
       .get(ENDPOINT)
       .set("cookie", `jwt=${mockToken}`);
-    expect(response.status).toBe(404); 
+    expect(response.status).toBe(404);
     expect(response.body).toEqual({
       statusCode: 404,
       error: STATUS_CODES[404],
@@ -73,18 +73,17 @@ describe("GET /admin/images", () => {
     });
   });
 
-  it("404 - No images found when user has not yet uploaded any images", async () => {
+  it("200 - No images found when user has not yet uploaded any images", async () => {
     const mockToken = mockUserModel.generateJWT();
     jest.spyOn(UserService, "fetchUserFromId").mockImplementation(()=>mockUserModel);
     jest.spyOn(ImageService, "getImagesByUserId").mockImplementation(()=>null);
     const response =  await request(app)
       .get(ENDPOINT)
       .set("cookie",`jwt=${mockToken}`);
-    expect(response.status).toBe(404);
+    expect(response.status).toBe(200);
     expect(response.body).toEqual({
-      statusCode: 404,
-      error: STATUS_CODES[404],
-      message: "No images found for this user",
+      statusCode: 200,
+      data: [],
     });
   });
 
@@ -98,7 +97,6 @@ describe("GET /admin/images", () => {
     expect(response.status).toBe(200);
     expect(response.body).toEqual({
       statusCode: 200,
-      message: "Images fetched successfully",
       data: {
         domainame: expect.any(String),
         imageId: expect.any(String),

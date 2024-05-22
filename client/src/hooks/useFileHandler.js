@@ -17,7 +17,7 @@ const useFileHandler = (validFormats) => {
 
 		try {
 			const url = URL.createObjectURL(file);
-			setFile({name: file.name, url});
+			setFile({name: file.name, url, data: file});
 		} catch (error) {
 			setError('An error occurred while reading the file.');
 		}

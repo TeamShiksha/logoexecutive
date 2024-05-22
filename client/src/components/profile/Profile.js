@@ -10,10 +10,11 @@ function Profile() {
 	const [updateProfileData, setUpdateProfileData] = useState(
 		INITIAL_UPDATE_PROFILE_FORM_DATA,
 	);
+	const [changeInInputField, setChangeInInputField] = useState(false);
 	const {userData, fetchUserData} = useContext(UserContext);
 	const [updateProfileValidationErrors, setUpdateProfileValidationErrors] =
 		useState({});
-	const [oldPassword, setOldPassword] = useState('');
+	const [currPassword, setCurrPassword] = useState('');
 	const [errorMessage, setErroMessage] = useState('');
 	const [newPassword, setNewPassword] = useState('');
 	const [repeatNewPassword, setRepeatNewPassword] = useState('');
@@ -23,39 +24,50 @@ function Profile() {
 			url: `api/user/update-profile`,
 			method: 'patch',
 			data: {
-				...(updateProfileData.firstName && {
-					firstName: updateProfileData.firstName,
-				}),
-				...(updateProfileData.lastName && {
-					lastName: updateProfileData.lastName,
-				}),
-				...(oldPassword && {oldPassword: oldPassword}),
-				...(newPassword && {newPassword: newPassword}),
+				firstName: updateProfileData.firstName,
+				lastName: updateProfileData.lastName,
 			},
 		});
+	const {
+		data: updatePasswordData,
+		errorMsg: updatePasswordErrorMsg,
+		makeRequest: makeUpdatePasswordRequest,
+		loading: updatePasswordLoading,
+		isSuccess: updatePasswordIsSuccess,
+	} = useApi({
+		url: `api/user/update-password`,
+		method: 'post',
+		data: {
+			currPassword: currPassword,
+			newPassword: newPassword,
+			confirmPassword: repeatNewPassword,
+		},
+	});
 
 	function onSubmitHandler(e) {
 		e.preventDefault();
-		makeRequest();
+		setChangeInInputField(false);
+		makeUpdatePasswordRequest();
 	}
 	useEffect(() => {
-		if (oldPassword || newPassword || repeatNewPassword) {
+		!changeInInputField && setChangeInInputField(true);
+		if (currPassword || newPassword || repeatNewPassword) {
 			didInputChanged.current = true;
 		}
 		if (didInputChanged.current) {
-			if (!oldPassword.match(isValidPassword)) {
+			if (!currPassword.match(isValidPassword)) {
 				setErroMessage('Invalid old password');
 			} else if (!newPassword.match(isValidPassword)) {
 				setErroMessage('Invalid new password');
 			} else if (newPassword !== repeatNewPassword) {
 				setErroMessage('Password does not match');
-			} else if (oldPassword === newPassword) {
+			} else if (currPassword === newPassword) {
 				setErroMessage('New password cannot be same as old password');
 			} else {
 				setErroMessage('');
 			}
 		}
-	}, [oldPassword, newPassword, repeatNewPassword]);
+	}, [currPassword, newPassword, repeatNewPassword]);
 
 	const validateUpdateProfileFormData = () => {
 		if (updateProfileData.firstName === '') {
@@ -186,8 +198,16 @@ function Profile() {
 			</div>
 			<div className='profile-sub-cont'>
 				<h2 className='profile-heading'>Change Password</h2>
-				<div className='profile-border-bottom input-errors'>
-					<span data-testid='password-error'>{errorMessage}</span>
+				<div
+					className={`${updatePasswordIsSuccess && !changeInInputField ? 'profile-update-success' : 'input-errors'}`}
+				>
+					<span data-testid='password-error'>
+						{errorMessage ||
+							(!changeInInputField &&
+								(updatePasswordIsSuccess
+									? updatePasswordData.message
+									: updatePasswordErrorMsg))}
+					</span>
 				</div>
 				<form onSubmit={onSubmitHandler}>
 					<CustomInput
@@ -196,9 +216,9 @@ function Profile() {
 						data-testid='old-password'
 						id='old password'
 						label='old password'
-						value={oldPassword}
+						value={currPassword}
 						required
-						onChange={(e) => setOldPassword(e.target.value)}
+						onChange={(e) => setCurrPassword(e.target.value)}
 					/>
 
 					<CustomInput
@@ -223,9 +243,7 @@ function Profile() {
 						onChange={(e) => setRepeatNewPassword(e.target.value)}
 					/>
 					<button
-						disabled={
-							errorMessage || !oldPassword || !newPassword || !repeatNewPassword
-						}
+						disabled={errorMessage || updatePasswordLoading}
 						className='profile-button'
 						type='submit'
 						data-testid='change-password-button'

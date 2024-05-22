@@ -23,10 +23,6 @@ describe("UpdateProfile Controller", () => {
     process.env.JWT_SECRET = "my_secret";
     process.env.BASE_URL = "http://validcorsorigin.com";
   });
-  afterEach(()=>{
-    jest.clearAllMocks();
-    jest.resetAllMocks();
-  });
   afterAll(() => {
     delete process.env.JWT_SECRET;
     delete process.env.BASE_URL;
@@ -45,53 +41,38 @@ describe("UpdateProfile Controller", () => {
     });
   });
 
-  it("422 - email cannot be updated", async () => {
+  it("422 - First name is required", async () => {
     const mockToken = mockUserModel.generateJWT();
     const response = await request(app)
       .patch(ENDPOINT)
       .set("cookie", `jwt=${mockToken}`)
       .send({
+        lastName: "Rider",
         newEmail: "ghosty@rider.com",
       });
 
     expect(response.status).toBe(422);
     expect(response.body).toEqual({
       error: STATUS_CODES[422],
-      message: "\"newEmail\" is not allowed",
+      message: "First name is required",
       statusCode: 422,
     });
   });
 
-  it("422 - Cannot send empty body", async () => {
-    const mockToken = mockUserModel.generateJWT();
-    const response = await request(app)
-      .patch(ENDPOINT)
-      .set("cookie", `jwt=${mockToken}`)
-      .send({});
-
-    expect(response.status).toBe(422);
-    expect(response.body).toEqual({
-      error: STATUS_CODES[422],
-      message:
-				"\"value\" must contain at least one of [firstName, lastName, newPassword]",
-      statusCode: 422,
-    });
-  });
-
-  it("422 - newPassword is required with oldPassword", async () => {
+  it("422 - Last name is required", async () => {
     const mockToken = mockUserModel.generateJWT();
     const response = await request(app)
       .patch(ENDPOINT)
       .set("cookie", `jwt=${mockToken}`)
       .send({
-        oldPassword: "Testing@123",
+        firstName: "Ghosty",
+        newEmail: "ghosty@rider.com",
       });
 
     expect(response.status).toBe(422);
     expect(response.body).toEqual({
       error: STATUS_CODES[422],
-      message:
-				"\"value\" contains [oldPassword] without its required peers [newPassword]",
+      message: "Last name is required",
       statusCode: 422,
     });
   });
@@ -104,6 +85,7 @@ describe("UpdateProfile Controller", () => {
       .send({
         firstName: "Ghosty1",
         lastName: "Rider@",
+        newEmail: "ghostidergod@gmail.com",
       });
 
     expect(response.status).toBe(422);
@@ -179,30 +161,10 @@ describe("UpdateProfile Controller", () => {
     });
   });
 
-  it("401 - Incorrect password", async () => {
-    jest.spyOn(UserService, "fetchUserByEmail").mockImplementation(() => new Users(mockUsers[1]));
-    jest.spyOn(UserService, "updateUser").mockResolvedValueOnce(false);
-
-    const mockToken = mockUserModel.generateJWT();
-    const response = await request(app)
-      .patch(ENDPOINT)
-      .set("cookie", `jwt=${mockToken}`)
-      .send({
-        oldPassword: "password@123",
-        newPassword: "Testing@1234",
-      });
-
-    expect(response.status).toBe(401);
-    expect(response.body).toEqual({
-      statusCode: 401,
-      message: "Incorrect password",
-      error: STATUS_CODES[401],
-    });
-
-  });
-
   it("200 - Profile updated successfully", async () => {
-    jest.spyOn(UserService, "fetchUserByEmail").mockImplementation(() => new Users(mockUsers[1]));
+    jest.spyOn(UserService, "fetchUserByEmail").mockResolvedValueOnce(() => {
+      new Users(mockUsers[0]);
+    });
     jest.spyOn(UserService, "updateUser").mockResolvedValueOnce(true);
     const mockToken = mockUserModel.generateJWT();
     const response = await request(app)
@@ -211,10 +173,9 @@ describe("UpdateProfile Controller", () => {
       .send({
         firstName: "John",
         lastName: "Doe",
-        oldPassword: "password123",
-        newPassword: "Testing@1234",
       });
 
+    expect(response.status).toBe(200);
     expect(response.body).toEqual({
       statusCode: 200,
       message: "Profile updated successfully",

@@ -23,4 +23,23 @@ export const updateProfileHandler = [
 			}),
 		);
 	}),
+	rest.post('api/user/update-password', (req, res, ctx) => {
+		const {currPassword} = req.body;
+		if (currPassword === 'invalidPass@123') {
+			return res(
+				ctx.status(400),
+				ctx.json({
+					message: 'Current password is incorrect',
+					statusCode: 400,
+					error: STATUS_CODES[400],
+				}),
+			);
+		}
+		return res(
+			ctx.status(200),
+			ctx.json({
+				message: 'Password Updated Successfully',
+			}),
+		);
+	}),
 ];

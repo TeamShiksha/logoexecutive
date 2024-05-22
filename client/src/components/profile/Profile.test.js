@@ -341,6 +341,25 @@ describe('Profile component', () => {
 			'New password cannot be same as old password',
 		);
 	});
+	it('should not update the password successfully if old password is invalid', async () => {
+		renderProfile();
+		const oldPasswordInput = screen.getByTestId('old-password');
+		const newPasswordInput = screen.getByTestId('new-password');
+		const repeatNewPasswordInput = screen.getByTestId('repeat-new-password');
+		const saveButton = screen.getByTestId('change-password-button');
+
+		fireEvent.change(oldPasswordInput, {target: {value: 'invalidPass@123'}});
+		fireEvent.change(newPasswordInput, {target: {value: 'newPassword@456'}});
+		fireEvent.change(repeatNewPasswordInput, {
+			target: {value: 'newPassword@456'},
+		});
+		fireEvent.click(saveButton);
+
+		await waitFor(() => {
+			const passwordError = screen.getByTestId('password-error');
+			expect(passwordError).toHaveTextContent('Current password is incorrect');
+		});
+	});
 	it('should update the password successfully', async () => {
 		renderProfile();
 		const oldPasswordInput = screen.getByTestId('old-password');
@@ -356,9 +375,13 @@ describe('Profile component', () => {
 		fireEvent.click(saveButton);
 
 		await waitFor(() => {
-			expect(screen.getByText(/Profile Updated Successfully/i)).toHaveClass(
-				'profile-update-success',
-			);
+			expect(
+				screen.getByText(/Password Updated Successfully/i),
+			).toBeInTheDocument();
 		});
+
+		fireEvent.change(oldPasswordInput, {target: {value: 'sd@456'}});
+		const passwordError = screen.getByTestId('password-error');
+		expect(passwordError).toHaveTextContent('Invalid old password');
 	});
 });

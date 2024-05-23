@@ -34,7 +34,13 @@
 	color: var(--success);
 	line-height: 24px;
 	margin-bottom: 16px;
-	font-weight: bold;
+	text-align: center;
+}
+
+.image-upload-error {
+	color: var(--error);
+	line-height: 24px;
+	margin-bottom: 16px;
 }
 
 .preview-container img {

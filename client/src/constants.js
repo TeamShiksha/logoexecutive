@@ -138,19 +138,6 @@ export const imageTableHeadings = [
 	'REUPLOAD',
 ];
 
-export const dummyUploadedImageDetails = [
-	{
-		name: 'TeamShiksha.png',
-		createDate: 'Dec 18, 2023',
-		updateDate: 'Dec 27, 2023',
-	},
-	{
-		name: 'LogoExecutive.jpg',
-		createDate: 'Sep 07, 2023',
-		updateDate: 'Oct 12, 2023',
-	},
-];
-
 export const adminTableHeadings = ['EMAIL', 'REASON', 'ACTION', 'CREATE DATE'];
 
 export const dummyAdminTableDetails = [

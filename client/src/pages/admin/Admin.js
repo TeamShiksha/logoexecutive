@@ -1,32 +1,38 @@
-import {useState} from 'react';
-import AddAdminForm from '../../components/admindashboard/AddAdminForm';
-import AdminTable from '../../components/admindashboard/AdminTable';
+import {useEffect} from 'react';
+// import AddAdminForm from '../../components/admindashboard/AddAdminForm';
+// import AdminTable from '../../components/admindashboard/AdminTable';
 import DragAndDrop from '../../components/admindashboard/DragAndDrop';
 import ImageTable from '../../components/admindashboard/ImageTable';
-import Divider from '../../components/common/divider/Divider';
-import {
-	dummyAdminTableDetails,
-	dummyUploadedImageDetails,
-} from '../../constants';
+// import Divider from '../../components/common/divider/Divider';
+// import {
+// 	dummyAdminTableDetails,
+// } from '../../constants';
 import './Admin.css';
+import {useApi} from '../../hooks/useApi';
 
 function AdminDashboard() {
-	const [uploadedImages, setUploadedImages] = useState(
-		dummyUploadedImageDetails,
-	);
-	const [adminDetails, setAdminDetails] = useState(dummyAdminTableDetails);
-	function handleDeleteAdmin(adminEmail) {
-		setAdminDetails(adminDetails.filter((admin) => admin.email !== adminEmail));
-	}
+	// const [adminDetails, setAdminDetails] = useState(dummyAdminTableDetails);
+	const {data, makeRequest, errorMsg} = useApi({
+		url: 'api/admin/images',
+		method: 'get',
+	});
+
+	useEffect(() => {
+		makeRequest();
+	}, []);
+
+	// function handleDeleteAdmin(adminEmail) {
+	// 	setAdminDetails(adminDetails.filter((admin) => admin.email !== adminEmail));
+	// }
 
 	return (
 		<div className='admin-container'>
 			<section className='admin-section-container'>
 				<h2>Add Image</h2>
-				<DragAndDrop setUploadedImages={setUploadedImages} />
-				<ImageTable uploadedImages={uploadedImages} />
+				<DragAndDrop fetchUploadedImages={makeRequest} />
+				<ImageTable uploadedImages={data?.data} errorMessage={errorMsg} />
 			</section>
-			<Divider />
+			{/* <Divider />
 			<section className='admin-section-container'>
 				<h2>Add Admin</h2>
 				<AddAdminForm setAdminDetails={setAdminDetails} />
@@ -34,7 +40,7 @@ function AdminDashboard() {
 					adminDetails={adminDetails}
 					deleteAdmin={handleDeleteAdmin}
 				/>
-			</section>
+			</section> */}
 		</div>
 	);
 }

@@ -71,7 +71,7 @@ describe('Dashboard Component', () => {
 		});
 	});
 
-	it('Tries to delete the key, but fails', async () => {
+	it('Delete API Key fails on wrong keyId', async () => {
 		const wrongKeyData = {
 			firstName: 'Anoop',
 			lastName: 'Singh',

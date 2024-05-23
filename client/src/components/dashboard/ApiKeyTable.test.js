@@ -9,10 +9,10 @@ describe('ApiKeyTable', () => {
 			keyId: 'id1',
 			createdAt: '2024-02-29',
 		},
-		{keyDescription: 'Test Key 2', key: '456', keyId: 'id2', createdAt: ''},
+		{keyDescription: 'Test Key 2', key: '456', keyId: 'id2', createdAt: '2024-02-28'},
 	];
 
-	it('renders correctly', () => {
+	it('Renders correctly', () => {
 		render(
 			<ApiKeyTable
 				keys={keys}
@@ -21,18 +21,10 @@ describe('ApiKeyTable', () => {
 				deleteKey={() => {}}
 			/>,
 		);
-
 		expect(screen.getByText('Test Key 1')).toBeInTheDocument();
 		expect(screen.getByText('Test Key 2')).toBeInTheDocument();
 		expect(screen.getByText('February 29, 2024')).toBeInTheDocument();
-		const elements = screen.getAllByText('');
-		let found = false;
-		elements.forEach((element) => {
-			if (element.tagName == 'TD') {
-				found = true;
-			}
-		});
-		expect(found).toBe(true);
+		expect(screen.getByText('February 28, 2024')).toBeInTheDocument();
 	});
 
 	it('handles copy to clipboard', () => {
@@ -45,7 +37,6 @@ describe('ApiKeyTable', () => {
 				deleteKey={() => {}}
 			/>,
 		);
-
 		const buttons = screen.getAllByTestId('api-key-copy');
 		fireEvent.click(buttons[0]);
 		expect(handleCopyToClipboard).toHaveBeenCalledWith('123');
@@ -67,7 +58,7 @@ describe('ApiKeyTable', () => {
 		expect(screen.getByTestId('api-key-copied')).toBeInTheDocument();
 	});
 
-	it('removes key when delete is clicked', () => {
+	it('Removes key when delete is clicked', () => {
 		const deleteKey = jest.fn();
 		render(
 			<ApiKeyTable

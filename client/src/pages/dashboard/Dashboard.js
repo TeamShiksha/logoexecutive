@@ -1,4 +1,4 @@
-import {useContext, useEffect, useState, useCallback} from 'react';
+import {useContext, useEffect, useState} from 'react';
 import ApiKeyForm from '../../components/dashboard/ApiKeyForm';
 import ApiKeyTable from '../../components/dashboard/ApiKeyTable';
 import CurrentPlan from '../../components/dashboard/CurrentPlan';
@@ -23,7 +23,7 @@ function Dashboard() {
 	const [copiedKey, setCopiedKey] = useState(null);
 	const [keys, setKeys] = useState([]);
 	const {userData, fetchUserData} = useContext(UserContext);
-	const {data, errorMsg, makeRequest, isSuccess} = useApi({
+	const {data, errorMsg, makeRequest, isSuccess, loading} = useApi({
 		url: `api/user/generate`,
 		method: 'post',
 		data: {keyDescription: inputValue},
@@ -102,10 +102,6 @@ function Dashboard() {
 		await makeRequest();
 	}
 
-	const handleDeleteKey = async (apiKeyId) => {
-		setDeletedKey(apiKeyId);
-	};
-
 	const handleCopyToClipboard = async (apiKey) => {
 		await navigator.clipboard.writeText(apiKey);
 		setCopiedKey(apiKey);
@@ -126,6 +122,7 @@ function Dashboard() {
 							inputValue={inputValue}
 							setInputValue={setInputValue}
 							errorMessage={errorMessage}
+							loading={loading}
 							setErrorMessage={setErrorMessage}
 							handleGenerateKey={handleGenerateKey}
 						/>
@@ -136,7 +133,7 @@ function Dashboard() {
 					keys={keys}
 					copiedKey={copiedKey}
 					handleCopyToClipboard={handleCopyToClipboard}
-					deleteKey={handleDeleteKey}
+					deleteKey={setDeletedKey}
 				/>
 			</div>
 		</div>

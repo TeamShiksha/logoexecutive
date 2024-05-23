@@ -60,7 +60,7 @@ function ApiKeyTable({keys, copiedKey, handleCopyToClipboard, deleteKey}) {
 										month: 'long',
 										day: 'numeric',
 										year: 'numeric',
-									}) || ''}
+									})}
 								</td>
 							</tr>
 						))}

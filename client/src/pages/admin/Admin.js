@@ -12,7 +12,7 @@ import {useApi} from '../../hooks/useApi';
 
 function AdminDashboard() {
 	// const [adminDetails, setAdminDetails] = useState(dummyAdminTableDetails);
-	const {data, makeRequest} = useApi({
+	const {data, makeRequest, errorMsg} = useApi({
 		url: 'api/admin/images',
 		method: 'get',
 	});
@@ -30,7 +30,7 @@ function AdminDashboard() {
 			<section className='admin-section-container'>
 				<h2>Add Image</h2>
 				<DragAndDrop fetchUploadedImages={makeRequest} />
-				<ImageTable uploadedImages={data?.data} />
+				<ImageTable uploadedImages={data?.data} errorMessage={errorMsg} />
 			</section>
 			{/* <Divider />
 			<section className='admin-section-container'>

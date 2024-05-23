@@ -4,7 +4,7 @@ import {imageTableHeadings} from '../../constants';
 import {formatDate} from '../../utils/helpers';
 import './ImageTable.css';
 
-function ImageTable({uploadedImages}) {
+function ImageTable({uploadedImages, errorMessage}) {
 	const formattedUploadedImagesData = uploadedImages?.map((image) => ({
 		...image,
 		createdAt: formatDate(image.createdAt),
@@ -23,8 +23,8 @@ function ImageTable({uploadedImages}) {
 				</thead>
 				<tbody>
 					{formattedUploadedImagesData?.length > 0 ? (
-						formattedUploadedImagesData.map((image, index) => (
-							<tr key={index}>
+						formattedUploadedImagesData.map((image) => (
+							<tr key={image?.imageId}>
 								<td>{image.domainame}</td>
 								<td>{image.createdAt}</td>
 								<td>{image.updatedAt}</td>
@@ -37,9 +37,10 @@ function ImageTable({uploadedImages}) {
 						))
 					) : (
 						<tr>
-							<td colSpan='4' className='no-keys'>
-								Your uploaded images will be visible here, drag and drop or
-								click to upload.
+							<td colSpan='4' className={errorMessage ? 'error' : null}>
+								{errorMessage
+									? `Error : ${errorMessage}`
+									: 'Your uploaded images will be visible here, drag and drop or click to upload.'}
 							</td>
 						</tr>
 					)}
@@ -57,6 +58,7 @@ ImageTable.propTypes = {
 			updatedAt: PropTypes.string.isRequired,
 		}),
 	),
+	errorMessage: PropTypes.string,
 };
 
 export default ImageTable;

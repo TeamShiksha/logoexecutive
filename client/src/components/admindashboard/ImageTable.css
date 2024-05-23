@@ -42,3 +42,7 @@
 	height: 20px;
 	width: 20px;
 }
+
+.image-table tbody tr .error {
+	color: var(--error);
+}

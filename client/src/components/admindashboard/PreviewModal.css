@@ -41,7 +41,6 @@
 	color: var(--error);
 	line-height: 24px;
 	margin-bottom: 16px;
-	font-weight: bold;
 }
 
 .preview-container img {

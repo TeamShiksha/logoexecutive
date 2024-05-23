@@ -25,3 +25,12 @@ export const isValidMessage = (message) => {
 	const messageRegex = /^[^!@#$%^&*(){}[\]\\.;'",.<>/?`~|0-9]*$/;
 	return messageRegex.test(message);
 };
+
+export const formatDate = (dateString) => {
+	if (!dateString) return '';
+	return new Date(dateString).toLocaleDateString('en-us', {
+		month: 'long',
+		day: 'numeric',
+		year: 'numeric',
+	});
+};

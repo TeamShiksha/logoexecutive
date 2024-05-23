@@ -1,9 +1,16 @@
 import PropTypes from 'prop-types';
 import {BsArrowRepeat} from 'react-icons/bs';
 import {imageTableHeadings} from '../../constants';
+import {formatDate} from '../../utils/helpers';
 import './ImageTable.css';
 
 function ImageTable({uploadedImages}) {
+	const formattedUploadedImagesData = uploadedImages?.map((image) => ({
+		...image,
+		createdAt: formatDate(image.createdAt),
+		updatedAt: formatDate(image.updatedAt),
+	}));
+
 	return (
 		<div className='image-table-wrapper'>
 			<table className='image-table'>
@@ -15,8 +22,8 @@ function ImageTable({uploadedImages}) {
 					</tr>
 				</thead>
 				<tbody>
-					{uploadedImages?.length > 0 ? (
-						uploadedImages.map((image, index) => (
+					{formattedUploadedImagesData?.length > 0 ? (
+						formattedUploadedImagesData.map((image, index) => (
 							<tr key={index}>
 								<td>{image.domainame}</td>
 								<td>{image.createdAt}</td>

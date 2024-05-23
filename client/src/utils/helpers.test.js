@@ -3,6 +3,7 @@ import {
 	isValidPassword,
 	isSQLInjectionAttempt,
 	isValidMessage,
+	formatDate,
 } from './helpers';
 
 describe('Helper functions', () => {
@@ -24,5 +25,10 @@ describe('Helper functions', () => {
 	test('isValidMessage', () => {
 		expect(isValidMessage('Hello world')).toBeTruthy();
 		expect(isValidMessage('Invalid message 123!')).toBeFalsy();
+	});
+
+	test('formatDate', () => {
+		expect(formatDate('2024-05-23T07:23:21.816Z')).toBe('May 23, 2024');
+		expect(formatDate()).toBe('');
 	});
 });

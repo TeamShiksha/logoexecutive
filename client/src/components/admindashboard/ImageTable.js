@@ -24,7 +24,7 @@ function ImageTable({uploadedImages, errorMessage}) {
 				<tbody>
 					{formattedUploadedImagesData?.length > 0 ? (
 						formattedUploadedImagesData.map((image) => (
-							<tr key={image?.imageId}>
+							<tr key={image.imageId}>
 								<td>{image.domainame}</td>
 								<td>{image.createdAt}</td>
 								<td>{image.updatedAt}</td>

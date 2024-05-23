@@ -1,5 +1,5 @@
 import React from 'react';
-import {render, screen, fireEvent} from '@testing-library/react';
+import {render, screen, fireEvent, waitFor} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import DragAndDrop from './DragAndDrop';
@@ -9,10 +9,10 @@ global.URL.createObjectURL = jest.fn();
 describe('Drag and Drop Component', () => {
 	const mockFile = new File(['fileContent'], 'image.jpg', {type: 'image/jpeg'});
 	const mockTextFile = new File(['fileContent'], 'image.txt', {type: 'text'});
-	const dragFunction = jest.fn();
+	const mockFetchUploadedImages = jest.fn();
 
 	test('Drag and Drop component should be rendered properly', () => {
-		render(<DragAndDrop setUploadedImages={dragFunction} />);
+		render(<DragAndDrop fetchUploadedImages={mockFetchUploadedImages} />);
 		expect(
 			screen.getByText('Drag and drop your image here or click to browse.'),
 		).toBeInTheDocument();
@@ -21,7 +21,7 @@ describe('Drag and Drop Component', () => {
 	});
 
 	test('Uploading file in the input should work as expected', async () => {
-		render(<DragAndDrop setUploadedImages={dragFunction} />);
+		render(<DragAndDrop fetchUploadedImages={mockFetchUploadedImages} />);
 		const imageUploadElement = screen.getByTestId('file-upload');
 		expect(imageUploadElement).toBeInTheDocument();
 		userEvent.upload(imageUploadElement, mockFile);
@@ -34,7 +34,7 @@ describe('Drag and Drop Component', () => {
 	});
 
 	test('Drag over and check if the text changes', () => {
-		render(<DragAndDrop setUploadedImages={dragFunction} />);
+		render(<DragAndDrop fetchUploadedImages={mockFetchUploadedImages} />);
 		const dragArea = screen.getByTestId('drag-area');
 		const dataTransfer = {dropEffect: ''};
 		fireEvent.dragOver(dragArea, {dataTransfer});
@@ -46,7 +46,7 @@ describe('Drag and Drop Component', () => {
 	});
 
 	test('Drag and Drop functionality of image should work as expected', () => {
-		render(<DragAndDrop setUploadedImages={dragFunction} />);
+		render(<DragAndDrop fetchUploadedImages={mockFetchUploadedImages} />);
 		expect(
 			screen.getByText('Drag and drop your image here or click to browse.'),
 		).toBeInTheDocument();
@@ -60,7 +60,7 @@ describe('Drag and Drop Component', () => {
 	});
 
 	test('Error message should be shown for wrong type of file', () => {
-		render(<DragAndDrop setUploadedImages={dragFunction} />);
+		render(<DragAndDrop fetchUploadedImages={mockFetchUploadedImages} />);
 		const imageUploadElement = screen.getByTestId('file-upload');
 		expect(imageUploadElement).toBeInTheDocument();
 		userEvent.upload(imageUploadElement, mockTextFile);
@@ -70,20 +70,22 @@ describe('Drag and Drop Component', () => {
 		).toBeInTheDocument();
 	});
 
-	test('Click Upload after dropping image and see the success message', () => {
-		render(<DragAndDrop setUploadedImages={dragFunction} />);
+	test('Click Upload after dropping image and see the success message', async () => {
+		render(<DragAndDrop fetchUploadedImages={mockFetchUploadedImages} />);
 		const dragArea = screen.getByTestId('drag-area');
 		const dataTransfer = {files: [mockFile]};
 		fireEvent.drop(dragArea, {dataTransfer});
 		const uploadButton = screen.getByRole('button', {name: 'Upload'});
 		fireEvent.click(uploadButton);
-		// expect(
-		// 	screen.getByText('upload successfully.'),
-		// ).toBeInTheDocument();
+		await waitFor(() => {
+			expect(
+				screen.getByText('Image Uploaded successfully'),
+			).toBeInTheDocument();
+		});
 	});
 
 	test('Upload image and then close the modal', () => {
-		render(<DragAndDrop setUploadedImages={dragFunction} />);
+		render(<DragAndDrop fetchUploadedImages={mockFetchUploadedImages} />);
 		const dragArea = screen.getByTestId('drag-area');
 		const dataTransfer = {files: [mockFile]};
 		fireEvent.drop(dragArea, {dataTransfer});
@@ -98,7 +100,9 @@ describe('Drag and Drop Component', () => {
 		const mockRevokeObjectURL = jest.fn();
 		global.URL.createObjectURL = mockCreateObjectURL;
 		global.URL.revokeObjectURL = mockRevokeObjectURL;
-		const {unmount} = render(<DragAndDrop setUploadedImages={dragFunction} />);
+		const {unmount} = render(
+			<DragAndDrop fetchUploadedImages={mockFetchUploadedImages} />,
+		);
 		const imageUploadElement = screen.getByTestId('file-upload');
 		const mockFile = new File(['fileContent'], 'image.jpg', {
 			type: 'image/jpeg',
@@ -110,16 +114,16 @@ describe('Drag and Drop Component', () => {
 	});
 
 	test('No action is taken if no files are selected', () => {
-		render(<DragAndDrop setUploadedImages={dragFunction} />);
+		render(<DragAndDrop fetchUploadedImages={mockFetchUploadedImages} />);
 		const fileInput = screen.getByTestId('file-upload');
 		fireEvent.change(fileInput, {target: {files: []}});
-		expect(dragFunction).not.toHaveBeenCalled();
 		const modal = screen.queryByTestId('preview-modal');
 		expect(modal).not.toBeInTheDocument();
+		expect(mockFetchUploadedImages).not.toHaveBeenCalled();
 	});
 
 	test('File name should be updated correctly', () => {
-		render(<DragAndDrop setUploadedImages={dragFunction} />);
+		render(<DragAndDrop fetchUploadedImages={mockFetchUploadedImages} />);
 		const fileInput = screen.getByTestId('file-upload');
 		const newFile = new File(['content'], 'newImage.jpg', {type: 'image/jpeg'});
 		fireEvent.change(fileInput, {target: {files: [newFile]}});

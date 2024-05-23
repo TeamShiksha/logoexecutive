@@ -11,6 +11,9 @@ function PreviewModal({
 	setIsModalOpen,
 	fetchUploadedImages,
 }) {
+	const formData = new FormData();
+	formData.append('imageName', image?.name);
+	formData.append('logo', image?.data);
 	const {data, makeRequest, isSuccess, errorMsg, loading} = useApi(
 		{
 			url: `api/admin/upload`,
@@ -18,7 +21,7 @@ function PreviewModal({
 			headers: {
 				'Content-Type': 'multipart/form-data',
 			},
-			data: {imageName: image?.name, logo: image?.data},
+			data: formData,
 		},
 		true,
 	);

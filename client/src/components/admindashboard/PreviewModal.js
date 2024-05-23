@@ -31,6 +31,9 @@ function PreviewModal({
 		const success = await makeRequest();
 		if (success) {
 			fetchUploadedImages();
+			setTimeout(() => {
+				setIsModalOpen(false);
+			}, 3000);
 		}
 	}
 

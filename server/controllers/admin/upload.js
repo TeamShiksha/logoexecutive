@@ -48,7 +48,11 @@ async function adminUploadController(req, res, next) {
         message: "Image Upload Failed, try again later",
       });
     }
-    const imageData = await createImageData(domainame, uploadby, extension);
+    const imageData = await createImageData(
+      domainame.split(".")[0],
+      uploadby,
+      extension
+    );
     if (!imageData) {
       res.status(500).json({
         error: STATUS_CODES[500],

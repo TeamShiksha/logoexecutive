@@ -9,7 +9,12 @@ describe('ApiKeyTable', () => {
 			keyId: 'id1',
 			createdAt: '2024-02-29',
 		},
-		{keyDescription: 'Test Key 2', key: '456', keyId: 'id2', createdAt: '2024-02-28'},
+		{
+			keyDescription: 'Test Key 2',
+			key: '456',
+			keyId: 'id2',
+			createdAt: '2024-02-28',
+		},
 	];
 
 	it('Renders correctly', () => {

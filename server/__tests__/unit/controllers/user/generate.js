@@ -162,8 +162,7 @@ describe("generate-key controller", () => {
 
     expect(response.status).toBe(403);
     expect(response.body).toEqual({
-      message:
-        "The maximum limit for key generation has been reached. Please consider upgrading your subscription to generate additional keys",
+      message: "Limit reached. Consider upgrading your plan",
       statusCode: 403,
       error: STATUS_CODES[403],
     });

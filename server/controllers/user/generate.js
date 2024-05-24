@@ -42,8 +42,7 @@ async function generateKeyController(req, res, next) {
     }
     if (keyCount >= keyLimit) {
       return res.status(403).json({
-        message:
-          "The maximum limit for key generation has been reached. Please consider upgrading your subscription to generate additional keys",
+        message: "Limit reached. Consider upgrading your plan",
         statusCode: 403,
         error: STATUS_CODES[403],
       });

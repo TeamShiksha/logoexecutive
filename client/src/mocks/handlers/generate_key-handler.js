@@ -43,8 +43,7 @@ export const generateKeyHandler = [
 			return res(
 				ctx.status(403),
 				ctx.json({
-					message:
-						'The maximum limit for key generation has been reached. Please consider upgrading your subscription to generate additional keys',
+					message: 'Limit reached. Consider upgrading your plan',
 					statusCode: 403,
 					error: 'Forbidden',
 				}),

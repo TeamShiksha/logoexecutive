@@ -163,9 +163,7 @@ describe('Dashboard Component', () => {
 		fireEvent.click(generateButton);
 		await waitFor(() => {
 			expect(
-				screen.getByText(
-					'The maximum limit for key generation has been reached. Please consider upgrading your subscription to generate additional keys',
-				),
+				screen.getByText('Limit reached. Consider upgrading your plan'),
 			).toBeInTheDocument();
 		});
 	});

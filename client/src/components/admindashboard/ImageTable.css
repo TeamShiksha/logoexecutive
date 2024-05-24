@@ -34,11 +34,15 @@
 	padding: 6px 10px;
 	border: none;
 	border-radius: 99px;
-	cursor: pointer;
+	cursor: not-allowed;
 }
 
 .image-table .reupload-btn > svg {
 	color: var(--smooth-gray);
 	height: 20px;
 	width: 20px;
+}
+
+.image-table tbody tr .error {
+	color: var(--error);
 }

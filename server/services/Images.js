@@ -17,13 +17,13 @@ async function uploadToS3(file, imageName, extension) {
     Body: file.buffer,
     Key: `${process.env.KEY}/${extension}/${imageName}`,
   };
-
+  
   try {
     await s3.send(new PutObjectCommand(uploadParams));
     return `${process.env.KEY}/${extension}/${imageName}`;
   } catch (error) {
     console.error(error);
-    throw error; 
+    throw error;
   }
 }
 
@@ -42,6 +42,24 @@ async function fetchImageByCompanyFree(company, default_extension="png") {
   }
   catch (err) {
     throw err;
+  }
+}
+
+async function getImagesByUserId(userId) {
+  try {
+    const imagesSnapshot = await ImageCollection.where("uploadedBy", "==", userId).get();
+    if (imagesSnapshot.empty) return null;
+    const images = imagesSnapshot.docs.map(doc => {
+      return {
+        domainame: doc.data().domainame,
+        imageId: doc.data().imageId,
+        createdAt: doc.data().createdAt.toDate(),
+        updatedAt: doc.data().updatedAt.toDate()
+      };
+    });
+    return images;
+  } catch (error) {
+    throw error;
   }
 }
 
@@ -66,4 +84,4 @@ async function createImageData(domainame, uploadedBy, extension) {
   }
 }
 
-module.exports = { createImageData, fetchImageByCompanyFree, uploadToS3 };
+module.exports = { createImageData, fetchImageByCompanyFree, uploadToS3, getImagesByUserId };

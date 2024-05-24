@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import {FiCopy} from 'react-icons/fi';
 import {LuCopyCheck} from 'react-icons/lu';
 import {MdDeleteOutline} from 'react-icons/md';
+import {formatDate} from '../../utils/helpers';
 
 function ApiKeyTable({keys, copiedKey, handleCopyToClipboard, deleteKey}) {
 	return (
@@ -55,13 +56,7 @@ function ApiKeyTable({keys, copiedKey, handleCopyToClipboard, deleteKey}) {
 										<MdDeleteOutline />
 									</button>
 								</td>
-								<td>
-									{new Date(key?.createdAt).toLocaleDateString('en-us', {
-										month: 'long',
-										day: 'numeric',
-										year: 'numeric',
-									})}
-								</td>
+								<td>{formatDate(key?.createdAt)}</td>
 							</tr>
 						))}
 					</tbody>

@@ -4,39 +4,26 @@ const { ContactUs } = require("../../../models");
 const { mockContactUsForm } = require("../../../utils/mocks/contactUs");
 
 describe("formExists", () => {
+  test("should return false if the query result is empty", async () => {
+    const email = "nonexistent@example.com";
+    const exists = await formExists(email);
+    expect(exists).toBe(false);
+  });
   test("should return true if form activityStatus is true for given email", async () => {
-    const user = await ContactUsCollection.doc(mockContactUsForm[1].contactId).set(mockContactUsForm[1]);
+    await ContactUsCollection.doc(mockContactUsForm[1].contactId).set(mockContactUsForm[1]);
     const email = "active@gmail.com";
     const exists = await formExists(email);
     expect(exists).toBe(true);
   });
 
   test("should return false if form does not exist or the activityStatus is false for given email", async () => {
-    const user = await ContactUsCollection.doc(mockContactUsForm[0].contactId).set(mockContactUsForm[0]);
+    await ContactUsCollection.doc(mockContactUsForm[0].contactId).set(mockContactUsForm[0]);
     const exist = await formExists("nonactive@example.com");
     expect(exist).toBe(false);
   });
 
-  test("should return false if the query result is empty", async () => {
-    jest.spyOn(ContactUsCollection, "where").mockReturnValue({
-      limit: jest.fn().mockReturnValue({
-        get: jest.fn().mockResolvedValue({ empty: true })
-      })
-    });
-
-    const email = "nonexistent@example.com";
-    const exists = await formExists(email);
-    expect(exists).toBe(false);
-  });
-
   test("should return true if the query result is not empty", async () => {
-    jest.spyOn(ContactUsCollection, "where").mockReturnValue({
-      limit: jest.fn().mockReturnValue({
-        get: jest.fn().mockResolvedValue({ empty: false })
-      })
-    });
-
-    const email = "existent@example.com";
+    const email = "nonactive@gmail.com";
     const exists = await formExists(email);
     expect(exists).toBe(true);
   });
@@ -88,7 +75,6 @@ describe("createForm", () => {
     jest.spyOn(ContactUsCollection, "doc").mockReturnValue({
       set: jest.fn().mockResolvedValue({})
     });
-
     const formData = {
       name: "New User",
       email: "newuser@example.com",

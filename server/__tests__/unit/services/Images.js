@@ -46,7 +46,6 @@ describe("uploadToS3", () => {
     expect(S3Client).toHaveBeenCalled();
     expect(S3Client).toHaveBeenCalledWith({
       region: process.env.BUCKET_REGION,
-      endpoint: process.env.AWS_ENDPOINT,
       credentials: {
         accessKeyId: process.env.ACCESS_KEY,
         secretAccessKey: process.env.SECRET_ACCESS_KEY,
@@ -70,24 +69,20 @@ describe("fetchImageByCompanyFree", () => {
   });
 
   it("should fetch image CDN URL by company successfully", async () => {
-    const image = await ImageCollection.doc(mockImage.imageId).set(mockImage);
+    await ImageCollection.doc(mockImage.imageId).set(mockImage);
     const mockCDNLink = "https://du4goljobz66l.cloudfront.net/meta.png?Expires=1706882374&Key-Pair-Id=K1CBTPCVEWK03E&Signature=l6ZpbQ-Z3WtJQ8inaDomAAAhcnnC0U2R~5Su7HWjC8fbbeQI4e4JBK368guQFYtc8rQAJMur446ozoXJE-9Hcj125NlZFSMqpeUsjam-nk9Wb2d8XGR6UjyxYLqGbhca8WYwl~h0CzHbe20PJXZbyuFPTufCrBTkIoh4o3Mg3MQDe2fPf5z6L9xLgVtbOrpJQoHZ0YlWTNvWJWutL-AFX8KbisrBaMi8zRa6h-mSfXuIoUyjziMRA5gPA0T8QSUJ8iLdbURwWxvRpRpM0Ohrjk06sWDSTkNzLL~pVNyL7LwO04mAHVK4XYgK5179xcZ-BjMMW1qJD3YF7G~xdcsXJw__";
     const mockSignedUrl = jest.fn(() => mockCDNLink);
     jest.spyOn(cloudfrontSigner, "getSignedUrl").mockImplementation(mockSignedUrl);
     jest.spyOn(cloudFront, "cloudFrontSignedURL").mockImplementation(() => ({ data: mockCDNLink, success: true }));
     const company = "google.jpg";
-    const result = await fetchImageByCompanyFree(company);
+    const result = await fetchImageByCompanyFree(company, "jpg");
     expect(result).toEqual(mockCDNLink);
   });
+  
 
   it("should return null when no image is found", async () => {
-    jest.spyOn(ImageCollection, "where").mockReturnValueOnce({
-      where: jest.fn(() => ({
-        get: jest.fn(() => ({ empty: true })),
-      })),
-    });
     const company = "non_existent_image.jpg";
-    const result = await fetchImageByCompanyFree(company);
+    const result = await fetchImageByCompanyFree(company, "jpg");
     expect(result).toBeNull();
   });
 
@@ -96,18 +91,18 @@ describe("fetchImageByCompanyFree", () => {
     jest.spyOn(ImageCollection, "where").mockReturnValueOnce({
       where: jest.fn(() => ({
         get: jest.fn().mockRejectedValueOnce(mockError),
-      })),
+      }))
     });
     const company = "error_image.jpg";
-    await expect(fetchImageByCompanyFree(company)).rejects.toThrow(mockError);
+    await expect(fetchImageByCompanyFree(company, "jpg")).rejects.toThrow(mockError);
   });
   
 });
 
 describe("getImagesByUserId", ()=>{
-    
+
   it("should return the all the images if the admin has images uploaded", async()=>{
-    const image = await ImageCollection.doc(mockImage.imageId).set(mockImage);
+    await ImageCollection.doc(mockImage.imageId).set(mockImage);
     const userId = "5e8bf5ae-1ac3-4daf-b1e4-45d220cfb5a9";
     const imageData = await getImagesByUserId(userId);
     expect(imageData).toEqual([{
@@ -119,10 +114,7 @@ describe("getImagesByUserId", ()=>{
   });
 
   it("should return  null if the no images were found", async()=>{
-    jest.spyOn(ImageCollection, "where").mockReturnValue({
-      get: jest.fn().mockResolvedValue({ empty: true })
-    });
-    const userId="5e8bf5ae-1ac3-4daf-b1e4-45d220cfb5a9";
+    const userId="5e8bf5ae-1ac3-4daf-b1e4-45d220cfb5ab";
     const imageData = await getImagesByUserId(userId);
     expect(imageData).toEqual(null);
   });
@@ -177,4 +169,3 @@ describe("createImageData", () => {
     await expect(createImageData("example.com", "user123", "png")).rejects.toThrow(errorMessage);
   });
 });
-

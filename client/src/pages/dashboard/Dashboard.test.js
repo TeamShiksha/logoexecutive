@@ -2,6 +2,7 @@ import React from 'react';
 import {render, screen, fireEvent, waitFor} from '@testing-library/react';
 import Dashboard from './Dashboard';
 import {UserContext} from '../../contexts/UserContext';
+import {formatDate} from '../../utils/helpers';
 
 describe('Dashboard Component', () => {
 	const mockUserData = {
@@ -16,16 +17,8 @@ describe('Dashboard Component', () => {
 				key: '4d6544e38f5d4ad8bae546ea61e2b842',
 				usageCount: '0',
 				keyDescription: 'Demo Key',
-				updatedAt: new Date().toLocaleDateString('en-US', {
-					day: '2-digit',
-					month: 'short',
-					year: 'numeric',
-				}),
-				createdAt: new Date().toLocaleDateString('en-US', {
-					day: '2-digit',
-					month: 'short',
-					year: 'numeric',
-				}),
+				updatedAt: formatDate(),
+				createdAt: formatDate(),
 			},
 		],
 		subscription: {
@@ -84,16 +77,8 @@ describe('Dashboard Component', () => {
 					key: '4d6544e38f5d4ad8bae546ea61e2b842',
 					usageCount: '0',
 					keyDescription: 'Demo Key',
-					updatedAt: new Date().toLocaleDateString('en-US', {
-						day: '2-digit',
-						month: 'short',
-						year: 'numeric',
-					}),
-					createdAt: new Date().toLocaleDateString('en-US', {
-						day: '2-digit',
-						month: 'short',
-						year: 'numeric',
-					}),
+					updatedAt: formatDate(),
+					createdAt: formatDate(),
 				},
 			],
 			subscription: {
@@ -128,15 +113,7 @@ describe('Dashboard Component', () => {
 		const tableElement = screen.getByRole('table');
 		const keyRows = screen.queryAllByRole('row', {container: tableElement});
 		expect(keyRows).toHaveLength(3);
-		expect(
-			screen.getAllByText(
-				new Date().toLocaleDateString('en-US', {
-					day: 'numeric',
-					month: 'long',
-					year: 'numeric',
-				}),
-			),
-		).toHaveLength(2);
+		expect(screen.getAllByText(formatDate())).toHaveLength(2);
 		expect(descriptionInput).toHaveValue('');
 	});
 

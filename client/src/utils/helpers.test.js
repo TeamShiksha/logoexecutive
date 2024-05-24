@@ -29,6 +29,12 @@ describe('Helper functions', () => {
 
 	test('formatDate', () => {
 		expect(formatDate('2024-05-23T07:23:21.816Z')).toBe('May 23, 2024');
-		expect(formatDate()).toBe('');
+		expect(formatDate()).toBe(
+			new Date().toLocaleDateString('en-us', {
+				month: 'long',
+				day: 'numeric',
+				year: 'numeric',
+			}),
+		);
 	});
 });

@@ -27,8 +27,8 @@ export const isValidMessage = (message) => {
 };
 
 export const formatDate = (dateString) => {
-	if (!dateString) return '';
-	return new Date(dateString).toLocaleDateString('en-us', {
+	const date = dateString ? new Date(dateString) : new Date();
+	return date.toLocaleDateString('en-us', {
 		month: 'long',
 		day: 'numeric',
 		year: 'numeric',

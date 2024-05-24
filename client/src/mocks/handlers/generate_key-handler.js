@@ -1,4 +1,5 @@
 import {rest} from 'msw';
+import {formatDate} from '../../utils/helpers';
 
 var keyDescriptionMap = new Map();
 export const generateKeyHandler = [
@@ -16,16 +17,8 @@ export const generateKeyHandler = [
 						keyDescription: 'Test API Key',
 						key: '7D8ED2F3F2C748BC9B96CED7EE2DE1BF',
 						usageCount: 0,
-						createdAt: new Date().toLocaleDateString('en-US', {
-							day: '2-digit',
-							month: 'short',
-							year: 'numeric',
-						}),
-						updatedAt: new Date().toLocaleDateString('en-US', {
-							day: '2-digit',
-							month: 'short',
-							year: 'numeric',
-						}),
+						createdAt: formatDate(),
+						updatedAt: formatDate(),
 					},
 				}),
 			);

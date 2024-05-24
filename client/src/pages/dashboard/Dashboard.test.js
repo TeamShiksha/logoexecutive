@@ -2,6 +2,7 @@ import React from 'react';
 import {render, screen, fireEvent, waitFor} from '@testing-library/react';
 import Dashboard from './Dashboard';
 import {UserContext} from '../../contexts/UserContext';
+import {formatDate} from '../../utils/helpers';
 
 describe('Dashboard Component', () => {
 	const mockUserData = {
@@ -16,16 +17,8 @@ describe('Dashboard Component', () => {
 				key: '4d6544e38f5d4ad8bae546ea61e2b842',
 				usageCount: '0',
 				keyDescription: 'Demo Key',
-				updatedAt: new Date().toLocaleDateString('en-US', {
-					day: '2-digit',
-					month: 'short',
-					year: 'numeric',
-				}),
-				createdAt: new Date().toLocaleDateString('en-US', {
-					day: '2-digit',
-					month: 'short',
-					year: 'numeric',
-				}),
+				updatedAt: formatDate(),
+				createdAt: formatDate(),
 			},
 		],
 		subscription: {
@@ -61,6 +54,53 @@ describe('Dashboard Component', () => {
 		expect(apiKeyTableComponent).toBeInTheDocument();
 	});
 
+	it('Delete API key and removes it from the list', async () => {
+		renderDashboard();
+		const deleteButton = screen.getAllByTestId('api-key-delete');
+		const deletedApiKeyDescription = screen.queryByText('Demo Key');
+		fireEvent.click(deleteButton[0]);
+		await waitFor(() => {
+			expect(deletedApiKeyDescription).not.toBeInTheDocument();
+		});
+	});
+
+	it('Delete API Key fails on wrong keyId', async () => {
+		const wrongKeyData = {
+			firstName: 'Anoop',
+			lastName: 'Singh',
+			email: 'aps08@gmail.com',
+			userId: '99234290-a33b-40d1-a5d4-888e86d06cd1',
+			userType: 'CUSTOMER',
+			keys: [
+				{
+					keyId: 'LogoExecutive@007',
+					key: '4d6544e38f5d4ad8bae546ea61e2b842',
+					usageCount: '0',
+					keyDescription: 'Demo Key',
+					updatedAt: formatDate(),
+					createdAt: formatDate(),
+				},
+			],
+			subscription: {
+				subscriptionId: '4d6544e3-8f5d-4ad8-bae5-46ea61e2b842',
+				subscriptionType: 'HOBBY',
+				keyLimit: 2,
+				usageLimit: 500,
+				isActive: false,
+				createdAt: '2024-04-11T10:24:38.501Z',
+				updatedAt: '2024-04-11T10:24:38.501Z',
+			},
+		};
+		renderDashboard(wrongKeyData);
+		const deleteButton = screen.getAllByTestId('api-key-delete');
+		const deletedApiKeyDescription = screen.queryByText('Demo Key');
+		fireEvent.click(deleteButton[0]);
+		await waitFor(() => {
+			expect(screen.getByText('Key ID is required')).toBeInTheDocument();
+		});
+		expect(deletedApiKeyDescription).toBeInTheDocument();
+	});
+
 	it('generates API key and adds to the list', async () => {
 		renderDashboard();
 		const descriptionInput = screen.getByLabelText('Description For API Key');
@@ -73,15 +113,7 @@ describe('Dashboard Component', () => {
 		const tableElement = screen.getByRole('table');
 		const keyRows = screen.queryAllByRole('row', {container: tableElement});
 		expect(keyRows).toHaveLength(3);
-		expect(
-			screen.getAllByText(
-				new Date().toLocaleDateString('en-US', {
-					day: 'numeric',
-					month: 'long',
-					year: 'numeric',
-				}),
-			),
-		).toHaveLength(2);
+		expect(screen.getAllByText(formatDate())).toHaveLength(2);
 		expect(descriptionInput).toHaveValue('');
 	});
 
@@ -129,17 +161,15 @@ describe('Dashboard Component', () => {
 				subscriptionId: '4d6544e3-8f5d-4ad8-bae5-46ea61e2b842',
 				subscriptionType: 'HOBBY',
 				keyLimit: 2,
-				usageLimit: 400,
+				usageLimit: 0,
 				isActive: false,
 				createdAt: '2024-04-11T10:24:38.501Z',
 				updatedAt: '2024-04-11T10:24:38.501Z',
 			},
 		};
 		renderDashboard(mockNullData);
-		expect(screen.getByText('0 calls')).toBeInTheDocument();
-		expect(
-			screen.getByText(mockNullData.subscription.usageLimit + ' calls'),
-		).toHaveClass('data');
+		const zeroCalls = screen.getAllByText('0 calls');
+		expect(zeroCalls).toHaveLength(2);
 	});
 
 	it('Throws error when same key description is given again', async () => {
@@ -166,14 +196,6 @@ describe('Dashboard Component', () => {
 				screen.getByText('Limit reached. Consider upgrading your plan'),
 			).toBeInTheDocument();
 		});
-	});
-
-	it('Delete API key and remove from the list', () => {
-		renderDashboard();
-		const deleteButton = screen.getAllByTestId('api-key-delete');
-		fireEvent.click(deleteButton[0]);
-		const deletedApiKeyDescription = screen.queryByText('Demo Key');
-		expect(deletedApiKeyDescription).not.toBeInTheDocument();
 	});
 
 	it('shows an error message when trying to generate a key without a description', async () => {

@@ -9,6 +9,7 @@ import {userDataHandler} from './handlers/userData-handler';
 import {forgotPasswordHandler} from './handlers/forgot-password-handler';
 import userDeleteHandler from './handlers/user-delete';
 import {generateKeyHandler} from './handlers/generate_key-handler';
+import {destroyKeyHandler} from './handlers/destroyKey-handler';
 import imageUploadHandler from './handlers/imageUpload-handler';
 import {uploadedImagesHandler} from './handlers/uploadedImages-handler';
 
@@ -24,6 +25,7 @@ const handlers = [
 	...forgotPasswordHandler,
 	...userDeleteHandler,
 	...generateKeyHandler,
+	...destroyKeyHandler,
 	...imageUploadHandler,
 	...uploadedImagesHandler,
 ];

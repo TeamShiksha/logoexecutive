@@ -5,8 +5,8 @@ import CurrentPlan from '../../components/dashboard/CurrentPlan';
 import Usage from '../../components/dashboard/Usage';
 import {isLettersAndSpacesOnly} from '../../constants';
 import {UserContext} from '../../contexts/UserContext';
-import './Dashboard.css';
 import {useApi} from '../../hooks/useApi';
+import './Dashboard.css';
 
 function getUsedCalls(keys) {
 	let result = 0;
@@ -18,14 +18,24 @@ function getUsedCalls(keys) {
 
 function Dashboard() {
 	const [inputValue, setInputValue] = useState('');
+	const [deletedKey, setDeletedKey] = useState(null);
 	const [errorMessage, setErrorMessage] = useState('');
 	const [copiedKey, setCopiedKey] = useState(null);
 	const [keys, setKeys] = useState([]);
 	const {userData, fetchUserData} = useContext(UserContext);
-	const {data, errorMsg, makeRequest, isSuccess} = useApi({
+	const {data, errorMsg, makeRequest, isSuccess, loading} = useApi({
 		url: `api/user/generate`,
 		method: 'post',
 		data: {keyDescription: inputValue},
+	});
+	const {
+		errorMsg: errorDeleteMsg,
+		makeRequest: makeDeleteRequest,
+		isSuccess: isDeleteSuccess,
+	} = useApi({
+		url: `api/user/destroy`,
+		method: 'delete',
+		params: {keyId: deletedKey},
 	});
 
 	useEffect(() => {
@@ -36,6 +46,9 @@ function Dashboard() {
 		if (userData?.keys) {
 			setKeys(userData.keys);
 		}
+	}, [userData]);
+
+	useEffect(() => {
 		if (isSuccess) {
 			const newKey = {
 				keyId: data.data.keyId,
@@ -51,7 +64,27 @@ function Dashboard() {
 			setErrorMessage(errorMsg);
 			setInputValue('');
 		}
-	}, [userData, isSuccess, errorMsg]);
+	}, [isSuccess, errorMsg]);
+
+	useEffect(() => {
+		if (isDeleteSuccess) {
+			const updatedKeys = keys.filter((key) => key.keyId !== deletedKey);
+			setKeys(updatedKeys);
+			setDeletedKey(null);
+		}
+		if (errorDeleteMsg) {
+			setErrorMessage(errorDeleteMsg);
+		}
+	}, [errorDeleteMsg, isDeleteSuccess]);
+
+	useEffect(() => {
+		const deleteKeyFunction = async () => {
+			await makeDeleteRequest();
+		};
+		if (deletedKey) {
+			deleteKeyFunction();
+		}
+	}, [deletedKey]);
 
 	async function handleGenerateKey(e) {
 		e.preventDefault();
@@ -69,9 +102,6 @@ function Dashboard() {
 		await makeRequest();
 	}
 
-	const handleDeleteKey = (apiKey) => {
-		setKeys(keys.filter((key) => key.key !== apiKey));
-	};
 	const handleCopyToClipboard = async (apiKey) => {
 		await navigator.clipboard.writeText(apiKey);
 		setCopiedKey(apiKey);
@@ -92,6 +122,7 @@ function Dashboard() {
 							inputValue={inputValue}
 							setInputValue={setInputValue}
 							errorMessage={errorMessage}
+							loading={loading}
 							setErrorMessage={setErrorMessage}
 							handleGenerateKey={handleGenerateKey}
 						/>
@@ -102,7 +133,7 @@ function Dashboard() {
 					keys={keys}
 					copiedKey={copiedKey}
 					handleCopyToClipboard={handleCopyToClipboard}
-					deleteKey={handleDeleteKey}
+					deleteKey={setDeletedKey}
 				/>
 			</div>
 		</div>

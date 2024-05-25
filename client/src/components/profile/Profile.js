@@ -46,7 +46,8 @@ function Profile() {
 		e.preventDefault();
 		setUpdatePasswordIsSuccess(false);
 		const error = validatePasswordFormData();
-		return error ? setErroMessage(error) : makeUpdatePasswordRequest();
+		setErroMessage(error);
+		return !error && makeUpdatePasswordRequest();
 	}
 
 	const handlePasswordChange = (e) => {
@@ -206,10 +207,10 @@ function Profile() {
 					className={`errors ${updatePasswordIsSuccess ? 'profile-update-success' : 'input-errors'}`}
 					data-testid='password-error'
 				>
-					{errorMessage ||
-						(updatePasswordIsSuccess
-							? updatePasswordData.message
-							: updatePasswordErrorMsg)}
+					{(updatePasswordIsSuccess && updatePasswordData.message) ||
+						errorMessage ||
+						updatePasswordErrorMsg ||
+						' '}
 				</span>
 				<form onSubmit={onSubmitHandler}>
 					<CustomInput
@@ -218,6 +219,7 @@ function Profile() {
 						data-testid='old-password'
 						id='old password'
 						label='old password'
+						required={false}
 						value={passwordFields.currPassword}
 						onChange={handlePasswordChange}
 					/>
@@ -227,6 +229,7 @@ function Profile() {
 						type='password'
 						id='new password'
 						data-testid='new-password'
+						required={false}
 						label='new password'
 						value={passwordFields.newPassword}
 						onChange={handlePasswordChange}
@@ -238,6 +241,7 @@ function Profile() {
 						id='repeat new password'
 						data-testid='repeat-new-password'
 						label='repeat new password'
+						required={false}
 						value={passwordFields.confirmPassword}
 						onChange={handlePasswordChange}
 					/>

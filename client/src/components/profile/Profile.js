@@ -61,7 +61,6 @@ function Profile() {
 	};
 
 	function validateUpdateProfileFormData() {
-		console.log('inside validator ');
 		if (updateProfileData.firstName === '') {
 			return {firstName: 'First name is required'};
 		} else if (/[^a-zA-Z\s]/.test(updateProfileData.firstName)) {

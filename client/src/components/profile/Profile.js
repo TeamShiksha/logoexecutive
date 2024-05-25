@@ -1,7 +1,10 @@
-import {useContext, useEffect, useState, useRef} from 'react';
+import {useContext, useEffect, useState} from 'react';
 import './Profile.css';
 import {UserContext} from '../../contexts/UserContext';
-import {INITIAL_UPDATE_PROFILE_FORM_DATA} from '../../constants';
+import {
+	INITIAL_UPDATE_PROFILE_FORM_DATA,
+	INITIAL_UPDATE_PASSWORD_FORM_DATA,
+} from '../../constants';
 import {useApi} from '../../hooks/useApi';
 import CustomInput from '../common/input/CustomInput';
 import {isValidPassword} from '../../constants';
@@ -10,15 +13,13 @@ function Profile() {
 	const [updateProfileData, setUpdateProfileData] = useState(
 		INITIAL_UPDATE_PROFILE_FORM_DATA,
 	);
-	const [changeInInputField, setChangeInInputField] = useState(false);
 	const {userData, fetchUserData} = useContext(UserContext);
 	const [updateProfileValidationErrors, setUpdateProfileValidationErrors] =
 		useState({});
-	const [currPassword, setCurrPassword] = useState('');
 	const [errorMessage, setErroMessage] = useState('');
-	const [newPassword, setNewPassword] = useState('');
-	const [repeatNewPassword, setRepeatNewPassword] = useState('');
-	const didInputChanged = useRef(false);
+	const [passwordFields, setPasswordFields] = useState(
+		INITIAL_UPDATE_PASSWORD_FORM_DATA,
+	);
 	const {data, errorMsg, makeRequest, loading, isSuccess, setIsSuccess} =
 		useApi({
 			url: `api/user/update-profile`,
@@ -32,44 +33,34 @@ function Profile() {
 		data: updatePasswordData,
 		errorMsg: updatePasswordErrorMsg,
 		makeRequest: makeUpdatePasswordRequest,
+		setIsSuccess: setUpdatePasswordIsSuccess,
 		loading: updatePasswordLoading,
 		isSuccess: updatePasswordIsSuccess,
 	} = useApi({
 		url: `api/user/update-password`,
 		method: 'post',
-		data: {
-			currPassword: currPassword,
-			newPassword: newPassword,
-			confirmPassword: repeatNewPassword,
-		},
+		data: passwordFields,
 	});
 
 	function onSubmitHandler(e) {
 		e.preventDefault();
-		setChangeInInputField(false);
-		makeUpdatePasswordRequest();
+		setUpdatePasswordIsSuccess(false);
+		const error = validatePasswordFormData();
+		return error ? setErroMessage(error) : makeUpdatePasswordRequest();
 	}
-	useEffect(() => {
-		!changeInInputField && setChangeInInputField(true);
-		if (currPassword || newPassword || repeatNewPassword) {
-			didInputChanged.current = true;
-		}
-		if (didInputChanged.current) {
-			if (!currPassword.match(isValidPassword)) {
-				setErroMessage('Invalid old password');
-			} else if (!newPassword.match(isValidPassword)) {
-				setErroMessage('Invalid new password');
-			} else if (newPassword !== repeatNewPassword) {
-				setErroMessage('Password does not match');
-			} else if (currPassword === newPassword) {
-				setErroMessage('New password cannot be same as old password');
-			} else {
-				setErroMessage('');
-			}
-		}
-	}, [currPassword, newPassword, repeatNewPassword]);
 
-	const validateUpdateProfileFormData = () => {
+	const handlePasswordChange = (e) => {
+		const {name, value} = e.target;
+		setPasswordFields((prev) => {
+			return {
+				...prev,
+				[name]: value,
+			};
+		});
+	};
+
+	function validateUpdateProfileFormData() {
+		console.log('inside validator ');
 		if (updateProfileData.firstName === '') {
 			return {firstName: 'First name is required'};
 		} else if (/[^a-zA-Z\s]/.test(updateProfileData.firstName)) {
@@ -91,6 +82,19 @@ function Profile() {
 			return {lastName: 'Last name should be 1 to 20 characters long'};
 		}
 		return null;
+	}
+	const validatePasswordFormData = () => {
+		if (!passwordFields.currPassword.match(isValidPassword)) {
+			return 'Invalid old password';
+		} else if (!passwordFields.newPassword.match(isValidPassword)) {
+			return 'Invalid new password';
+		} else if (passwordFields.newPassword !== passwordFields.confirmPassword) {
+			return 'Password does not match';
+		} else if (passwordFields.currPassword === passwordFields.newPassword) {
+			return 'New password cannot be same as old password';
+		} else {
+			return '';
+		}
 	};
 	const handleUpdateProfile = async (e) => {
 		setIsSuccess(false);
@@ -198,52 +202,47 @@ function Profile() {
 			</div>
 			<div className='profile-sub-cont'>
 				<h2 className='profile-heading'>Change Password</h2>
-				<div
-					className={`${updatePasswordIsSuccess && !changeInInputField ? 'profile-update-success' : 'input-errors'}`}
+				<span
+					className={`errors ${updatePasswordIsSuccess ? 'profile-update-success' : 'input-errors'}`}
+					data-testid='password-error'
 				>
-					<span data-testid='password-error'>
-						{errorMessage ||
-							(!changeInInputField &&
-								(updatePasswordIsSuccess
-									? updatePasswordData.message
-									: updatePasswordErrorMsg))}
-					</span>
-				</div>
+					{errorMessage ||
+						(updatePasswordIsSuccess
+							? updatePasswordData.message
+							: updatePasswordErrorMsg)}
+				</span>
 				<form onSubmit={onSubmitHandler}>
 					<CustomInput
-						name='old password'
+						name='currPassword'
 						type='password'
 						data-testid='old-password'
 						id='old password'
 						label='old password'
-						value={currPassword}
-						required
-						onChange={(e) => setCurrPassword(e.target.value)}
+						value={passwordFields.currPassword}
+						onChange={handlePasswordChange}
 					/>
 
 					<CustomInput
-						name='new password'
+						name='newPassword'
 						type='password'
 						id='new password'
 						data-testid='new-password'
 						label='new password'
-						value={newPassword}
-						required
-						onChange={(e) => setNewPassword(e.target.value)}
+						value={passwordFields.newPassword}
+						onChange={handlePasswordChange}
 					/>
 
 					<CustomInput
-						name='repeat new password'
+						name='confirmPassword'
 						type='password'
 						id='repeat new password'
 						data-testid='repeat-new-password'
 						label='repeat new password'
-						value={repeatNewPassword}
-						required
-						onChange={(e) => setRepeatNewPassword(e.target.value)}
+						value={passwordFields.confirmPassword}
+						onChange={handlePasswordChange}
 					/>
 					<button
-						disabled={errorMessage || updatePasswordLoading}
+						disabled={updatePasswordLoading}
 						className='profile-button'
 						type='submit'
 						data-testid='change-password-button'

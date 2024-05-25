@@ -30,6 +30,10 @@
 	color: red;
 	border: none;
 }
+.errors {
+	margin-top: 10px;
+	margin-bottom: 15px;
+}
 
 .profile-label {
 	font-weight: bold;

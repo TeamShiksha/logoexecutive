@@ -26,13 +26,6 @@
 	margin: 20px 0;
 	border: var(--border);
 }
-.input-errors {
-	color: red;
-}
-.errors {
-	margin-top: 10px;
-	margin-bottom: 15px;
-}
 
 .profile-label {
 	font-weight: bold;

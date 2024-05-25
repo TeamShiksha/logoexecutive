@@ -203,7 +203,7 @@ function Profile() {
 			<div className='profile-sub-cont'>
 				<h2 className='profile-heading'>Change Password</h2>
 				<span
-					className={`errors ${updatePasswordIsSuccess ? 'profile-update-success' : 'input-errors'}`}
+					className={`${updatePasswordIsSuccess ? 'profile-update-success' : 'form-error'}`}
 					data-testid='password-error'
 				>
 					{(updatePasswordIsSuccess && updatePasswordData.message) ||

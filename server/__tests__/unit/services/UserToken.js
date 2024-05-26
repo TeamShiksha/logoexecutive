@@ -10,10 +10,15 @@ const { UserTokenCollection } = require("../../../utils/firestore");
 const { mockUserTokens } = require("../../../utils/mocks/UserToken");
 
 describe("createForgotToken", () => {
+  afterEach(() => {
+    jest.restoreAllMocks(); 
+  });
+
   test("should return a new instance of UserToken if the operation is successful.", async () => {
     const newUserForgotToken = await createForgotToken(
       mockUserTokens[2].userId
     );
+    
     expect(newUserForgotToken).toBeInstanceOf(UserToken);
   });
   test("should return null if the Firestore operation fails or failure to create the token.", async () => {
@@ -21,6 +26,7 @@ describe("createForgotToken", () => {
       set: jest.fn().mockResolvedValue(null),
     });
     const result = await createForgotToken("invalid-userid");
+
     expect(result).toBeNull();
   });
   test("should throw an error if there's any issue during the process of creating or saving the forgot token", async () => {
@@ -34,10 +40,15 @@ describe("createForgotToken", () => {
 });
 
 describe("deleteUserToken function", () => {
+  afterEach(() => {
+    jest.restoreAllMocks(); 
+  });
+
   test("should return true to indicate that the deletion operation was successful", async () => {
     const userToken = { userTokenRef: { delete: jest.fn() } };
     userToken.userTokenRef.delete.mockResolvedValueOnce(true);
     const result = await deleteUserToken(userToken);
+
     expect(result).toBe(true);
   });
   test("should return false to indicate the failure of the deletion operation", async () => {
@@ -45,17 +56,20 @@ describe("deleteUserToken function", () => {
     deleteMock.mockResolvedValueOnce(false);
     const userToken = { userTokenRef: { delete: deleteMock } };
     const result = await deleteUserToken(userToken);
+
     expect(result).toBe(false);
   });
 });
 
 describe("createVerifyToken", () => {
+  afterEach(() => {
+    jest.restoreAllMocks(); 
+  });
+
   test("should return an instance of UserToken representing the created token.", async () => {
     const userId = mockUserTokens[1].userId;
-    jest.spyOn(UserTokenCollection, "doc").mockReturnValue({
-      set: jest.fn().mockResolvedValue({}),
-    });
     const newUserVerifyToken = await createVerifyToken(userId);
+
     expect(newUserVerifyToken).toBeInstanceOf(UserToken);
   });
   test("should return null if the function fails to create and save the verification token", async () => {
@@ -63,6 +77,7 @@ describe("createVerifyToken", () => {
       set: jest.fn().mockResolvedValue(null),
     });
     const result = await createVerifyToken("invalid-userid");
+
     expect(result).toBeNull();
   });
   test("should throw an error if Firestore operation fails", async () => {
@@ -75,22 +90,20 @@ describe("createVerifyToken", () => {
   });
 });
 describe("fetchTokenFromId", () => {
+  afterEach(() => {
+    jest.restoreAllMocks(); 
+  });
   test("should returns an instance of UserToken representing the fetched token.", async () => {
-    const token = mockUserTokens[1].token;
-    jest.spyOn(UserTokenCollection, "where").mockReturnValueOnce({
-      limit: jest.fn().mockReturnThis(),
-      get: jest.fn().mockResolvedValue({
-        docs: [{ data: () => mockUserTokens, ref: jest.fn() }],
-      }),
-    });
-    const userTokenDoc = await fetchTokenFromId(token);
+    const token = await createForgotToken(
+      mockUserTokens[2].userId
+    );
+    const userTokenDoc = await fetchTokenFromId(token.token);
+
     expect(userTokenDoc).toBeInstanceOf(UserToken);
   });
   test("should return null to indicate that no token was found.", async () => {
-    jest.spyOn(UserTokenCollection, "doc").mockReturnValue({
-      set: jest.fn().mockResolvedValue(null),
-    });
     const result = await fetchTokenFromId("invalid-token");
+
     expect(result).toBeNull();
   });
   test("should throw an error if Firestore operation fails", async () => {
@@ -104,24 +117,16 @@ describe("fetchTokenFromId", () => {
 });
 
 describe("fetchTokenFromUserid", () => {
+  afterEach(() => {
+    jest.restoreAllMocks(); 
+  });
+
   test("it fetches and returns a user token document from Firestore for the provided userId", async () => {
-    const mockUserTokenRef = {
-      get: jest.fn().mockResolvedValue({
-        forEach: jest.fn((callback) => {
-          callback({
-            data: () => mockUserTokens[0],
-            ref: "mockRef",
-          });
-        }),
-        empty: false,
-      }),
-    };
-    jest.spyOn(UserTokenCollection, "where").mockReturnValue(mockUserTokenRef);
+
+    await UserTokenCollection.doc(mockUserTokens[0].userId).set(mockUserTokens[0]);
     const user = await fetchTokenFromUserid(mockUserTokens[0].userId);
-    expect(user).toEqual({
-      ...mockUserTokens[0],
-      userTokenRef: "mockRef",
-    });
+
+    expect(user).toMatchObject(mockUserTokens[0]);
   });
   test("should throw an error if Firestore operation fails", async () => {
     jest.spyOn(UserTokenCollection, "where").mockImplementationOnce(() => {

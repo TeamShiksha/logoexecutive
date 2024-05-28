@@ -185,3 +185,12 @@ export const INITIAL_UPDATE_PROFILE_FORM_DATA = {
 	lastName: '',
 	email: '',
 };
+
+export const INITIAL_UPDATE_PASSWORD_FORM_DATA = {
+	currPassword: '',
+	newPassword: '',
+	confirmPassword: '',
+};
+
+export const isValidPassword =
+	/^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*\W)(?!.* ).{8,16}$/;

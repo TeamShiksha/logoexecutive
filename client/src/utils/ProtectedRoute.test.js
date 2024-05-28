@@ -3,7 +3,7 @@ import {AuthContext} from '../contexts/AuthContext';
 import ProtectedRoute from './ProtectedRoute';
 import {BrowserRouter, MemoryRouter, Route, Routes} from 'react-router-dom';
 import {UserContext} from '../contexts/UserContext';
-import {Account, Dashboard, Signin} from '../pages';
+import {Account, AdminDashboard, Dashboard, Home, Signin} from '../pages';
 
 describe('Protected Route', () => {
 	const mockUserData = {
@@ -114,5 +114,67 @@ describe('Protected Route', () => {
 			</AuthContext.Provider>,
 		);
 		expect(screen.getByText(/Sign in to dashboard/i)).toBeInTheDocument();
+	});
+	it('redirects non-admin user to /welcome route when attempting to access admin route', () => {
+		render(
+			<AuthContext.Provider value={{isAuthenticated: true}}>
+				<UserContext.Provider value={{userData: mockUserData, fetchUserData}}>
+					<MemoryRouter initialEntries={['/admin']}>
+						<Routes>
+							<Route
+								path='/admin'
+								element={
+									<ProtectedRoute adminOnly>
+										<AdminDashboard />
+									</ProtectedRoute>
+								}
+							/>
+							<Route path='/welcome' element={<Home />} />
+						</Routes>
+					</MemoryRouter>
+				</UserContext.Provider>
+			</AuthContext.Provider>,
+		);
+		expect(
+			screen.getByText(
+				/Empower Your Branding: Logo Executive Where Logos Shine in Every Size/i,
+			),
+		).toBeInTheDocument();
+	});
+	it('renders spinner when user data is loading for admin route', () => {
+		render(
+			<AuthContext.Provider value={{isAuthenticated: true}}>
+				<UserContext.Provider
+					value={{userData: null, loading: true, fetchUserData}}
+				>
+					<BrowserRouter>
+						<ProtectedRoute adminOnly>
+							<AdminDashboard />
+						</ProtectedRoute>
+					</BrowserRouter>
+				</UserContext.Provider>
+			</AuthContext.Provider>,
+		);
+		const spinnerElement = screen.getByTestId('spinner-container');
+		expect(spinnerElement).toBeInTheDocument();
+	});
+	it('renders admin dashboard when user is authenticated and an admin', () => {
+		const mockAdminUserData = {...mockUserData, userType: 'ADMIN'};
+
+		render(
+			<AuthContext.Provider value={{isAuthenticated: true}}>
+				<UserContext.Provider
+					value={{userData: mockAdminUserData, fetchUserData}}
+				>
+					<BrowserRouter>
+						<ProtectedRoute adminOnly>
+							<AdminDashboard />
+						</ProtectedRoute>
+					</BrowserRouter>
+				</UserContext.Provider>
+			</AuthContext.Provider>,
+		);
+		const adminDashboardElement = screen.getByText('Add Image');
+		expect(adminDashboardElement).toBeInTheDocument();
 	});
 });

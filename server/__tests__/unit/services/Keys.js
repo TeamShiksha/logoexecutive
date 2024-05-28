@@ -9,31 +9,9 @@ jest.mock("uuid", () => ({
     v4: jest.fn(() => mockKeys[0].keyId),
 }));
 
-
-describe("isAPIKeyPresent", () => {
-    test("should return true if the API key exists in the key collection", async () => {
-        await KeyCollection.doc(mockKeys[0].keyId).set(mockKeys[0]);
-        const result = await isAPIKeyPresent(mockKeys[0].key);
-        expect(result).toBe(true);
-    });
-
-    test("should return false if the API key does not exist in the key collection", async () => {
-        const mockApiKey = "mockApiKey";
-        const result = await isAPIKeyPresent(mockApiKey);
-        expect(result).toBe(false);
-    });
-
-    it("should throw an error if Firestore operation fails", async () => {
-        const mockApiKey = "mockApiKey";
-        const errorMessage = "Firestore operation failed";
-
-        jest.spyOn(KeyCollection, "where").mockReturnValue({
-            get: jest.fn().mockRejectedValueOnce(new Error(errorMessage))
-        });
-
-        await expect(isAPIKeyPresent(mockApiKey)).rejects.toThrow(errorMessage);
-    });
-});
+afterEach(() => {
+    jest.restoreAllMocks()
+})
 
 describe("createKey", () => {
     it("should create a key in the database and return the created key object", async () => {
@@ -78,6 +56,31 @@ describe("fetchKeysByuserid", () => {
             get: jest.fn().mockRejectedValueOnce(new Error(errorMessage))
         });
         await expect(fetchKeysByuserid(mockKeys[0].userId)).rejects.toThrow(errorMessage);
+    });
+});
+
+describe("isAPIKeyPresent", () => {
+    test("should return true if the API key exists in the key collection", async () => {
+        await KeyCollection.doc(mockKeys[0].keyId).set(mockKeys[0]);
+        const result = await isAPIKeyPresent(mockKeys[0].key);
+        expect(result).toBe(true);
+    });
+
+    test("should return false if the API key does not exist in the key collection", async () => {
+        const mockApiKey = "mockApiKey";
+        const result = await isAPIKeyPresent(mockApiKey);
+        expect(result).toBe(false);
+    });
+
+    it("should throw an error if Firestore operation fails", async () => {
+        const mockApiKey = "mockApiKey";
+        const errorMessage = "Firestore operation failed";
+
+        jest.spyOn(KeyCollection, "where").mockReturnValue({
+            get: jest.fn().mockRejectedValueOnce(new Error(errorMessage))
+        });
+
+        await expect(isAPIKeyPresent(mockApiKey)).rejects.toThrow(errorMessage);
     });
 });
 

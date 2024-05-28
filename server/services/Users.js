@@ -130,7 +130,7 @@ async function verifyUser(user) {
 
 async function updateUser(updateProfile, user) {
   try {
-    const {firstName, lastName} = updateProfile;
+    const { firstName, lastName } = updateProfile;
     const userRef = user.userRef;
     const update = {
       firstName: firstName,

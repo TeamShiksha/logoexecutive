@@ -1,5 +1,5 @@
 const { formExists, createForm } = require("./ContactUs");
-const { createImageData, fetchImageByCompanyFree, upload, uploadToS3 } = require("./Images");
+const { createImageData, fetchImageByCompanyFree, upload, uploadToS3, getImagesByUserId } = require("./Images");
 const { createKey, fetchKeysByuserid, destroyKey, isAPIKeyPresent } = require("./Keys");
 const { createSubscription, fetchSubscriptionByuserid } = require("./Subscriptions");
 const { createForgotToken, deleteUserToken, createVerifyToken,
@@ -23,5 +23,5 @@ module.exports = {
   fetchUsers, fetchUserByEmail, createUser, updatePasswordbyUser,
   fetchUserFromId, verifyUser, updateUser, deleteUserAccount, emailRecordExists, setUserAdmin,
   ContactUsService, ImageService, KeyService, SubscriptionService, UserTokenService, UserService, AdminService,
-  upload, uploadToS3
+  upload, uploadToS3, getImagesByUserId
 };

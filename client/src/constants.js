@@ -138,19 +138,6 @@ export const imageTableHeadings = [
 	'REUPLOAD',
 ];
 
-export const dummyUploadedImageDetails = [
-	{
-		name: 'TeamShiksha.png',
-		createDate: 'Dec 18, 2023',
-		updateDate: 'Dec 27, 2023',
-	},
-	{
-		name: 'LogoExecutive.jpg',
-		createDate: 'Sep 07, 2023',
-		updateDate: 'Oct 12, 2023',
-	},
-];
-
 export const adminTableHeadings = ['EMAIL', 'REASON', 'ACTION', 'CREATE DATE'];
 
 export const dummyAdminTableDetails = [
@@ -198,3 +185,12 @@ export const INITIAL_UPDATE_PROFILE_FORM_DATA = {
 	lastName: '',
 	email: '',
 };
+
+export const INITIAL_UPDATE_PASSWORD_FORM_DATA = {
+	currPassword: '',
+	newPassword: '',
+	confirmPassword: '',
+};
+
+export const isValidPassword =
+	/^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*\W)(?!.* ).{8,16}$/;

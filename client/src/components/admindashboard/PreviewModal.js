@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import CustomInput from '../common/input/CustomInput';
 import Modal from '../common/modal/Modal';
+import {useApi} from '../../hooks/useApi';
 import './PreviewModal.css';
 
 function PreviewModal({
@@ -8,25 +9,32 @@ function PreviewModal({
 	handleImageNameChange,
 	isModalOpen,
 	setIsModalOpen,
-	isUploadSuccessfull,
-	setIsUploadSuccessfull,
-	setUploadedImages,
+	fetchUploadedImages,
 }) {
-	function handleUpload(event) {
-		event.preventDefault();
-		setIsUploadSuccessfull(true);
-		setUploadedImages((prevImages) => [
-			...prevImages,
-			{
-				name: image.name,
-				createDate: new Date().toLocaleDateString('en-US', {
-					month: 'short',
-					day: '2-digit',
-					year: 'numeric',
-				}),
-				updateDate: '-',
+	const formData = new FormData();
+	formData.append('imageName', image?.name);
+	formData.append('logo', image?.data);
+	const {data, makeRequest, isSuccess, errorMsg, loading} = useApi(
+		{
+			url: `api/admin/upload`,
+			method: 'post',
+			headers: {
+				'Content-Type': 'multipart/form-data',
 			},
-		]);
+			data: formData,
+		},
+		true,
+	);
+
+	async function handleUpload(event) {
+		event.preventDefault();
+		const success = await makeRequest();
+		if (success) {
+			fetchUploadedImages();
+			setTimeout(() => {
+				setIsModalOpen(false);
+			}, 3000);
+		}
 	}
 
 	return (
@@ -45,22 +53,22 @@ function PreviewModal({
 					type='text'
 					label='Image name'
 					name='imagename'
-					value={image.name}
+					value={image?.name}
 					onChange={handleImageNameChange}
+					disabled={isSuccess}
 				/>
 				<button
 					type='submit'
 					className='images-upload-btn'
-					disabled={isUploadSuccessfull}
+					disabled={isSuccess || loading}
 				>
 					Upload
 				</button>
 			</form>
-			{isUploadSuccessfull && (
-				<p className='image-upload-success'>Image uploaded successfully.</p>
-			)}
+			{isSuccess && <p className='image-upload-success'>{data?.message}</p>}
+			{errorMsg && <p className='image-upload-error'>{errorMsg}</p>}
 			<div className='preview-container'>
-				<img src={image.url} alt={image.name} data-testid='image-preview' />
+				<img src={image?.url} alt={image?.name} data-testid='image-preview' />
 			</div>
 		</Modal>
 	);
@@ -74,9 +82,7 @@ PreviewModal.propTypes = {
 	handleImageNameChange: PropTypes.func.isRequired,
 	isModalOpen: PropTypes.bool.isRequired,
 	setIsModalOpen: PropTypes.func.isRequired,
-	isUploadSuccessfull: PropTypes.bool.isRequired,
-	setIsUploadSuccessfull: PropTypes.func.isRequired,
-	setUploadedImages: PropTypes.func.isRequired,
+	fetchUploadedImages: PropTypes.func.isRequired,
 };
 
 export default PreviewModal;

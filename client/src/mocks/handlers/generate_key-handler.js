@@ -1,4 +1,5 @@
 import {rest} from 'msw';
+import {formatDate} from '../../utils/helpers';
 
 var keyDescriptionMap = new Map();
 export const generateKeyHandler = [
@@ -16,16 +17,8 @@ export const generateKeyHandler = [
 						keyDescription: 'Test API Key',
 						key: '7D8ED2F3F2C748BC9B96CED7EE2DE1BF',
 						usageCount: 0,
-						createdAt: new Date().toLocaleDateString('en-US', {
-							day: '2-digit',
-							month: 'short',
-							year: 'numeric',
-						}),
-						updatedAt: new Date().toLocaleDateString('en-US', {
-							day: '2-digit',
-							month: 'short',
-							year: 'numeric',
-						}),
+						createdAt: formatDate(),
+						updatedAt: formatDate(),
 					},
 				}),
 			);
@@ -43,8 +36,7 @@ export const generateKeyHandler = [
 			return res(
 				ctx.status(403),
 				ctx.json({
-					message:
-						'The maximum limit for key generation has been reached. Please consider upgrading your subscription to generate additional keys',
+					message: 'Limit reached. Consider upgrading your plan',
 					statusCode: 403,
 					error: 'Forbidden',
 				}),

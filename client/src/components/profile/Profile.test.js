@@ -384,5 +384,8 @@ describe('Profile component', () => {
 				screen.getByText(/Password Updated Successfully/i),
 			).toBeInTheDocument();
 		});
+		expect(oldPasswordInput.innerText).toBe(undefined);
+		expect(newPasswordInput.innerText).toBe(undefined);
+		expect(repeatNewPasswordInput.innerText).toBe(undefined);
 	});
 });

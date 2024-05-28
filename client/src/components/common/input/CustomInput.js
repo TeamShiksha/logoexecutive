@@ -9,7 +9,6 @@ function CustomInput({
 	onChange,
 	error,
 	className,
-	required = true,
 	...rest
 }) {
 	return (
@@ -20,7 +19,7 @@ function CustomInput({
 				name={name}
 				value={value}
 				onChange={onChange}
-				required={required}
+				required
 				className={`custom-input ${className}`}
 				{...rest}
 			/>
@@ -37,7 +36,6 @@ CustomInput.propTypes = {
 	label: PropTypes.string.isRequired,
 	value: PropTypes.string.isRequired,
 	name: PropTypes.string.isRequired,
-	required: PropTypes.bool,
 	onChange: PropTypes.func.isRequired,
 	error: PropTypes.string,
 	className: PropTypes.string,

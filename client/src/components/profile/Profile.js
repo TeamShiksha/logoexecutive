@@ -47,7 +47,12 @@ function Profile() {
 		setUpdatePasswordIsSuccess(false);
 		const error = validatePasswordFormData();
 		setErroMessage(error);
-		return !error && makeUpdatePasswordRequest();
+		return (
+			!error &&
+			makeUpdatePasswordRequest().then((res) => {
+				res && setPasswordFields(INITIAL_UPDATE_PASSWORD_FORM_DATA);
+			})
+		);
 	}
 
 	const handlePasswordChange = (e) => {
@@ -211,14 +216,13 @@ function Profile() {
 						updatePasswordErrorMsg ||
 						' '}
 				</span>
-				<form onSubmit={onSubmitHandler}>
+				<form noValidate onSubmit={onSubmitHandler}>
 					<CustomInput
 						name='currPassword'
 						type='password'
 						data-testid='old-password'
 						id='old password'
 						label='old password'
-						required={false}
 						value={passwordFields.currPassword}
 						onChange={handlePasswordChange}
 					/>
@@ -228,7 +232,6 @@ function Profile() {
 						type='password'
 						id='new password'
 						data-testid='new-password'
-						required={false}
 						label='new password'
 						value={passwordFields.newPassword}
 						onChange={handlePasswordChange}
@@ -240,7 +243,6 @@ function Profile() {
 						id='repeat new password'
 						data-testid='repeat-new-password'
 						label='repeat new password'
-						required={false}
 						value={passwordFields.confirmPassword}
 						onChange={handlePasswordChange}
 					/>

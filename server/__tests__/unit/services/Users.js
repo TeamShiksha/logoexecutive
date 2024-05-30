@@ -192,8 +192,6 @@ describe('Users service', () => {
       lastName: "User",
       password: "password123",
     };
-
-    // Mock bcrypt.hash to throw an error
     jest.spyOn(bcrypt, "hash").mockImplementationOnce(() => {
       throw new Error("Hashing failed");
     });

@@ -1,25 +1,14 @@
-const dayjs = require("dayjs");
 const { UserToken } = require("../models");
-const { Timestamp } = require("firebase-admin/firestore");
 const { UserTokenTypes } = require("../utils/constants");
 const { UserTokenCollection } = require("../utils/firestore");
-const { v4 } = require("uuid");
 
 /**
  * Creates user token in "UserTokens" collection
  * @param {string} userId - userId associate with token
  **/
 async function createForgotToken(userId) {
-  const expireAt = dayjs().add(1, "day").toDate();
   try {
-    const newUserForgotToken = {
-      userId: userId,
-      type: UserTokenTypes.FORGOT,
-      userTokenId: v4(),
-      token: v4().replaceAll("-", ""),
-      createdAt: Timestamp.now(),
-      expireAt: Timestamp.fromDate(expireAt),
-    };
+    const newUserForgotToken = await UserToken.NewUserToken({userId,type:UserTokenTypes.FORGOT});
     const result = await UserTokenCollection.doc(
       newUserForgotToken.userTokenId
     ).set(newUserForgotToken);
@@ -45,16 +34,8 @@ async function deleteUserToken(userToken) {
  * @param {string} userId - userId associate with token
  **/
 async function createVerifyToken(userId) {
-  const expireAt = dayjs().add(1, "day").toDate();
   try {
-    const newUserVerifyToken = {
-      userId: userId,
-      type: UserTokenTypes.VERIFY,
-      userTokenId: v4(),
-      token: v4().replaceAll("-", ""),
-      createdAt: Timestamp.now(),
-      expireAt: Timestamp.fromDate(expireAt),
-    };
+    const newUserVerifyToken = await UserToken.NewUserToken({userId,type:UserTokenTypes.VERIFY});
     const result = await UserTokenCollection.doc(
       newUserVerifyToken.userTokenId
     ).set(newUserVerifyToken);

@@ -53,18 +53,6 @@ class UserToken {
   }
 
   /**
-   * Returns normalized data that can be used in JS
-   **/
-  get data() {
-    return {
-      userId: this.userId,
-      token: this.token,
-      createdAt: new Date(this.createdAt),
-      expireAt: new Date(this.expireAt),
-    };
-  }
-
-  /**
    * Generates a link that can be shared via email
    *
    * @param {UserTokenTypes} path - path of service

@@ -12,6 +12,7 @@ const { Users } = require("../../../models");
 const { mockUsers } = require("../../../utils/mocks/Users");
 const { mockKeys } = require("../../../utils/mocks/Keys");
 const { mockSubscriptions } = require("../../../utils/mocks/Subscriptions");
+const bcrypt = require('bcrypt');
 
 describe("emailRecordExists", () => {
   afterEach(() => {
@@ -27,7 +28,7 @@ describe("emailRecordExists", () => {
 
   test("should return false if email does not exist in user collection", async () => {
     await UserCollection.doc(mockUsers[0].userId).set(mockUsers[0]);
-    const exists = await emailRecordExists(mockUsers[1].email);
+    const exists = await emailRecordExists("nonexsitinguser@gmail.com");
 
     expect(exists).toBe(false);
   });
@@ -180,6 +181,22 @@ describe("createUser", () => {
     });
 
     await expect(createUser(mockUsers[0])).rejects.toThrow("Firestore operation failed");
+  });
+});
+
+describe('Users service', () => {
+  it("should throw an error if bcrypt.hash throws an error", async () => {
+    const mockUser = {
+      email: "test@example.com",
+      firstName: "Test",
+      lastName: "User",
+      password: "password123",
+    };
+    jest.spyOn(bcrypt, "hash").mockImplementationOnce(() => {
+      throw new Error("Hashing failed");
+    });
+
+    await expect(Users.NewUser(mockUser)).rejects.toThrow("Hashing failed");
   });
 });
 

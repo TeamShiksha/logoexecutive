@@ -31,23 +31,6 @@ class ContactUs {
     this.updatedAt = normalizeDate(params.updatedAt);
     this.activityStatus = params.activityStatus;
   }
-
-  /**
-   * Get the user data in a structured format.
-   * Firebase database methods requires objects not created using "new" keyword
-   * @returns {Object} An object containing form data.
-   */
-  get data() {
-    return {
-      name: this.name,
-      email: this.email,
-      message: this.message,
-      assignedTo: this.assignedTo,
-      activityStatus: this.activityStatus,
-      createdAt: new Date(this.createdAt),
-      updatedAt: new Date(this.updatedAt),
-    };
-  }
 }
 
 

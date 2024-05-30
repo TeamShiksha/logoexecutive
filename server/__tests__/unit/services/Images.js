@@ -4,6 +4,7 @@ const {fetchImageByCompanyFree, getImagesByUserId, createImageData, uploadToS3} 
 const cloudFront = require("../../../utils/cloudFront");
 const { Timestamp } = require("firebase-admin/firestore");
 const { S3Client,PutObjectCommand } = require("@aws-sdk/client-s3");
+const { Images } = require("../../../models");
 
 jest.mock("../../../utils/cloudFront", () => ({
   cloudFrontSignedURL: jest.fn(),
@@ -19,14 +20,14 @@ jest.mock("@aws-sdk/client-s3", () => ({
   })),
   PutObjectCommand: jest.fn(),
 }));
-const mockImage = {
+const mockImage = new Images ({
   domainame :"google.jpg",
   extension: "jpg",
   imageId: "12579986-7ad0-4a58-b204-211b583ab05b",
   createdAt: Timestamp.fromDate(new Date("02-02-2002")),
   updatedAt:Timestamp.fromDate(new Date("02-02-2002")),
   uploadedBy :"5e8bf5ae-1ac3-4daf-b1e4-45d220cfb5a9"
-};
+});
 
 describe("uploadToS3", () => {
   beforeEach(()=>{
@@ -69,7 +70,7 @@ describe("fetchImageByCompanyFree", () => {
   });
 
   it("should fetch image CDN URL by company successfully", async () => {
-    await ImageCollection.doc(mockImage.imageId).set(mockImage);
+    await ImageCollection.doc(mockImage.imageId).set(mockImage.data);
     const mockCDNLink = "https://du4goljobz66l.cloudfront.net/meta.png?Expires=1706882374&Key-Pair-Id=K1CBTPCVEWK03E&Signature=l6ZpbQ-Z3WtJQ8inaDomAAAhcnnC0U2R~5Su7HWjC8fbbeQI4e4JBK368guQFYtc8rQAJMur446ozoXJE-9Hcj125NlZFSMqpeUsjam-nk9Wb2d8XGR6UjyxYLqGbhca8WYwl~h0CzHbe20PJXZbyuFPTufCrBTkIoh4o3Mg3MQDe2fPf5z6L9xLgVtbOrpJQoHZ0YlWTNvWJWutL-AFX8KbisrBaMi8zRa6h-mSfXuIoUyjziMRA5gPA0T8QSUJ8iLdbURwWxvRpRpM0Ohrjk06sWDSTkNzLL~pVNyL7LwO04mAHVK4XYgK5179xcZ-BjMMW1qJD3YF7G~xdcsXJw__";
     const mockSignedUrl = jest.fn(() => mockCDNLink);
     jest.spyOn(cloudfrontSigner, "getSignedUrl").mockImplementation(mockSignedUrl);
@@ -102,7 +103,7 @@ describe("fetchImageByCompanyFree", () => {
 describe("getImagesByUserId", ()=>{
 
   it("should return the all the images if the admin has images uploaded", async()=>{
-    await ImageCollection.doc(mockImage.imageId).set(mockImage);
+    await ImageCollection.doc(mockImage.imageId).set(mockImage.data);
     const userId = "5e8bf5ae-1ac3-4daf-b1e4-45d220cfb5a9";
     const imageData = await getImagesByUserId(userId);
     expect(imageData).toEqual([{

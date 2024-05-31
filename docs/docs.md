@@ -49,7 +49,7 @@ share a common theme.
 **Example Call:**
 
 ```sh
-https://logoexecutive.netlify.app/api/business/logo/search?size=36&format=jpg&key=g&API_KEY=YOUR_API_KEY
+https://logoexecutive.netlify.app/api/business/logo/search?key=g&API_KEY=YOUR_API_KEY
 ```
 
 We encourage you to explore and integrate these endpoints into your

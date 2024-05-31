@@ -5,40 +5,34 @@ const {
 
 const { mockUsers } = require("../../../utils/mocks/Users");
 const { SubscriptionCollection } = require("../../../utils/firestore");
+const { Subscriptions } = require("../../../models");
 
+afterEach(() => {
+  jest.restoreAllMocks()
+})
 describe("createSubscription", () => {
   test("should create a subscription collection of a user", async () => {
     const createdSubscription = await createSubscription(mockUsers[0].userId);
-    expect(createdSubscription.subscriptionId).toBeTruthy();
+    expect(createdSubscription).toBeInstanceOf(Subscriptions);
   });
 
   test("should throw an error if an error ocurrs while creating a subscription", async () => {
     const errorMessage = "Firestore operation failed";
-
     jest.spyOn(SubscriptionCollection, "doc").mockReturnValueOnce({
       set: jest.fn().mockRejectedValue(new Error(errorMessage)),
     });
-
-    await expect(createSubscription(mockUsers[0].userId)).rejects.toThrow(
-      errorMessage
-    );
+    await expect(createSubscription(mockUsers[0].userId)).rejects.toThrow(errorMessage);
   });
 });
 
 describe("fetchSubscriptionByuserid", () => {
   test("should return subscription for user if userid matches", async () => {
-    const fetchUsersSubscription = await fetchSubscriptionByuserid(
-      mockUsers[0].userId
-    );
-    expect(fetchUsersSubscription.subscriptionId).toBeTruthy();
+    await createSubscription(mockUsers[0].userId);
+    const fetchUsersSubscription = await fetchSubscriptionByuserid(mockUsers[0].userId);
+    expect(fetchUsersSubscription).toBeInstanceOf(Subscriptions);
   });
 
   test("should return null if userid does not match", async () => {
-    jest.spyOn(SubscriptionCollection, "where").mockReturnValue({
-      limit: jest.fn().mockReturnValueOnce({
-        get: jest.fn().mockResolvedValueOnce({ empty: true }),
-      }),
-    });
     const value = await fetchSubscriptionByuserid(mockUsers[1].userId);
     expect(value).toBeNull();
   });
@@ -51,9 +45,6 @@ describe("fetchSubscriptionByuserid", () => {
         get: jest.fn().mockRejectedValue(new Error(errorMessage)),
       }),
     });
-
-    await expect(
-      fetchSubscriptionByuserid(mockUsers[0].userId)
-    ).rejects.toThrow(errorMessage);
+    await expect(fetchSubscriptionByuserid(mockUsers[0].userId)).rejects.toThrow(errorMessage);
   });
 });

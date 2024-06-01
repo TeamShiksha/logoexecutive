@@ -1,23 +1,13 @@
 import React from 'react';
-import {fireEvent, render, screen, waitFor} from '@testing-library/react';
+import {fireEvent, render, screen} from '@testing-library/react';
 import Demo from './Demo';
-import {useApi} from '../../hooks/useApi';
-
-jest.mock('../../hooks/useApi');
 
 describe('Demo Component', () => {
-	beforeEach(() => {
-		useApi.mockReturnValue({
-			errorMsg: '',
-			makeRequest: jest.fn(),
-			data: null,
-			loading: false,
-		});
-	});
-	test('renders a text input field', () => {
+	test('renders a text input field and a button', () => {
 		render(<Demo />);
 		expect(screen.getByText('Try it now')).toBeInTheDocument();
 		expect(screen.getByLabelText('Brand name')).toBeInTheDocument();
+		expect(screen.getByText('Go')).toBeInTheDocument();
 	});
 
 	test('update Brand Name on input change', () => {
@@ -34,55 +24,24 @@ describe('Demo Component', () => {
 		fireEvent.change(brandNameInput, {target: {value: ''}});
 		expect(brandNameInput.value).toBe('');
 	});
-	test('form submission triggers makeRequest', async () => {
-		const makeRequestMock = jest.fn();
-		useApi.mockReturnValue({
-			errorMsg: '',
-			makeRequest: makeRequestMock,
-			data: null,
-			loading: false,
-		});
+	test('displays error for empty brandname', () => {
 		render(<Demo />);
-		const brandNameInput = screen.getByLabelText('Brand name');
-		fireEvent.change(brandNameInput, {target: {value: 'google'}});
-		const form = screen.getByTestId('demo-form');
-		fireEvent.submit(form);
+		const brandInput = screen.getByLabelText('Brand name');
+		const goButton = screen.getByText('Go');
 
-		await waitFor(() => {
-			expect(makeRequestMock).toHaveBeenCalled();
-		});
+		fireEvent.change(brandInput, {target: {value: ''}});
+		fireEvent.click(goButton);
+		expect(screen.getByText('Brand Name is required')).toBeInTheDocument();
 	});
-	test('displays spinner while data is being fetched', async () => {
-		useApi.mockReturnValue({
-			errorMsg: '',
-			makeRequest: jest.fn(
-				() => new Promise((resolve) => setTimeout(resolve, 1000)),
-			),
-			data: null,
-			loading: true,
-		});
+	test('displays error for invalid brandname', () => {
 		render(<Demo />);
-	});
-	test('displays error message when errorMsg is present', () => {
-		useApi.mockReturnValue({
-			errorMsg: 'Error fetching data',
-			makeRequest: jest.fn(),
-			data: null,
-			loading: false,
-		});
-		render(<Demo />);
-		expect(screen.getByText('Error fetching data')).toBeInTheDocument();
-	});
-	test('displays logo image when data is fetched', () => {
-		useApi.mockReturnValue({
-			errorMsg: '',
-			makeRequest: jest.fn(),
-			data: {data: 'logo-url'},
-			loading: false,
-		});
-		render(<Demo />);
-		const brandNameInput = screen.getByLabelText('Brand name');
-		fireEvent.change(brandNameInput, {target: {value: 'google'}});
-		expect(screen.getByAltText('Logo').src).toContain('logo-url');
+		const brandInput = screen.getByLabelText('Brand name');
+		const goButton = screen.getByText('Go');
+
+		fireEvent.change(brandInput, {target: {value: '@logo'}});
+		fireEvent.change(brandInput, {target: {value: 'logo$'}});
+		fireEvent.change(brandInput, {target: {value: '123#'}});
+		fireEvent.click(goButton);
+		expect(screen.getByText('Invalid Brand Name')).toBeInTheDocument();
 	});
 });

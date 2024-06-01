@@ -49,5 +49,6 @@ export const useApi = (config, isProtected = false) => {
 		makeRequest,
 		isSuccess,
 		setIsSuccess,
+		setErrorMsg,
 	};
 };

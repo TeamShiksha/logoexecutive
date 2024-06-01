@@ -1,4 +1,5 @@
 const nodemailer = require("nodemailer");
+const { config } = require("./constants");
 
 /**
  * Sends an email using the provided parameters.
@@ -12,9 +13,9 @@ const nodemailer = require("nodemailer");
 async function sendEmail(email, subject, text) {
   try {
     const transporter = nodemailer.createTransport({
-      host: process.env.EMAIL_HOST,
-      service: process.env.EMAIL_SERVICE,
-      port: Number(process.env.EMAIL_PORT),
+      host: config.EMAIL_HOST,
+      service: config.EMAIL_SERVICE,
+      port: Number(config.EMAIL_PORT),
       secure: true,
       auth: {
         user: process.env.EMAIL_USER,

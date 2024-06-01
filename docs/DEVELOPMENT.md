@@ -7,6 +7,7 @@ This document provides step-by-step instructions for cloning and running the pro
 ### [AWS setup](#aws-setup)
 ### [Firebase setup](#firebase-setup)
 ### [Firebase emulator setup](#firebase-emulator-setup)
+### [Important Note about Environment Variables and Constants](#important-note-about-environment-variables-and-constants)
 
 ## Clone and install dependencies
 Execute the following commands sequentially to clone the project and install all its dependencies:
@@ -90,8 +91,30 @@ firebase emulators:start
 
 # You can access the Firebase UI at http://localhost:4040
 ```
+## Important Note about Environment Variables and Constants
+Due to the limitation imposed by Netlify, which provides only 4KB of environment storage for environment variables, some of the environment variables had to be moved to the `constants.js` file. This approach was taken to ensure that the application could accommodate all the necessary configuration values within the available storage space.
 
-## All set! 
+In addition to the environmental variables defined in the `.env` files, some configuration values are stored in the `constants.js` file. This file contains values that are either constants or derived from other environmental variables.
+
+The `constants.js` file exports an object named `config` with the following properties:
+
+All the FIRESTORE related keys and UNIVERSE_DOMAIN can be found in serviceAccountKey.json.
+
+- `BUCKET_REGION`: Derived from the `BUCKET_NAME` environment variable.
+- `EMAIL_HOST`: Constant value for the email host.
+- `EMAIL_PORT`: Constant value for the email port.
+- `EMAIL_SERVICE`: Constant value for the email service.
+- `FIRESTORE_AUTH_PROVIDER`: Constant value for the Firebase authentication provider URL.
+- `FIRESTORE_AUTH_URI`: Constant value for the Firebase authentication URI.
+- `FIRESTORE_CLIENT_CERT`: Derived from the `FIREBASE_ADMINSDK_ID` and `FIRESTORE_PROJECT_ID` environment variables.
+- `FIRESTORE_CLIENT_EMAIL`: Derived from the `FIREBASE_ADMINSDK_ID` and `FIRESTORE_PROJECT_ID` environment variables.
+- `FIRESTORE_TOKEN_URI`: Constant value for the Firebase token URI.
+- `KEY`: Constant value for the S3 bucket folder name.
+- `UNIVERSE_DOMAIN`: Constant value for the universe domain.
+
+These configuration values are used throughout the application and can be accessed by importing the `config` object from the `constants.js` file.
+
+## All set!
 In a new terminal, execute the following command to initiate the development environment.
 ```sh
 yarn dev

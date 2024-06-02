@@ -11,6 +11,7 @@ import userDeleteHandler from './handlers/user-delete';
 import {generateKeyHandler} from './handlers/generate_key-handler';
 import imageUploadHandler from './handlers/imageUpload-handler';
 import {uploadedImagesHandler} from './handlers/uploadedImages-handler';
+import {displayImagesHandler} from './handlers/demo-displayImage-handler';
 
 const handlers = [
 	...signinHandler,
@@ -26,6 +27,7 @@ const handlers = [
 	...generateKeyHandler,
 	...imageUploadHandler,
 	...uploadedImagesHandler,
+	...displayImagesHandler,
 ];
 
 export default handlers;

@@ -45,10 +45,10 @@ function Settings() {
 	return (
 		<section className='settings' data-testid='testid-settings'>
 			<h1 className='sett-cont-heading'>Settings</h1>
-			<button className='settings-button'>Download Account Data</button>
-			<p className='setting-instruction'>
-				This will prepare a PDF download of your personal data.
-			</p>
+			<button disabled className='settings-button'>
+				Download Account Data
+			</button>
+			<p className='setting-instruction'>Coming Soon ...</p>
 			<button onClick={openModal} className='settings-button settings-delete'>
 				Delete Account
 			</button>

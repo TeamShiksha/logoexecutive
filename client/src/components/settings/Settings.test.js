@@ -23,6 +23,7 @@ describe('Settings component', () => {
 		expect(headingElement).toBeInTheDocument();
 		const downloadButton = screen.getByText(/Download Account Data/i);
 		expect(downloadButton).toBeInTheDocument();
+		expect(downloadButton).toBeDisabled();
 		const deleteButton = screen.getByText(/Delete Account/i);
 		expect(deleteButton).toBeInTheDocument();
 	});

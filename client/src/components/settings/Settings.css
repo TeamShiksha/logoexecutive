@@ -32,7 +32,9 @@
 	font-weight: 500;
 	width: fit-content;
 }
-
+.settings-button:disabled {
+	background-color: var(--faded-purple);
+}
 .settings-delete {
 	background-color: rgba(255, 0, 0, 0.7);
 }

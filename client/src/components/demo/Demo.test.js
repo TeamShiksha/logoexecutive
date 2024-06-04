@@ -48,18 +48,17 @@ describe('Demo Component', () => {
 		fireEvent.click(goButton);
 		expect(screen.getByText('Invalid Brand Name')).toBeInTheDocument();
 	});
-	// test('displays image for valid brandname', async () => {
-	// 	render(<Demo />);
-	// 	const brandInput = screen.getByLabelText('Brand name');
-	// 	const goButton = screen.getByText('Go');
+	test('displays image for valid brandname', async () => {
+		render(<Demo />);
+		const brandInput = screen.getByLabelText('Brand name');
+		const goButton = screen.getByText('Go');
 
-	// 	fireEvent.change(brandInput, {target: {value: 'Google'}});
-	// 	fireEvent.click(goButton);
-	// 	screen.debug();
-	// 	await waitFor(() => {
-	// 		const logo = screen.getByAltText('Logo');
-	// 		expect(logo).toBeInTheDocument();
-	// 		expect(logo.src).toContain('Google.png');
-	// 	});
-	// });
+		fireEvent.change(brandInput, {target: {value: 'Google'}});
+		fireEvent.click(goButton);
+
+		await waitFor(() => {
+			const logo = screen.getByAltText('Logo');
+			expect(logo).toBeInTheDocument();
+		});
+	});
 });

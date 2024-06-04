@@ -2,9 +2,8 @@ import {rest} from 'msw';
 const mockImagesData = [{domain: 'Google.png'}, {domain: 'Meta.png'}];
 export const displayImagesHandler = [
 	rest.get('api/public/logo', (req, res, ctx) => {
-		// console.log("Request is logged ******",req);
-		const {domain} = req.url.searchParams;
-		// console.log("Domain name is ******",domain);
+		const domain = req.url.searchParams.get('domain');
+
 		if (!domain) {
 			return res(
 				ctx.status(422),

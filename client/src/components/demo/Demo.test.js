@@ -1,11 +1,6 @@
 import React from 'react';
 import {fireEvent, render, screen, waitFor} from '@testing-library/react';
 import Demo from './Demo';
-import {server} from '../../mocks/server';
-beforeAll(() => server.listen());
-afterEach(() => server.resetHandlers());
-afterAll(() => server.close());
-
 describe('Demo Component', () => {
 	test('renders a text input field and a button', () => {
 		render(<Demo />);
@@ -13,14 +8,12 @@ describe('Demo Component', () => {
 		expect(screen.getByLabelText('Brand name')).toBeInTheDocument();
 		expect(screen.getByText('Go')).toBeInTheDocument();
 	});
-
 	test('update Brand Name on input change', () => {
 		render(<Demo />);
 		const brandNameInput = screen.getByLabelText('Brand name');
 		fireEvent.change(brandNameInput, {target: {value: 'google'}});
 		expect(brandNameInput.value).toBe('google');
 	});
-
 	test('update Brand Name on reverted change', () => {
 		render(<Demo />);
 		const brandNameInput = screen.getByLabelText('Brand name');
@@ -32,7 +25,6 @@ describe('Demo Component', () => {
 		render(<Demo />);
 		const brandInput = screen.getByLabelText('Brand name');
 		const goButton = screen.getByText('Go');
-
 		fireEvent.change(brandInput, {target: {value: ''}});
 		fireEvent.click(goButton);
 		expect(screen.getByText('Brand Name is required')).toBeInTheDocument();
@@ -41,7 +33,6 @@ describe('Demo Component', () => {
 		render(<Demo />);
 		const brandInput = screen.getByLabelText('Brand name');
 		const goButton = screen.getByText('Go');
-
 		fireEvent.change(brandInput, {target: {value: '@logo'}});
 		fireEvent.change(brandInput, {target: {value: 'logo$'}});
 		fireEvent.change(brandInput, {target: {value: '123#'}});
@@ -52,13 +43,11 @@ describe('Demo Component', () => {
 		render(<Demo />);
 		const brandInput = screen.getByLabelText('Brand name');
 		const goButton = screen.getByText('Go');
-
 		fireEvent.change(brandInput, {target: {value: 'Google'}});
 		fireEvent.click(goButton);
-
 		await waitFor(() => {
 			const logo = screen.getByAltText('Logo');
-			expect(logo).toBeInTheDocument();
+			expect(logo).toHaveAttribute('src', 'http://localhost/google.png');
 		});
 	});
 });

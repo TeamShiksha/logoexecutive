@@ -1,9 +1,11 @@
 import {rest} from 'msw';
-const mockImagesData = [{domain: 'Google.png'}, {domain: 'Meta.png'}];
+const mockImagesData = {
+	imageName: 'Google.png',
+	data: 'http://localhost/google.png',
+};
 export const displayImagesHandler = [
 	rest.get('api/public/logo', (req, res, ctx) => {
 		const domain = req.url.searchParams.get('domain');
-
 		if (!domain) {
 			return res(
 				ctx.status(422),
@@ -13,7 +15,7 @@ export const displayImagesHandler = [
 				}),
 			);
 		}
-		const image = mockImagesData.find((img) => img.domain === `${domain}.png`);
+		const image = mockImagesData['imageName'] === `${domain}.png`;
 		if (!image) {
 			return res(
 				ctx.status(404),
@@ -27,7 +29,7 @@ export const displayImagesHandler = [
 			ctx.status(200),
 			ctx.json({
 				statusCode: 200,
-				data: image,
+				data: mockImagesData['data'],
 			}),
 		);
 	}),

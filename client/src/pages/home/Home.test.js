@@ -23,7 +23,9 @@ describe('Welcome Page', () => {
 	it('should render Demo Section', () => {
 		renderWelcomePage();
 		expect(screen.getByText('Try it now')).toHaveClass('demo-heading');
-		expect(screen.getByTestId('demo-input-description')).toBeInTheDocument();
+		expect(
+			screen.getByText(/Enter the name of a brand or the URL of a website/i),
+		).toHaveClass('demo-input-description');
 		const input = screen.getByLabelText('Brand name');
 		expect(input).toBeInTheDocument();
 		fireEvent.change(input, {target: {value: 'google'}});

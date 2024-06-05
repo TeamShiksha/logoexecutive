@@ -12,6 +12,7 @@ import {generateKeyHandler} from './handlers/generate_key-handler';
 import {destroyKeyHandler} from './handlers/destroyKey-handler';
 import imageUploadHandler from './handlers/imageUpload-handler';
 import {uploadedImagesHandler} from './handlers/uploadedImages-handler';
+import {displayImagesHandler} from './handlers/demo-displayImage-handler';
 
 const handlers = [
 	...signinHandler,
@@ -28,6 +29,7 @@ const handlers = [
 	...destroyKeyHandler,
 	...imageUploadHandler,
 	...uploadedImagesHandler,
+	...displayImagesHandler,
 ];
 
 export default handlers;

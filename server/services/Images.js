@@ -35,7 +35,7 @@ async function fetchImageByCompanyFree(company, default_extension="png") {
         .where("extension", "==", default_extension).get();
       if (imageRef.empty) return null;
       const doc = imageRef.docs[0];
-      const imageUrl = doc.data().domainame + `.${default_extension}`;
+      const imageUrl = `${default_extension}/` + doc.data().domainame + `.${default_extension}`;
       const cloudFrontUrl = cloudFrontSignedURL(`/${imageUrl}`).data;
       return cloudFrontUrl;
     });

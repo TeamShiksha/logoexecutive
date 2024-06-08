@@ -2,7 +2,7 @@ import {rest} from 'msw';
 import {STATUS_CODES} from 'http';
 
 export const emailVerificationHandler = [
-	rest.get('/api/auth/verify', (req, res, ctx) => {
+	rest.get(`${process.env.PROXY_URL}/api/auth/verify`, (req, res, ctx) => {
 		const {searchParams} = req.url;
 		const token = searchParams.get('token');
 		if (token === 'exampleToken') {

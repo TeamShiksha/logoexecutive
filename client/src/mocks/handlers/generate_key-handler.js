@@ -3,7 +3,7 @@ import {formatDate} from '../../utils/helpers';
 
 var keyDescriptionMap = new Map();
 export const generateKeyHandler = [
-	rest.post('api/user/generate', (req, res, ctx) => {
+	rest.post(`${process.env.PROXY_URL}/api/user/generate`, (req, res, ctx) => {
 		const {keyDescription} = req.body;
 		if (!keyDescriptionMap.has(keyDescription)) {
 			keyDescriptionMap.set(keyDescription, 1);

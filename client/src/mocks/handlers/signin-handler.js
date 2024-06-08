@@ -2,7 +2,7 @@ import {rest} from 'msw';
 import {STATUS_CODES} from 'http';
 
 export const signinHandler = [
-	rest.post('/api/auth/signin', (req, res, ctx) => {
+	rest.post(`${process.env.PROXY_URL}/api/auth/signin`, (req, res, ctx) => {
 		const {email, password} = req.body;
 
 		if (email === 'unverified@gmail.com') {

@@ -1,7 +1,7 @@
 import {rest} from 'msw';
 
 export const signupHandler = [
-	rest.post('api/auth/signup', (req, res, ctx) => {
+	rest.post(`${process.env.PROXY_URL}/api/auth/signup`, (req, res, ctx) => {
 		return res(
 			ctx.status(200),
 			ctx.json({

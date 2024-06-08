@@ -3,7 +3,6 @@
 	"version": "1.0.0",
 	"repository": "https://github.com/TeamShiksha/logoexecutive.git",
 	"private": true,
-	"proxy": "http://127.0.0.1:8888",
 	"dependencies": {
 		"@testing-library/jest-dom": "^5.17.0",
 		"@testing-library/react": "^13.4.0",

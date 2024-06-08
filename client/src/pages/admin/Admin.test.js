@@ -32,7 +32,7 @@ describe('AdminDashboard', () => {
 
 	it('renders a message when there are no uploaded images', async () => {
 		server.use(
-			rest.get('api/admin/images', (req, res, ctx) => {
+			rest.get(`${process.env.PROXY_URL}/api/admin/images`, (req, res, ctx) => {
 				return res(ctx.status(200), ctx.json({data: []}));
 			}),
 		);
@@ -46,7 +46,7 @@ describe('AdminDashboard', () => {
 
 	it('renders an error message when there is an error fetching images', async () => {
 		server.use(
-			rest.get('api/admin/images', (req, res, ctx) => {
+			rest.get(`${process.env.PROXY_URL}/api/admin/images`, (req, res, ctx) => {
 				return res(
 					ctx.status(500),
 					ctx.json({message: 'Failed to fetch images'}),

@@ -13,7 +13,7 @@ const mockUploadedImagesData = [
 ];
 
 export const uploadedImagesHandler = [
-	rest.get('api/admin/images', (req, res, ctx) => {
+	rest.get(`${process.env.PROXY_URL}/api/admin/images`, (req, res, ctx) => {
 		return res(
 			ctx.status(200),
 			ctx.json({

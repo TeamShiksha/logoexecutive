@@ -4,7 +4,7 @@ const mockImagesData = {
 	data: 'http://localhost/google.png',
 };
 export const displayImagesHandler = [
-	rest.get('api/public/logo', (req, res, ctx) => {
+	rest.get(`${process.env.PROXY_URL}/api/public/logo`, (req, res, ctx) => {
 		const domain = req.url.searchParams.get('domain');
 		if (!domain) {
 			return res(

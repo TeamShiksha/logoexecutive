@@ -2,7 +2,7 @@ import {rest} from 'msw';
 const {STATUS_CODES} = require('http');
 
 export const destroyKeyHandler = [
-	rest.delete('api/user/destroy', (req, res, ctx) => {
+	rest.delete(`${process.env.PROXY_URL}/api/user/destroy`, (req, res, ctx) => {
 		const keyId = req.url.searchParams.get('keyId');
 		if (keyId === '4d6544e38f5d4ad8bae546ea61e2b842') {
 			return res(

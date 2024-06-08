@@ -30,7 +30,7 @@ describe('UserProvider', () => {
 
 	test('should handle error', async () => {
 		server.use(
-			rest.get('/api/user/data', (req, res, ctx) => {
+			rest.get(`${process.env.PROXY_URL}/api/user/data`, (req, res, ctx) => {
 				return res(ctx.status(500));
 			}),
 		);

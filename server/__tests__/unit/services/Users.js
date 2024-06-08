@@ -12,7 +12,7 @@ const { Users } = require("../../../models");
 const { mockUsers } = require("../../../utils/mocks/Users");
 const { mockKeys } = require("../../../utils/mocks/Keys");
 const { mockSubscriptions } = require("../../../utils/mocks/Subscriptions");
-const bcrypt = require("bcrypt");
+const bcrypt = require('bcrypt');
 
 describe("emailRecordExists", () => {
   afterEach(() => {
@@ -184,7 +184,7 @@ describe("createUser", () => {
   });
 });
 
-describe("Users service", () => {
+describe('Users service', () => {
   it("should throw an error if bcrypt.hash throws an error", async () => {
     const mockUser = {
       email: "test@example.com",

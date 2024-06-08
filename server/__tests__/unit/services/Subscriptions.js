@@ -8,8 +8,8 @@ const { SubscriptionCollection } = require("../../../utils/firestore");
 const { Subscriptions } = require("../../../models");
 
 afterEach(() => {
-  jest.restoreAllMocks();
-});
+  jest.restoreAllMocks()
+})
 describe("createSubscription", () => {
   test("should create a subscription collection of a user", async () => {
     const createdSubscription = await createSubscription(mockUsers[0].userId);

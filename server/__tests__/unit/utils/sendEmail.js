@@ -1,6 +1,5 @@
 const nodemailer = require("nodemailer");
 const { sendEmail } = require("../../../utils/sendEmail");
-const { config } = require("../../../utils/constants");
 
 jest.mock("nodemailer", () => ({
   createTransport: jest.fn(),
@@ -11,9 +10,9 @@ nodemailer.createTransport.mockReturnValue(transporter);
 
 describe("sendEmail", () => {
   it("should be able to send email", async () => {
-    config.EMAIL_HOST = "host";
-    config.EMAIL_SERVICE = "service";
-    config.EMAIL_PORT = "587";
+    process.env.EMAIL_HOST = "host";
+    process.env.EMAIL_SERVICE = "service";
+    process.env.EMAIL_PORT = "587";
     process.env.EMAIL_USER = "user";
     process.env.EMAIL_PASS = "pass";
 
@@ -40,7 +39,7 @@ describe("sendEmail", () => {
     });
     expect(result).toEqual({ success: true });
   });
-
+    
   it("should return { success: false, error: error } when there is an error", async () => {
     process.env.EMAIL_HOST = "host";
     process.env.EMAIL_SERVICE = "service";
@@ -51,7 +50,7 @@ describe("sendEmail", () => {
     transporter.sendMail.mockImplementation(() => {
       throw new Error("Test Error");
     });
-
+      
     const result = await sendEmail(
       "test@example.com",
       "Test Subject",

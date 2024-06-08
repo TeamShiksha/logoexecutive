@@ -1,5 +1,7 @@
 const dotenv = require("dotenv");
+const fs = require("fs");
 const { validateEnv } = require("../utils/scripts/envSchema.js");
+const path = require("path");
 const serverless = require("serverless-http");
 
 if (process.env.NODE_ENV !== "production") {
@@ -7,11 +9,13 @@ if (process.env.NODE_ENV !== "production") {
 } else {
   dotenv.config();
 }
-const { config } = require("../utils/constants.js");
 
-const env = { ...process.env, ...config };
+const serviceKeyPath = path.join(process.cwd(), "serviceAccountKey.json");
+const serviceAccountKeyExists = fs.existsSync(serviceKeyPath);
 
-const { error } = validateEnv(env);
+const { error } = validateEnv(process.env, {
+  serviceAccountKey: serviceAccountKeyExists,
+});
 
 if (error) {
   console.log("\x1b[41m%s\x1b[0m", `Config validation error: ${error.message}`);

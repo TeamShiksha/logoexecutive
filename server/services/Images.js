@@ -2,10 +2,9 @@ const { S3Client, PutObjectCommand } = require("@aws-sdk/client-s3");
 const {Images}= require("../models");
 const { db:firestore, ImageCollection } = require("../utils/firestore");
 const { cloudFrontSignedURL } = require("../utils/cloudFront");
-const { config } = require("../utils/constants");
 
 const s3 = new S3Client({
-  region: config.BUCKET_REGION,
+  region: process.env.BUCKET_REGION,
   credentials: {
     accessKeyId: process.env.ACCESS_KEY,
     secretAccessKey: process.env.SECRET_ACCESS_KEY,
@@ -16,12 +15,12 @@ async function uploadToS3(file, imageName, extension) {
   const uploadParams = {
     Bucket: process.env.BUCKET_NAME,
     Body: file.buffer,
-    Key: `${config.KEY}/${extension}/${imageName}`,
+    Key: `${process.env.KEY}/${extension}/${imageName}`,
   };
-
+  
   try {
     await s3.send(new PutObjectCommand(uploadParams));
-    return `${config.KEY}/${extension}/${imageName}`;
+    return `${process.env.KEY}/${extension}/${imageName}`;
   } catch (error) {
     console.error(error);
     throw error;

@@ -22,9 +22,9 @@ format.
 **Example Call:**
 
 ```sh
-https://logoexecutive.netlify.app/api/business/logo?domain=google&API_KEY=YOUR_API_KEY
-https://logoexecutive.netlify.app/api/business/logo?domain=https://google.com&API_KEY=YOUR_API_KEY
-https://logoexecutive.netlify.app/api/business/logo?domain=www.google.com&API_KEY=YOUR_API_KEY
+https://api-logoexecutive.vercel.app/api/business/logo?domain=google&API_KEY=YOUR_API_KEY
+https://api-logoexecutive.vercel.app/api/business/logo?domain=https://google.com&API_KEY=YOUR_API_KEY
+https://api-logoexecutive.vercel.app/api/business/logo?domain=www.google.com&API_KEY=YOUR_API_KEY
 ```
 
 ## 2. Search (Comming soon)
@@ -49,7 +49,7 @@ share a common theme.
 **Example Call:**
 
 ```sh
-https://logoexecutive.netlify.app/api/business/logo/search?key=g&API_KEY=YOUR_API_KEY
+https://api-logoexecutive.vercel.app/api/business/logo/search?key=g&API_KEY=YOUR_API_KEY
 ```
 
 We encourage you to explore and integrate these endpoints into your

@@ -21,7 +21,7 @@ format and has a default size of 24px.
 **Example Call:**
 
 ```sh
-https://logoexecutive.netlify.app/v1/logo?key=google
+https://logoexecutive.vercel.app/v1/logo?key=google
 ```
 
 ### Custom
@@ -46,7 +46,7 @@ their specific application interfaces.
 **Example Call:**
 
 ```sh
-https://logoexecutive.netlify.app/v1/logo?size=36&format=jpg&key=google
+https://logoexecutive.vercel.app/v1/logo?size=36&format=jpg&key=google
 ```
 
 ## 2. Search
@@ -70,7 +70,7 @@ share a common theme. The default size of the logos is 32px.
 **Example Call:**
 
 ```sh
-https://logoexecutive.netlify.app/v1/logo/search?key=g
+https://logoexecutive.vercel.app/v1/logo/search?key=g
 ```
 
 ### Custom
@@ -95,7 +95,7 @@ appearance of the logos in their applications.
 **Example Call:**
 
 ```sh
-https://logoexecutive.netlify.app/v1/logo/search?size=36&format=jpg&key=g
+https://logoexecutive.vercel.app/v1/logo/search?size=36&format=jpg&key=g
 ```
 
 We encourage you to explore and integrate these endpoints into your

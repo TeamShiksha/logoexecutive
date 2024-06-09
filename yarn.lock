@@ -3412,19 +3412,19 @@
     strict-event-emitter "^0.2.4"
     web-encoding "^1.1.5"
 
-"@netlify/binary-info@^1.0.0":
+"@vercel/binary-info@^1.0.0":
   version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@netlify/binary-info/-/binary-info-1.0.0.tgz#cd0d86fb783fb03e52067f0cd284865e57be86c8"
+  resolved "https://registry.yarnpkg.com/@vercel/binary-info/-/binary-info-1.0.0.tgz#cd0d86fb783fb03e52067f0cd284865e57be86c8"
   integrity sha512-4wMPu9iN3/HL97QblBsBay3E1etIciR84izI3U+4iALY+JHCrI+a2jO0qbAZ/nxKoegypYEaiiqWXylm+/zfrw==
 
-"@netlify/blobs@7.3.0", "@netlify/blobs@^7.3.0":
+"@vercel/blobs@7.3.0", "@vercel/blobs@^7.3.0":
   version "7.3.0"
-  resolved "https://registry.yarnpkg.com/@netlify/blobs/-/blobs-7.3.0.tgz#3331cfe79781c679f73bb2ee67619c4b2d1e5bb3"
+  resolved "https://registry.yarnpkg.com/@vercel/blobs/-/blobs-7.3.0.tgz#3331cfe79781c679f73bb2ee67619c4b2d1e5bb3"
   integrity sha512-wN/kNTZo4xjlUM/C0WILOkJbe8p4AFquSGkZEIoIcgnsx5ikp2GyqGiq1WMLee7QdbnqeIV2g2hn/PjT324E5w==
 
-"@netlify/build-info@7.13.2":
+"@vercel/build-info@7.13.2":
   version "7.13.2"
-  resolved "https://registry.yarnpkg.com/@netlify/build-info/-/build-info-7.13.2.tgz#8700e782c038640193b0d5ae67c20d3d38d14a62"
+  resolved "https://registry.yarnpkg.com/@vercel/build-info/-/build-info-7.13.2.tgz#8700e782c038640193b0d5ae67c20d3d38d14a62"
   integrity sha512-smzhIgcms6Z/v2cct90l8ncBbnA5kvknj5/quhwyM6UHUycgMKFlA22qkB0KLj9shwL1Lkh7iQW751JwhSaP9g==
   dependencies:
     "@bugsnag/js" "^7.20.0"
@@ -3437,23 +3437,23 @@
     yaml "^2.1.3"
     yargs "^17.6.0"
 
-"@netlify/build@29.39.1":
+"@vercel/build@29.39.1":
   version "29.39.1"
-  resolved "https://registry.yarnpkg.com/@netlify/build/-/build-29.39.1.tgz#e71353f16be2133ddf07755e78ae2511ee7853ad"
+  resolved "https://registry.yarnpkg.com/@vercel/build/-/build-29.39.1.tgz#e71353f16be2133ddf07755e78ae2511ee7853ad"
   integrity sha512-Pl6xb7CecEJEkUszylscT1f7FF+37xaIk+wz5ZL99TIhZ2D/3f0w+wm0knASTB90dvmDaL4IAfPTDMORzgMBIA==
   dependencies:
     "@bugsnag/js" "^7.0.0"
-    "@netlify/blobs" "^7.3.0"
-    "@netlify/cache-utils" "^5.1.5"
-    "@netlify/config" "^20.12.1"
-    "@netlify/edge-bundler" "11.3.0"
-    "@netlify/framework-info" "^9.8.11"
-    "@netlify/functions-utils" "^5.2.54"
-    "@netlify/git-utils" "^5.1.1"
-    "@netlify/opentelemetry-utils" "^1.1.0"
-    "@netlify/plugins-list" "^6.77.0"
-    "@netlify/run-utils" "^5.1.1"
-    "@netlify/zip-it-and-ship-it" "9.31.3"
+    "@vercel/blobs" "^7.3.0"
+    "@vercel/cache-utils" "^5.1.5"
+    "@vercel/config" "^20.12.1"
+    "@vercel/edge-bundler" "11.3.0"
+    "@vercel/framework-info" "^9.8.11"
+    "@vercel/functions-utils" "^5.2.54"
+    "@vercel/git-utils" "^5.1.1"
+    "@vercel/opentelemetry-utils" "^1.1.0"
+    "@vercel/plugins-list" "^6.77.0"
+    "@vercel/run-utils" "^5.1.1"
+    "@vercel/zip-it-and-ship-it" "9.31.3"
     "@sindresorhus/slugify" "^2.0.0"
     ansi-escapes "^6.0.0"
     chalk "^5.0.0"
@@ -3500,9 +3500,9 @@
     uuid "^9.0.0"
     yargs "^17.6.0"
 
-"@netlify/cache-utils@^5.1.5":
+"@vercel/cache-utils@^5.1.5":
   version "5.1.5"
-  resolved "https://registry.yarnpkg.com/@netlify/cache-utils/-/cache-utils-5.1.5.tgz#848c59003e576fa0b2f9c6ca270eff27af938b25"
+  resolved "https://registry.yarnpkg.com/@vercel/cache-utils/-/cache-utils-5.1.5.tgz#848c59003e576fa0b2f9c6ca270eff27af938b25"
   integrity sha512-lMNdFmy2Yu3oVquSPooRDLxJ8QOsIX6X6vzA2pKz/9V2LQFJiqBukggXM+Rnqzk1regPpdJ0jK3dPGvOKaRQgg==
   dependencies:
     cpy "^9.0.0"
@@ -3514,9 +3514,9 @@
     path-exists "^5.0.0"
     readdirp "^3.4.0"
 
-"@netlify/config@20.12.1":
+"@vercel/config@20.12.1":
   version "20.12.1"
-  resolved "https://registry.yarnpkg.com/@netlify/config/-/config-20.12.1.tgz#e9df9860ff486b020d0a04e23a6e122ed8b1e7d1"
+  resolved "https://registry.yarnpkg.com/@vercel/config/-/config-20.12.1.tgz#e9df9860ff486b020d0a04e23a6e122ed8b1e7d1"
   integrity sha512-sziuaOA9XfeQjQf6Yru7S9k9xTMy9GAJSPJL02WFld0cFDA5dgDyAFLN34jedIbgl7jVV+g7Vb2nOJocfgibbg==
   dependencies:
     "@iarna/toml" "^2.2.5"
@@ -3533,9 +3533,9 @@
     is-plain-obj "^4.0.0"
     js-yaml "^4.0.0"
     map-obj "^5.0.0"
-    netlify "^13.1.14"
-    netlify-headers-parser "^7.1.4"
-    netlify-redirect-parser "^14.2.2"
+    vercel "^13.1.14"
+    vercel-headers-parser "^7.1.4"
+    vercel-redirect-parser "^14.2.2"
     node-fetch "^3.3.1"
     omit.js "^2.0.2"
     p-locate "^6.0.0"
@@ -3544,9 +3544,9 @@
     validate-npm-package-name "^4.0.0"
     yargs "^17.6.0"
 
-"@netlify/config@^20.12.1":
+"@vercel/config@^20.12.1":
   version "20.12.2"
-  resolved "https://registry.yarnpkg.com/@netlify/config/-/config-20.12.2.tgz#26a17eb3444dc77e0926365246127a8a3ccaa53e"
+  resolved "https://registry.yarnpkg.com/@vercel/config/-/config-20.12.2.tgz#26a17eb3444dc77e0926365246127a8a3ccaa53e"
   integrity sha512-1o33RyGR3RGFh3ed1mQ1qvRahtm7EJINaWEeO2attcbtElezaTkrlOgEIwsgdxWNlwbHvFqspcsajWFnZNUF0w==
   dependencies:
     "@iarna/toml" "^2.2.5"
@@ -3563,9 +3563,9 @@
     is-plain-obj "^4.0.0"
     js-yaml "^4.0.0"
     map-obj "^5.0.0"
-    netlify "^13.1.14"
-    netlify-headers-parser "^7.1.4"
-    netlify-redirect-parser "^14.2.2"
+    vercel "^13.1.14"
+    vercel-headers-parser "^7.1.4"
+    vercel-redirect-parser "^14.2.2"
     node-fetch "^3.3.1"
     omit.js "^2.0.2"
     p-locate "^6.0.0"
@@ -3574,9 +3574,9 @@
     validate-npm-package-name "^4.0.0"
     yargs "^17.6.0"
 
-"@netlify/edge-bundler@11.3.0":
+"@vercel/edge-bundler@11.3.0":
   version "11.3.0"
-  resolved "https://registry.yarnpkg.com/@netlify/edge-bundler/-/edge-bundler-11.3.0.tgz#1c8b77ce1f8ded2c11d2c1f1c6bebab5583e9133"
+  resolved "https://registry.yarnpkg.com/@vercel/edge-bundler/-/edge-bundler-11.3.0.tgz#1c8b77ce1f8ded2c11d2c1f1c6bebab5583e9133"
   integrity sha512-ROyjrrOCe4TYdBf9Eky8EFrSFENcKdsHHqGe0nSwbyLKDfbe9gPNwN9LoXt9QhxmPyJCOGwxz12kDX2rqFc+Mw==
   dependencies:
     "@import-maps/resolve" "^1.0.1"
@@ -3603,14 +3603,14 @@
     urlpattern-polyfill "8.0.2"
     uuid "^9.0.0"
 
-"@netlify/edge-functions@2.5.1":
+"@vercel/edge-functions@2.5.1":
   version "2.5.1"
-  resolved "https://registry.yarnpkg.com/@netlify/edge-functions/-/edge-functions-2.5.1.tgz#465b4fa51f4f37775876a0c515b1f1ee8e1793ca"
+  resolved "https://registry.yarnpkg.com/@vercel/edge-functions/-/edge-functions-2.5.1.tgz#465b4fa51f4f37775876a0c515b1f1ee8e1793ca"
   integrity sha512-6YGlbzxPaSqc/D2LhP4T4PXrim/vRmqpO1RwQKqVod6WCWlkdtJcAd3mGoI7efrjfND8twh7TqXtL7RRCI23qA==
 
-"@netlify/framework-info@^9.8.11":
+"@vercel/framework-info@^9.8.11":
   version "9.8.11"
-  resolved "https://registry.yarnpkg.com/@netlify/framework-info/-/framework-info-9.8.11.tgz#a4b4740b906e7c59c853a8eaaf9a7067a2258a71"
+  resolved "https://registry.yarnpkg.com/@vercel/framework-info/-/framework-info-9.8.11.tgz#a4b4740b906e7c59c853a8eaaf9a7067a2258a71"
   integrity sha512-8NuvzQQVeU36PRilWqijiIWmjy6JZcqbKooGQ4bNgH/26YNdS+tN5gOWGWVYnRHgdmBUCycyYrM5h1Srwnq3hQ==
   dependencies:
     ajv "^8.12.0"
@@ -3624,18 +3624,18 @@
     read-pkg-up "^9.0.0"
     semver "^7.3.8"
 
-"@netlify/functions-utils@^5.2.54":
+"@vercel/functions-utils@^5.2.54":
   version "5.2.54"
-  resolved "https://registry.yarnpkg.com/@netlify/functions-utils/-/functions-utils-5.2.54.tgz#c26dbd968fafc17098be8844f646a45c88734e0f"
+  resolved "https://registry.yarnpkg.com/@vercel/functions-utils/-/functions-utils-5.2.54.tgz#c26dbd968fafc17098be8844f646a45c88734e0f"
   integrity sha512-QdYmIPC6NBp90MfuHWeNGqf1XdsRUcIIbcWnT2AK1g2By8ur8m28qGM99GlReRmprzC7ZT7YmwcHjUjaq24sRA==
   dependencies:
-    "@netlify/zip-it-and-ship-it" "9.31.3"
+    "@vercel/zip-it-and-ship-it" "9.31.3"
     cpy "^9.0.0"
     path-exists "^5.0.0"
 
-"@netlify/git-utils@^5.1.1":
+"@vercel/git-utils@^5.1.1":
   version "5.1.1"
-  resolved "https://registry.yarnpkg.com/@netlify/git-utils/-/git-utils-5.1.1.tgz#36d5a6433a070035099b47d9151638053752cd7b"
+  resolved "https://registry.yarnpkg.com/@vercel/git-utils/-/git-utils-5.1.1.tgz#36d5a6433a070035099b47d9151638053752cd7b"
   integrity sha512-oyHieuTZH3rKTmg7EKpGEGa28IFxta2oXuVwpPJI/FJAtBje3UE+yko0eDjNufgm3AyGa8G77trUxgBhInAYuw==
   dependencies:
     execa "^6.0.0"
@@ -3644,117 +3644,117 @@
     moize "^6.1.3"
     path-exists "^5.0.0"
 
-"@netlify/local-functions-proxy-darwin-arm64@1.1.1":
+"@vercel/local-functions-proxy-darwin-arm64@1.1.1":
   version "1.1.1"
-  resolved "https://registry.yarnpkg.com/@netlify/local-functions-proxy-darwin-arm64/-/local-functions-proxy-darwin-arm64-1.1.1.tgz#c83a0a142637fb8cefe25c95f5c5cf6f2d7e32ed"
+  resolved "https://registry.yarnpkg.com/@vercel/local-functions-proxy-darwin-arm64/-/local-functions-proxy-darwin-arm64-1.1.1.tgz#c83a0a142637fb8cefe25c95f5c5cf6f2d7e32ed"
   integrity sha512-lphJ9qqZ3glnKWEqlemU1LMqXxtJ/tKf7VzakqqyjigwLscXSZSb6fupSjQfd4tR1xqxA76ylws/2HDhc/gs+Q==
 
-"@netlify/local-functions-proxy-darwin-x64@1.1.1":
+"@vercel/local-functions-proxy-darwin-x64@1.1.1":
   version "1.1.1"
-  resolved "https://registry.yarnpkg.com/@netlify/local-functions-proxy-darwin-x64/-/local-functions-proxy-darwin-x64-1.1.1.tgz#e8b558cfd459a5d8343d468e5c128a144638967a"
+  resolved "https://registry.yarnpkg.com/@vercel/local-functions-proxy-darwin-x64/-/local-functions-proxy-darwin-x64-1.1.1.tgz#e8b558cfd459a5d8343d468e5c128a144638967a"
   integrity sha512-4CRB0H+dXZzoEklq5Jpmg+chizXlVwCko94d8+UHWCgy/bA3M/rU/BJ8OLZisnJaAktHoeLABKtcLOhtRHpxZQ==
 
-"@netlify/local-functions-proxy-freebsd-arm64@1.1.1":
+"@vercel/local-functions-proxy-freebsd-arm64@1.1.1":
   version "1.1.1"
-  resolved "https://registry.yarnpkg.com/@netlify/local-functions-proxy-freebsd-arm64/-/local-functions-proxy-freebsd-arm64-1.1.1.tgz#3a60e32fe1929f97817db5da0925c37feea7606e"
+  resolved "https://registry.yarnpkg.com/@vercel/local-functions-proxy-freebsd-arm64/-/local-functions-proxy-freebsd-arm64-1.1.1.tgz#3a60e32fe1929f97817db5da0925c37feea7606e"
   integrity sha512-u13lWTVMJDF0A6jX7V4N3HYGTIHLe5d1Z2wT43fSIHwXkTs6UXi72cGSraisajG+5JFIwHfPr7asw5vxFC0P9w==
 
-"@netlify/local-functions-proxy-freebsd-x64@1.1.1":
+"@vercel/local-functions-proxy-freebsd-x64@1.1.1":
   version "1.1.1"
-  resolved "https://registry.yarnpkg.com/@netlify/local-functions-proxy-freebsd-x64/-/local-functions-proxy-freebsd-x64-1.1.1.tgz#ddc526256cb835f6dbd6747d75a7f3dbcca77da8"
+  resolved "https://registry.yarnpkg.com/@vercel/local-functions-proxy-freebsd-x64/-/local-functions-proxy-freebsd-x64-1.1.1.tgz#ddc526256cb835f6dbd6747d75a7f3dbcca77da8"
   integrity sha512-g5xw4xATK5YDzvXtzJ8S1qSkWBiyF8VVRehXPMOAMzpGjCX86twYhWp8rbAk7yA1zBWmmWrWNA2Odq/MgpKJJg==
 
-"@netlify/local-functions-proxy-linux-arm64@1.1.1":
+"@vercel/local-functions-proxy-linux-arm64@1.1.1":
   version "1.1.1"
-  resolved "https://registry.yarnpkg.com/@netlify/local-functions-proxy-linux-arm64/-/local-functions-proxy-linux-arm64-1.1.1.tgz#c88c3d8eacdaf655f871eb1eff58b1b3262c38ff"
+  resolved "https://registry.yarnpkg.com/@vercel/local-functions-proxy-linux-arm64/-/local-functions-proxy-linux-arm64-1.1.1.tgz#c88c3d8eacdaf655f871eb1eff58b1b3262c38ff"
   integrity sha512-dPGu1H5n8na7mBKxiXQ+FNmthDAiA57wqgpm5JMAHtcdcmRvcXwJkwWVGvwfj8ShhYJHQaSaS9oPgO+mpKkgmA==
 
-"@netlify/local-functions-proxy-linux-arm@1.1.1":
+"@vercel/local-functions-proxy-linux-arm@1.1.1":
   version "1.1.1"
-  resolved "https://registry.yarnpkg.com/@netlify/local-functions-proxy-linux-arm/-/local-functions-proxy-linux-arm-1.1.1.tgz#d92905605f3f17c442001e6ead3710b64366fbd1"
+  resolved "https://registry.yarnpkg.com/@vercel/local-functions-proxy-linux-arm/-/local-functions-proxy-linux-arm-1.1.1.tgz#d92905605f3f17c442001e6ead3710b64366fbd1"
   integrity sha512-YsTpL+AbHwQrfHWXmKnwUrJBjoUON363nr6jUG1ueYnpbbv6wTUA7gI5snMi/gkGpqFusBthAA7C30e6bixfiA==
 
-"@netlify/local-functions-proxy-linux-ia32@1.1.1":
+"@vercel/local-functions-proxy-linux-ia32@1.1.1":
   version "1.1.1"
-  resolved "https://registry.yarnpkg.com/@netlify/local-functions-proxy-linux-ia32/-/local-functions-proxy-linux-ia32-1.1.1.tgz#b4cb57c438a82f42c2e30ee4ec50cfa233379d59"
+  resolved "https://registry.yarnpkg.com/@vercel/local-functions-proxy-linux-ia32/-/local-functions-proxy-linux-ia32-1.1.1.tgz#b4cb57c438a82f42c2e30ee4ec50cfa233379d59"
   integrity sha512-Ra0FlXDrmPRaq+rYH3/ttkXSrwk1D5Zx/Na7UPfJZxMY7Qo5iY4bgi/FuzjzWzlp0uuKZOhYOYzYzsIIyrSvmw==
 
-"@netlify/local-functions-proxy-linux-ppc64@1.1.1":
+"@vercel/local-functions-proxy-linux-ppc64@1.1.1":
   version "1.1.1"
-  resolved "https://registry.yarnpkg.com/@netlify/local-functions-proxy-linux-ppc64/-/local-functions-proxy-linux-ppc64-1.1.1.tgz#3fdef281191dd819fee72ac58ccbca1ac650fee3"
+  resolved "https://registry.yarnpkg.com/@vercel/local-functions-proxy-linux-ppc64/-/local-functions-proxy-linux-ppc64-1.1.1.tgz#3fdef281191dd819fee72ac58ccbca1ac650fee3"
   integrity sha512-oXf1satwqwUUxz7LHS1BxbRqc4FFEKIDFTls04eXiLReFR3sqv9H/QuYNTCCDMuRcCOd92qKyDfATdnxT4HR8w==
 
-"@netlify/local-functions-proxy-linux-x64@1.1.1":
+"@vercel/local-functions-proxy-linux-x64@1.1.1":
   version "1.1.1"
-  resolved "https://registry.yarnpkg.com/@netlify/local-functions-proxy-linux-x64/-/local-functions-proxy-linux-x64-1.1.1.tgz#bd2c8059c5d7dd46ef5da174723ca2cdd7bfdb2f"
+  resolved "https://registry.yarnpkg.com/@vercel/local-functions-proxy-linux-x64/-/local-functions-proxy-linux-x64-1.1.1.tgz#bd2c8059c5d7dd46ef5da174723ca2cdd7bfdb2f"
   integrity sha512-bS3u4JuDg/eC0y4Na3i/29JBOxrdUvsK5JSjHfzUeZEbOcuXYf4KavTpHS5uikdvTgyczoSrvbmQJ5m0FLXfLA==
 
-"@netlify/local-functions-proxy-openbsd-x64@1.1.1":
+"@vercel/local-functions-proxy-openbsd-x64@1.1.1":
   version "1.1.1"
-  resolved "https://registry.yarnpkg.com/@netlify/local-functions-proxy-openbsd-x64/-/local-functions-proxy-openbsd-x64-1.1.1.tgz#31a3340f4f10dd5c95cd3f2dc9f1e967c051aa2a"
+  resolved "https://registry.yarnpkg.com/@vercel/local-functions-proxy-openbsd-x64/-/local-functions-proxy-openbsd-x64-1.1.1.tgz#31a3340f4f10dd5c95cd3f2dc9f1e967c051aa2a"
   integrity sha512-1xLef/kLRNkBTXJ+ZGoRFcwsFxd/B2H3oeJZyXaZ3CN5umd9Mv9wZuAD74NuMt/535yRva8jtAJqvEgl9xMSdA==
 
-"@netlify/local-functions-proxy-win32-ia32@1.1.1":
+"@vercel/local-functions-proxy-win32-ia32@1.1.1":
   version "1.1.1"
-  resolved "https://registry.yarnpkg.com/@netlify/local-functions-proxy-win32-ia32/-/local-functions-proxy-win32-ia32-1.1.1.tgz#354890bc58f54e8b26721447f243c49945f2fe74"
+  resolved "https://registry.yarnpkg.com/@vercel/local-functions-proxy-win32-ia32/-/local-functions-proxy-win32-ia32-1.1.1.tgz#354890bc58f54e8b26721447f243c49945f2fe74"
   integrity sha512-4IOMDBxp2f8VbIkhZ85zGNDrZR4ey8d68fCMSOIwitjsnKav35YrCf8UmAh3UR6CNIRJdJL4MW1GYePJ7iJ8uA==
 
-"@netlify/local-functions-proxy-win32-x64@1.1.1":
+"@vercel/local-functions-proxy-win32-x64@1.1.1":
   version "1.1.1"
-  resolved "https://registry.yarnpkg.com/@netlify/local-functions-proxy-win32-x64/-/local-functions-proxy-win32-x64-1.1.1.tgz#7ee183b4ccd0062b6124275387d844530ea0b224"
+  resolved "https://registry.yarnpkg.com/@vercel/local-functions-proxy-win32-x64/-/local-functions-proxy-win32-x64-1.1.1.tgz#7ee183b4ccd0062b6124275387d844530ea0b224"
   integrity sha512-VCBXBJWBujVxyo5f+3r8ovLc9I7wJqpmgDn3ixs1fvdrER5Ac+SzYwYH4mUug9HI08mzTSAKZErzKeuadSez3w==
 
-"@netlify/local-functions-proxy@1.1.1":
+"@vercel/local-functions-proxy@1.1.1":
   version "1.1.1"
-  resolved "https://registry.yarnpkg.com/@netlify/local-functions-proxy/-/local-functions-proxy-1.1.1.tgz#e5d1416e6d607f8e8bd4d295b1ee1e550d5bd3cb"
+  resolved "https://registry.yarnpkg.com/@vercel/local-functions-proxy/-/local-functions-proxy-1.1.1.tgz#e5d1416e6d607f8e8bd4d295b1ee1e550d5bd3cb"
   integrity sha512-eXSsayLT6PMvjzFQpjC9nkg2Otc3lZ5GoYele9M6f8PmsvWpaXRhwjNQ0NYhQQ2UZbLMIiO2dH8dbRsT3bMkFw==
   optionalDependencies:
-    "@netlify/local-functions-proxy-darwin-arm64" "1.1.1"
-    "@netlify/local-functions-proxy-darwin-x64" "1.1.1"
-    "@netlify/local-functions-proxy-freebsd-arm64" "1.1.1"
-    "@netlify/local-functions-proxy-freebsd-x64" "1.1.1"
-    "@netlify/local-functions-proxy-linux-arm" "1.1.1"
-    "@netlify/local-functions-proxy-linux-arm64" "1.1.1"
-    "@netlify/local-functions-proxy-linux-ia32" "1.1.1"
-    "@netlify/local-functions-proxy-linux-ppc64" "1.1.1"
-    "@netlify/local-functions-proxy-linux-x64" "1.1.1"
-    "@netlify/local-functions-proxy-openbsd-x64" "1.1.1"
-    "@netlify/local-functions-proxy-win32-ia32" "1.1.1"
-    "@netlify/local-functions-proxy-win32-x64" "1.1.1"
+    "@vercel/local-functions-proxy-darwin-arm64" "1.1.1"
+    "@vercel/local-functions-proxy-darwin-x64" "1.1.1"
+    "@vercel/local-functions-proxy-freebsd-arm64" "1.1.1"
+    "@vercel/local-functions-proxy-freebsd-x64" "1.1.1"
+    "@vercel/local-functions-proxy-linux-arm" "1.1.1"
+    "@vercel/local-functions-proxy-linux-arm64" "1.1.1"
+    "@vercel/local-functions-proxy-linux-ia32" "1.1.1"
+    "@vercel/local-functions-proxy-linux-ppc64" "1.1.1"
+    "@vercel/local-functions-proxy-linux-x64" "1.1.1"
+    "@vercel/local-functions-proxy-openbsd-x64" "1.1.1"
+    "@vercel/local-functions-proxy-win32-ia32" "1.1.1"
+    "@vercel/local-functions-proxy-win32-x64" "1.1.1"
 
-"@netlify/node-cookies@^0.1.0":
+"@vercel/node-cookies@^0.1.0":
   version "0.1.0"
-  resolved "https://registry.yarnpkg.com/@netlify/node-cookies/-/node-cookies-0.1.0.tgz#dda912ba618527695cf519fafa221c5e6777c612"
+  resolved "https://registry.yarnpkg.com/@vercel/node-cookies/-/node-cookies-0.1.0.tgz#dda912ba618527695cf519fafa221c5e6777c612"
   integrity sha512-OAs1xG+FfLX0LoRASpqzVntVV/RpYkgpI0VrUnw2u0Q1qiZUzcPffxRK8HF3gc4GjuhG5ahOEMJ9bswBiZPq0g==
 
-"@netlify/open-api@^2.28.0":
+"@vercel/open-api@^2.28.0":
   version "2.30.0"
-  resolved "https://registry.yarnpkg.com/@netlify/open-api/-/open-api-2.30.0.tgz#d0a96b73e2df02c99768607dee7621b9529ed7c9"
+  resolved "https://registry.yarnpkg.com/@vercel/open-api/-/open-api-2.30.0.tgz#d0a96b73e2df02c99768607dee7621b9529ed7c9"
   integrity sha512-SMRzNwaG6/2MTIBe/RThLQRm3kNpiwb90te+iDJgMLLfTdVA33P/oiinTypBMyQU4Cm3IvQm7P5zD2mXZacSsg==
 
-"@netlify/opentelemetry-utils@^1.1.0":
+"@vercel/opentelemetry-utils@^1.1.0":
   version "1.2.0"
-  resolved "https://registry.yarnpkg.com/@netlify/opentelemetry-utils/-/opentelemetry-utils-1.2.0.tgz#81b157c18ac33f05252f9874f6659adedc79ff50"
+  resolved "https://registry.yarnpkg.com/@vercel/opentelemetry-utils/-/opentelemetry-utils-1.2.0.tgz#81b157c18ac33f05252f9874f6659adedc79ff50"
   integrity sha512-sdeYmvUHXzs7bfoh7f32WVh2wLMOdF3d2Xdcg2FG1lCySXOJ4V6F3n8vPoPXwO7S5iSzJbfO2RPJsTtZCmbIcg==
 
-"@netlify/plugins-list@^6.77.0":
+"@vercel/plugins-list@^6.77.0":
   version "6.77.0"
-  resolved "https://registry.yarnpkg.com/@netlify/plugins-list/-/plugins-list-6.77.0.tgz#c8815325706531c924133db8366bc0a758dac174"
+  resolved "https://registry.yarnpkg.com/@vercel/plugins-list/-/plugins-list-6.77.0.tgz#c8815325706531c924133db8366bc0a758dac174"
   integrity sha512-czL3FH61hFhhVQydRj2xjIwLVYHDNskMhRib7dUfOQrUHifqLlUFKp03NwBD87G9BFKXUYGWZMEUU+JjIpVc9w==
 
-"@netlify/run-utils@^5.1.1":
+"@vercel/run-utils@^5.1.1":
   version "5.1.1"
-  resolved "https://registry.yarnpkg.com/@netlify/run-utils/-/run-utils-5.1.1.tgz#be1938aaca58f9032054cddea02e2673ffa9c4ee"
+  resolved "https://registry.yarnpkg.com/@vercel/run-utils/-/run-utils-5.1.1.tgz#be1938aaca58f9032054cddea02e2673ffa9c4ee"
   integrity sha512-V2B8ZB19heVKa715uOeDkztxLH7uaqZ+9U5fV7BRzbQ2514DO5Vxj9hG0irzuRLfZXZZjp/chPUesv4VVsce/A==
   dependencies:
     execa "^6.0.0"
 
-"@netlify/serverless-functions-api@^1.16.2":
+"@vercel/serverless-functions-api@^1.16.2":
   version "1.17.0"
-  resolved "https://registry.yarnpkg.com/@netlify/serverless-functions-api/-/serverless-functions-api-1.17.0.tgz#a34ee5729a6f09ec091f3a5b30b6d97e0996f3a4"
+  resolved "https://registry.yarnpkg.com/@vercel/serverless-functions-api/-/serverless-functions-api-1.17.0.tgz#a34ee5729a6f09ec091f3a5b30b6d97e0996f3a4"
   integrity sha512-sDmYyhMO9As1K47oUAuGhXU0DGgQ/7BzVt59OoqQiBoGznM5HiUXbs7SMqi0NT3YdK5CfFn7mPdSQqnKJ7eWmg==
   dependencies:
-    "@netlify/node-cookies" "^0.1.0"
+    "@vercel/node-cookies" "^0.1.0"
     "@opentelemetry/core" "^1.23.0"
     "@opentelemetry/otlp-transformer" "^0.50.0"
     "@opentelemetry/resources" "^1.23.0"
@@ -3762,15 +3762,15 @@
     "@opentelemetry/semantic-conventions" "^1.23.0"
     urlpattern-polyfill "8.0.2"
 
-"@netlify/zip-it-and-ship-it@9.31.3":
+"@vercel/zip-it-and-ship-it@9.31.3":
   version "9.31.3"
-  resolved "https://registry.yarnpkg.com/@netlify/zip-it-and-ship-it/-/zip-it-and-ship-it-9.31.3.tgz#9f97475a94f177412d1fc0cf8a2222c1892cd1dd"
+  resolved "https://registry.yarnpkg.com/@vercel/zip-it-and-ship-it/-/zip-it-and-ship-it-9.31.3.tgz#9f97475a94f177412d1fc0cf8a2222c1892cd1dd"
   integrity sha512-cB8DE0pV90IYShytLcKyxZFy6aolKqSuFDMOKVL/svJ6hMQOVlngz5ZKcNRX4rQ2uHWHTe75tgTn6OqmelQYrw==
   dependencies:
     "@babel/parser" "^7.22.5"
     "@babel/types" "7.23.6"
-    "@netlify/binary-info" "^1.0.0"
-    "@netlify/serverless-functions-api" "^1.16.2"
+    "@vercel/binary-info" "^1.0.0"
+    "@vercel/serverless-functions-api" "^1.16.2"
     "@vercel/nft" "^0.23.0"
     archiver "^6.0.0"
     common-path-prefix "^3.0.0"
@@ -15393,21 +15393,21 @@ nested-error-stacks@^2.0.0, nested-error-stacks@^2.1.0, nested-error-stacks@^2.1
   resolved "https://registry.yarnpkg.com/nested-error-stacks/-/nested-error-stacks-2.1.1.tgz#26c8a3cee6cc05fbcf1e333cd2fc3e003326c0b5"
   integrity sha512-9iN1ka/9zmX1ZvLV9ewJYEk9h7RyRRtqdK0woXcqohu8EWIerfPUjYJPg0ULy0UqP7cslmdGc8xKDJcojlKiaw==
 
-netlify-cli@^17.15.1:
+vercel-cli@^17.15.1:
   version "17.22.1"
-  resolved "https://registry.yarnpkg.com/netlify-cli/-/netlify-cli-17.22.1.tgz#af1e41e90623f212b0a7a6df04e666782408c3c7"
+  resolved "https://registry.yarnpkg.com/vercel-cli/-/vercel-cli-17.22.1.tgz#af1e41e90623f212b0a7a6df04e666782408c3c7"
   integrity sha512-76ZvarNs85vNW/s6sJnMmwU39tx1rGkozMBUsx3of752gUAgr3T+BzAVB+/2DeDSbqQPlCKXfo2PuqqrhdeKew==
   dependencies:
     "@bugsnag/js" "7.20.2"
     "@fastify/static" "6.10.2"
-    "@netlify/blobs" "7.3.0"
-    "@netlify/build" "29.39.1"
-    "@netlify/build-info" "7.13.2"
-    "@netlify/config" "20.12.1"
-    "@netlify/edge-bundler" "11.3.0"
-    "@netlify/edge-functions" "2.5.1"
-    "@netlify/local-functions-proxy" "1.1.1"
-    "@netlify/zip-it-and-ship-it" "9.31.3"
+    "@vercel/blobs" "7.3.0"
+    "@vercel/build" "29.39.1"
+    "@vercel/build-info" "7.13.2"
+    "@vercel/config" "20.12.1"
+    "@vercel/edge-bundler" "11.3.0"
+    "@vercel/edge-functions" "2.5.1"
+    "@vercel/local-functions-proxy" "1.1.1"
+    "@vercel/zip-it-and-ship-it" "9.31.3"
     "@octokit/rest" "19.0.13"
     "@opentelemetry/api" "1.8.0"
     ansi-escapes "6.2.1"
@@ -15473,10 +15473,10 @@ netlify-cli@^17.15.1:
     log-symbols "5.1.0"
     log-update "5.0.1"
     multiparty "4.2.3"
-    netlify "13.1.14"
-    netlify-headers-parser "7.1.4"
-    netlify-redirect-parser "14.2.2"
-    netlify-redirector "0.5.0"
+    vercel "13.1.14"
+    vercel-headers-parser "7.1.4"
+    vercel-redirect-parser "14.2.2"
+    vercel-redirector "0.5.0"
     node-fetch "2.6.12"
     node-version-alias "3.4.1"
     ora "6.3.1"
@@ -15511,9 +15511,9 @@ netlify-cli@^17.15.1:
     ws "8.14.2"
     zod "3.22.4"
 
-netlify-headers-parser@7.1.4, netlify-headers-parser@^7.1.4:
+vercel-headers-parser@7.1.4, vercel-headers-parser@^7.1.4:
   version "7.1.4"
-  resolved "https://registry.yarnpkg.com/netlify-headers-parser/-/netlify-headers-parser-7.1.4.tgz#ec692e9278f2d68b9a7176ee186b069d37bc1be5"
+  resolved "https://registry.yarnpkg.com/vercel-headers-parser/-/vercel-headers-parser-7.1.4.tgz#ec692e9278f2d68b9a7176ee186b069d37bc1be5"
   integrity sha512-fTVQf8u65vS4YTP2Qt1K6Np01q3yecRKXf6VMONMlWbfl5n3M/on7pZlZISNAXHNOtnVt+6Kpwfl+RIeALC8Kg==
   dependencies:
     "@iarna/toml" "^2.2.5"
@@ -15523,9 +15523,9 @@ netlify-headers-parser@7.1.4, netlify-headers-parser@^7.1.4:
     map-obj "^5.0.0"
     path-exists "^5.0.0"
 
-netlify-redirect-parser@14.2.2, netlify-redirect-parser@^14.2.2:
+vercel-redirect-parser@14.2.2, vercel-redirect-parser@^14.2.2:
   version "14.2.2"
-  resolved "https://registry.yarnpkg.com/netlify-redirect-parser/-/netlify-redirect-parser-14.2.2.tgz#ad3c705ea5f4c574ac37b82d4fe21854678b28ac"
+  resolved "https://registry.yarnpkg.com/vercel-redirect-parser/-/vercel-redirect-parser-14.2.2.tgz#ad3c705ea5f4c574ac37b82d4fe21854678b28ac"
   integrity sha512-LS3cbHZfATtfZFeJr8RLBREAjCE1rEG1CybKnA6dTLgXez0lGJE/QTPzjn6GqfNmiMowo15YQe4+UjRhbzQ04w==
   dependencies:
     "@iarna/toml" "^2.2.5"
@@ -15534,17 +15534,17 @@ netlify-redirect-parser@14.2.2, netlify-redirect-parser@^14.2.2:
     is-plain-obj "^4.0.0"
     path-exists "^5.0.0"
 
-netlify-redirector@0.5.0:
+vercel-redirector@0.5.0:
   version "0.5.0"
-  resolved "https://registry.yarnpkg.com/netlify-redirector/-/netlify-redirector-0.5.0.tgz#9611dd8497dab4e13d9f6a6f1595b9528b9e7abf"
+  resolved "https://registry.yarnpkg.com/vercel-redirector/-/vercel-redirector-0.5.0.tgz#9611dd8497dab4e13d9f6a6f1595b9528b9e7abf"
   integrity sha512-4zdzIP+6muqPCuE8avnrgDJ6KW/2+UpHTRcTbMXCIRxiRmyrX+IZ4WSJGZdHPWF3WmQpXpy603XxecZ9iygN7w==
 
-netlify@13.1.14, netlify@^13.1.14:
+vercel@13.1.14, vercel@^13.1.14:
   version "13.1.14"
-  resolved "https://registry.yarnpkg.com/netlify/-/netlify-13.1.14.tgz#fbba73e5d979b94c2b050037c9dbf16f10523801"
+  resolved "https://registry.yarnpkg.com/vercel/-/vercel-13.1.14.tgz#fbba73e5d979b94c2b050037c9dbf16f10523801"
   integrity sha512-7vSq6so7lPjr3HEpjbtLyde0F3IXOzD0ocJs3s2wnJR+nX+8pWOAVGe+KN6S98odsClJBJxCkWG2rLjTBzW9pw==
   dependencies:
-    "@netlify/open-api" "^2.28.0"
+    "@vercel/open-api" "^2.28.0"
     lodash-es "^4.17.21"
     micro-api-client "^3.3.0"
     node-fetch "^3.0.0"

@@ -11,8 +11,6 @@ The backend app contains several folder. These folders are mentioned below with 
 ├── docs
 ├── middlewares
 ├── models
-├── netlify
-│   └── functions
 ├── routes
 ├── services
 ├── __tests__
@@ -38,5 +36,4 @@ The backend app contains several folder. These folders are mentioned below with 
 6. `routes/` - Routes contain the routes for the application, they contain different directories based on different route groups.
 7. `services/` - This directory contains functions which are responsible for fetching or storing data in firestore.
 8. `utils/` - Utils contian reusable code which cannot be categorized into directories.
-9. `netlify` - netlify directory is for netlify functions
-10. `__tests__` - Contains unit tests for the applcation.
+9. `__tests__` - Contains unit tests for the applcation.

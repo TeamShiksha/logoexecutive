@@ -57,6 +57,8 @@ async function signinController(req, res, next) {
 
     res.cookie("jwt", user.generateJWT(), {
       expires: dayjs().add(1, "day").toDate(),
+      sameSite: "none",
+      secure: true,
     });
     return res.status(200).json({ message: "Sign In Successful" });
   } catch (err) {

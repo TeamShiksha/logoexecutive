@@ -22,14 +22,14 @@ const ENDPOINT = "/api/auth/verify";
 
 describe("GET /auth/verify", () => {
   beforeAll(() => {
-    process.env.BASE_URL = "http://validcorsorigin.com";
+    process.env.CLIENT_URL = "http://validcorsorigin.com";
   });
   afterEach(() => {
     jest.clearAllMocks();
     jest.restoreAllMocks();
   });
   afterAll(() => {
-    delete process.env.BASE_URL;
+    delete process.env.CLIENT_URL;
   });
 
   it("500 - Not allowed by CORS", async () => {

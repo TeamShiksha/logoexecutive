@@ -15,12 +15,12 @@ const ENDPOINT = "/api/user/delete";
 describe("deleteUserAccountController", () => {
   beforeAll(() => {
     process.env.JWT_SECRET = "my_secret";
-    process.env.BASE_URL = "http://validcorsorigin.com";
+    process.env.CLIENT_URL = "http://validcorsorigin.com";
   });
 
   afterAll(() => {
     delete process.env.JWT_SECRET;
-    delete process.env.BASE_URL;
+    delete process.env.CLIENT_URL;
   });
 
   it("500 - Not allowed by CORS", async () => {
@@ -32,7 +32,7 @@ describe("deleteUserAccountController", () => {
     expect(response.body).toEqual({
       error: STATUS_CODES[500],
       message: "Not allowed by CORS",
-      statusCode: 500
+      statusCode: 500,
     });
   });
 
@@ -53,24 +53,24 @@ describe("deleteUserAccountController", () => {
   });
 
   it("should call next with an error when deleteUserAccount throws an error", async () => {
-  
     const mockError = new Error("Mock error");
-    require("../../../../services/Users").deleteUserAccount.mockRejectedValue(mockError);
-  
+    require("../../../../services/Users").deleteUserAccount.mockRejectedValue(
+      mockError
+    );
+
     const mockReq = {
       userData: {
-        userId: "testUserId"
-      }
+        userId: "testUserId",
+      },
     };
     const mockRes = {
       status: jest.fn().mockReturnThis(),
-      json: jest.fn()
+      json: jest.fn(),
     };
     const next = jest.fn();
-  
+
     await deleteUserAccountController(mockReq, mockRes, next);
-  
+
     expect(next).toHaveBeenCalledWith(mockError);
   });
-
 });

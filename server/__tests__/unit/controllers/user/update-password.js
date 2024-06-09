@@ -14,14 +14,13 @@ jest.mock("../../../../services/Users", () => ({
 const ENDPOINT = "/api/user/update-password";
 
 describe("POST - /user/update-password", () => {
-
   beforeAll(() => {
     process.env.JWT_SECRET = "my_secret";
-    process.env.BASE_URL = "http://validcorsorigin.com";
+    process.env.CLIENT_URL = "http://validcorsorigin.com";
   });
   afterAll(() => {
     delete process.env.JWT_SECRET;
-    delete process.env.BASE_URL;
+    delete process.env.CLIENT_URL;
   });
 
   it("500 - Not allowed by CORS", async () => {
@@ -33,12 +32,11 @@ describe("POST - /user/update-password", () => {
     expect(response.body).toEqual({
       error: STATUS_CODES[500],
       message: "Not allowed by CORS",
-      statusCode: 500
+      statusCode: 500,
     });
   });
 
-  
-  it("422 - Password and confirm password do not match", async() =>{
+  it("422 - Password and confirm password do not match", async () => {
     const mockToken = mockUserModel.generateJWT();
     const response = await request(app)
       .post(ENDPOINT)
@@ -46,7 +44,7 @@ describe("POST - /user/update-password", () => {
       .send({
         currPassword: "Aviralyadav@7",
         newPassword: "Aviralyadav@8",
-        confirmPassword: "doesNotMatch"
+        confirmPassword: "doesNotMatch",
       });
 
     expect(response.status).toBe(422);
@@ -57,7 +55,7 @@ describe("POST - /user/update-password", () => {
     });
   });
 
-  it("422 - New password must be at least 8 characters", async() =>{
+  it("422 - New password must be at least 8 characters", async () => {
     const mockToken = mockUserModel.generateJWT();
     const response = await request(app)
       .post(ENDPOINT)
@@ -65,7 +63,7 @@ describe("POST - /user/update-password", () => {
       .send({
         currPassword: "Aviralyadav@7",
         newPassword: "small",
-        confirmPassword: "small"
+        confirmPassword: "small",
       });
 
     expect(response.status).toBe(422);
@@ -76,14 +74,14 @@ describe("POST - /user/update-password", () => {
     });
   });
 
-  it("422 - Current password is required", async() =>{
+  it("422 - Current password is required", async () => {
     const mockToken = mockUserModel.generateJWT();
     const response = await request(app)
       .post(ENDPOINT)
       .set("cookie", `jwt=${mockToken}`)
       .send({
         newPassword: "small",
-        confirmPassword: "small"
+        confirmPassword: "small",
       });
 
     expect(response.status).toBe(422);
@@ -94,16 +92,18 @@ describe("POST - /user/update-password", () => {
     });
   });
 
-  it("400 - Current password is incorrect", async() =>{
+  it("400 - Current password is incorrect", async () => {
     const mockToken = mockUserModel.generateJWT();
-    jest.spyOn(UserService, "fetchUserByEmail").mockResolvedValueOnce( new Users(mockUsers[0]));
+    jest
+      .spyOn(UserService, "fetchUserByEmail")
+      .mockResolvedValueOnce(new Users(mockUsers[0]));
     const response = await request(app)
       .post(ENDPOINT)
       .set("cookie", `jwt=${mockToken}`)
       .send({
         currPassword: "Aviralyadav@7",
         newPassword: "NotVerysmall",
-        confirmPassword: "NotVerysmall"
+        confirmPassword: "NotVerysmall",
       });
 
     expect(response.status).toBe(400);
@@ -114,17 +114,21 @@ describe("POST - /user/update-password", () => {
     });
   });
 
-  it("500 - Unexpected error occured while updating password", async() =>{
+  it("500 - Unexpected error occured while updating password", async () => {
     const mockToken = mockUserModel.generateJWT();
-    jest.spyOn(UserService, "fetchUserByEmail").mockResolvedValueOnce( new Users(mockUsers[0]));
-    jest.spyOn(UserService, "updatePasswordbyUser").mockResolvedValueOnce(false);
+    jest
+      .spyOn(UserService, "fetchUserByEmail")
+      .mockResolvedValueOnce(new Users(mockUsers[0]));
+    jest
+      .spyOn(UserService, "updatePasswordbyUser")
+      .mockResolvedValueOnce(false);
     const response = await request(app)
       .post(ENDPOINT)
       .set("cookie", `jwt=${mockToken}`)
       .send({
         currPassword: "password123",
         newPassword: "NotVerysmall",
-        confirmPassword: "NotVerysmall"
+        confirmPassword: "NotVerysmall",
       });
 
     expect(response.status).toBe(500);
@@ -135,17 +139,21 @@ describe("POST - /user/update-password", () => {
     });
   });
 
-  it("500 - Unexpected error", async() =>{
+  it("500 - Unexpected error", async () => {
     const mockToken = mockUserModel.generateJWT();
-    jest.spyOn(UserService, "fetchUserByEmail").mockResolvedValueOnce( new Users(mockUsers[0]));
-    jest.spyOn(UserService, "updatePasswordbyUser").mockImplementation(() => {throw new Error("Unexpected error");});
+    jest
+      .spyOn(UserService, "fetchUserByEmail")
+      .mockResolvedValueOnce(new Users(mockUsers[0]));
+    jest.spyOn(UserService, "updatePasswordbyUser").mockImplementation(() => {
+      throw new Error("Unexpected error");
+    });
     const response = await request(app)
       .post(ENDPOINT)
       .set("cookie", `jwt=${mockToken}`)
       .send({
         currPassword: "password123",
         newPassword: "NotVerysmall",
-        confirmPassword: "NotVerysmall"
+        confirmPassword: "NotVerysmall",
       });
 
     expect(response.status).toBe(500);
@@ -156,9 +164,11 @@ describe("POST - /user/update-password", () => {
     });
   });
 
-  it("200 - Password updated successfully", async() =>{
+  it("200 - Password updated successfully", async () => {
     const mockToken = mockUserModel.generateJWT();
-    jest.spyOn(UserService, "fetchUserByEmail").mockResolvedValueOnce( new Users(mockUsers[0]));
+    jest
+      .spyOn(UserService, "fetchUserByEmail")
+      .mockResolvedValueOnce(new Users(mockUsers[0]));
     jest.spyOn(UserService, "updatePasswordbyUser").mockResolvedValueOnce(true);
     const response = await request(app)
       .post(ENDPOINT)
@@ -166,13 +176,13 @@ describe("POST - /user/update-password", () => {
       .send({
         currPassword: "password123",
         newPassword: "NotVerysmall",
-        confirmPassword: "NotVerysmall"
+        confirmPassword: "NotVerysmall",
       });
 
     expect(response.status).toBe(200);
     expect(response.body).toEqual({
       message: "Password updated successfully",
-      statusCode: 200
+      statusCode: 200,
     });
   });
 });

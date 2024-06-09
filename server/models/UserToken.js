@@ -41,7 +41,9 @@ class UserToken {
    * @param {Date} [params.expireAt] - expiry date of token (Default value is 24 hours after creation)
    **/
   static NewUserToken(params) {
-    const expireAt = params.expireAt ? normalizeDate(params.expireAt) : dayjs().add(1, "day").toDate();
+    const expireAt = params.expireAt
+      ? normalizeDate(params.expireAt)
+      : dayjs().add(1, "day").toDate();
     return {
       userId: params.userId,
       token: v4().replaceAll("-", ""),
@@ -61,7 +63,7 @@ class UserToken {
     let path, url;
     if (this.type === UserTokenTypes.FORGOT) path = "/reset-password";
     if (this.type === UserTokenTypes.VERIFY) path = "/verify";
-    url = new URL(path, process.env.BASE_URL);
+    url = new URL(path, process.env.CLIENT_URL);
     url.searchParams.append("token", this.token);
     return url;
   }

@@ -1,11 +1,13 @@
+/* eslint-disable quotes */
 const { validateEnv } = require("../../../../utils/scripts/envSchema");
 
 const validEnv = {
   CLOUD_FRONT_KEYPAIR_ID: "ABCDEF1234567890",
-  PORT:5000,
+  PORT: 5000,
   CLOUD_FRONT_PRIVATE_KEY: "randomText",
   DISTRIBUTION_DOMAIN: "https://d111111abcdef8.cloudfront.net",
-  BASE_URL: "http://localhost:3000",
+  CLIENT_URL: "http://localhost:3000",
+  SERVER_DOMAIN: "http://localhost:5000",
   EMAIL_HOST: "randomText",
   EMAIL_SERVICE: "randomText",
   EMAIL_PORT: 587,
@@ -28,17 +30,24 @@ const validEnv = {
 };
 
 describe("If service account key exists", () => {
-
-  it("should return error message if BASE_URL is not a valid URI", () => {
+  it("should return error message if CLIENT_URL is not a valid URI", () => {
     const env = { ...validEnv };
-    delete env.BASE_URL;
-    env.BASE_URL = "randomText";
+    delete env.CLIENT_URL;
+    env.CLIENT_URL = "randomText";
     const result = validateEnv(env);
 
     expect(result).toHaveProperty("error");
     expect(result.error.message).toMatch(
-      /\"BASE_URL\" must be a valid uri/gi
+      /\"CLIENT_URL\" must be a valid uri/gi
     );
+  });
+
+  it("should return error message if SERVER_DOMAIN is not a valid URI", () => {
+    const env = { ...validEnv };
+    delete env.SERVER_DOMAIN;
+    const result = validateEnv(env);
+
+    expect(result.error.message).toMatch(/\"SERVER_DOMAIN\" is required/gi);
   });
 
   it("should return error message if EMAIL_PORT is not a number", () => {
@@ -49,7 +58,7 @@ describe("If service account key exists", () => {
 
     expect(result).toHaveProperty("error");
     expect(result.error.message).toMatch(
-      "\"EMAIL_PORT\" with value \"randomText\" fails to match the required pattern: /^\\d+$/"
+      '"EMAIL_PORT" with value "randomText" fails to match the required pattern: /^\\d+$/'
     );
   });
 
@@ -61,7 +70,7 @@ describe("If service account key exists", () => {
 
     expect(result).toHaveProperty("error");
     expect(result.error.message).toMatch(
-      "\"PORT\" with value \"randomText\" fails to match the required pattern: /^\\d+$/"
+      '"PORT" with value "randomText" fails to match the required pattern: /^\\d+$/'
     );
   });
 
@@ -71,9 +80,7 @@ describe("If service account key exists", () => {
     env.EMAIL_USER = "randomText";
     const result = validateEnv(env);
     expect(result).toHaveProperty("error");
-    expect(result.error.message).toMatch(
-      "\"EMAIL_USER\" must be a valid email"
-    );
+    expect(result.error.message).toMatch('"EMAIL_USER" must be a valid email');
   });
 
   it("should return error message if CLOUD_FRONT_KEYPAIR_ID does not exist", () => {
@@ -83,7 +90,7 @@ describe("If service account key exists", () => {
     const result = validateEnv(env);
     expect(result).toHaveProperty("error");
     expect(result.error.message).toMatch(
-      "\"CLOUD_FRONT_KEYPAIR_ID\" is required"
+      '"CLOUD_FRONT_KEYPAIR_ID" is required'
     );
   });
 
@@ -95,7 +102,7 @@ describe("If service account key exists", () => {
     const result = validateEnv(env);
     expect(result).toHaveProperty("error");
     expect(result.error.message).toMatch(
-      "\"CLOUD_FRONT_KEYPAIR_ID\" with value \"R134a\" fails to match the required pattern: /^[A-Z0-9]+$/"
+      '"CLOUD_FRONT_KEYPAIR_ID" with value "R134a" fails to match the required pattern: /^[A-Z0-9]+$/'
     );
   });
 
@@ -120,7 +127,7 @@ describe("If service account key exists", () => {
 
     expect(result).toHaveProperty("error");
     expect(result.error.message).toMatch(
-      "\"DISTRIBUTION_DOMAIN\" must be a valid uri with a scheme matching the https pattern"
+      '"DISTRIBUTION_DOMAIN" must be a valid uri with a scheme matching the https pattern'
     );
   });
 
@@ -130,7 +137,7 @@ describe("If service account key exists", () => {
     const result = validateEnv(env);
 
     expect(result).toHaveProperty("error");
-    expect(result.error.message).toMatch("\"DISTRIBUTION_DOMAIN\" is required");
+    expect(result.error.message).toMatch('"DISTRIBUTION_DOMAIN" is required');
   });
 
   it("should return error message if BUCKET NAME does not exist", () => {
@@ -139,7 +146,7 @@ describe("If service account key exists", () => {
     const result = validateEnv(env);
 
     expect(result).toHaveProperty("error");
-    expect(result.error.message).toMatch("\"BUCKET_NAME\" is required");
+    expect(result.error.message).toMatch('"BUCKET_NAME" is required');
   });
 
   it("should return error message if BUCKET_REGION does not exist", () => {
@@ -148,7 +155,7 @@ describe("If service account key exists", () => {
     const result = validateEnv(env);
 
     expect(result).toHaveProperty("error");
-    expect(result.error.message).toMatch("\"BUCKET_REGION\" is required");
+    expect(result.error.message).toMatch('"BUCKET_REGION" is required');
   });
   it("should return error message if ACCESS_KEY does not exist", () => {
     const env = { ...validEnv };
@@ -156,7 +163,7 @@ describe("If service account key exists", () => {
     const result = validateEnv(env);
 
     expect(result).toHaveProperty("error");
-    expect(result.error.message).toMatch("\"ACCESS_KEY\" is required");
+    expect(result.error.message).toMatch('"ACCESS_KEY" is required');
   });
 
   it("should return error message ifSECRET_ACCESS_KEY does not exist", () => {
@@ -165,6 +172,6 @@ describe("If service account key exists", () => {
     const result = validateEnv(env);
 
     expect(result).toHaveProperty("error");
-    expect(result.error.message).toMatch("\"SECRET_ACCESS_KEY\" is required");
+    expect(result.error.message).toMatch('"SECRET_ACCESS_KEY" is required');
   });
 });

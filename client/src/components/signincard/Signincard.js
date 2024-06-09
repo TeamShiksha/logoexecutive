@@ -14,14 +14,11 @@ function Signincard() {
 	const {setIsAuthenticated} = useContext(AuthContext);
 	const navigate = useNavigate();
 	const {state} = useLocation();
-	const {errorMsg, makeRequest, loading} = useApi(
-		{
-			url: `api/auth/signin`,
-			method: 'post',
-			data: formData,
-		},
-		true,
-	);
+	const {errorMsg, makeRequest, loading} = useApi({
+		url: `api/auth/signin`,
+		method: 'post',
+		data: formData,
+	});
 
 	const handleFormChange = (e) => {
 		const {name, value} = e.target;

@@ -18,11 +18,11 @@ const ENDPOINT = "/api/auth/signin";
 describe("Signin Controller", () => {
   beforeAll(() => {
     process.env.JWT_SECRET = "mysecret";
-    process.env.BASE_URL = "http://validcorsorigin.com";
+    process.env.CLIENT_URL = "http://validcorsorigin.com";
   });
   afterAll(() => {
     delete process.env.JWT_SECRET;
-    delete process.env.BASE_URL;
+    delete process.env.CLIENT_URL;
   });
 
   it("500 - Not allowed by CORS", async () => {

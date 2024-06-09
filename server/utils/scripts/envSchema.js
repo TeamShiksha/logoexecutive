@@ -2,8 +2,9 @@ const Joi = require("joi");
 
 const EnvSchema = Joi.object()
   .keys({
-    BASE_URL: Joi.string().uri().required(),
-    PORT:Joi.alternatives(
+    CLIENT_URL: Joi.string().uri().required(),
+    SERVER_DOMAIN: Joi.string().required(),
+    PORT: Joi.alternatives(
       Joi.string().regex(/^\d+$/),
       Joi.number()
     ).required(),

@@ -12,10 +12,13 @@ import {useApi} from '../../hooks/useApi';
 
 function AdminDashboard() {
 	// const [adminDetails, setAdminDetails] = useState(dummyAdminTableDetails);
-	const {data, makeRequest, errorMsg} = useApi({
-		url: 'api/admin/images',
-		method: 'get',
-	});
+	const {data, makeRequest, errorMsg} = useApi(
+		{
+			url: 'api/admin/images',
+			method: 'get',
+		},
+		true,
+	);
 
 	useEffect(() => {
 		makeRequest();

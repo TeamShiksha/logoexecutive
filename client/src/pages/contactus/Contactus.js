@@ -16,11 +16,14 @@ import './Contactus.css';
 function Contactus() {
 	const [formData, setFormData] = useState(INITIAL_CONTACTUS_FORM_DATA);
 	const [validationError, setValidationError] = useState('');
-	const {errorMsg, makeRequest, data, loading, isSuccess} = useApi({
-		url: `api/public/contact-us`,
-		method: 'post',
-		data: formData,
-	});
+	const {errorMsg, makeRequest, data, loading, isSuccess} = useApi(
+		{
+			url: `api/public/contact-us`,
+			method: 'post',
+			data: formData,
+		},
+		true,
+	);
 	const {isAuthenticated} = useContext(AuthContext);
 	const {userData, fetchUserData} = useContext(UserContext);
 

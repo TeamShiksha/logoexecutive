@@ -28,22 +28,6 @@ const validEnv = {
 };
 
 describe("If service account key exists", () => {
-  it("should return value if port exists", () => {
-    const env = { ...validEnv };
-    const result = validateEnv(env);
-    expect(result.error).toBeFalsy();
-    expect(result).toHaveProperty("value");
-    expect(result.value).toStrictEqual(env);
-  });
-
-  it("should be valid if port is a number", () => {
-    const env = { ...validEnv };
-    const result = validateEnv(env);
-
-    expect(result.error).toBeFalsy();
-    expect(result).toHaveProperty("value");
-    expect(result.value).toStrictEqual(env);
-  });
 
   it("should return error message if BASE_URL is not a valid URI", () => {
     const env = { ...validEnv };
@@ -66,6 +50,18 @@ describe("If service account key exists", () => {
     expect(result).toHaveProperty("error");
     expect(result.error.message).toMatch(
       "\"EMAIL_PORT\" with value \"randomText\" fails to match the required pattern: /^\\d+$/"
+    );
+  });
+
+  it("should return error message if PORT is not a number", () => {
+    const env = { ...validEnv };
+    delete env.PORT;
+    env.PORT = "randomText";
+    const result = validateEnv(env);
+
+    expect(result).toHaveProperty("error");
+    expect(result.error.message).toMatch(
+      "\"PORT\" with value \"randomText\" fails to match the required pattern: /^\\d+$/"
     );
   });
 

@@ -9,7 +9,4 @@ export const instance = axios.create({
 	withCredentials: true,
 });
 
-export const protectedInstance = axios.create({
-	baseURL: PROXY_URL,
-	withCredentials: true,
-});
+export const protectedInstance = instance;

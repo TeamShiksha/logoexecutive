@@ -9,7 +9,6 @@ const cors = require("cors");
 const privateRouteCORS = {
   origin: (origin, callback) => {
     if (
-      origin === "http://127.0.0.1:8888" ||
       origin === process.env.BASE_URL ||
       !origin
     ) {

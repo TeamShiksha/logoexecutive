@@ -78,7 +78,7 @@ describe('Contact Us Component', () => {
 	it('renders link to Get a demo section', () => {
 		renderContactUs();
 		const getADemoLink = screen.getByText('Get a demo');
-		expect(getADemoLink).toHaveAttribute('href', '/welcome#demo');
+		expect(getADemoLink).toHaveAttribute('href', '/home#demo');
 	});
 
 	it('renders arrow icon next to Get a demo link', () => {

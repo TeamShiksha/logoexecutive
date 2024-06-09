@@ -172,7 +172,7 @@ function Contactus() {
 							issues with our product or have any questions.
 						</p>
 						<div className='custom-link'>
-							<Link to='/welcome#demo'>Get a demo</Link>
+							<Link to='/home#demo'>Get a demo</Link>
 							<FiArrowRight
 								className='contact-arrow-icon'
 								data-testid='contact-arrow-icon'

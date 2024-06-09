@@ -48,7 +48,7 @@ export default function Verification() {
 					)}
 				</section>
 			) : (
-				<Navigate to='/welcome' />
+				<Navigate to='/home' />
 			)}
 		</div>
 	);

@@ -11,7 +11,7 @@ const Dropdown = ({handleLogout, toggleShowAccount}) => {
 	const handleLogoutClick = () => {
 		handleLogout();
 		toggleShowAccount();
-		navigate('/welcome');
+		navigate('/home');
 	};
 	return (
 		<>

@@ -66,7 +66,7 @@ function ResetPassword() {
 				if (success) setToken(extractedToken);
 			})();
 		} else {
-			navigate('/welcome');
+			navigate('/home');
 		}
 	}, []);
 

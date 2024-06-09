@@ -8,10 +8,7 @@ const cors = require("cors");
 
 const privateRouteCORS = {
   origin: (origin, callback) => {
-    if (
-      origin === process.env.BASE_URL ||
-      !origin
-    ) {
+    if (origin === process.env.BASE_URL || !origin) {
       callback(null, true);
     } else {
       callback(new Error("Not allowed by CORS"));

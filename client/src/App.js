@@ -27,7 +27,7 @@ function App() {
 			<ScrollToAnchor />
 			<Header />
 			<Routes>
-				<Route index element={<Navigate to='/welcome' />} />
+				<Route index element={<Navigate to='/home' />} />
 				<Route path='/about' element={<About />} />
 				<Route path='/contactus' element={<Contactus />} />
 				<Route path='/docs' element={<ApiDocs />} />
@@ -36,7 +36,7 @@ function App() {
 				<Route path='/reset-password' element={<ResetPassword />} />
 				<Route path='/signin' element={<Signin />} />
 				<Route path='/signup' element={<Signup />} />
-				<Route path='/welcome' element={<Home />} />
+				<Route path='/home' element={<Home />} />
 				<Route path='/verify' element={<Verification />} />
 				<Route
 					path='/profile'

@@ -2,7 +2,7 @@ import {rest} from 'msw';
 
 export const forgotPasswordHandler = [
 	rest.post(
-		`${process.env.PROXY_URL}/api/auth/forgot-password`,
+		`${process.env.REACT_APP_PROXY_URL}/api/auth/forgot-password`,
 		(req, res, ctx) => {
 			return res(
 				ctx.status(200),

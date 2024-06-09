@@ -24,7 +24,7 @@ describe('VerificationStatus Component', () => {
 			<MemoryRouter initialEntries={[url]}>
 				<Routes>
 					<Route path='/verify' element={<Verification />} />
-					<Route path='/welcome' element={<Home />} />
+					<Route path='/home' element={<Home />} />
 				</Routes>
 			</MemoryRouter>,
 		);
@@ -32,7 +32,7 @@ describe('VerificationStatus Component', () => {
 			expect(navigate).not.toHaveBeenCalled();
 		});
 		setTimeout(() => {
-			expect(navigate).toHaveBeenCalledWith('/welcome');
+			expect(navigate).toHaveBeenCalledWith('/home');
 		}, 3000);
 		expect(screen.getByTestId('home-container')).toBeInTheDocument();
 	});
@@ -46,7 +46,7 @@ describe('VerificationStatus Component', () => {
 			<MemoryRouter initialEntries={[url]}>
 				<Routes>
 					<Route path='/verify' element={<Verification />} />
-					<Route path='/welcome' element={<Home />} />
+					<Route path='/home' element={<Home />} />
 				</Routes>
 			</MemoryRouter>,
 		);

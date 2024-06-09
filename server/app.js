@@ -21,6 +21,11 @@ app.use("/api/", routes);
 app.use(routeNotFound);
 app.use(errorHandler);
 
-app.listen(process.env.PORT,()=>{console.log(`Server listening at port ${process.env.PORT}`);});
 
-module.exports = app;
+if (process.env.NODE_ENV !== "test") {
+  app.listen(process.env.PORT, () => {
+    console.log(`Server running at http://localhost:${process.env.PORT}`);
+  });
+}
+
+module.exports =  app;

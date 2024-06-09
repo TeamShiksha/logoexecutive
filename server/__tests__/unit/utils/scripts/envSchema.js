@@ -2,6 +2,7 @@ const { validateEnv } = require("../../../../utils/scripts/envSchema");
 
 const validEnv = {
   CLOUD_FRONT_KEYPAIR_ID: "ABCDEF1234567890",
+  PORT:5000,
   CLOUD_FRONT_PRIVATE_KEY: "randomText",
   DISTRIBUTION_DOMAIN: "https://d111111abcdef8.cloudfront.net",
   BASE_URL: "http://localhost:3000",

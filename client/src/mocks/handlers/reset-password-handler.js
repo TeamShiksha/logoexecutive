@@ -3,7 +3,7 @@ import {STATUS_CODES} from 'http';
 
 export const resetPasswordHandler = [
 	rest.patch(
-		`${process.env.PROXY_URL}/api/auth/reset-password`,
+		`${process.env.REACT_APP_PROXY_URL}/api/auth/reset-password`,
 		(req, res, ctx) => {
 			const {newPassword, confirmPassword} = req.body;
 

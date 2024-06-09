@@ -115,7 +115,7 @@ describe('Protected Route', () => {
 		);
 		expect(screen.getByText(/Sign in to dashboard/i)).toBeInTheDocument();
 	});
-	it('redirects non-admin user to /welcome route when attempting to access admin route', () => {
+	it('redirects non-admin user to /home route when attempting to access admin route', () => {
 		render(
 			<AuthContext.Provider value={{isAuthenticated: true}}>
 				<UserContext.Provider value={{userData: mockUserData, fetchUserData}}>
@@ -129,7 +129,7 @@ describe('Protected Route', () => {
 									</ProtectedRoute>
 								}
 							/>
-							<Route path='/welcome' element={<Home />} />
+							<Route path='/home' element={<Home />} />
 						</Routes>
 					</MemoryRouter>
 				</UserContext.Provider>

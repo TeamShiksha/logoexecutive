@@ -5,7 +5,7 @@ import Logo from '../../assets/images/business-man-logo.webp';
 const NotFound = () => {
 	const navigate = useNavigate();
 	const handleHomePageBtnClick = () => {
-		navigate('/welcome');
+		navigate('/home');
 	};
 	return (
 		<div className='error-container'>

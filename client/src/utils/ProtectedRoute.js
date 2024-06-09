@@ -24,7 +24,7 @@ function ProtectedRoute({adminOnly, children}) {
 		if (userData.userType === 'ADMIN') {
 			return children;
 		} else {
-			return <Navigate to='/welcome' replace={true} />;
+			return <Navigate to='/home' replace={true} />;
 		}
 	}
 

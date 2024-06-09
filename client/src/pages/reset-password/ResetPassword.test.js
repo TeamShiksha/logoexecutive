@@ -94,7 +94,7 @@ describe('ResetPassword component', () => {
 		});
 	});
 
-	it('navigates to /welcome when token is not provided', () => {
+	it('navigates to /home when token is not provided', () => {
 		useLocation.mockReturnValue({search: ''});
 		const navigate = useNavigate();
 		render(
@@ -103,7 +103,7 @@ describe('ResetPassword component', () => {
 			</BrowserRouter>,
 		);
 
-		expect(navigate).toHaveBeenCalledWith('/welcome');
+		expect(navigate).toHaveBeenCalledWith('/home');
 	});
 
 	it('submits form successfully if passwords match', async () => {

@@ -25,10 +25,10 @@ describe('Page Not Found test', () => {
 		expect(screen.getByText('Oops! Page Not Found')).toBeInTheDocument();
 	});
 
-	test('should navigate to /welcome when clicked on go to homepage', () => {
+	test('should navigate to /home when clicked on go to homepage', () => {
 		renderNotFound();
 		const logout = screen.getByText('Go to homepage');
 		fireEvent.click(logout);
-		expect(navigate).toHaveBeenCalledWith('/welcome');
+		expect(navigate).toHaveBeenCalledWith('/home');
 	});
 });

@@ -71,7 +71,7 @@ describe('PreviewModal', () => {
 	it('shows error message and when image upload fails', async () => {
 		server.use(
 			rest.post(
-				`${process.env.PROXY_URL}/api/admin/upload`,
+				`${process.env.REACT_APP_PROXY_URL}/api/admin/upload`,
 				(req, res, ctx) => {
 					return res(
 						ctx.status(500),

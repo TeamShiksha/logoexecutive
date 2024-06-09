@@ -1,10 +1,10 @@
 // Footer related
 export const footerColumns = [
 	[
-		{name: 'Welcome', link: '/welcome'},
+		{name: 'Welcome', link: '/home'},
 		{
 			name: 'Demo',
-			link: '/welcome#demo',
+			link: '/home#demo',
 		},
 	],
 	[
@@ -39,11 +39,11 @@ export const loggedInNavbarItems = [
 export const loggedOutNavbarItems = [
 	{
 		name: 'Home',
-		link: '/welcome',
+		link: '/home',
 	},
 	{
 		name: 'Demo',
-		link: '/welcome#demo',
+		link: '/home#demo',
 	},
 	{
 		name: 'Pricing',

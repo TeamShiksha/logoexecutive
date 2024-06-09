@@ -5,7 +5,7 @@ const useCountdownTimer = (
 	navigate,
 	countdown,
 	setCountdown,
-	route = '/welcome',
+	route = '/home',
 ) => {
 	useEffect(() => {
 		let timer = null;

@@ -3,7 +3,7 @@ import {STATUS_CODES} from 'http';
 
 export const updateProfileHandler = [
 	rest.patch(
-		`${process.env.PROXY_URL}/api/user/update-profile`,
+		`${process.env.REACT_APP_PROXY_URL}/api/user/update-profile`,
 		(req, res, ctx) => {
 			const {firstName} = req.body;
 
@@ -27,7 +27,7 @@ export const updateProfileHandler = [
 		},
 	),
 	rest.post(
-		`${process.env.PROXY_URL}/api/user/update-password`,
+		`${process.env.REACT_APP_PROXY_URL}/api/user/update-password`,
 		(req, res, ctx) => {
 			const {currPassword} = req.body;
 			if (currPassword === 'invalidPass@123') {

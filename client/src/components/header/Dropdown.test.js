@@ -49,7 +49,7 @@ describe('Dropdown test', () => {
 		const logout = screen.getByTestId('logout-option');
 		fireEvent.click(logout);
 		expect(handleLogout).toHaveBeenCalled();
-		expect(navigate).toHaveBeenCalledWith('/welcome');
+		expect(navigate).toHaveBeenCalledWith('/home');
 		expect(toggleShowAccount).toHaveBeenCalled();
 	});
 });

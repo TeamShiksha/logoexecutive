@@ -11,7 +11,7 @@ describe('useCountdownTimer', () => {
 	beforeEach(() => {
 		jest.useFakeTimers();
 	});
-	it('should navigate to "/welcome" when countdown reaches 0', () => {
+	it('should navigate to "/home" when countdown reaches 0', () => {
 		const navigateMock = jest.fn();
 		let countdown = 3;
 		const setCountdownMock = jest.fn().mockImplementation((value) => {
@@ -25,7 +25,7 @@ describe('useCountdownTimer', () => {
 		});
 		setTimeout(() => {
 			expect(result.current).toBe(0);
-			expect(navigateMock).toHaveBeenCalledWith('/welcome');
+			expect(navigateMock).toHaveBeenCalledWith('/home');
 		}, 3000);
 	});
 
@@ -79,6 +79,6 @@ describe('useCountdownTimer', () => {
 		setTimeout(() => {
 			expect(result.current).toBe(0);
 		}, 1000);
-		expect(navigateMock).toHaveBeenCalledWith('/welcome');
+		expect(navigateMock).toHaveBeenCalledWith('/home');
 	});
 });

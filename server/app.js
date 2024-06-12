@@ -4,11 +4,13 @@ const dotenv = require("dotenv");
 const morgan = require("morgan");
 const { validateEnv } = require("./utils/scripts/envSchema.js");
 
-dotenv.config();
-const { error } = validateEnv(process.env);
-if (error) {
-  console.log(`Config validation error: ${error.message}`);
-  process.exit(1);
+if (process.env.NODE_ENV !== "test") {
+  dotenv.config();
+  const { error } = validateEnv(process.env);
+  if (error) {
+    console.log(`Config validation error: ${error.message}`);
+    process.exit(1);
+  }
 }
 
 const routes = require("./routes");

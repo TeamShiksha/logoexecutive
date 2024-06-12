@@ -319,23 +319,19 @@ describe('Profile component', () => {
 		const passwordError = screen.getByTestId('password-error');
 		const saveButton = screen.getByTestId('change-password-button');
 
-		//Invalid old password
 		fireEvent.change(oldPasswordInput, {target: {value: '1234'}});
 		fireEvent.click(saveButton);
 		expect(passwordError).toHaveTextContent('Invalid old password');
 
-		//Invalid new password
 		fireEvent.change(oldPasswordInput, {target: {value: 'oldPassword@123'}});
 		fireEvent.change(newPasswordInput, {target: {value: '123'}});
 		fireEvent.click(saveButton);
 		expect(passwordError).toHaveTextContent('Invalid new password');
 
-		//Password does not match
 		fireEvent.change(newPasswordInput, {target: {value: 'newPassword@123'}});
 		fireEvent.click(saveButton);
 		expect(passwordError).toHaveTextContent('Password does not match');
 
-		//New password cannot be same as old password
 		fireEvent.change(newPasswordInput, {target: {value: 'newPassword@123'}});
 		fireEvent.change(repeatNewPasswordInput, {
 			target: {value: 'newPassword@123'},

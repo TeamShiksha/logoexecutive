@@ -1,4 +1,3 @@
-// Footer related
 export const footerColumns = [
 	[
 		{name: 'Welcome', link: '/home'},
@@ -16,7 +15,6 @@ export const footerColumns = [
 	],
 ];
 
-// Header related
 export const loggedInNavbarItems = [
 	{
 		name: 'Dashboard',
@@ -55,7 +53,6 @@ export const loggedOutNavbarItems = [
 	},
 ];
 
-// Profile related
 export const months = [
 	'January',
 	'February',
@@ -71,7 +68,6 @@ export const months = [
 	'December',
 ];
 
-// Pricing related
 export const pricingCardsContent = [
 	{
 		title: 'Hobby',
@@ -79,7 +75,7 @@ export const pricingCardsContent = [
 		price: 'Free',
 		features: [
 			'Fortune 500 company logo',
-			'5000 API calls per month',
+			'500 API calls per month',
 			'2 API keys',
 			'Basic analytics',
 			'48-72 hour of response time',
@@ -92,7 +88,7 @@ export const pricingCardsContent = [
 		period: true,
 		features: [
 			'Fortune 500 company logo + private images',
-			'15000 API calls per month',
+			'5000 API calls per month',
 			'5 API keys',
 			'Advance analytics',
 			'12-36 hours of response time',
@@ -130,7 +126,6 @@ export const faqsData = [
 	},
 ];
 
-// Admin dashboard related
 export const imageTableHeadings = [
 	'IMAGE NAME',
 	'CREATE DATE',

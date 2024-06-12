@@ -7,6 +7,7 @@ const validEnv = {
   CLOUD_FRONT_PRIVATE_KEY: "randomText",
   DISTRIBUTION_DOMAIN: "https://d111111abcdef8.cloudfront.net",
   CLIENT_URL: "http://localhost:3000",
+  CLIENT_PROXY_URL: "http://localhost:5000",
   EMAIL_HOST: "randomText",
   EMAIL_SERVICE: "randomText",
   EMAIL_PORT: 587,
@@ -29,6 +30,18 @@ const validEnv = {
 };
 
 describe("If service account key exists", () => {
+  it("should return error message if CLIENT_PROXY_URL is not a valid URI", () => {
+    const env = { ...validEnv };
+    delete env.CLIENT_PROXY_URL;
+    env.CLIENT_PROXY_URL = "randomText";
+    const result = validateEnv(env);
+
+    expect(result).toHaveProperty("error");
+    expect(result.error.message).toMatch(
+      /\"CLIENT_PROXY_URL\" must be a valid uri/gi
+    );
+  });
+
   it("should return error message if CLIENT_URL is not a valid URI", () => {
     const env = { ...validEnv };
     delete env.CLIENT_URL;

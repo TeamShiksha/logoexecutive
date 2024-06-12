@@ -17,10 +17,10 @@ const mockValidPayload = {
 
 describe("contactUs controller", () => {
   beforeAll(() => {
-    process.env.CLIENT_URL = "https://example.com";
+    process.env.CLIENT_PROXY_URL = "https://example.com";
   });
   afterAll(() => {
-    delete process.env.CLIENT_URL;
+    delete process.env.CLIENT_PROXY_URL;
   });
   afterEach(() => {
     jest.clearAllMocks();

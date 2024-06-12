@@ -24,11 +24,11 @@ const ENDPOINT = "/api/user/destroy";
 describe("generate-key controller", () => {
   beforeAll(() => {
     process.env.JWT_SECRET = "my_secret";
-    process.env.CLIENT_URL = "http://validcorsorigin.com";
+    process.env.CLIENT_PROXY_URL = "http://validcorsorigin.com";
   });
   afterAll(() => {
     delete process.env.JWT_SECRET;
-    delete process.env.CLIENT_URL;
+    delete process.env.CLIENT_PROXY_URL;
   });
 
   it("500 - Not allowed by CORS", async () => {

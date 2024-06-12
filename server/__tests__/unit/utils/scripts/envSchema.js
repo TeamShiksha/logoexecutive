@@ -7,7 +7,6 @@ const validEnv = {
   CLOUD_FRONT_PRIVATE_KEY: "randomText",
   DISTRIBUTION_DOMAIN: "https://d111111abcdef8.cloudfront.net",
   CLIENT_URL: "http://localhost:3000",
-  SERVER_DOMAIN: "http://localhost:5000",
   EMAIL_HOST: "randomText",
   EMAIL_SERVICE: "randomText",
   EMAIL_PORT: 587,
@@ -40,14 +39,6 @@ describe("If service account key exists", () => {
     expect(result.error.message).toMatch(
       /\"CLIENT_URL\" must be a valid uri/gi
     );
-  });
-
-  it("should return error message if SERVER_DOMAIN is not a valid URI", () => {
-    const env = { ...validEnv };
-    delete env.SERVER_DOMAIN;
-    const result = validateEnv(env);
-
-    expect(result.error.message).toMatch(/\"SERVER_DOMAIN\" is required/gi);
   });
 
   it("should return error message if EMAIL_PORT is not a number", () => {

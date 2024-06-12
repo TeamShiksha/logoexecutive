@@ -62,15 +62,12 @@ describe('Settings component', () => {
 
 	test('shows error modal on failed API call', async () => {
 		server.use(
-			rest.delete(
-				`${process.env.REACT_APP_PROXY_URL}/api/user/delete`,
-				(req, res, ctx) => {
-					return res(
-						ctx.status(500),
-						ctx.json({message: 'Something went wrong'}),
-					);
-				},
-			),
+			rest.delete('/api/user/delete', (req, res, ctx) => {
+				return res(
+					ctx.status(500),
+					ctx.json({message: 'Something went wrong'}),
+				);
+			}),
 		);
 
 		renderSettings();

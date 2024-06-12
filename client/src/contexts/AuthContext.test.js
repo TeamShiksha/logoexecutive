@@ -60,12 +60,9 @@ describe('AuthProvider', () => {
 
 	test('should handle error on logout', async () => {
 		server.use(
-			rest.get(
-				`${process.env.REACT_APP_PROXY_URL}/api/auth/signout`,
-				(req, res, ctx) => {
-					return res(ctx.status(500));
-				},
-			),
+			rest.get('/api/auth/signout', (req, res, ctx) => {
+				return res(ctx.status(500));
+			}),
 		);
 
 		const consoleSpy = jest.spyOn(console, 'error');

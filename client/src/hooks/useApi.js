@@ -1,5 +1,5 @@
 import {useState} from 'react';
-import {instance, protectedInstance} from '../api/api_instance';
+import {instance} from '../api/api_instance';
 
 /**
  * Custom React hook to make API requests using axios.
@@ -22,7 +22,7 @@ export const useApi = (config, isProtected = false) => {
 		setLoading(true);
 		let success = false;
 		try {
-			const axiosInstance = isProtected ? protectedInstance : instance;
+			const axiosInstance = isProtected ? instance : instance;
 			const response = await axiosInstance(config);
 			setData(response.data);
 			setIsSuccess(true);

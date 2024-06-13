@@ -3,7 +3,7 @@ const Joi = require("joi");
 const EnvSchema = Joi.object()
   .keys({
     CLIENT_URL: Joi.string().uri().required(),
-    SERVER_DOMAIN: Joi.string().required(),
+    CLIENT_PROXY_URL: Joi.string().uri().required(),
     PORT: Joi.alternatives(
       Joi.string().regex(/^\d+$/),
       Joi.number()

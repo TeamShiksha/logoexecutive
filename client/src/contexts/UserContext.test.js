@@ -30,12 +30,9 @@ describe('UserProvider', () => {
 
 	test('should handle error', async () => {
 		server.use(
-			rest.get(
-				`${process.env.REACT_APP_PROXY_URL}/api/user/data`,
-				(req, res, ctx) => {
-					return res(ctx.status(500));
-				},
-			),
+			rest.get('/api/user/data', (req, res, ctx) => {
+				return res(ctx.status(500));
+			}),
 		);
 
 		render(

@@ -1,5 +1,5 @@
 import {createContext, useEffect, useState} from 'react';
-import {protectedInstance} from '../api/api_instance';
+import {instance} from '../api/api_instance';
 
 export const AuthContext = createContext();
 
@@ -21,7 +21,7 @@ export const AuthProvider = ({children}) => {
 
 	const logout = async () => {
 		try {
-			await protectedInstance.get(`api/auth/signout`);
+			await instance.get(`api/auth/signout`);
 			setIsAuthenticated(false);
 		} catch (err) {
 			console.error(err);

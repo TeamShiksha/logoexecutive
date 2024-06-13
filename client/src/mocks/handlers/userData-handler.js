@@ -36,10 +36,7 @@ const mockUserData = {
 };
 
 export const userDataHandler = [
-	rest.get(
-		`${process.env.REACT_APP_PROXY_URL}/api/user/data`,
-		(req, res, ctx) => {
-			return res(ctx.json({data: mockUserData}));
-		},
-	),
+	rest.get('/api/user/data', (req, res, ctx) => {
+		return res(ctx.json({data: mockUserData}));
+	}),
 ];

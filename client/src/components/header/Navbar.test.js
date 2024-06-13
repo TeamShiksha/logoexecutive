@@ -1,6 +1,6 @@
 import React from 'react';
 import {render, screen} from '@testing-library/react';
-import {BrowserRouter} from 'react-router-dom'; // BrowserRouter allows testing components that use React Router components without needing a full router setup
+import {BrowserRouter} from 'react-router-dom';
 import Navbar from './Navbar';
 
 test('renders navbar with correct items', () => {

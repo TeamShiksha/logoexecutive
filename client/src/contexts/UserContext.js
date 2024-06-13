@@ -1,5 +1,5 @@
 import {createContext, useState} from 'react';
-import {protectedInstance} from '../api/api_instance';
+import {instance} from '../api/api_instance';
 
 export const UserContext = createContext();
 
@@ -11,7 +11,7 @@ export function UserProvider({children}) {
 	const fetchUserData = async () => {
 		setLoading(true);
 		try {
-			const res = await protectedInstance.get('/api/user/data');
+			const res = await instance.get('/api/user/data');
 			const data = res.data.data;
 			setUserData(data);
 		} catch (err) {

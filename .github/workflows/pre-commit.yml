@@ -20,8 +20,6 @@ jobs:
         run: yarn install
 
       - name: Test Client
-        env:
-          PROXY_URL: ${{ secrets.PROXY_URL }}
         run: yarn test:client
 
       - name: Test Server

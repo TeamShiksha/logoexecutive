@@ -18,11 +18,11 @@ const ENDPOINT = "/api/auth/reset-password";
 
 describe("GET /auth/reset-password", () => {
   beforeAll(() => {
-    process.env.CLIENT_URL = "https://clienturl.com";
+    process.env.CLIENT_PROXY_URL = "https://clienturl.com";
     process.env.JWT_SECRET = "mysecret";
   });
   afterAll(() => {
-    delete process.env.CLIENT_URL;
+    delete process.env.CLIENT_PROXY_URL;
     delete process.env.JWT_SECRET;
   });
 
@@ -130,11 +130,11 @@ describe("PATCH /auth/reset-password", () => {
   const mockUserModel = new Users(mockUserTokens[0]);
 
   beforeAll(() => {
-    process.env.CLIENT_URL = "https://example.com";
+    process.env.CLIENT_PROXY_URL = "https://example.com";
     process.env.JWT_SECRET = "my_secret";
   });
   afterAll(() => {
-    delete process.env.CLIENT_URL;
+    delete process.env.CLIENT_PROXY_URL;
     delete process.env.JWT_SECRET;
   });
   afterEach(() => {

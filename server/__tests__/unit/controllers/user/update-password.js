@@ -16,11 +16,11 @@ const ENDPOINT = "/api/user/update-password";
 describe("POST - /user/update-password", () => {
   beforeAll(() => {
     process.env.JWT_SECRET = "my_secret";
-    process.env.CLIENT_URL = "http://validcorsorigin.com";
+    process.env.CLIENT_PROXY_URL = "http://validcorsorigin.com";
   });
   afterAll(() => {
     delete process.env.JWT_SECRET;
-    delete process.env.CLIENT_URL;
+    delete process.env.CLIENT_PROXY_URL;
   });
 
   it("500 - Not allowed by CORS", async () => {

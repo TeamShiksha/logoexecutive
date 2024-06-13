@@ -70,17 +70,14 @@ describe('PreviewModal', () => {
 
 	it('shows error message and when image upload fails', async () => {
 		server.use(
-			rest.post(
-				`${process.env.REACT_APP_PROXY_URL}/api/admin/upload`,
-				(req, res, ctx) => {
-					return res(
-						ctx.status(500),
-						ctx.json({
-							message: 'Image Upload Failed, try again later',
-						}),
-					);
-				},
-			),
+			rest.post('/api/admin/upload', (req, res, ctx) => {
+				return res(
+					ctx.status(500),
+					ctx.json({
+						message: 'Image Upload Failed, try again later',
+					}),
+				);
+			}),
 		);
 		render(
 			<PreviewModal

@@ -53,11 +53,8 @@ describe('AdminTable', () => {
 				deleteAdmin={mockDeleteAdmin}
 			/>,
 		);
-
-		// Click delete button for the first admin
 		fireEvent.click(screen.getAllByRole('button')[0]);
 
-		// Check that deleteAdminMock was called with the correct email
 		expect(mockDeleteAdmin).toHaveBeenCalledWith('admin1@example.com');
 	});
 });

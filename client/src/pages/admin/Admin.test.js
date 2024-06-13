@@ -32,12 +32,9 @@ describe('AdminDashboard', () => {
 
 	it('renders a message when there are no uploaded images', async () => {
 		server.use(
-			rest.get(
-				`${process.env.REACT_APP_PROXY_URL}/api/admin/images`,
-				(req, res, ctx) => {
-					return res(ctx.status(200), ctx.json({data: []}));
-				},
-			),
+			rest.get('/api/admin/images', (req, res, ctx) => {
+				return res(ctx.status(200), ctx.json({data: []}));
+			}),
 		);
 
 		render(<AdminDashboard />);
@@ -49,15 +46,12 @@ describe('AdminDashboard', () => {
 
 	it('renders an error message when there is an error fetching images', async () => {
 		server.use(
-			rest.get(
-				`${process.env.REACT_APP_PROXY_URL}/api/admin/images`,
-				(req, res, ctx) => {
-					return res(
-						ctx.status(500),
-						ctx.json({message: 'Failed to fetch images'}),
-					);
-				},
-			),
+			rest.get('/api/admin/images', (req, res, ctx) => {
+				return res(
+					ctx.status(500),
+					ctx.json({message: 'Failed to fetch images'}),
+				);
+			}),
 		);
 
 		render(<AdminDashboard />);

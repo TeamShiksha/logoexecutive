@@ -37,10 +37,10 @@ const ENDPOINT = "/api/auth/signup";
 
 describe("Signup Controller", () => {
   beforeAll(() => {
-    process.env.CLIENT_URL = "https://exmample.com";
+    process.env.CLIENT_PROXY_URL = "https://exmample.com";
   });
   afterAll(() => {
-    delete process.env.CLIENT_URL;
+    delete process.env.CLIENT_PROXY_URL;
   });
   afterEach(() => {
     jest.clearAllMocks();
@@ -50,7 +50,7 @@ describe("Signup Controller", () => {
   it("500 - Not allowed by CORS", async () => {
     const response = await request(app)
       .get(ENDPOINT)
-      .set("Origin", "http://invalidcorsorigin.com");
+      .set("Origin", "https://invalid.com");
 
     expect(response.status).toBe(500);
     expect(response.body).toEqual({

@@ -38,9 +38,11 @@ const ENDPOINT = "/api/auth/signup";
 describe("Signup Controller", () => {
   beforeAll(() => {
     process.env.CLIENT_PROXY_URL = "https://exmample.com";
+    process.env.CLIENT_URL = "https://exmample.com";
   });
   afterAll(() => {
     delete process.env.CLIENT_PROXY_URL;
+    delete process.env.CLIENT_URL;
   });
   afterEach(() => {
     jest.clearAllMocks();

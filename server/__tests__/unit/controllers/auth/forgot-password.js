@@ -31,6 +31,7 @@ describe("/forgot-password", () => {
 
   beforeAll(() => {
     process.env.CLIENT_PROXY_URL = "http://example.com";
+    process.env.CLIENT_URL = "http://example.com";
   });
   afterEach(() => {
     jest.clearAllMocks();
@@ -38,6 +39,7 @@ describe("/forgot-password", () => {
   });
   afterAll(() => {
     delete process.env.CLIENT_PROXY_URL;
+    delete process.env.CLIENT_URL;
   });
 
   it("500 - Not allowed by CORS", async () => {

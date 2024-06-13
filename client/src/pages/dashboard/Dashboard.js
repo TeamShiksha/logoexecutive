@@ -23,26 +23,20 @@ function Dashboard() {
 	const [copiedKey, setCopiedKey] = useState(null);
 	const [keys, setKeys] = useState([]);
 	const {userData, fetchUserData} = useContext(UserContext);
-	const {data, errorMsg, makeRequest, isSuccess, loading} = useApi(
-		{
-			url: `api/user/generate`,
-			method: 'post',
-			data: {keyDescription: inputValue},
-		},
-		true,
-	);
+	const {data, errorMsg, makeRequest, isSuccess, loading} = useApi({
+		url: `api/user/generate`,
+		method: 'post',
+		data: {keyDescription: inputValue},
+	});
 	const {
 		errorMsg: errorDeleteMsg,
 		makeRequest: makeDeleteRequest,
 		isSuccess: isDeleteSuccess,
-	} = useApi(
-		{
-			url: `api/user/destroy`,
-			method: 'delete',
-			params: {keyId: deletedKey},
-		},
-		true,
-	);
+	} = useApi({
+		url: `api/user/destroy`,
+		method: 'delete',
+		params: {keyId: deletedKey},
+	});
 
 	useEffect(() => {
 		fetchUserData();

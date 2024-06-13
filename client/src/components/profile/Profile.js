@@ -21,17 +21,14 @@ function Profile() {
 		INITIAL_UPDATE_PASSWORD_FORM_DATA,
 	);
 	const {data, errorMsg, makeRequest, loading, isSuccess, setIsSuccess} =
-		useApi(
-			{
-				url: `api/user/update-profile`,
-				method: 'patch',
-				data: {
-					firstName: updateProfileData.firstName,
-					lastName: updateProfileData.lastName,
-				},
+		useApi({
+			url: `api/user/update-profile`,
+			method: 'patch',
+			data: {
+				firstName: updateProfileData.firstName,
+				lastName: updateProfileData.lastName,
 			},
-			true,
-		);
+		});
 	const {
 		data: updatePasswordData,
 		errorMsg: updatePasswordErrorMsg,
@@ -39,14 +36,11 @@ function Profile() {
 		setIsSuccess: setUpdatePasswordIsSuccess,
 		loading: updatePasswordLoading,
 		isSuccess: updatePasswordIsSuccess,
-	} = useApi(
-		{
-			url: `api/user/update-password`,
-			method: 'post',
-			data: passwordFields,
-		},
-		true,
-	);
+	} = useApi({
+		url: `api/user/update-password`,
+		method: 'post',
+		data: passwordFields,
+	});
 
 	function onSubmitHandler(e) {
 		e.preventDefault();

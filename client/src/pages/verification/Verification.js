@@ -14,13 +14,10 @@ export default function Verification() {
 	const [countdown, setCountdown] = useState(3);
 	const navigate = useNavigate();
 
-	const {errorMsg, makeRequest, loading, isSuccess, data} = useApi(
-		{
-			url: `/api/auth/verify?token=${token}`,
-			method: 'get',
-		},
-		true,
-	);
+	const {errorMsg, makeRequest, loading, isSuccess, data} = useApi({
+		url: `/api/auth/verify?token=${token}`,
+		method: 'get',
+	});
 	useCountdownTimer(isSuccess, navigate, countdown, setCountdown);
 	useEffect(() => {
 		makeRequest();

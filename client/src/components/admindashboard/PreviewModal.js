@@ -14,17 +14,14 @@ function PreviewModal({
 	const formData = new FormData();
 	formData.append('imageName', image?.name);
 	formData.append('logo', image?.data);
-	const {data, makeRequest, isSuccess, errorMsg, loading} = useApi(
-		{
-			url: `api/admin/upload`,
-			method: 'post',
-			headers: {
-				'Content-Type': 'multipart/form-data',
-			},
-			data: formData,
+	const {data, makeRequest, isSuccess, errorMsg, loading} = useApi({
+		url: `api/admin/upload`,
+		method: 'post',
+		headers: {
+			'Content-Type': 'multipart/form-data',
 		},
-		true,
-	);
+		data: formData,
+	});
 
 	async function handleUpload(event) {
 		event.preventDefault();

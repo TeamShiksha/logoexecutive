@@ -14,13 +14,10 @@ function Settings() {
 	const [countdown, setCountdown] = useState(3);
 	const navigate = useNavigate();
 	const {logout} = useContext(AuthContext);
-	const {data, errorMsg, loading, makeRequest, isSuccess} = useApi(
-		{
-			url: 'api/user/delete',
-			method: 'delete',
-		},
-		true,
-	);
+	const {data, errorMsg, loading, makeRequest, isSuccess} = useApi({
+		url: 'api/user/delete',
+		method: 'delete',
+	});
 
 	const openModal = () => setModalOpen(true);
 

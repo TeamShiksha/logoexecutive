@@ -35,12 +35,10 @@ async function adminUploadController(req, res, next) {
         error: STATUS_CODES[422],
       });
     }
-    const imageNameParts = imageName.split(".");
-    const extension = imageNameParts[imageNameParts.length - 1];
-    const domainame = imageName;
-    const uploadby = userId;
+    const Imagename = imageName.split(".")[0].toUpperCase();
+    const Extension = imageName.split(".")[1].toLowerCase();
 
-    const key = await uploadToS3(file, imageName, extension);
+    const key = await uploadToS3(file, Imagename + "." + Extension, Extension);
     if (!key) {
       res.status(500).json({
         error: STATUS_CODES[500],
@@ -48,11 +46,7 @@ async function adminUploadController(req, res, next) {
         message: "Image Upload Failed, try again later",
       });
     }
-    const imageData = await createImageData(
-      domainame.split(".")[0],
-      uploadby,
-      extension
-    );
+    const imageData = await createImageData(Imagename, userId, Extension);
     if (!imageData) {
       res.status(500).json({
         error: STATUS_CODES[500],

@@ -5,10 +5,11 @@ const { fetchImageByCompanyFree } = require("../../services");
 const getLogoQuerySchema = Joi.object({
   domain: Joi.string()
     .regex(/^[A-Za-z0-9&-/:.]+$/)
-    .required().messages({
+    .required()
+    .messages({
       "any.required": "Domain is required",
       "string.pattern.base": "Invalid domain",
-    })
+    }),
 });
 
 async function demoLogoController(req, res, next) {
@@ -23,8 +24,7 @@ async function demoLogoController(req, res, next) {
     }
 
     const { domain } = value;
-
-    let company = domain.replace(/.+\/\/|www.|\..+/g, "").toLowerCase();
+    let company = domain.replace(/.+\/\/|www.|\..+/g, "").toUpperCase();
     const imageUrl = await fetchImageByCompanyFree(company);
     if (!imageUrl) {
       return res.status(404).json({

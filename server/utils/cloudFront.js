@@ -9,7 +9,7 @@ function cloudFrontSignedURL(path) {
       data: getSignedUrl({
         url: `${distributionDomain}${path}`,
         dateLessThan: new Date(Date.now() + 1000 * 60 * 5),
-        privateKey: process.env.CLOUD_FRONT_PRIVATE_KEY,
+        privateKey: process.env.CLOUD_FRONT_PRIVATE_KEY.replace(/\\n/gm, "\n"),
         keyPairId: process.env.CLOUD_FRONT_KEYPAIR_ID,
       }),
       success: true,

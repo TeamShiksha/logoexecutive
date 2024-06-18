@@ -35,7 +35,7 @@ async function getLogoController(req, res, next) {
       });
     }
 
-    let company = domain.replace(/.+\/\/|www.|\..+/g, "").toLowerCase();
+    let company = domain.replace(/.+\/\/|www.|\..+/g, "").toUppercase();
     const imageUrl = await fetchImageByCompanyFree(company);
     if (!imageUrl) {
       return res.status(404).json({

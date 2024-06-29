@@ -1,0 +1,48 @@
+name: Bug Report Form
+description: Use this form to report a bug
+labels: ["bug", "high priority"]
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: Please enter an explicit description of the bug you're reporting.
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected-behavior
+    attributes:
+      label: Expected Behavior
+      description: Describe what should happen when this bug is resolved.
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps-to-reproduce
+    attributes:
+      label: Steps to Reproduce
+      description: Please provide detailed steps to reproduce the bug.
+      placeholder: |
+        1. Go to '...'
+        2. Click on '....'
+        3. Scroll down to '....'
+        4. See error
+    validations:
+      required: true
+
+  - type: textarea
+    id: screenshots-recordings
+    attributes:
+      label: Screenshots or Recordings
+      description: If applicable, add screenshots or screen recordings to help explain the problem. You can drag and drop images or paste links to recordings here.
+
+  - type: checkboxes
+    id: confirmation-checklist
+    attributes:
+      label: Confirmation Checklist
+      options:
+        - label: I have searched for similar issues [issues](https://github.com/TeamShiksha/logoexecutive/issues) and made sure no duplicate issue exists..
+        - label: I have provided all the necessary information to understand and reproduce the bug.
+    validations:
+      required: true

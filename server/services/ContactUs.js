@@ -14,7 +14,6 @@ async function formExists(email) {
     throw error;
   }
 }
-
 /**
  * Creates user in the DB
  * @param {Object} formData

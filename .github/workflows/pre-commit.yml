@@ -24,6 +24,8 @@ jobs:
 
       - name: Test Server
         run: yarn test:server
+        env:
+          TEST_MONGO_URI: ${{ secrets.TEST_MONGO_URI }}
 
       - name: Check formatting
         run: yarn check:client

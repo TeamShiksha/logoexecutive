@@ -1,80 +1,73 @@
 const { UserToken } = require("../models");
 const { UserTokenTypes } = require("../utils/constants");
-const { UserTokenCollection } = require("../utils/firestore");
 
 /**
  * Creates user token in "UserTokens" collection
- * @param {string} userId - userId associate with token
+ * @param {string} userId - userId associated with the token
  **/
 async function createForgotToken(userId) {
   try {
-    const newUserForgotToken = await UserToken.NewUserToken({userId,type:UserTokenTypes.FORGOT});
-    const result = await UserTokenCollection.doc(
-      newUserForgotToken.userTokenId
-    ).set(newUserForgotToken);
+    const newUserForgotToken = UserToken.NewUserToken({ userId, type: UserTokenTypes.FORGOT });
+    const createdToken = new UserToken(newUserForgotToken);
+    const result = await createdToken.save();
     if (!result) return null;
-    return new UserToken(newUserForgotToken);
+    return createdToken;
   } catch (err) {
     throw err;
   }
 }
 
 /**
- * Deletes the userToken document in firestore
+ * Deletes the userToken document in MongoDB
  * @param {UserToken} userToken
  **/
 async function deleteUserToken(userToken) {
-  const result = await userToken.userTokenRef.delete();
-  if (!result) return false;
-  return true;
+  try {
+    const result = await UserToken.findByIdAndDelete(userToken._id);
+    return result !== null;
+  } catch (err) {
+    throw err;
+  }
 }
 
 /**
  * Creates user token with type Verify in "UserTokens" collection
- * @param {string} userId - userId associate with token
+ * @param {string} userId - userId associated with the token
  **/
 async function createVerifyToken(userId) {
   try {
-    const newUserVerifyToken = await UserToken.NewUserToken({userId,type:UserTokenTypes.VERIFY});
-    const result = await UserTokenCollection.doc(
-      newUserVerifyToken.userTokenId
-    ).set(newUserVerifyToken);
+    const newUserVerifyToken = UserToken.NewUserToken({ userId, type: UserTokenTypes.VERIFY });
+    const createdToken = new UserToken(newUserVerifyToken);
+    const result = await createdToken.save();
     if (!result) return null;
-    return new UserToken(newUserVerifyToken);
+    return createdToken;
   } catch (err) {
     throw err;
   }
 }
 
+/**
+ * Fetches a user token from MongoDB by token value
+ * @param {string} token - token value
+ **/
 async function fetchTokenFromId(token) {
   try {
-    const tokenSnapshot = await UserTokenCollection.where("token", "==", token)
-      .limit(1)
-      .get();
-    if (tokenSnapshot.empty) return null;
-    const userTokenDoc = tokenSnapshot.docs[0];
-    return new UserToken({
-      ...userTokenDoc.data(),
-      userTokenRef: userTokenDoc.ref,
-    });
+    const userTokenDoc = await UserToken.findOne({ token }).exec();
+    if (!userTokenDoc) return null;
+    return userTokenDoc;
   } catch (err) {
     throw err;
   }
 }
 
-async function fetchTokenFromUserid(userid) {
+/**
+ * Fetches a user token from MongoDB by userId
+ * @param {string} userId - userId value
+ **/
+async function fetchTokenFromUserid(userId) {
   try {
-    let getTokenDoc = null;
-    const userTokenRef = await UserTokenCollection.where(
-      "userId",
-      "==",
-      userid
-    ).get();
-
-    userTokenRef.forEach((doc) => {
-      getTokenDoc = { ...doc.data(), userTokenRef: doc.ref };
-    });
-    return getTokenDoc;
+    const userTokenDoc = await UserToken.findOne({ userId }).exec();
+    return userTokenDoc;
   } catch (err) {
     throw err;
   }

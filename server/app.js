@@ -3,6 +3,7 @@ const cookieParser = require("cookie-parser");
 const dotenv = require("dotenv");
 const morgan = require("morgan");
 const { validateEnv } = require("./utils/scripts/envSchema.js");
+const mongoose = require("mongoose");
 
 dotenv.config();
 if (process.env.NODE_ENV !== "test") {
@@ -12,6 +13,8 @@ if (process.env.NODE_ENV !== "test") {
     process.exit(1);
   }
 }
+
+mongoose.connect(process.env.MONGO_URL);
 
 const routes = require("./routes");
 const { routeNotFound, errorHandler } = require("./middlewares");

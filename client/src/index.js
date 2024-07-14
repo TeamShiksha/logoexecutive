@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import {ScrollProvider} from './contexts/ScrollContext';
 import App from './App';
 import {BrowserRouter} from 'react-router-dom';
 import {AuthProvider} from './contexts/AuthContext';
@@ -13,7 +14,9 @@ root.render(
 		<AuthProvider>
 			<UserProvider>
 				<BrowserRouter>
-					<App />
+					<ScrollProvider>
+						<App />
+					</ScrollProvider>
 				</BrowserRouter>
 			</UserProvider>
 		</AuthProvider>

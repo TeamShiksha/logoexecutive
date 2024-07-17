@@ -1,9 +1,4 @@
-const { Timestamp } = require("firebase-admin/firestore");
-const { Users } = require("../models");
-const { UserCollection } = require("../utils/firestore");
-const { KeyCollection } = require("../utils/firestore");
-const { SubscriptionCollection } = require("../utils/firestore");
-const { db } = require("../utils/firestore");
+const { Users, Subscriptions, Keys } = require("../models");
 
 /**
  * Checks if provided email exists in the user collections
@@ -12,8 +7,8 @@ const { db } = require("../utils/firestore");
  **/
 async function emailRecordExists(email) {
   try {
-    const userRef = await UserCollection.where("email", "==", email).get();
-    return !userRef.empty;
+    const userRef = await Users.findOne({ email }).exec();
+    return !!userRef;
   } catch (err) {
     throw err;
   }
@@ -24,33 +19,21 @@ async function emailRecordExists(email) {
  **/
 async function fetchUsers() {
   try {
-    const usersRef = await UserCollection.get();
-    const users = usersRef.docs.map(
-      (doc) => new Users({ ...doc.data(), id: doc.id })
-    );
-    return {
-      data: users,
-    };
+    const users = await Users.find().exec();
+    return { data: users };
   } catch (err) {
     throw err;
   }
 }
 
 /**
- * fetchUserByUsername - Fetches user from provided key
+ * Fetches user by email
  * @param {string} email - email of the user
  **/
 async function fetchUserByEmail(email) {
   try {
-    const userRef = await UserCollection.where("email", "==", email)
-      .limit(1)
-      .get();
-    if (userRef.empty) return null;
-    const user = new Users({
-      ...userRef.docs[0].data(),
-      userRef: userRef.docs[0].ref,
-    });
-    return user;
+    const user = await Users.findOne({ email }).exec();
+    return user || null;
   } catch (err) {
     throw err;
   }
@@ -67,20 +50,11 @@ async function fetchUserByEmail(email) {
 async function createUser(user) {
   try {
     const { email, firstName, lastName, password } = user;
-    const newUser = await Users.NewUser({
-      email,
-      firstName,
-      lastName,
-      password,
-    });
+    const newUser = await Users.NewUser({ email, firstName, lastName, password });
     if (!newUser) return null;
-    const result = await UserCollection.doc(newUser.userId).set({
-      ...newUser,
-      isVerified: false,
-    });
-    if (!result) return null;
     const createdUser = new Users(newUser);
-    return createdUser;
+    const result = await createdUser.save();
+    return result;
   } catch (err) {
     throw err;
   }
@@ -92,15 +66,8 @@ async function createUser(user) {
  **/
 async function fetchUserFromId(userId) {
   try {
-    const userSnapshot = await UserCollection.where("userId", "==", userId)
-      .limit(1)
-      .get();
-    if (userSnapshot.empty) return null;
-
-    return new Users({
-      ...userSnapshot.docs[0].data(),
-      userRef: userSnapshot.docs[0].ref,
-    });
+    const user = await Users.findById(userId).exec();
+    return user || null;
   } catch (err) {
     throw err;
   }
@@ -108,10 +75,9 @@ async function fetchUserFromId(userId) {
 
 async function updatePasswordbyUser(user, hashNewPassword) {
   try {
-    await user.userRef.update({
-      password: hashNewPassword,
-      updatedAt: Timestamp.now(),
-    });
+    user.password = hashNewPassword;
+    user.updatedAt = Date.now();
+    await user.save();
     return true;
   } catch (err) {
     throw err;
@@ -120,8 +86,8 @@ async function updatePasswordbyUser(user, hashNewPassword) {
 
 async function verifyUser(user) {
   try {
-    const result = await user.userRef.update({ isVerified: true });
-    if (!result) return false;
+    user.isVerified = true;
+    await user.save();
     return true;
   } catch (err) {
     throw err;
@@ -131,14 +97,10 @@ async function verifyUser(user) {
 async function updateUser(updateProfile, user) {
   try {
     const { firstName, lastName } = updateProfile;
-    const userRef = user.userRef;
-    const update = {
-      firstName: firstName,
-      lastName: lastName,
-      updatedAt: Timestamp.now(),
-    };
-    const updated = await userRef.update(update);
-    if (!updated) return false;
+    user.firstName = firstName;
+    user.lastName = lastName;
+    user.updatedAt = Date.now();
+    await user.save();
     return true;
   } catch (err) {
     throw err;
@@ -146,34 +108,22 @@ async function updateUser(updateProfile, user) {
 }
 
 async function deleteUserAccount(userId) {
+  const session = await mongoose.startSession();
+  session.startTransaction();
   try {
-    await db.runTransaction(async (transaction) => {
-      const userSnapshot = await UserCollection.where("userId", "==", userId)
-        .limit(1)
-        .get();
-      if (!userSnapshot.empty) {
-        const userDoc = userSnapshot.docs[0];
-        transaction.delete(userDoc.ref);
-      }
+    const user = await Users.findByIdAndDelete(userId).session(session).exec();
+    if (!user) throw new Error("User not found");
 
-      const subscriptionSnapshot = await SubscriptionCollection.where(
-        "userId",
-        "==",
-        userId
-      ).get();
-      subscriptionSnapshot.forEach((doc) => transaction.delete(doc.ref));
+    // Deleting associated subscriptions and keys
+    await Subscriptions.deleteMany({ user: user._id }).session(session).exec();
+    await Keys.deleteMany({ user: user._id }).session(session).exec();
 
-      const keySnapshot = await KeyCollection.where(
-        "userId",
-        "==",
-        userId
-      ).get();
-      if (!keySnapshot.empty) {
-        keySnapshot.forEach((doc) => transaction.delete(doc.ref));
-      }
-    });
+    await session.commitTransaction();
   } catch (err) {
+    await session.abortTransaction();
     throw err;
+  }finally{
+    session.endSession();
   }
 }
 

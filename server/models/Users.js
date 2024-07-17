@@ -1,110 +1,94 @@
+const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
-const { DocumentReference, Timestamp } = require("firebase-admin/firestore");
 const jwt = require("jsonwebtoken");
-const { v4 } = require("uuid");
 const { UserType } = require("../utils/constants");
-const { normalizeDate } = require("../utils/date");
+const dayjs = require("dayjs");
 
-class Users {
-  userId;
-  email;
-  firstName;
-  lastName;
-  createdAt;
-  updatedAt;
-  userRef;
-  isVerified;
-  userType;
-  #password;
-
-  /**
-   * @param {Object} params
-   * @param {string} params.userId
-   * @param {string} params.email
-   * @param {string} params.password
-   * @param {boolean} params.isVerified
-   * @param {string} params.firstName
-   * @param {string} params.lastName
-   * @param {string} params.userType
-   * @param {Date} params.createdAt
-   * @param {Date} params.updatedAt
-   * @param {DocumentReference} [params.userRef] - Firebase document reference of the user
-   * @param {string} [params.token]
-   **/
-  constructor(params) {
-    this.userId = params.userId;
-    this.email = params.email;
-    this.#password = params.password;
-    this.firstName = params.firstName;
-    this.lastName = params.lastName;
-    this.userType = params.userType;
-    this.createdAt = normalizeDate(params.createdAt);
-    this.updatedAt = normalizeDate(params.updatedAt);
-    this.userRef = params.userRef ?? null;
-    this.isVerified = params.isVerified;
+const userSchema = new mongoose.Schema({
+  email: {
+    type: String,
+    required: true,
+    unique: true
+  },
+  firstName: {
+    type: String,
+    required: true
+  },
+  lastName: {
+    type: String,
+    required: true
+  },
+  password: {
+    type: String,
+    required: true
+  },
+  userType: {
+    type: String,
+    required: true,
+    enum: Object.values(UserType),
+    default: UserType.CUSTOMER
+  },
+  createdAt: {
+    type: Date,
+    required: true,
+    default: Date.now
+  },
+  updatedAt: {
+    type: Date,
+    required: true,
+    default: Date.now
+  },
+  isVerified: {
+    type: Boolean,
+    required: true,
+    default: false
   }
+});
 
-  get data() {
-    return {
-      firstName: this.firstName,
-      lastName: this.lastName,
-      email: this.email,
-      userId: this.userId,
-      userType: this.userType,
-    };
-  }
+// Pre-save hook to hash the password before saving
+// userSchema.pre('save', async function(next) {
+//   if (this.isModified('password')) {
+//     this.password = await bcrypt.hash(this.password, 10);
+//   }
+//   next();
+// });
 
-  /**
-   * Creates a firestore compatible object with current time for createdAt
-   * and updatedAt using Firebase Timestamp
-   *
-   * @param {Object} userData
-   * @param {string} userData.email
-   * @param {string} userData.firstName
-   * @param {string} userData.lastName
-   * @param {string} userData.password
-   * @param {string} userData.userType
-   **/
-  static async NewUser(userData) {
-    try {
-      const { email, firstName, lastName, password } = userData;
-      if (!email || !firstName || !lastName || !password) {
-        return null;
-      }
-      const hashedPassword = await bcrypt.hash(password, 10);
-      return {
-        userId: v4(),
-        email,
-        firstName,
-        lastName,
-        userType: UserType.CUSTOMER,
-        password: hashedPassword,
-        createdAt: Timestamp.now(),
-        updatedAt: Timestamp.now(),
-        isVerified: false,
-      };
-    } catch (err) {
-      throw err;
+// Instance method to match password
+userSchema.methods.matchPassword = async function(password) {
+  return await bcrypt.compare(password, this.password);
+};
+
+// Instance method to generate JWT token
+userSchema.methods.generateJWT = function() {
+  return jwt.sign({ data: this.toJSON() }, process.env.JWT_SECRET, {
+    expiresIn: "1d",
+  });
+};
+
+// Static method to create a new user
+userSchema.statics.NewUser = async function(userData) {
+  try {
+    const { email, firstName, lastName, password } = userData;
+    if (!email || !firstName || !lastName || !password) {
+      return null;
     }
-  }
-
-  /**
-   * Returns true or false if the password provided matches the user's password
-   * @param {string} password - password to match
-   **/
-  async matchPassword(password) {
-    const match = await bcrypt.compare(password, this.#password);
-    return !!match;
-  }
-
-  /**
-   * Signs and returns jwt token with user data
-   **/
-  generateJWT() {
-    return jwt.sign({ data: this.data }, process.env.JWT_SECRET, {
-      expiresIn: "1d",
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const user = new this({
+      email,
+      firstName,
+      lastName,
+      password: hashedPassword,
+      userType: UserType.CUSTOMER,
+      isVerified: false,
+      createdAt: dayjs().toDate(),
+      updatedAt: dayjs().toDate()
     });
+    return user;
+  } catch (err) {
+    throw err;
   }
-}
+};
 
-module.exports = Users;
+const User = mongoose.model("User", userSchema);
+
+module.exports = User;

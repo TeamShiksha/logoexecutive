@@ -5,7 +5,7 @@ const { Users, Subscriptions, Keys } = require("../models");
  * @param {string} email
  * @returns {Promise<boolean>} true if email already exists and else false
  **/
-async function emailRecordExists(email) {
+const emailRecordExists = async (email) => {
   try {
     const userRef = await Users.findOne({ email }).exec();
     return !!userRef;
@@ -17,7 +17,7 @@ async function emailRecordExists(email) {
 /**
  * Fetches all the users
  **/
-async function fetchUsers() {
+const fetchUsers = async () =>{ 
   try {
     const users = await Users.find().exec();
     return { data: users };
@@ -30,7 +30,7 @@ async function fetchUsers() {
  * Fetches user by email
  * @param {string} email - email of the user
  **/
-async function fetchUserByEmail(email) {
+const fetchUserByEmail = async (email) => {
   try {
     const user = await Users.findOne({ email }).exec();
     return user || null;
@@ -47,7 +47,7 @@ async function fetchUserByEmail(email) {
  * @param {string} user.lastName - Last name of the user
  * @param {string} user.password - password of the user
  */
-async function createUser(user) {
+const createUser = async (user) => {
   try {
     const { email, firstName, lastName, password } = user;
     const newUser = await Users.NewUser({ email, firstName, lastName, password });
@@ -64,7 +64,7 @@ async function createUser(user) {
  * Fetches user by document id
  * @param {string} userId - User Id of user
  **/
-async function fetchUserFromId(userId) {
+const fetchUserFromId = async (userId) => {
   try {
     const user = await Users.findById(userId).exec();
     return user || null;
@@ -73,7 +73,7 @@ async function fetchUserFromId(userId) {
   }
 }
 
-async function updatePasswordbyUser(user, hashNewPassword) {
+const updatePasswordbyUser = async (user, hashNewPassword) => {
   try {
     user.password = hashNewPassword;
     user.updatedAt = Date.now();
@@ -84,7 +84,7 @@ async function updatePasswordbyUser(user, hashNewPassword) {
   }
 }
 
-async function verifyUser(user) {
+const verifyUser = async (user) => {
   try {
     user.isVerified = true;
     await user.save();
@@ -94,7 +94,7 @@ async function verifyUser(user) {
   }
 }
 
-async function updateUser(updateProfile, user) {
+const updateUser = async (updateProfile, user) => {
   try {
     const { firstName, lastName } = updateProfile;
     user.firstName = firstName;
@@ -107,7 +107,7 @@ async function updateUser(updateProfile, user) {
   }
 }
 
-async function deleteUserAccount(userId) {
+const deleteUserAccount = async (userId) => {
   const session = await mongoose.startSession();
   session.startTransaction();
   try {

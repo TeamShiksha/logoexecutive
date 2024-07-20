@@ -13,21 +13,19 @@ async function getUserDataController(req, res, next) {
         message: "User document not found",
       });
     }
-
     const data = {};
 
     const [subscriptionData, userKeys] = await Promise.allSettled([fetchSubscriptionByuserid(userId), fetchKeysByuserid(userId)]);
-
-    Object.assign(data, user.data);
+    Object.assign(data, user.data());
 
     let statusCode = 200;
     if(subscriptionData.status === "fulfilled" && subscriptionData.value) {
-      Object.assign(data, { subscription: subscriptionData.value.data });
+      Object.assign(data, { subscription: subscriptionData.value });
     } else {
       statusCode = 206;
     }
     if(userKeys.status === "fulfilled" && userKeys.value) {
-      Object.assign(data, { keys: userKeys.value.map(key => key.data) });
+      Object.assign(data, { keys: userKeys.value.map(key => key) });
     } else {
       statusCode = 206;
     }

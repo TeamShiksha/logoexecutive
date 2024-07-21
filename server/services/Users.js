@@ -1,5 +1,5 @@
 const { Users, Subscriptions, Keys } = require("../models");
-
+const mongoose = require("mongoose");
 /**
  * Checks if provided email exists in the user collections
  * @param {string} email
@@ -109,23 +109,34 @@ const updateUser = async (updateProfile, user) => {
 
 const deleteUserAccount = async (userId) => {
   const session = await mongoose.startSession();
-  session.startTransaction();
+  
+  // Check if the current MongoDB instance supports transactions
+  const isReplicaSet = (await mongoose.connection.db.admin().serverStatus()).repl?.setName;
+
+  if (isReplicaSet) {
+    session.startTransaction();
+  }
+
   try {
-    const user = await Users.findByIdAndDelete(userId).session(session).exec();
-    if (!user) throw new Error("User not found");
+    const user = await Users.findByIdAndDelete(userId).session(isReplicaSet ? session : null).exec();
+    if (!user) return null;
 
     // Deleting associated subscriptions and keys
-    await Subscriptions.deleteMany({ user: user._id }).session(session).exec();
-    await Keys.deleteMany({ user: user._id }).session(session).exec();
+    await Subscriptions.deleteMany({ user: user._id }).session(isReplicaSet ? session : null).exec();
+    await Keys.deleteMany({ user: user._id }).session(isReplicaSet ? session : null).exec();
 
-    await session.commitTransaction();
+    if (isReplicaSet) {
+      await session.commitTransaction();
+    }
   } catch (err) {
-    await session.abortTransaction();
+    if (isReplicaSet) {
+      await session.abortTransaction();
+    }
     throw err;
-  }finally{
+  } finally {
     session.endSession();
   }
-}
+};
 
 module.exports = {
   fetchUsers,

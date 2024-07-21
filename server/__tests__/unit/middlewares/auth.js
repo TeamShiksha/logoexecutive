@@ -36,7 +36,18 @@ describe("Auth middleware", () => {
 
     expect(mockCtrl).toHaveBeenCalledTimes(1);
     expect(response.status).toBe(200);
-    expect(response.body).toEqual(mockUser.data);
+    console.log("response.body======>",response.body , mockUser);
+    expect(response.body).toEqual({
+    "_id": mockUser._id.toString(),
+    "createdAt": mockUser.createdAt.toISOString(),
+    "email": mockUser.email,
+    "firstName": mockUser.firstName ,
+    "isVerified" : mockUser.isVerified,
+   "lastName": mockUser.lastName ,
+    "password": mockUser.password ,
+    "updatedAt": mockUser.updatedAt.toISOString(),
+    "userType": mockUser.userType,
+    });
   });
 
   it("200 - If user is signed in (ADMIN)", async () => {
@@ -51,7 +62,17 @@ describe("Auth middleware", () => {
 
     expect(mockCtrl).toHaveBeenCalledTimes(1);
     expect(response.status).toBe(200);
-    expect(response.body).toEqual(mockUser.data);
+    expect(response.body).toEqual({
+    "_id": mockUser._id.toString(),
+    "createdAt": mockUser.createdAt.toISOString(),
+    "email": mockUser.email,
+    "firstName": mockUser.firstName ,
+    "isVerified" : mockUser.isVerified,
+   "lastName": mockUser.lastName ,
+    "password": mockUser.password ,
+    "updatedAt": mockUser.updatedAt.toISOString(),
+    "userType": mockUser.userType,
+    });
   });
 
   it("401 - If user is not signed in / JWT not present", async () => {

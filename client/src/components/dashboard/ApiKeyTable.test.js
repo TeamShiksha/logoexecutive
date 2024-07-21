@@ -65,12 +65,12 @@ describe('ApiKeyTable', () => {
 
 	it('show confirmation modal when delete button is clicked', () => {
 		render(
-		  <ApiKeyTable
-			keys={keys}
-			copiedKey=""
-			handleCopyToClipboard={() => {}}
-			deleteKey={() => {}}
-		  />
+			<ApiKeyTable
+				keys={keys}
+				copiedKey=''
+				handleCopyToClipboard={() => {}}
+				deleteKey={() => {}}
+			/>,
 		);
 		const buttons = screen.getAllByTestId('api-key-delete');
 		fireEvent.click(buttons[0]);
@@ -79,12 +79,12 @@ describe('ApiKeyTable', () => {
 
 	it('close the confirmation modal when cancel button is clicked in modal', () => {
 		render(
-		  <ApiKeyTable
-			keys={keys}
-			copiedKey=""
-			handleCopyToClipboard={() => {}}
-			deleteKey={() => {}}
-		  />
+			<ApiKeyTable
+				keys={keys}
+				copiedKey=''
+				handleCopyToClipboard={() => {}}
+				deleteKey={() => {}}
+			/>,
 		);
 
 		const buttons = screen.getAllByTestId('api-key-delete');
@@ -98,12 +98,12 @@ describe('ApiKeyTable', () => {
 	it('remove key when delete is confirmed', () => {
 		const deleteKey = jest.fn();
 		render(
-		  <ApiKeyTable
-			keys={keys}
-			copiedKey=""
-			handleCopyToClipboard={() => {}}
-			deleteKey={deleteKey}
-		  />
+			<ApiKeyTable
+				keys={keys}
+				copiedKey=''
+				handleCopyToClipboard={() => {}}
+				deleteKey={deleteKey}
+			/>,
 		);
 
 		const buttons = screen.getAllByTestId('api-key-delete');
@@ -118,12 +118,12 @@ describe('ApiKeyTable', () => {
 	it('does not remove key when delete is cancelled', () => {
 		const deleteKey = jest.fn();
 		render(
-		  <ApiKeyTable
-			keys={keys}
-			copiedKey=""
-			handleCopyToClipboard={() => {}}
-			deleteKey={deleteKey}
-		  />
+			<ApiKeyTable
+				keys={keys}
+				copiedKey=''
+				handleCopyToClipboard={() => {}}
+				deleteKey={deleteKey}
+			/>,
 		);
 
 		const buttons = screen.getAllByTestId('api-key-delete');

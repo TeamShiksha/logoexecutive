@@ -4,22 +4,21 @@ import {LuCopyCheck} from 'react-icons/lu';
 import {MdDeleteOutline} from 'react-icons/md';
 import {formatDate} from '../../utils/helpers';
 import Modal from '../common/modal/Modal';
-import { useRef, useState } from 'react';
+import {useRef, useState} from 'react';
 function ApiKeyTable({keys, copiedKey, handleCopyToClipboard, deleteKey}) {
-
 	const apiKeyToBeDeleted = useRef(null);
 	const [modalOpen, setModalOpen] = useState(false);
 
 	const showConfirmationModal = (keyId) => {
 		apiKeyToBeDeleted.current = keyId;
 		setModalOpen(true);
-	}
+	};
 
 	const confirmActionHandler = () => {
 		setModalOpen(false);
 		deleteKey(apiKeyToBeDeleted.current);
 		apiKeyToBeDeleted.current = null;
-	}
+	};
 
 	return (
 		<section className='dashboard-content-section'>
@@ -86,7 +85,8 @@ function ApiKeyTable({keys, copiedKey, handleCopyToClipboard, deleteKey}) {
 			>
 				<h2>Are you sure?</h2>
 				<p className='settings-confirm-message'>
-					Please confirm that you want to delete this permanently, as this action cannot be undone.
+					Please confirm that you want to delete this permanently, as this
+					action cannot be undone.
 				</p>
 			</Modal>
 		</section>

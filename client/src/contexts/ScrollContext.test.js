@@ -1,5 +1,5 @@
 import React from 'react';
-import {render, act} from '@testing-library/react';
+import {render} from '@testing-library/react';
 import {MemoryRouter, Routes, Route} from 'react-router-dom';
 import {ScrollProvider} from './ScrollContext';
 
@@ -38,9 +38,7 @@ describe('ScrollContext', () => {
 		location = {pathname: '/new-path'};
 		useLocation.mockReturnValue(location);
 
-		act(() => {
-			rerender(<App path='/new-path' />);
-		});
+		rerender(<App path='/new-path' />);
 
 		expect(window.scrollTo).toHaveBeenCalledWith(0, 0);
 	});

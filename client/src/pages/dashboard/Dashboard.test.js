@@ -59,6 +59,8 @@ describe('Dashboard Component', () => {
 		const deleteButton = screen.getAllByTestId('api-key-delete');
 		const deletedApiKeyDescription = screen.queryByText('Demo Key');
 		fireEvent.click(deleteButton[0]);
+		const confirmButton = screen.getByText(/Okay/i);
+		fireEvent.click(confirmButton);
 		await waitFor(() => {
 			expect(deletedApiKeyDescription).not.toBeInTheDocument();
 		});
@@ -95,6 +97,8 @@ describe('Dashboard Component', () => {
 		const deleteButton = screen.getAllByTestId('api-key-delete');
 		const deletedApiKeyDescription = screen.queryByText('Demo Key');
 		fireEvent.click(deleteButton[0]);
+		const confirmButton = screen.getByText(/Okay/i);
+		fireEvent.click(confirmButton);
 		await waitFor(() => {
 			expect(screen.getByText('Key ID is required')).toBeInTheDocument();
 		});

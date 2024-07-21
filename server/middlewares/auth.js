@@ -1,6 +1,7 @@
 const JWT = require("jsonwebtoken");
 const { STATUS_CODES } = require("http");
 const { UserType } = require("../utils/constants");
+require("dotenv").config();
 
 /**
  * @param {Object} options
@@ -22,7 +23,7 @@ module.exports = (options = {}) => {
       const decodedData = JWT.verify(jwt, process.env.JWT_SECRET);
 
       const { data } = decodedData;
-      if (!data || !data.email || !data.userId)
+      if (!data || !data.email || !data._id)
         return res.status(403).json({
           error: STATUS_CODES[403],
           message: "Invalid credentials",

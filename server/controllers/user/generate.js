@@ -32,6 +32,7 @@ async function generateKeyController(req, res, next) {
         error: STATUS_CODES[422],
       });
     }
+
     const { userId } = req.userData;
     const subscription = await fetchSubscriptionByuserid(userId);
     const keyLimit = subscription.keyLimit;
@@ -50,7 +51,7 @@ async function generateKeyController(req, res, next) {
 
     const duplicateKeyDescription =
       keysObject.length > 0 &&
-      keysObject.every((keys) =>
+      keysObject.some((keys) =>
         req.body.keyDescription.includes(keys.keyDescription)
       );
     if (duplicateKeyDescription) {
@@ -62,7 +63,7 @@ async function generateKeyController(req, res, next) {
     }
 
     const data = {
-      userId: req.userData.userId,
+      user: req.userData.user,
       keyDescription: req.body.keyDescription,
     };
     const UserKey = await createKey(data);

@@ -32,7 +32,7 @@ async function verifyTokenController(req, res, next) {
         statusCode: 403,
       });
 
-    const user = await fetchUserFromId(userToken.userId);
+    const user = await fetchUserFromId(userToken.user);
     if (!user)
       return res.status(404).json({
         error: STATUS_CODES[404],

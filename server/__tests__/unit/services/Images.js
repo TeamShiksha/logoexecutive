@@ -14,8 +14,8 @@ jest.mock("../../../utils/cloudFront", () => ({
   cloudFrontSignedURL: jest.fn(),
 }));
 
-jest.mock("@aws-sdk/cloudfront-signer", () => ({
-  getSignedUrl: jest.fn(),
+jest.mock("@aws-sdk/cloudfront-signer", ()=>({
+  getSignedUrl: jest.fn()
 }));
 
 jest.mock("@aws-sdk/client-s3", () => ({
@@ -34,8 +34,7 @@ const mockImage = new Images({
 });
 
 beforeAll(async () => {
-  // console.log(process.env.TEST_MONGO_URI);
-  await mongoose.connect("mongodb://localhost:27017");
+  await mongoose.connect(process.env.TEST_MONGO_URI);
 });
 
 afterAll(async () => {
@@ -43,15 +42,13 @@ afterAll(async () => {
 });
 
 describe("uploadToS3", () => {
-  beforeEach(() => {
-    process.env.BUCKET_NAME = "Demo";
-    process.env.KEY = "logo";
+  beforeEach(()=>{
+    process.env.BUCKET_NAME="Demo",
+    process.env.KEY="logo";
   });
-
-  afterEach(() => {
+  afterEach(()=>{
     jest.resetAllMocks();
   });
-
   it("should upload a file to S3 and return the URL", async () => {
     const mockFile = { buffer: Buffer.from("mock file data") };
     const mockResponse = { Key: "mock/key/image.jpg" };

@@ -23,7 +23,7 @@ const uploadToS3 = async(file, imageName, extension) => {
     await s3.send(new PutObjectCommand(uploadParams));
     return `${process.env.KEY}/${extension}/${imageName}`;
   } catch (error) {
-    // console.error(error);
+    console.error(error);
     throw error;
   }
 }

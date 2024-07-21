@@ -36,7 +36,6 @@ describe("Auth middleware", () => {
 
     expect(mockCtrl).toHaveBeenCalledTimes(1);
     expect(response.status).toBe(200);
-    console.log("response.body======>",response.body , mockUser);
     expect(response.body).toEqual({
     "_id": mockUser._id.toString(),
     "createdAt": mockUser.createdAt.toISOString(),

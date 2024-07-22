@@ -7,17 +7,6 @@ const mongoose = require("mongoose");
 const { UserType } = require("../../../../utils/constants");
 require("dotenv").config();
 
-beforeAll(async () => {
-  await mongoose.connect(process.env.TEST_MONGO_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  });
-});
-
-afterAll(async () => {
-  await mongoose.connection.close();
-});
-
 const mockUser = new Users({
   email: "john@email.com",
   firstName: "firstName",
@@ -46,12 +35,13 @@ describe("generate-key controller", () => {
     process.env.JWT_SECRET = "my_secret";
     process.env.CLIENT_PROXY_URL = "http://validcorsorigin.com";
     savedUser = await mockUser.save();
+    console.log("reached");
   });
 
   afterAll(async () => {
     delete process.env.JWT_SECRET;
     delete process.env.CLIENT_PROXY_URL;
-    await Users.findByIdAndDelete(savedUser._id);
+    await Users.deleteMany();
   });
 
   test("500 - Not allowed by CORS", async () => {

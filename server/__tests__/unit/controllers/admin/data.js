@@ -100,14 +100,8 @@ describe("GET /admin/images", () => {
       data: {
         domainame: expect.any(String),
         imageId: expect.any(String),
-        createdAt: expect.objectContaining({
-          _seconds: expect.any(Number),
-          _nanoseconds: expect.any(Number)
-        }),
-        updatedAt: expect.objectContaining({
-          _seconds: expect.any(Number),
-          _nanoseconds: expect.any(Number)
-        })
+        createdAt: expect.any(String),
+        updatedAt: expect.any(String)
       }
     });
   });

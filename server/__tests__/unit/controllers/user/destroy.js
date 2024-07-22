@@ -4,7 +4,6 @@ const app = require("../../../../app");
 const { STATUS_CODES } = require("http");
 
 const { Users } = require("../../../../models");
-const { Timestamp } = require("firebase-admin/firestore");
 const { KeyService } = require("../../../../services");
 
 const mockUser = new Users({
@@ -12,8 +11,8 @@ const mockUser = new Users({
   email: "john@email.com",
   firstName: "firstName",
   lastName: "lastName",
-  updatedAt: Timestamp.now().toDate(),
-  createdAt: Timestamp.now().toDate(),
+  updatedAt: Date.now(),
+  createdAt: Date.now(),
 });
 jest.mock("../../../../services/Keys", () => ({
   destroyKey: jest.fn(),

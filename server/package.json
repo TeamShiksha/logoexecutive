@@ -7,9 +7,9 @@
     "start": "node app.js",
     "lint": "eslint .",
     "lint:fix": "eslint --fix .",
-    "test": "firebase emulators:exec \"jest --watchAll=false\" --project=logoexecutive-d1e9a",
+    "test": "jest --watchAll=false",
     "unit": "jest unit",
-    "coverage": "firebase emulators:exec \"jest --coverage --watchAll=false\" --project=logoexecutive-d1e9a"
+    "coverage": "jest --coverage --watchAll=false"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.472.0",
@@ -20,7 +20,6 @@
     "dayjs": "^1.11.10",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
-    "firebase-admin": "^11.10.1",
     "joi": "^17.12.3",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.5.1",

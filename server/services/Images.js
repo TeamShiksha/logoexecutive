@@ -26,7 +26,7 @@ const uploadToS3 = async(file, imageName, extension) => {
     console.error(error);
     throw error;
   }
-}
+};
 
 const fetchImageByCompanyFree = async(company, default_extension = "png") =>{
   try {
@@ -41,7 +41,7 @@ const fetchImageByCompanyFree = async(company, default_extension = "png") =>{
   } catch (err) {
     throw err;
   }
-}
+};
 const getImagesByUserId = async(userId) => {
   try {
     const images = await Images.find({ uploadedBy: userId });
@@ -57,7 +57,7 @@ const getImagesByUserId = async(userId) => {
   } catch (error) {
     throw error;
   }
-}
+};
 
 const createImageData = async(domainame, uploadedBy, extension) => {
   try {
@@ -78,7 +78,7 @@ const createImageData = async(domainame, uploadedBy, extension) => {
     console.error(`Failed to create image data: ${error}`);
     throw error;
   }
-}
+};
 
 module.exports = {
   createImageData,

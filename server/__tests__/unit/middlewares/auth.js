@@ -37,15 +37,15 @@ describe("Auth middleware", () => {
     expect(mockCtrl).toHaveBeenCalledTimes(1);
     expect(response.status).toBe(200);
     expect(response.body).toEqual({
-    "_id": mockUser._id.toString(),
-    "createdAt": mockUser.createdAt.toISOString(),
-    "email": mockUser.email,
-    "firstName": mockUser.firstName ,
-    "isVerified" : mockUser.isVerified,
-   "lastName": mockUser.lastName ,
-    "password": mockUser.password ,
-    "updatedAt": mockUser.updatedAt.toISOString(),
-    "userType": mockUser.userType,
+      "_id": mockUser._id.toString(),
+      "createdAt": mockUser.createdAt.toISOString(),
+      "email": mockUser.email,
+      "firstName": mockUser.firstName ,
+      "isVerified" : mockUser.isVerified,
+      "lastName": mockUser.lastName ,
+      "password": mockUser.password ,
+      "updatedAt": mockUser.updatedAt.toISOString(),
+      "userType": mockUser.userType,
     });
   });
 
@@ -62,15 +62,15 @@ describe("Auth middleware", () => {
     expect(mockCtrl).toHaveBeenCalledTimes(1);
     expect(response.status).toBe(200);
     expect(response.body).toEqual({
-    "_id": mockUser._id.toString(),
-    "createdAt": mockUser.createdAt.toISOString(),
-    "email": mockUser.email,
-    "firstName": mockUser.firstName ,
-    "isVerified" : mockUser.isVerified,
-   "lastName": mockUser.lastName ,
-    "password": mockUser.password ,
-    "updatedAt": mockUser.updatedAt.toISOString(),
-    "userType": mockUser.userType,
+      "_id": mockUser._id.toString(),
+      "createdAt": mockUser.createdAt.toISOString(),
+      "email": mockUser.email,
+      "firstName": mockUser.firstName ,
+      "isVerified" : mockUser.isVerified,
+      "lastName": mockUser.lastName ,
+      "password": mockUser.password ,
+      "updatedAt": mockUser.updatedAt.toISOString(),
+      "userType": mockUser.userType,
     });
   });
 

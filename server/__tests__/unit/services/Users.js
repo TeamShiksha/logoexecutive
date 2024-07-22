@@ -158,7 +158,7 @@ describe("createUser", () => {
       updatedAt: Date.now(),
       userType: UserType.CUSTOMER,
       isVerified: false,
-    }
+    };
     // jest.spyOn(Users, "NewUser").mockReturnValueOnce(mockUser);
     // jest.spyOn(UserCollection, "doc").mockReturnValueOnce({
     //   set: jest.fn().mockResolvedValueOnce(null),

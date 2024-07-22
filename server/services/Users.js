@@ -12,7 +12,7 @@ const emailRecordExists = async (email) => {
   } catch (err) {
     throw err;
   }
-}
+};
 
 /**
  * Fetches all the users
@@ -24,7 +24,7 @@ const fetchUsers = async () =>{
   } catch (err) {
     throw err;
   }
-}
+};
 
 /**
  * Fetches user by email
@@ -37,7 +37,7 @@ const fetchUserByEmail = async (email) => {
   } catch (err) {
     throw err;
   }
-}
+};
 
 /**
  * Creates user in the DB
@@ -58,7 +58,7 @@ const createUser = async (user) => {
   } catch (err) {
     throw err;
   }
-}
+};
 
 /**
  * Fetches user by document id
@@ -71,7 +71,7 @@ const fetchUserFromId = async (userId) => {
   } catch (err) {
     throw err;
   }
-}
+};
 
 const updatePasswordbyUser = async (user, hashNewPassword) => {
   try {
@@ -82,7 +82,7 @@ const updatePasswordbyUser = async (user, hashNewPassword) => {
   } catch (err) {
     throw err;
   }
-}
+};
 
 const verifyUser = async (user) => {
   try {
@@ -92,7 +92,7 @@ const verifyUser = async (user) => {
   } catch (err) {
     throw err;
   }
-}
+};
 
 const updateUser = async (updateProfile, user) => {
   try {
@@ -105,7 +105,7 @@ const updateUser = async (updateProfile, user) => {
   } catch (err) {
     throw err;
   }
-}
+};
 
 const deleteUserAccount = async (userId) => {
   const session = await mongoose.startSession();

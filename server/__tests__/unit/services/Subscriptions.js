@@ -25,7 +25,6 @@ describe("createSubscription", () => {
     const createdSubscription = await createSubscription(
       mockSubscriptions[0].user
     );
-    console.log(createdSubscription);
     expect(createdSubscription).toBeInstanceOf(Subscriptions); 
   });
 

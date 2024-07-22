@@ -322,36 +322,34 @@ describe("updateUser", () => {
 });
 
 
-// describe("deleteUserAccount", () => {
-//   afterEach(async () => {
-//     jest.restoreAllMocks();
-//     await Users.deleteMany({});
-//   });
+describe("deleteUserAccount", () => {
+  afterEach(async () => {
+    jest.restoreAllMocks();
+    await Users.deleteMany({});
+  });
 
-//   test("should delete user account from the database", async () => {
-//     const mockUser = new Users(mockUsers[0]);
-//     await mockUser.save();
+  test("should delete user account from the database", async () => {
+    const mockUser = new Users(mockUsers[0]);
+    await mockUser.save();
 
-//     const deletedUser = await deleteUserAccount(mockUser._id);
+    const deletedUser = await deleteUserAccount(mockUser._id);
+    const userExists = await Users.findById(mockUser._id);
+    expect(userExists).toBeNull();
+    
+  });
 
-//     expect(deletedUser).toBeTruthy();
+  test("should return null if user does not exist for the provided user ID", async () => {
+    const deletedUser = await deleteUserAccount(new mongoose.Types.ObjectId());
 
-//     const userExists = await Users.findById(mockUser._id);
-//     expect(userExists).toBeNull();
-//   });
+    expect(deletedUser).toBeNull();
+  });
 
-//   test("should return null if user does not exist for the provided user ID", async () => {
-//     const deletedUser = await deleteUserAccount(mongoose.Types.ObjectId());
+  test("should throw an error if MongoDB operation fails", async () => {
+    const errorMessage = "MongoDB operation failed";
+    jest.spyOn(Users, "findByIdAndDelete").mockImplementationOnce(() => {
+      throw new Error(errorMessage);
+    });
 
-//     expect(deletedUser).toBeNull();
-//   });
-
-//   test("should throw an error if MongoDB operation fails", async () => {
-//     const errorMessage = "MongoDB operation failed";
-//     jest.spyOn(Users, "findByIdAndDelete").mockImplementationOnce(() => {
-//       throw new Error(errorMessage);
-//     });
-
-//     await expect(deleteUserAccount(mockUsers[0]._id)).rejects.toThrow(errorMessage);
-//   });
-// });
+    await expect(deleteUserAccount(mockUsers[0]._id)).rejects.toThrow(errorMessage);
+  });
+});

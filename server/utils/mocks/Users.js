@@ -1,8 +1,10 @@
 const bcrypt = require("bcrypt");
 const { UserType } = require("../constants");
+const { default: mongoose } = require("mongoose");
 
 const mockUsers = [
   {
+    _id : new mongoose.Types.ObjectId(),
     firstName: "John",
     lastName: "Doe",
     email: "john.doe@example.com",
@@ -13,6 +15,7 @@ const mockUsers = [
     isVerified: false,
   },
   {
+    _id : new mongoose.Types.ObjectId(),
     firstName: "John",
     lastName: "Doe",
     email: "johndoe@example.com",
@@ -23,6 +26,7 @@ const mockUsers = [
     isVerified: true,
   },
   {
+    _id : new mongoose.Types.ObjectId(),
     firstName: "John",
     lastName: "Doe",
     email: "johndoe2@example.com",

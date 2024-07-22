@@ -1,7 +1,8 @@
 const { S3Client, PutObjectCommand } = require("@aws-sdk/client-s3");
-const { Images } = require("../models");
-const { db: firestore, ImageCollection } = require("../utils/firestore");
+const mongoose = require("mongoose");
+const Images = require("../models/Images");
 const { cloudFrontSignedURL } = require("../utils/cloudFront");
+
 
 const s3 = new S3Client({
   region: process.env.BUCKET_REGION,
@@ -11,7 +12,7 @@ const s3 = new S3Client({
   },
 });
 
-async function uploadToS3(file, imageName, extension) {
+const uploadToS3 = async(file, imageName, extension) => {
   const uploadParams = {
     Bucket: process.env.BUCKET_NAME,
     Body: file.buffer,
@@ -27,50 +28,38 @@ async function uploadToS3(file, imageName, extension) {
   }
 }
 
-async function fetchImageByCompanyFree(company, default_extension = "png") {
+const fetchImageByCompanyFree = async(company, default_extension = "png") =>{
   try {
-    const imageCDNUrl = await firestore.runTransaction(async () => {
-      const imageRef = await ImageCollection.where("domainame", "==", company)
-        .where("extension", "==", default_extension)
-        .get();
-      if (imageRef.empty) return null;
-      const doc = imageRef.docs[0];
-      const imageUrl =
-        `${default_extension}/` +
-        doc.data().domainame +
-        `.${default_extension}`;
-      const cloudFrontUrl = cloudFrontSignedURL(`/${imageUrl}`).data;
-      return cloudFrontUrl;
+    const image = await Images.findOne({
+      domainame: company,
+      extension: default_extension
     });
-    return imageCDNUrl;
+    if (!image) return null;
+    const imageUrl = `${default_extension}/${image.domainame}.${default_extension}`;
+    const cloudFrontUrl = cloudFrontSignedURL(`/${imageUrl}`).data;
+    return cloudFrontUrl;
   } catch (err) {
     throw err;
   }
 }
-
-async function getImagesByUserId(userId) {
+const getImagesByUserId = async(userId) => {
   try {
-    const imagesSnapshot = await ImageCollection.where(
-      "uploadedBy",
-      "==",
-      userId
-    ).get();
-    if (imagesSnapshot.empty) return null;
-    const images = imagesSnapshot.docs.map((doc) => {
-      return {
-        domainame: doc.data().domainame,
-        imageId: doc.data().imageId,
-        createdAt: doc.data().createdAt.toDate(),
-        updatedAt: doc.data().updatedAt.toDate(),
-      };
-    });
-    return images;
+    const images = await Images.find({ uploadedBy: userId });
+
+    if (!images.length) return null;
+
+    return images.map((image) => ({
+      domainame: image.domainame,
+      _id: image._id,
+      createdAt: image.createdAt,
+      updatedAt: image.updatedAt,
+    }));
   } catch (error) {
     throw error;
   }
 }
 
-async function createImageData(domainame, uploadedBy, extension) {
+const createImageData = async(domainame, uploadedBy, extension) => {
   try {
     const newImage = Images.newImage({
       domainame,
@@ -78,12 +67,12 @@ async function createImageData(domainame, uploadedBy, extension) {
       extension,
     });
     if (!newImage) return null;
-    const result = await ImageCollection.doc(newImage.imageId).set(newImage);
-    if (!result) return null;
+    const result = new Images(newImage);
+    await result.save();
     return {
-      imageId: newImage.imageId,
-      createdAt: newImage.createdAt.toDate(),
-      updatedAt: newImage.updatedAt.toDate(),
+      _id: result._id,
+      createdAt: result.createdAt,
+      updatedAt: result.updatedAt,
     };
   } catch (error) {
     console.error(`Failed to create image data: ${error}`);

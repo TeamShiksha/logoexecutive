@@ -3,6 +3,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { UserType } = require("../utils/constants");
 const dayjs = require("dayjs");
+require("dotenv").config();
 
 const userSchema = new mongoose.Schema({
   email: {
@@ -87,6 +88,16 @@ userSchema.statics.NewUser = async function(userData) {
   } catch (err) {
     throw err;
   }
+};
+
+userSchema.methods.data =function(){
+  return {
+    firstName: this.firstName,
+    lastName: this.lastName,
+    email: this.email,
+    userId: (this._id).toString(),
+    userType: this.userType,
+  };
 };
 
 const User = mongoose.model("User", userSchema);

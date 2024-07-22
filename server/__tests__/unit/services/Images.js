@@ -1,9 +1,13 @@
+const mongoose = require("mongoose");
 const cloudfrontSigner = require("@aws-sdk/cloudfront-signer");
-const { ImageCollection } = require("../../../utils/firestore");
-const {fetchImageByCompanyFree, getImagesByUserId, createImageData, uploadToS3} = require("../../../services/Images");
 const cloudFront = require("../../../utils/cloudFront");
-const { Timestamp } = require("firebase-admin/firestore");
-const { S3Client,PutObjectCommand } = require("@aws-sdk/client-s3");
+const {
+  fetchImageByCompanyFree,
+  getImagesByUserId,
+  createImageData,
+  uploadToS3,
+} = require("../../../services/Images");
+const { S3Client, PutObjectCommand } = require("@aws-sdk/client-s3");
 const { Images } = require("../../../models");
 
 jest.mock("../../../utils/cloudFront", () => ({
@@ -20,13 +24,21 @@ jest.mock("@aws-sdk/client-s3", () => ({
   })),
   PutObjectCommand: jest.fn(),
 }));
-const mockImage = new Images ({
-  domainame :"google.jpg",
+
+const mockImage = new Images({
+  domainame: "google.com",
   extension: "jpg",
-  imageId: "12579986-7ad0-4a58-b204-211b583ab05b",
-  createdAt: Timestamp.fromDate(new Date("02-02-2002")),
-  updatedAt:Timestamp.fromDate(new Date("02-02-2002")),
-  uploadedBy :"5e8bf5ae-1ac3-4daf-b1e4-45d220cfb5a9"
+  createdAt: new Date("2002-02-02"),
+  updatedAt: new Date("2002-02-02"),
+  uploadedBy: new mongoose.Types.ObjectId() 
+});
+
+beforeAll(async () => {
+  await mongoose.connect(process.env.TEST_MONGO_URI);
+});
+
+afterAll(async () => {
+  await mongoose.connection.close();
 });
 
 describe("uploadToS3", () => {
@@ -65,21 +77,21 @@ describe("uploadToS3", () => {
 });
 
 describe("fetchImageByCompanyFree", () => {
-  afterEach(() => {
+  afterEach(async () => {
     jest.clearAllMocks();
+    await Images.deleteMany({});
   });
-
   it("should fetch image CDN URL by company successfully", async () => {
-    await ImageCollection.doc(mockImage.imageId).set(mockImage.data);
+    const image  = new Images(mockImage);
+    await image.save()
     const mockCDNLink = "https://du4goljobz66l.cloudfront.net/meta.png?Expires=1706882374&Key-Pair-Id=K1CBTPCVEWK03E&Signature=l6ZpbQ-Z3WtJQ8inaDomAAAhcnnC0U2R~5Su7HWjC8fbbeQI4e4JBK368guQFYtc8rQAJMur446ozoXJE-9Hcj125NlZFSMqpeUsjam-nk9Wb2d8XGR6UjyxYLqGbhca8WYwl~h0CzHbe20PJXZbyuFPTufCrBTkIoh4o3Mg3MQDe2fPf5z6L9xLgVtbOrpJQoHZ0YlWTNvWJWutL-AFX8KbisrBaMi8zRa6h-mSfXuIoUyjziMRA5gPA0T8QSUJ8iLdbURwWxvRpRpM0Ohrjk06sWDSTkNzLL~pVNyL7LwO04mAHVK4XYgK5179xcZ-BjMMW1qJD3YF7G~xdcsXJw__";
     const mockSignedUrl = jest.fn(() => mockCDNLink);
     jest.spyOn(cloudfrontSigner, "getSignedUrl").mockImplementation(mockSignedUrl);
     jest.spyOn(cloudFront, "cloudFrontSignedURL").mockImplementation(() => ({ data: mockCDNLink, success: true }));
-    const company = "google.jpg";
+    const company = "google.com";
     const result = await fetchImageByCompanyFree(company, "jpg");
     expect(result).toEqual(mockCDNLink);
   });
-  
 
   it("should return null when no image is found", async () => {
     const company = "non_existent_image.jpg";
@@ -88,85 +100,87 @@ describe("fetchImageByCompanyFree", () => {
   });
 
   it("should throw an error if an error occurs during image retrieval", async () => {
-    const mockError = new Error("Test error");
-    jest.spyOn(ImageCollection, "where").mockReturnValueOnce({
-      where: jest.fn(() => ({
-        get: jest.fn().mockRejectedValueOnce(mockError),
-      }))
+    const mockError = "Test error";
+    jest.spyOn(Images, "findOne").mockImplementationOnce(() => {
+      throw new Error(mockError);
     });
     const company = "error_image.jpg";
     await expect(fetchImageByCompanyFree(company, "jpg")).rejects.toThrow(mockError);
   });
-  
 });
 
-describe("getImagesByUserId", ()=>{
-
-  it("should return the all the images if the admin has images uploaded", async()=>{
-    await ImageCollection.doc(mockImage.imageId).set(mockImage.data);
-    const userId = "5e8bf5ae-1ac3-4daf-b1e4-45d220cfb5a9";
-    const imageData = await getImagesByUserId(userId);
-    expect(imageData).toEqual([{
-      domainame:mockImage.domainame,
-      imageId:mockImage.imageId,
-      createdAt:mockImage.createdAt.toDate(),
-      updatedAt:mockImage.updatedAt.toDate()
-    }]);
+describe("getImagesByUserId", () => {
+  afterEach(async () => {
+    jest.clearAllMocks();
+    await Images.deleteMany({});
   });
 
-  it("should return  null if the no images were found", async()=>{
-    const userId="5e8bf5ae-1ac3-4daf-b1e4-45d220cfb5ab";
+  it("should return all the images if the user has images uploaded", async () => {
+    const image  = new Images(mockImage);
+    await image.save()
+    const userId = mockImage.uploadedBy
     const imageData = await getImagesByUserId(userId);
-    expect(imageData).toEqual(null);
+    expect(imageData).toEqual([
+      {
+        _id : mockImage._id,
+        domainame: mockImage.domainame,
+        createdAt: mockImage.createdAt,
+        updatedAt: mockImage.updatedAt,
+      },
+    ]);
   });
 
-  test("should throw an error if Firestore operation fails", async () => {
-    const errorMessage = "Firestore operation failed";
-    const userId="5e8bf5ae-1ac3-4daf-b1e4-45d220cfb5a9";
-    jest.spyOn(ImageCollection, "where").mockReturnValue({
-      get: jest.fn().mockRejectedValue(new Error(errorMessage))
+  it("should return null if no images were found", async () => {
+    const userId = mockImage.uploadedBy
+    const imageData = await getImagesByUserId(userId);
+    expect(imageData).toBeNull();
+  });
+
+  test("should throw an error if MongoDB operation fails", async () => {
+    const errorMessage = "MongoDB operation failed";
+    const userId = mockImage.uploadedBy._id;
+    jest.spyOn(Images, "find").mockImplementationOnce(() => {
+      throw new Error(errorMessage);
     });
     await expect(getImagesByUserId(userId)).rejects.toThrow(errorMessage);
   });
 });
 
 describe("createImageData", () => {
-  afterEach(() => {
+  afterEach(async () => {
     jest.clearAllMocks();
+    await Images.deleteMany({});
   });
 
   it("should create image data successfully", async () => {
     const domainame = "example.com";
-    const uploadedBy = "user123";
+    const uploadedBy =  new mongoose.Types.ObjectId();
     const extension = "png";
     const result = await createImageData(domainame, uploadedBy, extension);
     expect(result).toEqual({
-      imageId: expect.any(String),
+      _id: expect.any(mongoose.Types.ObjectId),
       createdAt: expect.any(Date),
-      updatedAt: expect.any(Date),
+      updatedAt: expect.any(Date)
     });
   });
-  it("should return null if setting the document in the collection fails", async () => {
+
+  it("should return null if data is improper", async () => {
     const domainame = "example.com";
-    const uploadedBy = "user123";
+    const uploadedBy =  undefined;
     const extension = "png";
-    jest.spyOn(ImageCollection, "doc").mockReturnValue({
-      set: jest.fn().mockResolvedValue(null)
-    });
-    const result = await createImageData(domainame, uploadedBy, extension);
-    expect(result).toBeNull();
+
+    const createdUser = await createImageData(domainame, uploadedBy, extension);
+    expect(createdUser).toBeNull();
   });
 
-  it("should return null if newImage is falsy", async () => {
-    const result = await createImageData("", "", "");
-    expect(result).toBeNull();
-  });
-
-  it("should throw an error and log if an error occurs during image data creation", async () => {
-    const errorMessage = "Firestore operation failed";
-    jest.spyOn(ImageCollection, "doc").mockReturnValue({
-      set: jest.fn().mockRejectedValue(new Error(errorMessage))
+  it("should throw an error if MongoDB operation fails", async () => {
+    const errorMessage = "MongoDB operation failed";
+    jest.spyOn(Images.prototype, "save").mockImplementationOnce(() => {
+      throw new Error(errorMessage);
     });
-    await expect(createImageData("example.com", "user123", "png")).rejects.toThrow(errorMessage);
+    const domainame = "example.com";
+    const uploadedBy = new mongoose.Types.ObjectId();
+    const extension = "png";
+    await expect(createImageData(domainame, uploadedBy, extension)).rejects.toThrow(errorMessage);
   });
 });

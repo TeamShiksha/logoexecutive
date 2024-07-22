@@ -8,10 +8,12 @@ const {
 } = require("../../../services");
 const { UserToken } = require("../../../models");
 const { mockUserTokens } = require("../../../utils/mocks/UserToken");
-require("dotenv").config();
+const { MongoMemoryServer } = require("mongodb-memory-server");
 
 beforeAll(async () => {
-  await mongoose.connect(process.env.TEST_MONGO_URI);
+  const mongoServer = await MongoMemoryServer.create();
+  const mongo_uri = mongoServer.getUri();
+  await mongoose.connect(mongo_uri);
 });
 
 afterAll(async () => {

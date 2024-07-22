@@ -9,6 +9,7 @@ const {
 } = require("../../../services/Images");
 const { S3Client, PutObjectCommand } = require("@aws-sdk/client-s3");
 const { Images } = require("../../../models");
+const { MongoMemoryServer } = require("mongodb-memory-server");
 
 jest.mock("../../../utils/cloudFront", () => ({
   cloudFrontSignedURL: jest.fn(),
@@ -34,7 +35,9 @@ const mockImage = new Images({
 });
 
 beforeAll(async () => {
-  await mongoose.connect(process.env.TEST_MONGO_URI);
+  const mongoServer = await MongoMemoryServer.create();
+  const mongo_uri = mongoServer.getUri();
+  await mongoose.connect(mongo_uri);
 });
 
 afterAll(async () => {

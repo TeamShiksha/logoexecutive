@@ -1,11 +1,13 @@
 const { formExists, createForm } = require("../../../services");
 const { ContactUs } = require("../../../models");
 const { mockContactUsForm } = require("../../../utils/mocks/contactUs");
+const { MongoMemoryServer } = require("mongodb-memory-server");
 const mongoose = require("mongoose");
-require("dotenv").config();
 
 beforeAll(async () => {
-  await mongoose.connect(process.env.TEST_MONGO_URI);
+  const mongoServer = await MongoMemoryServer.create();
+  const mongo_uri = mongoServer.getUri();
+  await mongoose.connect(mongo_uri);
 });
 
 afterAll(async () => {

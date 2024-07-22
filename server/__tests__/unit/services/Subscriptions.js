@@ -5,11 +5,12 @@ const {
 } = require("../../../services");
 const { mockSubscriptions } = require("../../../utils/mocks/Subscriptions");
 const { Subscriptions } = require("../../../models");
-
-require("dotenv").config();
+const { MongoMemoryServer } = require("mongodb-memory-server");
 
 beforeAll(async () => {
-  await mongoose.connect(process.env.TEST_MONGO_URI);
+  const mongoServer = await MongoMemoryServer.create();
+  const mongo_uri = mongoServer.getUri();
+  await mongoose.connect(mongo_uri);
 });
 
 afterAll(async () => {

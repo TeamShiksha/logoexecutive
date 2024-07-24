@@ -9,6 +9,7 @@ const {
 } = require("../../../services/Images");
 const { S3Client, PutObjectCommand } = require("@aws-sdk/client-s3");
 const { Images } = require("../../../models");
+const { MongoMemoryServer } = require("mongodb-memory-server");
 
 jest.mock("../../../utils/cloudFront", () => ({
   cloudFrontSignedURL: jest.fn(),
@@ -34,7 +35,9 @@ const mockImage = new Images({
 });
 
 beforeAll(async () => {
-  await mongoose.connect(process.env.TEST_MONGO_URI);
+  const mongoServer = await MongoMemoryServer.create();
+  const mongo_uri = mongoServer.getUri();
+  await mongoose.connect(mongo_uri);
 });
 
 afterAll(async () => {
@@ -57,13 +60,13 @@ describe("uploadToS3", () => {
     const result = await uploadToS3(mockFile, "image", "jpg");
     expect(result).toBe(`${process.env.KEY}/jpg/image`);
     expect(S3Client).toHaveBeenCalled();
-    // expect(S3Client).toHaveBeenCalledWith({
-    //   region: process.env.BUCKET_REGION,
-    //   credentials: {
-    //     accessKeyId: process.env.ACCESS_KEY,
-    //     secretAccessKey: process.env.SECRET_ACCESS_KEY,
-    //   },
-    // });
+    expect(S3Client).toHaveBeenCalledWith({
+      region: process.env.BUCKET_REGION,
+      credentials: {
+        accessKeyId: process.env.ACCESS_KEY,
+        secretAccessKey: process.env.SECRET_ACCESS_KEY,
+      },
+    });
   });
 
   it("should throw an error when the upload fails", async () => {

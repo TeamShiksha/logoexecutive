@@ -5,7 +5,7 @@ const { Users } = require("../../../../models");
 const { KeyService, SubscriptionService } = require("../../../../services");
 const mongoose = require("mongoose");
 const { UserType } = require("../../../../utils/constants");
-require("dotenv").config();
+const { MongoMemoryServer } = require("mongodb-memory-server");
 
 const mockUser = new Users({
   email: "john@email.com",
@@ -26,6 +26,16 @@ jest.mock("../../../../services/Subscriptions", () => ({
   fetchSubscriptionByuserid: jest.fn(),
 }));
 
+beforeAll(async () => {
+  const mongoServer = await MongoMemoryServer.create();
+  const mongo_uri = mongoServer.getUri();
+  await mongoose.connect(mongo_uri);
+});
+
+afterAll(async () => {
+  await mongoose.connection.close();
+});
+
 const ENDPOINT = "/api/user/generate";
 
 describe("generate-key controller", () => {
@@ -35,7 +45,6 @@ describe("generate-key controller", () => {
     process.env.JWT_SECRET = "my_secret";
     process.env.CLIENT_PROXY_URL = "http://validcorsorigin.com";
     savedUser = await mockUser.save();
-    console.log("reached");
   });
 
   afterAll(async () => {

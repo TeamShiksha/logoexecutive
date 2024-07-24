@@ -1,7 +1,6 @@
 const JWT = require("jsonwebtoken");
 const { STATUS_CODES } = require("http");
 const { UserType } = require("../utils/constants");
-require("dotenv").config();
 
 /**
  * @param {Object} options

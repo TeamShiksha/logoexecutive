@@ -14,10 +14,12 @@ const {
 const { Users } = require("../../../models");
 const { mockUsers } = require("../../../utils/mocks/Users");
 const { UserType } = require("../../../utils/constants");
-require("dotenv").config();
+const { MongoMemoryServer } = require("mongodb-memory-server");
 
 beforeAll(async () => {
-  await mongoose.connect(process.env.TEST_MONGO_URI);
+  const mongoServer = await MongoMemoryServer.create();
+  const mongo_uri = mongoServer.getUri();
+  await mongoose.connect(mongo_uri);
 });
 
 afterAll(async () => {
@@ -108,7 +110,6 @@ describe("fetchUserByEmail", () => {
   test("should fetch user by email from the user collection", async () => {
     const user = await Users.create(mockUsers[0]);
     const fetched_user = await fetchUserByEmail(mockUsers[0].email);
-    // console.log(`fc ==> ${fetched_user._id}, ac==> ${user._id}`);
     expect(fetched_user).toBeInstanceOf(Users);
     expect(fetched_user._id).toStrictEqual(user._id);
   });
@@ -179,21 +180,21 @@ describe("createUser", () => {
   });
 });
 
-// describe("Users service", () => {
-//   test("should throw an error if bcrypt.hash throws an error", async () => {
-//     const mockUser = {
-//       email: "test@example.com",
-//       firstName: "Test",
-//       lastName: "Users",
-//       password: "password123",
-//     };
-//     jest.spyOn(bcrypt, "hash").mockImplementationOnce(() => {
-//       throw new Error("Hashing failed");
-//     });
+describe("Users service", () => {
+  test("should throw an error if bcrypt.hash throws an error", async () => {
+    const mockUser = {
+      email: "test@example.com",
+      firstName: "Test",
+      lastName: "Users",
+      password: "password123",
+    };
+    jest.spyOn(bcrypt, "hash").mockImplementationOnce(() => {
+      throw new Error("Hashing failed");
+    });
 
-//     await expect(Users.NewUser(mockUser)).rejects.toThrow("Hashing failed");
-//   });
-// });
+    await expect(Users.NewUser(mockUser)).rejects.toThrow("Hashing failed");
+  });
+});
 
 describe("updatePasswordbyUser", () => {
   afterEach(async () => {
@@ -267,7 +268,6 @@ describe("verifyUser", () => {
   test("should throw an error if MongoDB operation fails", async () => {
     const errorMessage = "MongoDB operation failed";
     const mockUser = new Users(mockUsers[0]);
-    // const user = await mockUser.save();
     jest.spyOn(Users.prototype, "save").mockImplementationOnce(() => {
       throw new Error(errorMessage);
     });

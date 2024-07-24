@@ -5,8 +5,7 @@ This document provides step-by-step instructions for cloning and running the pro
 ### [Enironmental variables](#enironmental-variable)
 ### [Gmail setup](#gmail-setup)
 ### [AWS setup](#aws-setup)
-### [Firebase setup](#firebase-setup)
-### [Firebase emulator setup](#firebase-emulator-setup)
+### [MongoDB Atlas setup](#mongodb-atlas-setup)
 
 ## Clone and install dependencies
 Execute the following commands sequentially to clone the project and install all its dependencies:
@@ -39,61 +38,49 @@ Substitute the right-hand value of each environment variable with the correspond
 ## AWS setup
 - Follow the guide given [here](./guides/CLOUDFORMATION.md) for setting up AWS.
 
-## Firebase setup
-- Sign in to [firebase](https://firebase.google.com/)  using your Google account and go to the Firebase console.
-- Select `Add Project`.
-- Enter the `project name`.
-- Analytics are optional, and you can disable them if you prefer.
+## MongoDB Atlas setup
+1. **Create a MongoDB Atlas Account**:
+    - Go to [MongoDB Atlas](https://www.mongodb.com/cloud/atlas/register) and create a free account.
 
-Once you have set up your project, proceed to create a Firestore instance.
-- Navigate to the project dashboard and click on the `Cloud Firestore` card.
-- Select `Create database` to initiate the database creation process.
-- You have the option to commence your project in either `production` or `test` mode.
-- Choose a `location`, ideally the one nearest to you, to ensure better latency.
+2. **Create a Cluster**:
+    - Once logged in, click on `Create a Cluster`.
+    - Choose the free tier `M0` and configure your cluster as needed.
+    - Click `Create Deployment`. This may take a few minutes.
 
-Once you've configured Firestore, proceed to generate the service account credentials:
-- Navigate to the `settings icon` in the sidebar of your project dashboard.
-- Choose `Project Settings` from the options available in the settings menu.
-- Navigate to the `Service Account` tab in the Project Settings.
-- Choose the appropriate SDK, in our case, it is `Node.js`.
-- Select `Generate new private key` to generate the necessary credentials.
-- Upon selection, a file download prompt will appear. Save the file as `serviceAccountKey.json` and ensure the formatting is matched accurately.
+3. **Create a Database User**:
+    - In your cluster view, go to the `Database Access` tab.
+    - Click `+ Add New Database User`.
+    - Create a new user with the appropriate roles and a strong password.
 
-## Firebase emulator setup
-- To utilize the emulator in the project, set the `EMULATED_FIRESTORE` environmental variable to `1`.
-- Additionally, ensure that you provide the correct Firebase `project ID` in the `FIRESTORE_PROJECT_ID` environmental variable.
-- Ensure you have Java 11 or a later version installed to run the Firebase emulator. We suggest [Java 19](https://www.oracle.com/java/technologies/javase/jdk19-archive-downloads.html)
-- Enter the project directory and execute the commands below one by one to install and launch the Firebase emulator. Messages starting with `#` are provided for your assistance and do not need to be executed along with the commands.
-```sh
-# Install Firebase CLI globally
-npm install -g firebase-tools
+4. **Configure Network Access**:
+    - Go to the `Network Access` tab.
+    - Click `+ Add IP Address`.
+    - Add your IP address or allow access from anywhere (`0.0.0.0/0`), though this is not recommended for production.
 
-# Log in to Firebase
-firebase login
-# When prompted to allow data collection, type 'n'
-# Follow the redirection in your default browser, select your Google account, and click 'allow'
+5. **Get the Connection String**:
+    - In your cluster view, click `Connect`.
+    - Select driver as Node.js and version as 5.5 or later
+    - Copy the connection string. It should look something like this:
+      ```
+      mongodb+srv://<username>:<password>@cluster0.mongodb.net/<dbname>?retryWrites=true&w=majority
+      ```
 
-# Set the project ID
-firebase use {project_id}
-# Replace {project_id} with the project ID obtained from the service account file
-
-# Initialize Firebase
-firebase init
-# When prompted, type 'Y'
-# Choose "Emulators: Set up local emulators for Firebase products"
-# Select "Firestore Emulator"
-# When asked if you want to download the emulators, type 'Y'
-
-# Once initialization is complete
-firebase emulators:start
-# To start the emulator
-
-# You can access the Firebase UI at http://localhost:4040
-```
+6. **Set Up Environment Variable**:
+    - Create a `.env` file in the root of your project.
+    - Add your MongoDB connection string to the `.env` file:
+      ```env
+      MONGO_URL=mongodb+srv://<username>:<password>@cluster0.mongodb.net/<dbname>?retryWrites=true&w=majority
+      ```
+6. **For testing purpose**:
+    - We recommend having two seperate clusters i.e. one for dev and another for testing
+    - However it's upto the user to decide
+    - For a separate cluster, create the cluster as described before and copy its connection string and add it to the '.env' file
+      ```env
+      TEST_MONGO_URI=mongodb+srv://<username>:<password>@cluster0.mongodb.net/<dbname>?retryWrites=true&w=majority
+      ```
 
 ## All set! 
 In a new terminal, execute the following command to initiate the development environment.
 ```sh
 yarn dev
 ```
-**NOTE**: If you are utilizing the emulator, make sure to run `firebase emulators:start` before starting the Node.js server. Failure to do so might result in errors.

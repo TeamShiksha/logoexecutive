@@ -60,13 +60,13 @@ describe("uploadToS3", () => {
     const result = await uploadToS3(mockFile, "image", "jpg");
     expect(result).toBe(`${process.env.KEY}/jpg/image`);
     expect(S3Client).toHaveBeenCalled();
-    // expect(S3Client).toHaveBeenCalledWith({
-    //   region: process.env.BUCKET_REGION,
-    //   credentials: {
-    //     accessKeyId: process.env.ACCESS_KEY,
-    //     secretAccessKey: process.env.SECRET_ACCESS_KEY,
-    //   },
-    // });
+    expect(S3Client).toHaveBeenCalledWith({
+      region: process.env.BUCKET_REGION,
+      credentials: {
+        accessKeyId: process.env.ACCESS_KEY,
+        secretAccessKey: process.env.SECRET_ACCESS_KEY,
+      },
+    });
   });
 
   it("should throw an error when the upload fails", async () => {

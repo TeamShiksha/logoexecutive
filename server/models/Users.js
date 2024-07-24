@@ -3,7 +3,6 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { UserType } = require("../utils/constants");
 const dayjs = require("dayjs");
-require("dotenv").config();
 
 const userSchema = new mongoose.Schema({
   email: {

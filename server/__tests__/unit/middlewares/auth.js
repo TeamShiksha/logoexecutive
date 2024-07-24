@@ -6,7 +6,6 @@ const auth = require("../../../middlewares/auth");
 const { mockUsers } = require("../../../utils/mocks/Users");
 const { Users } = require("../../../models");
 const { STATUS_CODES } = require("http");
-require("dotenv").config();
 
 const mockCtrl = jest.fn();
 

@@ -45,7 +45,7 @@ userTokenSchema.methods.isExpired = function() {
 
 userTokenSchema.statics.NewUserToken = function(params) {
   return {
-    userId: params.userId,
+    user:params.userId,
     token: v4().replaceAll("-", ""),
     type: params.type,
     createdAt: Date.now(),

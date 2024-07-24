@@ -71,13 +71,6 @@ Substitute the right-hand value of each environment variable with the correspond
       ```env
       MONGO_URL=mongodb+srv://<username>:<password>@cluster0.mongodb.net/<dbname>?retryWrites=true&w=majority
       ```
-6. **For testing purpose**:
-    - We recommend having two seperate clusters i.e. one for dev and another for testing
-    - However it's upto the user to decide
-    - For a separate cluster, create the cluster as described before and copy its connection string and add it to the '.env' file
-      ```env
-      TEST_MONGO_URI=mongodb+srv://<username>:<password>@cluster0.mongodb.net/<dbname>?retryWrites=true&w=majority
-      ```
 
 ## All set! 
 In a new terminal, execute the following command to initiate the development environment.

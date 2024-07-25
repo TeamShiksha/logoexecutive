@@ -10,7 +10,7 @@ function Modal({
 	showButtons,
 	containerClassName,
 	showCloseIcon = true,
-	loading,
+	loading = false,
 }) {
 	const closeModal = () => setModal(false);
 	const stopPropagation = (event) => event.stopPropagation();

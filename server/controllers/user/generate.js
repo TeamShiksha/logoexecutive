@@ -63,14 +63,14 @@ async function generateKeyController(req, res, next) {
     }
 
     const data = {
-      user: req.userData.user,
+      user: req.userData.userId,
       keyDescription: req.body.keyDescription,
     };
     const UserKey = await createKey(data);
     return res.status(200).json({
       message: "Key generated successfully",
       statusCode: 200,
-      data: UserKey.data,
+      data: UserKey,
     });
   } catch (err) {
     next(err);

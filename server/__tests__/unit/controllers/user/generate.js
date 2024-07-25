@@ -214,9 +214,11 @@ describe("generate-key controller", () => {
       message: "Key generated successfully",
       statusCode: 200,
       data: {
-        keyId: "1",
-        keyDescription: "Another Description",
-        key: "SOMEKEYAPIKEY",
+        data:{
+          keyId: "1",
+          keyDescription: "Another Description",
+          key: "SOMEKEYAPIKEY",
+        }
       },
     });
   });
@@ -250,9 +252,11 @@ describe("generate-key controller", () => {
       message: "Key generated successfully",
       statusCode: 200,
       data: {
-        keyId: "2",
-        keyDescription: "Another Description",
-        key: "SOMEKEYAPIKEY",
+        data:{
+          keyId: "2",
+          keyDescription: "Another Description",
+          key: "SOMEKEYAPIKEY",
+        }
       },
     });
   });

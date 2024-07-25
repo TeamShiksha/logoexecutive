@@ -36,7 +36,6 @@ async function fetchKeysByuserid(user) {
   try {
     const keys = await Keys.find({"user": user});
     if (!keys.length) return null;
-
     return keys;
   } catch (err) {
     throw err;

@@ -6,6 +6,7 @@ const auth = require("../../../middlewares/auth");
 const { mockUsers } = require("../../../utils/mocks/Users");
 const { Users } = require("../../../models");
 const { STATUS_CODES } = require("http");
+const User = require("../../../models/Users");
 
 const mockCtrl = jest.fn();
 
@@ -36,15 +37,11 @@ describe("Auth middleware", () => {
     expect(mockCtrl).toHaveBeenCalledTimes(1);
     expect(response.status).toBe(200);
     expect(response.body).toEqual({
-      "_id": mockUser._id.toString(),
-      "createdAt": mockUser.createdAt.toISOString(),
       "email": mockUser.email,
       "firstName": mockUser.firstName ,
-      "isVerified" : mockUser.isVerified,
       "lastName": mockUser.lastName ,
-      "password": mockUser.password ,
-      "updatedAt": mockUser.updatedAt.toISOString(),
       "userType": mockUser.userType,
+      "userId": mockUser._id.toString()
     });
   });
 
@@ -61,15 +58,11 @@ describe("Auth middleware", () => {
     expect(mockCtrl).toHaveBeenCalledTimes(1);
     expect(response.status).toBe(200);
     expect(response.body).toEqual({
-      "_id": mockUser._id.toString(),
-      "createdAt": mockUser.createdAt.toISOString(),
       "email": mockUser.email,
       "firstName": mockUser.firstName ,
-      "isVerified" : mockUser.isVerified,
       "lastName": mockUser.lastName ,
-      "password": mockUser.password ,
-      "updatedAt": mockUser.updatedAt.toISOString(),
       "userType": mockUser.userType,
+      "userId": mockUser._id.toString()
     });
   });
 
@@ -99,7 +92,8 @@ describe("Auth middleware", () => {
   });
 
   it("403 - The user is not admin", async () => {
-    const mockJWT = jwt.sign({ data: mockUsers[1] }, process.env.JWT_SECRET);
+    const userData = new User(mockUsers[1]);
+    const mockJWT = jwt.sign({ data: userData.data() }, process.env.JWT_SECRET);
 
     const response = await request(app).get(ADMIN_ENDPOINT).set("Cookie", `jwt=${mockJWT}`);
 

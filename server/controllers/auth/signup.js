@@ -84,7 +84,6 @@ async function signupController(req, res, next) {
         },
       );
     }
-    console.log(newUser);
 
     const newsubcription = await createSubscription(newUser._id);
     if (!newsubcription) {

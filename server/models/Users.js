@@ -60,7 +60,7 @@ userSchema.methods.matchPassword = async function(password) {
 
 // Instance method to generate JWT token
 userSchema.methods.generateJWT = function() {
-  return jwt.sign({ data: this.toJSON() }, process.env.JWT_SECRET, {
+  return jwt.sign({ data: this.data() }, process.env.JWT_SECRET, {
     expiresIn: "1d",
   });
 };

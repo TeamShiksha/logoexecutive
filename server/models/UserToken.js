@@ -1,79 +1,58 @@
-const { Timestamp, DocumentReference } = require("firebase-admin/firestore");
-const { normalizeDate } = require("../utils/date");
-const { UserTokenTypes } = require("../utils/constants");
+const mongoose = require("mongoose");
 const { v4 } = require("uuid");
 const dayjs = require("dayjs");
+const { UserTokenTypes } = require("../utils/constants");
 
-class UserToken {
-  createdAt;
-  expireAt;
-  token;
-  type;
-  userId;
-  userTokenId;
-  userTokenRef;
-
-  /**
-   * @param {Object} params
-   * @param {string} params.token
-   * @param {string} params.userId
-   * @param {string} params.userTokenId
-   * @param {string} params.type
-   * @param {Date|Timestamp} params.createdAt
-   * @param {Date|Timestamp} params.expireAt
-   * @param {DocumentReference} params.userTokenRef
-   **/
-  constructor(params) {
-    this.token = params.token;
-    this.userId = params.userId;
-    this.userTokenId = params.userTokenId;
-    this.type = params.type;
-    this.createdAt = normalizeDate(params.createdAt);
-    this.expireAt = normalizeDate(params.expireAt);
-    this.userTokenRef = params.userTokenRef;
+const userTokenSchema = new mongoose.Schema({
+  token: {
+    type: String,
+    required: true,
+    default: () => v4().replaceAll("-", "")
+  },
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref:"User",
+  },
+  type: {
+    type: String,
+    required: true,
+    enum: Object.values(UserTokenTypes)
+  },
+  createdAt: {
+    type: Date,
+    required: true,
+    default: Date.now,
+  },
+  expireAt: {
+    type: Date,
+    required: true,
+    default: () => dayjs().add(1, "day").toDate(),
   }
+});
 
-  /**
-   * Creates a firebase compatible userToken
-   * @param {Object} params
-   * @param {string} params.userId - userId for the token is being created
-   * @param {UserTokenTypes} params.type
-   * @param {Date} [params.expireAt] - expiry date of token (Default value is 24 hours after creation)
-   **/
-  static NewUserToken(params) {
-    const expireAt = params.expireAt
-      ? normalizeDate(params.expireAt)
-      : dayjs().add(1, "day").toDate();
-    return {
-      userId: params.userId,
-      token: v4().replaceAll("-", ""),
-      userTokenId: v4(),
-      type: params.type,
-      createdAt: Timestamp.now(),
-      expireAt: Timestamp.fromDate(expireAt),
-    };
-  }
+userTokenSchema.methods.tokenURL = function() {
+  let path,url;
+  if (this.type === UserTokenTypes.FORGOT) path = "/reset-password";
+  if (this.type === UserTokenTypes.VERIFY) path = "/verify";
+  url = new URL(path, process.env.CLIENT_URL);
+  url.searchParams.append("token", this.token);
+  return url.toString();
+};
 
-  /**
-   * Generates a link that can be shared via email
-   *
-   * @param {UserTokenTypes} path - path of service
-   */
-  get tokenURL() {
-    let path, url;
-    if (this.type === UserTokenTypes.FORGOT) path = "/reset-password";
-    if (this.type === UserTokenTypes.VERIFY) path = "/verify";
-    url = new URL(path, process.env.CLIENT_URL);
-    url.searchParams.append("token", this.token);
-    return url;
-  }
+userTokenSchema.methods.isExpired = function() {
+  return !(this.expireAt - Date.now() > 0);
+};
 
-  /**
-   * returns - true if token is expired and false if not
-   **/
-  isExpired() {
-    return !(this.expireAt - Date.now() > 0);
-  }
-}
+userTokenSchema.statics.NewUserToken = function(params) {
+  return {
+    user:params.userId,
+    token: v4().replaceAll("-", ""),
+    type: params.type,
+    createdAt: Date.now(),
+    expireAt: dayjs().add(1, "day").toDate()
+  };
+};
+
+const UserToken = mongoose.model("UserToken", userTokenSchema);
 
 module.exports = UserToken;

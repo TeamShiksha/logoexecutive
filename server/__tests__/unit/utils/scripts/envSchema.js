@@ -17,16 +17,7 @@ const validEnv = {
   BUCKET_REGION: "ap-south-1",
   ACCESS_KEY: "GH67BTYLTNVVQEC6",
   SECRET_ACCESS_KEY: "Z1Ydwv8gcywVpcwJGYWy3cDEYUOlFoiI6Aw0E",
-  FIRESTORE_PROJECT_ID: "randomText",
-  FIRESTORE_PRIVATE_KEY: "randomText",
-  FIRESTORE_PRIVATE_ID: "randomText",
-  FIRESTORE_CLIENT_EMAIL: "randomText",
-  FIRESTORE_CLIENT_ID: "randomText",
-  FIRESTORE_TOKEN_URI: "randomText",
-  FIRESTORE_AUTH_PROVIDER: "randomText",
-  FIRESTORE_CLIENT_CERT: "randomText",
-  UNIVERSE_DOMAIN: "randomText",
-  FIRESTORE_AUTH_URI: "randomText",
+  UNIVERSE_DOMAIN: "randomText"
 };
 
 describe("If service account key exists", () => {

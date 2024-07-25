@@ -1,43 +1,48 @@
-const { normalizeDate } = require("../utils/date");
+const { required } = require("joi");
+const { v4 } = require("uuid");
+const mongoose = require("mongoose");
 
-class Keys {
-  keyId;
-  userId;
-  key;
-  keyDescription;
-  usageCount;
-  createdAt;
-  updatedAt;
-
-  /**
-   * @param {Object} params
-   * @param {string} params.keyId
-   * @param {string} params.userId
-   * @param {string} params.key
-   * @param {number} params.usageCount
-   * @param {Date|Timestamp|string} params.createdAt
-   * @param {Date|Timestamp|string} params.updatedAt
-   **/
-  constructor(params) {
-    this.keyId = params.keyId;
-    this.userId = params.userId;
-    this.keyDescription = params.keyDescription;
-    this.key = params.key;
-    this.usageCount = params.usageCount;
-    this.createdAt = normalizeDate(params.createdAt);
-    this.updatedAt = normalizeDate(params.updatedAt);
+const keySchema = new mongoose.Schema({
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Users",
+  },
+  key: { 
+    type: String,
+    required: true,
+    default: () => v4().replaceAll("-", "").toUpperCase()
+  },
+  keyDescription: {
+    type: String,
+    required: true
+  },
+  usageCount: { 
+    type: Number,
+    default: 0
+  },
+  createdAt: { 
+    type: Date,
+    default: Date.now
+  },
+  updatedAt: { 
+    type: Date,
+    default: Date.now 
   }
+});
 
-  get data() {
-    return {
-      keyId: this.keyId,
-      keyDescription: this.keyDescription,
-      key: this.key,
-      usageCount: this.usageCount,
-      createdAt: this.createdAt,
-      updatedAt: this.updatedAt,
-    };
-  }
-}
+keySchema.methods.data = function() {
+  return {
+    _id: this._id,
+    user: this.user,
+    keyDescription: this.keyDescription,
+    key: this.key,
+    usageCount: this.usageCount,
+    createdAt: this.createdAt,
+    updatedAt: this.updatedAt,
+  };
+};
+
+const Keys = mongoose.model("Keys", keySchema);
 
 module.exports = Keys;
+

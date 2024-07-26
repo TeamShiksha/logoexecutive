@@ -22,7 +22,9 @@ async function createKey(data) {
     const UserKey = new Keys(keyData);
     const result = await UserKey.save();
     if(!result) return null;
-    return UserKey;
+    const { _id, ...restKeyData } = result._doc;
+    const key = { keyId: _id, ...restKeyData };
+    return key;
   } catch (err) {
     throw err;
   }
@@ -36,7 +38,11 @@ async function fetchKeysByuserid(user) {
   try {
     const keys = await Keys.find({"user": user});
     if (!keys.length) return null;
-    return keys;
+    const filteredKeys = keys.map(( {_doc: { _id, ...restKeyData }})=>({
+      keyId:_id,
+      ...restKeyData
+    }));
+    return filteredKeys;
   } catch (err) {
     throw err;
   }

@@ -1,10 +1,16 @@
 const Joi = require("joi");
 const { STATUS_CODES } = require("http");
 const { destroyKey } = require("../../services");
+const { isValidObjectId } = require("mongoose");
 
 const destroyKeyPayloadSchema = Joi.object({
-  keyId: Joi.string().guid({ version: "uuidv4" }).required().messages({
-    "string.guid": "Key ID must be a valid UUID",
+  keyId: Joi.string().custom((value, helpers) => {
+    if (!isValidObjectId(value)) {
+      return helpers.error("any.invalid");
+    }
+    return value;
+  }).required().messages({
+    "any.invalid": "Key ID must be a valid mongodb objectId",
     "any.required": "Key ID is required",
   }),
 });

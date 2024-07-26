@@ -63,7 +63,39 @@ describe('ApiKeyTable', () => {
 		expect(screen.getByTestId('api-key-copied')).toBeInTheDocument();
 	});
 
-	it('Removes key when delete is clicked', () => {
+	it('show confirmation modal when delete button is clicked', () => {
+		render(
+			<ApiKeyTable
+				keys={keys}
+				copiedKey=''
+				handleCopyToClipboard={() => {}}
+				deleteKey={() => {}}
+			/>,
+		);
+		const buttons = screen.getAllByTestId('api-key-delete');
+		fireEvent.click(buttons[0]);
+		expect(screen.getByText(/Are you sure?/i)).toBeInTheDocument();
+	});
+
+	it('close the confirmation modal when cancel button is clicked in modal', () => {
+		render(
+			<ApiKeyTable
+				keys={keys}
+				copiedKey=''
+				handleCopyToClipboard={() => {}}
+				deleteKey={() => {}}
+			/>,
+		);
+
+		const buttons = screen.getAllByTestId('api-key-delete');
+		fireEvent.click(buttons[0]);
+		const modalTitle = screen.getByText(/Are you sure?/i);
+		const cancelButton = screen.getByText(/Cancel/i);
+		fireEvent.click(cancelButton);
+		expect(modalTitle).not.toBeInTheDocument();
+	});
+
+	it('remove key when delete is confirmed', () => {
 		const deleteKey = jest.fn();
 		render(
 			<ApiKeyTable
@@ -76,6 +108,29 @@ describe('ApiKeyTable', () => {
 
 		const buttons = screen.getAllByTestId('api-key-delete');
 		fireEvent.click(buttons[0]);
+		const confirmButton = screen.getByText(/Okay/i);
+
+		fireEvent.click(confirmButton);
 		expect(deleteKey).toHaveBeenCalledWith('id1');
+		expect(deleteKey).toHaveBeenCalledTimes(1);
+	});
+
+	it('does not remove key when delete is cancelled', () => {
+		const deleteKey = jest.fn();
+		render(
+			<ApiKeyTable
+				keys={keys}
+				copiedKey=''
+				handleCopyToClipboard={() => {}}
+				deleteKey={deleteKey}
+			/>,
+		);
+
+		const buttons = screen.getAllByTestId('api-key-delete');
+		fireEvent.click(buttons[0]);
+		const cancelButton = screen.getByText(/Cancel/i);
+
+		fireEvent.click(cancelButton);
+		expect(deleteKey).not.toHaveBeenCalled();
 	});
 });

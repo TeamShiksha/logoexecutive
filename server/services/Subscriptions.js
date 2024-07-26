@@ -6,10 +6,11 @@ const { Subscriptions } = require("../models");
 async function createSubscription(userId) {
   try {
     const subscriptionData = Subscriptions.NewSubscription(userId);
-    // const UserSubscription = await Subscriptions.create(subscriptionData);
     const UserSubscription = new Subscriptions(subscriptionData);
     const result = await UserSubscription.save();
-    return result;
+    const {_id , ...restSubscriptionData} = result._doc;
+    const subscription = { subscriptionId:_id, ...restSubscriptionData};
+    return subscription;
   } catch (err) {
     throw err;
   }
@@ -18,7 +19,10 @@ async function createSubscription(userId) {
 async function fetchSubscriptionByuserid(userId) {
   try {
     const subscription = await Subscriptions.findOne({ "user":userId });
-    return subscription || null;
+    if (!subscription) return null;
+    const {_id , ...restSubscriptionData} = subscription._doc;
+    const subscriptionData = { subscriptionId:_id, ...restSubscriptionData};
+    return subscriptionData;
   } catch (err) {
     throw err;
   }

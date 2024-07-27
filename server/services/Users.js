@@ -110,7 +110,6 @@ const updateUser = async (updateProfile, user) => {
 const deleteUserAccount = async (userId) => {
   const session = await mongoose.startSession();
   
-  // Check if the current MongoDB instance supports transactions
   const isReplicaSet = (await mongoose.connection.db.admin().serverStatus()).repl?.setName;
 
   if (isReplicaSet) {
@@ -121,7 +120,6 @@ const deleteUserAccount = async (userId) => {
     const user = await Users.findByIdAndDelete(userId).session(isReplicaSet ? session : null).exec();
     if (!user) return null;
 
-    // Deleting associated subscriptions and keys
     await Subscriptions.deleteMany({ user: user._id }).session(isReplicaSet ? session : null).exec();
     await Keys.deleteMany({ user: user._id }).session(isReplicaSet ? session : null).exec();
 

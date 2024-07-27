@@ -142,32 +142,17 @@ describe("createUser", () => {
     expect(createdUser.email).toBe(mockUsers[0].email);
   });
 
-  // test("should return null if data is improper", async () => {
-  //   jest.spyOn(Users.prototype, "save").mockImplementationOnce(() => null);
-  //   const createdUser = await createUser({});
-
-  //   expect(createdUser).toBeNull();
-  // });
-
   it("should return null if data is improper", async () => {
     const mockUser = {
       firstName: "John",
       lastName: "Doe",
       email: "john.doe@example.com",
-      // password: bcrypt.hashSync("password123", 10),
       createdAt: Date.now(),
       updatedAt: Date.now(),
       userType: UserType.CUSTOMER,
       isVerified: false,
     };
-    // jest.spyOn(Users, "NewUser").mockReturnValueOnce(mockUser);
-    // jest.spyOn(UserCollection, "doc").mockReturnValueOnce({
-    //   set: jest.fn().mockResolvedValueOnce(null),
-    // });
-    // delete mockUser.email;
-
     const createdUser = await createUser(mockUser);
-
     expect(createdUser).toBeNull();
   });
 
@@ -213,7 +198,6 @@ describe("updatePasswordbyUser", () => {
   test("should throw an error if an error occurs while updating user password", async () => {
     const errorMessage = "MongoDB operation failed";
     const mockUser = new Users(mockUsers[0]);
-    // await mockUser.save();
     jest.spyOn(Users.prototype, "save").mockImplementationOnce(() => {
       throw new Error(errorMessage);
     });
@@ -296,17 +280,6 @@ describe("updateUser", () => {
 
     expect(updatedUser).toBeTruthy();
   });
-
-  // test("should return null if user does not exist for the provided user ID", async () => {
-  //   const updatedUserData = {
-  //     firstName: "UpdatedFirstName",
-  //     lastName: "UpdatedLastName",
-  //   };
-
-  //   const updatedUser = await updateUser(mongoose.Types.ObjectId(), updatedUserData);
-
-  //   expect(updatedUser).toBeNull();
-  // });
 
   test("should throw an error if MongoDB operation fails", async () => {
     const errorMessage = "MongoDB operation failed";

@@ -16,8 +16,7 @@ const validEnv = {
   BUCKET_NAME: "logoexecutive",
   BUCKET_REGION: "ap-south-1",
   ACCESS_KEY: "GH67BTYLTNVVQEC6",
-  SECRET_ACCESS_KEY: "Z1Ydwv8gcywVpcwJGYWy3cDEYUOlFoiI6Aw0E",
-  UNIVERSE_DOMAIN: "randomText"
+  SECRET_ACCESS_KEY: "Z1Ydwv8gcywVpcwJGYWy3cDEYUOlFoiI6Aw0E"
 };
 
 describe("If service account key exists", () => {

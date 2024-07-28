@@ -27,8 +27,7 @@ const EnvSchema = Joi.object()
     BUCKET_NAME: Joi.string().required(),
     BUCKET_REGION: Joi.string().required(),
     ACCESS_KEY: Joi.string().required(),
-    SECRET_ACCESS_KEY: Joi.string().required(),
-    UNIVERSE_DOMAIN: Joi.string().required()
+    SECRET_ACCESS_KEY: Joi.string().required()
   })
   .unknown(true);
 

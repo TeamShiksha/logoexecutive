@@ -12,7 +12,7 @@ const s3 = new S3Client({
   },
 });
 
-const uploadToS3 = async(file, imageName, extension) => {
+async function uploadToS3(file, imageName, extension) {
   const uploadParams = {
     Bucket: process.env.BUCKET_NAME,
     Body: file.buffer,
@@ -28,7 +28,7 @@ const uploadToS3 = async(file, imageName, extension) => {
   }
 };
 
-const fetchImageByCompanyFree = async(company, default_extension = "png") =>{
+async function fetchImageByCompanyFree(company, default_extension = "png") {
   try {
     const image = await Images.findOne({
       domainame: company,
@@ -42,7 +42,8 @@ const fetchImageByCompanyFree = async(company, default_extension = "png") =>{
     throw err;
   }
 };
-const getImagesByUserId = async(userId) => {
+
+async function getImagesByUserId(userId) {
   try {
     const images = await Images.find({ uploadedBy: userId });
 
@@ -59,7 +60,7 @@ const getImagesByUserId = async(userId) => {
   }
 };
 
-const createImageData = async(domainame, uploadedBy, extension) => {
+async function createImageData(domainame, uploadedBy, extension) {
   try {
     const newImage = Images.newImage({
       domainame,

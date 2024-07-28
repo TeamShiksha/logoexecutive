@@ -5,7 +5,7 @@ const mongoose = require("mongoose");
  * @param {string} email
  * @returns {Promise<boolean>} true if email already exists and else false
  **/
-const emailRecordExists = async (email) => {
+async function emailRecordExists(email) {
   try {
     const userRef = await Users.findOne({ email }).exec();
     return !!userRef;
@@ -17,7 +17,7 @@ const emailRecordExists = async (email) => {
 /**
  * Fetches all the users
  **/
-const fetchUsers = async () =>{ 
+async function fetchUsers() { 
   try {
     const users = await Users.find().exec();
     return { data: users };
@@ -30,7 +30,7 @@ const fetchUsers = async () =>{
  * Fetches user by email
  * @param {string} email - email of the user
  **/
-const fetchUserByEmail = async (email) => {
+async function fetchUserByEmail(email) {
   try {
     const user = await Users.findOne({ email }).exec();
     return user || null;
@@ -47,7 +47,7 @@ const fetchUserByEmail = async (email) => {
  * @param {string} user.lastName - Last name of the user
  * @param {string} user.password - password of the user
  */
-const createUser = async (user) => {
+async function createUser(user) {
   try {
     const { email, firstName, lastName, password } = user;
     const newUser = await Users.NewUser({ email, firstName, lastName, password });
@@ -64,7 +64,7 @@ const createUser = async (user) => {
  * Fetches user by document id
  * @param {string} userId - User Id of user
  **/
-const fetchUserFromId = async (userId) => {
+async function fetchUserFromId(userId) {
   try {
     const user = await Users.findById(userId).exec();
     return user || null;
@@ -73,7 +73,7 @@ const fetchUserFromId = async (userId) => {
   }
 };
 
-const updatePasswordbyUser = async (user, hashNewPassword) => {
+async function updatePasswordbyUser(user, hashNewPassword) {
   try {
     user.password = hashNewPassword;
     user.updatedAt = Date.now();
@@ -84,7 +84,7 @@ const updatePasswordbyUser = async (user, hashNewPassword) => {
   }
 };
 
-const verifyUser = async (user) => {
+async function verifyUser(user) {
   try {
     user.isVerified = true;
     await user.save();
@@ -94,7 +94,7 @@ const verifyUser = async (user) => {
   }
 };
 
-const updateUser = async (updateProfile, user) => {
+async function updateUser(updateProfile, user) {
   try {
     const { firstName, lastName } = updateProfile;
     user.firstName = firstName;
@@ -107,10 +107,9 @@ const updateUser = async (updateProfile, user) => {
   }
 };
 
-const deleteUserAccount = async (userId) => {
+async function deleteUserAccount(userId) {
   const session = await mongoose.startSession();
   
-  // Check if the current MongoDB instance supports transactions
   const isReplicaSet = (await mongoose.connection.db.admin().serverStatus()).repl?.setName;
 
   if (isReplicaSet) {
@@ -121,7 +120,6 @@ const deleteUserAccount = async (userId) => {
     const user = await Users.findByIdAndDelete(userId).session(isReplicaSet ? session : null).exec();
     if (!user) return null;
 
-    // Deleting associated subscriptions and keys
     await Subscriptions.deleteMany({ user: user._id }).session(isReplicaSet ? session : null).exec();
     await Keys.deleteMany({ user: user._id }).session(isReplicaSet ? session : null).exec();
 

@@ -94,7 +94,6 @@ describe("createForm", () => {
   });
 
   it("should return a ContactUs instance with default values when MongoDB save operation returns partial data (edge case)", async () => {
-    // jest.spyOn(ContactUs.prototype, "save").mockResolvedValue({});
     const formData = {
       name: "New User",
       email: "newuser@example.com",

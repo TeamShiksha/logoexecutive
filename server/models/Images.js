@@ -26,7 +26,6 @@ const imageSchema = new mongoose.Schema({
   }
 });
 
-// Static method to create a new image
 imageSchema.statics.newImage = function(imageData) {
   const { domainame, uploadedBy, extension } = imageData;
   if (!domainame || !uploadedBy || !extension) {

@@ -29,7 +29,7 @@ async function sendEmail(email, subject, text) {
     });
     return { success: true };
   } catch (error) {
-    // console.error(error);
+    console.error(error);
     return { success: false, error: error };
   }
 }

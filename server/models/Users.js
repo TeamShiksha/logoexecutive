@@ -45,27 +45,17 @@ const userSchema = new mongoose.Schema({
   }
 });
 
-// Pre-save hook to hash the password before saving
-// userSchema.pre('save', async function(next) {
-//   if (this.isModified('password')) {
-//     this.password = await bcrypt.hash(this.password, 10);
-//   }
-//   next();
-// });
 
-// Instance method to match password
 userSchema.methods.matchPassword = async function(password) {
   return await bcrypt.compare(password, this.password);
 };
 
-// Instance method to generate JWT token
 userSchema.methods.generateJWT = function() {
   return jwt.sign({ data: this.data() }, process.env.JWT_SECRET, {
     expiresIn: "1d",
   });
 };
 
-// Static method to create a new user
 userSchema.statics.NewUser = async function(userData) {
   try {
     const { email, firstName, lastName, password } = userData;

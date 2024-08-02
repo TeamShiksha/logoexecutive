@@ -1,43 +1,69 @@
 const { formExists, createForm } = require("../../../services");
-const { ContactUsCollection } = require("../../../utils/firestore");
 const { ContactUs } = require("../../../models");
 const { mockContactUsForm } = require("../../../utils/mocks/contactUs");
+const { MongoMemoryServer } = require("mongodb-memory-server");
+const mongoose = require("mongoose");
+
+beforeAll(async () => {
+  const mongoServer = await MongoMemoryServer.create();
+  const mongo_uri = mongoServer.getUri();
+  await mongoose.connect(mongo_uri);
+});
+
+afterAll(async () => {
+  await mongoose.connection.close();
+});
 
 describe("formExists", () => {
+
+  afterEach(async () => {
+    await ContactUs.deleteMany({});
+  });
+
   test("should return false if the query result is empty", async () => {
     const email = "nonexistent@example.com";
     const exists = await formExists(email);
     expect(exists).toBe(false);
   });
+
   test("should return true if form activityStatus is true for given email", async () => {
-    await ContactUsCollection.doc(mockContactUsForm[1].contactId).set(mockContactUsForm[1]);
+    const form = new ContactUs(mockContactUsForm[1]);
+    await form.save();
     const email = "active@gmail.com";
     const exists = await formExists(email);
     expect(exists).toBe(true);
   });
 
   test("should return false if form does not exist or the activityStatus is false for given email", async () => {
-    await ContactUsCollection.doc(mockContactUsForm[0].contactId).set(mockContactUsForm[0]);
-    const exist = await formExists("nonactive@example.com");
+    const form = new ContactUs(mockContactUsForm[0]);
+    await form.save();
+    const exist = await formExists("nonactive@gmail.com");
     expect(exist).toBe(false);
   });
 
   test("should return true if the query result is not empty", async () => {
-    const email = "nonactive@gmail.com";
+    const form = new ContactUs(mockContactUsForm[1]);
+    await form.save();
+    const email = "active@gmail.com";
     const exists = await formExists(email);
     expect(exists).toBe(true);
   });
 
-  it("should throw an error if Firestore operation fails", async () => {
-    jest.spyOn(ContactUsCollection, "where").mockImplementationOnce(() => {
-      throw new Error("Firestore operation failed");
+  it("should throw an error if the MongoDB operation fails", async () => {
+    jest.spyOn(ContactUs, "findOne").mockImplementationOnce(() => {
+      throw new Error("MongoDB operation failed");
     });
     const email = "error@example.com";
-    await expect(formExists(email)).rejects.toThrow("Firestore operation failed");
+    await expect(formExists(email)).rejects.toThrow("MongoDB operation failed");
   });
 });
 
 describe("createForm", () => {
+
+  afterEach(async () => {
+    await ContactUs.deleteMany({});
+  });
+
   it("should create a form in database and return the created form object", async () => {
     const formData = {
       name: "Aman",
@@ -49,32 +75,25 @@ describe("createForm", () => {
   });
 
   it("should not create a form when formData is incomplete", async () => {
-    jest.spyOn(ContactUsCollection, "doc").mockImplementationOnce(() => {
-      throw new Error("Firestore operation failed");
-    });
     const formData = {
       name: "Test User"
     };
-    await expect(createForm(formData)).rejects.toThrow("Firestore operation failed");
+    await expect(createForm(formData)).rejects.toThrow(mongoose.Error.ValidationError);
   });
 
-  it("should return null if Firestore set operation does not return a result", async () => {
-    jest.spyOn(ContactUsCollection, "doc").mockReturnValue({
-      set: jest.fn().mockResolvedValue(null)
+  it("should return null if MongoDB save operation fails", async () => {
+    jest.spyOn(ContactUs.prototype, "save").mockImplementationOnce(() => {
+      throw new Error("MongoDB operation failed");
     });
     const formData = {
       name: "A User",
       email: "usermail@example.com",
       message: "Hello, this is a test message."
     };
-    const result = await createForm(formData);
-    expect(result).toBeNull();
+    await expect(createForm(formData)).rejects.toThrow("MongoDB operation failed");
   });
 
-  it("should return a ContactUs instance with default values when Firestore set operation returns partial data (edge case)", async () => {
-    jest.spyOn(ContactUsCollection, "doc").mockReturnValue({
-      set: jest.fn().mockResolvedValue({})
-    });
+  it("should return a ContactUs instance with default values when MongoDB save operation returns partial data (edge case)", async () => {
     const formData = {
       name: "New User",
       email: "newuser@example.com",
@@ -85,8 +104,6 @@ describe("createForm", () => {
     expect(result.name).toEqual(formData.name);
     expect(result.email).toEqual(formData.email);
     expect(result.message).toEqual(formData.message);
-
     expect(result.assignedTo).toBeNull();
   });
 });
-

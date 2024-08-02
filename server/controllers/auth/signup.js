@@ -85,7 +85,7 @@ async function signupController(req, res, next) {
       );
     }
 
-    const newsubcription = await createSubscription(newUser.userId);
+    const newsubcription = await createSubscription(newUser._id);
     if (!newsubcription) {
       return res.status(206).json(
         {
@@ -96,7 +96,7 @@ async function signupController(req, res, next) {
       );
     }
 
-    const verificationToken = await createVerifyToken(newUser.userId);
+    const verificationToken = await createVerifyToken(newUser._id);
     if (!verificationToken)
       return res.status(206).json(
         {
@@ -109,7 +109,7 @@ async function signupController(req, res, next) {
     const emailRes = await sendEmail(
       newUser.email,
       "Please Verify your email",
-      verificationToken.tokenURL.href
+      verificationToken.tokenURL()
     );
     if (!emailRes.success) {
       return res.status(206).json(

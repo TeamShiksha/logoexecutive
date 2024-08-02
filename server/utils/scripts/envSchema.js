@@ -27,17 +27,7 @@ const EnvSchema = Joi.object()
     BUCKET_NAME: Joi.string().required(),
     BUCKET_REGION: Joi.string().required(),
     ACCESS_KEY: Joi.string().required(),
-    SECRET_ACCESS_KEY: Joi.string().required(),
-    FIRESTORE_PROJECT_ID: Joi.string().required(),
-    FIRESTORE_PRIVATE_KEY: Joi.string().required(),
-    FIRESTORE_PRIVATE_ID: Joi.string().required(),
-    FIRESTORE_CLIENT_EMAIL: Joi.string().required(),
-    FIRESTORE_CLIENT_ID: Joi.string().required(),
-    FIRESTORE_TOKEN_URI: Joi.string().required(),
-    FIRESTORE_AUTH_PROVIDER: Joi.string().required(),
-    FIRESTORE_CLIENT_CERT: Joi.string().required(),
-    UNIVERSE_DOMAIN: Joi.string().required(),
-    FIRESTORE_AUTH_URI: Joi.string().required(),
+    SECRET_ACCESS_KEY: Joi.string().required()
   })
   .unknown(true);
 

@@ -5,7 +5,6 @@ const { STATUS_CODES } = require("http");
 
 const { UserService, UserTokenService } = require("../../../../services");
 const { Users } = require("../../../../models");
-const { error } = require("console");
 
 jest.mock("../../../../services/Users", () => ({
   fetchUserByEmail: jest.fn(),

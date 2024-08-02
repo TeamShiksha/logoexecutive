@@ -1,22 +1,23 @@
 const { UserType } = require("../utils/constants");
-const { UserCollection } = require("../utils/firestore");
+const { Users } = require("../models");
+const mongoose = require("mongoose");
 
-async function setUserAdmin(email) {
+async function setUserAdmin(emailId) {
   try {
-    const userRef = await UserCollection.where("email", "==", email)
-      .limit(1)
-      .get();
-    if (userRef.empty) return null;
-    const userType = userRef.docs[0].data().userType;
-    if (userType == UserType.ADMIN) {
+    const userRef = await Users.findOne({ email: emailId });
+    if (!userRef) return null;
+
+    if (userRef.userType === UserType.ADMIN) {
       return {
         success: true,
         isNewAdmin: false,
       };
     }
-    const updatedUser = { userType: UserType.ADMIN };
-    const doc = userRef.docs[0];
-    await doc.ref.update(updatedUser);
+
+    Users.findByIdAndUpdate(
+      userRef._id,
+      { $set: { userType: UserType.ADMIN } },
+    );
     return {
       success: true,
       isNewAdmin: true,

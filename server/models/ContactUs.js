@@ -1,37 +1,42 @@
-const {normalizeDate} = require("../utils/date");
+const mongoose = require("mongoose");
 
-class ContactUs {
-  email;
-  name;
-  contactId;
-  message;
-  activityStatus;
-  assignedTo;
-  createdAt;
-  updatedAt;
-
-  /**
-   * @param {Object} params
-   * @param {string} params.name
-   * @param {string} params.email
-   * @param {string} params.contactId
-   * @param {string} params.message
-   * @param {boolean} params.activityStatus
-   * @param {string} params.assignedTo
-   * @param {Date} params.createdAt
-   * @param {Date} params.updatedAt
-   **/
-  constructor(params) {
-    this.name = params.name;
-    this.email = params.email;
-    this.contactId = params.contactId;
-    this.message = params.message;
-    this.assignedTo = params.assignedTo;
-    this.createdAt = normalizeDate(params.createdAt);
-    this.updatedAt = normalizeDate(params.updatedAt);
-    this.activityStatus = params.activityStatus;
+const contactUsSchema = new mongoose.Schema({
+  email: {
+    type: String,
+    required: true,
+    trim: true,
+    lowercase: true
+  },
+  name: {
+    type: String,
+    required: true,
+    trim: true
+  },
+  message: {
+    type: String,
+    required: true,
+    trim: true
+  },
+  activityStatus: {
+    type: Boolean,
+    required: true
+  },
+  assignedTo: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref:"User"
+  },
+  createdAt: {
+    type: Date,
+    required: true,
+    default: Date.now,
+  },
+  updatedAt: {
+    type: Date,
+    required: true,
+    default: Date.now,
   }
-}
+});
 
+const ContactUs = mongoose.model("ContactUs", contactUsSchema);
 
 module.exports = ContactUs;

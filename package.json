@@ -27,8 +27,7 @@
 		"coverage:server": "yarn workspace server coverage"
 	},
 	"devDependencies": {
-		"concurrently": "^8.2.2",
-		"firebase-tools": "^13.7.5"
+		"concurrently": "^8.2.2"
 	},
 	"pre-commit": [
 		"test:server",

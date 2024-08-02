@@ -72,29 +72,26 @@ describe("GET - /user/data", () => {
     const mockToken = mockUserModel.generateJWT();
     const mockSubscriptionModel = new Subscriptions(mockSubscriptions[0]);
     const mockKeyModel = new Keys(mockKeys[0]);
-    jest
-      .spyOn(UserService, "fetchUserFromId")
-      .mockImplementation(() => mockUserModel);
-    jest
-      .spyOn(SubscriptionService, "fetchSubscriptionByuserid")
-      .mockImplementation(() => mockSubscriptionModel);
-    jest
-      .spyOn(KeyService, "fetchKeysByuserid")
-      .mockImplementation(() => [mockKeyModel]);
+
+    jest.spyOn(UserService, "fetchUserFromId").mockResolvedValue(mockUserModel);
+    jest.spyOn(SubscriptionService, "fetchSubscriptionByuserid").mockResolvedValue(mockSubscriptionModel);
+    jest.spyOn(KeyService, "fetchKeysByuserid").mockResolvedValue([mockKeyModel]);
 
     const response = await request(app)
       .get(ENDPOINT)
       .set("Cookie", `jwt=${mockToken}`);
 
+    expect(response.status).toBe(200);
     expect(response.body.data).toEqual({
       email: mockUserModel.email,
       firstName: mockUserModel.firstName,
       lastName: mockUserModel.lastName,
-      userId: mockUserModel.userId,
+      userId: mockUserModel._id.toString(),
       userType: mockUserModel.userType,
       subscription: {
-        subscriptionId: mockSubscriptionModel.subscriptionId,
+        _id: mockSubscriptionModel._id.toString(),
         subscriptionType: mockSubscriptionModel.subscriptionType,
+        user: mockSubscriptionModel.user.toString(),
         isActive: mockSubscriptionModel.isActive,
         usageLimit: mockSubscriptionModel.usageLimit,
         keyLimit: mockSubscriptionModel.keyLimit,
@@ -103,7 +100,8 @@ describe("GET - /user/data", () => {
       },
       keys: [
         {
-          keyId: mockKeyModel.keyId,
+          _id: mockKeyModel._id.toString(),
+          user: mockKeyModel.userId,
           key: mockKeyModel.key,
           usageCount: mockKeyModel.usageCount,
           keyDescription: mockKeyModel.keyDescription,
@@ -116,11 +114,11 @@ describe("GET - /user/data", () => {
 
   it("404 - User document not found", async () => {
     const mockToken = mockUserModel.generateJWT();
-    jest.spyOn(UserService, "fetchUserFromId").mockImplementation(() => null);
+    jest.spyOn(UserService, "fetchUserFromId").mockResolvedValue(null);
 
     const response = await request(app)
       .get(ENDPOINT)
-      .set("cookie", `jwt=${mockToken}`);
+      .set("Cookie", `jwt=${mockToken}`);
 
     expect(response.status).toBe(404);
     expect(response.body).toEqual({
@@ -132,19 +130,22 @@ describe("GET - /user/data", () => {
 
   it("206 - Subscription and key not found", async () => {
     const mockToken = mockUserModel.generateJWT();
-    jest
-      .spyOn(UserService, "fetchUserFromId")
-      .mockImplementation(() => mockUserModel);
-    jest
-      .spyOn(SubscriptionService, "fetchSubscriptionByuserid")
-      .mockRejectedValue(null);
-    jest.spyOn(KeyService, "fetchKeysByuserid").mockRejectedValue(null);
+    jest.spyOn(UserService, "fetchUserFromId").mockResolvedValue(mockUserModel);
+    jest.spyOn(SubscriptionService, "fetchSubscriptionByuserid").mockResolvedValue(null);
+    jest.spyOn(KeyService, "fetchKeysByuserid").mockResolvedValue([]);
 
     const response = await request(app)
       .get(ENDPOINT)
-      .set("cookie", `jwt=${mockToken}`);
+      .set("Cookie", `jwt=${mockToken}`);
 
     expect(response.status).toBe(206);
-    expect(response.body.data).toEqual({ ...mockUserModel.data });
+    expect(response.body.data).toEqual({
+      email: mockUserModel.email,
+      firstName: mockUserModel.firstName,
+      lastName: mockUserModel.lastName,
+      userId: mockUserModel._id.toString(),
+      userType: mockUserModel.userType,
+      keys: [],
+    });
   });
 });

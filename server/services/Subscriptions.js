@@ -1,5 +1,4 @@
 const { Subscriptions } = require("../models");
-const { SubscriptionCollection } = require("../utils/firestore");
 
 /**
  * @param {string} userId - userId of user
@@ -7,12 +6,11 @@ const { SubscriptionCollection } = require("../utils/firestore");
 async function createSubscription(userId) {
   try {
     const subscriptionData = Subscriptions.NewSubscription(userId);
-    const result = await SubscriptionCollection.doc(
-      subscriptionData.subscriptionId
-    ).set(subscriptionData);
-
     const UserSubscription = new Subscriptions(subscriptionData);
-    return UserSubscription;
+    const result = await UserSubscription.save();
+    const {_id , ...restSubscriptionData} = result._doc;
+    const subscription = { subscriptionId:_id, ...restSubscriptionData};
+    return subscription;
   } catch (err) {
     throw err;
   }
@@ -20,17 +18,11 @@ async function createSubscription(userId) {
 
 async function fetchSubscriptionByuserid(userId) {
   try {
-    const subscriptionRef = await SubscriptionCollection.where(
-      "userId",
-      "==",
-      userId
-    )
-      .limit(1)
-      .get();
-    if (subscriptionRef.empty) return null;
-    const subscription = new Subscriptions(subscriptionRef.docs[0].data());
-
-    return subscription;
+    const subscription = await Subscriptions.findOne({ "user":userId });
+    if (!subscription) return null;
+    const {_id , ...restSubscriptionData} = subscription._doc;
+    const subscriptionData = { subscriptionId:_id, ...restSubscriptionData};
+    return subscriptionData;
   } catch (err) {
     throw err;
   }

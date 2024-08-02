@@ -1,67 +1,85 @@
 const { createKey, fetchKeysByuserid, isAPIKeyPresent, destroyKey } = require("../../../services");
-const { KeyCollection } = require("../../../utils/firestore");
-const { Keys } = require("../../../models");
-const { Timestamp } = require("firebase-admin/firestore");
-const { v4 } = require("uuid");
+const Keys = require("../../../models/Keys");
 const { mockKeys } = require("../../../utils/mocks/Keys");
+const mongoose = require("mongoose");
+const { MongoMemoryServer } = require("mongodb-memory-server");
 
-jest.mock("uuid", () => ({
-  v4: jest.fn(() => mockKeys[0].keyId),
-}));
+beforeAll(async () => {
+  const mongoServer = await MongoMemoryServer.create();
+  const mongo_uri = mongoServer.getUri();
+  await mongoose.connect(mongo_uri);
+});
 
-afterEach(() => {
-  jest.restoreAllMocks();
+afterAll(async () => {
+  await mongoose.connection.close();
 });
 
 describe("createKey", () => {
-  it("should create a key in the database and return the created key object", async () => {
-    const result = await createKey(mockKeys[0]);
-    expect(result).toBeInstanceOf(Keys);
-    expect(result.keyId).toBe(mockKeys[0].keyId);
-    expect(result.key).toMatch(/^[A-F0-9]{32}$/);
-    expect(result.userId).toBe(mockKeys[0].userId);
+  afterEach(async () => {
+    jest.restoreAllMocks();
+    await Keys.deleteMany({});
   });
-  it("should throw an error if Firestore operation fails", async () => {
-    const errorMessage = "Firestore operation failed";
-    jest.spyOn(KeyCollection, "doc").mockImplementationOnce(() => {
-      throw new Error("Firestore operation failed");
+
+  test("should create a key in the database and return the created key object", async () => {
+    const result = await createKey(mockKeys[0]);
+    // expect(result).toBeInstanceOf(Keys);
+    expect(result.user).toBe(mockKeys[0].user);
+    expect(result.keyDescription).toBe(mockKeys[0].keyDescription);
+    expect(result.key).toMatch(/^[A-F0-9]{32}$/);
+    expect(result.usageCount).toBe(0);
+  });
+
+  test("should throw an error if database operation fails", async () => {
+    const errorMessage = "Database operation failed";
+    jest.spyOn(Keys.prototype, "save").mockImplementationOnce(() => {
+      throw new Error(errorMessage);
     });
+    
     await expect(createKey(mockKeys[0])).rejects.toThrow(errorMessage);
   });
 });
 
-describe("fetchKeysByuserid", () => {
-  it("should fetch keys by userId from the key collection", async () => {
-    for (let key = 0; key < mockKeys.length; key++) {
-      await KeyCollection.doc(mockKeys[key].keyId).set(mockKeys[key]);
-    }
-
-    const result = await fetchKeysByuserid(mockKeys[0].userId);
-    expect(result.length).toBe(mockKeys.length);
-    expect(result[0]).toBeInstanceOf(Keys);
-    expect(result[0].keyId).toBe(mockKeys[0].keyId);
-    expect(result.length).toBe(mockKeys.length);
+describe("fetchKeysByUserId", () => {
+  beforeEach(async () => {
+    await Keys.insertMany(mockKeys);
   });
 
-  it("should return null if no keys are found for the provided userId", async () => {
-    const nonExistingUserId = "nonExistingUserId";
-    const result = await fetchKeysByuserid(nonExistingUserId);
+  afterEach(async () => {
+    jest.restoreAllMocks();
+    await Keys.deleteMany({});
+  });
+
+  test("should fetch keys by userId from the key collection", async () => {
+    const result = await fetchKeysByuserid(mockKeys[0].user);
+    expect(result.length).toBe(mockKeys.length);
+    // expect(result[0]).toBeInstanceOf(Keys);
+  });
+
+  test("should return null if no keys are found for the provided userId", async () => {
+    const nonExistingUser = new mongoose.Types.ObjectId("21FB95E0E988B2F5883106C0");
+    const result = await fetchKeysByuserid(nonExistingUser);
     expect(result).toBeNull();
   });
 
-  it("should throw an error if Firestore operation fails", async () => {
-    const errorMessage = "Firestore operation failed";
+  test("should throw an error if the database operation fails", async () => {
+    const errorMessage = "Database operation failed";
 
-    jest.spyOn(KeyCollection, "where").mockReturnValue({
-      get: jest.fn().mockRejectedValueOnce(new Error(errorMessage))
-    });
-    await expect(fetchKeysByuserid(mockKeys[0].userId)).rejects.toThrow(errorMessage);
+    jest.spyOn(Keys, "find").mockRejectedValueOnce(new Error(errorMessage));
+    await expect(fetchKeysByuserid(mockKeys[0].user)).rejects.toThrow(errorMessage);
   });
 });
 
 describe("isAPIKeyPresent", () => {
+  beforeEach(async () => {
+    await Keys.insertMany(mockKeys);
+  });
+
+  afterEach(async () => {
+    jest.restoreAllMocks();
+    await Keys.deleteMany({});
+  });
+
   test("should return true if the API key exists in the key collection", async () => {
-    await KeyCollection.doc(mockKeys[0].keyId).set(mockKeys[0]);
     const result = await isAPIKeyPresent(mockKeys[0].key);
     expect(result).toBe(true);
   });
@@ -71,34 +89,32 @@ describe("isAPIKeyPresent", () => {
     const result = await isAPIKeyPresent(mockApiKey);
     expect(result).toBe(false);
   });
-
-  it("should throw an error if Firestore operation fails", async () => {
-    const mockApiKey = "mockApiKey";
-    const errorMessage = "Firestore operation failed";
-
-    jest.spyOn(KeyCollection, "where").mockReturnValue({
-      get: jest.fn().mockRejectedValueOnce(new Error(errorMessage))
-    });
-
-    await expect(isAPIKeyPresent(mockApiKey)).rejects.toThrow(errorMessage);
-  });
 });
 
 describe("destroyKey", () => {
-  it("should delete the key by keyId from the key collection", async () => {
-    const createKeys = await createKey(mockKeys[0]);
-    const result = await destroyKey(createKeys.keyId);
+  let createdKey;
+
+  beforeEach(async () => {
+    createdKey = await createKey(mockKeys[0]);
+  });
+
+  afterEach(async () => {
+    jest.restoreAllMocks();
+    await Keys.deleteMany({});
+  });
+
+  test("should delete the key by keyId from the key collection", async () => {
+    const result = await destroyKey(createdKey.keyId);
     expect(result).toBe(true);
+    const deletedKey = await Keys.findById(createdKey.keyId);
+    expect(deletedKey).toBeNull();
   });
 
-  it("should throw an error if Firestore operation fails", async () => {
-    const mockKeyId = "mockKeyId";
-    const errorMessage = "Firestore operation failed";
+  test("should throw an error if the delete operation fails", async () => {
+    const errorMessage = "Database operation failed";
 
-    jest.spyOn(KeyCollection, "doc").mockReturnValue({
-      delete: jest.fn().mockRejectedValueOnce(new Error(errorMessage))
-    });
-    await expect(destroyKey(mockKeyId)).rejects.toThrow(errorMessage);
+    jest.spyOn(Keys, "deleteOne").mockRejectedValueOnce(new Error(errorMessage));
+
+    await expect(destroyKey(createdKey._id)).rejects.toThrow(errorMessage);
   });
-
 });

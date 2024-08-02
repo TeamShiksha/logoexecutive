@@ -1,69 +1,61 @@
-const { Timestamp } = require("firebase-admin/firestore");
+const mongoose=require("mongoose");
 const { SubscriptionTypes } = require("../utils/constants");
-const { normalizeDate } = require("../utils/date");
-const { v4 } = require("uuid");
 
-class Subscriptions {
-  userId;
-  subscriptionId;
-  subscriptionType;
-  keyLimit;
-  usageLimit;
-  isActive;
-  createdAt;
-  updatedAt;
+const subscriptionSchema = new mongoose.Schema({
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+  },
+  subscriptionType: {
+    type: String,
+    required: true,
+  },
+  keyLimit: {
+    type: Number,
+    required: true,
+  },
+  usageLimit: {
+    type: Number,
+    required: true,
+  },
+  isActive: {
+    type: Boolean,
+    required: true,
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
+  updatedAt: {
+    type: Date,
+    default: Date.now,
+  },
+});
 
-  /**
-   * @param {Object} params
-   * @param {string} params.userId
-   * @param {string} params.subscriptionType
-   * @param {string} params.subscriptionId
-   * @param {number} params.keyLimit
-   * @param {number} params.usageLimit
-   * @param {boolean} params.isActive
-   * @param {Date|Timestamp|string} params.createdAt
-   * @param {Date|Timestamp|string} params.updatedAt
-   **/
-  constructor(params) {
-    this.userId = params.userId;
-    this.subscriptionId = params.subscriptionId;
-    this.subscriptionType = params.subscriptionType;
-    this.keyLimit = params.keyLimit;
-    this.usageLimit = params.usageLimit;
-    this.isActive = params.isActive;
-    this.createdAt = normalizeDate(params.createdAt);
-    this.updatedAt = normalizeDate(params.updatedAt);
-  }
+subscriptionSchema.statics.NewSubscription = function (userId) {
+  return {
+    user: userId,
+    subscriptionType: SubscriptionTypes.HOBBY,
+    keyLimit: 2,
+    usageLimit: 500,
+    isActive: false,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  };
+};
+subscriptionSchema.methods.getSubscriptionData = function () {
+  return {
+    _id: this._id,
+    user:this.user,
+    subscriptionType: this.subscriptionType,
+    keyLimit: this.keyLimit,
+    usageLimit: this.usageLimit,
+    isActive: this.isActive,
+    createdAt: this.createdAt,
+    updatedAt: this.updatedAt,
+  };
+};
 
-  /**
-    * Creates a firestore document compatible object
-    *
-    * @param {string} userId 
-    **/
-  static NewSubscription(userId) {
-    return {
-      userId,
-      subscriptionId: v4(),
-      subscriptionType: SubscriptionTypes.HOBBY,
-      keyLimit: 2,
-      usageLimit: 500,
-      isActive: false,
-      createdAt: Timestamp.now(),
-      updatedAt: Timestamp.now()
-    };
-  }
-
-  get data() {
-    return {
-      subscriptionId: this.subscriptionId,
-      subscriptionType: this.subscriptionType,
-      keyLimit: this.keyLimit,
-      usageLimit: this.usageLimit,
-      isActive: this.isActive,
-      createdAt: this.createdAt,
-      updatedAt: this.updatedAt,
-    };
-  }
-}
+const Subscriptions = mongoose.model("Subscription", subscriptionSchema);
 
 module.exports = Subscriptions;

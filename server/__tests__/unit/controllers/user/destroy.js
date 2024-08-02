@@ -4,16 +4,16 @@ const app = require("../../../../app");
 const { STATUS_CODES } = require("http");
 
 const { Users } = require("../../../../models");
-const { Timestamp } = require("firebase-admin/firestore");
 const { KeyService } = require("../../../../services");
+const { default: mongoose } = require("mongoose");
 
 const mockUser = new Users({
   userId: "1",
   email: "john@email.com",
   firstName: "firstName",
   lastName: "lastName",
-  updatedAt: Timestamp.now().toDate(),
-  createdAt: Timestamp.now().toDate(),
+  updatedAt: Date.now(),
+  createdAt: Date.now(),
 });
 jest.mock("../../../../services/Keys", () => ({
   destroyKey: jest.fn(),
@@ -44,7 +44,7 @@ describe("generate-key controller", () => {
     });
   });
 
-  it("422 - Key ID must be a valid UUID", async () => {
+  it("422 - Key ID must be a valid mongodb objectId", async () => {
     const mockToken = mockUser.generateJWT();
     const response = await request(app)
       .delete(ENDPOINT)
@@ -53,7 +53,7 @@ describe("generate-key controller", () => {
 
     expect(response.status).toBe(422);
     expect(response.body).toEqual({
-      message: "Key ID must be a valid UUID",
+      message: "Key ID must be a valid mongodb objectId",
       statusCode: 422,
       error: STATUS_CODES[422],
     });
@@ -82,8 +82,9 @@ describe("generate-key controller", () => {
     const response = await request(app)
       .delete(ENDPOINT)
       .set("cookie", `jwt=${mockToken}`)
-      .query({ keyId: uuidv4() });
-
+      .query({ keyId: new mongoose.Types.ObjectId().toString() });
+    
+    console.log(response.body);
     expect(response.status).toBe(500);
     expect(response.body).toEqual({
       error: STATUS_CODES[500],
@@ -97,7 +98,7 @@ describe("generate-key controller", () => {
     jest.spyOn(KeyService, "destroyKey").mockResolvedValueOnce(false);
     const response = await request(app)
       .delete(ENDPOINT)
-      .query({ keyId: uuidv4() })
+      .query({ keyId: new mongoose.Types.ObjectId().toString() })
       .set("cookie", `jwt=${mockToken}`);
 
     expect(response.status).toBe(404);
@@ -110,7 +111,7 @@ describe("generate-key controller", () => {
   it("200 - Key deleted successfully", async () => {
     const mockToken = mockUser.generateJWT();
     jest.spyOn(KeyService, "destroyKey").mockResolvedValueOnce(true);
-    const keyid = uuidv4();
+    const keyid = new mongoose.Types.ObjectId().toString();
     const response = await request(app)
       .delete(ENDPOINT)
       .query({ keyId: keyid })

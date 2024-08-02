@@ -1,18 +1,21 @@
 const request = require("supertest");
 const app = require("../../../../app");
-const { Timestamp } = require("firebase-admin/firestore");
 const { STATUS_CODES } = require("http");
-
 const { Users } = require("../../../../models");
 const { KeyService, SubscriptionService } = require("../../../../services");
+const mongoose = require("mongoose");
+const { UserType } = require("../../../../utils/constants");
+const { MongoMemoryServer } = require("mongodb-memory-server");
 
 const mockUser = new Users({
-  userId: "1",
   email: "john@email.com",
   firstName: "firstName",
   lastName: "lastName",
-  updatedAt: Timestamp.now().toDate(),
-  createdAt: Timestamp.now().toDate(),
+  userType: UserType.CUSTOMER,
+  password: "12345",
+  updatedAt: Date.now(),
+  createdAt: Date.now(),
+  isVerified: true,
 });
 
 jest.mock("../../../../services/Keys", () => ({
@@ -23,19 +26,34 @@ jest.mock("../../../../services/Subscriptions", () => ({
   fetchSubscriptionByuserid: jest.fn(),
 }));
 
+beforeAll(async () => {
+  const mongoServer = await MongoMemoryServer.create();
+  const mongo_uri = mongoServer.getUri();
+  await mongoose.connect(mongo_uri);
+});
+
+afterAll(async () => {
+  await mongoose.connection.close();
+});
+
 const ENDPOINT = "/api/user/generate";
 
 describe("generate-key controller", () => {
-  beforeAll(() => {
+  let savedUser;
+
+  beforeAll(async () => {
     process.env.JWT_SECRET = "my_secret";
     process.env.CLIENT_PROXY_URL = "http://validcorsorigin.com";
-  });
-  afterAll(() => {
-    delete process.env.JWT_SECRET;
-    delete process.env.CLIENT_PROXY_URL;
+    savedUser = await mockUser.save();
   });
 
-  it("500 - Not allowed by CORS", async () => {
+  afterAll(async () => {
+    delete process.env.JWT_SECRET;
+    delete process.env.CLIENT_PROXY_URL;
+    await Users.deleteMany();
+  });
+
+  test("500 - Not allowed by CORS", async () => {
     const response = await request(app)
       .post(ENDPOINT)
       .set("Origin", "http://invalidcorsorigin.com");
@@ -48,8 +66,8 @@ describe("generate-key controller", () => {
     });
   });
 
-  it("422 - Description is required", async () => {
-    const mockToken = mockUser.generateJWT();
+  test("422 - Description is required", async () => {
+    const mockToken = savedUser.generateJWT();
     const response = await request(app)
       .post(ENDPOINT)
       .set("cookie", `jwt=${mockToken}`)
@@ -63,8 +81,8 @@ describe("generate-key controller", () => {
     });
   });
 
-  it("422 -  Description must be a string", async () => {
-    const mockToken = mockUser.generateJWT();
+  test("422 -  Description must be a string", async () => {
+    const mockToken = savedUser.generateJWT();
     const response = await request(app)
       .post(ENDPOINT)
       .set("cookie", `jwt=${mockToken}`)
@@ -78,8 +96,8 @@ describe("generate-key controller", () => {
     });
   });
 
-  it("422 -  Description must be 20 characters or fewer", async () => {
-    const mockToken = mockUser.generateJWT();
+  test("422 -  Description must be 20 characters or fewer", async () => {
+    const mockToken = savedUser.generateJWT();
     const response = await request(app)
       .post(ENDPOINT)
       .set("cookie", `jwt=${mockToken}`)
@@ -93,8 +111,8 @@ describe("generate-key controller", () => {
     });
   });
 
-  it("422 -  Description must contain only alphabets and spaces", async () => {
-    const mockToken = mockUser.generateJWT();
+  test("422 -  Description must contain only alphabets and spaces", async () => {
+    const mockToken = savedUser.generateJWT();
     const response = await request(app)
       .post(ENDPOINT)
       .set("cookie", `jwt=${mockToken}`)
@@ -108,23 +126,8 @@ describe("generate-key controller", () => {
     });
   });
 
-  it("200 -  Description must contain only alphabets and spaces", async () => {
-    const mockToken = mockUser.generateJWT();
-    const response = await request(app)
-      .post(ENDPOINT)
-      .set("cookie", `jwt=${mockToken}`)
-      .send({ keyDescription: "NUMBER 20" });
-
-    expect(response.status).toBe(422);
-    expect(response.body).toEqual({
-      message: "Description must contain only alphabets and spaces",
-      statusCode: 422,
-      error: STATUS_CODES[422],
-    });
-  });
-
-  it("409 - Please provide a different key description", async () => {
-    const mockToken = mockUser.generateJWT();
+  test("409 - Please provide a different key description", async () => {
+    const mockToken = savedUser.generateJWT();
     jest
       .spyOn(SubscriptionService, "fetchSubscriptionByuserid")
       .mockResolvedValueOnce({ keyLimit: 2 });
@@ -144,8 +147,8 @@ describe("generate-key controller", () => {
     });
   });
 
-  it("403 - Maximum limit reached", async () => {
-    const mockToken = mockUser.generateJWT();
+  test("403 - Maximum limit reached", async () => {
+    const mockToken = savedUser.generateJWT();
     jest
       .spyOn(SubscriptionService, "fetchSubscriptionByuserid")
       .mockResolvedValueOnce({ keyLimit: 2 });
@@ -168,8 +171,8 @@ describe("generate-key controller", () => {
     });
   });
 
-  it("500 - Unexpected error", async () => {
-    const mockToken = mockUser.generateJWT();
+  test("500 - Unexpected error", async () => {
+    const mockToken = savedUser.generateJWT();
     jest
       .spyOn(SubscriptionService, "fetchSubscriptionByuserid")
       .mockImplementation(() => {
@@ -188,8 +191,8 @@ describe("generate-key controller", () => {
     });
   });
 
-  it("200 - Key generated successfully", async () => {
-    const mockToken = mockUser.generateJWT();
+  test("200 - Key generated successfully", async () => {
+    const mockToken = savedUser.generateJWT();
     jest
       .spyOn(SubscriptionService, "fetchSubscriptionByuserid")
       .mockResolvedValueOnce({ keyLimit: 2 });
@@ -211,15 +214,17 @@ describe("generate-key controller", () => {
       message: "Key generated successfully",
       statusCode: 200,
       data: {
-        keyId: "1",
-        keyDescription: "Another Description",
-        key: "SOMEKEYAPIKEY",
+        data:{
+          keyId: "1",
+          keyDescription: "Another Description",
+          key: "SOMEKEYAPIKEY",
+        }
       },
     });
   });
 
-  it("200 - Key generated successfully [Already 1 key Exists]", async () => {
-    const mockToken = mockUser.generateJWT();
+  test("200 - Key generated successfully [Already 1 key Exists]", async () => {
+    const mockToken = savedUser.generateJWT();
     jest
       .spyOn(SubscriptionService, "fetchSubscriptionByuserid")
       .mockResolvedValueOnce({ keyLimit: 2 });
@@ -247,9 +252,11 @@ describe("generate-key controller", () => {
       message: "Key generated successfully",
       statusCode: 200,
       data: {
-        keyId: "2",
-        keyDescription: "Another Description",
-        key: "SOMEKEYAPIKEY",
+        data:{
+          keyId: "2",
+          keyDescription: "Another Description",
+          key: "SOMEKEYAPIKEY",
+        }
       },
     });
   });

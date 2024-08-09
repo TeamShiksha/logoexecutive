@@ -72,6 +72,38 @@
 	margin-bottom: 30px;
 }
 
+.api-key-warning {
+	color: #eed202;
+	font-size: var(--medium-text);
+	line-height: 20px;
+	font-weight: 400;
+	margin: 10px 0 30px 0;
+}
+
+.api-key-div {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+}
+
+.api-key-buttons-div {
+	display: flex;
+	gap: 10px;
+}
+
+.api-key-buttons {
+	top: 1.5rem;
+	right: 1.5rem;
+	border: none;
+	background: none;
+	font-size: larger;
+	cursor: pointer;
+}
+
+.hide {
+	display: none;
+}
+
 .dashboard-content-item > button {
 	max-width: fit-content;
 }
@@ -344,3 +376,4 @@
 		display: none;
 	}
 }
+

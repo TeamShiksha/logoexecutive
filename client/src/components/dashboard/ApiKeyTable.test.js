@@ -1,136 +1,101 @@
-import {render, fireEvent, screen} from '@testing-library/react';
+import { render, fireEvent, screen } from '@testing-library/react';
 import ApiKeyTable from './ApiKeyTable';
 
 describe('ApiKeyTable', () => {
-	const keys = [
-		{
-			keyDescription: 'Test Key 1',
-			key: '123',
-			keyId: 'id1',
-			createdAt: '2024-02-29',
-		},
-		{
-			keyDescription: 'Test Key 2',
-			key: '456',
-			keyId: 'id2',
-			createdAt: '2024-02-28',
-		},
-	];
+  const keys = [
+    {
+      keyDescription: 'Test Key 1',
+      key: '123',
+      keyId: 'id1',
+      createdAt: '2024-02-29',
+    },
+    {
+      keyDescription: 'Test Key 2',
+      key: '456',
+      keyId: 'id2',
+      createdAt: '2024-02-28',
+    },
+  ];
 
-	it('Renders correctly', () => {
-		render(
-			<ApiKeyTable
-				keys={keys}
-				copiedKey=''
-				handleCopyToClipboard={() => {}}
-				deleteKey={() => {}}
-			/>,
-		);
-		expect(screen.getByText('Test Key 1')).toBeInTheDocument();
-		expect(screen.getByText('Test Key 2')).toBeInTheDocument();
-		expect(screen.getByText('February 29, 2024')).toBeInTheDocument();
-		expect(screen.getByText('February 28, 2024')).toBeInTheDocument();
-	});
+  it('Renders correctly', () => {
+    render(
+      <ApiKeyTable
+        keys={keys}
+        handleCloseKey={() => { }}
+        deleteKey={() => { }}
+      />,
+    );
+    expect(screen.getByText('Test Key 1')).toBeInTheDocument();
+    expect(screen.getByText('Test Key 2')).toBeInTheDocument();
+    expect(screen.getByText('February 29, 2024')).toBeInTheDocument();
+    expect(screen.getByText('February 28, 2024')).toBeInTheDocument();
+  });
 
-	it('handles copy to clipboard', () => {
-		const handleCopyToClipboard = jest.fn();
-		render(
-			<ApiKeyTable
-				keys={keys}
-				copiedKey=''
-				handleCopyToClipboard={handleCopyToClipboard}
-				deleteKey={() => {}}
-			/>,
-		);
-		const buttons = screen.getAllByTestId('api-key-copy');
-		fireEvent.click(buttons[0]);
-		expect(handleCopyToClipboard).toHaveBeenCalledWith('123');
-	});
+  it('show confirmation modal when delete button is clicked', () => {
+    render(
+      <ApiKeyTable
+        keys={keys}
+        handleCloseKey={() => { }}
+        deleteKey={() => { }}
+      />,
+    );
+    const buttons = screen.getAllByTestId('api-key-delete');
+    fireEvent.click(buttons[0]);
+    expect(screen.getByText(/Are you sure?/i)).toBeInTheDocument();
+  });
 
-	it('shows copied icon when key is copied', () => {
-		const handleCopyToClipboard = jest.fn();
-		render(
-			<ApiKeyTable
-				keys={keys}
-				copiedKey='123'
-				handleCopyToClipboard={handleCopyToClipboard}
-				deleteKey={() => {}}
-			/>,
-		);
+  it('close the confirmation modal when cancel button is clicked in modal', () => {
+    render(
+      <ApiKeyTable
+        keys={keys}
+        handleCloseKey={() => { }}
+        deleteKey={() => { }}
+      />,
+    );
 
-		const buttons = screen.getAllByTestId('api-key-copy');
-		fireEvent.click(buttons[0]);
-		expect(screen.getByTestId('api-key-copied')).toBeInTheDocument();
-	});
+    const buttons = screen.getAllByTestId('api-key-delete');
+    fireEvent.click(buttons[0]);
+    const modalTitle = screen.getByText(/Are you sure?/i);
+    const cancelButton = screen.getByText(/Cancel/i);
+    fireEvent.click(cancelButton);
+    expect(modalTitle).not.toBeInTheDocument();
+  });
 
-	it('show confirmation modal when delete button is clicked', () => {
-		render(
-			<ApiKeyTable
-				keys={keys}
-				copiedKey=''
-				handleCopyToClipboard={() => {}}
-				deleteKey={() => {}}
-			/>,
-		);
-		const buttons = screen.getAllByTestId('api-key-delete');
-		fireEvent.click(buttons[0]);
-		expect(screen.getByText(/Are you sure?/i)).toBeInTheDocument();
-	});
+  it('remove key when delete is confirmed', () => {
+    const deleteKey = jest.fn();
+    render(
+      <ApiKeyTable
+        keys={keys}
+        handleCloseKey={() => { }}
+        deleteKey={deleteKey}
+      />,
+    );
 
-	it('close the confirmation modal when cancel button is clicked in modal', () => {
-		render(
-			<ApiKeyTable
-				keys={keys}
-				copiedKey=''
-				handleCopyToClipboard={() => {}}
-				deleteKey={() => {}}
-			/>,
-		);
+    const buttons = screen.getAllByTestId('api-key-delete');
+    fireEvent.click(buttons[0]);
+    const confirmButton = screen.getByText(/Okay/i);
 
-		const buttons = screen.getAllByTestId('api-key-delete');
-		fireEvent.click(buttons[0]);
-		const modalTitle = screen.getByText(/Are you sure?/i);
-		const cancelButton = screen.getByText(/Cancel/i);
-		fireEvent.click(cancelButton);
-		expect(modalTitle).not.toBeInTheDocument();
-	});
+    fireEvent.click(confirmButton);
+    expect(deleteKey).toHaveBeenCalledWith('id1');
+    expect(deleteKey).toHaveBeenCalledTimes(1);
+  });
 
-	it('remove key when delete is confirmed', () => {
-		const deleteKey = jest.fn();
-		render(
-			<ApiKeyTable
-				keys={keys}
-				copiedKey=''
-				handleCopyToClipboard={() => {}}
-				deleteKey={deleteKey}
-			/>,
-		);
+  it('does not remove key when delete is cancelled', () => {
+    const deleteKey = jest.fn();
+    render(
+      <ApiKeyTable
+        keys={keys}
+        handleCloseKey={() => { }}
+        deleteKey={deleteKey}
+      />,
+    );
 
-		const buttons = screen.getAllByTestId('api-key-delete');
-		fireEvent.click(buttons[0]);
-		const confirmButton = screen.getByText(/Okay/i);
+    const buttons = screen.getAllByTestId('api-key-delete');
+    fireEvent.click(buttons[0]);
+    const cancelButton = screen.getByText(/Cancel/i);
 
-		fireEvent.click(confirmButton);
-		expect(deleteKey).toHaveBeenCalledWith('id1');
-		expect(deleteKey).toHaveBeenCalledTimes(1);
-	});
-
-	it('does not remove key when delete is cancelled', () => {
-		const deleteKey = jest.fn();
-		render(
-			<ApiKeyTable
-				keys={keys}
-				copiedKey=''
-				handleCopyToClipboard={() => {}}
-				deleteKey={deleteKey}
-			/>,
-		);
-
-		const buttons = screen.getAllByTestId('api-key-delete');
-		fireEvent.click(buttons[0]);
-		const cancelButton = screen.getByText(/Cancel/i);
-
-		fireEvent.click(cancelButton);
-		expect(deleteKey).not.toHaveBeenCalled();
-	});
+    fireEvent.click(cancelButton);
+    expect(deleteKey).not.toHaveBeenCalled();
+  });
 });
+

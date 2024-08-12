@@ -34,7 +34,7 @@ describe("createKey", () => {
     jest.spyOn(Keys.prototype, "save").mockImplementationOnce(() => {
       throw new Error(errorMessage);
     });
-    
+
     await expect(createKey(mockKeys[0])).rejects.toThrow(errorMessage);
   });
 });
@@ -53,6 +53,12 @@ describe("fetchKeysByUserId", () => {
     const result = await fetchKeysByuserid(mockKeys[0].user);
     expect(result.length).toBe(mockKeys.length);
     // expect(result[0]).toBeInstanceOf(Keys);
+  });
+
+  test("should not include 'key' property in returned keys", async () => {
+    const result = await fetchKeysByuserid(mockKeys[0].user);
+    // Assert that 'key' property is absent in each object of the result
+    expect(result.every(keyObj => !keyObj.hasOwnProperty('key'))).toBe(true);
   });
 
   test("should return null if no keys are found for the provided userId", async () => {

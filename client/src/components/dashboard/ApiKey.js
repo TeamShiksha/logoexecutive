@@ -12,7 +12,11 @@ function ApiKey({Key, handleCloseKey, handleCopyToClipboard}) {
 					Make sure to copy your API KEY now. You won’t be able to see it again!
 				</p>
 
-				<button className='api-key-buttons' onClick={() => handleCloseKey()}>
+				<button
+					className='api-key-buttons'
+					onClick={() => handleCloseKey()}
+					aria-label='Close'
+				>
 					<IoMdClose />
 				</button>
 			</div>
@@ -22,13 +26,14 @@ function ApiKey({Key, handleCloseKey, handleCopyToClipboard}) {
 					<button
 						className='api-key-buttons'
 						onClick={() => setHideKey(!hideKey)}
+						aria-label='Show/Hide API Key'
 					>
 						{hideKey ? <FaEye /> : <FaEyeSlash />}{' '}
-						{/* Replace with appropriate icons */}
 					</button>
 					<button
 						className='api-key-buttons'
 						onClick={() => handleCopyToClipboard(Key)}
+						aria-label='Copy API Key'
 					>
 						<FaCopy />
 					</button>

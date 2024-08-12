@@ -1,4 +1,9 @@
-const { createKey, fetchKeysByuserid, isAPIKeyPresent, destroyKey } = require("../../../services");
+const {
+  createKey,
+  fetchKeysByuserid,
+  isAPIKeyPresent,
+  destroyKey,
+} = require("../../../services");
 const Keys = require("../../../models/Keys");
 const { mockKeys } = require("../../../utils/mocks/Keys");
 const mongoose = require("mongoose");
@@ -58,11 +63,13 @@ describe("fetchKeysByUserId", () => {
   test("should not include 'key' property in returned keys", async () => {
     const result = await fetchKeysByuserid(mockKeys[0].user);
     // Assert that 'key' property is absent in each object of the result
-    expect(result.every(keyObj => !keyObj.hasOwnProperty('key'))).toBe(true);
+    expect(result.every((keyObj) => !keyObj.hasOwnProperty("key"))).toBe(true);
   });
 
   test("should return null if no keys are found for the provided userId", async () => {
-    const nonExistingUser = new mongoose.Types.ObjectId("21FB95E0E988B2F5883106C0");
+    const nonExistingUser = new mongoose.Types.ObjectId(
+      "21FB95E0E988B2F5883106C0",
+    );
     const result = await fetchKeysByuserid(nonExistingUser);
     expect(result).toBeNull();
   });
@@ -71,7 +78,9 @@ describe("fetchKeysByUserId", () => {
     const errorMessage = "Database operation failed";
 
     jest.spyOn(Keys, "find").mockRejectedValueOnce(new Error(errorMessage));
-    await expect(fetchKeysByuserid(mockKeys[0].user)).rejects.toThrow(errorMessage);
+    await expect(fetchKeysByuserid(mockKeys[0].user)).rejects.toThrow(
+      errorMessage,
+    );
   });
 });
 
@@ -119,7 +128,9 @@ describe("destroyKey", () => {
   test("should throw an error if the delete operation fails", async () => {
     const errorMessage = "Database operation failed";
 
-    jest.spyOn(Keys, "deleteOne").mockRejectedValueOnce(new Error(errorMessage));
+    jest
+      .spyOn(Keys, "deleteOne")
+      .mockRejectedValueOnce(new Error(errorMessage));
 
     await expect(destroyKey(createdKey._id)).rejects.toThrow(errorMessage);
   });

@@ -1,6 +1,5 @@
 const Keys = require("../models/Keys");
 const { v4 } = require("uuid");
-const mongoose = require("mongoose");
 
 /**
  * Creates Keys in the "Keys" collection
@@ -14,7 +13,6 @@ async function createKey(data) {
       user: data.user,
       key: v4().replaceAll("-", "").toUpperCase(),
       keyDescription: data.keyDescription,
-      usageCount: 0,
       createdAt: Date.now(),
       updatedAt: Date.now(),
     };
@@ -62,6 +60,20 @@ async function isAPIKeyPresent(apiKey) {
 }
 
 /**
+ * Fetches user by API key
+ * @param {string} apiKey of user
+**/
+async function fetchUserByApiKey(apiKey){
+  try{
+    const key = await Keys.findOne({"key":apiKey});
+    if(!key) return null;
+    return key.user.toString();
+  }catch(err){
+    throw err;
+  }
+}
+
+/**
  * Deleted the key from mongoDB colletion with matching keyId
  * @param {string} keyId - keyId which is a 24 char hex string (_id)
  **/
@@ -80,4 +92,5 @@ module.exports = {
   fetchKeysByuserid,
   destroyKey,
   isAPIKeyPresent,
+  fetchUserByApiKey
 };

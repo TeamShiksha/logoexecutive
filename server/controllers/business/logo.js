@@ -1,6 +1,8 @@
 const Joi = require("joi");
 const { STATUS_CODES } = require("http");
 const { isAPIKeyPresent, fetchImageByCompanyFree } = require("../../services");
+const { updateApiUsageCount, isApiUsageLimitExceed } = require("../../services/Subscriptions");
+const { fetchUserByApiKey } = require("../../services/Keys");
 
 const getLogoQuerySchema = Joi.object({
   domain: Joi.string()
@@ -35,8 +37,18 @@ async function getLogoController(req, res, next) {
       });
     }
 
+    const userId =await fetchUserByApiKey(API_KEY);
+    const isExceed = await isApiUsageLimitExceed(userId);
+    if(isExceed){
+      return res.status(403).json({
+        message: "Usage limit exceed",
+        statusCode: 403,
+        error: STATUS_CODES[403]
+      });
+    }
     let company = domain.replace(/.+\/\/|www.|\..+/g, "").toUpperCase();
     const imageUrl = await fetchImageByCompanyFree(company);
+    await updateApiUsageCount(userId);
     if (!imageUrl) {
       return res.status(404).json({
         message: "Logo not available",

@@ -2,6 +2,8 @@ const mongoose = require("mongoose");
 const {
   createSubscription,
   fetchSubscriptionByuserid,
+  updateApiUsageCount,
+  isApiUsageLimitExceed
 } = require("../../../services");
 const { mockSubscriptions } = require("../../../utils/mocks/Subscriptions");
 const { Subscriptions } = require("../../../models");
@@ -76,3 +78,66 @@ describe("fetchSubscriptionByuserid", () => {
   });
 });
 
+describe("isApiUsageLimitExceed", () => {
+  afterEach(async () => {
+    jest.restoreAllMocks();
+    await Subscriptions.deleteMany({});
+  });
+
+  test("should return true if usage limit is reached", async () => {
+    const subscription = new Subscriptions(mockSubscriptions[1]);
+    await subscription.save();
+
+    const result = await isApiUsageLimitExceed(mockSubscriptions[1].user);
+    expect(result).toBe(true);
+  });
+
+  test("should return false if usage limit is not reached", async () => {
+    const subscription = new Subscriptions(mockSubscriptions[0]);
+    await subscription.save();
+
+    const result = await isApiUsageLimitExceed(mockSubscriptions[0].user);
+    expect(result).toBe(false);
+  });
+
+  test("should throw an error if an error occurs while checking usage limit", async () => {
+    const errorMessage = "MongoDB operation failed";
+    jest
+      .spyOn(Subscriptions, "findOne")
+      .mockRejectedValue(new Error(errorMessage));
+
+    await expect(isApiUsageLimitExceed(mockSubscriptions[0].user)).rejects.toThrow(errorMessage);
+  });
+});
+
+describe("updateApiUsageCount", () => {
+  afterEach(async () => {
+    jest.restoreAllMocks();
+    await Subscriptions.deleteMany({});
+  });
+
+  test("should increment usage count and return 1", async () => {
+    const subscription = new Subscriptions(mockSubscriptions[0]);
+    await subscription.save();
+    const result = await updateApiUsageCount(mockSubscriptions[0].user.toString());
+    expect(result).toBe(1);
+
+    const updatedSubscription = await Subscriptions.findOne({ user: mockSubscriptions[0].user });
+    expect(updatedSubscription.usageCount).toBe(1);
+  });
+
+  test("should return null if no subscription is found", async () => {
+    const nonExistingUserId = new mongoose.Types.ObjectId();
+    const result = await updateApiUsageCount(nonExistingUserId);
+    expect(result).toBe(0);
+  });
+
+  test("should throw an error if an error occurs while updating usage count", async () => {
+    const errorMessage = "MongoDB operation failed";
+    jest.spyOn(Subscriptions, "updateOne").mockReturnValueOnce({
+      exec: jest.fn().mockRejectedValueOnce(new Error(errorMessage))
+    });
+
+    await expect(updateApiUsageCount(mockSubscriptions[0].user)).rejects.toThrow(errorMessage);
+  });
+});

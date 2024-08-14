@@ -41,7 +41,7 @@ async function getLogoController(req, res, next) {
     const isExceed = await isApiUsageLimitExceed(userId);
     if(isExceed){
       return res.status(403).json({
-        message: "Usage limit exceed",
+        message: "Limit reached. Consider upgrading your plan",
         statusCode: 403,
         error: STATUS_CODES[403]
       });

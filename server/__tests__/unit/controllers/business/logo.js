@@ -96,6 +96,23 @@ describe("getLogoController", () => {
     });
   });
 
+  it("403 - Limit reached. Consider upgrading your plan", async () => {
+    jest.spyOn(KeyService, "isAPIKeyPresent").mockResolvedValue(true);
+    jest.spyOn(KeyService, "fetchUserByApiKey").mockResolvedValue(mockUser);
+    jest.spyOn(SubscriptionService, "isApiUsageLimitExceed").mockResolvedValue(true);
+    const mockQuery = { "domain": "coupang", "API_KEY": "2B1B1BF5F9914BCD85A0B1122C71EDDB" };
+    const response = await request(app)
+      .get(ENDPOINT)
+      .query(mockQuery);
+
+    expect(response.status).toBe(403);
+    expect(response.body).toEqual({
+      message: "Limit reached. Consider upgrading your plan",
+      statusCode: 403,
+      error: STATUS_CODES[403],
+    });
+  });
+
   it("500 - Unexpected error", async () => {
     jest.spyOn(KeyService, "isAPIKeyPresent").mockImplementation(() => { throw new Error("Unexpected error"); });
     const mockQuery = { "domain": "coupang", "API_KEY": "2B1B1BF5F9914BCD85A0B1122C71EDDB" };
@@ -161,4 +178,5 @@ describe("getLogoController", () => {
       data: mockCDNLink
     });
   });
+  
 });

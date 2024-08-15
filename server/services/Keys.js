@@ -65,7 +65,7 @@ async function isAPIKeyPresent(apiKey) {
 **/
 async function fetchUserByApiKey(apiKey){
   try{
-    const key = await Keys.findOne({"key":apiKey});
+    const key = await Keys.findOne({key:apiKey});
     if(!key) return null;
     return key.user.toString();
   }catch(err){

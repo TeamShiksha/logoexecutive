@@ -1,7 +1,7 @@
 const { formExists, createForm } = require("./ContactUs");
 const { createImageData, fetchImageByCompanyFree, upload, uploadToS3, getImagesByUserId } = require("./Images");
-const { createKey, fetchKeysByuserid, destroyKey, isAPIKeyPresent } = require("./Keys");
-const { createSubscription, fetchSubscriptionByuserid } = require("./Subscriptions");
+const { createKey, fetchKeysByuserid, destroyKey, isAPIKeyPresent, fetchUserByApiKey } = require("./Keys");
+const { createSubscription, fetchSubscriptionByuserid, updateApiUsageCount, isApiUsageLimitExceed } = require("./Subscriptions");
 const { createForgotToken, deleteUserToken, createVerifyToken,
   fetchTokenFromId, fetchTokenFromUserid } = require("./UserToken");
 const {fetchUsers, fetchUserByEmail, createUser, updatePasswordbyUser,
@@ -17,8 +17,8 @@ const AdminService = require("./admin");
 
 module.exports = {
   formExists, createForm, createImageData, fetchImageByCompanyFree,
-  createKey, fetchKeysByuserid, destroyKey, isAPIKeyPresent,
-  createSubscription, fetchSubscriptionByuserid, createForgotToken,
+  createKey, fetchKeysByuserid, destroyKey, isAPIKeyPresent, fetchUserByApiKey,
+  createSubscription, fetchSubscriptionByuserid, updateApiUsageCount, isApiUsageLimitExceed, createForgotToken,
   deleteUserToken, createVerifyToken, fetchTokenFromId, fetchTokenFromUserid,
   fetchUsers, fetchUserByEmail, createUser, updatePasswordbyUser,
   fetchUserFromId, verifyUser, updateUser, deleteUserAccount, emailRecordExists, setUserAdmin,

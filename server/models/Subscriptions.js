@@ -18,6 +18,10 @@ const subscriptionSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
+  usageCount: {
+    type: Number,
+    default: 0
+  },
   isActive: {
     type: Boolean,
     required: true,
@@ -38,6 +42,7 @@ subscriptionSchema.statics.NewSubscription = function (userId) {
     subscriptionType: SubscriptionTypes.HOBBY,
     keyLimit: 2,
     usageLimit: 500,
+    usageCount: 0,
     isActive: false,
     createdAt: new Date(),
     updatedAt: new Date(),
@@ -50,6 +55,7 @@ subscriptionSchema.methods.getSubscriptionData = function () {
     subscriptionType: this.subscriptionType,
     keyLimit: this.keyLimit,
     usageLimit: this.usageLimit,
+    usageCount: this.usageCount,
     isActive: this.isActive,
     createdAt: this.createdAt,
     updatedAt: this.updatedAt,

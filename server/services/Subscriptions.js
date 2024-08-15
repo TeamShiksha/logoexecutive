@@ -16,6 +16,38 @@ async function createSubscription(userId) {
   }
 }
 
+/**
+ * Checks if the user is allowed to make API calls
+ * 
+ * @param {string} userId - userId of user 
+**/
+async function isApiUsageLimitExceed(userId) {
+  try{
+    const subscription = await Subscriptions.findOne({user:userId});
+    if(subscription.usageCount == subscription.usageLimit) return true;
+    return false;
+  }catch(err){
+    throw err;
+  }
+}
+
+/**
+ * Updates the API usage count for a given user.
+ * 
+ * @param {string} userId - userId of user
+ * @returns {Promise<number|null>} - The number of documents modified, or null if no document was found to update.
+ **/
+async function updateApiUsageCount(userId){
+  try{
+    const subscription =await Subscriptions.updateOne({user:userId},{$inc:{usageCount:1}}).exec();
+    
+    if(!subscription.matchedCount===0) return null;
+    return subscription.modifiedCount;
+  }catch(err){
+    throw err;
+  }
+}
+
 async function fetchSubscriptionByuserid(userId) {
   try {
     const subscription = await Subscriptions.findOne({ "user":userId });
@@ -31,4 +63,6 @@ async function fetchSubscriptionByuserid(userId) {
 module.exports = {
   createSubscription,
   fetchSubscriptionByuserid,
+  updateApiUsageCount,
+  isApiUsageLimitExceed
 };

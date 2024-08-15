@@ -95,15 +95,15 @@ describe("GET - /user/data", () => {
         isActive: mockSubscriptionModel.isActive,
         usageLimit: mockSubscriptionModel.usageLimit,
         keyLimit: mockSubscriptionModel.keyLimit,
+        usageCount: mockSubscriptionModel.usageCount,
         createdAt: mockSubscriptionModel.createdAt.toISOString(),
         updatedAt: mockSubscriptionModel.updatedAt.toISOString(),
       },
       keys: [
         {
           _id: mockKeyModel._id.toString(),
-          user: mockKeyModel.userId,
+          user: mockKeyModel.user.toString(),
           key: mockKeyModel.key,
-          usageCount: mockKeyModel.usageCount,
           keyDescription: mockKeyModel.keyDescription,
           createdAt: mockKeyModel.createdAt.toISOString(),
           updatedAt: mockKeyModel.updatedAt.toISOString(),

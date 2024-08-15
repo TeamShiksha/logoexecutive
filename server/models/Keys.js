@@ -1,4 +1,3 @@
-const { required } = require("joi");
 const { v4 } = require("uuid");
 const mongoose = require("mongoose");
 
@@ -16,10 +15,6 @@ const keySchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  usageCount: { 
-    type: Number,
-    default: 0
-  },
   createdAt: { 
     type: Date,
     default: Date.now
@@ -36,7 +31,6 @@ keySchema.methods.data = function() {
     user: this.user,
     keyDescription: this.keyDescription,
     key: this.key,
-    usageCount: this.usageCount,
     createdAt: this.createdAt,
     updatedAt: this.updatedAt,
   };

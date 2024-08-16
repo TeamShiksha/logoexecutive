@@ -16,7 +16,7 @@ function ApiKeyTable({keys, deleteKey, handleCloseKey}) {
 		setModalOpen(false);
 		deleteKey(apiKeyToBeDeleted.current);
 		apiKeyToBeDeleted.current = null;
-		handleCloseKey();
+		handleCloseKey(true);
 	};
 
 	return (

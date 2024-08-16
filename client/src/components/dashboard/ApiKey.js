@@ -4,21 +4,21 @@ import {FaCopy} from 'react-icons/fa';
 
 function ApiKey({Key, handleCloseKey, handleCopyToClipboard}) {
 	return (
-		<div className='dashboard-content-item'>
-			<div className='current-plan-header'>
+		<div className='api-key-container-main'>
+			<div className='api-key-header'>
 				<p className='api-key-warning'>
 					Make sure to copy your API KEY now. You won’t be able to see it again!
 				</p>
 
 				<button
-					className='api-key-buttons'
+					className='api-key-buttons close-btn-ak'
 					onClick={() => handleCloseKey()}
 					aria-label='Close'
 				>
 					<IoMdClose />
 				</button>
 			</div>
-			<div className='api-key-div dashboard-content-item'>
+			<div className='api-key-div '>
 				<p>*******************</p>
 				<div className='api-key-buttons-div'>
 					<button

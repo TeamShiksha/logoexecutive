@@ -109,9 +109,18 @@ function Dashboard() {
 		setCopiedKey(apiKey);
 	};
 
-	const handleCloseKey = () => {
+	const handleCloseKey = async (del) => {
 		if (showKey) {
-			if (window.confirm('Are you sure you want to close the API key?')) {
+			const nv = await navigator.clipboard.readText();
+			if (copiedKey !== nv && !del) {
+				if (
+					window.confirm(
+						'Are you sure you want to close the API key? ( You have not copied the key )',
+					)
+				) {
+					setShowKey(false);
+				}
+			} else {
 				setShowKey(false);
 			}
 		}

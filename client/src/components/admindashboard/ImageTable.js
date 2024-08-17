@@ -1,12 +1,12 @@
 import PropTypes from 'prop-types';
-import {BsArrowRepeat} from 'react-icons/bs';
-import {imageTableHeadings} from '../../constants';
-import {formatDate} from '../../utils/helpers';
+import { BsArrowRepeat } from 'react-icons/bs';
+import { imageTableHeadings } from '../../constants';
+import { formatDate } from '../../utils/helpers';
 import './ImageTable.css';
-import {useState, useEffect} from 'react';
-import {useApi} from '../../hooks/useApi';
+import { useState, useEffect } from 'react';
+import { useApi } from '../../hooks/useApi';
 
-function ImageTable({userId, errorMessage, refresh}) {
+function ImageTable({ userId, errorMessage, refresh }) {
 	const [uploadedImages, setUploadedImages] = useState([]);
 	const [currentPage, setCurrentPage] = useState(1);
 	const [inputPage, setInputPage] = useState(1);
@@ -24,7 +24,6 @@ function ImageTable({userId, errorMessage, refresh}) {
 				);
 				const data = await response.json();
 
-				//console.log('API response:', data);
 
 				if (response.ok) {
 					setUploadedImages(data.data || []);
@@ -108,9 +107,10 @@ function ImageTable({userId, errorMessage, refresh}) {
 							<td colSpan='4'>Loading...</td>
 						</tr>
 					) : formattedUploadedImagesData.length > 0 ? (
-						formattedUploadedImagesData.map((image) => (
-							<tr key={image.imageId}>
-								<td>{image.domainame}</td>
+						formattedUploadedImagesData.map((image, index) => (
+							<tr key={index}>
+								<td>{image.domainame.substring(0, 15)
+								}</td>
 								<td>{image.createdAt}</td>
 								<td>{image.updatedAt}</td>
 								<td>

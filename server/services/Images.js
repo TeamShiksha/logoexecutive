@@ -64,15 +64,15 @@ const getImagesByUserIdLimitedByQuery = async (userId, page = 1, limit = 20) => 
   const skip = (page - 1) * limit;
 
   try {
-    // Fetch the images with pagination
-    const images = await Images.find({ uploadedBy: userId }) // Ensure correct model name
+
+    const images = await Images.find({ uploadedBy: userId })
       .skip(skip)
       .limit(limit)
       .sort({ createdAt: -1 })
       .exec();
 
-    // Count the total number of images
-    const totalCount = await Images.countDocuments({ uploadedBy: userId }); // Ensure correct model name
+
+    const totalCount = await Images.countDocuments({ uploadedBy: userId });
     return { images, totalCount };
   } catch (error) {
     console.error('Error fetching images:', error);

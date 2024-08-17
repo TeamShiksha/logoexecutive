@@ -23,9 +23,6 @@ function ImageTable({ userId, errorMessage, refresh }) {
 					`/api/admin/images/query?userId=${userId}&page=${currentPage}&limit=${imagesPerPage}`,
 				);
 				const data = await response.json();
-				console.log('response - ', data);
-
-
 				if (response.ok) {
 					setUploadedImages(data.data || []);
 					const count = data.totalCount || 0;

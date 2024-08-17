@@ -28,7 +28,7 @@ const getImagesByQueryController = async (req, res, next) => {
     return res.status(200).json({
       statusCode: 200,
       data: images,
-      totalCount: totalCount, // Total count of images
+      totalCount: totalCount,
     });
   } catch (err) {
     next(err);

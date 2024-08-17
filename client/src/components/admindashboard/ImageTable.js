@@ -23,6 +23,7 @@ function ImageTable({ userId, errorMessage, refresh }) {
 					`/api/admin/images/query?userId=${userId}&page=${currentPage}&limit=${imagesPerPage}`,
 				);
 				const data = await response.json();
+				console.log('response - ', data);
 
 
 				if (response.ok) {
@@ -109,7 +110,8 @@ function ImageTable({ userId, errorMessage, refresh }) {
 					) : formattedUploadedImagesData.length > 0 ? (
 						formattedUploadedImagesData.map((image, index) => (
 							<tr key={index}>
-								<td>{image.domainame.substring(0, 15)
+								<td>{
+									image.domainame.length < 12 ? image.domainame : image.domainame.substring(0, 12) + '...'
 								}</td>
 								<td>{image.createdAt}</td>
 								<td>{image.updatedAt}</td>

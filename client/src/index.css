@@ -23,6 +23,7 @@
 	--error: rgb(255, 55, 55);
 	--success: rgb(52, 168, 83);
 	--table-heading-bg: rgb(226, 224, 224);
+	--table-pagination-bg: rgb(226, 225, 225);
 }
 
 * {

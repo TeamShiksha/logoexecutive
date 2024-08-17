@@ -37,7 +37,7 @@
 	cursor: not-allowed;
 }
 
-.image-table .reupload-btn > svg {
+.image-table .reupload-btn>svg {
 	color: var(--smooth-gray);
 	height: 20px;
 	width: 20px;
@@ -45,4 +45,42 @@
 
 .image-table tbody tr .error {
 	color: var(--error);
+}
+
+.pagination {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background-color: var(--table-pagination-bg);
+	padding: 8px;
+	font-weight: 500;
+	color: var(--smooth-gray);
+}
+
+.pagination span {
+	margin: 0px auto;
+}
+
+.pagination-button {
+	background-color: var(--smooth-purple);
+	color: var(--white);
+	border-radius: var(--bradius);
+	background-color: var(--smooth-purple);
+	padding: 10px 20px;
+	border: none;
+	cursor: pointer;
+	font-weight: bold;
+}
+
+.pagination-button:disabled,
+.pagination-button[disabled] {
+	background-color: var(--gray-drag-drop-background);
+	color: var(--black);
+}
+
+
+.pagination-input {
+	width: 40px;
+	text-align: center;
+	margin: 0 5px;
 }

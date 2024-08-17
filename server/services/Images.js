@@ -60,6 +60,26 @@ async function getImagesByUserId(userId) {
   }
 };
 
+const getImagesByUserIdLimitedByQuery = async (userId, page = 1, limit = 20) => {
+  const skip = (page - 1) * limit;
+
+  try {
+    // Fetch the images with pagination
+    const images = await Images.find({ uploadedBy: userId }) // Ensure correct model name
+      .skip(skip)
+      .limit(limit)
+      .sort({ createdAt: -1 })
+      .exec();
+
+    // Count the total number of images
+    const totalCount = await Images.countDocuments({ uploadedBy: userId }); // Ensure correct model name
+    return { images, totalCount };
+  } catch (error) {
+    console.error('Error fetching images:', error);
+    throw error;
+  }
+};
+
 async function createImageData(domainame, uploadedBy, extension) {
   try {
     const newImage = Images.newImage({
@@ -86,4 +106,5 @@ module.exports = {
   fetchImageByCompanyFree,
   uploadToS3,
   getImagesByUserId,
+  getImagesByUserIdLimitedByQuery
 };

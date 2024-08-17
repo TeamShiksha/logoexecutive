@@ -3,6 +3,7 @@ import CustomInput from '../common/input/CustomInput';
 import Modal from '../common/modal/Modal';
 import {useApi} from '../../hooks/useApi';
 import './PreviewModal.css';
+import {useEffect} from 'react';
 
 function PreviewModal({
 	image,
@@ -30,9 +31,20 @@ function PreviewModal({
 			fetchUploadedImages();
 			setTimeout(() => {
 				setIsModalOpen(false);
-			}, 3000);
+			}, 500);
 		}
 	}
+	useEffect(() => {
+		if (isModalOpen) {
+			document.body.style.overflow = 'hidden';
+		} else {
+			document.body.style.overflow = 'auto';
+		}
+
+		return () => {
+			document.body.style.overflow = 'auto';
+		};
+	}, [isModalOpen]);
 
 	return (
 		<Modal

@@ -60,6 +60,12 @@ async function signinController(req, res, next) {
       sameSite: "none",
       secure: true,
     });
+
+    res.cookie("userId", user.id, {
+      expires: dayjs().add(1, "day").toDate(),
+      sameSite: "none",
+      secure: true,
+    });
     return res.status(200).json({ message: "Sign In Successful" });
   } catch (err) {
     next(err);

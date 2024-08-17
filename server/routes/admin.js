@@ -3,25 +3,28 @@ const addAdminController = require("../controllers/admin/add");
 const upload = require("../middlewares/fileUpload");
 const { adminUploadController } = require("../controllers/admin/upload");
 const { getImagesController } = require("../controllers/admin/data");
+const { getImagesByQueryController } = require("../controllers/admin/pagination");
 const authMiddleware = require("../middlewares/auth");
 
-
-router.put(
-  "/add", 
-  authMiddleware({ adminOnly: true }), 
-  addAdminController
-);
+router.put("/add", authMiddleware({ adminOnly: true }), addAdminController);
 
 router.post(
   "/upload",
-  authMiddleware({adminOnly: true}),
+  authMiddleware({ adminOnly: true }),
   upload.single("logo"),
   adminUploadController
 );
 
 router.get(
   "/images",
-  authMiddleware({adminOnly: true}),
+  authMiddleware({ adminOnly: true }),
   getImagesController
 );
+
+router.get(
+  "/images/query",
+  authMiddleware({ adminOnly: true }),
+  getImagesByQueryController
+);
+
 module.exports = router;

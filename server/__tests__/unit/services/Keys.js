@@ -1,9 +1,4 @@
-const {
-  createKey,
-  fetchKeysByuserid,
-  isAPIKeyPresent,
-  destroyKey,
-} = require("../../../services");
+const { createKey, fetchKeysByuserid, isAPIKeyPresent, destroyKey } = require("../../../services");
 const Keys = require("../../../models/Keys");
 const { mockKeys } = require("../../../utils/mocks/Keys");
 const mongoose = require("mongoose");
@@ -67,9 +62,7 @@ describe("fetchKeysByUserId", () => {
   });
 
   test("should return null if no keys are found for the provided userId", async () => {
-    const nonExistingUser = new mongoose.Types.ObjectId(
-      "21FB95E0E988B2F5883106C0",
-    );
+    const nonExistingUser = new mongoose.Types.ObjectId();
     const result = await fetchKeysByuserid(nonExistingUser);
     expect(result).toBeNull();
   });

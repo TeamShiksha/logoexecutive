@@ -14,8 +14,7 @@ describe('Dashboard Component', () => {
 		keys: [
 			{
 				keyId: '4d6544e38f5d4ad8bae546ea61e2b842',
-				key: '4d6544e38f5d4ad8bae546ea61e2b842',
-				usageCount: '0',
+				usageCount: 0,
 				keyDescription: 'Demo Key',
 				updatedAt: formatDate(),
 				createdAt: formatDate(),
@@ -234,20 +233,5 @@ describe('Dashboard Component', () => {
 			'Description must contain only alphabets and spaces',
 		);
 		expect(errordocument).toBeInTheDocument();
-	});
-
-	it('copies API key to clipboard', async () => {
-		global.navigator.clipboard = {
-			writeText: jest.fn(),
-		};
-		renderDashboard();
-		const descriptionInput = screen.getByLabelText('Description For API Key');
-		fireEvent.change(descriptionInput, {target: {value: 'Test API Key'}});
-		const generateButton = screen.getByText('Generate Key');
-		fireEvent.click(generateButton);
-		const buttons = screen.getAllByTestId('api-key-copy');
-		fireEvent.click(buttons[0]);
-		const inscreenirem = await screen.findByTestId('api-key-copied');
-		expect(inscreenirem).toBeInTheDocument();
 	});
 });

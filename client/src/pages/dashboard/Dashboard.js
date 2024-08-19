@@ -1,6 +1,7 @@
 import {useContext, useEffect, useState} from 'react';
 import ApiKeyForm from '../../components/dashboard/ApiKeyForm';
 import ApiKeyTable from '../../components/dashboard/ApiKeyTable';
+import ApiKey from '../../components/dashboard/ApiKey';
 import CurrentPlan from '../../components/dashboard/CurrentPlan';
 import Usage from '../../components/dashboard/Usage';
 import {isLettersAndSpacesOnly} from '../../constants';
@@ -22,6 +23,7 @@ function Dashboard() {
 	const [errorMessage, setErrorMessage] = useState('');
 	const [copiedKey, setCopiedKey] = useState(null);
 	const [keys, setKeys] = useState([]);
+	const [showKey, setShowKey] = useState(false);
 	const {userData, fetchUserData} = useContext(UserContext);
 	const {data, errorMsg, makeRequest, isSuccess, loading} = useApi({
 		url: `api/user/generate`,
@@ -50,10 +52,10 @@ function Dashboard() {
 
 	useEffect(() => {
 		if (isSuccess) {
+			setShowKey(true);
 			const newKey = {
 				keyId: data.data.keyId,
 				keyDescription: data.data.keyDescription,
-				key: data.data.key,
 				usageCount: data.data.usageCount,
 				createdAt: data.data.createdAt,
 				updatedAt: data.data.updatedAt,
@@ -107,6 +109,23 @@ function Dashboard() {
 		setCopiedKey(apiKey);
 	};
 
+	const handleCloseKey = async (del) => {
+		if (showKey) {
+			const nv = await navigator.clipboard.readText();
+			if (copiedKey !== nv && !del) {
+				if (
+					window.confirm(
+						'Are you sure you want to close the API key? ( You have not copied the key )',
+					)
+				) {
+					setShowKey(false);
+				}
+			} else {
+				setShowKey(false);
+			}
+		}
+	};
+
 	return (
 		<div className='dashboard-container' data-testid='testid-dashboard'>
 			<div className='dashboard-content-container'>
@@ -128,12 +147,20 @@ function Dashboard() {
 						/>
 					</div>
 				</section>
+				{showKey && (
+					<ApiKey
+						Key={data?.data?.key}
+						handleCloseKey={handleCloseKey}
+						handleCopyToClipboard={handleCopyToClipboard}
+					/>
+				)}
 				<div className='divider'></div>
 				<ApiKeyTable
 					keys={keys}
 					copiedKey={copiedKey}
 					handleCopyToClipboard={handleCopyToClipboard}
 					deleteKey={setDeletedKey}
+					handleCloseKey={handleCloseKey}
 				/>
 			</div>
 		</div>

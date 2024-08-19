@@ -21,8 +21,7 @@ describe('ApiKeyTable', () => {
 		render(
 			<ApiKeyTable
 				keys={keys}
-				copiedKey=''
-				handleCopyToClipboard={() => {}}
+				handleCloseKey={() => {}}
 				deleteKey={() => {}}
 			/>,
 		);
@@ -32,43 +31,11 @@ describe('ApiKeyTable', () => {
 		expect(screen.getByText('February 28, 2024')).toBeInTheDocument();
 	});
 
-	it('handles copy to clipboard', () => {
-		const handleCopyToClipboard = jest.fn();
-		render(
-			<ApiKeyTable
-				keys={keys}
-				copiedKey=''
-				handleCopyToClipboard={handleCopyToClipboard}
-				deleteKey={() => {}}
-			/>,
-		);
-		const buttons = screen.getAllByTestId('api-key-copy');
-		fireEvent.click(buttons[0]);
-		expect(handleCopyToClipboard).toHaveBeenCalledWith('123');
-	});
-
-	it('shows copied icon when key is copied', () => {
-		const handleCopyToClipboard = jest.fn();
-		render(
-			<ApiKeyTable
-				keys={keys}
-				copiedKey='123'
-				handleCopyToClipboard={handleCopyToClipboard}
-				deleteKey={() => {}}
-			/>,
-		);
-
-		const buttons = screen.getAllByTestId('api-key-copy');
-		fireEvent.click(buttons[0]);
-		expect(screen.getByTestId('api-key-copied')).toBeInTheDocument();
-	});
-
 	it('show confirmation modal when delete button is clicked', () => {
 		render(
 			<ApiKeyTable
 				keys={keys}
-				copiedKey=''
-				handleCopyToClipboard={() => {}}
+				handleCloseKey={() => {}}
 				deleteKey={() => {}}
 			/>,
 		);
@@ -81,8 +48,7 @@ describe('ApiKeyTable', () => {
 		render(
 			<ApiKeyTable
 				keys={keys}
-				copiedKey=''
-				handleCopyToClipboard={() => {}}
+				handleCloseKey={() => {}}
 				deleteKey={() => {}}
 			/>,
 		);
@@ -100,8 +66,7 @@ describe('ApiKeyTable', () => {
 		render(
 			<ApiKeyTable
 				keys={keys}
-				copiedKey=''
-				handleCopyToClipboard={() => {}}
+				handleCloseKey={() => {}}
 				deleteKey={deleteKey}
 			/>,
 		);
@@ -120,8 +85,7 @@ describe('ApiKeyTable', () => {
 		render(
 			<ApiKeyTable
 				keys={keys}
-				copiedKey=''
-				handleCopyToClipboard={() => {}}
+				handleCloseKey={() => {}}
 				deleteKey={deleteKey}
 			/>,
 		);

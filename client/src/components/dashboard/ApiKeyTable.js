@@ -1,11 +1,9 @@
 import PropTypes from 'prop-types';
-import {FiCopy} from 'react-icons/fi';
-import {LuCopyCheck} from 'react-icons/lu';
 import {MdDeleteOutline} from 'react-icons/md';
 import {formatDate} from '../../utils/helpers';
 import Modal from '../common/modal/Modal';
 import {useRef, useState} from 'react';
-function ApiKeyTable({keys, copiedKey, handleCopyToClipboard, deleteKey}) {
+function ApiKeyTable({keys, deleteKey, handleCloseKey}) {
 	const apiKeyToBeDeleted = useRef(null);
 	const [modalOpen, setModalOpen] = useState(false);
 
@@ -18,6 +16,7 @@ function ApiKeyTable({keys, copiedKey, handleCopyToClipboard, deleteKey}) {
 		setModalOpen(false);
 		deleteKey(apiKeyToBeDeleted.current);
 		apiKeyToBeDeleted.current = null;
+		handleCloseKey(true);
 	};
 
 	return (
@@ -27,7 +26,6 @@ function ApiKeyTable({keys, copiedKey, handleCopyToClipboard, deleteKey}) {
 					<thead>
 						<tr>
 							<th>DESCRIPTION</th>
-							<th>API KEY</th>
 							<th>ACTION</th>
 							<th>CREATE DATE</th>
 						</tr>
@@ -35,7 +33,7 @@ function ApiKeyTable({keys, copiedKey, handleCopyToClipboard, deleteKey}) {
 					<tbody>
 						{!keys.length && (
 							<tr>
-								<td colSpan='4' className='no-keys'>
+								<td colSpan='3' className='no-keys'>
 									Your api keys will be visible here, click on generate key to
 									add new api key
 								</td>
@@ -44,24 +42,6 @@ function ApiKeyTable({keys, copiedKey, handleCopyToClipboard, deleteKey}) {
 						{keys.map((key, index) => (
 							<tr key={index}>
 								<td>{key.keyDescription}</td>
-								<td className='api-key-column'>
-									{copiedKey === key.key ? (
-										<div
-											className='api-key-copied'
-											data-testid='api-key-copied'
-										>
-											<LuCopyCheck />
-										</div>
-									) : (
-										<button
-											className='api-key-copy'
-											data-testid='api-key-copy'
-											onClick={() => handleCopyToClipboard(key.key)}
-										>
-											<FiCopy />
-										</button>
-									)}
-								</td>
 								<td>
 									<button
 										className='api-key-delete-button'
@@ -100,9 +80,8 @@ ApiKeyTable.propTypes = {
 			apiKey: PropTypes.string,
 		}),
 	).isRequired,
-	copiedKey: PropTypes.string,
-	handleCopyToClipboard: PropTypes.func.isRequired,
 	deleteKey: PropTypes.func.isRequired,
+	handleCloseKey: PropTypes.func.isRequired,
 };
 
 export default ApiKeyTable;

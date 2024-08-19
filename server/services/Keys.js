@@ -19,7 +19,7 @@ async function createKey(data) {
 
     const UserKey = new Keys(keyData);
     const result = await UserKey.save();
-    if(!result) return null;
+    if (!result) return null;
     const { _id, ...restKeyData } = result._doc;
     const key = { keyId: _id, ...restKeyData };
     return key;
@@ -34,11 +34,11 @@ async function createKey(data) {
  **/
 async function fetchKeysByuserid(user) {
   try {
-    const keys = await Keys.find({"user": user});
+    const keys = await Keys.find({ user: user });
     if (!keys.length) return null;
-    const filteredKeys = keys.map(( {_doc: { _id, ...restKeyData }})=>({
-      keyId:_id,
-      ...restKeyData
+    const filteredKeys = keys.map(({ _doc: { _id, key, ...restKeyData } }) => ({
+      keyId: _id,
+      ...restKeyData,
     }));
     return filteredKeys;
   } catch (err) {
@@ -52,7 +52,7 @@ async function fetchKeysByuserid(user) {
  **/
 async function isAPIKeyPresent(apiKey) {
   try {
-    const keyRef = await Keys.find({"key": apiKey});
+    const keyRef = await Keys.find({ key: apiKey });
     return keyRef.length > 0;
   } catch (err) {
     throw err;
@@ -79,8 +79,8 @@ async function fetchUserByApiKey(apiKey){
  **/
 async function destroyKey(_id) {
   try {
-    const keyRef = await Keys.deleteOne({"_id": _id});
-    if(keyRef.deletedCount === 0) throw new Error("Database operation failed");
+    const keyRef = await Keys.deleteOne({ _id: _id });
+    if (keyRef.deletedCount === 0) throw new Error("Database operation failed");
     return true;
   } catch (err) {
     throw err;

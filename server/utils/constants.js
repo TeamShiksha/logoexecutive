@@ -4,12 +4,13 @@
  **/
 const UserTokenTypes = {
   FORGOT: "FORGOT",
-  VERIFY: "VERIFY",
+  VERIFY: "VERIFY"
 };
 
 const UserType = {
   ADMIN: "ADMIN",
-  CUSTOMER:"CUSTOMER"
+  CUSTOMER: "CUSTOMER",
+  OPERATOR: "OPERATOR"
 };
 
 const SubscriptionTypes = {

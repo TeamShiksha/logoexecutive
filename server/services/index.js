@@ -1,4 +1,4 @@
-const { formExists, createForm } = require("./ContactUs");
+const { formExists, createForm, updateForm } = require("./ContactUs");
 const { createImageData, fetchImageByCompanyFree, upload, uploadToS3, getImagesByUserId } = require("./Images");
 const { createKey, fetchKeysByuserid, destroyKey, isAPIKeyPresent, fetchUserByApiKey } = require("./Keys");
 const { createSubscription, fetchSubscriptionByuserid, updateApiUsageCount, isApiUsageLimitExceed } = require("./Subscriptions");
@@ -16,7 +16,7 @@ const UserService = require("./Users");
 const AdminService = require("./admin");
 
 module.exports = {
-  formExists, createForm, createImageData, fetchImageByCompanyFree,
+  formExists, createForm, updateForm, createImageData, fetchImageByCompanyFree,
   createKey, fetchKeysByuserid, destroyKey, isAPIKeyPresent, fetchUserByApiKey,
   createSubscription, fetchSubscriptionByuserid, updateApiUsageCount, isApiUsageLimitExceed, createForgotToken,
   deleteUserToken, createVerifyToken, fetchTokenFromId, fetchTokenFromUserid,

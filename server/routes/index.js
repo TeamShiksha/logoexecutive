@@ -4,6 +4,7 @@ const publicRouter = require("./public");
 const authRouter = require("./auth");
 const logoRouter = require("./business");
 const adminRouter = require("./admin");
+const operatorRouter = require("./operator");
 const cors = require("cors");
 
 const privateRouteCORS = {
@@ -14,14 +15,15 @@ const privateRouteCORS = {
       callback(new Error("Not allowed by CORS"));
     }
   },
-  credentials: true,
+  credentials: true
 };
 
 router.use("/auth", cors(privateRouteCORS), authRouter);
 router.use("/user", cors(privateRouteCORS), userRouter);
 router.use("/admin", cors(privateRouteCORS), adminRouter);
 router.use("/public", cors(privateRouteCORS), publicRouter);
-router.use("/business", cors({ origin: "*" }),logoRouter);
+router.use("/business", cors({ origin: "*" }), logoRouter);
 router.use("/admin", cors(privateRouteCORS), adminRouter);
+router.use("/operator", cors(privateRouteCORS), operatorRouter);
 
 module.exports = router;

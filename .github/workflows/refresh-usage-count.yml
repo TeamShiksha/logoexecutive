@@ -18,7 +18,7 @@ jobs:
           node-version: '20'
 
       - name: Install Mongoose
-        run: npm install mongoose
+        run: npm install mongoose --legacy-peer-deps
 
       - name: Run refreshUsageCount script
         env:

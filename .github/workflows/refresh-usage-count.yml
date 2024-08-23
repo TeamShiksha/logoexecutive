@@ -16,18 +16,11 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '20'
-      
-      - name: Create temp directory for mongoose
-        run: mkdir -p temp-dir
 
-      - name: Install mongoose
-        run: |
-          cd temp-dir
-          npm init -y
-          npm install mongoose
+      - name: Install Mongoose
+        run: npm install mongoose --legacy-peer-deps
 
       - name: Run refreshUsageCount script
         env:
           MONGO_URL: ${{ secrets.MONGO_URL }}
-          NODE_PATH: temp-dir/node_modules
         run: node ./server/scripts/refreshUsageCount.js

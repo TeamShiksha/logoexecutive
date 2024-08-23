@@ -11,13 +11,14 @@ async function refreshUsageCount() {
     const refreshSubscriptionData = allSubscriptions.map(async (subscription) => {
       const currentDate = Date.now();
       const daysSinceCreation = Math.round((currentDate - subscription.createdAt) / (1000 * 3600 * 24));
-      const daysInAMonth = 30;
 
       //Every time 30 days i.e a month has passed, usageCount gets reset to zero
-      if (daysSinceCreation % daysInAMonth === 0) {
-        subscription.usageCount = 0;
-        subscription.updatedAt = Date.now();
-        await subscription.save();
+      if (daysSinceCreation > 0 && daysSinceCreation % 30 === 0) {
+        if(subscription.usageCount > 0) {
+          subscription.usageCount = 0;
+          subscription.updatedAt = Date.now();
+          await subscription.save();
+        }
       }
     });
 
@@ -30,8 +31,7 @@ async function refreshUsageCount() {
 }
 
 refreshUsageCount().then(() => {
-  const currentDateTime = new Date().toLocaleString();
-  console.log(`Refresh usage count process completed successfully on ${currentDateTime}.`);
+  console.log("Refresh usage count process completed successfully!");
 }).catch(error => {
   console.error("An error occurred during the refresh usage count process:", error);
 });

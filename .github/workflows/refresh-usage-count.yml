@@ -8,7 +8,14 @@ on:
 jobs:
   refresh_usage_count:
     runs-on: ubuntu-latest
+    timeout-minutes: 2
     steps:
+      - name: set timezone
+        run: |
+          sudo timedatectl set-timezone Asia/Kolkata
+          sudo timedatectl set-ntp true
+          timedatectl
+      
       - name: Checkout code
         uses: actions/checkout@v3
 

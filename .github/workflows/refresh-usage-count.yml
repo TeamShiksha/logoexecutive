@@ -2,7 +2,7 @@ name: Refresh Usage Count
 
 on:
   schedule:
-    - cron: '0 0 * * *'
+    - cron: "30 18 * * *"
   workflow_dispatch:
 
 jobs:

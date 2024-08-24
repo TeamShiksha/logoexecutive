@@ -6,23 +6,31 @@ async function refreshUsageCount() {
   try {
     await mongoose.connect(process.env.MONGO_URL);
 
-    const allSubscriptions = await Subscriptions.find();
+    const allSubscriptions = await Subscriptions.find({ usageCount: { $gt: 0 }});
+    const recordsToUpdate = [];
 
-    const refreshSubscriptionData = allSubscriptions.map(async (subscription) => {
+    console.log(allSubscriptions);
+
+    const refreshSubscriptionData = allSubscriptions.map((subscription) => {
       const currentDate = Date.now();
       const daysSinceCreation = Math.round((currentDate - subscription.createdAt) / (1000 * 3600 * 24));
 
-      //Every time 30 days i.e a month has passed, usageCount gets reset to zero
       if (daysSinceCreation > 0 && daysSinceCreation % 30 === 0) {
-        if(subscription.usageCount > 0) {
-          subscription.usageCount = 0;
-          subscription.updatedAt = Date.now();
-          await subscription.save();
-        }
+        recordsToUpdate.push({
+          updateOne: {
+            filter: { _id: subscription._id },
+            update: {
+              usageCount: 0,
+              updatedAt: currentDate
+            }
+          }
+        });
       }
     });
 
-    await Promise.all(refreshSubscriptionData);
+    if (recordsToUpdate.length > 0) {
+      await Subscriptions.bulkWrite(recordsToUpdate);
+    }
   } catch(err) {
     console.log(err);
   } finally {
@@ -32,6 +40,6 @@ async function refreshUsageCount() {
 
 refreshUsageCount().then(() => {
   console.log("Refresh usage count process completed successfully!");
-}).catch(error => {
-  console.error("An error occurred during the refresh usage count process:", error);
+}).catch(err => {
+  console.error("An error occurred during the refresh usage count process:", err);
 });

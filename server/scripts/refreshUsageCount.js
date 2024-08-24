@@ -9,8 +9,6 @@ async function refreshUsageCount() {
     const allSubscriptions = await Subscriptions.find({ usageCount: { $gt: 0 }});
     const recordsToUpdate = [];
 
-    console.log(allSubscriptions);
-
     const refreshSubscriptionData = allSubscriptions.map((subscription) => {
       const currentDate = Date.now();
       const daysSinceCreation = Math.round((currentDate - subscription.createdAt) / (1000 * 3600 * 24));

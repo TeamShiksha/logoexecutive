@@ -36,6 +36,6 @@ Before pull request make sure to follow proper procedure mentioned in [CONTRIBUT
 ## Some guides
 - [Project Structure](./guides/BACKEND.md) - Back-end
 - [Project Structure](./guides/FRONTEND.md) - Front-end
-- [Firebase Collection](./guides/COLLECTIONS.md)
+- [MongoDB Collection](./guides/COLLECTIONS.md)
 - [AWS Setup](./guides/CLOUDFORMATION.md)
 - [Business APIs](./guides/BUSINESSAPI.md)

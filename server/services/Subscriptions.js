@@ -52,7 +52,7 @@ async function fetchSubscriptionByuserid(userId) {
   try {
     const subscription = await Subscriptions.findOne({ "user":userId });
     if (!subscription) return null;
-    const {_id , ...restSubscriptionData} = subscription._doc;
+    const {_id , user:undefined, ...restSubscriptionData} = subscription._doc;
     const subscriptionData = { subscriptionId:_id, ...restSubscriptionData};
     return subscriptionData;
   } catch (err) {

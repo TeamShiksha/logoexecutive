@@ -4,6 +4,7 @@ const { STATUS_CODES } = require("http");
 const { Users, UserToken } = require("../../../../models");
 const { mockUserTokens } = require("../../../../utils/mocks/UserToken");
 const { UserTokenService, UserService } = require("../../../../services");
+const { default: mongoose } = require("mongoose");
 
 jest.mock("../../../../services/UserToken", () => ({
   fetchTokenFromId: jest.fn(),
@@ -107,7 +108,7 @@ describe("GET /auth/reset-password", () => {
           expireAt: new Date("02-01-20075"),
           token: "123",
           type: "FORGOT",
-          userId: "12342",
+          user: new mongoose.Types.ObjectId(),
           userTokenId: "241254",
         })
     );

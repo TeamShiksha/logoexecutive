@@ -84,7 +84,6 @@ describe("generate-key controller", () => {
       .set("cookie", `jwt=${mockToken}`)
       .query({ keyId: new mongoose.Types.ObjectId().toString() });
     
-    console.log(response.body);
     expect(response.status).toBe(500);
     expect(response.body).toEqual({
       error: STATUS_CODES[500],

@@ -38,8 +38,7 @@ async function forgotPasswordController(req, res, next) {
         message: "Email does not exist",
         statusCode: 404,
       });
-
-    const userToken = await createForgotToken(user.userId);
+    const userToken = await createForgotToken(user._id.toString());
     if (!userToken)
       return res.status(503).json({
         error: STATUS_CODES[503],

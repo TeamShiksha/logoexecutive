@@ -47,7 +47,7 @@ async function forgotPasswordController(req, res, next) {
         statusCode: 503,
       });
 
-    const mail = mailText(userToken.tokenURL.href);
+    const mail = mailText(userToken.tokenURL());
     const nodeMailerRes = await sendEmail(user.email, mail.subject, mail.body);
     if (!nodeMailerRes.success)
       return res.status(500).json({

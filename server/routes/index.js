@@ -5,6 +5,7 @@ const authRouter = require("./auth");
 const logoRouter = require("./business");
 const adminRouter = require("./admin");
 const operatorRouter = require("./operator");
+const paginationRouter = require("./pagination");
 const cors = require("cors");
 
 const privateRouteCORS = {
@@ -25,5 +26,6 @@ router.use("/public", cors(privateRouteCORS), publicRouter);
 router.use("/business", cors({ origin: "*" }), logoRouter);
 router.use("/admin", cors(privateRouteCORS), adminRouter);
 router.use("/operator", cors(privateRouteCORS), operatorRouter);
+router.use("/common", cors(privateRouteCORS), paginationRouter);
 
 module.exports = router;

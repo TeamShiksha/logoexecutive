@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import axios from 'axios'; // Import Axios
 import Modal from '../../components/common/modal/Modal';
 import './Operator.css';
@@ -38,6 +38,41 @@ function Operator({queries}) {
 		setResponse(event.target.value);
 	};
 
+	const handleGetQueries = async () => {
+		if (!selectedQuery) return;
+
+		setLoading(true);
+		setError('');
+
+		try {
+			const params = {
+				model: "ContactUs",
+				page: currentPage,
+				limit: queriesPerPage,
+				active: activeTab === "ACTIVE"
+			};
+
+			const {data} = await axios.get('api/common/pagination', {
+				headers: {
+					'Content-Type': 'application/json',
+					Authorization: `Bearer ${localStorage.getItem('token')}`,
+				},
+				params
+			});
+
+			alert(data.message);
+			console.log(data);
+			handleModalClose();
+		} catch (err) {
+			setError(
+				err.response?.data?.message ||
+					'Failed to send response. Please try again.',
+			);
+		} finally {
+			setLoading(false);
+		}
+	}
+
 	const handleSendResponse = async () => {
 		if (!selectedQuery) return;
 
@@ -51,7 +86,7 @@ function Operator({queries}) {
 				reply: response,
 			};
 
-			const {data} = await axios.put('/revert', responsePayload, {
+			const {data} = await axios.put('api/operator/revert', responsePayload, {
 				headers: {
 					'Content-Type': 'application/json',
 					Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -129,6 +164,10 @@ function Operator({queries}) {
 			handlePageInputBlur();
 		}
 	};
+
+	useEffect(() => {
+		handleGetQueries();
+	}, []);
 
 	return (
 		<div className='operator-container'>

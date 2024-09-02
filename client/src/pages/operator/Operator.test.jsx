@@ -69,7 +69,7 @@ describe('Operator Component', () => {
 
 		await waitFor(() => expect(axios.put).toHaveBeenCalledTimes(1));
 		expect(axios.put).toHaveBeenCalledWith(
-			'/revert',
+			'api/operator/revert',
 			expect.any(Object),
 			expect.any(Object),
 		);

@@ -83,14 +83,14 @@ function Contactus() {
 		}
 	};
 
-	const sendMessage = (e) => {
+	async function sendMessage(e) {
 		e.preventDefault();
 		setValidationError(null);
 		const error = validateFormData();
 		if (error) {
 			setValidationError(error);
 		} else {
-			const success = makeRequest();
+			const success = await makeRequest();
 			if (success) {
 				setFormData(INITIAL_CONTACTUS_FORM_DATA);
 			}

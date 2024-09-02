@@ -43,7 +43,7 @@ async function get(req, res, next) {
     res.cookie(
       "resetPasswordSession",
       jwt.sign(
-        { userId: userToken.userId, token: userToken.token },
+        { userId: userToken.user.toString(), token: userToken.token },
         process.env.JWT_SECRET
       )
     );

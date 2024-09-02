@@ -9,14 +9,6 @@ import {UserContext} from '../../contexts/UserContext';
 import {useApi} from '../../hooks/useApi';
 import './Dashboard.css';
 
-function getUsedCalls(keys) {
-	let result = 0;
-	keys?.forEach((key) => {
-		result += key.usageCount;
-	});
-	return result;
-}
-
 function Dashboard() {
 	const [inputValue, setInputValue] = useState('');
 	const [deletedKey, setDeletedKey] = useState(null);
@@ -132,7 +124,7 @@ function Dashboard() {
 				<section className='dashboard-content-section'>
 					<CurrentPlan subscriptionData={userData?.subscription} />
 					<Usage
-						usedCalls={getUsedCalls(userData?.keys)}
+						usedCalls={userData?.subscription.usageCount}
 						totalCalls={userData?.subscription.usageLimit || 0}
 					/>
 					<div className='generate-api'>

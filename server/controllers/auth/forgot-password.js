@@ -38,8 +38,7 @@ async function forgotPasswordController(req, res, next) {
         message: "Email does not exist",
         statusCode: 404,
       });
-
-    const userToken = await createForgotToken(user.userId);
+    const userToken = await createForgotToken(user._id.toString());
     if (!userToken)
       return res.status(503).json({
         error: STATUS_CODES[503],
@@ -47,7 +46,7 @@ async function forgotPasswordController(req, res, next) {
         statusCode: 503,
       });
 
-    const mail = mailText(userToken.tokenURL.href);
+    const mail = mailText(userToken.tokenURL());
     const nodeMailerRes = await sendEmail(user.email, mail.subject, mail.body);
     if (!nodeMailerRes.success)
       return res.status(500).json({

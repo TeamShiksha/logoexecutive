@@ -16,7 +16,8 @@ const validEnv = {
   BUCKET_NAME: "logoexecutive",
   BUCKET_REGION: "ap-south-1",
   ACCESS_KEY: "GH67BTYLTNVVQEC6",
-  SECRET_ACCESS_KEY: "Z1Ydwv8gcywVpcwJGYWy3cDEYUOlFoiI6Aw0E"
+  SECRET_ACCESS_KEY: "Z1Ydwv8gcywVpcwJGYWy3cDEYUOlFoiI6Aw0E",
+  MONGO_URL: "mongodb://localhost:27017/logoexecutive"
 };
 
 describe("If service account key exists", () => {
@@ -160,12 +161,21 @@ describe("If service account key exists", () => {
     expect(result.error.message).toMatch('"ACCESS_KEY" is required');
   });
 
-  it("should return error message ifSECRET_ACCESS_KEY does not exist", () => {
+  it("should return error message if SECRET_ACCESS_KEY does not exist", () => {
     const env = { ...validEnv };
     delete env.SECRET_ACCESS_KEY;
     const result = validateEnv(env);
 
     expect(result).toHaveProperty("error");
     expect(result.error.message).toMatch('"SECRET_ACCESS_KEY" is required');
+  });
+
+  it("should return error message if MONGO_URL does not exist", () => {
+    const env = { ...validEnv };
+    delete env.MONGO_URL;
+    const result = validateEnv(env);
+
+    expect(result).toHaveProperty("error");
+    expect(result.error.message).toMatch('"MONGO_URL" is required');
   });
 });

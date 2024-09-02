@@ -1,0 +1,33 @@
+name: Refresh Usage Count
+
+on:
+  schedule:
+    - cron: "30 18 * * *"
+  workflow_dispatch:
+
+jobs:
+  refresh_usage_count:
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - name: set timezone
+        run: |
+          sudo timedatectl set-timezone Asia/Kolkata
+          sudo timedatectl set-ntp true
+          timedatectl
+      
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+
+      - name: Install Mongoose
+        run: npm install mongoose --legacy-peer-deps
+
+      - name: Run refreshUsageCount script
+        env:
+          MONGO_URL: ${{ secrets.MONGO_URL }}
+        run: node ./server/scripts/refreshUsageCount.js

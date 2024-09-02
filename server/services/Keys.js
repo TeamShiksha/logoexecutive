@@ -36,8 +36,9 @@ async function fetchKeysByuserid(user) {
   try {
     const keys = await Keys.find({ user: user });
     if (!keys.length) return null;
-    const filteredKeys = keys.map(({ _doc: { _id, key, ...restKeyData } }) => ({
+    const filteredKeys = keys.map(({ _doc: { _id, key, user, ...restKeyData } }) => ({
       keyId: _id,
+      user: undefined,
       ...restKeyData,
     }));
     return filteredKeys;

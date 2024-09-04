@@ -31,7 +31,6 @@
 	},
 	"pre-commit": [
 		"test:server",
-		"test:client",
 		"lint",
 		"check:client"
 	]

@@ -46,10 +46,10 @@ function Operator({queries}) {
 
 		try {
 			const params = {
-				model: "ContactUs",
+				model: 'ContactUs',
 				page: currentPage,
 				limit: queriesPerPage,
-				active: activeTab === "ACTIVE"
+				active: activeTab === 'ACTIVE',
 			};
 
 			const {data} = await axios.get('api/common/pagination', {
@@ -57,7 +57,7 @@ function Operator({queries}) {
 					'Content-Type': 'application/json',
 					Authorization: `Bearer ${localStorage.getItem('token')}`,
 				},
-				params
+				params,
 			});
 
 			alert(data.message);
@@ -71,7 +71,7 @@ function Operator({queries}) {
 		} finally {
 			setLoading(false);
 		}
-	}
+	};
 
 	const handleSendResponse = async () => {
 		if (!selectedQuery) return;

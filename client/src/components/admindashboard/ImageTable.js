@@ -3,15 +3,14 @@ import {BsArrowRepeat} from 'react-icons/bs';
 import {imageTableHeadings} from '../../constants';
 import {formatDate} from '../../utils/helpers';
 import './ImageTable.css';
-import { useState } from 'react';
+import {useState} from 'react';
 import ReuploadImageModal from './ReuploadImageModal';
 
 function ImageTable({uploadedImages, errorMessage}) {
-
 	const [showReuploadModal, setShowReuplaodModal] = useState(false);
-	
+
 	const closeShowReuplaodModal = () => {
-		setShowReuplaodModal(false)
+		setShowReuplaodModal(false);
 	};
 
 	const formattedUploadedImagesData = uploadedImages?.map((image) => ({
@@ -38,9 +37,12 @@ function ImageTable({uploadedImages, errorMessage}) {
 								<td>{image.createdAt}</td>
 								<td>{image.updatedAt}</td>
 								<td>
-									<button onClick={()=> {
-										setShowReuplaodModal(true);
-									}} className='reupload-btn'>
+									<button
+										onClick={() => {
+											setShowReuplaodModal(true);
+										}}
+										className='reupload-btn'
+									>
 										<BsArrowRepeat />
 									</button>
 								</td>

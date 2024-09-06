@@ -113,10 +113,7 @@ function ReuploadImageModal({fetchUploadedImages, onClose}) {
 						)}
 					</section>
 				</div>
-				<button
-					onClick={onClose}
-					className='modal-close-button'
-				>
+				<button onClick={onClose} className='modal-close-button'>
 					Cancel
 				</button>
 			</div>

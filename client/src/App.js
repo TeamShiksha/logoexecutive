@@ -21,6 +21,7 @@ import ScrollToAnchor from './utils/ScrollToAnchor';
 import ProtectedRoute from './utils/ProtectedRoute';
 import NotFound from './components/notfound/NotFound';
 import './App.css';
+import {OperatorProvider} from './contexts/OperatorContext';
 
 function App() {
 	return (
@@ -68,7 +69,9 @@ function App() {
 					path='/operator'
 					element={
 						<ProtectedRoute>
-							<Operator />
+							<OperatorProvider>
+								<Operator />
+							</OperatorProvider>
 						</ProtectedRoute>
 					}
 				/>

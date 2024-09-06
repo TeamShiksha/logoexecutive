@@ -1,20 +1,22 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import axios from 'axios'; // Import Axios
 import Modal from '../../components/common/modal/Modal';
 import './Operator.css';
 import Card from './Card';
 import Spinner from '../../components/spinner/Spinner';
+import {OperatorContext} from '../../contexts/OperatorContext';
 
-function Operator() {
+function Operator({defaultQueries}) {
 	const [selectedQuery, setSelectedQuery] = useState(null);
 	const [modalOpen, setModalOpen] = useState(false);
 	const [activeTab, setActiveTab] = useState('ACTIVE');
 	const [response, setResponse] = useState('');
-	const [loading, setLoading] = useState(false);
-	const [error, setError] = useState('');
+	const [load, setLoad] = useState(false);
+	const [errorMsg, setErrorMsg] = useState('');
 	const [currentPage, setCurrentPage] = useState(1);
 	const [inputPage, setInputPage] = useState(1);
-	const [queries, setQueries] = useState([]);
+	const {queries, loading, error, fetchQueries} = useContext(OperatorContext);
+	// const [queries, setQueries] = useState(defaultQueries || []);
 	const queriesPerPage = 5; // Number of queries per page
 
 	const truncateText = (text, maxLength) => {
@@ -33,49 +35,49 @@ function Operator() {
 		setModalOpen(false);
 		setSelectedQuery(null);
 		setResponse('');
-		setError('');
+		setErrorMsg('');
 	};
 
 	const handleResponseChange = (event) => {
 		setResponse(event.target.value);
 	};
 
-	const handleGetQueries = async () => {
-		setLoading(true);
-		setError('');
+	// const handleGetQueries = async () => {
+	// 	setLoading(true);
+	// 	setError('');
 
-		try {
-			const params = {
-				model: 'ContactUs',
-				page: currentPage,
-				limit: queriesPerPage,
-				active: activeTab !== 'ACTIVE',
-			};
+	// 	try {
+	// 		const params = {
+	// 			model: 'ContactUs',
+	// 			page: currentPage,
+	// 			limit: queriesPerPage,
+	// 			active: activeTab !== 'ACTIVE',
+	// 		};
 
-			const {data} = await axios.get('api/common/pagination', {
-				headers: {
-					'Content-Type': 'application/json',
-					Authorization: `Bearer ${localStorage.getItem('token')}`,
-				},
-				params,
-			});
+	// 		const {data} = await axios.get('api/common/pagination', {
+	// 			headers: {
+	// 				'Content-Type': 'application/json',
+	// 				Authorization: `Bearer ${localStorage.getItem('token')}`,
+	// 			},
+	// 			params,
+	// 		});
 
-			setQueries(data.results);
-		} catch (err) {
-			setError(
-				err.response?.data?.message ||
-					'Failed to send response. Please try again.',
-			);
-		} finally {
-			setLoading(false);
-		}
-	};
+	// 		setQueries(data.results);
+	// 	} catch (err) {
+	// 		setError(
+	// 			err.response?.data?.message ||
+	// 				'Failed to send response. Please try again.',
+	// 		);
+	// 	} finally {
+	// 		setLoading(false);
+	// 	}
+	// };
 
 	const handleSendResponse = async () => {
 		if (!selectedQuery) return;
 
-		setLoading(true);
-		setError('');
+		setLoad(true);
+		setErrorMsg('');
 
 		try {
 			const responsePayload = {
@@ -91,15 +93,14 @@ function Operator() {
 				},
 			});
 
-			alert(data.message);
 			handleModalClose();
 		} catch (err) {
-			setError(
+			setErrorMsg(
 				err.response?.data?.message ||
 					'Failed to send response. Please try again.',
 			);
 		} finally {
-			setLoading(false);
+			setLoad(false);
 		}
 	};
 
@@ -164,13 +165,13 @@ function Operator() {
 	};
 
 	useEffect(() => {
-		handleGetQueries();
+		fetchQueries(activeTab !== 'ACTIVE', inputPage, 10);
 	}, [activeTab]);
-
+	console.log({queries});
 	return (
-		<div data-testid="testid-operator" className='operator-container'>
+		<div data-testid='testid-operator' className='operator-container'>
 			{loading && <Spinner />}
-			<div data-testid="tabs-container" className='tabs'>
+			<div data-testid='tabs-container' className='tabs'>
 				<button
 					className={`tab ${activeTab === 'ACTIVE' ? 'active' : ''}`}
 					onClick={() => handleTabChange('ACTIVE')}
@@ -184,7 +185,7 @@ function Operator() {
 					ARCHIVED
 				</button>
 			</div>
-			<div data-testid="tab-content-container" className='tab-content'>
+			<div data-testid='tab-content-container' className='tab-content'>
 				{queries.length === 0 ? (
 					<p>No queries available.</p>
 				) : (
@@ -291,13 +292,13 @@ function Operator() {
 							onChange={handleResponseChange}
 							placeholder='Write your response here...'
 						/>
-						{error && <p className='error-message'>*{error}</p>}
+						{errorMsg && <p className='error-message'>*{errorMsg}</p>}
 						<button
 							className='send-response-button'
 							onClick={handleSendResponse}
-							disabled={loading} // Disable button while loading
+							disabled={load} // Disable button while loading
 						>
-							{loading ? 'Sending...' : 'Send'}
+							{load ? 'Sending...' : 'Send'}
 						</button>
 					</div>
 				)}

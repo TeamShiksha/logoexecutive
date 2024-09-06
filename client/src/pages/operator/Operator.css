@@ -91,7 +91,15 @@
 }
 
 .query-details {
-	padding: 20px;
+	padding: 10px;
+}
+
+.query-details > h2 {
+	margin-bottom: 10px;
+}
+
+.query-details > p {
+	margin-bottom: 10px;
 }
 
 /* 
@@ -114,16 +122,17 @@
 	/* Remove margins around the textarea */
 	padding: 10px;
 	/* Add padding inside the textarea for better readability */
-	border: 1px solid #ccc;
+	border: 2px double #ccc;
 	/* Add a border to the textarea */
 	box-sizing: border-box;
 	/* Ensure padding and border are included in the width and height */
 	resize: none;
+	margin-bottom: 10px;
 	/* Prevent resizing if you don't want users to resize it */
 }
 
 .send-response-button {
-	padding: 10px 50px;
+	padding: 10px 30px;
 	background-color: rgb(79, 70, 229) !important;
 	/* Force button color to purple */
 	color: white;
@@ -132,6 +141,11 @@
 	cursor: pointer;
 	margin-left: auto;
 	margin-right: auto;
-	width: 40%;
+	width: auto;
 	display: block;
+}
+
+.error-message {
+	font-size: small;
+	color: red;
 }

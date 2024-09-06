@@ -22,54 +22,6 @@ import ProtectedRoute from './utils/ProtectedRoute';
 import NotFound from './components/notfound/NotFound';
 import './App.css';
 
-const dummyQueries = [
-	{
-		name: 'Sujal Maiti',
-		email: 'sujal@example.com',
-		message:
-			'Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia,molestiae quas vel sint commodi repudiandae consequuntur voluptatum laborumnumquam blanditiis harum quisquam eius sed odit fugiat iusto fuga praesentiumoptio, eaque rerum!',
-	},
-	{
-		name: 'Sujal Maiti',
-		email: 'sujal@example.com',
-		message:
-			'Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia,molestiae quas vel sint commodi repudiandae consequuntur voluptatum laborumnumquam blanditiis harum quisquam eius sed odit fugiat iusto fuga praesentiumoptio, eaque rerum!',
-	},
-
-	{
-		name: 'Sujal Maiti',
-		email: 'sujal@example.com',
-		message:
-			'Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia,molestiae quas vel sint commodi repudiandae consequuntur voluptatum laborumnumquam blanditiis harum quisquam eius sed odit fugiat iusto fuga praesentiumoptio, eaque rerum!',
-	},
-
-	{
-		name: 'Sujal Maiti',
-		email: 'sujal@example.com',
-		message:
-			'Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia,molestiae quas vel sint commodi repudiandae consequuntur voluptatum laborumnumquam blanditiis harum quisquam eius sed odit fugiat iusto fuga praesentiumoptio, eaque rerum!',
-	},
-	{
-		name: 'Sujal Maiti',
-		email: 'sujal@example.com',
-		message:
-			'Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia,molestiae quas vel sint commodi repudiandae consequuntur voluptatum laborumnumquam blanditiis harum quisquam eius sed odit fugiat iusto fuga praesentiumoptio, eaque rerum!',
-	},
-	{
-		name: 'Sujal Maiti',
-		email: 'sujal@example.com',
-		message:
-			'Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia,molestiae quas vel sint commodi repudiandae consequuntur voluptatum laborumnumquam blanditiis harum quisquam eius sed odit fugiat iusto fuga praesentiumoptio, eaque rerum!',
-	},
-
-	{
-		name: 'Sujal Maiti',
-		email: 'sujal@example.com',
-		message:
-			'Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia,molestiae quas vel sint commodi repudiandae consequuntur voluptatum laborumnumquam blanditiis harum quisquam eius sed odit fugiat iusto fuga praesentiumoptio, eaque rerum!',
-	},
-];
-
 function App() {
 	return (
 		<div className='App'>
@@ -116,7 +68,7 @@ function App() {
 					path='/operator'
 					element={
 						<ProtectedRoute>
-							<Operator queries={dummyQueries} />
+							<Operator />
 						</ProtectedRoute>
 					}
 				/>

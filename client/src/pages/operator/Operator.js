@@ -168,9 +168,9 @@ function Operator() {
 	}, [activeTab]);
 
 	return (
-		<div className='operator-container'>
+		<div data-testid="testid-operator" className='operator-container'>
 			{loading && <Spinner />}
-			<div className='tabs'>
+			<div data-testid="tabs-container" className='tabs'>
 				<button
 					className={`tab ${activeTab === 'ACTIVE' ? 'active' : ''}`}
 					onClick={() => handleTabChange('ACTIVE')}
@@ -184,7 +184,7 @@ function Operator() {
 					ARCHIVED
 				</button>
 			</div>
-			<div className='tab-content'>
+			<div data-testid="tab-content-container" className='tab-content'>
 				{queries.length === 0 ? (
 					<p>No queries available.</p>
 				) : (

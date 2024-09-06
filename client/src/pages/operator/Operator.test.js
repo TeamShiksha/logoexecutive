@@ -1,24 +1,55 @@
 import React from 'react';
 import {render, fireEvent, screen, waitFor} from '@testing-library/react';
 import axios from 'axios';
-
 import Operator from './Operator';
+import {UserContext} from '../../contexts/UserContext';
+
+jest.mock('axios');
 
 describe('Operator Component', () => {
-	beforeEach(async () => {
-		await axios.get('api/operator/data', {
-			params: {model: 'ContactUs', page: 1, limit: 1, active: true},
-		});
-	});
+	const mockQueries = [
+		{
+			_id: '66bf3695a4e3b9dab1d6f8e9',
+			email: 'ayushsanjpro7@gmail.com',
+			name: 'Ayush seven',
+			message:
+				'Contact us if you are experiencing issues with our product or have any questions',
+			activityStatus: false,
+			assignedTo: null,
+			createdAt: '2024-08-16T11:23:01.684Z',
+			updatedAt: '2024-08-16T11:23:01.684Z',
+			__v: 0,
+		},
+	];
 
-	afterEach(() => {
-		axios.mockClear();
+	const handleGetQueries = jest.fn();
+
+	const renderOperator = (queries = mockQueries) => {
+		render(
+			<UserContext.Provider value={{queries, handleGetQueries}}>
+				<Operator />
+			</UserContext.Provider>,
+		);
+	};
+
+	it('renders Operator with all its components', () => {
+		renderOperator();
+		const operatorContainer = screen.getByTestId('operator-container');
+		expect(operatorContainer).toBeInTheDocument();
+		const tabs = screen.getByTestId('tabs');
+		expect(tabs).toBeInTheDocument();
+		const tabsContainer = screen.getByTestId('tabs-content');
+		expect(tabsContainer).toBeInTheDocument();
 	});
 
 	test('renders ACTIVE tab by default', () => {
 		render(<Operator />);
 		expect(screen.getByText('ACTIVE')).toHaveClass('active');
-		expect(screen.getByText('Test Message 1')).toBeInTheDocument();
+		expect(
+			screen.getByText(
+				'Contact us if you are experiencing issues with our product or have any questions',
+			),
+		).toBeInTheDocument();
 	});
 
 	test('switches to ARCHIVED tab when clicked', () => {

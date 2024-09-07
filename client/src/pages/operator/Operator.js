@@ -1,5 +1,5 @@
 import React, {useContext, useEffect, useState} from 'react';
-import axios from 'axios'; // Import Axios
+import axios from 'axios';
 import Modal from '../../components/common/modal/Modal';
 import './Operator.css';
 import Card from './Card';
@@ -17,13 +17,6 @@ function Operator() {
 	const [inputPage, setInputPage] = useState(1);
 	const {queries, loading, fetchQueries} = useContext(OperatorContext);
 	const queriesPerPage = 5;
-
-	const truncateText = (text, maxLength) => {
-		if (text.length > maxLength) {
-			return text.substring(0, maxLength) + '...';
-		}
-		return text;
-	};
 
 	const handleButtonClick = (query) => {
 		setSelectedQuery(query);
@@ -116,26 +109,26 @@ function Operator() {
 			</div>
 			<div data-testid='tab-content-container' className='tab-content'>
 				{queries?.results?.length === 0 ? (
-					<p>No queries available.</p>
+					<p className='no-queries'>No queries available.</p>
 				) : (
 					queries?.results?.map((query, index) => (
 						<Card key={index} className='query-card'>
 							<p>
-								<strong>Message:</strong> {truncateText(query.message, 100)}
+								<strong>Message:</strong> {query.message}
 							</p>
-							<div className='card-footer'>
-								<span className='created-at'>
-									{new Date(query.createdAt).toLocaleDateString()}
-								</span>
+							<div>
+								<p className='card-footer'>
+									{new Date(query.createdAt).toDateString()}
+								</p>
+								{activeTab !== 'ARCHIVED' && (
+									<button
+										className='view-response-button'
+										onClick={() => handleButtonClick(query)}
+									>
+										Respond
+									</button>
+								)}
 							</div>
-							{activeTab !== 'ARCHIVED' && (
-								<button
-									className='view-response-button'
-									onClick={() => handleButtonClick(query)}
-								>
-									Respond
-								</button>
-							)}
 						</Card>
 					))
 				)}
@@ -149,15 +142,23 @@ function Operator() {
 				>
 					&#8592;
 				</button>
-				{Array(queries?.results?.length).fill().map((item, idx) => (
-					<a className={currentPage === idx + 1 && 'active'} key={idx} href={`#${idx + 1}`}>{idx + 1}</a>
-				))}
+				{/* {Array(queries?.results?.length)
+					.fill()
+					.map((item, idx) => (
+						<a
+							className={currentPage === queries?.pages ? 'active' : ''}
+							key={idx}
+							href={`#${idx + 1}`}
+						>
+							{idx + 1}
+						</a>
+					))} */}
 				<button
 					className='pagination-button'
 					onClick={handleNextPage}
 					disabled={currentPage === queries?.pages}
 				>
-					&#8594; 
+					&#8594;
 				</button>
 			</div>
 
@@ -167,21 +168,18 @@ function Operator() {
 				setModal={setModalOpen}
 				showButtons={false}
 				onClose={handleModalClose}
+				containerClassName='modal'
 			>
 				{selectedQuery && (
 					<div className='query-details'>
 						<h2>Respond to Customer</h2>
-						<p>
-							<strong>Inquiry:</strong> {selectedQuery.message}
-						</p>
-
 						<textarea
 							className='response-textarea'
 							value={response}
 							onChange={handleResponseChange}
 							placeholder='Write your response here...'
 						/>
-						{errorMsg && <p className='error-message'>*{errorMsg}</p>}
+						{errorMsg && <p className='error-message'>{errorMsg}</p>}
 						<button
 							className='send-response-button'
 							onClick={handleSendResponse}

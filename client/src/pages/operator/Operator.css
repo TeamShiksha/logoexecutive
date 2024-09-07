@@ -49,23 +49,27 @@
 	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
+.query-card > div {
+	display: flex;
+	justify-content: space-between;
+	align-items: baseline;
+	margin-top: 15px;
+}
+
 .view-response-button {
-	position: absolute;
-	top: 50%;
-	right: 20px;
-	transform: translateY(-50%);
+	background-color: #4f46e5;
 	padding: 10px 20px;
-	background-color: rgb(79, 70, 229) !important;
-	/* Force button color to purple */
 	color: white;
-	border: none;
+	border: 2px solid #4f46e5;
 	border-radius: 4px;
 	cursor: pointer;
 }
 
 .view-response-button:hover {
-	background-color: #4f46e5;
-	/* Slightly lighter shade on hover */
+	background-color: #fff !important;
+	color: #4f46e5;
+	border: 2px solid #4f46e5;
+	transition: background-color ease-in-out 300ms;
 }
 
 .pagination {
@@ -92,7 +96,7 @@
 }
 
 .pagination-button:disabled {
-	background-color: #ccc;
+	background-color: #ccc !important;
 	cursor: not-allowed;
 }
 
@@ -101,40 +105,25 @@
 }
 
 .query-details > h2 {
-	margin-bottom: 10px;
+	margin-bottom: 20px;
 }
 
 .query-details > p {
 	margin-bottom: 10px;
 }
 
-/* 
-.response-textarea {
-    width: 100%;
-    height: 100px;
-    margin-top: 10px;
-    margin-bottom: 10px;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-} */
+.modal {
+	width: 50vw;
+}
 
 .response-textarea {
 	width: 100%;
-	/* Make the textarea take full width */
 	height: 150px;
-	/* Adjust the height as needed */
 	margin: 0;
-	/* Remove margins around the textarea */
 	padding: 10px;
-	/* Add padding inside the textarea for better readability */
 	border: 2px double #ccc;
-	/* Add a border to the textarea */
-	box-sizing: border-box;
-	/* Ensure padding and border are included in the width and height */
-	resize: none;
 	margin-bottom: 10px;
-	/* Prevent resizing if you don't want users to resize it */
+	resize: none;
 }
 
 .send-response-button {
@@ -142,13 +131,20 @@
 	background-color: rgb(79, 70, 229) !important;
 	/* Force button color to purple */
 	color: white;
-	border: none;
+	border: 2px solid #4f46e5;
 	border-radius: 4px;
 	cursor: pointer;
 	margin-left: auto;
 	margin-right: auto;
 	width: auto;
 	display: block;
+}
+
+.send-response-button:hover {
+	background-color: #fff !important;
+	color: #4f46e5;
+	border: 2px solid #4f46e5;
+	transition: background-color ease-in-out 300ms;
 }
 
 .error-message {
@@ -168,7 +164,16 @@
 	color: #fff;
 }
 
-.active {
+.pagination-active {
 	background-color: #4f46e5;
 	color: #fff;
+}
+
+.card-footer {
+	font-size: smaller;
+	align-self: baseline;
+}
+
+.no-queries {
+	height: calc(100vh - 375px);
 }

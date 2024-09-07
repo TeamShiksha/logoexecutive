@@ -6,7 +6,7 @@ import Card from './Card';
 import Spinner from '../../components/spinner/Spinner';
 import {OperatorContext} from '../../contexts/OperatorContext';
 
-function Operator({defaultQueries}) {
+function Operator() {
 	const [selectedQuery, setSelectedQuery] = useState(null);
 	const [modalOpen, setModalOpen] = useState(false);
 	const [activeTab, setActiveTab] = useState('ACTIVE');
@@ -15,9 +15,8 @@ function Operator({defaultQueries}) {
 	const [errorMsg, setErrorMsg] = useState('');
 	const [currentPage, setCurrentPage] = useState(1);
 	const [inputPage, setInputPage] = useState(1);
-	const {queries, loading, error, fetchQueries} = useContext(OperatorContext);
-	// const [queries, setQueries] = useState(defaultQueries || []);
-	const queriesPerPage = 5; // Number of queries per page
+	const {queries, loading, fetchQueries} = useContext(OperatorContext);
+	const queriesPerPage = 5;
 
 	const truncateText = (text, maxLength) => {
 		if (text.length > maxLength) {
@@ -42,37 +41,6 @@ function Operator({defaultQueries}) {
 		setResponse(event.target.value);
 	};
 
-	// const handleGetQueries = async () => {
-	// 	setLoading(true);
-	// 	setError('');
-
-	// 	try {
-	// 		const params = {
-	// 			model: 'ContactUs',
-	// 			page: currentPage,
-	// 			limit: queriesPerPage,
-	// 			active: activeTab !== 'ACTIVE',
-	// 		};
-
-	// 		const {data} = await axios.get('api/common/pagination', {
-	// 			headers: {
-	// 				'Content-Type': 'application/json',
-	// 				Authorization: `Bearer ${localStorage.getItem('token')}`,
-	// 			},
-	// 			params,
-	// 		});
-
-	// 		setQueries(data.results);
-	// 	} catch (err) {
-	// 		setError(
-	// 			err.response?.data?.message ||
-	// 				'Failed to send response. Please try again.',
-	// 		);
-	// 	} finally {
-	// 		setLoading(false);
-	// 	}
-	// };
-
 	const handleSendResponse = async () => {
 		if (!selectedQuery) return;
 
@@ -86,13 +54,14 @@ function Operator({defaultQueries}) {
 				reply: response,
 			};
 
-			const {data} = await axios.put('api/operator/revert', responsePayload, {
+			await axios.put('api/operator/revert', responsePayload, {
 				headers: {
 					'Content-Type': 'application/json',
 					Authorization: `Bearer ${localStorage.getItem('token')}`,
 				},
 			});
 
+			setActiveTab('ARCHIVED');
 			handleModalClose();
 		} catch (err) {
 			setErrorMsg(
@@ -106,68 +75,28 @@ function Operator({defaultQueries}) {
 
 	const handleTabChange = (tab) => {
 		setActiveTab(tab);
-		setCurrentPage(1); // Reset to the first page when switching tabs
-		setInputPage(1); // Reset input page when switching tabs
+		setCurrentPage(1);
+		setInputPage(1);
 	};
 
-	// Filter queries based on the active tab
-	// const activeQueries = queries.filter((query) => !query.activityStatus);
-	// const archivedQueries = queries.filter((query) => query.activityStatus);
-
-	// Get the queries for the current page
-	// const indexOfLastQuery = currentPage * queriesPerPage;
-	// const indexOfFirstQuery = indexOfLastQuery - queriesPerPage;
-	// const currentQueries =
-	// 	activeTab === 'ACTIVE'
-	// 		? activeQueries.slice(indexOfFirstQuery, indexOfLastQuery)
-	// 		: archivedQueries.slice(indexOfFirstQuery, indexOfLastQuery);
-
-	// // Pagination controls
-	// const totalPages = Math.ceil(
-	// 	(activeTab === 'ACTIVE' ? activeQueries.length : archivedQueries.length) /
-	// 		queriesPerPage,
-	// );
-
 	const handleNextPage = () => {
-		// if (currentPage < totalPages) {
-		// 	setCurrentPage(currentPage + 1);
-		// 	setInputPage(currentPage + 1);
-		// }
+		if (currentPage < queries?.pages) {
+			setCurrentPage(currentPage + 1);
+			setInputPage(currentPage + 1);
+		}
 	};
 
 	const handlePrevPage = () => {
-		// if (currentPage > 1) {
-		// 	setCurrentPage(currentPage - 1);
-		// 	setInputPage(currentPage - 1);
-		// }
-	};
-
-	const handlePageInputChange = (e) => {
-		// const value = e.target.value;
-		// if (value === '' || (Number(value) && Number(value) > 0)) {
-		// 	setInputPage(value);
-		// }
-	};
-
-	const handlePageInputBlur = () => {
-		// const page = Number(inputPage);
-		// if (page >= 1 && page <= totalPages) {
-		// 	setCurrentPage(page);
-		// } else {
-		// 	setInputPage(currentPage);
-		// }
-	};
-
-	const handlePageInputKeyPress = (e) => {
-		// if (e.key === 'Enter') {
-		// 	handlePageInputBlur();
-		// }
+		if (currentPage > 1) {
+			setCurrentPage(currentPage - 1);
+			setInputPage(currentPage - 1);
+		}
 	};
 
 	useEffect(() => {
-		fetchQueries(activeTab !== 'ACTIVE', inputPage, 10);
-	}, [activeTab]);
-	console.log({queries});
+		fetchQueries(activeTab !== 'ACTIVE', inputPage, queriesPerPage);
+	}, [activeTab, inputPage]);
+
 	return (
 		<div data-testid='testid-operator' className='operator-container'>
 			{loading && <Spinner />}
@@ -186,10 +115,10 @@ function Operator({defaultQueries}) {
 				</button>
 			</div>
 			<div data-testid='tab-content-container' className='tab-content'>
-				{queries.length === 0 ? (
+				{queries?.results?.length === 0 ? (
 					<p>No queries available.</p>
 				) : (
-					queries.map((query, index) => (
+					queries?.results?.map((query, index) => (
 						<Card key={index} className='query-card'>
 							<p>
 								<strong>Message:</strong> {truncateText(query.message, 100)}
@@ -199,78 +128,38 @@ function Operator({defaultQueries}) {
 									{new Date(query.createdAt).toLocaleDateString()}
 								</span>
 							</div>
-							<button
-								className='view-response-button'
-								onClick={() => handleButtonClick(query)}
-							>
-								Respond
-							</button>
+							{activeTab !== 'ARCHIVED' && (
+								<button
+									className='view-response-button'
+									onClick={() => handleButtonClick(query)}
+								>
+									Respond
+								</button>
+							)}
 						</Card>
 					))
 				)}
 			</div>
 
-			{/* Pagination Controls */}
-			{activeTab === 'ACTIVE' && queries.length > queriesPerPage && (
-				<div className='pagination'>
-					<button
-						className='pagination-button'
-						onClick={handlePrevPage}
-						disabled={currentPage === 1}
-					>
-						Previous
-					</button>
-					<span>
-						Page{' '}
-						<input
-							type='text'
-							value={inputPage}
-							onChange={handlePageInputChange}
-							onBlur={handlePageInputBlur}
-							onKeyPress={handlePageInputKeyPress}
-							className='pagination-input'
-						/>{' '}
-						{/* of {totalPages} */}
-					</span>
-					<button
-						className='pagination-button'
-						onClick={handleNextPage}
-						// disabled={currentPage === totalPages}
-					>
-						Next
-					</button>
-				</div>
-			)}
-			{activeTab === 'ARCHIVED' && queries.length > queriesPerPage && (
-				<div className='pagination'>
-					<button
-						className='pagination-button'
-						onClick={handlePrevPage}
-						disabled={currentPage === 1}
-					>
-						Previous
-					</button>
-					<span>
-						Page{' '}
-						<input
-							type='text'
-							value={inputPage}
-							onChange={handlePageInputChange}
-							onBlur={handlePageInputBlur}
-							onKeyPress={handlePageInputKeyPress}
-							className='pagination-input'
-						/>{' '}
-						{/* of {totalPages} */}
-					</span>
-					<button
-						className='pagination-button'
-						onClick={handleNextPage}
-						// disabled={currentPage === totalPages}
-					>
-						Next
-					</button>
-				</div>
-			)}
+			<div className='pagination'>
+				<button
+					className='pagination-button'
+					onClick={handlePrevPage}
+					disabled={currentPage === 1}
+				>
+					&#8592;
+				</button>
+				{Array(queries?.results?.length).fill().map((item, idx) => (
+					<a className={currentPage === idx + 1 && 'active'} key={idx} href={`#${idx + 1}`}>{idx + 1}</a>
+				))}
+				<button
+					className='pagination-button'
+					onClick={handleNextPage}
+					disabled={currentPage === queries?.pages}
+				>
+					&#8594; 
+				</button>
+			</div>
 
 			{/* Modal for detailed query */}
 			<Modal

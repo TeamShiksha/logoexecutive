@@ -20,7 +20,7 @@ export function OperatorProvider({children}) {
 				},
 			});
 			const data = res.data;
-			setQueries(data.results);
+			setQueries(data);
 		} catch (err) {
 			setError(err);
 		} finally {

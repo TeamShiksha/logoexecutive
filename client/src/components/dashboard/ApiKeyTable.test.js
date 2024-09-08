@@ -1,4 +1,5 @@
 import {render, fireEvent, screen} from '@testing-library/react';
+import {vi} from 'vitest';
 import ApiKeyTable from './ApiKeyTable';
 
 describe('ApiKeyTable', () => {
@@ -62,7 +63,7 @@ describe('ApiKeyTable', () => {
 	});
 
 	it('remove key when delete is confirmed', () => {
-		const deleteKey = jest.fn();
+		const deleteKey = vi.fn();
 		render(
 			<ApiKeyTable
 				keys={keys}
@@ -81,7 +82,7 @@ describe('ApiKeyTable', () => {
 	});
 
 	it('does not remove key when delete is cancelled', () => {
-		const deleteKey = jest.fn();
+		const deleteKey = vi.fn();
 		render(
 			<ApiKeyTable
 				keys={keys}

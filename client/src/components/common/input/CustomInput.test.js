@@ -1,6 +1,6 @@
 import {render, fireEvent, screen} from '@testing-library/react';
 import CustomInput from './CustomInput';
-
+import {vi} from 'vitest';
 describe('CustomInput', () => {
 	it('renders correctly', () => {
 		render(
@@ -16,22 +16,23 @@ describe('CustomInput', () => {
 		expect(screen.getByLabelText('Test Label')).toBeInTheDocument();
 	});
 
-	it('handles value change', () => {
-		const handleChange = jest.fn();
+	it('handles value change', async () => {
+		const handleChange = vi.fn();
 		render(
 			<CustomInput
 				type='text'
 				label='Test Label'
 				name='testName'
+				value=''
 				onChange={handleChange}
 			/>,
 		);
 
-		fireEvent.change(screen.getByLabelText('Test Label'), {
+		const inputElement = screen.getByLabelText('Test Label');
+		fireEvent.change(inputElement, {
 			target: {value: 'New Value'},
 		});
 		expect(handleChange).toHaveBeenCalled();
-		const inputElement = screen.getByLabelText('Test Label');
 		expect(inputElement).toHaveValue('New Value');
 	});
 

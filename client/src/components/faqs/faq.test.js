@@ -20,13 +20,14 @@ const faqsMockData = [
 describe('FAQ', () => {
 	it('should render the FAQ questions and answers', () => {
 		render(<FAQs />);
+
 		expect(screen.getByText('Frequently Asked Questions')).toBeInTheDocument();
+
 		fireEvent.click(screen.getByText(faqsMockData[0].title));
 		expect(screen.getByText(faqsMockData[0].steps[0])).toBeInTheDocument();
-		const stayTunedElements = screen.getAllByText('Stay tuned coming soon');
+
 		fireEvent.click(screen.getByText(faqsMockData[1].title));
-		stayTunedElements.forEach((element) => {
-			expect(element).toBeInTheDocument();
-		});
+		const stayTunedElements = screen.getAllByText('Stay tuned coming soon');
+		expect(stayTunedElements).toHaveLength(2);
 	});
 });

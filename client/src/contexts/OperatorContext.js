@@ -1,9 +1,9 @@
-import { createContext, useState } from 'react';
-import { instance } from '../api/api_instance';
+import {createContext, useState} from 'react';
+import {instance} from '../api/api_instance';
 
 export const OperatorContext = createContext();
 
-export function OperatorProvider({ children }) {
+export function OperatorProvider({children}) {
 	const [queries, setQueries] = useState([]);
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState();
@@ -29,7 +29,7 @@ export function OperatorProvider({ children }) {
 	};
 
 	return (
-		<OperatorContext.Provider value={{ queries, loading, error, fetchQueries }}>
+		<OperatorContext.Provider value={{queries, loading, error, fetchQueries}}>
 			{children}
 		</OperatorContext.Provider>
 	);

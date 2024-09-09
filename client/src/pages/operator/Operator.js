@@ -142,17 +142,6 @@ function Operator() {
 				>
 					&#8592;
 				</button>
-				{/* {Array(queries?.results?.length)
-					.fill()
-					.map((item, idx) => (
-						<a
-							className={currentPage === queries?.pages ? 'active' : ''}
-							key={idx}
-							href={`#${idx + 1}`}
-						>
-							{idx + 1}
-						</a>
-					))} */}
 				<button
 					className='pagination-button'
 					onClick={handleNextPage}

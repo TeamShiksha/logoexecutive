@@ -8,6 +8,8 @@ import ReuploadImageModal from './ReuploadImageModal';
 
 function ImageTable({uploadedImages, errorMessage}) {
 	const [showReuploadModal, setShowReuplaodModal] = useState(false);
+	const [ReuploadImageId, setReuploadImageId] = useState();
+	const [ImageName, setImageName] = useState();
 
 	const closeShowReuplaodModal = () => {
 		setShowReuplaodModal(false);
@@ -39,6 +41,9 @@ function ImageTable({uploadedImages, errorMessage}) {
 								<td>
 									<button
 										onClick={() => {
+											const i = image.domainame;
+											setReuploadImageId(image._id);
+											setImageName(i);
 											setShowReuplaodModal(true);
 										}}
 										className='reupload-btn'
@@ -59,10 +64,12 @@ function ImageTable({uploadedImages, errorMessage}) {
 					)}
 				</tbody>
 			</table>
-			{showReuploadModal && (
+			{showReuploadModal && !!ReuploadImageId && !!ImageName && (
 				<ReuploadImageModal
 					show={showReuploadModal}
 					onClose={closeShowReuplaodModal}
+					Id={ReuploadImageId}
+					ImageName={ImageName}
 				/>
 			)}
 		</div>

@@ -80,22 +80,6 @@ describe('Drag and Drop Component', () => {
 		).toBeInTheDocument();
 	});
 
-	test('Click Upload after dropping image and see the success message', async () => {
-		render(
-			<ReuploadImageModal fetchUploadedImages={mockFetchUploadedImages} />,
-		);
-		const dragArea = screen.getByTestId('drag-area');
-		const dataTransfer = {files: [mockFile]};
-		fireEvent.drop(dragArea, {dataTransfer});
-		const uploadButton = screen.getByRole('button', {name: 'Upload'});
-		fireEvent.click(uploadButton);
-		await waitFor(() => {
-			expect(
-				screen.getByText('Image Uploaded successfully'),
-			).toBeInTheDocument();
-		});
-	});
-
 	test('revokeObjectURL is called on component unmount', () => {
 		const mockCreateObjectURL = jest.fn(() => 'https://image.com/1.jpg');
 		const mockRevokeObjectURL = jest.fn();

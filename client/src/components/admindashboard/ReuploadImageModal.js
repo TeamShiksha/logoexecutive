@@ -1,10 +1,10 @@
 import PropTypes from 'prop-types';
 import {useEffect, useRef, useState} from 'react';
 import useFileHandler from '../../hooks/useFileHandler';
-import PreviewModal from './PreviewModal';
+import PreviewReuploadModal from './PreviewReuploadModal';
 import './ReuploadImageModal.css';
 
-function ReuploadImageModal({fetchUploadedImages, onClose}) {
+function ReuploadImageModal({onClose, Id, ImageName}) {
 	const validImageFormats = ['jpg', 'png', 'svg'];
 	const [isDragging, setIsDragging] = useState(false);
 	const [isModalOpen, setIsModalOpen] = useState(false);
@@ -102,13 +102,14 @@ function ReuploadImageModal({fetchUploadedImages, onClose}) {
 							</p>
 						)}
 						{image && (
-							<PreviewModal
+							<PreviewReuploadModal
 								data-testid='preview'
 								image={image}
 								handleImageNameChange={handleImageNameChange}
 								isModalOpen={isModalOpen}
 								setIsModalOpen={resetModal}
-								fetchUploadedImages={fetchUploadedImages}
+								Id={Id}
+								ImageName={ImageName}
 							/>
 						)}
 					</section>
@@ -122,7 +123,9 @@ function ReuploadImageModal({fetchUploadedImages, onClose}) {
 }
 
 ReuploadImageModal.propTypes = {
-	fetchUploadedImages: PropTypes.func.isRequired,
+	onClose: PropTypes.func.isRequired,
+	Id: PropTypes.string.isRequired,
+	ImageName: PropTypes.string.isRequired,
 };
 
 export default ReuploadImageModal;

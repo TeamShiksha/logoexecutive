@@ -97,7 +97,7 @@ describe("GET /common/pagination", () => {
         total: 0,
       }));
 
-    const response = await request(app).get(`${ENDPOINT}?model=ContactUs&page=1&limit=1&active=true`)
+    const response = await request(app).get(`${ENDPOINT}?type=queries&page=1&limit=1&active=true`)
       .set("Cookie", `jwt=${mockJWT}`);
 
     console.log(response.body); // For debugging

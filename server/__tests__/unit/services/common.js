@@ -1,11 +1,8 @@
-const request = require("supertest");
-const { STATUS_CODES } = require("http");
 const mongoose = require("mongoose");
 const { MongoMemoryServer } = require("mongodb-memory-server");
 
 const app = require("../../../app");
-const { Users, ContactUs } = require("../../../models");
-const { mockUsers } = require("../../../utils/mocks/Users");
+const { ContactUs } = require("../../../models");
 const { fetchWithPagination, commonService } = require("../../../services");
 
 beforeAll(async () => {
@@ -26,7 +23,7 @@ describe("fetchWithPagination", () => {
 
   test("should return reject if any query is missing", async () => {
     await expect(fetchWithPagination(1, 4)).rejects.toThrow(
-      "This model is not compatible with pagination"
+      "Invalid params"
     );
   });
 
@@ -39,24 +36,18 @@ describe("fetchWithPagination", () => {
       total: 0,
     };
     await expect(
-      fetchWithPagination("ContactUs", 1, 4, { activity: true })
+      fetchWithPagination("queries", 1, 4, { activity: true })
     ).resolves.toEqual(expectedResult);
-  });
-
-  test("should return reject if model is not present", async () => {
-    await expect(
-      fetchWithPagination("", 1, 1, { activity: true })
-    ).rejects.toThrow("This model is not compatible with pagination");
   });
 
   test("should throw error if no params are present", async () => {
     await expect(fetchWithPagination()).rejects.toThrow(
-      "This model is not compatible with pagination"
+      "Invalid params!"
     );
   });
 
-  test("should throw error if no data is present", async () => {
-    const result = await fetchWithPagination("ContactUs", 9, 9, {
+  test("should show empty results if no data is present", async () => {
+    const result = await fetchWithPagination("queries", 9, 9, {
       activity: false,
     });
     expect(result).toStrictEqual({

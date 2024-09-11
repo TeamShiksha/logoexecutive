@@ -4,7 +4,7 @@ const { fetchWithPagination } = require("../../services");
 
 const querySchema = Joi.object({
   model: Joi.string().trim().required().messages({
-    "string.empty": "Model name is required"
+    "string.empty": "Type is required"
   }),
   page: Joi.number().required().messages({
     "number.base": "Page number is required"
@@ -33,7 +33,7 @@ async function getOperatorDataController(req, res, next) {
       return res.status(404).json({
         statusCode: 404,
         error: STATUS_CODES[404],
-        message: "Pagination data not found"
+        message: "Data not found!"
       });
     }
 

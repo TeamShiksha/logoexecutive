@@ -1,10 +1,10 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import axios from 'axios';
 import Modal from '../../components/common/modal/Modal';
 import './Operator.css';
 import Card from './Card';
 import Spinner from '../../components/spinner/Spinner';
-import {OperatorContext} from '../../contexts/OperatorContext';
+import { OperatorContext } from '../../contexts/OperatorContext';
 
 function Operator() {
 	const [selectedQuery, setSelectedQuery] = useState(null);
@@ -15,7 +15,7 @@ function Operator() {
 	const [errorMsg, setErrorMsg] = useState('');
 	const [currentPage, setCurrentPage] = useState(1);
 	const [inputPage, setInputPage] = useState(1);
-	const {queries, loading, fetchQueries} = useContext(OperatorContext);
+	const { queries, loading, fetchQueries } = useContext(OperatorContext);
 	const queriesPerPage = 5;
 
 	const handleButtonClick = (query) => {
@@ -43,7 +43,6 @@ function Operator() {
 		try {
 			const responsePayload = {
 				id: selectedQuery._id,
-				email: selectedQuery.email,
 				reply: response,
 			};
 
@@ -59,7 +58,7 @@ function Operator() {
 		} catch (err) {
 			setErrorMsg(
 				err.response?.data?.message ||
-					'Failed to send response. Please try again.',
+				'Failed to send response. Please try again.',
 			);
 		} finally {
 			setLoad(false);

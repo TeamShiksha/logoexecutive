@@ -125,7 +125,6 @@ describe("updateForm", () => {
     await form.save();
     const updatedForm = await updateForm(
       form._id,
-      form.email,
       "This is a reply",
       mockOperator._id,
     );
@@ -154,7 +153,7 @@ describe("updateForm", () => {
       throw new Error("MongoDB operation failed");
     });
     await expect(
-      updateForm(form._id, form.email, "Reply", mockOperator._id),
+      updateForm(form._id, "Reply", mockOperator._id),
     ).rejects.toThrow("MongoDB operation failed");
   });
 });

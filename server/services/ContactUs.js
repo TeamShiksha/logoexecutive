@@ -45,16 +45,16 @@ async function createForm(formData) {
  * @param {String} reply
  * @param {String} operatorId
  */
-async function updateForm(formId, email, reply, operatorId) {
+async function updateForm(formId, reply, operatorId) {
   try {
-    const currentForm = await ContactUs.findOne({ _id: formId, email });
+    const currentForm = await ContactUs.findOne({ _id: formId });
     if (!currentForm) throw new Error("Form not found");
     if (currentForm.activityStatus) {
       return { alreadyReplied: true };
     }
 
     const result = await ContactUs.updateOne(
-      { _id: formId, email },
+      { _id: formId },
       {
         $set: {
           reply,
@@ -64,7 +64,7 @@ async function updateForm(formId, email, reply, operatorId) {
       }
     );
     if (result.modifiedCount === 0) throw new Error("MongoDB operation failed");
-    return { reply, activityStatus: true, assignedTo: operatorId };
+    return { reply, activityStatus: true, assignedTo: operatorId, email: currentForm.email };
   } catch (error) {
     throw error;
   }

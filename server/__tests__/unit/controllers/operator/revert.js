@@ -49,7 +49,6 @@ describe("Revert To Customer Controller", () => {
     const mockContactUsData = mockContactUsForm[0];
     const mockJWT = new Users(mockUsers[0]).generateJWT();
     const mockPayload = {
-      email: mockContactUsData.email,
       id: mockContactUsData._id,
       reply: "dsbb hdsjbddnn",
     };
@@ -72,7 +71,6 @@ describe("Revert To Customer Controller", () => {
     const mockJWT = mockOperator.generateJWT();
 
     const mockPayload = {
-      email: form.email,
       id: form._id,
       reply: "Hi there where are you now where are you now when I need you",
     };
@@ -103,7 +101,6 @@ describe("Revert To Customer Controller", () => {
     await form.save();
     const mockJWT = mockOperator.generateJWT();
     const mockPayload = {
-      email: form.email,
       id: form._id,
       reply: "Hi there where are you now where are you now when I need you",
     };
@@ -138,7 +135,6 @@ describe("Revert To Customer Controller", () => {
     await form.save();
     const mockJWT = mockOperator.generateJWT();
     const mockPayload = {
-      email: form.email,
       id: form._id,
       reply: "Hi there where are you now where are you now when I need you",
     };

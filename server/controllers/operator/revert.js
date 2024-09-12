@@ -17,15 +17,6 @@ const revertToCustomerPayloadSchema = Joi.object().keys({
       "any.invalid": "Key ID must be a valid mongodb objectId",
       "any.required": "Key ID is required"
     }),
-  email: Joi.string()
-    .trim()
-    .required()
-    .regex(/^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/)
-    .messages({
-      "string.base": "Email must be a string",
-      "any.required": "Email is required",
-      "string.pattern.base": "Invalid email"
-    }),
   reply: Joi.string()
     .trim()
     .required()
@@ -62,8 +53,8 @@ async function revertToCustomerController(req, res, next) {
       });
     }
 
-    const { id, email, reply } = value;
-    const revertForm = await updateForm(id, email, reply, userId);
+    const { id, reply } = value;
+    const revertForm = await updateForm(id, reply, userId);
     if (revertForm?.alreadyReplied) {
       return res.status(409).json({
         statusCode: 409,
@@ -72,7 +63,7 @@ async function revertToCustomerController(req, res, next) {
       });
     }
     const emailRes = await sendEmail(
-      email,
+      revertForm.email,
       "Response for your query at LogoExecutive",
       reply
     );

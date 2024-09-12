@@ -3,7 +3,7 @@ const Joi = require("joi");
 const { fetchWithPagination } = require("../../services");
 
 const querySchema = Joi.object({
-  model: Joi.string().trim().required().messages({
+  type: Joi.string().trim().required().messages({
     "string.empty": "Type is required"
   }),
   page: Joi.number().required().messages({
@@ -26,9 +26,9 @@ async function getOperatorDataController(req, res, next) {
         error: STATUS_CODES[422],
       });
 
-    const { model, page, limit, active } = req.query;
+    const { type, page, limit, active } = req.query;
 
-    const paginationData = await fetchWithPagination(model, page, limit, { activityStatus: active });
+    const paginationData = await fetchWithPagination(type, page, limit, { activityStatus: active });
     if (!paginationData) {
       return res.status(404).json({
         statusCode: 404,

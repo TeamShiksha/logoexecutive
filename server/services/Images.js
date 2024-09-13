@@ -1,5 +1,5 @@
 const { S3Client, PutObjectCommand } = require("@aws-sdk/client-s3");
-const mongoose = require("mongoose");
+const mongoose = require("mongoose");  // Not used
 const Images = require("../models/Images");
 const { cloudFrontSignedURL } = require("../utils/cloudFront");
 
@@ -81,9 +81,26 @@ async function createImageData(domainame, uploadedBy, extension) {
   }
 };
 
+async function updateImageById(id, updateObj) {
+  try {
+    const updatingImage = await Images.findByIdAndUpdate(id, updateObj, {
+      new: true,
+    });
+    return {
+      _id: updatingImage._id,
+      createdAt: updatingImage.createdAt,
+      updatedAt: updatingImage.updatedAt,
+    };
+  } catch (error) {
+    console.error(`Failed to update image data: ${error}`);
+    throw error;
+  }
+}
+
 module.exports = {
   createImageData,
   fetchImageByCompanyFree,
   uploadToS3,
   getImagesByUserId,
+  updateImageById,
 };

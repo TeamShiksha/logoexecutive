@@ -3,8 +3,18 @@ import {BsArrowRepeat} from 'react-icons/bs';
 import {imageTableHeadings} from '../../constants';
 import {formatDate} from '../../utils/helpers';
 import './ImageTable.css';
+import {useState} from 'react';
+import ReuploadImageModal from './ReuploadImageModal';
 
 function ImageTable({uploadedImages, errorMessage}) {
+	const [showReuploadModal, setShowReuplaodModal] = useState(false);
+	const [ReuploadImageId, setReuploadImageId] = useState();
+	const [ImageName, setImageName] = useState();
+
+	const closeShowReuplaodModal = () => {
+		setShowReuplaodModal(false);
+	};
+
 	const formattedUploadedImagesData = uploadedImages?.map((image) => ({
 		...image,
 		createdAt: formatDate(image.createdAt),
@@ -29,7 +39,15 @@ function ImageTable({uploadedImages, errorMessage}) {
 								<td>{image.createdAt}</td>
 								<td>{image.updatedAt}</td>
 								<td>
-									<button disabled className='reupload-btn'>
+									<button
+										onClick={() => {
+											const i = image.domainame;
+											setReuploadImageId(image._id);
+											setImageName(i);
+											setShowReuplaodModal(true);
+										}}
+										className='reupload-btn'
+									>
 										<BsArrowRepeat />
 									</button>
 								</td>
@@ -46,6 +64,14 @@ function ImageTable({uploadedImages, errorMessage}) {
 					)}
 				</tbody>
 			</table>
+			{showReuploadModal && !!ReuploadImageId && !!ImageName && (
+				<ReuploadImageModal
+					show={showReuploadModal}
+					onClose={closeShowReuplaodModal}
+					Id={ReuploadImageId}
+					ImageName={ImageName}
+				/>
+			)}
 		</div>
 	);
 }

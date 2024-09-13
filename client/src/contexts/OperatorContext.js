@@ -13,7 +13,7 @@ export function OperatorProvider({children}) {
 		try {
 			const res = await instance.get('/api/common/pagination', {
 				params: {
-					model: 'ContactUs',
+					type: 'queries',
 					page: currentPage,
 					limit: queriesPerPage,
 					active: isActive,

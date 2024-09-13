@@ -19,17 +19,20 @@ async function fetchWithPagination(type, page, limit, query = {}) {
   try {
     const modelName = models[type];
     if (!modelName) {
-      throw new Error("Invalid params!");
+      throw new Error(`Invalid params!${type}`);
     }
 
     const skip = (page - 1) * limit;
     const total = await models[type].countDocuments(query);
     const pages = Math.ceil(total / limit);
 
-    const results = await models[type].find(query)
+    const fields = "_id message activityStatus createdAt updatedAt";
+    const q = models[type]
+      .find(query)
+      .select(fields)
       .skip(skip)
       .limit(limit);
-
+    const results = await q;
     return {
       total,
       pages,

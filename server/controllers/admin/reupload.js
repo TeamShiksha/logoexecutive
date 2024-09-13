@@ -3,7 +3,6 @@ const { STATUS_CODES } = require("http");
 const Joi = require("joi");
 let { UserType } = require("../../utils/constants");
 const Image = require("../../models/Images");
-// const { updateImageById } = require("../../services/Images");
 const { Images } = require("../../models");
 const mongoose = require("mongoose");
 const { updateImageById } = require("../../services/Images");

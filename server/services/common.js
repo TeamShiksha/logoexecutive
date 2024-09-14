@@ -15,6 +15,8 @@ const models = {
   // please add others if required...
 };
 
+const fields = "_id message activityStatus createdAt updatedAt";
+
 async function fetchWithPagination(type, page, limit, query = {}) {
   try {
     const modelName = models[type];
@@ -26,7 +28,6 @@ async function fetchWithPagination(type, page, limit, query = {}) {
     const total = await models[type].countDocuments(query);
     const pages = Math.ceil(total / limit);
 
-    const fields = "_id message activityStatus createdAt updatedAt";
     const q = models[type]
       .find(query)
       .select(fields)

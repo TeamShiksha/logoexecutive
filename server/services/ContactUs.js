@@ -5,6 +5,7 @@ const { ContactUs } = require("../models");
  * @param {string} email - email submitted in form
  * @returns {boolean} - true when form is found in database else false.
  **/
+
 async function formExists(email) {
   try {
     const formQuery = await ContactUs.findOne({ email, activityStatus: true });
@@ -14,6 +15,7 @@ async function formExists(email) {
     throw error;
   }
 }
+
 /**
  * Creates user in the DB
  * @param {Object} formData
@@ -21,6 +23,7 @@ async function formExists(email) {
  * @param {String} formData.email
  * @param {String} formData.message
  **/
+
 async function createForm(formData) {
   try {
     const newForm = new ContactUs({
@@ -45,9 +48,10 @@ async function createForm(formData) {
  * @param {String} reply
  * @param {String} operatorId
  */
+
 async function updateForm(formId, reply, operatorId) {
   try {
-    const currentForm = await ContactUs.findOne({ _id: formId });
+    const currentForm = await ContactUs.findById(formId);
     if (!currentForm) throw new Error("Form not found");
     if (currentForm.activityStatus) {
       return { alreadyReplied: true };

@@ -8,7 +8,7 @@ import Signin from './signin/Signin';
 import Signup from './signup/Signup';
 import Home from './home/Home';
 import AdminDashboard from './admin/Admin';
-
+import Operator from './operator/Operator';
 export {
 	About,
 	Account,
@@ -20,4 +20,5 @@ export {
 	ResetPassword,
 	Signin,
 	Signup,
+	Operator,
 };

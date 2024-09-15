@@ -13,6 +13,7 @@ import {destroyKeyHandler} from './handlers/destroyKey-handler';
 import imageUploadHandler from './handlers/imageUpload-handler';
 import {uploadedImagesHandler} from './handlers/uploadedImages-handler';
 import {displayImagesHandler} from './handlers/demo-displayImage-handler';
+import {queriesHandler} from './handlers/queries-handler';
 
 const handlers = [
 	...signinHandler,
@@ -30,6 +31,7 @@ const handlers = [
 	...imageUploadHandler,
 	...uploadedImagesHandler,
 	...displayImagesHandler,
+	...queriesHandler,
 ];
 
 export default handlers;

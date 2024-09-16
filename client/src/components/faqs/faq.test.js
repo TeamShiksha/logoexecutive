@@ -1,5 +1,7 @@
+import {describe, it, expect} from 'vitest';
 import {render, screen, fireEvent} from '@testing-library/react';
 import FAQs from './FAQs';
+
 const faqsMockData = [
 	{
 		title: 'How to create API Keys ?',
@@ -21,13 +23,13 @@ describe('FAQ', () => {
 	it('should render the FAQ questions and answers', () => {
 		render(<FAQs />);
 
-		expect(screen.getByText('Frequently Asked Questions')).toBeInTheDocument();
+		expect(screen.getByText('Frequently Asked Questions')).toBeDefined();
 
 		fireEvent.click(screen.getByText(faqsMockData[0].title));
-		expect(screen.getByText(faqsMockData[0].steps[0])).toBeInTheDocument();
+		expect(screen.getByText(faqsMockData[0].steps[0])).toBeDefined();
 
 		fireEvent.click(screen.getByText(faqsMockData[1].title));
 		const stayTunedElements = screen.getAllByText('Stay tuned coming soon');
-		expect(stayTunedElements).toHaveLength(2);
+		expect(stayTunedElements.length).toBe(2);
 	});
 });

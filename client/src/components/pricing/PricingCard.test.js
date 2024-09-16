@@ -1,6 +1,5 @@
-import React from 'react';
+import {describe, it, expect} from 'vitest';
 import {render, screen} from '@testing-library/react';
-
 import PricingCard from './PricingCard';
 
 describe('PricingCard component', () => {
@@ -15,13 +14,13 @@ describe('PricingCard component', () => {
 
 	it('displays the correct content', () => {
 		render(<PricingCard content={mockContent} selectMonthly={true} />);
-		expect(screen.getByText('test-Title')).toBeInTheDocument();
-		expect(screen.getByText('test-Tagline')).toBeInTheDocument();
-		expect(screen.getByText('₹100')).toBeInTheDocument();
-		expect(screen.getByText('/month')).toBeInTheDocument();
-		expect(screen.getByTestId('pricing-card')).toBeInTheDocument();
-		expect(screen.getByText('test-Label')).toBeInTheDocument();
-		expect(screen.getByText('Feature 1')).toBeInTheDocument();
-		expect(screen.getByText('Feature 2')).toBeInTheDocument();
+		expect(screen.getByText('test-Title')).toBeDefined();
+		expect(screen.getByText('test-Tagline')).toBeDefined();
+		expect(screen.getByText('₹100')).toBeDefined();
+		expect(screen.getByText('/month')).toBeDefined();
+		expect(screen.getByTestId('pricing-card')).toBeDefined();
+		expect(screen.getByText('test-Label')).toBeDefined();
+		expect(screen.getByText('Feature 1')).toBeDefined();
+		expect(screen.getByText('Feature 2')).toBeDefined();
 	});
 });

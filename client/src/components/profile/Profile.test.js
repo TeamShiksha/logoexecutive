@@ -1,5 +1,6 @@
 import React from 'react';
 import {render, fireEvent, screen, waitFor} from '@testing-library/react';
+import {vi} from 'vitest';
 import Profile from './Profile';
 import {AuthContext} from '../../contexts/AuthContext';
 import {UserContext} from '../../contexts/UserContext';
@@ -40,7 +41,7 @@ describe('Profile component', () => {
 			updatedAt: '2024-04-11T10:24:38.501Z',
 		},
 	};
-	const fetchUserData = jest.fn();
+	const fetchUserData = vi.fn();
 	const renderProfile = () => {
 		render(
 			<AuthContext.Provider value={true}>
@@ -52,11 +53,12 @@ describe('Profile component', () => {
 			</AuthContext.Provider>,
 		);
 	};
+
 	it('renders without crashing', () => {
 		renderProfile();
 
-		expect(screen.getByText('Profile')).toBeInTheDocument();
-		expect(screen.getByText('Change Password')).toBeInTheDocument();
+		expect(screen.getByText('Profile')).toBeDefined();
+		expect(screen.getByText('Change Password')).toBeDefined();
 	});
 
 	it('updates first name on input change', () => {
@@ -284,7 +286,7 @@ describe('Profile component', () => {
 		await waitFor(() => {
 			expect(
 				screen.getByText(/First name should only contain alphabets/i),
-			).toBeInTheDocument();
+			).toBeDefined();
 		});
 	});
 
@@ -342,6 +344,7 @@ describe('Profile component', () => {
 			'New password cannot be same as old password',
 		);
 	});
+
 	it('should not update the password successfully if old password is invalid', async () => {
 		renderProfile();
 		const oldPasswordInput = screen.getByTestId('old-password');
@@ -361,6 +364,7 @@ describe('Profile component', () => {
 			expect(passwordError).toHaveTextContent('Current password is incorrect');
 		});
 	});
+
 	it('should update the password successfully', async () => {
 		renderProfile();
 		const oldPasswordInput = screen.getByTestId('old-password');
@@ -376,9 +380,7 @@ describe('Profile component', () => {
 		fireEvent.click(saveButton);
 
 		await waitFor(() => {
-			expect(
-				screen.getByText(/Password Updated Successfully/i),
-			).toBeInTheDocument();
+			expect(screen.getByText(/Password Updated Successfully/i)).toBeDefined();
 		});
 		expect(oldPasswordInput.innerText).toBe(undefined);
 		expect(newPasswordInput.innerText).toBe(undefined);

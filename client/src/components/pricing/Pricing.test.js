@@ -1,10 +1,10 @@
-import React from 'react';
+import {describe, it, expect} from 'vitest';
 import {render, fireEvent, screen} from '@testing-library/react';
 import Pricing from './Pricing';
 import {pricingCardsContent} from '../../constants';
 
 describe('Pricing component', () => {
-	test('by default, Monthly should be selected', () => {
+	it('by default, Monthly should be selected', () => {
 		render(<Pricing />);
 		const monthlySwitch = screen.getByTestId('monthly');
 		const annuallySwitch = screen.getByTestId('annually');
@@ -12,7 +12,7 @@ describe('Pricing component', () => {
 		expect(annuallySwitch).not.toHaveClass('active');
 	});
 
-	test('switches between Monthly and Annually views on switch click', () => {
+	it('switches between Monthly and Annually views on switch click', () => {
 		render(<Pricing />);
 		const monthlySwitch = screen.getByTestId('monthly');
 		const annuallySwitch = screen.getByTestId('annually');
@@ -29,9 +29,9 @@ describe('Pricing component', () => {
 		expect(annuallySwitch).not.toHaveClass('active');
 	});
 
-	test('renders pricing cards based on pricingCardsContent', () => {
+	it('renders pricing cards based on pricingCardsContent', () => {
 		render(<Pricing />);
 		const pricingCardComponents = screen.getAllByTestId('pricing-card');
-		expect(pricingCardComponents).toHaveLength(pricingCardsContent.length);
+		expect(pricingCardComponents.length).toBe(pricingCardsContent.length);
 	});
 });

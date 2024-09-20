@@ -15,7 +15,7 @@ module.exports = (options = {}) => {
         return res.status(401).json({
           error: STATUS_CODES[401],
           message: "User not signed in",
-          statusCode: 401,
+          statusCode: 401
         });
       }
 
@@ -26,14 +26,17 @@ module.exports = (options = {}) => {
         return res.status(403).json({
           error: STATUS_CODES[403],
           message: "Invalid credentials",
-          statusCode: 403,
+          statusCode: 403
         });
 
-      if (options.adminOnly && data.userType !== UserType.ADMIN)
+      if (
+        (options.adminOnly && data.userType !== UserType.ADMIN) ||
+        (options.operatorOnly && data.userType !== UserType.OPERATOR)
+      )
         return res.status(401).json({
           error: STATUS_CODES[401],
           message: "User not authorized",
-          statusCode: 401,
+          statusCode: 401
         });
 
       Object.assign(req, { userData: decodedData.data });

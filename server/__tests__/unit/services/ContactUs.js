@@ -1,8 +1,10 @@
-const { formExists, createForm } = require("../../../services");
-const { ContactUs } = require("../../../models");
+const { formExists, createForm, updateForm } = require("../../../services");
+const { ContactUs, Users } = require("../../../models");
 const { mockContactUsForm } = require("../../../utils/mocks/contactUs");
 const { MongoMemoryServer } = require("mongodb-memory-server");
 const mongoose = require("mongoose");
+const { mockUsers } = require("../../../utils/mocks/Users");
+const { UserType } = require("../../../utils/constants");
 
 beforeAll(async () => {
   const mongoServer = await MongoMemoryServer.create();
@@ -15,7 +17,6 @@ afterAll(async () => {
 });
 
 describe("formExists", () => {
-
   afterEach(async () => {
     await ContactUs.deleteMany({});
   });
@@ -59,7 +60,6 @@ describe("formExists", () => {
 });
 
 describe("createForm", () => {
-
   afterEach(async () => {
     await ContactUs.deleteMany({});
   });
@@ -68,7 +68,7 @@ describe("createForm", () => {
     const formData = {
       name: "Aman",
       email: "xartpvtasas@gmail.com",
-      message: "Hello"
+      message: "Hello",
     };
     const addedForm = await createForm(formData);
     expect(addedForm).toBeInstanceOf(ContactUs);
@@ -76,9 +76,11 @@ describe("createForm", () => {
 
   it("should not create a form when formData is incomplete", async () => {
     const formData = {
-      name: "Test User"
+      name: "Test User",
     };
-    await expect(createForm(formData)).rejects.toThrow(mongoose.Error.ValidationError);
+    await expect(createForm(formData)).rejects.toThrow(
+      mongoose.Error.ValidationError,
+    );
   });
 
   it("should return null if MongoDB save operation fails", async () => {
@@ -88,16 +90,18 @@ describe("createForm", () => {
     const formData = {
       name: "A User",
       email: "usermail@example.com",
-      message: "Hello, this is a test message."
+      message: "Hello, this is a test message.",
     };
-    await expect(createForm(formData)).rejects.toThrow("MongoDB operation failed");
+    await expect(createForm(formData)).rejects.toThrow(
+      "MongoDB operation failed",
+    );
   });
 
   it("should return a ContactUs instance with default values when MongoDB save operation returns partial data (edge case)", async () => {
     const formData = {
       name: "New User",
       email: "newuser@example.com",
-      message: "Testing minimal data handling."
+      message: "Testing minimal data handling.",
     };
     const result = await createForm(formData);
     expect(result).toBeInstanceOf(ContactUs);
@@ -105,5 +109,51 @@ describe("createForm", () => {
     expect(result.email).toEqual(formData.email);
     expect(result.message).toEqual(formData.message);
     expect(result.assignedTo).toBeNull();
+  });
+});
+
+const mockOperator = new Users(
+  mockUsers.find((item) => item.userType === UserType.OPERATOR),
+);
+describe("updateForm", () => {
+  afterEach(async () => {
+    await ContactUs.deleteMany({});
+  });
+
+  it("should update the form in the database and return the result", async () => {
+    const form = new ContactUs(mockContactUsForm[0]);
+    await form.save();
+    const updatedForm = await updateForm(
+      form._id,
+      "This is a reply",
+      mockOperator._id,
+    );
+    expect(updatedForm.reply).toEqual("This is a reply");
+    expect(updatedForm.assignedTo).toEqual(mockOperator._id);
+  });
+
+  it("should throw an error if the form is not found", async () => {
+    await expect(
+      updateForm(
+        new mongoose.Types.ObjectId(),
+        "nonexistent@example.com",
+        "Reply",
+        mockOperator._id,
+      ),
+    ).rejects.toThrow("Form not found");
+  });
+
+  it("should throw an error if MongoDB update operation fails", async () => {
+    const form = new ContactUs(mockContactUsForm[0]);
+    await form.save();
+    jest.spyOn(ContactUs, "findOne").mockImplementationOnce(() => {
+      throw new Error("MongoDB operation failed");
+    });
+    jest.spyOn(ContactUs, "updateOne").mockImplementationOnce(() => {
+      throw new Error("MongoDB operation failed");
+    });
+    await expect(
+      updateForm(form._id, "Reply", mockOperator._id),
+    ).rejects.toThrow("MongoDB operation failed");
   });
 });

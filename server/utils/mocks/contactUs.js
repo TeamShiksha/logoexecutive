@@ -1,6 +1,7 @@
-
+const { default: mongoose } = require("mongoose");
 const mockContactUsForm = [
   {
+    _id: new mongoose.Types.ObjectId(),
     email: "nonactive@gmail.com",
     name: "first last",
     message: "hasta la vista baby",
@@ -10,6 +11,7 @@ const mockContactUsForm = [
     updatedAt: new Date("01-01-2001"),
   },
   {
+    _id: new mongoose.Types.ObjectId(),
     email: "active@gmail.com",
     name: "first last",
     message: "hasta la vista baby",
@@ -17,7 +19,40 @@ const mockContactUsForm = [
     assignedTo: null,
     createdAt: new Date("01-01-2001"),
     updatedAt: new Date("01-01-2001"),
-  }
+  },
+  {
+    _id: new mongoose.Types.ObjectId(),
+    email: "someEmail@gmail.com",
+    name: "first last",
+    message: "hasta la vista baby",
+    activityStatus: true,
+    assignedTo: null,
+    createdAt: new Date("01-01-2001"),
+    updatedAt: new Date("01-01-2001"),
+    reply: "This is a mock reply",
+  },
+  {
+    _id: new mongoose.Types.ObjectId(),
+    email: "someEmail@gmail.com",
+    name: "first last",
+    message: "hasta la vista baby",
+    activityStatus: false,
+    assignedTo: null,
+    createdAt: new Date("01-01-2001"),
+    updatedAt: new Date("01-01-2001"),
+    reply: "",
+  },
+  {
+    _id: new mongoose.Types.ObjectId(),
+    email: "someEmail@gmail.com",
+    name: "first last",
+    message: "hasta la vista baby",
+    activityStatus: false,
+    assignedTo: null,
+    createdAt: new Date("01-01-2001"),
+    updatedAt: new Date("01-01-2001"),
+    reply: "",
+  },
 ];
 
 module.exports = { mockContactUsForm };

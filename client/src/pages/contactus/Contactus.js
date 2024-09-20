@@ -95,7 +95,7 @@ function Contactus() {
 				setFormData(INITIAL_CONTACTUS_FORM_DATA);
 			}
 		}
-	};
+	}
 
 	return (
 		<div className='contact-main-cont' id='contactus'>

@@ -1,9 +1,8 @@
 const Joi = require("joi");
 const { STATUS_CODES } = require("http");
-const { isAPIKeyPresent, fetchImageByCompanyFree } = require("../../services");
-const { updateApiUsageCount, isApiUsageLimitExceed } = require("../../services/Subscriptions");
-const { fetchUserByApiKey } = require("../../services/Keys");
-const Images = require("../../models/Images");
+const { fetchImageByCompanyFree } = require("../../services");
+const { updateApiUsageCount } = require("../../services/Subscriptions");
+const { Images, Keys, Subscriptions } = require("../../models/index");
 
 const getSearchQuerySchema = Joi.object({
   domainKey: Joi.string()
@@ -30,9 +29,28 @@ async function searchLogoController(req, res, next) {
 
     const { domainKey, API_KEY } = value;
     let companyNameBeginsWith = domainKey.replace(/.+\/\/|www.|\..+/g, "").toUpperCase();
+    if(companyNameBeginsWith === "") {
+      return res.status(422).json({
+        message: "domainKey URL cannot be empty",
+        statusCode: 422,
+        error: STATUS_CODES[422],
+      });
+    }
 
-    const apiKeyPresent = await isAPIKeyPresent(API_KEY);
-    if (!apiKeyPresent) {
+    const userWithSubscription = await Keys.aggregate([
+      { $match: { key: API_KEY } },
+      {
+        $lookup: {
+          from: "subscriptions",
+          localField: "user",
+          foreignField: "user",
+          as: "subscriptionDetails",
+        },
+      },
+      { $unwind: "$subscriptionDetails" },
+    ]);
+
+    if (userWithSubscription.length === 0) {
       return res.status(403).json({
         message: "Invalid API key",
         statusCode: 403,
@@ -40,13 +58,12 @@ async function searchLogoController(req, res, next) {
       });
     }
 
-    const userId =await fetchUserByApiKey(API_KEY);
-    const isExceed = await isApiUsageLimitExceed(userId);
-    if(isExceed){
+    const { subscriptionDetails } = userWithSubscription[0];
+    if (subscriptionDetails.usageCount >= subscriptionDetails.usageLimit) {
       return res.status(403).json({
         message: "Limit reached. Consider upgrading your plan",
         statusCode: 403,
-        error: STATUS_CODES[403]
+        error: STATUS_CODES[403],
       });
     }
 
@@ -54,12 +71,18 @@ async function searchLogoController(req, res, next) {
     const companyList = await Images.find({
       domainame: { $regex: regexPattern }
     });
-    
-    const companyListSorted = companyList.sort((a, b) => a.domainame.localeCompare(b.domainame));
+
+    if (companyList.length === 0) {
+      return res.status(404).json({
+        message: "No companies found matching the provided domain key.",
+        statusCode: 404,
+        error: STATUS_CODES[404],
+      });
+    }
 
     const dataList = [];
-    for(const company of companyListSorted){
-      const signedUrl = await fetchImageByCompanyFree(company.domainame);
+    for(const company of companyList){
+      const signedUrl = await fetchImageByCompanyFree(company.domainame, undefined, false);
 
       if(!signedUrl) continue;
 
@@ -68,7 +91,11 @@ async function searchLogoController(req, res, next) {
         image: signedUrl
       });
     }
-    await updateApiUsageCount(userId);
+
+    await Subscriptions.updateOne(
+      { _id: subscriptionDetails._id },
+      { $inc: { usageCount: 1 } }
+    );
     
     return res.status(200).json({
       statusCode: 200,

@@ -28,16 +28,23 @@ async function uploadToS3(file, imageName, extension) {
   }
 };
 
-async function fetchImageByCompanyFree(company, default_extension = "png") {
+async function fetchImageByCompanyFree(company, default_extension = "png", checkDb = true) {
   try {
-    const image = await Images.findOne({
-      domainame: company,
-      extension: default_extension
-    });
-    if (!image) return null;
-    const imageUrl = `${default_extension}/${image.domainame}.${default_extension}`;
+    let domainName = company;
+    
+    if (checkDb) {
+      const image = await Images.findOne({
+        domainame: company,
+        extension: default_extension
+      });
+      if (!image) return null;
+      domainName = image.domainame;
+    }
+
+    const imageUrl = `${default_extension}/${domainName}.${default_extension}`;
     const cloudFrontUrl = cloudFrontSignedURL(`/${imageUrl}`).data;
     return cloudFrontUrl;
+
   } catch (err) {
     throw err;
   }

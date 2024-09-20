@@ -1,19 +1,9 @@
 const request = require("supertest");
 const { STATUS_CODES } = require("http");
 const app = require("../../../../app");
-const { KeyService, ImageService, SubscriptionService } = require("../../../../services");
-const Images = require("../../../../models/Images");
+const { ImageService } = require("../../../../services");
+const { Images, Keys, Subscriptions } = require("../../../../models/index");
 const { mockImages } = require("../../../../utils/mocks/Images");
-
-jest.mock("../../../../services/Keys", () => ({
-  isAPIKeyPresent: jest.fn(),
-  fetchUserByApiKey: jest.fn(),
-}));
-
-jest.mock("../../../../services/Subscriptions", () => ({
-  isApiUsageLimitExceed: jest.fn(),
-  updateApiUsageCount: jest.fn(),
-}));
 
 jest.mock("../../../../services/Images", () => ({
   fetchImageByCompanyFree: jest.fn(),
@@ -63,14 +53,30 @@ describe("searchLogoController", () => {
     });
   });
 
+  it("422 - domainKey URL cannot be empty", async () => {
+    const mockQuery = {
+      domainKey: "https://.com",
+      API_KEY: "2B1B1BF5F9914BCD85A0B1122C71EDDB",
+    };
+
+    const response = await request(app).get(ENDPOINT).query(mockQuery);
+
+    expect(response.status).toBe(422);
+    expect(response.body).toEqual({
+      message: "domainKey URL cannot be empty",
+      statusCode: 422,
+      error: STATUS_CODES[422],
+    });
+  });
+
   it("403 - Invalid API key", async () => {
     const mockQuery = {
       domainKey: "dummy",
       API_KEY: "2B1B1BF5F9914BCD85A0B1122C71EDDC",
     };
-    jest.spyOn(KeyService, "isAPIKeyPresent").mockResolvedValue(false);
+    jest.spyOn(Keys, "aggregate").mockResolvedValue([]); // No user found
     const response = await request(app).get(ENDPOINT).query(mockQuery);
-
+  
     expect(response.status).toBe(403);
     expect(response.body).toEqual({
       message: "Invalid API key",
@@ -80,15 +86,18 @@ describe("searchLogoController", () => {
   });
 
   it("403 - API Key Limit reached. Consider upgrading your plan", async () => {
-    jest.spyOn(KeyService, "isAPIKeyPresent").mockResolvedValue(true);
-    jest.spyOn(KeyService, "fetchUserByApiKey").mockResolvedValue(mockUser);
-    jest.spyOn(SubscriptionService, "isApiUsageLimitExceed").mockResolvedValue(true);
     const mockQuery = {
       domainKey: "dummy",
       API_KEY: "2B1B1BF5F9914BCD85A0B1122C71EDDB",
     };
+    jest.spyOn(Keys, "aggregate").mockResolvedValue([{
+      subscriptionDetails: {
+        usageCount: 500,
+        usageLimit: 500,
+      }
+    }]);
     const response = await request(app).get(ENDPOINT).query(mockQuery);
-
+  
     expect(response.status).toBe(403);
     expect(response.body).toEqual({
       message: "Limit reached. Consider upgrading your plan",
@@ -98,15 +107,15 @@ describe("searchLogoController", () => {
   });
 
   it("500 - Unexpected error", async () => {
-    jest.spyOn(KeyService, "isAPIKeyPresent").mockImplementation(() => {
-      throw new Error("Unexpected error");
-    });
     const mockQuery = {
       domainKey: "dummy",
       API_KEY: "2B1B1BF5F9914BCD85A0B1122C71EDDB",
     };
+    jest.spyOn(Keys, "aggregate").mockImplementation(() => {
+      throw new Error("Unexpected error");
+    });
     const response = await request(app).get(ENDPOINT).query(mockQuery);
-
+  
     expect(response.status).toBe(500);
     expect(response.body).toEqual({
       message: "Unexpected error",
@@ -115,35 +124,63 @@ describe("searchLogoController", () => {
     });
   });
 
+  it("404 - No companies found", async () => {
+    const mockQuery = {
+      domainKey: "unknownDomain",
+      API_KEY: "2B1B1BF5F9914BCD85A0B1122C71EDDB",
+    };
+    jest.spyOn(Keys, "aggregate").mockResolvedValue([{
+      user: "mockUserId",
+      subscriptionDetails: {
+        usageCount: 0,
+        usageLimit: 500,
+      }
+    }]);
+    jest.spyOn(Images, "find").mockResolvedValue([]); // No companies found
+  
+    const response = await request(app).get(ENDPOINT).query(mockQuery);
+  
+    expect(response.status).toBe(404);
+    expect(response.body).toEqual({
+      message: "No companies found matching the provided domain key.",
+      statusCode: 404,
+      error: STATUS_CODES[404],
+    });
+  });
+
   it("200 - Success response when domainKey is given", async () => {
-    jest.spyOn(KeyService, "isAPIKeyPresent").mockResolvedValue(true);
-    jest.spyOn(KeyService, "fetchUserByApiKey").mockResolvedValue(mockUser);
-    jest.spyOn(SubscriptionService, "updateApiUsageCount").mockResolvedValue(mockUser);
-    jest.spyOn(SubscriptionService, "isApiUsageLimitExceed").mockResolvedValue(false);
+    const mockQuery = {
+      domainKey: "go",
+      API_KEY: "2B1B1BF5F9914BCD85A0B1122C71EDDB",
+    };
+    jest.spyOn(Keys, "aggregate").mockResolvedValue([{
+      user: "mockUserId",
+      subscriptionDetails: {
+        usageCount: 0,
+        usageLimit: 500,
+      }
+    }]);
     jest.spyOn(ImageService, "fetchImageByCompanyFree").mockResolvedValue(mockCDNLink);
     jest.spyOn(Images, "find").mockImplementation((query) => {
       const regex = query.domainame.$regex;
       const filteredImages = mockImages.filter((company) => regex.test(company.domainame));
       return filteredImages;
     });
-
-    const mockQuery = {
-      domainKey: "go",
-      API_KEY: "2B1B1BF5F9914BCD85A0B1122C71EDDB",
-    };
+    jest.spyOn(Subscriptions, "updateOne").mockResolvedValue();
+  
     const response = await request(app).get(ENDPOINT).query(mockQuery);
-
+  
     const expectedData = [
       {
         companyName: "GODADDY",
-        image: mockCDNLink
+        image: mockCDNLink,
       },
       {
         companyName: "GOOGLE",
-        image: mockCDNLink  
-      }
+        image: mockCDNLink,
+      },
     ];
-
+  
     expect(response.status).toBe(200);
     expect(response.body).toEqual({
       statusCode: 200,
@@ -152,30 +189,34 @@ describe("searchLogoController", () => {
   });
 
   it("200 - Success response when domain URL is given", async () => {
-    jest.spyOn(KeyService, "isAPIKeyPresent").mockResolvedValue(true);
-    jest.spyOn(KeyService, "fetchUserByApiKey").mockResolvedValue(mockUser);
-    jest.spyOn(SubscriptionService, "updateApiUsageCount").mockResolvedValue(mockUser);
-    jest.spyOn(SubscriptionService, "isApiUsageLimitExceed").mockResolvedValue(false);
+    const mockQuery = {
+      domainKey: "https://www.aircon.com",
+      API_KEY: "2B1B1BF5F9914BCD85A0B1122C71EDDB",
+    };
+    jest.spyOn(Keys, "aggregate").mockResolvedValue([{
+      user: "mockUserId",
+      subscriptionDetails: {
+        usageCount: 0,
+        usageLimit: 500,
+      }
+    }]);
     jest.spyOn(ImageService, "fetchImageByCompanyFree").mockResolvedValue(mockCDNLink);
     jest.spyOn(Images, "find").mockImplementation((query) => {
       const regex = query.domainame.$regex;
       const filteredImages = mockImages.filter((company) => regex.test(company.domainame));
       return filteredImages;
     });
-
-    const mockQuery = {
-      domainKey: "https://www.aircon.com",
-      API_KEY: "2B1B1BF5F9914BCD85A0B1122C71EDDB",
-    };
+    jest.spyOn(Subscriptions, "updateOne").mockResolvedValue();
+  
     const response = await request(app).get(ENDPOINT).query(mockQuery);
-
+  
     const expectedData = [
       {
         companyName: "AIRCON",
-        image: mockCDNLink
-      }
+        image: mockCDNLink,
+      },
     ];
-
+  
     expect(response.status).toBe(200);
     expect(response.body).toEqual({
       statusCode: 200,

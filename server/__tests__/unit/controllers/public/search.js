@@ -53,6 +53,19 @@ describe("demoSearchLogoController", () => {
     });
   });
 
+  it("422 - domainKey URL cannot be empty", async () => {
+    const mockQuery = { domainKey: "https://.com" };
+
+    const response = await request(app).get(ENDPOINT).query(mockQuery);
+
+    expect(response.status).toBe(422);
+    expect(response.body).toEqual({
+      message: "domainKey URL cannot be empty",
+      statusCode: 422,
+      error: STATUS_CODES[422],
+    });
+  });
+
   it("500 - Unexpected error", async () => {
     jest.spyOn(ImageService, "fetchImageByCompanyFree").mockImplementation(() => {
       throw new Error("Unexpected error");
@@ -70,6 +83,20 @@ describe("demoSearchLogoController", () => {
       message: "Unexpected error",
       error: STATUS_CODES[500],
       statusCode: 500,
+    });
+  });
+
+  it("404 - No companies found", async () => {
+    const mockQuery = { domainKey: "unknownDomain" };
+    jest.spyOn(Images, "find").mockResolvedValue([]);
+  
+    const response = await request(app).get(ENDPOINT).query(mockQuery);
+  
+    expect(response.status).toBe(404);
+    expect(response.body).toEqual({
+      message: "No companies found matching the provided domain key.",
+      statusCode: 404,
+      error: STATUS_CODES[404],
     });
   });
 

@@ -1,16 +1,17 @@
 import React from 'react';
 import {fireEvent, render, screen, waitFor} from '@testing-library/react';
 import {BrowserRouter, useNavigate} from 'react-router-dom';
+import {describe, expect, test, vi} from 'vitest';
 import {AuthContext} from '../../contexts/AuthContext';
 import Signincard from './Signincard';
 
-jest.mock('react-router', () => ({
-	...jest.requireActual('react-router'),
-	useNavigate: jest.fn(),
+vi.mock('react-router', () => ({
+	...vi.importActual('react-router'),
+	useNavigate: vi.fn(),
 }));
 
 describe('Sign In Card Component', () => {
-	const mockSetUser = jest.fn();
+	const mockSetUser = vi.fn();
 
 	const renderComponent = () => {
 		render(
@@ -32,7 +33,7 @@ describe('Sign In Card Component', () => {
 	};
 
 	beforeEach(() => {
-		useNavigate.mockReturnValue(jest.fn());
+		useNavigate.mockReturnValue(vi.fn());
 	});
 
 	test('Sign in card should be rendered properly with the proper form', () => {

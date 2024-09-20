@@ -2,6 +2,7 @@ import React from 'react';
 import {render, screen} from '@testing-library/react';
 import Account from './Account';
 import {BrowserRouter} from 'react-router-dom';
+import {describe, expect, it, vi} from 'vitest';
 import {AuthContext} from '../../contexts/AuthContext';
 import {UserContext} from '../../contexts/UserContext';
 
@@ -40,7 +41,7 @@ describe('Account Component', () => {
 			updatedAt: '2024-04-11T10:24:38.501Z',
 		},
 	};
-	const fetchUserData = jest.fn();
+	const fetchUserData = vi.fn();
 	const renderAccount = () => {
 		render(
 			<AuthContext.Provider value={false}>

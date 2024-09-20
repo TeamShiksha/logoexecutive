@@ -1,5 +1,6 @@
 import {render, screen, waitFor} from '@testing-library/react';
 import {rest} from 'msw';
+import {vi, describe, expect, it} from 'vitest';
 import {server} from '../../mocks/server.js';
 import AdminDashboard from './Admin.js';
 
@@ -62,7 +63,7 @@ describe('AdminDashboard', () => {
 	});
 
 	it('calls the makeRequest function on component mount to fetch uploaded images', async () => {
-		const requestSpy = jest.fn();
+		const requestSpy = vi.fn();
 		server.events.on('request:start', requestSpy);
 
 		render(<AdminDashboard />);

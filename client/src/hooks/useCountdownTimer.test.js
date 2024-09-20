@@ -36,6 +36,7 @@ describe('useCountdownTimer', () => {
 		const setCountdownMock = vi.fn().mockImplementation((value) => {
 			countdown = value;
 		});
+
 		const {result} = renderHook(() =>
 			useCountdownTimer(false, navigateMock, countdown, setCountdownMock),
 		);

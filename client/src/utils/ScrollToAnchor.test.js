@@ -7,6 +7,10 @@ import ScrollToAnchor from './ScrollToAnchor';
 window.HTMLElement.prototype.scrollIntoView = vi.fn();
 
 describe('ScrollToAnchor', () => {
+	beforeEach(() => {
+		vi.clearAllMocks();
+	});
+
 	const targetElementId = 'target-element';
 	it('should scroll to the target element smoothly when a hash is present in the URL', async () => {
 		render(

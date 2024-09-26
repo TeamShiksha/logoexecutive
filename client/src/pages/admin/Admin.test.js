@@ -72,7 +72,7 @@ describe('AdminDashboard', () => {
 		});
 		expect(requestSpy).toHaveBeenCalledWith(
 			expect.objectContaining({
-				url: new URL('api/admin/images', 'http://localhost'),
+				url: new URL('api/admin/images', 'http://localhost:3000'),
 			}),
 		);
 		server.events.removeListener('request:start', requestSpy);

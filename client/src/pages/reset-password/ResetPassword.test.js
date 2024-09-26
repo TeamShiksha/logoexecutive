@@ -3,10 +3,10 @@ import {render, fireEvent, waitFor, screen} from '@testing-library/react';
 import {BrowserRouter} from 'react-router-dom';
 import ResetPassword from './ResetPassword';
 import {useLocation, useNavigate} from 'react-router-dom';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import {beforeEach, describe, expect, it, vi} from 'vitest';
 
 vi.mock('react-router', () => ({
-	...vi.requireActual('react-router'),
+	...vi.importActual('react-router'),
 	useNavigate: vi.fn(),
 	useLocation: vi.fn(),
 }));

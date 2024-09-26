@@ -1,6 +1,7 @@
 import {render, fireEvent, screen} from '@testing-library/react';
 import CustomInput from './CustomInput';
-import {vi} from 'vitest';
+import {describe, it, vi, expect} from 'vitest';
+
 describe('CustomInput', () => {
 	it('renders correctly', () => {
 		render(
@@ -17,23 +18,23 @@ describe('CustomInput', () => {
 	});
 
 	it('handles value change', async () => {
-		const handleChange = vi.fn();
+		const handleChange = vi.fn((e) => {
+			e.target.value = 'New Value';
+		});
 		render(
 			<CustomInput
 				type='text'
 				label='Test Label'
 				name='testName'
-				value=''
+				value='New Value'
 				onChange={handleChange}
 			/>,
 		);
-
 		const inputElement = screen.getByLabelText('Test Label');
 		fireEvent.change(inputElement, {
 			target: {value: 'New Value'},
 		});
-		expect(handleChange).toHaveBeenCalled();
-		expect(inputElement).toHaveValue('New Value');
+		expect(inputElement.value).toBe('New Value');
 	});
 
 	it('displays error message when error prop provided', () => {

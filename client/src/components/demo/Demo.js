@@ -1,5 +1,6 @@
 import {useEffect, useState} from 'react';
 import CustomInput from '../common/input/CustomInput';
+import RaiseRequest from '../raiserequest/RaiseRequest';
 import './Demo.css';
 import {useApi} from '../../hooks/useApi';
 import Spinner from '../spinner/Spinner';
@@ -64,6 +65,7 @@ const Demo = () => {
 				<p className='image-display-error' aria-live='assertive' role='alert'>
 					{errorMsg || validationError || ''}
 				</p>
+				{errorMsg && <RaiseRequest />}
 				{isSuccess && imageUrl && (
 					<div className='demo-displaylogo'>
 						<img src={imageUrl} alt='Logo' />

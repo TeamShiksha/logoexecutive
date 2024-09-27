@@ -20,9 +20,10 @@
 	background-color: var(--smooth-purple);
 	color: var(--white);
 	font-size: var(--medium-text);
-	padding: 10px 7px;
+	padding: 12px 10px;
 	border-radius: var(--bradius);
 	border: var(--border);
+	font-weight: bold;
 }
 
 .raise-request-button:hover {

@@ -167,6 +167,11 @@ export const INITIAL_CONTACTUS_FORM_DATA = {
 	message: '',
 };
 
+export const INITIAL_RAISE_REQUEST_FORM_DATA = {
+	email: '',
+	companyUrl: '',
+};
+
 export const SubscriptionTypes = {
 	HOBBY: 'HOBBY',
 	PRO: 'PRO',

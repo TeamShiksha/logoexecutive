@@ -21,19 +21,19 @@ const getHTMLBody = (url) =>{
         <table width="100%" cellpadding="0" cellspacing="0"
           style="background-color: #ffffff; max-width: 675px; margin: 0 auto; border: 1px solid #ddd; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
           <tr>
-            <td style="padding: 20px; background-color: #6b5b95;">
+            <td style="padding: 20px; background-color: #f1f1f1; margin: 0 auto; text-align: center">
               <a href="https://logoexecutive.vercel.app/home"
-                style="color: #ffffff; text-decoration: none; display: flex; align-items: center; justify-content: center;">
+                style="color: rgb(17, 24, 39); text-decoration: none;">
                 <img src="https://logoexecutive.vercel.app/static/media/business-man-logo.3a122f718b0294570293.webp"
-                  alt="Logo" style="height: 35px; width: 35px; margin-right: 10px; filter: invert();">
+                  alt="Logo" style="height: 35px; width: 35px; margin-right: 10px; vertical-align: bottom;">
                 <span style="font-size: 24px; font-weight: 800;">Forgot Password</span>
               </a>
-            </td>
+           </td>
           </tr>
           <tr>
             <td style="padding: 50px 20px; text-align: left;">
               <p style="font-size: 16px; color: #333; margin-bottom: 10px;">Hi there,</p>
-              <p style="font-size: 16px; color: #333; margin-bottom: 10px;">Thank you for visiting Logoexecutive.</p>
+              <p style="font-size: 16px; color: #333; margin-bottom: 10px;">Thank you for visiting LogoExecutive.</p>
               <p style="font-size: 16px; color: #333; margin-bottom: 10px;"><strong>It seems like you forgot your
                   password?</strong></p>
               <p style="font-size: 16px; color: #333; margin-bottom: 10px;">Please click on the following link to reset your
@@ -49,9 +49,7 @@ const getHTMLBody = (url) =>{
                 <tr>
                   <td style="padding-bottom: 10px;">
                     <p style="font-size: 14px; color: #777; margin: 0;">
-                      This is an automated message from OpenLogo. Please do not reply to this email.
-                      <br>
-                      Copyright © 2024 | OpenLogo
+                      Copyright © 2024 | LogoExecutive
                     </p>
                   </td>
                 </tr>
@@ -66,6 +64,13 @@ const getHTMLBody = (url) =>{
                           alt="TeamShiksha Logo" style="margin-left: 5px; width: auto; height: 18px;">
                       </a>
                     </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td style="padding-top: 10px;">
+                    <p style="font-size: 10px; color: #777; margin: 0;">
+                      This is an automated message from LogoExecutive. Please do not reply to this email.
+                    </p>
                   </td>
                 </tr>
               </table>

@@ -94,6 +94,12 @@ function Signincard() {
 					onChange={handleFormChange}
 					disabled={loading}
 				/>
+				<div className='forgot-password-link'>
+					<NavLink to='/forgot-password' className='input-actiontext-link'>
+						Forgot Password
+					</NavLink>
+				</div>
+				<br />
 				<button
 					className='login-btn'
 					aria-label='Sign in to Dashboard'
@@ -109,9 +115,9 @@ function Signincard() {
 						Sign up
 					</NavLink>
 				</div>
-				<NavLink to='/forgot-password' className='input-actiontext-link'>
+				{/* <NavLink to='/forgot-password' className='input-actiontext-link'>
 					Forgot Password
-				</NavLink>
+				</NavLink> */}
 			</section>
 		</div>
 	);

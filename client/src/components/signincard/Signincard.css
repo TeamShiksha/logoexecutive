@@ -60,7 +60,7 @@
 .input-actiontext {
 	margin: 10px 0px 30px;
 	display: flex;
-	justify-content: space-between;
+	justify-content: center;
 	flex-wrap: wrap;
 	gap: 6px;
 }
@@ -71,4 +71,8 @@
 
 .input-actiontext-link {
 	text-decoration: none;
+}
+
+.forgot-password-link {
+	margin-left: 50%;
 }

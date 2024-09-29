@@ -1,6 +1,6 @@
 import {render, screen, waitFor} from '@testing-library/react';
 import ApiDocs from './ApiDocs';
-import { afterEach, beforeEach, describe, expect, it, vi, vitest } from 'vitest';
+import {afterEach, beforeEach, describe, expect, it, vi} from 'vitest';
 
 vi.mock('react-markdown', () => ({children}) => <div>{children}</div>);
 vi.mock('remark-gfm', () => () => <div />);

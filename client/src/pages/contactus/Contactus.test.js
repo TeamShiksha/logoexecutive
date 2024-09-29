@@ -1,7 +1,7 @@
 import React from 'react';
 import {render, screen, fireEvent} from '@testing-library/react';
 import {BrowserRouter} from 'react-router-dom';
-import {describe, expect, it} from 'vitest';
+import {describe, expect, it, vi} from 'vitest';
 import Contactus from './Contactus';
 import {UserContext} from '../../contexts/UserContext';
 import {AuthContext} from '../../contexts/AuthContext';

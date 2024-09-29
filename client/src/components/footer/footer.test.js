@@ -9,7 +9,7 @@ describe('Footer', () => {
 				<Footer />
 			</BrowserRouter>,
 		);
-		expect(screen.getByText('Welcome')).toBeInTheDocument();
+		expect(screen.getByText('Home')).toBeInTheDocument();
 		expect(screen.getByText('Demo')).toBeInTheDocument();
 		expect(screen.getByText('About')).toBeInTheDocument();
 		expect(screen.getByText('Contact')).toBeInTheDocument();

@@ -1,7 +1,7 @@
 import React from 'react';
 import {BrowserRouter, useNavigate} from 'react-router-dom';
 import {describe, expect, test, vi} from 'vitest';
-import {fireEvent, render, screen, waitFor} from '@testing-library/react';
+import {render, screen} from '@testing-library/react';
 import {AuthContext} from '../../contexts/AuthContext';
 import Signincard from './Signincard';
 
@@ -34,9 +34,9 @@ describe('Sign In Card Component', () => {
 		);
 	};
 
-	const changeInputValue = (inputElement, value) => {
-		fireEvent.change(inputElement, {target: {value}});
-	};
+	// const changeInputValue = (inputElement, value) => {
+	// 	fireEvent.change(inputElement, {target: {value}});
+	// };
 
 	test('Sign in card should be rendered properly with the proper form', () => {
 		renderComponent();

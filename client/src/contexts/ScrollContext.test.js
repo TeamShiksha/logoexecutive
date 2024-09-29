@@ -1,13 +1,15 @@
 import React from 'react';
 import {render} from '@testing-library/react';
 import {MemoryRouter, Routes, Route} from 'react-router-dom';
+import { describe, expect, it, vi } from 'vitest';
+
 import {ScrollProvider} from './ScrollContext';
 
-jest.mock('react-router-dom', () => {
-	const originalModule = jest.requireActual('react-router-dom');
+vi.mock('react-router-dom', () => {
+	const originalModule = vi.importActual('react-router-dom');
 	return {
 		...originalModule,
-		useLocation: jest.fn(),
+		useLocation: vi.fn(),
 	};
 });
 
@@ -17,7 +19,7 @@ describe('ScrollContext', () => {
 		let location = {pathname: '/'};
 		useLocation.mockReturnValue(location);
 
-		window.scrollTo = jest.fn();
+		window.scrollTo = vi.fn();
 
 		const App = ({path}) => (
 			<MemoryRouter initialEntries={[path]}>

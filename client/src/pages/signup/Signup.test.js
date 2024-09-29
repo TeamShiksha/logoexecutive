@@ -1,11 +1,12 @@
 import {waitFor, fireEvent, render, screen} from '@testing-library/react';
 import {BrowserRouter, Navigate} from 'react-router-dom';
+import {vi, describe, expect, it} from 'vitest';
 import Signup from './Signup';
 import {AuthContext} from '../../contexts/AuthContext';
 
-jest.mock('react-router-dom', () => ({
-	...jest.requireActual('react-router-dom'),
-	Navigate: jest.fn(() => null),
+vi.mock('react-router-dom', () => ({
+	...vi.requireActual('react-router-dom'),
+	Navigate: vi.fn(() => null),
 }));
 
 describe('Signup', () => {

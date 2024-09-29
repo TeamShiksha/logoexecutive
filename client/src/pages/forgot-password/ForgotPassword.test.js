@@ -1,5 +1,6 @@
 import React from 'react';
 import {render, screen, fireEvent, waitFor} from '@testing-library/react';
+import {describe, expect, it} from 'vitest';
 import {MemoryRouter} from 'react-router-dom';
 import ForgotPassword from './ForgotPassword';
 

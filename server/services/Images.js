@@ -1,5 +1,5 @@
 const { S3Client, PutObjectCommand } = require("@aws-sdk/client-s3");
-const mongoose = require("mongoose");
+const mongoose = require("mongoose");  // Not used
 const Images = require("../models/Images");
 const { cloudFrontSignedURL } = require("../utils/cloudFront");
 
@@ -28,16 +28,23 @@ async function uploadToS3(file, imageName, extension) {
   }
 };
 
-async function fetchImageByCompanyFree(company, default_extension = "png") {
+async function fetchImageByCompanyFree(company, default_extension = "png", checkDb = true) {
   try {
-    const image = await Images.findOne({
-      domainame: company,
-      extension: default_extension
-    });
-    if (!image) return null;
-    const imageUrl = `${default_extension}/${image.domainame}.${default_extension}`;
+    let domainName = company;
+    
+    if (checkDb) {
+      const image = await Images.findOne({
+        domainame: company,
+        extension: default_extension
+      });
+      if (!image) return null;
+      domainName = image.domainame;
+    }
+
+    const imageUrl = `${default_extension}/${domainName}.${default_extension}`;
     const cloudFrontUrl = cloudFrontSignedURL(`/${imageUrl}`).data;
     return cloudFrontUrl;
+
   } catch (err) {
     throw err;
   }
@@ -81,9 +88,26 @@ async function createImageData(domainame, uploadedBy, extension) {
   }
 };
 
+async function updateImageById(id, updateObj) {
+  try {
+    const updatingImage = await Images.findByIdAndUpdate(id, updateObj, {
+      new: true,
+    });
+    return {
+      _id: updatingImage._id,
+      createdAt: updatingImage.createdAt,
+      updatedAt: updatingImage.updatedAt,
+    };
+  } catch (error) {
+    console.error(`Failed to update image data: ${error}`);
+    throw error;
+  }
+}
+
 module.exports = {
   createImageData,
   fetchImageByCompanyFree,
   uploadToS3,
   getImagesByUserId,
+  updateImageById,
 };

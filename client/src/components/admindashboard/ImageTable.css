@@ -34,7 +34,7 @@
 	padding: 6px 10px;
 	border: none;
 	border-radius: 99px;
-	cursor: not-allowed;
+	cursor: pointer;
 }
 
 .image-table .reupload-btn > svg {

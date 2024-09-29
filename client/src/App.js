@@ -15,11 +15,13 @@ import {
 	ResetPassword,
 	Signin,
 	Signup,
+	Operator,
 } from './pages';
 import ScrollToAnchor from './utils/ScrollToAnchor';
 import ProtectedRoute from './utils/ProtectedRoute';
 import NotFound from './components/notfound/NotFound';
 import './App.css';
+import {OperatorProvider} from './contexts/OperatorContext';
 
 function App() {
 	return (
@@ -63,6 +65,16 @@ function App() {
 					}
 				/>
 				<Route path='*' element={<NotFound />} />
+				<Route
+					path='/operator'
+					element={
+						<ProtectedRoute>
+							<OperatorProvider>
+								<Operator />
+							</OperatorProvider>
+						</ProtectedRoute>
+					}
+				/>
 			</Routes>
 			<Footer />
 		</div>

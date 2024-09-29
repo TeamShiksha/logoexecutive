@@ -23,17 +23,22 @@ const contactUsSchema = new mongoose.Schema({
   },
   assignedTo: {
     type: mongoose.Schema.Types.ObjectId,
-    ref:"User"
+    ref: "User"
   },
   createdAt: {
     type: Date,
     required: true,
-    default: Date.now,
+    default: Date.now
   },
   updatedAt: {
     type: Date,
     required: true,
-    default: Date.now,
+    default: Date.now
+  },
+  reply: {
+    type: String,
+    required: false,
+    trim: true
   }
 });
 

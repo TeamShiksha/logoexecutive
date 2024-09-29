@@ -1,10 +1,11 @@
 import React from 'react';
 import {render, fireEvent, screen} from '@testing-library/react';
 import axios from 'axios';
+import { describe, expect, it, vi } from 'vitest';
 import Operator from './Operator';
 import {OperatorContext} from '../../contexts/OperatorContext';
 
-jest.mock('axios');
+vi.mock('axios');
 
 describe('Operator Component', () => {
 	const mockQueries = {
@@ -28,7 +29,7 @@ describe('Operator Component', () => {
 		],
 	};
 
-	const fetchQueries = jest.fn();
+	const fetchQueries = vi.fn();
 
 	const renderOperator = (queries = mockQueries) => {
 		render(

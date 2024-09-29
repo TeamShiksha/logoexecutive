@@ -2,8 +2,12 @@ import {render, screen, waitFor} from '@testing-library/react';
 import ApiDocs from './ApiDocs';
 import {afterEach, beforeEach, describe, expect, it, vi} from 'vitest';
 
-vi.mock('react-markdown', () => ({children}) => <div>{children}</div>);
-vi.mock('remark-gfm', () => () => <div />);
+vi.mock('react-markdown', () => ({
+	default: ({children}) => <div>{children}</div>,
+}));
+vi.mock('remark-gfm', () => ({
+	default: () => <div />,
+}));
 
 describe('ApiDocs Component', () => {
 	beforeEach(() => {

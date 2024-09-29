@@ -6,6 +6,10 @@ import {rest} from 'msw';
 import PreviewModal from './PreviewModal';
 
 describe('PreviewModal', () => {
+	beforeEach(() => {
+		vi.clearAllMocks();
+	});
+
 	const file = new Blob([''], {type: 'image/jpeg'});
 	const mockImage = {
 		name: 'test.jpg',

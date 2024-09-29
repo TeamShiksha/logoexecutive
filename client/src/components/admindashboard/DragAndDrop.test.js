@@ -7,6 +7,10 @@ import DragAndDrop from './DragAndDrop';
 global.URL.createObjectURL = vi.fn();
 
 describe('Drag and Drop Component', () => {
+	beforeEach(() => {
+		vi.clearAllMocks();
+	});
+
 	const mockFile = new File(['fileContent'], 'image.jpg', {type: 'image/jpeg'});
 	const mockTextFile = new File(['fileContent'], 'image.txt', {type: 'text'});
 	const mockFetchUploadedImages = vi.fn();

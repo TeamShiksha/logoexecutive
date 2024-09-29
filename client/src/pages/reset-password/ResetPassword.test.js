@@ -3,16 +3,17 @@ import {render, fireEvent, waitFor, screen} from '@testing-library/react';
 import {BrowserRouter} from 'react-router-dom';
 import ResetPassword from './ResetPassword';
 import {useLocation, useNavigate} from 'react-router-dom';
+import {beforeEach, describe, expect, it, vi} from 'vitest';
 
-jest.mock('react-router', () => ({
-	...jest.requireActual('react-router'),
-	useNavigate: jest.fn(),
-	useLocation: jest.fn(),
+vi.mock('react-router', () => ({
+	...vi.importActual('react-router'),
+	useNavigate: vi.fn(),
+	useLocation: vi.fn(),
 }));
 
 describe('ResetPassword component', () => {
 	beforeEach(() => {
-		useNavigate.mockReturnValue(jest.fn());
+		useNavigate.mockReturnValue(vi.fn());
 	});
 
 	it('renders reset password form', () => {

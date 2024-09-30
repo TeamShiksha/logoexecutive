@@ -10,7 +10,7 @@ const getHTMLBody = (url) =>{
       <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Forgot Password</title>
+        <title>Verify Your Email</title>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
         <link
@@ -27,7 +27,7 @@ const getHTMLBody = (url) =>{
                 style="color: rgb(17, 24, 39); text-decoration: none;">
                 <img src="https://logoexecutive.vercel.app/static/media/business-man-logo.3a122f718b0294570293.webp"
                   alt="Logo" style="height: 35px; width: 35px; margin-right: 10px; vertical-align: bottom;">
-                <span style="font-size: 24px; font-weight: 800;">Forgot Password</span>
+                <span style="font-size: 24px; font-weight: 800;">Verify Your Email</span>
               </a>
             </td>
           </tr>

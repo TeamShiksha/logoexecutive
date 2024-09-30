@@ -27,7 +27,7 @@ const getHTMLReplyForCustomer = (message, reply) => {
                 style="color: rgb(17, 24, 39); text-decoration: none;">
                 <img src="https://logoexecutive.vercel.app/static/media/business-man-logo.3a122f718b0294570293.webp"
                   alt="Logo" style="height: 35px; width: 35px; margin-right: 10px; vertical-align: bottom;">
-                <span style="font-size: 24px; font-weight: 800;">Forgot Password</span>
+                <span style="font-size: 24px; font-weight: 800;">LogoExecutive</span>
               </a>
            </td>
           </tr>

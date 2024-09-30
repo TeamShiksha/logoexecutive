@@ -49,7 +49,7 @@ const getHTMLBody = (url) =>{
                 <tr>
                   <td style="padding-bottom: 10px;">
                     <p style="font-size: 14px; color: #777; margin: 0;">
-                      Copyright © 2024 | OpenLogo
+                      Copyright © 2024 | LogoExecutive
                     </p>
                   </td>
                 </tr>

@@ -52,6 +52,7 @@ const Demo = () => {
 					Enter the name of a brand or the URL of a website for which you would
 					like to retrieve logos.
 				</p>
+
 				<CustomInput
 					type='text'
 					label='Brand name'
@@ -65,13 +66,13 @@ const Demo = () => {
 				<p className='image-display-error' aria-live='assertive' role='alert'>
 					{errorMsg || validationError || ''}
 				</p>
-				{errorMsg && <RaiseRequest />}
 				{isSuccess && imageUrl && (
 					<div className='demo-displaylogo'>
 						<img src={imageUrl} alt='Logo' />
 					</div>
 				)}
 			</form>
+			{errorMsg && <RaiseRequest />}
 		</section>
 	);
 };

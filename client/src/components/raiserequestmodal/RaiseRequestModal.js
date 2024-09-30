@@ -9,13 +9,17 @@ import {INITIAL_RAISE_REQUEST_FORM_DATA} from '../../constants';
 function RaiseRequestModal({modalOpen, setModal}) {
 	const [formData, setFormData] = useState(INITIAL_RAISE_REQUEST_FORM_DATA);
 	const [validationErrors, setValidationErrors] = useState('');
-	const {errorMsg, makeRequest, loading} = useApi({
-		url: `api/logo-requests`,
+	const {errorMsg, makeRequest, loading, data, setErrorMsg, setData} = useApi({
+		url: `api/public/logo-request`,
 		method: 'post',
 		data: formData,
 	});
 
 	const handleFormChange = (e) => {
+		setValidationErrors('');
+		setData('');
+		setErrorMsg('');
+
 		const {name, value} = e.target;
 		const trimmedValue = value.trim();
 		setValidationErrors(null);
@@ -65,13 +69,24 @@ function RaiseRequestModal({modalOpen, setModal}) {
 			<p>
 				<strong>Didn't Find the Logo? Request It Here</strong>
 			</p>
-			<p
-				className={`input-error ${validationErrors || errorMsg ? '' : 'hidden'}`}
-				aria-live='assertive'
-				role='alert'
-			>
-				{validationErrors || errorMsg || ' '}
-			</p>
+			{(validationErrors || errorMsg) && (
+				<p
+					className={`input-error ${validationErrors || errorMsg ? '' : 'hidden'}`}
+					aria-live='assertive'
+					role='alert'
+				>
+					{validationErrors || errorMsg || ' '}
+				</p>
+			)}
+			{data && (
+				<p
+					className={`input-success ${data ? '' : 'hidden'}`}
+					aria-live='assertive'
+					role='alert'
+				>
+					Request submitted successfully
+				</p>
+			)}
 			<form onSubmit={handleSubmit} className='raise-request-form'>
 				<CustomInput
 					type='email'

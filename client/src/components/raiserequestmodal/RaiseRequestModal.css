@@ -18,3 +18,29 @@
 	transition: 200ms ease-in-out;
 	cursor: pointer;
 }
+
+.input-error {
+	height: 40px;
+	display: flex;
+	align-items: flex-end;
+	color: #ff3333;
+	width: fit-content;
+	padding-top: 5px;
+}
+
+.input-error.hidden {
+	visibility: hidden;
+}
+
+.input-success {
+	height: 40px;
+	display: flex;
+	align-items: flex-end;
+	color: #7be287;
+	width: fit-content;
+	padding-top: 5px;
+}
+
+.input-success.hidden {
+	visibility: hidden;
+}

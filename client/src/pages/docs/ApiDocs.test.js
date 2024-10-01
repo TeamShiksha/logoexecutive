@@ -9,6 +9,10 @@ vi.mock('remark-gfm', () => ({
 	default: () => <div />,
 }));
 
+vi.mock('../../../../docs/docs.md', () => ({
+	default: 'mocked-docs-url.md',
+}));
+
 describe('ApiDocs Component', () => {
 	beforeEach(() => {
 		global.fetch = vi.fn();

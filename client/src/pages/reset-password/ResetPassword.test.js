@@ -1,26 +1,29 @@
 import React from 'react';
 import {render, fireEvent, waitFor, screen} from '@testing-library/react';
-import {BrowserRouter} from 'react-router-dom';
+import {MemoryRouter} from 'react-router-dom';
 import ResetPassword from './ResetPassword';
 import {useLocation, useNavigate} from 'react-router-dom';
 import {beforeEach, describe, expect, it, vi} from 'vitest';
 
-vi.mock('react-router', () => ({
-	...vi.importActual('react-router'),
+vi.mock('react-router-dom', () => ({
 	useNavigate: vi.fn(),
 	useLocation: vi.fn(),
+	MemoryRouter: ({children}) => <div>{children}</div>,
+	Routes: ({children}) => <div>{children}</div>,
+	Route: ({element}) => element,
 }));
 
 describe('ResetPassword component', () => {
 	beforeEach(() => {
+		vi.clearAllMocks();
 		useNavigate.mockReturnValue(vi.fn());
 	});
 
 	it('renders reset password form', () => {
 		render(
-			<BrowserRouter>
+			<MemoryRouter>
 				<ResetPassword />
-			</BrowserRouter>,
+			</MemoryRouter>,
 		);
 
 		expect(screen.getByText('Reset Password')).toBeInTheDocument();
@@ -34,9 +37,9 @@ describe('ResetPassword component', () => {
 
 	it('shows error message if passwords do not match', async () => {
 		render(
-			<BrowserRouter>
+			<MemoryRouter>
 				<ResetPassword />
-			</BrowserRouter>,
+			</MemoryRouter>,
 		);
 
 		fireEvent.change(screen.getByLabelText('New Password'), {
@@ -55,9 +58,9 @@ describe('ResetPassword component', () => {
 
 	it('Length less than 8', async () => {
 		render(
-			<BrowserRouter>
+			<MemoryRouter>
 				<ResetPassword />
-			</BrowserRouter>,
+			</MemoryRouter>,
 		);
 
 		fireEvent.change(screen.getByLabelText('New Password'), {
@@ -76,9 +79,9 @@ describe('ResetPassword component', () => {
 
 	it('Length greater than 30', async () => {
 		render(
-			<BrowserRouter>
+			<MemoryRouter>
 				<ResetPassword />
-			</BrowserRouter>,
+			</MemoryRouter>,
 		);
 
 		fireEvent.change(screen.getByLabelText('New Password'), {
@@ -99,9 +102,9 @@ describe('ResetPassword component', () => {
 		useLocation.mockReturnValue({search: ''});
 		const navigate = useNavigate();
 		render(
-			<BrowserRouter>
+			<MemoryRouter>
 				<ResetPassword />
-			</BrowserRouter>,
+			</MemoryRouter>,
 		);
 
 		expect(navigate).toHaveBeenCalledWith('/home');
@@ -110,9 +113,9 @@ describe('ResetPassword component', () => {
 	it('submits form successfully if passwords match', async () => {
 		useLocation.mockReturnValue({search: '?token=123'});
 		render(
-			<BrowserRouter>
+			<MemoryRouter>
 				<ResetPassword />
-			</BrowserRouter>,
+			</MemoryRouter>,
 		);
 
 		fireEvent.change(screen.getByLabelText('New Password'), {
@@ -134,9 +137,9 @@ describe('ResetPassword component', () => {
 
 	it('displays an error message for invalid token', async () => {
 		render(
-			<BrowserRouter>
+			<MemoryRouter>
 				<ResetPassword />
-			</BrowserRouter>,
+			</MemoryRouter>,
 		);
 
 		fireEvent.change(screen.getByLabelText('New Password'), {

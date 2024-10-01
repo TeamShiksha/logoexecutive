@@ -1,7 +1,7 @@
 import React from 'react';
 import {render, fireEvent, screen} from '@testing-library/react';
 import axios from 'axios';
-import { describe, expect, it, vi } from 'vitest';
+import {describe, expect, it, vi} from 'vitest';
 import Operator from './Operator';
 import {OperatorContext} from '../../contexts/OperatorContext';
 

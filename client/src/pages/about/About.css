@@ -1,41 +1,3 @@
-/* .about {
-	padding: 64px 32px 0px;
-	display: grid;
-	grid-template-columns: 1fr 1fr;
-	grid-gap: 50px 60px;
-	justify-items: center;
-	max-width: 1440px;
-	margin: 0 auto;
-}
-
-.about-section {
-	max-width: 600px;
-	border: solid 1px #000000;
-	padding: 3%;
-	border-radius: 10px;
-}
-
-.about-section-heading {
-	font-size: 2rem;
-	margin-bottom: 18px;
-	color: #111827;
-}
-
-.about-section-paragraph {
-	color: var(--description);
-	line-height: 24px;
-	font-size: var(--large-text);
-	line-height: 32px;
-	text-align: justify;
-}
-
-@media screen and (max-width: 768px) {
-	.about {
-		padding: 32px 16px;
-		grid-template-columns: 1fr;
-	}
-} */
-
 .about {
 	display: flex;
 	flex-wrap: wrap;
@@ -87,13 +49,11 @@
 	line-height: 1.6;
 }
 
-/* Add a subtle animation for paragraph on hover */
 .about-section:hover .about-section-paragraph {
 	transform: scale(1.02);
 	transition: transform 0.3s ease;
 }
 
-/* Responsive adjustments */
 @media (max-width: 768px) {
 	.about-container {
 		display: flex;
@@ -119,12 +79,10 @@
 	}
 }
 
-/* Add some variety to section colors */
 .about-section:nth-child(odd) {
 	background-color: #f9f9f9;
 }
 
-/* Add a subtle border to separate sections */
 .about-section + .about-section {
 	border-top: 1px solid #eaeaea;
 }

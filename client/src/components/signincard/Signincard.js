@@ -115,9 +115,6 @@ function Signincard() {
 						Sign up
 					</NavLink>
 				</div>
-				{/* <NavLink to='/forgot-password' className='input-actiontext-link'>
-					Forgot Password
-				</NavLink> */}
 			</section>
 		</div>
 	);

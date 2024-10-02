@@ -1,4 +1,5 @@
 import {render, screen, waitFor} from '@testing-library/react';
+import {describe, test, expect} from 'vitest';
 import {UserProvider, UserContext} from './UserContext';
 import {rest} from 'msw';
 import {useContext, useEffect} from 'react';

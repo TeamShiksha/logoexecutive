@@ -1,5 +1,6 @@
 import {render, screen, fireEvent} from '@testing-library/react';
 import AdminTable from './AdminTable';
+import {describe, it, expect, vi} from 'vitest';
 
 const mockAdminDetails = [
 	{
@@ -16,7 +17,7 @@ const mockAdminDetails = [
 
 const mockAdminTableHeadings = ['EMAIL', 'REASON', 'ACTION', 'CREATE DATE'];
 describe('AdminTable', () => {
-	const mockDeleteAdmin = jest.fn();
+	const mockDeleteAdmin = vi.fn();
 
 	it('renders the table headings correctly', () => {
 		render(

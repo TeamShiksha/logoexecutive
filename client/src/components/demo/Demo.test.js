@@ -1,35 +1,40 @@
-import React from 'react';
-import {fireEvent, render, screen, waitFor} from '@testing-library/react';
+import {describe, it, expect} from 'vitest';
+import {render, fireEvent, screen, waitFor} from '@testing-library/react';
 import Demo from './Demo';
+
 describe('Demo Component', () => {
-	test('renders a text input field and a button', () => {
+	it('renders a text input field and a button', () => {
 		render(<Demo />);
-		expect(screen.getByText('Try it now')).toBeInTheDocument();
-		expect(screen.getByLabelText('Brand name')).toBeInTheDocument();
-		expect(screen.getByText('Go')).toBeInTheDocument();
+		expect(screen.getByText('Try it now')).toBeDefined();
+		expect(screen.getByLabelText('Brand name')).toBeDefined();
+		expect(screen.getByText('Go')).toBeDefined();
 	});
-	test('update Brand Name on input change', () => {
+
+	it('update Brand Name on input change', () => {
 		render(<Demo />);
 		const brandNameInput = screen.getByLabelText('Brand name');
 		fireEvent.change(brandNameInput, {target: {value: 'google'}});
 		expect(brandNameInput.value).toBe('google');
 	});
-	test('update Brand Name on reverted change', () => {
+
+	it('update Brand Name on reverted change', () => {
 		render(<Demo />);
 		const brandNameInput = screen.getByLabelText('Brand name');
 		fireEvent.change(brandNameInput, {target: {value: 'google'}});
 		fireEvent.change(brandNameInput, {target: {value: ''}});
 		expect(brandNameInput.value).toBe('');
 	});
-	test('displays error for empty brandname', () => {
+
+	it('displays error for empty brandname', () => {
 		render(<Demo />);
 		const brandInput = screen.getByLabelText('Brand name');
 		const goButton = screen.getByText('Go');
 		fireEvent.change(brandInput, {target: {value: ''}});
 		fireEvent.click(goButton);
-		expect(screen.getByText('Brand Name is required')).toBeInTheDocument();
+		expect(screen.getByText('Brand Name is required')).toBeDefined();
 	});
-	test('displays error for invalid brandname', () => {
+
+	it('displays error for invalid brandname', () => {
 		render(<Demo />);
 		const brandInput = screen.getByLabelText('Brand name');
 		const goButton = screen.getByText('Go');
@@ -37,9 +42,10 @@ describe('Demo Component', () => {
 		fireEvent.change(brandInput, {target: {value: 'logo$'}});
 		fireEvent.change(brandInput, {target: {value: '123#'}});
 		fireEvent.click(goButton);
-		expect(screen.getByText('Invalid Brand Name')).toBeInTheDocument();
+		expect(screen.getByText('Invalid Brand Name')).toBeDefined();
 	});
-	test('displays image for valid brandname', async () => {
+
+	it('displays image for valid brandname', async () => {
 		render(<Demo />);
 		const brandInput = screen.getByLabelText('Brand name');
 		const goButton = screen.getByText('Go');

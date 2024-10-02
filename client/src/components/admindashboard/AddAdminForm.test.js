@@ -1,9 +1,10 @@
 import {render, screen, fireEvent} from '@testing-library/react';
 import AddAdminForm from './AddAdminForm';
+import {describe, it, expect, vi} from 'vitest';
 
 describe('AddAdminForm', () => {
 	it('renders the form with email and reason inputs', () => {
-		const setAdminDetailsMock = jest.fn();
+		const setAdminDetailsMock = vi.fn();
 		render(<AddAdminForm setAdminDetails={setAdminDetailsMock} />);
 
 		expect(screen.getByLabelText('Admin Email')).toBeInTheDocument();
@@ -12,7 +13,7 @@ describe('AddAdminForm', () => {
 	});
 
 	it('updates state on email and reason input changes', () => {
-		const setAdminDetailsMock = jest.fn();
+		const setAdminDetailsMock = vi.fn();
 		render(<AddAdminForm setAdminDetails={setAdminDetailsMock} />);
 
 		const emailInput = screen.getByLabelText('Admin Email');
@@ -26,7 +27,7 @@ describe('AddAdminForm', () => {
 	});
 
 	it('calls setAdminDetails with the correct data on form submission', () => {
-		const setAdminDetailsMock = jest.fn();
+		const setAdminDetailsMock = vi.fn();
 		render(<AddAdminForm setAdminDetails={setAdminDetailsMock} />);
 
 		const emailInput = screen.getByLabelText('Admin Email');
@@ -42,7 +43,7 @@ describe('AddAdminForm', () => {
 	});
 
 	it('resets email and reason state after form submission', () => {
-		const setAdminDetailsMock = jest.fn();
+		const setAdminDetailsMock = vi.fn();
 		render(<AddAdminForm setAdminDetails={setAdminDetailsMock} />);
 
 		const emailInput = screen.getByLabelText('Admin Email');

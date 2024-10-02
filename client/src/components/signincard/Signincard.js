@@ -1,6 +1,5 @@
 import {useContext, useState} from 'react';
-import {useLocation, useNavigate} from 'react-router';
-import {NavLink} from 'react-router-dom';
+import {NavLink, useLocation, useNavigate} from 'react-router-dom';
 import CustomInput from '../common/input/CustomInput';
 import {AuthContext} from '../../contexts/AuthContext';
 import {useApi} from '../../hooks/useApi';
@@ -13,7 +12,7 @@ function Signincard() {
 	const [validationErrors, setValidationErrors] = useState('');
 	const {setIsAuthenticated} = useContext(AuthContext);
 	const navigate = useNavigate();
-	const {state} = useLocation();
+	const location = useLocation();
 	const {errorMsg, makeRequest, loading} = useApi({
 		url: `api/auth/signin`,
 		method: 'post',
@@ -60,7 +59,7 @@ function Signincard() {
 			if (success) {
 				setFormData(INITIAL_SIGNIN_FORM_DATA);
 				setIsAuthenticated(true);
-				navigate(state?.path || '/dashboard');
+				navigate(location?.pathname || '/dashboard');
 			}
 		}
 	};
@@ -94,6 +93,12 @@ function Signincard() {
 					onChange={handleFormChange}
 					disabled={loading}
 				/>
+				<div className='forgot-password-link'>
+					<NavLink to='/forgot-password' className='input-actiontext-link'>
+						Forgot Password
+					</NavLink>
+				</div>
+				<br />
 				<button
 					className='login-btn'
 					aria-label='Sign in to Dashboard'
@@ -109,9 +114,6 @@ function Signincard() {
 						Sign up
 					</NavLink>
 				</div>
-				<NavLink to='/forgot-password' className='input-actiontext-link'>
-					Forgot Password
-				</NavLink>
 			</section>
 		</div>
 	);

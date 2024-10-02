@@ -4,6 +4,7 @@ import './About.css';
 function About() {
 	return (
 		<>
+			<br />
 			<article className='about'>
 				<section className='about-section'>
 					<h2 className='about-section-heading'>Journey</h2>
@@ -56,12 +57,12 @@ function About() {
 						or a large enterprise, our offerings are tailored to suit businesses
 						of all scales, providing unparalleled convenience and affordability.
 						<br />
-						<br />
+						{/* <br />
 						Ready to elevate your brand with LogoExecutive? Join us today and
 						unlock a world of logo exploration possibilities. Visit our website
 						to generate API keys and start accessing logos in various sizes and
 						formats. Experience convenience, affordability, and exceptional
-						quality with LogoExecutive - your ultimate logo exploration partner.
+						quality with LogoExecutive - your ultimate logo exploration partner. */}
 					</p>
 				</section>
 			</article>

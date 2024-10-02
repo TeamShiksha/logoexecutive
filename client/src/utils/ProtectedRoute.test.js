@@ -1,4 +1,5 @@
 import {render, screen} from '@testing-library/react';
+import {describe, expect, it, vi} from 'vitest';
 import {AuthContext} from '../contexts/AuthContext';
 import ProtectedRoute from './ProtectedRoute';
 import {BrowserRouter, MemoryRouter, Route, Routes} from 'react-router-dom';
@@ -40,7 +41,7 @@ describe('Protected Route', () => {
 			updatedAt: '2024-04-11T10:24:38.501Z',
 		},
 	};
-	const fetchUserData = jest.fn();
+	const fetchUserData = vi.fn();
 	it('renders dashboard when user is authenticated', () => {
 		render(
 			<AuthContext.Provider value={{isAuthenticated: true}}>

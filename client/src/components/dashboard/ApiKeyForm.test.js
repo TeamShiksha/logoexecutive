@@ -1,6 +1,6 @@
-import {render, fireEvent, screen} from '@testing-library/react';
+import {render, fireEvent, screen, waitFor} from '@testing-library/react';
+import {vi} from 'vitest';
 import ApiKeyForm from './ApiKeyForm';
-
 describe('ApiKeyForm', () => {
 	it('renders correctly', () => {
 		render(
@@ -19,8 +19,8 @@ describe('ApiKeyForm', () => {
 	});
 
 	it('handles input value change', () => {
-		const setInputValue = jest.fn();
-		const setErrorMessage = jest.fn();
+		const setInputValue = vi.fn();
+		const setErrorMessage = vi.fn();
 		render(
 			<ApiKeyForm
 				inputValue=''
@@ -37,8 +37,8 @@ describe('ApiKeyForm', () => {
 		expect(setErrorMessage).toHaveBeenCalled();
 	});
 
-	it('handles form submission', () => {
-		const handleGenerateKey = jest.fn();
+	it('handles form submission', async () => {
+		const handleGenerateKey = vi.fn();
 		render(
 			<ApiKeyForm
 				inputValue=''
@@ -48,7 +48,10 @@ describe('ApiKeyForm', () => {
 				handleGenerateKey={handleGenerateKey}
 			/>,
 		);
-		fireEvent.click(screen.getByText('Generate Key'));
-		expect(handleGenerateKey).toHaveBeenCalled();
+
+		fireEvent.submit(screen.getByRole('button', {name: 'Generate Key'}));
+		await waitFor(() => {
+			expect(handleGenerateKey).toHaveBeenCalled();
+		});
 	});
 });

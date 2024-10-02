@@ -1,14 +1,14 @@
-import React from 'react';
+import {describe, it, expect} from 'vitest';
 import {render, screen} from '@testing-library/react';
 import Spinner from './Spinner';
 
 describe('Spinner Component', () => {
-	test('renders spinner container and spinner element', () => {
+	it('renders spinner container and spinner element', () => {
 		render(<Spinner />);
 
 		const containerElement = screen.getByTestId('spinner-container');
-		expect(containerElement).toBeInTheDocument();
+		expect(containerElement).toBeDefined();
 		const spinnerElement = screen.getByTestId('spinner');
-		expect(spinnerElement).toBeInTheDocument();
+		expect(spinnerElement).toBeDefined();
 	});
 });

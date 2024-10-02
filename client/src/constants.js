@@ -1,18 +1,8 @@
 export const footerColumns = [
-	[
-		{name: 'Welcome', link: '/home'},
-		{
-			name: 'Demo',
-			link: '/home#demo',
-		},
-	],
-	[
-		{name: 'About', link: '/about'},
-		{
-			name: 'Contact',
-			link: '/about#contactus',
-		},
-	],
+	{name: 'Home', link: '/home'},
+	{name: 'Demo', link: '/home#demo'},
+	{name: 'About', link: '/about'},
+	{name: 'Contact', link: '/about#contactus'},
 ];
 
 export const loggedInNavbarItems = [

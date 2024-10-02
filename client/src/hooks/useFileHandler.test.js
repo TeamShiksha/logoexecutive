@@ -1,7 +1,8 @@
 import {renderHook, act} from '@testing-library/react-hooks';
+import {describe, expect, it, vi} from 'vitest';
 import useFileHandler from './useFileHandler';
 
-global.URL.createObjectURL = jest.fn();
+global.URL.createObjectURL = vi.fn();
 
 describe('useFileHandler', () => {
 	it('should return initial state', () => {
@@ -24,7 +25,7 @@ describe('useFileHandler', () => {
 
 	it('should set file when file type is valid', () => {
 		const {result} = renderHook(() => useFileHandler(['jpg', 'png']));
-		const mockCreateObjectURL = jest.fn(() => 'https://image.com/1.jpg');
+		const mockCreateObjectURL = vi.fn(() => 'https://image.com/1.jpg');
 		global.URL.createObjectURL = mockCreateObjectURL;
 		const file = new File(['fileContent'], 'hello.jpg', {type: 'image/jpeg'});
 		act(() => {
@@ -38,7 +39,7 @@ describe('useFileHandler', () => {
 	it('should set error when file cannot be read', () => {
 		const {result} = renderHook(() => useFileHandler(['jpg', 'png']));
 		const file = new File(['hello'], 'hello.jpg', {type: 'image/jpeg'});
-		const createObjectURLSpy = jest
+		const createObjectURLSpy = vi
 			.spyOn(URL, 'createObjectURL')
 			.mockImplementationOnce(() => {
 				throw new Error('Cannot read file');
@@ -55,7 +56,7 @@ describe('useFileHandler', () => {
 
 	it('should set file when no valid formats are provided', () => {
 		const {result} = renderHook(() => useFileHandler());
-		const mockCreateObjectURL = jest.fn(() => 'https://image.com/1.jpg');
+		const mockCreateObjectURL = vi.fn(() => 'https://image.com/1.jpg');
 		global.URL.createObjectURL = mockCreateObjectURL;
 		const file = new File(['hello'], 'hello.pdf', {type: 'application/pdf'});
 		act(() => {

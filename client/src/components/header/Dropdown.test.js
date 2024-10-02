@@ -1,3 +1,4 @@
+import {describe, it, expect, vi, beforeEach, afterEach} from 'vitest';
 import {fireEvent, render, screen} from '@testing-library/react';
 import {BrowserRouter} from 'react-router-dom';
 import Dropdown from './Dropdown';
@@ -5,10 +6,10 @@ import {AuthContext} from '../../contexts/AuthContext';
 import * as router from 'react-router';
 
 describe('Dropdown test', () => {
-	const navigate = jest.fn();
-	const mockLogout = jest.fn();
-	const toggleShowAccount = jest.fn();
-	const handleLogout = jest.fn();
+	const navigate = vi.fn();
+	const mockLogout = vi.fn();
+	const toggleShowAccount = vi.fn();
+	const handleLogout = vi.fn();
 
 	const renderDropdown = () => {
 		render(
@@ -24,27 +25,27 @@ describe('Dropdown test', () => {
 	};
 
 	beforeEach(() => {
-		jest.spyOn(router, 'useNavigate').mockImplementation(() => navigate);
+		vi.spyOn(router, 'useNavigate').mockImplementation(() => navigate);
 	});
 
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
-	test('renders without crashing', () => {
+	it('renders without crashing', () => {
 		renderDropdown();
-		expect(screen.getByText('Profile')).toBeInTheDocument();
-		expect(screen.getByText('Logout')).toBeInTheDocument();
+		expect(screen.getByText('Profile')).toBeDefined();
+		expect(screen.getByText('Logout')).toBeDefined();
 	});
 
-	test('should navigate to /profile', () => {
+	it('should navigate to /profile', () => {
 		renderDropdown();
 		const profileLink = screen.getByTestId('profile-link');
 		fireEvent.click(profileLink);
 		expect(navigate).toHaveBeenCalledWith('/profile');
 	});
 
-	test('should call handleLogout when Logout option is clicked and navigate to /wlecome', () => {
+	it('should call handleLogout when Logout option is clicked and navigate to /home', () => {
 		renderDropdown();
 		const logout = screen.getByTestId('logout-option');
 		fireEvent.click(logout);

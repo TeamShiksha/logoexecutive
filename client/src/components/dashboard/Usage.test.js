@@ -1,4 +1,4 @@
-import React from 'react';
+import {describe, it, expect} from 'vitest';
 import {render, screen} from '@testing-library/react';
 
 import {months} from '../../constants';
@@ -13,30 +13,30 @@ describe('Usage card Component', () => {
 	const nextMonth = months[(now.getMonth() + 1) % 12];
 	const nextYear = now.getFullYear() + (now.getMonth() === 11 ? 1 : 0);
 
-	test('Displays the usage card', () => {
+	it('Displays the usage card', () => {
 		render(<Usage usedCalls={mockUsedCalls} totalCalls={mockTotalCalls} />);
-		expect(screen.getByText('Usage')).toBeInTheDocument();
+		expect(screen.getByText('Usage')).toBeDefined();
 	});
 
-	test('Displays the correct calls percentage', () => {
+	it('Displays the correct calls percentage', () => {
 		render(<Usage usedCalls={mockUsedCalls} totalCalls={mockTotalCalls} />);
-		expect(screen.getByText(`${expectedPercentage}%`)).toBeInTheDocument();
+		expect(screen.getByText(`${expectedPercentage}%`)).toBeDefined();
 	});
 
-	test('Displays the correct number of Used calls', () => {
+	it('Displays the correct number of Used calls', () => {
 		render(<Usage usedCalls={mockUsedCalls} totalCalls={mockTotalCalls} />);
-		expect(screen.getByText(`${mockUsedCalls} calls`)).toBeInTheDocument();
+		expect(screen.getByText(`${mockUsedCalls} calls`)).toBeDefined();
 	});
 
-	test('Displays the correct number of Total calls', () => {
+	it('Displays the correct number of Total calls', () => {
 		render(<Usage usedCalls={mockUsedCalls} totalCalls={mockTotalCalls} />);
-		expect(screen.getByText(`${mockTotalCalls} calls`)).toBeInTheDocument();
+		expect(screen.getByText(`${mockTotalCalls} calls`)).toBeDefined();
 	});
 
-	test('Displays the next reset date correctly', () => {
+	it('Displays the next reset date correctly', () => {
 		render(<Usage usedCalls={mockUsedCalls} totalCalls={mockTotalCalls} />);
 		expect(
 			screen.getByText(`Next reset on the 1st of ${nextMonth} ${nextYear}`),
-		).toBeInTheDocument();
+		).toBeDefined();
 	});
 });

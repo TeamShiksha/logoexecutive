@@ -1,31 +1,32 @@
+import {describe, it, expect, vi, beforeEach, afterEach} from 'vitest';
 import {fireEvent, render, screen} from '@testing-library/react';
 
 import * as router from 'react-router';
 import NotFound from './NotFound';
 
 describe('Page Not Found test', () => {
-	const navigate = jest.fn();
+	const navigate = vi.fn();
 
 	const renderNotFound = () => {
 		render(<NotFound></NotFound>);
 	};
 
 	beforeEach(() => {
-		jest.spyOn(router, 'useNavigate').mockImplementation(() => navigate);
+		vi.spyOn(router, 'useNavigate').mockImplementation(() => navigate);
 	});
 
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
-	test('should show logo', () => {
+	it('should show logo', () => {
 		renderNotFound();
 		const image = screen.getByAltText('error');
-		expect(image).toBeInTheDocument();
-		expect(screen.getByText('Oops! Page Not Found')).toBeInTheDocument();
+		expect(image).toBeDefined();
+		expect(screen.getByText('Oops! Page Not Found')).toBeDefined();
 	});
 
-	test('should navigate to /home when clicked on go to homepage', () => {
+	it('should navigate to /home when clicked on go to homepage', () => {
 		renderNotFound();
 		const logout = screen.getByText('Go to homepage');
 		fireEvent.click(logout);

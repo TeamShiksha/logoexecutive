@@ -1,3 +1,4 @@
+import {describe, it, expect, vi, beforeAll, afterEach, afterAll} from 'vitest';
 import {render, screen, fireEvent, waitFor} from '@testing-library/react';
 import {BrowserRouter} from 'react-router-dom';
 import {AuthContext} from '../../contexts/AuthContext';
@@ -6,7 +7,7 @@ import {server} from '../../mocks/server';
 import Settings from './Settings';
 
 describe('Settings component', () => {
-	const mockLogout = jest.fn();
+	const mockLogout = vi.fn();
 	const renderSettings = () => {
 		render(
 			<AuthContext.Provider value={{isAuthenticated: true, logout: mockLogout}}>
@@ -17,28 +18,32 @@ describe('Settings component', () => {
 		);
 	};
 
-	test('renders settings component', () => {
+	beforeAll(() => server.listen());
+	afterEach(() => server.resetHandlers());
+	afterAll(() => server.close());
+
+	it('renders settings component', () => {
 		renderSettings();
 		const headingElement = screen.getByText(/Settings/i);
-		expect(headingElement).toBeInTheDocument();
+		expect(headingElement).toBeDefined();
 		const downloadButton = screen.getByText(/Download Account Data/i);
-		expect(downloadButton).toBeInTheDocument();
+		expect(downloadButton).toBeDefined();
 		expect(downloadButton).toBeDisabled();
 		const deleteButton = screen.getByText(/Delete Account/i);
-		expect(deleteButton).toBeInTheDocument();
+		expect(deleteButton).toBeDefined();
 	});
 
-	test('opens modal when delete button is clicked', () => {
+	it('opens modal when delete button is clicked', () => {
 		renderSettings();
 		const modalElement = screen.queryByText(/Are you sure?/i);
-		expect(modalElement).not.toBeInTheDocument();
+		expect(modalElement).toBeNull();
 		const deleteButton = screen.getByRole('button', {name: 'Delete Account'});
 		fireEvent.click(deleteButton);
 		const modalTitle = screen.getByText(/Are you sure?/i);
-		expect(modalTitle).toBeInTheDocument();
+		expect(modalTitle).toBeDefined();
 	});
 
-	test('deletes account and navigates to home page on successful API call', async () => {
+	it('deletes account and navigates to home page on successful API call', async () => {
 		renderSettings();
 		const deleteButton = screen.getByRole('button', {name: 'Delete Account'});
 		fireEvent.click(deleteButton);
@@ -49,7 +54,7 @@ describe('Settings component', () => {
 			const successMessage = screen.getByText(
 				'Your user data has been successfully deleted from our system',
 			);
-			expect(successMessage).toBeInTheDocument();
+			expect(successMessage).toBeDefined();
 		});
 
 		await waitFor(
@@ -60,7 +65,7 @@ describe('Settings component', () => {
 		);
 	});
 
-	test('shows error modal on failed API call', async () => {
+	it('shows error modal on failed API call', async () => {
 		server.use(
 			rest.delete('/api/user/delete', (req, res, ctx) => {
 				return res(
@@ -80,7 +85,7 @@ describe('Settings component', () => {
 			const errorModal = screen.getByText(
 				'Something went wrong. Please try again later.',
 			);
-			expect(errorModal).toBeInTheDocument();
+			expect(errorModal).toBeDefined();
 		});
 	});
 });

@@ -50,7 +50,7 @@
 
 .nav-links {
 	text-decoration: none;
-	color: #222;
+	/* color: var(--smooth-purple); */
 	font-size: var(--large-text);
 	font-weight: bold;
 	color: var(--black);

@@ -7,10 +7,10 @@ import './Footer.css';
 const Footer = () => {
 	return (
 		<footer className='footer'>
-			<section className='footer-left'>
-				{footerColumns.map((footerColumn, index) => (
-					<ul key={index}>
-						{footerColumn.map((footerLink, index) => (
+			<section className='footer-top'>
+				<section className='footer-left'>
+					<ul>
+						{footerColumns.map((footerLink, index) => (
 							<li key={index} className='footer-items'>
 								<NavLink className='nav-links' to={footerLink.link}>
 									{footerLink.name}
@@ -18,16 +18,20 @@ const Footer = () => {
 							</li>
 						))}
 					</ul>
-				))}
+				</section>
+
+				<section className='footer-right'>
+					<div className='footer-right-heading-container'>
+						<img src={businessLogo} alt='Brand logo' />
+						<h4>
+							Empower Your Branding: Logo Executive Where Logos Shine in Every
+							Size
+						</h4>
+					</div>
+				</section>
 			</section>
-			<section className='footer-right'>
-				<div className='footer-right-heading-container'>
-					<img src={businessLogo} alt='Brand logo' />
-					<h4>
-						Empower Your Branding: Logo Executive Where Logos Shine in Every
-						Size
-					</h4>
-				</div>
+			<hr />
+			<section className='footer-bottom'>
 				<section
 					className='poweredBy'
 					onClick={() => {

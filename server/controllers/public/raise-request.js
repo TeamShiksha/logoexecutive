@@ -8,6 +8,7 @@ const postRaiseRequestPayloadSchema = Joi.object({
     .required()
     .regex(/^[^s@]+@[^s@]+.[^s@]+$/)
     .messages({
+      "string.base": "Email must be a string",
       "any.required": "Email is required",
       "string.pattern.base": "Invalid email",
     }),
@@ -17,7 +18,7 @@ const postRaiseRequestPayloadSchema = Joi.object({
     .regex(
       /^(https?:\/\/)?((([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,})|(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}))(:\d+)?(\/.*)?$/
     )
-    .message({
+    .messages({
       "any.required": "URL is required",
       "string.pattern.base": "Invalid URL",
     }),
@@ -27,6 +28,7 @@ async function raiseRequestController(req, res, next) {
   try {
     const { error, value } = postRaiseRequestPayloadSchema.validate(req.body);
     if (error) {
+      console.log(error.message);
       return res.status(422).json({
         message: error.message,
         statusCode: 422,

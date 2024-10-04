@@ -1,4 +1,5 @@
 const { formExists, createForm, updateForm } = require("./ContactUs");
+const { createRaiseRequest } = require("./RaiseRequest");
 const {
   createImageData,
   fetchImageByCompanyFree,
@@ -40,7 +41,7 @@ const {
 } = require("./Users");
 const { setUserAdmin } = require("./admin");
 const ContactUsService = require("./ContactUs");
-const { createRaiseRequest } = require("./RaiseRequest");
+const CreateRaiseRequestService = require("./RaiseRequest");
 const ImageService = require("./Images");
 const KeyService = require("./Keys");
 const SubscriptionService = require("./Subscriptions");
@@ -53,6 +54,7 @@ module.exports = {
   formExists,
   createForm,
   updateForm,
+  createRaiseRequest,
   createImageData,
   fetchImageByCompanyFree,
   createKey,
@@ -91,5 +93,5 @@ module.exports = {
   uploadToS3,
   getImagesByUserId,
   commonService,
-  createRaiseRequest,
+  CreateRaiseRequestService,
 };

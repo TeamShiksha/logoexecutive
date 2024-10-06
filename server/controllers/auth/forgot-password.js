@@ -50,8 +50,8 @@ async function forgotPasswordController(req, res, next) {
     const template = handlebars.compile(htmlFile);
     const replacements = {
       url: userToken.tokenURL(),
-      message1: "It seems like you forgot your password?",
-      message2: "Please click on the following link to reset your password"
+      highlighted_text: "It seems like you forgot your password?",
+      text: "Please click on the following link to reset your password"
     };
     const htmlBody = template(replacements);
     const nodeMailerRes = await sendEmail(user.email,  "Change Password", htmlBody);

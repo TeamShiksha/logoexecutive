@@ -115,8 +115,8 @@ async function signupController(req, res, next) {
     const template = handlebars.compile(htmlFile);
     const replacements = {
       url: verificationToken.tokenURL(),
-      message1: "You need to verify your email",
-      message2: "Please click on the following link to verify your email"
+      highlighted_text: "You need to verify your email",
+      text: "Please click on the following link to verify your email"
     };
     const htmlBody = template(replacements);
     const emailRes = await sendEmail(

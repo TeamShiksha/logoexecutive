@@ -1,85 +1,9 @@
 const Joi = require("joi");
 const { STATUS_CODES } = require("http");
+const fs = require("fs");
+const handlebars = require("handlebars");
 const { fetchUserByEmail, createForgotToken } = require("../../services");
 const { sendEmail } = require("../../utils/sendEmail");
-
-const getHTMLBody = (url) =>{
-  return `<!DOCTYPE html>
-    <html lang="en">
-      <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Forgot Password</title>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Lato:wght@700&family=Nunito&family=Poppins&display=swap"
-          rel="stylesheet" />
-      </head>
-
-      <body style="margin: 0; padding: 0; font-family: Inter, Arial, sans-serif; box-sizing: border-box;">
-        <table width="100%" cellpadding="0" cellspacing="0"
-          style="background-color: #ffffff; max-width: 675px; margin: 0 auto; border: 1px solid #ddd; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
-          <tr>
-            <td style="padding: 20px; background-color: #f1f1f1; margin: 0 auto; text-align: center">
-              <a href="https://logoexecutive.vercel.app/home"
-                style="color: rgb(17, 24, 39); text-decoration: none;">
-                <img src="https://logoexecutive.vercel.app/static/media/business-man-logo.3a122f718b0294570293.webp"
-                  alt="Logo" style="height: 35px; width: 35px; margin-right: 10px; vertical-align: bottom;">
-                <span style="font-size: 24px; font-weight: 800;">Forgot Password</span>
-              </a>
-           </td>
-          </tr>
-          <tr>
-            <td style="padding: 50px 20px; text-align: left;">
-              <p style="font-size: 16px; color: #333; margin-bottom: 10px;">Hi there,</p>
-              <p style="font-size: 16px; color: #333; margin-bottom: 10px;">Thank you for visiting LogoExecutive.</p>
-              <p style="font-size: 16px; color: #333; margin-bottom: 10px;"><strong>It seems like you forgot your
-                  password?</strong></p>
-              <p style="font-size: 16px; color: #333; margin-bottom: 10px;">Please click on the following link to reset your
-                password</p>
-              <a href="${url}"
-                style="display: inline-block; cursor: pointer; border: none; padding: 12px 20px; font-size: 16px; font-weight: bold; background-color: rgb(79, 70, 229); color: white; border: 2px solid rgb(229, 231, 235); text-decoration: none; border-radius: 6px; transition: 200ms ease-in-out; box-shadow: rgba(140, 152, 164, 0.125) 0px 6px 24px 0px; margin-top: 20px;">Click
-                on the link</a>
-            </td>
-          </tr>
-          <tr>
-            <td style="background-color: #f1f1f1; padding: 12px; text-align: center;">
-              <table width="100%" cellpadding="0" cellspacing="0">
-                <tr>
-                  <td style="padding-bottom: 10px;">
-                    <p style="font-size: 14px; color: #777; margin: 0;">
-                      Copyright © 2024 | LogoExecutive
-                    </p>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <div
-                      style="display: inline-block; border: 2px solid rgb(79, 70, 229); border-radius: 6px; padding: 2px 6px;">
-                      <a href="https://team.shiksha/" target="_blank" rel="noopener"
-                        style="text-decoration: none; color: rgb(79, 70, 229); font-weight: 700; font-size: 16px; display: flex; align-items: center;">
-                        Powered By
-                        <img src="https://logoexecutive.vercel.app/static/media/teamshishalogo.7bfb117958cfe1b031c9.webp"
-                          alt="TeamShiksha Logo" style="margin-left: 5px; width: auto; height: 18px;">
-                      </a>
-                    </div>
-                  </td>
-                </tr>
-                <tr>
-                  <td style="padding-top: 10px;">
-                    <p style="font-size: 10px; color: #777; margin: 0;">
-                      This is an automated message from LogoExecutive. Please do not reply to this email.
-                    </p>
-                  </td>
-                </tr>
-              </table>
-            </td>
-          </tr>
-        </table>
-      </body>
-    </html>`;
-};
 
 const forgotPasswordSchema = Joi.object().keys({
   email: Joi.string()
@@ -91,11 +15,6 @@ const forgotPasswordSchema = Joi.object().keys({
       "any.required": "Email is required",
       "string.pattern.base": "Invalid email",
     }),
-});
-
-const mailText = (url) => ({
-  subject: "Change Password",
-  body: `To change the password, please click on the link\n\n${url}`,
 });
 
 async function forgotPasswordController(req, res, next) {
@@ -124,7 +43,17 @@ async function forgotPasswordController(req, res, next) {
         statusCode: 503,
       });
 
-    const htmlBody = getHTMLBody(userToken.tokenURL()); 
+    const htmlFile = fs.readFileSync(
+      __dirname + "/../../templates/ForgotPasswordOrVerify.html",
+      "utf-8"
+    ).toString();
+    const template = handlebars.compile(htmlFile);
+    const replacements = {
+      url: userToken.tokenURL(),
+      message1: "It seems like you forgot your password?",
+      message2: "Please click on the following link to reset your password"
+    };
+    const htmlBody = template(replacements);
     const nodeMailerRes = await sendEmail(user.email,  "Change Password", htmlBody);
     if (!nodeMailerRes.success)
       return res.status(500).json({

@@ -1,38 +1,11 @@
 {
-	"name": "logoexecutive",
-	"private": true,
-	"version": "1.1.0",
-	"repository": "https://github.com/TeamShiksha/logoexecutive.git",
-	"workspaces": [
-		"client",
-		"server"
-	],
-	"scripts": {
-		"build": "yarn workspace client build",
-		"start": "concurrently \"yarn start:client\" \"yarn start:server\"",
-		"start:client": "yarn workspace client start",
-		"start:server": "yarn workspace server start",
-		"lint:client": "yarn workspace client lint",
-		"lint:server": "yarn workspace server lint",
-		"lint": "concurrently \"yarn lint:client\" \"yarn lint:server\"",
-		"lint-fix:server": "yarn workspace server lint:fix",
-		"lint-fix:client": "yarn workspace client lint:fix",
-		"lint-fix": "concurrently \"yarn workspace server lint:fix\" \"yarn workspace client lint:fix\"",
-		"test": "concurrently \"yarn test:client\" \"yarn test:server\"",
-		"test:server": "yarn workspace server test",
-		"test:client": "yarn workspace client test",
-		"format:client": "yarn workspace client format",
-		"check:client": "cd client && yarn run check",
-		"coverage:client": "yarn workspace client coverage",
-		"coverage:server": "yarn workspace server coverage"
-	},
-	"devDependencies": {
-		"concurrently": "^8.2.2"
-	},
-	"pre-commit": [
-		"test:server",
-		"test:client",
-		"lint",
-		"check:client"
-	]
+  "name": "root",
+  "private": true,
+  "scripts": {
+    "start": "lerna run start --parallel"
+  },
+  "dependencies": {
+    "lerna": "^8.1.8",
+    "vite": "^5.4.8"
+  }
 }

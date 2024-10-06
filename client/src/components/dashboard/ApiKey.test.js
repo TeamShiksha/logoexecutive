@@ -1,11 +1,12 @@
 import {render, fireEvent, screen} from '@testing-library/react';
+import {vi} from 'vitest';
 import userEvent from '@testing-library/user-event';
 import ApiKey from './ApiKey';
 
 describe('ApiKey', () => {
 	it('renders correctly', () => {
-		const handleCloseKey = jest.fn();
-		const handleCopyToClipboard = jest.fn();
+		const handleCloseKey = vi.fn();
+		const handleCopyToClipboard = vi.fn();
 		const key = 'test_api_key';
 
 		render(
@@ -25,8 +26,8 @@ describe('ApiKey', () => {
 	});
 
 	it('closes when the close button is clicked', () => {
-		const handleCloseKey = jest.fn();
-		const handleCopyToClipboard = jest.fn();
+		const handleCloseKey = vi.fn();
+		const handleCopyToClipboard = vi.fn();
 		const key = 'test_api_key';
 
 		render(
@@ -43,8 +44,8 @@ describe('ApiKey', () => {
 	});
 
 	it('copies the API key to clipboard when clicked', () => {
-		const handleCloseKey = jest.fn();
-		const handleCopyToClipboard = jest.fn();
+		const handleCloseKey = vi.fn();
+		const handleCopyToClipboard = vi.fn();
 		const key = 'test_api_key';
 
 		render(

@@ -1,15 +1,19 @@
 import React from 'react';
 import {render, screen, fireEvent, waitFor} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-
+import {vi} from 'vitest';
 import DragAndDrop from './DragAndDrop';
 
-global.URL.createObjectURL = jest.fn();
+global.URL.createObjectURL = vi.fn();
 
 describe('Drag and Drop Component', () => {
+	beforeEach(() => {
+		vi.clearAllMocks();
+	});
+
 	const mockFile = new File(['fileContent'], 'image.jpg', {type: 'image/jpeg'});
 	const mockTextFile = new File(['fileContent'], 'image.txt', {type: 'text'});
-	const mockFetchUploadedImages = jest.fn();
+	const mockFetchUploadedImages = vi.fn();
 
 	test('Drag and Drop component should be rendered properly', () => {
 		render(<DragAndDrop fetchUploadedImages={mockFetchUploadedImages} />);
@@ -96,8 +100,8 @@ describe('Drag and Drop Component', () => {
 	});
 
 	test('revokeObjectURL is called on component unmount', () => {
-		const mockCreateObjectURL = jest.fn(() => 'https://image.com/1.jpg');
-		const mockRevokeObjectURL = jest.fn();
+		const mockCreateObjectURL = vi.fn(() => 'https://image.com/1.jpg');
+		const mockRevokeObjectURL = vi.fn();
 		global.URL.createObjectURL = mockCreateObjectURL;
 		global.URL.revokeObjectURL = mockRevokeObjectURL;
 		const {unmount} = render(

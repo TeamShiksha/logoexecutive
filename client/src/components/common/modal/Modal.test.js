@@ -1,8 +1,9 @@
 import {render, fireEvent, screen} from '@testing-library/react';
+import {vi} from 'vitest';
 import Modal from './Modal';
 
 describe('Modal', () => {
-	const mockSetModal = jest.fn();
+	const mockSetModal = vi.fn();
 
 	beforeEach(() => {
 		mockSetModal.mockReset();

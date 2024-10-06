@@ -1,16 +1,25 @@
 import {render, screen, waitFor} from '@testing-library/react';
 import ApiDocs from './ApiDocs';
+import {afterEach, beforeEach, describe, expect, it, vi} from 'vitest';
 
-jest.mock('react-markdown', () => ({children}) => <div>{children}</div>);
-jest.mock('remark-gfm', () => () => <div />);
+vi.mock('react-markdown', () => ({
+	default: ({children}) => <div>{children}</div>,
+}));
+vi.mock('remark-gfm', () => ({
+	default: () => <div />,
+}));
+
+vi.mock('../../../../docs/docs.md', () => ({
+	default: 'mocked-docs-url.md',
+}));
 
 describe('ApiDocs Component', () => {
 	beforeEach(() => {
-		global.fetch = jest.fn();
+		global.fetch = vi.fn();
 	});
 
 	afterEach(() => {
-		jest.restoreAllMocks();
+		vi.restoreAllMocks();
 	});
 
 	it('renders the markdown content', async () => {

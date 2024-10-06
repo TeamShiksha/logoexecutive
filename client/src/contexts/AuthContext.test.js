@@ -1,5 +1,6 @@
 import {useContext} from 'react';
 import {render, waitFor, act, screen} from '@testing-library/react';
+import {describe, test, expect, vi, beforeEach, afterEach} from 'vitest';
 import {AuthContext, AuthProvider} from './AuthContext';
 import {server} from '../mocks/server';
 import {rest} from 'msw';
@@ -15,6 +16,14 @@ const TestComponent = () => {
 };
 
 describe('AuthProvider', () => {
+	beforeEach(() => {
+		vi.spyOn(console, 'error').mockImplementation(() => {});
+	});
+
+	afterEach(() => {
+		vi.restoreAllMocks();
+	});
+
 	test('should set isAuthenticated to false if JWT cookie does not exist', async () => {
 		render(
 			<AuthProvider>
@@ -65,8 +74,6 @@ describe('AuthProvider', () => {
 			}),
 		);
 
-		const consoleSpy = jest.spyOn(console, 'error');
-
 		render(
 			<AuthProvider>
 				<TestComponent />
@@ -78,7 +85,6 @@ describe('AuthProvider', () => {
 			logoutButton.click();
 		});
 
-		expect(consoleSpy).toHaveBeenCalled();
-		consoleSpy.mockRestore();
+		expect(console.error).toHaveBeenCalled();
 	});
 });

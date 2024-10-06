@@ -1,16 +1,31 @@
 import React from 'react';
+import {MemoryRouter, useNavigate} from 'react-router-dom';
+import {describe, expect, test, vi} from 'vitest';
 import {fireEvent, render, screen, waitFor} from '@testing-library/react';
-import {BrowserRouter, useNavigate} from 'react-router-dom';
 import {AuthContext} from '../../contexts/AuthContext';
 import Signincard from './Signincard';
 
-jest.mock('react-router', () => ({
-	...jest.requireActual('react-router'),
-	useNavigate: jest.fn(),
+vi.mock('react-router-dom', () => ({
+	useNavigate: vi.fn(),
+	useLocation: vi.fn(),
+	MemoryRouter: ({children}) => <div>{children}</div>,
+	Routes: ({children}) => <div>{children}</div>,
+	Route: ({element}) => element,
+	NavLink: vi.fn(({children, to}) => (
+		<div>
+			<a href={to}>{children}</a>
+		</div>
+	)),
 }));
 
 describe('Sign In Card Component', () => {
-	const mockSetUser = jest.fn();
+	const mockSetUser = vi.fn();
+	const mockNavigate = vi.fn();
+
+	beforeEach(() => {
+		vi.clearAllMocks();
+		useNavigate.mockReturnValue(mockNavigate);
+	});
 
 	const renderComponent = () => {
 		render(
@@ -20,9 +35,9 @@ describe('Sign In Card Component', () => {
 					setIsAuthenticated: mockSetUser,
 				}}
 			>
-				<BrowserRouter>
+				<MemoryRouter>
 					<Signincard />
-				</BrowserRouter>
+				</MemoryRouter>
 			</AuthContext.Provider>,
 		);
 	};
@@ -30,10 +45,6 @@ describe('Sign In Card Component', () => {
 	const changeInputValue = (inputElement, value) => {
 		fireEvent.change(inputElement, {target: {value}});
 	};
-
-	beforeEach(() => {
-		useNavigate.mockReturnValue(jest.fn());
-	});
 
 	test('Sign in card should be rendered properly with the proper form', () => {
 		renderComponent();

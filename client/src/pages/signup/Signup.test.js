@@ -1,20 +1,28 @@
 import {waitFor, fireEvent, render, screen} from '@testing-library/react';
-import {BrowserRouter, Navigate} from 'react-router-dom';
+import {MemoryRouter, Navigate} from 'react-router-dom';
+import {vi, describe, expect, it} from 'vitest';
 import Signup from './Signup';
 import {AuthContext} from '../../contexts/AuthContext';
 
-jest.mock('react-router-dom', () => ({
-	...jest.requireActual('react-router-dom'),
-	Navigate: jest.fn(() => null),
+vi.mock('react-router-dom', () => ({
+	Navigate: vi.fn(() => null),
+	MemoryRouter: ({children}) => <div>{children}</div>,
+	Routes: ({children}) => <div>{children}</div>,
+	Route: ({element}) => element,
+	NavLink: ({children, to, ...props}) => (
+		<a href={to} {...props}>
+			{children}
+		</a>
+	),
 }));
 
 describe('Signup', () => {
 	const renderSignup = (isAuthenticated) => {
 		render(
 			<AuthContext.Provider value={{isAuthenticated}}>
-				<BrowserRouter>
+				<MemoryRouter>
 					<Signup />
-				</BrowserRouter>
+				</MemoryRouter>
 			</AuthContext.Provider>,
 		);
 	};

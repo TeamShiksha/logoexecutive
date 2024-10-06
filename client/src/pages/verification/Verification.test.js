@@ -1,18 +1,19 @@
 import React from 'react';
 import {MemoryRouter, Routes, Route} from 'react-router-dom';
 import {render, waitFor, screen} from '@testing-library/react';
+import {afterAll, beforeEach, describe, expect, it, vi} from 'vitest';
 import Home from '../home/Home';
 import Verification from './Verification';
 import * as router from 'react-router';
 
 describe('VerificationStatus Component', () => {
-	const navigate = jest.fn();
+	const navigate = vi.fn();
 	beforeEach(() => {
-		jest.spyOn(router, 'useNavigate').mockImplementation(() => navigate);
+		vi.spyOn(router, 'useNavigate').mockImplementation(() => navigate);
 	});
 
 	afterAll(() => {
-		jest.restoreAllMocks();
+		vi.restoreAllMocks();
 	});
 
 	it('should navigate to welcome page when token is not provided', async () => {

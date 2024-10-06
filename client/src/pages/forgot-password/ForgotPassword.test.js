@@ -1,5 +1,6 @@
 import React from 'react';
 import {render, screen, fireEvent, waitFor} from '@testing-library/react';
+import {describe, expect, it} from 'vitest';
 import {MemoryRouter} from 'react-router-dom';
 import ForgotPassword from './ForgotPassword';
 
@@ -32,12 +33,18 @@ describe('ForgotPassword Component', () => {
 		render(<ForgotPassword />, {wrapper: MemoryRouter});
 		const emailInput = screen.getByLabelText('Enter Your Email');
 		const submitButton = screen.getByRole('button', {name: 'Submit'});
+		emailInput.removeAttribute('required');
 		fireEvent.change(emailInput, {target: {value: ''}});
 		fireEvent.click(submitButton);
+
 		await waitFor(() => {
-			expect(
-				screen.getByText('Please enter your email address'),
-			).toBeInTheDocument();
+			expect(screen.getByRole('alert')).toBeInTheDocument();
+		});
+
+		await waitFor(() => {
+			expect(screen.getByRole('alert')).toHaveTextContent(
+				/please enter your email/i,
+			);
 		});
 	});
 

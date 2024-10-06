@@ -68,7 +68,7 @@ async function updateForm(formId, reply, operatorId) {
       }
     );
     if (result.modifiedCount === 0) throw new Error("MongoDB operation failed");
-    return { reply, activityStatus: true, assignedTo: operatorId, email: currentForm.email };
+    return { reply, activityStatus: true, assignedTo: operatorId, email: currentForm.email, message: currentForm.message };
   } catch (error) {
     throw error;
   }

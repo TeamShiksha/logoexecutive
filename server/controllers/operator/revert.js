@@ -1,5 +1,7 @@
 const Joi = require("joi");
 const { STATUS_CODES } = require("http");
+const fs = require("fs");
+const handlebars = require("handlebars");
 const { fetchUserFromId, updateForm } = require("../../services");
 const { isValidObjectId } = require("mongoose");
 const { sendEmail } = require("../../utils/sendEmail");
@@ -62,10 +64,20 @@ async function revertToCustomerController(req, res, next) {
         message: "Already sent the response for this query!"
       });
     }
+    const htmlFile = fs.readFileSync(
+      __dirname + "/../../templates/RevertEmail.html",
+      "utf-8"
+    ).toString();
+    const template = handlebars.compile(htmlFile);
+    const replacements = {
+      message: revertForm.message,
+      reply
+    };
+    const htmlBody = template(replacements);
     const emailRes = await sendEmail(
       revertForm.email,
       "Response for your query at LogoExecutive",
-      reply
+      htmlBody
     );
     if (!emailRes.success) {
       return res.status(500).json({

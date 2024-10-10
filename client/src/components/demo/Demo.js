@@ -1,14 +1,16 @@
-import {useEffect, useState} from 'react';
+import {useEffect, useState, useContext} from 'react';
 import CustomInput from '../common/input/CustomInput';
 import RaiseRequest from '../raiserequest/RaiseRequest';
 import './Demo.css';
 import {useApi} from '../../hooks/useApi';
 import Spinner from '../spinner/Spinner';
+import {AuthContext} from '../../contexts/AuthContext';
 
 const Demo = () => {
 	const [brandName, setBrandName] = useState('');
 	const [validationError, setValidationError] = useState('');
 	const [imageUrl, setImageUrl] = useState('');
+	const {isAuthenticated} = useContext(AuthContext);
 	const {errorMsg, makeRequest, data, loading, isSuccess, setErrorMsg} = useApi(
 		{
 			url: `api/public/logo`,
@@ -72,7 +74,7 @@ const Demo = () => {
 					</div>
 				)}
 			</form>
-			{errorMsg && <RaiseRequest />}
+			{errorMsg && isAuthenticated && <RaiseRequest />}
 		</section>
 	);
 };

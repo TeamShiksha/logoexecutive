@@ -158,7 +158,6 @@ export const INITIAL_CONTACTUS_FORM_DATA = {
 };
 
 export const INITIAL_RAISE_REQUEST_FORM_DATA = {
-	email: '',
 	companyUrl: '',
 };
 

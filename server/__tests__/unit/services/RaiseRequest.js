@@ -21,7 +21,9 @@ describe("createRaiseRequest", () => {
 
   it("should create a form in database and return the created form object", async () => {
     const formData = {
-      email: "prajwalchoudhary14@gmail.com",
+      user_id: new mongoose.Types.ObjectId(
+        "65bd32ab96c587421c08fd47"
+      ).toString(),
       companyUrl: "https://google.com/",
     };
     const addedForm = await createRaiseRequest(formData);
@@ -43,7 +45,9 @@ describe("createRaiseRequest", () => {
     });
 
     const formData = {
-      email: "prajwalchoudhary14@gmail.com",
+      user_id: new mongoose.Types.ObjectId(
+        "65bd32ab96c587421c08fd47"
+      ).toString(),
       companyUrl: "https://www.google.com/",
     };
 
@@ -54,7 +58,9 @@ describe("createRaiseRequest", () => {
 
   it("should return a RaiseRequest instance when mongoDB save operation returns", async () => {
     const formData = {
-      email: "prajwalchoudhary14@gmail.com",
+      user_id: new mongoose.Types.ObjectId(
+        "65bd32ab96c587421c08fd47"
+      ).toString(),
       companyUrl: "https://google.com",
     };
     const result = await createRaiseRequest(formData);

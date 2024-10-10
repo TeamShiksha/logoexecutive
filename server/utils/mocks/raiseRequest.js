@@ -2,16 +2,14 @@ const { default: mongoose } = require("mongoose");
 const mockRaiseRequestForm = [
   {
     id: new mongoose.Types.ObjectId(),
-    email: "adityak842@gmail.com",
+    user_id: new mongoose.Types.ObjectId("65bd32ab96c587421c08fd47").toString(),
     companyUrl: "https://www.swiggy.com/",
-    createdAt: new Date("01-01-2001"),
     updatedAt: new Date("01-01-2001"),
   },
   {
     id: new mongoose.Types.ObjectId(),
-    email: "dummy32@gmail.com",
+    user_id: new mongoose.Types.ObjectId("65bd32ab96c587421c08fd47").toString(),
     companyUrl: "https://www.zomato.com/",
-    createdAt: new Date("01-01-2001"),
     updatedAt: new Date("01-01-2001"),
   },
 ];

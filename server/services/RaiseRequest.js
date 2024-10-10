@@ -10,7 +10,7 @@ const { RaiseRequest } = require("../models");
 async function createRaiseRequest(formData) {
   try {
     const newRaiseRequest = new RaiseRequest({
-      email: formData.email,
+      user_id: formData.user_id,
       companyUrl: formData.companyUrl,
     });
     const result = await newRaiseRequest.save();

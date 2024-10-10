@@ -3,15 +3,11 @@ const { STATUS_CODES } = require("http");
 const { createRaiseRequest } = require("../../services");
 
 const postRaiseRequestPayloadSchema = Joi.object({
-  email: Joi.string()
-    .trim()
-    .required()
-    .regex(/^[^s@]+@[^s@]+.[^s@]+$/)
-    .messages({
-      "string.base": "Email must be a string",
-      "any.required": "Email is required",
-      "string.pattern.base": "Invalid email",
-    }),
+  user_id: Joi.string().trim().required().hex().length(24).messages({
+    "any.required": "User ID is required",
+    "string.length": "User ID must be exactly 24 characters long",
+    "string.hex": "User ID must be a valid hexadecimal string",
+  }),
   companyUrl: Joi.string()
     .trim()
     .required()
@@ -28,7 +24,6 @@ async function raiseRequestController(req, res, next) {
   try {
     const { error, value } = postRaiseRequestPayloadSchema.validate(req.body);
     if (error) {
-      console.log(error.message);
       return res.status(422).json({
         message: error.message,
         statusCode: 422,

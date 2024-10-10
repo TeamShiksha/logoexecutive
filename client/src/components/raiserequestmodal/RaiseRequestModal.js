@@ -1,20 +1,26 @@
 import Modal from '../common/modal/Modal';
 import CustomInput from '../common/input/CustomInput';
-import {useState} from 'react';
+import {useState, useContext} from 'react';
 import {useApi} from '../../hooks/useApi';
-import {isValidEmail, isValidCompanyUrl} from '../../utils/helpers';
+import {isValidCompanyUrl} from '../../utils/helpers';
 import './RaiseRequestModal.css';
 import {INITIAL_RAISE_REQUEST_FORM_DATA} from '../../constants';
+import {UserContext} from '../../contexts/UserContext';
 
 function RaiseRequestModal({modalOpen, setModal}) {
+	const {userData} = useContext(UserContext);
 	const [formData, setFormData] = useState(INITIAL_RAISE_REQUEST_FORM_DATA);
 	const [validationErrors, setValidationErrors] = useState('');
 	const {errorMsg, makeRequest, loading, data, setErrorMsg, setData} = useApi({
-		url: `api/public/logo-request`,
+		url: `api/user/logo-request`,
 		method: 'post',
-		data: formData,
+		data: {
+			...formData,
+			user_id: userData && userData.userId,
+		},
 	});
 
+	console.log(userData);
 	const handleFormChange = (e) => {
 		setValidationErrors('');
 		setData('');
@@ -32,13 +38,6 @@ function RaiseRequestModal({modalOpen, setModal}) {
 	};
 
 	const validateFormData = () => {
-		if (formData.email === '') {
-			return 'Email is required';
-		} else if (formData.email.length > 50) {
-			return 'Email should not be more than 50 characters long';
-		} else if (!isValidEmail(formData.email)) {
-			return 'Invalid email format';
-		}
 		if (formData.companyUrl === '') {
 			return 'Company URL is required';
 		} else if (!isValidCompanyUrl(formData.companyUrl)) {
@@ -88,14 +87,6 @@ function RaiseRequestModal({modalOpen, setModal}) {
 				</p>
 			)}
 			<form onSubmit={handleSubmit} className='raise-request-form'>
-				<CustomInput
-					type='email'
-					label='email'
-					value={formData.email}
-					name='email'
-					required
-					onChange={handleFormChange}
-				/>
 				<CustomInput
 					type='url'
 					label='company url'

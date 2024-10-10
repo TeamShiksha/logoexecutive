@@ -1,12 +1,11 @@
 const mongoose = require("mongoose");
+const { StatusTypes } = require("../utils/constants");
 
 const raiseRequestSchema = new mongoose.Schema({
-  email: {
-    type: String,
+  user_id: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
     required: true,
-    trim: true,
-    lowercase: true,
-    match: [/^[^\s@]+@[^\s@]+\.[^\s@]+$/, "{VALUE} is not a valid email!"],
   },
   companyUrl: {
     type: String,
@@ -17,10 +16,18 @@ const raiseRequestSchema = new mongoose.Schema({
       "Please enter a valid URL.",
     ],
   },
-  createdAt: {
-    type: Date,
-    required: true,
-    default: Date.now,
+  status: {
+    type: String,
+    enum: Object.values(StatusTypes),
+    default: StatusTypes.PENDING,
+  },
+  operator: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+  },
+  comment: {
+    type: String,
+    trim: true,
   },
   updatedAt: {
     type: Date,

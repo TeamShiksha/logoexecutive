@@ -1,6 +1,6 @@
 {
 	"name": "client",
-	"version": "1.0.0",
+	"version": "1.1.0",
 	"repository": "https://github.com/TeamShiksha/logoexecutive.git",
 	"proxy": "http://127.0.0.1:5000",
 	"private": true,

@@ -26,6 +26,7 @@ async function sendEmail(email, subject, text) {
       to: email,
       subject: subject,
       text: text,
+      html: text,
     });
     return { success: true };
   } catch (error) {

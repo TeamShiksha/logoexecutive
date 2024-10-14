@@ -1,5 +1,7 @@
 const Joi = require("joi");
 const { STATUS_CODES } = require("http");
+const fs = require("fs");
+const handlebars = require("handlebars");
 const { fetchUserByEmail, createForgotToken } = require("../../services");
 const { sendEmail } = require("../../utils/sendEmail");
 
@@ -13,11 +15,6 @@ const forgotPasswordSchema = Joi.object().keys({
       "any.required": "Email is required",
       "string.pattern.base": "Invalid email",
     }),
-});
-
-const mailText = (url) => ({
-  subject: "Change Password",
-  body: `To change the password, please click on the link\n\n${url}`,
 });
 
 async function forgotPasswordController(req, res, next) {
@@ -46,8 +43,18 @@ async function forgotPasswordController(req, res, next) {
         statusCode: 503,
       });
 
-    const mail = mailText(userToken.tokenURL());
-    const nodeMailerRes = await sendEmail(user.email, mail.subject, mail.body);
+    const htmlFile = fs.readFileSync(
+      __dirname + "/../../templates/ForgotPasswordOrVerify.html",
+      "utf-8"
+    ).toString();
+    const template = handlebars.compile(htmlFile);
+    const replacements = {
+      url: userToken.tokenURL(),
+      highlighted_text: "It seems like you forgot your password?",
+      text: "Please click on the following link to reset your password"
+    };
+    const htmlBody = template(replacements);
+    const nodeMailerRes = await sendEmail(user.email,  "Change Password", htmlBody);
     if (!nodeMailerRes.success)
       return res.status(500).json({
         error: STATUS_CODES[500],

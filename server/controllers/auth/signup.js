@@ -1,5 +1,7 @@
 const Joi = require("joi");
 const { STATUS_CODES } = require("http");
+const fs = require("fs");
+const handlebars = require("handlebars");
 const { sendEmail } = require("../../utils/sendEmail");
 const { createUser, emailRecordExists,
   createVerifyToken, createSubscription } = require("../../services");
@@ -106,10 +108,21 @@ async function signupController(req, res, next) {
         },
       );
 
+    const htmlFile = fs.readFileSync(
+      __dirname + "/../../templates/ForgotPasswordOrVerify.html",
+      "utf-8"
+    ).toString();
+    const template = handlebars.compile(htmlFile);
+    const replacements = {
+      url: verificationToken.tokenURL(),
+      highlighted_text: "You need to verify your email",
+      text: "Please click on the following link to verify your email"
+    };
+    const htmlBody = template(replacements);
     const emailRes = await sendEmail(
       newUser.email,
       "Please Verify your email",
-      verificationToken.tokenURL()
+      htmlBody
     );
     if (!emailRes.success) {
       return res.status(206).json(

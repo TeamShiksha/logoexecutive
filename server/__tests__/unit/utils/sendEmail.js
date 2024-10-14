@@ -36,6 +36,7 @@ describe("sendEmail", () => {
       to: "test@example.com",
       subject: "Test Subject",
       text: "Test Body",
+      html: "Test Body",
     });
     expect(result).toEqual({ success: true });
   });
@@ -71,6 +72,7 @@ describe("sendEmail", () => {
       to: "test@example.com",
       subject: "Test Subject",
       text: "Test Body",
+      html: "Test Body",
     });
     expect(result).toEqual({ success: false, error: new Error("Test Error") });
   });

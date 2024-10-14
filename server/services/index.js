@@ -16,6 +16,7 @@ const UserTokenService = require("./UserToken");
 const UserService = require("./Users");
 const AdminService = require("./admin");
 const commonService = require("./common");
+const { log } = require("./Logs");
 
 module.exports = {
   formExists, createForm, updateForm, createImageData, fetchImageByCompanyFree,
@@ -25,5 +26,5 @@ module.exports = {
   fetchUsers, fetchUserByEmail, createUser, updatePasswordbyUser,
   fetchUserFromId, verifyUser, updateUser, deleteUserAccount, emailRecordExists, setUserAdmin,
   ContactUsService, ImageService, KeyService, fetchWithPagination, SubscriptionService, UserTokenService, UserService, AdminService,
-  upload, uploadToS3, getImagesByUserId, commonService
+  upload, uploadToS3, getImagesByUserId, commonService, log
 };

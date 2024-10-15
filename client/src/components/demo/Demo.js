@@ -1,5 +1,6 @@
 import {useEffect, useState} from 'react';
 import CustomInput from '../common/input/CustomInput';
+import RaiseRequest from '../raiserequest/RaiseRequest';
 import './Demo.css';
 import {useApi} from '../../hooks/useApi';
 import Spinner from '../spinner/Spinner';
@@ -51,6 +52,7 @@ const Demo = () => {
 					Enter the name of a brand or the URL of a website for which you would
 					like to retrieve logos.
 				</p>
+
 				<CustomInput
 					type='text'
 					label='Brand name'
@@ -70,6 +72,7 @@ const Demo = () => {
 					</div>
 				)}
 			</form>
+			{errorMsg && <RaiseRequest />}
 		</section>
 	);
 };

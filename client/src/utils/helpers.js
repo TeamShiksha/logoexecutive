@@ -34,3 +34,21 @@ export const formatDate = (dateString) => {
 		year: 'numeric',
 	});
 };
+
+export const isValidCompanyUrl = (url) => {
+	const protocol = /^(https?:\/\/)?/;
+	const www = /(www\.)?/;
+	const domainName = /[a-zA-Z0-9-]+/;
+	const topLevelDomain = /(\.[a-zA-Z]{2,}){1,}/;
+	const countryCode = /(\.[a-zA-Z]{2,})?/;
+	const path = /(\/.*)?/;
+
+	return (
+		protocol.test(url) &&
+		www.test(url) &&
+		domainName.test(url) &&
+		topLevelDomain.test(url) &&
+		countryCode.test(url) &&
+		path.test(url)
+	);
+};

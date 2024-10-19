@@ -52,7 +52,6 @@ const Demo = () => {
 					Enter the name of a brand or the URL of a website for which you would
 					like to retrieve logos.
 				</p>
-
 				<CustomInput
 					type='text'
 					label='Brand name'

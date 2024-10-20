@@ -1,8 +1,5 @@
-
 const BaseRepository = require('./base');
 const Subscriptions = require('../models/Subscriptions');
-
-
 
 /**
  * The SubscriptionsRepository extends BaseRepository to manage ContactUs model operations, inheriting CRUD methods like getById, getAll, create, update, and delete..
@@ -14,7 +11,6 @@ class SubscriptionsRepository extends BaseRepository {
   constructor() {
     super(Subscriptions); 
   }
-
 
 }
 

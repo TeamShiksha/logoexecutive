@@ -1,4 +1,3 @@
-
 const BaseRepository = require('./base');
 const User = require('../models/User'); 
 
@@ -12,7 +11,6 @@ class UsersRepository extends BaseRepository {
   constructor() {
     super(User); 
   }
-
 
 }
 

@@ -1,4 +1,3 @@
-
 const BaseRepository = require('./base');
 const ContactUs = require('../models/ContactUs'); 
 

@@ -1,13 +1,11 @@
 name: Deploy
 on:
   workflow_dispatch:
-  push:
+  pull_request:
     branches:
       - dev
       - tst
       - prod
-  pull_request:
-    types: [opened, synchronize, reopened]
 
 jobs:
   sonarcloud:

@@ -1,0 +1,25 @@
+name: Feature Form
+description: Use this form to request feature or enchancement
+labels: ["enhancement", "low priority"]
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: Please provide detailed description of this feature/enhancement.
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected-behavior
+    attributes:
+      label: Expected and Current Behavior
+      description: Describe what should happen when this issue is resolved, and whats happending currently.
+
+  - type: checkboxes
+    id : confirmation-checklist
+    attributes :
+       label : Confirmation Checklist
+       options :
+         - label : I have searched for similar issues before creating this one.
+         - label : I have provided all the necessary information to understand and reproduce the issue.

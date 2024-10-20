@@ -1,0 +1,33 @@
+name: Bug Report Form
+description: Use this form to report a bug
+labels: ["bug", "high priority"]
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: Description and Expected Behavior
+      description: Please provide description and expected behavior of the bug you're reporting.
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps-to-reproduce
+    attributes:
+      label: Steps to Reproduce with Screenshots or Recordings
+      description: Please provide steps to reproduce the bug and Screenshots/Recordings.
+      placeholder: |
+        1. Go to '...'
+        2. Click on '....'
+        3. See error
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: confirmation-checklist
+    attributes:
+      label: Confirmation Checklist
+      options:
+        - label: I have searched for similar issues [issues](https://github.com/TeamShiksha/logoexecutive/issues) and made sure no duplicate issue exists..
+        - label: I have provided all the necessary information to understand and reproduce the bug.
+    validations:
+      required: true

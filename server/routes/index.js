@@ -16,7 +16,7 @@ const privateRouteCORS = {
       callback(new Error("Not allowed by CORS"));
     }
   },
-  credentials: true
+  credentials: true,
 };
 
 router.use("/auth", cors(privateRouteCORS), authRouter);

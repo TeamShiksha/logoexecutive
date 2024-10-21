@@ -7,4 +7,4 @@ router.post("/contact-us", contactUsController);
 router.get("/logo", demoLogoController);
 router.get("/search", demoSearchLogoController);
 
-module.exports = router; 
+module.exports = router;

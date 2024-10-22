@@ -1,8 +1,8 @@
-const express = require('express');
+const express = require("express");
 const app = express();
 
-app.get('/', (req, res) => {
-  res.json({ message: 'Hello, this is your JSON response!' });
+app.get("/", (req, res) => {
+  res.json({ message: "Hello, this is your JSON response!" });
 });
 
 const PORT = process.env.PORT || 5000;

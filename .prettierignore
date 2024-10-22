@@ -2,3 +2,5 @@ node_modules
 dist
 build
 *.min.js
+packages/*/dist/
+packages/*/coverage/

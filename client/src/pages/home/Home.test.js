@@ -1,9 +1,18 @@
 import {fireEvent, render, screen} from '@testing-library/react';
+import {AuthContext} from '../../contexts/AuthContext';
 import Home from './Home';
 
 describe('Welcome Page', () => {
+	const mockAuthContext = {
+		isAuthenticated: true,
+	};
+
 	const renderWelcomePage = () => {
-		return render(<Home />);
+		return render(
+			<AuthContext.Provider value={mockAuthContext}>
+				<Home />
+			</AuthContext.Provider>,
+		);
 	};
 
 	it('should render Hero Section', () => {

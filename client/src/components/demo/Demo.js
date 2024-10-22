@@ -1,13 +1,16 @@
-import {useEffect, useState} from 'react';
+import {useEffect, useState, useContext} from 'react';
 import CustomInput from '../common/input/CustomInput';
+import RaiseRequest from '../raiserequest/RaiseRequest';
 import './Demo.css';
 import {useApi} from '../../hooks/useApi';
 import Spinner from '../spinner/Spinner';
+import {AuthContext} from '../../contexts/AuthContext';
 
 const Demo = () => {
 	const [brandName, setBrandName] = useState('');
 	const [validationError, setValidationError] = useState('');
 	const [imageUrl, setImageUrl] = useState('');
+	const {isAuthenticated} = useContext(AuthContext);
 	const {errorMsg, makeRequest, data, loading, isSuccess, setErrorMsg} = useApi(
 		{
 			url: `api/public/logo`,
@@ -43,6 +46,7 @@ const Demo = () => {
 			setImageUrl(data.data);
 		}
 	}, [data]);
+
 	return (
 		<section id='demo' className='demo-container'>
 			<form onSubmit={handleFormChange} noValidate>
@@ -51,6 +55,7 @@ const Demo = () => {
 					Enter the name of a brand or the URL of a website for which you would
 					like to retrieve logos.
 				</p>
+
 				<CustomInput
 					type='text'
 					label='Brand name'
@@ -70,6 +75,7 @@ const Demo = () => {
 					</div>
 				)}
 			</form>
+			{errorMsg && isAuthenticated && <RaiseRequest />}
 		</section>
 	);
 };

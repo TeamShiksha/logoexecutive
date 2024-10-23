@@ -5,6 +5,7 @@
   "license": "MIT",
   "scripts": {
     "start": "node app.js",
+    "build": "echo 'Build not required for nodejs app'",
     "lint": "eslint .",
     "lint:fix": "eslint --fix .",
     "test": "jest --watchAll=false",

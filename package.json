@@ -1,11 +1,35 @@
 {
   "name": "root",
   "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
   "scripts": {
-    "start": "lerna run start --parallel"
+    "build": "lerna run build",
+    "start": "lerna run start --parallel",
+    "test": "lerna run test --stream",
+    "lint": "lerna run lint",
+    "format": "lerna run format",
+    "format:check": "lerna run format:check"
   },
-  "dependencies": {
+  "lint-staged": {
+    "**/*.{js,jsx,ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ]
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.25.9",
+    "@babel/core": "^7.25.9",
+    "@babel/preset-env": "^7.25.9",
+    "@eslint/js": "^9.11.1",
+    "eslint": "^9.13.0",
+    "eslint-plugin-react": "^7.37.0",
+    "globals": "^15.9.0",
+    "husky": "^9.1.6",
     "lerna": "^8.1.8",
+    "lint-staged": "^15.2.10",
+    "prettier": "3.3.3",
     "vite": "^5.4.8"
   }
 }

@@ -5,11 +5,13 @@
   "license": "MIT",
   "scripts": {
     "start": "node app.js",
+    "build": "echo 'Build not required for nodejs app'",
     "lint": "eslint .",
     "lint:fix": "eslint --fix .",
     "test": "jest --watchAll=false",
     "unit": "jest unit",
-    "coverage": "jest --coverage --watchAll=false"
+    "coverage": "jest --coverage --watchAll=false",
+    "format": "prettier --write"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.472.0",

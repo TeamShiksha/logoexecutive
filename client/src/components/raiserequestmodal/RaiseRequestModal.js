@@ -20,7 +20,6 @@ function RaiseRequestModal({modalOpen, setModal}) {
 		},
 	});
 
-	/////.log(userData);
 	const handleFormChange = (e) => {
 		setValidationErrors('');
 		setData('');

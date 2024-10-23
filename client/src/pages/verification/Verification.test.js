@@ -6,7 +6,7 @@ import {afterAll, beforeEach, describe, expect, it, vi} from 'vitest';
 import Home from '../home/Home';
 import Verification from './Verification';
 import * as router from 'react-router';
-import {AuthContext} from '../../contexts/AuthContext'; // Import AuthContext
+import {AuthContext} from '../../contexts/AuthContext';
 
 describe('VerificationStatus Component', () => {
 	const navigate = vi.fn();
@@ -28,7 +28,7 @@ describe('VerificationStatus Component', () => {
 	};
 
 	it('should navigate to welcome page when token is not provided', async () => {
-		const url = `/verify`; // No token in URL
+		const url = `/verify`;
 
 		renderWithAuthContext(
 			<MemoryRouter initialEntries={[url]}>

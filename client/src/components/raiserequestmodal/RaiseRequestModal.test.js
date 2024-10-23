@@ -57,7 +57,7 @@ describe('RaiseRequestModal Component', () => {
 			await userEvent.click(screen.getByRole('button', {name: /submit/i}));
 
 			expect(mockMakeRequest).toHaveBeenCalled();
-			expect(urlInput.value).toBe(''); // Form should reset on success
+			expect(urlInput.value).toBe('');
 		});
 
 		it('keeps form data on failed submission', async () => {
@@ -70,7 +70,7 @@ describe('RaiseRequestModal Component', () => {
 			await userEvent.click(screen.getByRole('button', {name: /submit/i}));
 
 			expect(mockMakeRequest).toHaveBeenCalled();
-			expect(urlInput.value).toBe(initialValue); // Form should not reset on failure
+			expect(urlInput.value).toBe(initialValue);
 		});
 	});
 

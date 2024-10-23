@@ -36,9 +36,9 @@ export const formatDate = (dateString) => {
 };
 
 export const isValidCompanyUrl = (url) => {
-	const protocol = /^https?:\/\/(www\.)?/; // Strict protocol check
-	const domainName = /[a-zA-Z0-9-]+\.[a-zA-Z]{2,}/; // Ensure valid domain with TLD
-	const path = /(\/.*)?/; // Optional path
+	const protocol = /^https?:\/\/(www\.)?/;
+	const domainName = /[a-zA-Z0-9-]+\.[a-zA-Z]{2,}/;
+	const path = /(\/.*)?/;
 
 	return protocol.test(url) && domainName.test(url) && path.test(url);
 };

@@ -36,9 +36,7 @@ export const formatDate = (dateString) => {
 };
 
 export const isValidCompanyUrl = (url) => {
-	const protocol = /^https?:\/\/(www\.)?/;
-	const domainName = /[a-zA-Z0-9-]+\.[a-zA-Z]{2,}/;
-	const path = /(\/.*)?/;
-
-	return protocol.test(url) && domainName.test(url) && path.test(url);
+	const urlRegex =
+		/^(https?:\/\/)(www\.)?([a-zA-Z0-9-]{1,63}\.)+[a-zA-Z]{2,}(\/[^\s#]*)?(#[^\s]*)?$/;
+	return urlRegex.test(url);
 };

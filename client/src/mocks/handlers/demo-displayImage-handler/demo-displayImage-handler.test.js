@@ -55,7 +55,6 @@ describe('MSW handler - /api/public/logo', () => {
 	it('should return 404 if logo is not available', async () => {
 		let apiResponse;
 
-		// Mock MSW handler to simulate a 404 response
 		server.use(
 			rest.get('/api/public/logo', (req, res, ctx) => {
 				apiResponse = {
@@ -68,17 +67,14 @@ describe('MSW handler - /api/public/logo', () => {
 
 		renderWithContext();
 
-		// Simulate user input and form submission
 		const input = screen.getByLabelText(/Brand name/i);
 		const button = screen.getByRole('button', {name: /go/i});
 
 		fireEvent.change(input, {target: {value: 'nonexistent'}});
 		fireEvent.click(button);
 
-		// Wait for the error message to appear
 		const error = await screen.findByText('Logo not available');
 
-		// Verify the error is present and visible
 		expect(error).toBeInTheDocument();
 	});
 });

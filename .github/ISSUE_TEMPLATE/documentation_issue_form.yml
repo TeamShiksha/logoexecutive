@@ -1,0 +1,52 @@
+name: Documentation Issue
+description: Use this form to report documentation issues, improvements, or missing content
+labels: ["documentation", "low priority"]
+body:        
+  - type: dropdown
+    id: issue-type
+    attributes:
+      label: Type of Documentation Issue
+      description: What type of documentation issue are you reporting?
+      options:
+        - Missing Documentation
+        - Incorrect Information
+        - Unclear Explanation
+        - Outdated Content
+        - Broken Links
+        - Typo/Grammar Error
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: issue-description
+    attributes:
+      label: Issue Description
+      description: Please describe what's wrong or missing in the documentation
+    validations:
+      required: true
+
+  - type: textarea
+    id: suggested-change
+    attributes:
+      label: Suggested Changes
+      description: Please share any specific suggestions you have for improving the documentation.
+
+  - type: input
+    id: location
+    attributes:
+      label: Documentation Location
+      description: Please specify where this documentation issue is located (URL or file path).
+      placeholder: "e.g., docs/README.md"
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: confirmation
+    attributes:
+      label: Confirmation
+      options:
+        - label: I have searched for similar issues before creating this one.
+        - label: I have provided all the necessary information to understand the documentation issue.
+    validations:
+      required: true

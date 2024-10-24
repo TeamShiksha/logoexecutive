@@ -1,0 +1,20 @@
+name: Other Issue Form
+description: Use this form for issues that don't fit other categories
+labels: ["other", "low priority"]
+body:
+  - type: textarea
+    id: issue-description
+    attributes:
+      label: Issue Description
+      description: Briefly describe the issue you're facing.
+    validations:
+      required: true
+  - type: checkboxes
+    id: confirmation-checklist
+    attributes:
+      label: Confirmation Checklist
+      options:
+        - label: I have searched for similar issues before submitting this one.
+        - label: I am sure that this issue doesn't fit any other categories.
+    validations:
+      required: true

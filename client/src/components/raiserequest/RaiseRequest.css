@@ -1,0 +1,35 @@
+.raise-request-container {
+	padding: 32px;
+	text-align: center;
+	margin-top: 20px;
+	border: var(--border);
+	border-radius: var(--bradius);
+	color: var(--description);
+}
+
+.raise-request-text {
+	margin-bottom: 20px;
+}
+
+.raise-request-text > strong {
+	font-weight: 400;
+	font-size: var(--large-text);
+}
+
+.raise-request-button {
+	background-color: var(--smooth-purple);
+	color: var(--white);
+	font-size: var(--medium-text);
+	padding: 12px 10px;
+	border-radius: var(--bradius);
+	border: var(--border);
+	font-weight: bold;
+}
+
+.raise-request-button:hover {
+	color: var(--smooth-purple);
+	background-color: var(--light-purple);
+	border: 2px solid var(--smooth-purple);
+	transition: 200ms ease-in-out;
+	cursor: pointer;
+}

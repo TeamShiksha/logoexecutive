@@ -34,3 +34,9 @@ export const formatDate = (dateString) => {
 		year: 'numeric',
 	});
 };
+
+export const isValidCompanyUrl = (url) => {
+	const urlRegex =
+		/^(https?:\/\/)(www\.)?([a-zA-Z0-9-]{1,63}\.)+[a-zA-Z]{2,}(\/[^\s#]*)?(#[^\s]*)?$/;
+	return urlRegex.test(url);
+};

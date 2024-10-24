@@ -1,22 +1,28 @@
 import {rest} from 'msw';
+
 const mockImagesData = {
-	imageName: 'Google.png',
+	imageName: 'google.png',
 	data: 'http://localhost/google.png',
 };
+
 export const displayImagesHandler = [
 	rest.get('/api/public/logo', (req, res, ctx) => {
 		const domain = req.url.searchParams.get('domain');
+
 		if (!domain) {
 			return res(
 				ctx.status(422),
 				ctx.json({
 					statusCode: 422,
-					message: 'Domain is required',
+					message: 'Brand Name is required',
 				}),
 			);
 		}
-		const image = mockImagesData['imageName'] === `${domain}.png`;
-		if (!image) {
+
+		const isImageAvailable =
+			mockImagesData.imageName === `${domain.toLowerCase()}.png`;
+
+		if (!isImageAvailable) {
 			return res(
 				ctx.status(404),
 				ctx.json({
@@ -25,11 +31,12 @@ export const displayImagesHandler = [
 				}),
 			);
 		}
+
 		return res(
 			ctx.status(200),
 			ctx.json({
 				statusCode: 200,
-				data: mockImagesData['data'],
+				data: mockImagesData.data,
 			}),
 		);
 	}),

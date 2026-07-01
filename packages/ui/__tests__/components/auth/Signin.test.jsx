@@ -349,9 +349,9 @@ describe("SignInForm UI and Functionality Tests", () => {
     fireEvent.click(guestSignInButton);
 
     await waitFor(() => {
-      expect(
-        screen.getAllByText(MESSAGES.GUEST_SIGN_IN_SUCCESS)
-      ).toHaveLength(1);
+      expect(screen.getAllByText(MESSAGES.GUEST_SIGN_IN_SUCCESS)).toHaveLength(
+        1
+      );
     });
   });
 

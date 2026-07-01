@@ -64,6 +64,7 @@ class UsersRepository extends BaseRepository {
   async findUsersWithSubscription({ search, page, limit, includeDeleted }) {
     const matchStage = {
       role: "CUSTOMER",
+      reward_points_current: { $gt: 0 },
     };
 
     if (!includeDeleted) {
@@ -71,10 +72,7 @@ class UsersRepository extends BaseRepository {
     }
 
     if (search) {
-      const escapedSearch = search.replaceAll(
-        /[.*+?^${}()|[\\\]\\]/g,
-        String.raw`\$&`
-      );
+      const escapedSearch = search.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
       const regex = new RegExp(escapedSearch, "i");
       matchStage.$or = [{ name: regex }, { email: regex }];
     }
@@ -104,6 +102,8 @@ class UsersRepository extends BaseRepository {
           email: 1,
           is_verified: 1,
           is_deleted: 1,
+          reward_points_current: 1,
+          reward_points_lifetime: 1,
           created_at: { $toDate: "$_id" },
           subscription: {
             type: "$subscription.type",

@@ -9,8 +9,10 @@ class BaseRepository {
     this.model = model;
   }
 
-  async find(query) {
-    return await this.model.find(query);
+  async find(query, { session } = {}) {
+    const q = this.model.find(query);
+    if (session) q.session(session);
+    return await q;
   }
 
   async getById(id, { session } = {}) {
@@ -59,7 +61,8 @@ class BaseRepository {
     return await this.model.findByIdAndUpdate(id, data, options);
   }
 
-  async findOneAndUpdate(filter, update, options = {}) {
+  async findOneAndUpdate(filter, update, { session } = {}) {
+    const options = session ? { session } : {};
     return await this.model.findOneAndUpdate(filter, update, options);
   }
 

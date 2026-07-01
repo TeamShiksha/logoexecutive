@@ -69,7 +69,7 @@ function UserRewards() {
     : "";
   const { fetchRequest, loading } = useApi({
     method: "GET",
-    url: `/admin/users?page=${page}&limit=${ITEMS_PER_PAGE}${searchParam}`,
+    url: `/admin/users?page=${page}&limit=${ITEMS_PER_PAGE}${searchParam}&hasRewardPoints=true`,
   });
 
   const { fetchRequest: fetchTransactions } = useApi({

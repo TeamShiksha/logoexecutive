@@ -347,12 +347,13 @@ class UserService {
    * @param {boolean} options.includeDeleted
    * @returns {Promise<{ users: Array, total: number }>}
    */
-  async listUsers({ search, page, limit, includeDeleted }) {
+  async listUsers({ search, page, limit, includeDeleted, hasRewardPoints }) {
     return await this.userRepository.findUsersWithSubscription({
       search,
       page,
       limit,
       includeDeleted,
+      hasRewardPoints,
     });
   }
 

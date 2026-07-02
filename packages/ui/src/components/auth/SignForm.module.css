@@ -189,13 +189,110 @@
   margin: 0 auto;
 }
 
+.password-container {
+  position: relative;
+}
+
 .strength-card {
-  border: 1px solid var(--border);
-  border-radius: 0.6rem;
-  padding: 0.3rem 0.65rem;
-  margin-top: 0.2rem;
-  margin-bottom: 0.1rem;
-  width: 400px;
+  position: absolute;
+  left: calc(100% + 20px);
+  top: -20px;
+  width: 260px;
+  background: var(--strength-card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 12px;
+  box-shadow: var(--strength-card-shadow);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateX(-8px) scale(0.97);
+  transition:
+    opacity 0.2s ease,
+    transform 0.2s ease,
+    visibility 0.2s ease;
+  pointer-events: none;
+}
+
+.strength-card::before {
+  content: "";
+  position: absolute;
+  left: -9px;
+  top: 22px;
+  width: 16px;
+  height: 16px;
+  background: var(--strength-card-bg);
+  border-left: 1px solid var(--border-color);
+  border-bottom: 1px solid var(--border-color);
+  z-index: 1;
+  transform: rotate(45deg);
+}
+
+.strength-card-visible {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(0) scale(1);
+  pointer-events: auto;
+}
+.password-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.weak {
+  color: #ef4444;
+}
+
+.medium {
+  color: #f59e0b;
+}
+
+.strong {
+  color: #22c55e;
+}
+
+.password-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.password-label {
+  color: var(--black);
+}
+
+.password-level {
+  font-weight: 600;
+}
+
+.needs-text {
+  margin-top: 0.55rem;
+
+  font-size: 0.75rem;
+  line-height: 1.35;
+
+  border-top: 1px solid var(--border);
+  padding-top: 0.45rem;
+
+  color: var(--description);
+}
+
+.needs-text strong {
+  color: var(--black);
+}
+
+.criteria-item {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+
+  font-size: 0.82rem;
+  font-weight: 500;
+
+  transition: color 0.2s ease;
 }
 
 .strength-bars {
@@ -208,52 +305,24 @@
   height: 5px;
   flex: 1;
   border-radius: 9999px;
-  background-color: var(--black);
-  opacity: 0.1;
+  background-color: #e5e7eb;
   transition: background-color 0.35s ease;
 }
 
 .strength-bar-active {
-  opacity: 1;
-  background-color: var(--success);
+  transition: background-color 0.3s ease;
 }
 
-.criteria-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.3rem 0.5rem;
+.bar-weak {
+  background-color: #ef4444;
 }
 
-.criteria-item {
-  display: flex;
-  align-items: center;
-  gap: 0.35rem;
-  font-size: 0.78rem;
-  color: var(--black);
-  opacity: 0.5;
-  font-weight: 600;
-  width: calc(50% - 0.3rem);
-  transition: color 0.3s ease;
+.bar-medium {
+  background-color: #f59e0b;
 }
 
-.criteria-item.met {
-  opacity: 1;
-  color: var(--success);
-}
-
-.criteria-icon {
-  font-size: 0.85rem;
-  line-height: 1;
-  color: var(--primary);
-  flex-shrink: 0;
-  transition: color 0.3s ease;
-}
-
-.criteria-item.met .criteria-icon {
-  color: var(--success);
+.bar-strong {
+  background-color: #22c55e;
 }
 
 .signup-divider {
@@ -289,16 +358,48 @@
   color: var(--description);
 }
 
+@media only screen and (max-width: 600px) {
+  .password-container {
+    overflow: hidden;
+  }
+
+  .strength-card {
+    position: static;
+    width: 100%;
+    margin-top: 0;
+    padding: 0;
+    transform: translateY(-8px) scale(0.97);
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    pointer-events: none;
+    transition:
+      opacity 0.2s ease,
+      transform 0.2s ease,
+      max-height 0.3s ease,
+      margin-top 0.3s ease;
+  }
+
+  .strength-card-visible {
+    max-height: 200px;
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    pointer-events: auto;
+    margin-top: 0.5rem;
+    padding: 12px;
+  }
+
+  .strength-card::before {
+    display: none;
+  }
+}
+
 @media only screen and (max-width: 564px) {
   .form-width {
     width: 350px;
   }
 
   .submit-button {
-    width: 350px;
-  }
-
-  .strength-card {
     width: 350px;
   }
 
@@ -313,10 +414,6 @@
   }
 
   .submit-button {
-    width: 300px;
-  }
-
-  .strength-card {
     width: 300px;
   }
 

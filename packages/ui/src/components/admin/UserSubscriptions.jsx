@@ -57,8 +57,8 @@ function renderTable(loading, initialized, users, styles, handleOpenModal) {
       <table className={styles.table}>
         <thead>
           <tr>
-            {USER_SUBSCRIPTIONS.tableHeaders.map((h, i) => (
-              <th key={i}>{h}</th>
+            {USER_SUBSCRIPTIONS.tableHeaders.map((h) => (
+              <th key={h}>{h}</th>
             ))}
           </tr>
         </thead>

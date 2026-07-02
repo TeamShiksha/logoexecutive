@@ -1,4 +1,3 @@
-/* ── Shared panel card ──────────────────────────────────────── */
 .panel {
   background-color: var(--white);
   border: 1px solid var(--border-color);
@@ -9,11 +8,9 @@
   gap: 1.5rem;
 }
 
-/* ── Tab bar ────────────────────────────────────────────────── */
 .tabs-container {
   display: flex;
   border-bottom: 1px solid var(--border-color);
-  /* cancel out the panel gap so the underline sits flush with content */
   margin-bottom: -0.5rem;
 }
 
@@ -49,12 +46,10 @@
   background-color: var(--primary);
 }
 
-/* ── Tab content ────────────────────────────────────────────── */
 .tab-content {
   flex: 1;
 }
 
-/* ── Responsive ─────────────────────────────────────────────── */
 @media (max-width: 768px) {
   .panel {
     padding: 1rem;

@@ -419,13 +419,14 @@ async function listUsersController(req, res, next) {
       });
     }
 
-    const { search, page, limit, includeDeleted } = value;
+    const { search, page, limit, includeDeleted, hasRewardPoints } = value;
     const userService = new UserService();
     const { users, total } = await userService.listUsers({
       search,
       page,
       limit,
       includeDeleted,
+      hasRewardPoints,
     });
 
     return res.status(200).json({

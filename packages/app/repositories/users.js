@@ -59,13 +59,22 @@ class UsersRepository extends BaseRepository {
    * @param {number} options.page - 1-based page number.
    * @param {number} options.limit - Number of results per page.
    * @param {boolean} options.includeDeleted - Whether to include soft-deleted users.
+   * @param {boolean} options.hasRewardPoints - Filter to only CUSTOMER users with reward points.
    * @returns {Promise<{ users: Array, total: number }>}
    */
-  async findUsersWithSubscription({ search, page, limit, includeDeleted }) {
-    const matchStage = {
-      role: "CUSTOMER",
-      reward_points_current: { $gt: 0 },
-    };
+  async findUsersWithSubscription({
+    search,
+    page,
+    limit,
+    includeDeleted,
+    hasRewardPoints,
+  }) {
+    const matchStage = {};
+
+    if (hasRewardPoints) {
+      matchStage.role = "CUSTOMER";
+      matchStage.reward_points_current = { $gt: 0 };
+    }
 
     if (!includeDeleted) {
       matchStage.is_deleted = false;

@@ -672,8 +672,7 @@ export const EMAIL_DOES_NOT_EXIST = {
 
 export const NOT_FOUND_PAGE = {
   TITLE: "404 - Page Not Found",
-  MESSAGE:
-    "The page you are looking for doesn't exist. It might have been moved, deleted, or perhaps the URL is incorrect.",
+  MESSAGE: "The page you are looking for does not exist.",
 };
 
 export const VERIFICATION = {
@@ -867,6 +866,222 @@ export const SUBSCRIPTION_PANEL = {
   tabs: {
     subscriptions: "User Subscriptions",
     logs: "Subscription Logs",
+  },
+};
+
+export const MILESTONE_CONFIG = {
+  title: "Rewards Milestone Configuration",
+  subtitle: "Manage reward milestone thresholds and activate configurations.",
+  createButton: "Create Config",
+  tableHeaders: ["Name", "Thresholds", "Status", ""],
+  status: {
+    active: "Active",
+    inactive: "Inactive",
+  },
+  modal: {
+    createTitle: "Create Milestone Config",
+    editTitle: "Edit Milestone Config",
+    nameLabel: "Configuration Name",
+    namePlaceholder: "e.g. Q3 2026 Campaign",
+    thresholdsLabel: "Reward Thresholds",
+    atLabel: "At (submissions)",
+    pointsLabel: "Points",
+    addThreshold: "Add Threshold",
+    removeThreshold: "Remove",
+    saveButton: "Save",
+    cancelButton: "Cancel",
+  },
+  activate: {
+    heading: "Activate Configuration",
+    description:
+      "Activating this configuration will deactivate the currently active one. The new configuration takes effect on the next worker run.",
+    confirmButton: "Activate",
+  },
+  delete: {
+    heading: "Delete Configuration",
+    description:
+      "Are you sure you want to delete this configuration? This action cannot be undone.",
+    confirmButton: "Delete",
+  },
+  emptyState: "No milestone configurations found. Create one to get started.",
+  toasts: {
+    createSuccess: "Milestone configuration created successfully.",
+    createError: "Failed to create milestone configuration.",
+    updateSuccess: "Milestone configuration updated successfully.",
+    updateError: "Failed to update milestone configuration.",
+    activateSuccess: "Milestone configuration activated successfully.",
+    activateError: "Failed to activate milestone configuration.",
+    deleteSuccess: "Milestone configuration deleted successfully.",
+    deleteError: "Failed to delete milestone configuration.",
+    loadError: "Failed to load milestone configurations.",
+  },
+};
+
+export const IMAGE_REWARD_MODAL = {
+  title: "Image Reward Stats",
+  subtitle: "View reward summary and transaction history for this image.",
+  summary: {
+    proUsers: "Pro Users",
+    totalPoints: "Total Points Awarded",
+    milestones: "Milestones Achieved",
+    nextMilestone: "Next Milestone",
+  },
+  transactions: {
+    title: "Transaction History",
+    headers: ["Type", "Points", "User", "Reason", "Date"],
+    emptyState: "No transactions found for this image.",
+  },
+  bonus: {
+    button: "Award Bonus",
+    pointsLabel: "Points",
+    reasonLabel: "Reason",
+    reasonPlaceholder: "Select a reason...",
+    descriptionLabel: "Description (optional)",
+    descriptionPlaceholder: "Additional details...",
+    confirmButton: "Award Points",
+    cancelButton: "Cancel",
+    submittingText: "Awarding...",
+    success: "Bonus points awarded successfully.",
+    error: "Failed to award bonus points.",
+    validation: {
+      pointsRequired: "Please enter a valid positive number of points.",
+      reasonRequired: "Please select a reason for the bonus.",
+    },
+    reasonOptions: [
+      { value: "PROMOTION", label: "Promotion" },
+      { value: "MANUAL_CORRECTION", label: "Manual Correction" },
+    ],
+  },
+  toasts: {
+    summaryError: "Failed to load reward summary.",
+    transactionsError: "Failed to load transactions.",
+  },
+};
+
+export const REWARD_PANEL = {
+  tabs: {
+    milestones: "Milestones",
+    userRewards: "User Rewards",
+  },
+};
+
+export const ADMIN_USER_REWARDS = {
+  title: "User Rewards",
+  subtitle:
+    "Search users and view their reward summary and transaction history.",
+  searchPlaceholder: "Search by name or email...",
+  tableHeaders: ["User", "Plan", "Points", ""],
+  emptyState: "No users found matching your search.",
+  detail: {
+    title: "Reward Details",
+    awardBonus: "Award Bonus",
+    stats: {
+      totalTransactions: "Total Transactions",
+      totalPoints: "Total Points Awarded",
+    },
+    breakdownTitle: "Transaction Breakdown",
+    breakdownHeaders: ["Type", "Count", "Total Points"],
+    historyTitle: "Transaction History",
+    historyHeaders: ["Type", "Points", "Reason", "Date", ""],
+    emptyHistory: "No transactions found for this user.",
+  },
+  bonusModal: {
+    title: "Award Bonus Points",
+    pointsLabel: "Points",
+    reasonLabel: "Reason",
+    reasonPlaceholder: "e.g. Promotion, referral bonus",
+    descriptionLabel: "Description (optional)",
+    descriptionPlaceholder: "Additional details...",
+    confirmButton: "Award Points",
+    cancelButton: "Cancel",
+    submittingText: "Awarding...",
+    success: "Bonus points awarded successfully.",
+    error: "Failed to award bonus points.",
+    validation: {
+      pointsRequired: "Please enter a valid positive number of points.",
+      reasonRequired: "Please select a reason for the bonus.",
+    },
+    reasonOptions: [
+      { value: "PROMOTION", label: "Promotion" },
+      { value: "MANUAL_CORRECTION", label: "Manual Correction" },
+      { value: "SUSPICIOUS_ACTIVITY", label: "Suspicious Activity" },
+    ],
+  },
+  reverseModal: {
+    title: "Reverse Transaction",
+    description: (points, type) =>
+      `This will reverse the ${type} transaction of ${points} points. The user's points balance will be decreased accordingly.`,
+    reasonLabel: "Reversal Reason",
+    reasonPlaceholder: "Select a reason...",
+    confirmButton: "Reverse Transaction",
+    cancelButton: "Cancel",
+    submittingText: "Reversing...",
+    success: "Transaction reversed successfully.",
+    error: "Failed to reverse transaction.",
+    validation: {
+      reasonRequired: "Please select a reason for the reversal.",
+    },
+    reversalReasonOptions: [
+      { value: "DUPLICATE_REMOVAL", label: "Duplicate Removal" },
+      { value: "SUSPICIOUS_ACTIVITY", label: "Suspicious Activity" },
+      { value: "MANUAL_CORRECTION", label: "Manual Correction" },
+      { value: "SYSTEM_ERROR", label: "System Error" },
+    ],
+  },
+  toasts: {
+    loadError: "Failed to load user rewards.",
+  },
+};
+
+export const USER_REWARDS_DASHBOARD = {
+  title: "My Rewards",
+  subtitle: "Track your reward points, milestones, and transaction history.",
+  stats: {
+    currentPoints: "Current Points",
+    lifetimePoints: "Lifetime Points",
+    totalImages: "Images Contributed",
+    avgPoints: "Avg Points / Image",
+  },
+  images: {
+    title: "My Images",
+    subtitle: "Images you've uploaded and their reward performance.",
+    emptyState: "No images uploaded yet.",
+    points: "Points",
+  },
+  breakdown: {
+    title: "Transaction Breakdown",
+    headers: ["Type", "Count", "Total Points"],
+    emptyState: "No transactions yet.",
+  },
+  history: {
+    title: "Transaction History",
+    headers: ["Type", "Points", "Image", "Reason", "Date"],
+    emptyState: "No transactions yet.",
+  },
+  viewLeaderboard: "View Leaderboard",
+  uploadImage: "Upload Image",
+  toasts: {
+    summaryError: "Failed to load reward summary.",
+    statsError: "Failed to load transaction stats.",
+    historyError: "Failed to load transaction history.",
+    leaderboardError: "Failed to load leaderboard.",
+    rankError: "Failed to load your rank.",
+  },
+};
+
+export const LEADERBOARD_PAGE = {
+  title: "Leaderboard",
+  subtitle: "Top creators ranked by total reward points earned.",
+  yourPosition: "Your Position",
+  notRanked: "You haven't earned any rewards yet.",
+  outOf: "out of",
+  users: "creators",
+  backToRewards: "Back to My Rewards",
+  headers: ["Rank", "User", "Points", "Milestones"],
+  emptyState: "No leaderboard data yet.",
+  toasts: {
+    loadError: "Failed to load leaderboard.",
+    rankError: "Failed to load your rank.",
   },
 };
 

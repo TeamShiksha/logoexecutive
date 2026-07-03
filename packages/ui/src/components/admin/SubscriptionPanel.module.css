@@ -1,0 +1,68 @@
+/* ── Shared panel card ──────────────────────────────────────── */
+.panel {
+  background-color: var(--white);
+  border: var(--border);
+  border-radius: var(--bradius);
+  box-shadow: var(--shadow);
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* ── Tab bar ────────────────────────────────────────────────── */
+.tabs-container {
+  display: flex;
+  border-bottom: 1px solid var(--border-color);
+  /* cancel out the panel gap so the underline sits flush with content */
+  margin-bottom: -0.5rem;
+}
+
+.tab-button {
+  background: transparent;
+  border: none;
+  padding: 0.625rem 1.25rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--description);
+  cursor: pointer;
+  position: relative;
+  transition: color 0.2s ease;
+  white-space: nowrap;
+}
+
+.tab-button:hover {
+  color: var(--black);
+}
+
+.active-tab {
+  color: var(--primary);
+  font-weight: 600;
+}
+
+.active-tab::after {
+  content: "";
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: var(--primary);
+}
+
+/* ── Tab content ────────────────────────────────────────────── */
+.tab-content {
+  flex: 1;
+}
+
+/* ── Responsive ─────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .panel {
+    padding: 1rem;
+  }
+
+  .tab-button {
+    padding: 0.5rem 0.875rem;
+    font-size: 0.8rem;
+  }
+}

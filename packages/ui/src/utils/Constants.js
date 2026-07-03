@@ -944,6 +944,50 @@ export const IMAGE_UPLOAD_MODEL = {
   or: "OR",
 };
 
+export const USER_SUBSCRIPTIONS = {
+  title: "User Subscriptions",
+  subtitle: "View and manage subscription plans for all users.",
+  searchPlaceholder: "Search by name or email...",
+  tableHeaders: ["User", "Plan", "Usage", ""],
+  plans: {
+    HOBBY: "Hobby",
+    PRO: "Pro",
+  },
+  modal: {
+    title: "Change Subscription Plan",
+    planLabel: "Select Plan",
+    reasonLabel: "Reason (optional)",
+    reasonPlaceholder: "Provide a reason for the plan change...",
+    confirmButton: "Confirm Change",
+  },
+  emptyState: "No users found matching your search.",
+  toasts: {
+    success: "Subscription plan updated successfully.",
+    error: "Failed to update subscription plan.",
+  },
+};
+
+export const SUBSCRIPTION_LOGS = {
+  title: "Subscription Logs",
+  subtitle: "Audit trail of all subscription plan changes.",
+  tableHeaders: ["Date", "User", "Changed By", "From", "To", "Reason"],
+  plans: {
+    HOBBY: "Hobby",
+    PRO: "Pro",
+  },
+  emptyState: "No subscription changes have been recorded yet.",
+  toasts: {
+    error: "Failed to load subscription logs.",
+  },
+};
+
+export const SUBSCRIPTION_PANEL = {
+  tabs: {
+    subscriptions: "User Subscriptions",
+    logs: "Subscription Logs",
+  },
+};
+
 export const RELEASE_PAGE = {
   introduction: {
     heading: "About",

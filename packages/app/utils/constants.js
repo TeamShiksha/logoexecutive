@@ -48,6 +48,13 @@ const DefaultSubscriptionPlan = {
   is_active: true,
 };
 
+const ProSubscriptionPlan = {
+  type: SubscriptionTypes.PRO,
+  key_limit: 5,
+  usage_limit: 15000,
+  is_active: true,
+};
+
 const Messages = {
   INVALID_USER_ID: "Invalid user id.",
   EMAIL_EXISTS: "Email already exists.",
@@ -110,6 +117,9 @@ const Messages = {
   UPDATE_API_KEY: "This Key needs an update.",
   MFA_FAILED: "Failed to enable/disable MFA",
   INCORRECT_PIN: "Incorrect pin. Please try again.",
+  SUBSCRIPTION_NOT_FOUND: "Subscription not found.",
+  PLAN_ALREADY_ACTIVE: "User is already on this plan.",
+  PLAN_CHANGE_SUCCESS: "Subscription plan updated successfully.",
   SESSION_NOT_FOUND: "Session not found.",
   CANNOT_REVOKE_CURRENT_SESSION:
     "Cannot revoke current session. Use signout instead.",
@@ -144,6 +154,7 @@ module.exports = {
   SubscriptionTypes,
   StatusTypes,
   DefaultSubscriptionPlan,
+  ProSubscriptionPlan,
   Messages,
   TAB_OPTIONS,
   CLOUD_FRONT_REGION,

@@ -22,7 +22,7 @@
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
   padding: 3rem;
   z-index: 1100;
-  overflow: hidden;
+  overflow: visible;
   margin: 1rem;
   width: 350px;
 }

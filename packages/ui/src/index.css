@@ -18,6 +18,8 @@
   --description: rgb(75, 85, 99);
   --border: 1px solid rgb(177, 179, 183);
   --border-color: rgb(177, 179, 183, 0.3);
+  --strength-card-shadow: 0 16px 32px rgba(140, 152, 164, 0.18);
+  --strength-card-bg: #ffffff;
   --label-color: rgb(134, 137, 139);
   --input-color: var(--description);
   --bradius: 6px;
@@ -41,6 +43,8 @@
   --input-color: rgb(209, 213, 219);
   --shadow: rgba(0, 0, 0, 0.3) 0px 6px 24px 0px;
   --shadow-bottom: 0px 16px 24px rgba(0, 0, 0, 0.4);
+  --strength-card-shadow: 0 12px 28px rgba(0, 0, 0, 0.35);
+  --strength-card-bg: #1f2937;
   --table-heading-bg: rgb(31, 41, 55);
   --table-background: rgba(31, 41, 55, 0.3);
   --primary: #6366f1;

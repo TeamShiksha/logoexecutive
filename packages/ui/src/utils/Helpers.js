@@ -1,9 +1,8 @@
 import {
   DOCUMENTATION,
-  PASSWORD_VALIDATION_MESSAGES,
   CHANGE_PASSWORD,
+  PASSWORD_VALIDATION_MESSAGES,
 } from "./Constants";
-
 const PASSWORD_RULES = {
   minLength: 8,
   maxLength: 20,

@@ -520,6 +520,66 @@ const MOCK_MFA_SESSIONS = [
   },
 ];
 
+const MOCK_SUBSCRIPTION_LOGS = [
+  {
+    _id: new mongoose.Types.ObjectId(),
+    user_id: {
+      _id: MOCK_USERS[1]._id,
+      name: MOCK_USERS[1].name,
+      email: MOCK_USERS[1].email,
+    },
+    subscription_id: MOCK_SUBSCRIPTION[0]._id,
+    changed_by: {
+      _id: MOCK_USERS[2]._id,
+      name: MOCK_USERS[2].name,
+      email: MOCK_USERS[2].email,
+    },
+    from_plan: "HOBBY",
+    to_plan: "PRO",
+    reason: "Upgrade requested by user",
+    createdAt: new Date("2026-05-01T10:00:00Z"),
+    updatedAt: new Date("2026-05-01T10:00:00Z"),
+  },
+  {
+    _id: new mongoose.Types.ObjectId(),
+    user_id: {
+      _id: MOCK_USERS[1]._id,
+      name: MOCK_USERS[1].name,
+      email: MOCK_USERS[1].email,
+    },
+    subscription_id: MOCK_SUBSCRIPTION[1]._id,
+    changed_by: {
+      _id: MOCK_USERS[2]._id,
+      name: MOCK_USERS[2].name,
+      email: MOCK_USERS[2].email,
+    },
+    from_plan: "PRO",
+    to_plan: "HOBBY",
+    reason: null,
+    createdAt: new Date("2026-04-15T08:30:00Z"),
+    updatedAt: new Date("2026-04-15T08:30:00Z"),
+  },
+  {
+    _id: new mongoose.Types.ObjectId(),
+    user_id: {
+      _id: MOCK_USERS[0]._id,
+      name: MOCK_USERS[0].name,
+      email: MOCK_USERS[0].email,
+    },
+    subscription_id: MOCK_SUBSCRIPTION[0]._id,
+    changed_by: {
+      _id: MOCK_USERS[2]._id,
+      name: MOCK_USERS[2].name,
+      email: MOCK_USERS[2].email,
+    },
+    from_plan: "HOBBY",
+    to_plan: "PRO",
+    reason: "Special promotion",
+    createdAt: new Date("2026-03-20T14:00:00Z"),
+    updatedAt: new Date("2026-03-20T14:00:00Z"),
+  },
+];
+
 module.exports = {
   MOCK_SUBSCRIPTION,
   MOCK_USERS,
@@ -541,4 +601,5 @@ module.exports = {
   MOCK_SESSION_ID_2,
   MOCK_USER_SESSIONS,
   MOCK_MFA_SESSIONS,
+  MOCK_SUBSCRIPTION_LOGS,
 };

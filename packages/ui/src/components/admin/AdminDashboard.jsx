@@ -1,5 +1,6 @@
 import Analytics from "../../components/analytics/Analytics";
 import Catalog from "../catalog/Catalog.jsx";
+import SubscriptionPanel from "./SubscriptionPanel.jsx";
 import PropTypes from "prop-types";
 import styles from "./AdminDashboard.module.css";
 
@@ -62,6 +63,7 @@ function AdminDashboard({
 
       <Analytics />
       <Catalog />
+      <SubscriptionPanel />
     </div>
   );
 }

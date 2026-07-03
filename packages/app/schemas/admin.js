@@ -20,4 +20,32 @@ const imageReuploadSchema = Joi.object().keys({
   }),
 });
 
-module.exports = { addAdminSchema, imageReuploadSchema };
+const changeSubscriptionPlanSchema = Joi.object().keys({
+  plan: Joi.string().valid("HOBBY", "PRO").required().messages({
+    "any.only": "Plan must be one of: HOBBY, PRO",
+    "any.required": "Plan is required",
+  }),
+  reason: Joi.string().trim().max(200).optional().messages({
+    "string.max": "Reason must be 200 characters or fewer",
+  }),
+});
+
+const listUsersQuerySchema = Joi.object({
+  search: Joi.string().trim().max(100).optional(),
+  page: Joi.number().integer().min(1).default(1),
+  limit: Joi.number().integer().min(1).max(100).default(20),
+  includeDeleted: Joi.boolean().default(false),
+});
+
+const listSubscriptionLogsQuerySchema = Joi.object({
+  page: Joi.number().integer().min(1).default(1),
+  limit: Joi.number().integer().min(1).max(100).default(10),
+});
+
+module.exports = {
+  addAdminSchema,
+  imageReuploadSchema,
+  changeSubscriptionPlanSchema,
+  listUsersQuerySchema,
+  listSubscriptionLogsQuerySchema,
+};

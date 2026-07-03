@@ -12,6 +12,7 @@ const {
   updatePasswordPayloadSchema,
   logoRequestPyaloadSchema,
 } = require("../schemas/user");
+const { listUsersQuerySchema } = require("../schemas/admin");
 const { Messages, getIsProduction } = require("../utils/constants");
 
 /**
@@ -401,6 +402,44 @@ async function downloadUserData(req, res, next) {
   }
 }
 
+/**
+ * Admin-only controller to list CUSTOMER users with their subscription details.
+ * Supports search by name/email, pagination, and optionally includes soft-deleted users.
+ */
+async function listUsersController(req, res, next) {
+  try {
+    const { error, value } = listUsersQuerySchema.validate(req.query, {
+      abortEarly: false,
+    });
+    if (error) {
+      return res.status(422).json({
+        statusCode: 422,
+        error: STATUS_CODES[422],
+        message: error.message,
+      });
+    }
+
+    const { search, page, limit, includeDeleted } = value;
+    const userService = new UserService();
+    const { users, total } = await userService.listUsers({
+      search,
+      page,
+      limit,
+      includeDeleted,
+    });
+
+    return res.status(200).json({
+      statusCode: 200,
+      data: users,
+      total,
+      currentPage: page,
+      totalPages: limit ? Math.ceil(total / limit) : 0,
+    });
+  } catch (err) {
+    next(err);
+  }
+}
+
 module.exports = {
   getUserDataController,
   updateProfileController,
@@ -411,4 +450,5 @@ module.exports = {
   logoRequestController,
   updateOldKeysController,
   downloadUserData,
+  listUsersController,
 };

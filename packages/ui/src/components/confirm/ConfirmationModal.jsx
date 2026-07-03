@@ -14,6 +14,7 @@ function ConfirmationModal({
   confirmButtonContent,
   customHeading,
   customDescription,
+  customWidth,
 }) {
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -21,7 +22,7 @@ function ConfirmationModal({
   };
 
   return (
-    <Modal onClose={onClose} isOpen={isOpen}>
+    <Modal onClose={onClose} isOpen={isOpen} customWidth={customWidth}>
       <form onSubmit={handleSubmit}>
         <h2 className={styles["confirm-modal-heading"]}>
           {customHeading || CONFIRMATION_MODAL.heading}
@@ -58,6 +59,7 @@ ConfirmationModal.propTypes = {
   confirmButtonContent: PropTypes.node,
   customHeading: PropTypes.node,
   customDescription: PropTypes.node,
+  customWidth: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 };
 
 export default ConfirmationModal;

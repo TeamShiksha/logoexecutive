@@ -4,7 +4,7 @@ import ApiKeyForm from "../../components/apikeyform/ApiKeyForm";
 import Usage from "../../components/usage/Usage";
 import styles from "./Dashboard.module.css";
 import Table from "../../components/common/table/Table.jsx";
-import { formatDate } from "../../utils/Helpers.js";
+import { formatDate } from "../../utils/Helpers";
 import { API_KEY, API_KEY_TABLE, BUTTON_TEXT } from "../../utils/Constants.js";
 import ConfirmationModal from "../../components/confirm/ConfirmationModal.jsx";
 import { useApi } from "../../hooks/useApi.js";
@@ -15,6 +15,7 @@ import CustomInput from "../../components/common/input/CustomInput.jsx";
 import OperatorDashboard from "../../components/operator/OperatorDashboard.jsx";
 import InformationModal from "../../components/information/InformationModal.jsx";
 import Graph from "../../components/graph/Graph.jsx";
+import UserRewardsDashboard from "../../components/rewards/UserRewardsDashboard.jsx";
 
 function Dashboard() {
   const { userData, loading, fetchUserData } = useContext(UserContext);
@@ -298,6 +299,14 @@ function Dashboard() {
                 >
                   API Keys
                 </button>
+                <button
+                  className={`${styles["tab"]} ${
+                    activeTab === "rewards" ? styles["active-tab"] : ""
+                  }`}
+                  onClick={() => setActiveTab("rewards")}
+                >
+                  Rewards
+                </button>
               </div>
             </div>
           </div>
@@ -352,6 +361,12 @@ function Dashboard() {
                     />
                   </div>
                 </div>
+              </div>
+            )}
+
+            {activeTab === "rewards" && (
+              <div className={styles["rewards-content"]}>
+                <UserRewardsDashboard />
               </div>
             )}
           </div>

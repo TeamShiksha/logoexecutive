@@ -1,7 +1,17 @@
+import { useState } from "react";
 import Analytics from "../../components/analytics/Analytics";
 import Catalog from "../catalog/Catalog.jsx";
+import SubscriptionPanel from "./SubscriptionPanel.jsx";
+
+import RewardPanel from "./RewardPanel.jsx";
 import PropTypes from "prop-types";
 import styles from "./AdminDashboard.module.css";
+
+const TABS = {
+  OVERVIEW: "overview",
+  SUBSCRIPTIONS: "subscriptions",
+  REWARDS: "rewards",
+};
 
 function AdminDashboard({
   selectedDashboard,
@@ -10,6 +20,8 @@ function AdminDashboard({
   setIsDropdownOpen,
   handleRoleSelect,
 }) {
+  const [activeTab, setActiveTab] = useState(TABS.OVERVIEW);
+
   return (
     <div className={styles["admin-dashboard"]} data-testid="admin-dashboard">
       <div className={styles["page-header"]}>
@@ -57,11 +69,44 @@ function AdminDashboard({
               )}
             </div>
           )}
+
+          <div className={styles["tabs"]}>
+            <button
+              className={`${styles["tab"]} ${
+                activeTab === TABS.OVERVIEW ? styles["active-tab"] : ""
+              }`}
+              onClick={() => setActiveTab(TABS.OVERVIEW)}
+            >
+              Overview
+            </button>
+            <button
+              className={`${styles["tab"]} ${
+                activeTab === TABS.SUBSCRIPTIONS ? styles["active-tab"] : ""
+              }`}
+              onClick={() => setActiveTab(TABS.SUBSCRIPTIONS)}
+            >
+              Subscriptions
+            </button>
+            <button
+              className={`${styles["tab"]} ${
+                activeTab === TABS.REWARDS ? styles["active-tab"] : ""
+              }`}
+              onClick={() => setActiveTab(TABS.REWARDS)}
+            >
+              Rewards
+            </button>
+          </div>
         </div>
       </div>
 
-      <Analytics />
-      <Catalog />
+      {activeTab === TABS.OVERVIEW && (
+        <>
+          <Analytics />
+          <Catalog />
+        </>
+      )}
+      {activeTab === TABS.SUBSCRIPTIONS && <SubscriptionPanel />}
+      {activeTab === TABS.REWARDS && <RewardPanel />}
     </div>
   );
 }

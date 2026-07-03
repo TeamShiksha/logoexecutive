@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from "react";
-import { Eye, EyeClosed, CheckCircle2, Circle } from "lucide-react";
+import { Eye, EyeClosed } from "lucide-react";
 import CustomInput from "../common/input/CustomInput";
 import Button from "../common/button/Button";
 import PropTypes from "prop-types";
@@ -14,7 +14,6 @@ import { useApi } from "../../hooks/useApi";
 import { useToast } from "../../hooks/useToast.js";
 import { Link, useNavigate } from "react-router-dom";
 import { useTheme } from "../../hooks/useTheme.js";
-
 function SignUp({ toggleForm, onClose }) {
   const navigate = useNavigate();
   const toast = useToast();
@@ -24,6 +23,8 @@ function SignUp({ toggleForm, onClose }) {
   const [focusedField, setFocusedField] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [showPasswordRules, setShowPasswordRules] = useState(false);
+  const [keepShowingStrength, setKeepShowingStrength] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const { isDarkMode } = useTheme();
   const { makeRequest, errorMsg } = useApi({
@@ -49,7 +50,7 @@ function SignUp({ toggleForm, onClose }) {
       setFormErrors({
         [focusedField]: validationErrors[focusedField] || "",
       });
-    }, 500);
+    }, 800);
 
     return () => clearTimeout(timeout);
   }, [focusedField, formValues]);
@@ -87,7 +88,27 @@ function SignUp({ toggleForm, onClose }) {
   );
 
   const strengthCount = passwordCriteria.filter((c) => c.met).length;
+  const allConditionsMet = passwordCriteria.every((criterion) => criterion.met);
+  const getStrengthLevel = (count) => {
+    if (!formValues.password.trim()) return "";
+    if (count <= 2) return "weak";
+    if (count === 3) return "medium";
+    return "strong";
+  };
 
+  useEffect(() => {
+    if (allConditionsMet) {
+      setKeepShowingStrength(true);
+
+      const timer = setTimeout(() => {
+        setKeepShowingStrength(false);
+      }, 1100);
+
+      return () => clearTimeout(timer);
+    }
+  }, [allConditionsMet]);
+
+  const strengthLevel = getStrengthLevel(strengthCount);
   return (
     <>
       <form
@@ -110,36 +131,86 @@ function SignUp({ toggleForm, onClose }) {
           {SIGNUP["fields"].map((field) => {
             if (field.name === "password") {
               return (
-                <div key={field.name} className={styles["password-wrapper"]}>
-                  <CustomInput
-                    error={formErrors[field.name]}
-                    type={showPassword ? "text" : "password"}
-                    name={field.name}
-                    label={field.label}
-                    value={formValues[field.name]}
-                    onChange={handleChange}
-                    onFocus={() => setFocusedField(field.name)}
-                    onBlur={() => setFocusedField(null)}
-                    disabled={isLoading}
-                    autoComplete={field.autoComplete}
-                  />
-                  <button
-                    type="button"
-                    className={styles["eye-button"]}
-                    onClick={() => setShowPassword(!showPassword)}
-                    aria-label={
-                      showPassword ? "Hide password" : "Show password"
-                    }
-                    tabIndex={-1}
-                    onKeyDown={(event) => {
-                      if (event.key === "Enter" || event.key === " ") {
-                        event.preventDefault();
-                        setShowPassword(!showPassword);
+                <div key={field.name} className={styles["password-container"]}>
+                  <div className={styles["password-wrapper"]}>
+                    <CustomInput
+                      error=""
+                      type={showPassword ? "text" : "password"}
+                      name={field.name}
+                      label={field.label}
+                      value={formValues[field.name]}
+                      onChange={handleChange}
+                      onFocus={() => {
+                        setFocusedField(field.name);
+                        setShowPasswordRules(true);
+                      }}
+                      onBlur={() => setFocusedField(null)}
+                      disabled={isLoading}
+                      autoComplete={field.autoComplete}
+                    />
+                    <button
+                      type="button"
+                      className={styles["eye-button"]}
+                      onClick={() => setShowPassword(!showPassword)}
+                      aria-label={
+                        showPassword ? "Hide password" : "Show password"
                       }
-                    }}
+                      tabIndex={-1}
+                      onKeyDown={(event) => {
+                        if (event.key === "Enter" || event.key === " ") {
+                          event.preventDefault();
+                          setShowPassword(!showPassword);
+                        }
+                      }}
+                    >
+                      {showPassword ? (
+                        <Eye size={20} />
+                      ) : (
+                        <EyeClosed size={20} />
+                      )}
+                    </button>
+                  </div>
+                  <div
+                    className={`${styles["strength-card"]} ${
+                      showPasswordRules &&
+                      formValues.password.length > 0 &&
+                      (!allConditionsMet || keepShowingStrength)
+                        ? styles["strength-card-visible"]
+                        : ""
+                    }`}
                   >
-                    {showPassword ? <Eye size={20} /> : <EyeClosed size={20} />}
-                  </button>
+                    <div className={styles["password-info"]}>
+                      <div className={styles["password-header"]}>
+                        <span>Password strength</span>
+                        <span className={styles[strengthLevel]}>
+                          {strengthLevel}
+                        </span>
+                      </div>
+
+                      <div className={styles["strength-bars"]}>
+                        {[0, 1, 2, 3, 4].map((i) => (
+                          <div
+                            key={i}
+                            className={`${styles["strength-bar"]} ${
+                              i < strengthCount
+                                ? `${styles["strength-bar-active"]} ${styles[`bar-${strengthLevel}`]}`
+                                : ""
+                            }`}
+                          />
+                        ))}
+                      </div>
+
+                      <p className={styles["needs-text"]}>
+                        <strong>Needs:</strong>{" "}
+                        {allConditionsMet
+                          ? "All requirements satisfied"
+                          : passwordCriteria
+                              .filter((c) => !c.met)
+                              .map((c) => c.label)
+                              .join(", ")}
+                      </p>
+                    </div>
+                  </div>
                 </div>
               );
             }
@@ -200,40 +271,6 @@ function SignUp({ toggleForm, onClose }) {
               />
             );
           })}
-        </div>
-
-        {/* Password strength card */}
-        <div className={styles["strength-card"]}>
-          <div className={styles["strength-bars"]}>
-            {[0, 1, 2, 3, 4].map((i) => (
-              <div
-                key={i}
-                className={`${styles["strength-bar"]} ${
-                  i < strengthCount ? styles["strength-bar-active"] : ""
-                }`}
-              />
-            ))}
-          </div>
-
-          <ul className={styles["criteria-list"]}>
-            {passwordCriteria.map((criterion) => (
-              <li
-                key={criterion.label}
-                className={`${styles["criteria-item"]} ${
-                  criterion.met ? styles["met"] : ""
-                }`}
-              >
-                <span className={styles["criteria-icon"]}>
-                  {criterion.met ? (
-                    <CheckCircle2 size={12} />
-                  ) : (
-                    <Circle size={12} />
-                  )}
-                </span>
-                {criterion.label}
-              </li>
-            ))}
-          </ul>
         </div>
 
         {/* Submit button */}

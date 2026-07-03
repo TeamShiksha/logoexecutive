@@ -68,6 +68,19 @@
   justify-content: flex-end;
 }
 
+.action-buttons {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.rewards-btn {
+  font-size: 0.875rem;
+  font-weight: 500;
+  padding: 0.375rem 0.75rem;
+  border-radius: 0.5rem;
+}
+
 .name-text {
   font-weight: 600;
   color: var(--black);

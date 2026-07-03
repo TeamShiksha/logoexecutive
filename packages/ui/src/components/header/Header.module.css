@@ -1,8 +1,8 @@
 .block {
   display: flex;
   justify-content: center;
-  background-color: #fff;
-  border-bottom: 1px solid #0000000d;
+  background-color: var(--white);
+  border-bottom: 1px solid var(--border-color);
   position: -webkit-sticky;
   position: sticky;
   top: 0;
@@ -32,7 +32,7 @@
   align-items: center;
   cursor: pointer;
   border: none;
-  background-color: #fff;
+  background-color: var(--white);
 }
 
 .brand-img {
@@ -45,7 +45,7 @@
   font-size: 1.25rem;
   font-weight: 700;
   letter-spacing: -0.02em;
-  color: #0f172a;
+  color: var(--black);
 }
 
 .nav-bar {
@@ -62,24 +62,24 @@
   font-size: 1rem;
   text-decoration: none;
   font-weight: 500;
-  color: #64748b;
+  color: var(--description);
   padding-bottom: 4px;
   position: relative;
 }
 
 .nav:hover {
-  color: #4f46e5;
+  color: var(--primary);
   transition: all 0.3s ease-in-out;
   text-decoration: underline;
-  text-decoration-color: #4f46e5;
+  text-decoration-color: var(--primary);
   text-decoration-thickness: 2px;
   text-underline-offset: 6px;
 }
 
 .active {
-  color: #4f46e5;
+  color: var(--primary);
   text-decoration: underline;
-  text-decoration-color: #4f46e5;
+  text-decoration-color: var(--primary);
   text-decoration-thickness: 2px;
   text-underline-offset: 6px;
 }

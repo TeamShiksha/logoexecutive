@@ -12,7 +12,7 @@
 }
 
 .button:disabled {
-  color: var(--white);
+  color: var(--white-fixed);
   cursor: not-allowed;
   opacity: 0.8;
   pointer-events: none;
@@ -24,7 +24,7 @@
 
 .primary {
   background: var(--primary);
-  color: var(--white);
+  color: var(--white-fixed);
 }
 
 .primary:hover {
@@ -45,7 +45,7 @@
 
 .danger {
   background-color: rgba(255, 69, 58, 1);
-  color: var(--white);
+  color: var(--white-fixed);
 }
 
 .danger:hover {

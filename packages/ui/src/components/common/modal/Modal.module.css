@@ -1,64 +1,84 @@
 .modal-overlay {
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  inset: 0;
   width: 100vw;
   height: 100vh;
-  backdrop-filter: blur(4px);
+  padding: 24px;
+  backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(17, 24, 39, 0.48);
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 1000;
+  box-sizing: border-box;
 }
 
 .modal {
-  background-color: var(--white);
-  border-radius: 12px;
+  width: min(100%, 420px);
+  max-height: calc(100vh - 48px);
+  overflow: auto;
+  background-color: var(--strength-card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
   position: relative;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-  padding: 3rem;
+  box-shadow:
+    0 24px 72px rgba(17, 24, 39, 0.22),
+    0 8px 24px rgba(17, 24, 39, 0.12);
+  padding: 32px;
   z-index: 1100;
-  overflow: visible;
-  margin: 1rem;
-  width: 350px;
 }
 
 .close-button {
   position: absolute;
-  top: 0.5rem;
-  right: 1rem;
-  background: none;
-  border: none;
-  font-size: 2rem;
+  top: 16px;
+  right: 16px;
+  width: 32px;
+  height: 32px;
+  background: var(--table-heading-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  font-size: 20px;
+  line-height: 1;
   cursor: pointer;
-  padding: 5px;
+  padding: 0;
   color: var(--description);
-  opacity: 0.4;
   z-index: 1;
-  transition: all 0.3s ease;
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease;
 }
 
 .close-button:hover {
-  opacity: 0.8;
-  transition: all 0.3s ease;
+  background: var(--strength-card-bg);
+  border-color: var(--label-color);
+  color: var(--black);
 }
 
 @media (max-width: 780px) {
+  .modal-overlay {
+    padding: 16px;
+  }
+
+  .modal {
+    max-height: calc(100vh - 32px);
+    padding: 28px 20px 24px;
+  }
+
   .close-button {
-    top: 0.5rem;
-    right: 1rem;
-    font-size: 2rem;
-    padding: 10px;
+    top: 12px;
+    right: 12px;
   }
 }
 
 @media (max-width: 480px) {
-  .close-button {
-    font-size: 1.5rem;
-    padding: 8px;
+  .modal-overlay {
+    padding: 12px;
+    align-items: flex-start;
+  }
+
+  .modal {
+    max-height: calc(100vh - 24px);
   }
 }

@@ -87,18 +87,16 @@ const renderOperator = () =>
   );
 
 describe("Operator Page", () => {
-  it("renders operator workbench summary and catalog operations sections", async () => {
+  it("renders operator dashboard header and controls", async () => {
     renderOperator();
 
     await waitFor(() => {
-      expect(screen.getByText("Operator Workbench")).toBeInTheDocument();
+      expect(screen.getByText("Operator Dashboard")).toBeInTheDocument();
     });
 
-    expect(screen.getByText("Open items")).toBeInTheDocument();
-    expect(screen.getByText("Archived items")).toBeInTheDocument();
-    expect(screen.getByText("Current queue")).toBeInTheDocument();
-    expect(screen.getByText("Queue Workbench")).toBeInTheDocument();
-    expect(screen.getByText("Catalog Operations")).toBeInTheDocument();
+    expect(screen.getByText("Monitor operations and manage system resources.")).toBeInTheDocument();
+    expect(screen.getByText("Active")).toBeInTheDocument();
+    expect(screen.getByText("Archived")).toBeInTheDocument();
   });
 
   it("renders and fetches messages by default", async () => {
@@ -238,10 +236,10 @@ describe("Operator Page", () => {
     });
   });
 
-  it("renders Add image button and opens upload modal", async () => {
+  it("renders Add Image button and opens upload modal", async () => {
     renderOperator();
 
-    fireEvent.click(screen.getByText("Add image"));
+    fireEvent.click(screen.getByText("Add Image"));
 
     await waitFor(() => {
       expect(screen.getByTestId("image-upload-modal")).toBeInTheDocument();
@@ -251,7 +249,7 @@ describe("Operator Page", () => {
   it("closes image upload modal", async () => {
     renderOperator();
 
-    fireEvent.click(screen.getByText("Add image"));
+    fireEvent.click(screen.getByText("Add Image"));
 
     const modal = await screen.findByTestId("image-upload-modal");
 
@@ -261,6 +259,39 @@ describe("Operator Page", () => {
       expect(
         screen.queryByTestId("image-upload-modal")
       ).not.toBeInTheDocument();
+    });
+  });
+
+  it("fetches catalog items successfully when dropdown changes to logos", async () => {
+    apiInstance.get.mockImplementation((url) => {
+      if (url.includes("/create-logo-request")) {
+        return Promise.resolve({
+          data: {
+            results: [
+              {
+                _id: "logo-1",
+                company_name: "Acme",
+                company_uri: "acme",
+                companyUrl: "https://acme.com",
+                extension: "png",
+                status: "PENDING",
+              },
+            ],
+            totalPages: 1,
+          },
+        });
+      }
+      return Promise.resolve(messagesResponse);
+    });
+
+    renderOperator();
+
+    fireEvent.change(screen.getByTestId("testid-dropdown"), {
+      target: { value: "logos" },
+    });
+
+    await waitFor(() => {
+      expect(screen.getByText("https://acme.com")).toBeInTheDocument();
     });
   });
 

@@ -32,15 +32,21 @@ describe("Pricing Component", () => {
 
     PRICING.plans.forEach((plan) => {
       const titleElement = screen.getByText(plan.name);
-      const { price, period } = getPriceParts(plan);
-
       expect(titleElement).toBeInTheDocument();
-      expect(screen.getByText(price)).toBeInTheDocument();
-      expect(screen.getByText(period)).toBeInTheDocument();
-      plan.keypoints.forEach((keypoint) => {
-        const plan_keypoint = screen.getByText(keypoint);
-        expect(plan_keypoint).toBeInTheDocument();
-      });
+
+      if (plan.index === 1) {
+        // PRO card shows placeholders, no real price/period/keypoints
+        expect(screen.getByText("Coming Soon")).toBeInTheDocument();
+        expect(screen.getByText("Upgrade to Pro")).toBeInTheDocument();
+      } else {
+        const { price, period } = getPriceParts(plan);
+        expect(screen.getByText(price)).toBeInTheDocument();
+        expect(screen.getByText(period)).toBeInTheDocument();
+        plan.keypoints.forEach((keypoint) => {
+          const plan_keypoint = screen.getByText(keypoint);
+          expect(plan_keypoint).toBeInTheDocument();
+        });
+      }
     });
   });
 

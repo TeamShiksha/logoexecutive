@@ -27,6 +27,9 @@ const EnvSchema = Joi.object()
       .required(),
     EMAIL_SERVICE_URL: Joi.string().optional(),
     EMAIL_SERVICE_AUTH_TOKEN: Joi.string().optional(),
+    UPSTASH_REDIS_REST_URL: Joi.string().uri().required(),
+    UPSTASH_REDIS_REST_TOKEN: Joi.string().required(),
+    RATE_LIMIT_REDIS_PREFIX: Joi.string().optional(),
     ADMINSEMAILS: Joi.string().required(),
     BUCKET_KEY: Joi.string().required(),
     CRYPTO_KEY: Joi.string().length(64).hex().required().messages({
@@ -35,6 +38,7 @@ const EnvSchema = Joi.object()
       "string.hex": "Crypto key must be a valid hex string",
     }),
   })
+  .and("UPSTASH_REDIS_REST_URL", "UPSTASH_REDIS_REST_TOKEN")
   .unknown(true);
 
 /**

@@ -8,6 +8,7 @@ const {
   addCatalogController,
   getAnalyticsController,
 } = require("../controllers/catalog");
+const { uploadLimiter } = require("../middlewares/rateLimiter");
 const { UserType } = require("../utils/constants");
 
 router.put(
@@ -35,6 +36,7 @@ router.post(
 
 router.post(
   "/signed-url",
+  uploadLimiter,
   authMiddleware({ roles: [UserType.ADMIN, UserType.OPERATOR] }),
   getPreSignedController
 );

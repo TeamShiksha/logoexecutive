@@ -23,7 +23,7 @@
 
 .contentColumn {
   max-width: 860px;
-  margin: 0 auto;
+  margin: 1.5rem auto;
   padding-left: 2.1rem;
   display: grid;
   gap: 2.8rem;

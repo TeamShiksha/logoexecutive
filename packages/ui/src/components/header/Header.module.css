@@ -162,6 +162,10 @@
     font-size: 1rem;
   }
 
+  .right-side {
+    gap: 0.5rem;
+  }
+
   .hamburger-img {
     width: 20px;
     height: 20px;

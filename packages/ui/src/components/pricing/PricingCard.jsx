@@ -23,43 +23,82 @@ function PricingCard({
     buttonText = "Upgrade to Pro";
   }
 
-  const isDisabled = isPlanActive || isPro;
+  // const isDisabled = isPlanActive || isPro;
 
   return (
     <div className={`${styles.card} ${isPro ? styles.dark : styles.light}`}>
       {isPro && <div className={styles.ribbon}>Coming Soon</div>}
-      <p className={styles["plan-name"]}>{name}</p>
 
-      <div className={styles["price-row"]}>
-        <span className={styles.price}>
-          {pricing === 0 ? "Free" : `$${pricing}`}
-        </span>
-        <span className={styles["price-period"]}>
-          {pricing === 0 ? "forever" : tagline.replace(`$${pricing} `, "")}
-        </span>
-      </div>
-
-      <ul className={styles.keypoints}>
-        {keypoints.map((keypoint, idx) => (
-          <li key={keypoint + idx}>
-            <img
-              alt="Tick Icon"
-              src={tickIcon}
-              className={styles["tick-icon"]}
-            />
-            <p>{keypoint}</p>
-          </li>
-        ))}
-      </ul>
-
-      <Button
-        variant={isPro ? "primary" : "secondary"}
-        className={styles["btn-full"]}
-        disabled={isDisabled}
-        onClick={openAuthModal}
-      >
-        {buttonText}
-      </Button>
+      {isPro ? (
+        <>
+          <div className={styles.blurOverlay}>
+            <p className={styles["plan-name"]}>PRO</p>
+            <div className={styles["price-row"]}>
+              <span
+                className={styles.placeholderBar}
+                style={{ width: "80px", height: "3rem" }}
+              />
+              <span
+                className={styles.placeholderBar}
+                style={{ width: "60px", height: "1rem" }}
+              />
+            </div>
+            <ul className={styles.keypoints}>
+              {[...Array(5)].map((_, idx) => (
+                <li key={idx}>
+                  <span className={styles.placeholderDot} />
+                  <span
+                    className={styles.placeholderBar}
+                    style={{
+                      width: `${70 + ((idx * 7) % 30)}%`,
+                      height: "0.9rem",
+                    }}
+                  />
+                </li>
+              ))}
+            </ul>
+          </div>
+          <Button
+            variant="primary"
+            className={styles["btn-full"]}
+            disabled={true}
+          >
+            Upgrade to Pro
+          </Button>
+        </>
+      ) : (
+        <>
+          <p className={styles["plan-name"]}>{name}</p>
+          <div className={styles["price-row"]}>
+            <span className={styles.price}>
+              {pricing === 0 ? "Free" : `$${pricing}`}
+            </span>
+            <span className={styles["price-period"]}>
+              {pricing === 0 ? "forever" : tagline.replace(`$${pricing} `, "")}
+            </span>
+          </div>
+          <ul className={styles.keypoints}>
+            {keypoints.map((keypoint, idx) => (
+              <li key={keypoint + idx}>
+                <img
+                  alt="Tick Icon"
+                  src={tickIcon}
+                  className={styles["tick-icon"]}
+                />
+                <p>{keypoint}</p>
+              </li>
+            ))}
+          </ul>
+          <Button
+            variant="secondary"
+            className={styles["btn-full"]}
+            disabled={isPlanActive}
+            onClick={openAuthModal}
+          >
+            {buttonText}
+          </Button>
+        </>
+      )}
     </div>
   );
 }

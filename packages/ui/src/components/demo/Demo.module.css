@@ -131,6 +131,7 @@
   margin-top: 1rem;
   margin-bottom: 2rem;
   width: 100%;
+  overflow: hidden;
 }
 
 .suggestionPill {
@@ -454,17 +455,19 @@
     gap: 2.5rem;
   }
 
+  .searchBox {
+    max-width: 100%;
+    order: 2;
+  }
+
   .content {
     text-align: center;
     max-width: 100%;
+    order: 1;
   }
 
   .features {
     align-items: center;
-  }
-
-  .searchBox {
-    max-width: 100%;
   }
 }
 
@@ -536,6 +539,14 @@
 }
 
 @media only screen and (max-width: 480px) {
+  .demo-wrapper {
+    padding: 2rem 0;
+  }
+
+  .demo-container {
+    gap: 1.5rem;
+  }
+
   .searchBox {
     padding: 1.25rem 1rem;
   }
@@ -546,21 +557,31 @@
 
   .searchInput {
     padding: 0 1.25rem 0 3rem;
-    font-size: 0.95rem;
-    height: 3.5rem;
+    font-size: 0.9rem;
+    height: 3.25rem;
   }
 
   .suggestionsRow {
-    gap: 0.4rem;
-    margin-bottom: 1.5rem;
+    gap: 0.35rem;
+    margin-top: 0.75rem;
+    margin-bottom: 1.25rem;
   }
 
   .suggestionPill {
-    padding: 0.35rem 0.6rem;
+    padding: 0.3rem 0.5rem;
+  }
+
+  .suggestionLogo {
+    width: 12px;
+    height: 12px;
   }
 
   .suggestionName {
-    font-size: 0.75rem;
+    font-size: 0.7rem;
+  }
+
+  .deckSection {
+    padding: 1.5rem 0 1rem 0;
   }
 
   .deckContainer {
@@ -608,5 +629,72 @@
   .resultCard {
     padding: 1rem;
     border-radius: 12px;
+  }
+}
+
+/* Very small devices */
+@media only screen and (max-width: 360px) {
+  .searchInput {
+    font-size: 0.85rem;
+    height: 3rem;
+  }
+
+  .suggestionsRow {
+    gap: 0.3rem;
+    margin-bottom: 1rem;
+  }
+
+  .suggestionPill {
+    padding: 0.25rem 0.45rem;
+  }
+
+  .suggestionName {
+    font-size: 0.65rem;
+  }
+
+  .deckContainer {
+    gap: 0.2rem;
+    padding: 0;
+  }
+
+  .deckCard {
+    width: 44px;
+    height: 64px;
+    border-radius: 7px;
+  }
+
+  .featuredCard {
+    width: 52px;
+    height: 74px;
+  }
+
+  .cardLogoWrapper {
+    width: 26px;
+    height: 26px;
+    border-radius: 7px;
+    margin-bottom: 0.25rem;
+  }
+
+  .featuredCard .cardLogoWrapper {
+    width: 30px;
+    height: 30px;
+  }
+
+  .cardLogo {
+    width: 14px;
+    height: 14px;
+  }
+
+  .featuredCard .cardLogo {
+    width: 16px;
+    height: 16px;
+  }
+
+  .cardName {
+    font-size: 0.5rem;
+  }
+
+  .content h1 {
+    font-size: 1.6rem;
   }
 }

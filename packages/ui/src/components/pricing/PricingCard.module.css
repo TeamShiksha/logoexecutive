@@ -52,21 +52,47 @@
 
 .ribbon {
   position: absolute;
-  top: 16px;
-  right: -33px;
-  width: 125px;
+  top: 22px;
+  right: -38px;
+  width: 160px;
   background-color: var(--primary);
   color: #fff;
   text-align: center;
-  font-size: 0.58rem;
-  font-weight: 700;
+  font-size: 0.82rem;
+  font-weight: 800;
   text-transform: uppercase;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.1em;
   transform: rotate(45deg);
-  padding: 0.3rem 0;
+  padding: 0.45rem 0;
   z-index: 10;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+/* Blur overlay for Pro card content */
+.blurOverlay {
+  filter: blur(8px);
+  opacity: 0.45;
+  pointer-events: none;
+  user-select: none;
+  flex: 1;
+}
+
+/* Placeholder bars to mimic text without real content */
+.placeholderBar {
+  display: inline-block;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+  vertical-align: middle;
+}
+
+.placeholderDot {
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  flex-shrink: 0;
 }
 
 .price-row {

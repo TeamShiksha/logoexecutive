@@ -288,4 +288,47 @@ describe("User Service", () => {
     );
     expect(result).toBeNull();
   });
+
+  it("should list users by delegating to repository", async () => {
+    const mockResult = {
+      users: [{ _id: "u1", name: "Alice" }],
+      total: 1,
+    };
+    jest
+      .spyOn(UsersRepository.prototype, "findUsersWithSubscription")
+      .mockResolvedValue(mockResult);
+
+    const result = await userService.listUsers({
+      search: "alice",
+      page: 1,
+      limit: 10,
+      includeDeleted: false,
+    });
+
+    expect(result).toEqual(mockResult);
+    expect(
+      UsersRepository.prototype.findUsersWithSubscription
+    ).toHaveBeenCalledWith({
+      search: "alice",
+      page: 1,
+      limit: 10,
+      includeDeleted: false,
+    });
+  });
+
+  it("should return empty list when no users match", async () => {
+    jest
+      .spyOn(UsersRepository.prototype, "findUsersWithSubscription")
+      .mockResolvedValue({ users: [], total: 0 });
+
+    const result = await userService.listUsers({
+      search: "nonexistent",
+      page: 1,
+      limit: 10,
+      includeDeleted: false,
+    });
+
+    expect(result.users).toEqual([]);
+    expect(result.total).toBe(0);
+  });
 });

@@ -48,6 +48,13 @@ const DefaultSubscriptionPlan = {
   is_active: true,
 };
 
+const ProSubscriptionPlan = {
+  type: SubscriptionTypes.PRO,
+  key_limit: 5,
+  usage_limit: 15000,
+  is_active: true,
+};
+
 const Messages = {
   INVALID_USER_ID: "Invalid user id.",
   EMAIL_EXISTS: "Email already exists.",
@@ -110,6 +117,9 @@ const Messages = {
   UPDATE_API_KEY: "This Key needs an update.",
   MFA_FAILED: "Failed to enable/disable MFA",
   INCORRECT_PIN: "Incorrect pin. Please try again.",
+  SUBSCRIPTION_NOT_FOUND: "Subscription not found.",
+  PLAN_ALREADY_ACTIVE: "User is already on this plan.",
+  PLAN_CHANGE_SUCCESS: "Subscription plan updated successfully.",
   SESSION_NOT_FOUND: "Session not found.",
   CANNOT_REVOKE_CURRENT_SESSION:
     "Cannot revoke current session. Use signout instead.",
@@ -117,6 +127,32 @@ const Messages = {
 };
 
 const MAX_SESSIONS_PER_USER = 5;
+
+const RewardMessages = {
+  IMAGE_NOT_FOUND: "No reward data found for this image",
+  TRANSACTION_NOT_FOUND: "Transaction not found",
+  MISSING_BONUS_FIELDS: "Missing required fields: imageId, userId, points",
+  POINTS_MUST_BE_POSITIVE: "Points must be greater than 0",
+  BONUS_AWARDED: "Bonus points awarded successfully",
+  REVERSAL_REASON_REQUIRED: "Reversal reason is required",
+  TRANSACTION_REVERSED: "Transaction reversed successfully",
+  MISSING_REQUEST_FIELDS:
+    "Missing required fields: imageId, userId, creatorId, keyId, subscription",
+  REQUEST_LOGGED: "Request logged for reward eligibility",
+  MILESTONE_NOT_FOUND: "MilestoneConfig not found",
+  MILESTONE_CREATED: "MilestoneConfig created successfully",
+  MILESTONE_UPDATED: "MilestoneConfig updated successfully",
+  MILESTONE_DELETED: "MilestoneConfig deleted successfully",
+  MILESTONE_ACTIVATED:
+    "MilestoneConfig activated — takes effect on the next worker run",
+  NAME_REQUIRED: "name is required",
+  THRESHOLDS_REQUIRED: "thresholds must be a non-empty array",
+  THRESHOLD_INVALID:
+    'Each threshold must have positive numeric "at" and "points" values',
+  NAME_OR_THRESHOLDS_REQUIRED:
+    "At least one of name or thresholds must be provided",
+  CONFIG_ALREADY_ACTIVE: "Config is already active",
+};
 
 const ExtractCompanyNameFromUrlRegex = /:\/\/(?:www\.)?([^./]+)\./i;
 
@@ -144,6 +180,7 @@ module.exports = {
   SubscriptionTypes,
   StatusTypes,
   DefaultSubscriptionPlan,
+  ProSubscriptionPlan,
   Messages,
   TAB_OPTIONS,
   CLOUD_FRONT_REGION,
@@ -152,4 +189,5 @@ module.exports = {
   SESSION_ID_REGEX,
   TEMPORARY_SESSION_TYPES,
   MAX_SESSIONS_PER_USER,
+  RewardMessages,
 };

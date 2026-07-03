@@ -165,6 +165,10 @@
   overflow: hidden;
 }
 
+.rewards-content {
+  width: 100%;
+}
+
 .api-keys-grid {
   display: grid;
   grid-template-columns: 350px 1fr;

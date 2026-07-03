@@ -1,11 +1,12 @@
 const CreateLogoRequestRepository = require("../repositories/createLogoRequest");
-const { ImagesRepository } = require("../repositories");
+const { ImagesRepository, RewardsRepository } = require("../repositories");
 const { StatusTypes } = require("../utils/constants");
 
 class CreateLogoRequestService {
   constructor() {
     this.createLogoRequestRepository = new CreateLogoRequestRepository();
     this.imagesRepository = new ImagesRepository();
+    this.rewardsRepository = new RewardsRepository();
   }
 
   /**
@@ -73,12 +74,18 @@ class CreateLogoRequestService {
     );
     if (result.modifiedCount === 0) throw new Error("MongoDB operation failed");
 
-    // If approved, publish the associated image so it becomes visible publicly
+    // If approved, publish the associated image so it becomes visible publicly. Also created a reward object for tracking.
     if (status === StatusTypes.RESOLVED && currentLogo.images) {
-      await this.imagesRepository.update(currentLogo.images, {
-        is_published: true,
-        updated_at: new Date(),
-      });
+      await Promise.all([
+        this.imagesRepository.update(currentLogo.images, {
+          is_published: true,
+          updated_at: new Date(),
+        }),
+        this.rewardsRepository.findOrCreateByImageId(
+          currentLogo.images,
+          currentLogo.user_id
+        ),
+      ]);
     }
 
     if (status === StatusTypes.REJECTED && currentLogo.images) {

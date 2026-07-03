@@ -9,12 +9,18 @@ class BaseRepository {
     this.model = model;
   }
 
-  async find(query) {
-    return await this.model.find(query);
+  async find(query, { session } = {}) {
+    const q = this.model.find(query);
+    if (session) q.session(session);
+    return await q;
   }
 
-  async getById(id) {
-    return await this.model.findById(id).select("-__v");
+  async getById(id, { session } = {}) {
+    const query = this.model.findById(id).select("-__v");
+    if (session) {
+      query.session(session);
+    }
+    return await query;
   }
 
   async getAll(page = 1, limit = 10, tab = "active") {
@@ -42,25 +48,32 @@ class BaseRepository {
     };
   }
 
-  async create(data) {
+  async create(data, { session } = {}) {
     const document = new this.model(data);
+    if (session) {
+      return await document.save({ session });
+    }
     return await document.save();
   }
 
-  async update(id, data) {
-    return await this.model.findByIdAndUpdate(id, data);
+  async update(id, data, { session } = {}) {
+    const options = session ? { session } : {};
+    return await this.model.findByIdAndUpdate(id, data, options);
   }
 
-  async findOneAndUpdate(filter, update, options = {}) {
+  async findOneAndUpdate(filter, update, { session } = {}) {
+    const options = session ? { session } : {};
     return await this.model.findOneAndUpdate(filter, update, options);
   }
 
-  async delete(id) {
-    return await this.model.findByIdAndDelete(id);
+  async delete(id, { session } = {}) {
+    const options = session ? { session } : {};
+    return await this.model.findByIdAndDelete(id, options);
   }
 
-  async mark_deleted(id) {
-    return await this.model.findByIdAndUpdate(id, { isDeleted: true });
+  async mark_deleted(id, { session } = {}) {
+    const options = session ? { session } : {};
+    return await this.model.findByIdAndUpdate(id, { isDeleted: true }, options);
   }
 }
 

@@ -40,6 +40,11 @@ const imageSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  has_pending_reward: {
+    type: Boolean,
+    default: false,
+    index: true,
+  },
 });
 
 imageSchema.methods.data = function () {
@@ -54,6 +59,7 @@ imageSchema.methods.data = function () {
     is_published: this.is_published,
     updated_at: this.updated_at,
     extension: this.extension,
+    has_pending_reward: this.has_pending_reward,
   };
 };
 

@@ -1,0 +1,358 @@
+/* ── Panel wrapper ─────────────────────────────────────────── */
+.panel {
+  background-color: var(--white);
+  border: var(--border);
+  border-radius: var(--bradius);
+  box-shadow: var(--shadow);
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* ── Panel header ──────────────────────────────────────────── */
+.panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.panel-title-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.panel-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--black);
+  margin: 0;
+}
+
+.panel-subtitle {
+  font-size: 0.875rem;
+  color: var(--description);
+  margin: 0;
+}
+
+/* ── Search ────────────────────────────────────────────────── */
+.search-wrapper {
+  flex-shrink: 0;
+  width: 280px;
+  max-width: 100%;
+}
+
+/* ── Table ─────────────────────────────────────────────────── */
+.table-wrapper {
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+}
+
+.table th {
+  background-color: var(--table-heading-bg);
+  color: var(--description);
+  font-weight: 600;
+  padding: 0.75rem 1rem;
+  text-align: left;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+}
+
+.table th:first-child {
+  border-radius: var(--bradius) 0 0 var(--bradius);
+}
+
+.table th:last-child {
+  border-radius: 0 var(--bradius) var(--bradius) 0;
+}
+
+.table td {
+  padding: 0.875rem 1rem;
+  color: var(--black);
+  border-bottom: 1px solid var(--border-color);
+  vertical-align: middle;
+}
+
+.table tr:last-child td {
+  border-bottom: none;
+}
+
+.table tr:hover td {
+  background-color: var(--table-background);
+}
+
+/* ── User cell ─────────────────────────────────────────────── */
+.user-name {
+  font-weight: 500;
+  color: var(--black);
+  margin: 0;
+}
+
+.user-email {
+  font-size: 0.75rem;
+  color: var(--description);
+  margin: 0.125rem 0 0;
+}
+
+.user-joined {
+  font-size: 0.7rem;
+  color: var(--label-color);
+  margin: 0.125rem 0 0;
+}
+
+/* ── Plan badge ────────────────────────────────────────────── */
+.plan-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.625rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.plan-badge-hobby {
+  background-color: var(--table-background);
+  color: var(--description);
+}
+
+.plan-badge-pro {
+  background-color: var(--primary-focus);
+  color: var(--primary);
+}
+
+[data-theme="dark"] .plan-badge-hobby {
+  background-color: rgba(55, 65, 81, 0.6);
+  color: var(--description);
+}
+
+[data-theme="dark"] .plan-badge-pro {
+  background-color: rgba(99, 102, 241, 0.2);
+  color: var(--primary);
+}
+
+/* ── Usage cell ────────────────────────────────────────────── */
+.usage-text {
+  font-size: 0.8rem;
+  color: var(--description);
+  white-space: nowrap;
+}
+
+/* ── Kebab / row-actions menu ──────────────────────────────── */
+.menu-cell {
+  width: 2.5rem;
+  text-align: center;
+  padding: 0.5rem !important;
+}
+
+.menu-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: var(--description);
+  padding: 0.3rem;
+  border-radius: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+  transition:
+    background-color 0.15s,
+    color 0.15s;
+  line-height: 0;
+}
+
+.menu-btn:hover {
+  background-color: var(--table-background);
+  color: var(--black);
+}
+
+/* ── Empty & loading states ────────────────────────────────── */
+.empty-state {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: var(--description);
+  font-size: 0.875rem;
+}
+
+.loading-container {
+  display: flex;
+  justify-content: center;
+  padding: 3rem 0;
+}
+
+/* ── Pagination ────────────────────────────────────────────── */
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.page-btn {
+  background: var(--white);
+  border: var(--border);
+  padding: 0.375rem 0.875rem;
+  border-radius: var(--bradius);
+  color: var(--description);
+  cursor: pointer;
+  font-size: 0.875rem;
+  transition:
+    background-color 0.2s,
+    color 0.2s;
+}
+
+.page-btn:hover:not(:disabled) {
+  background-color: var(--table-background);
+  color: var(--black);
+}
+
+.page-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.page-indicator {
+  font-size: 0.875rem;
+  color: var(--description);
+}
+
+/* ── Modal content ─────────────────────────────────────────── */
+.modal-body {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  padding: 0.25rem 0;
+}
+
+.modal-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--black);
+  margin: 0 0 0.125rem;
+}
+
+.modal-user-info {
+  font-size: 0.875rem;
+  color: var(--description);
+  margin: 0;
+}
+
+.modal-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--label-color);
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+/* ── Plan selector buttons ─────────────────────────────────── */
+.plan-selector {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.plan-option {
+  flex: 1;
+  padding: 0.75rem 1rem;
+  border-radius: var(--bradius);
+  border: var(--border);
+  background: var(--white);
+  color: var(--description);
+  cursor: pointer;
+  font-size: 0.875rem;
+  font-weight: 500;
+  text-align: center;
+  transition:
+    background-color 0.2s,
+    border-color 0.2s,
+    color 0.2s;
+}
+
+.plan-option:hover:not(.plan-option-selected) {
+  background-color: var(--table-background);
+  color: var(--black);
+}
+
+.plan-option-selected {
+  background-color: var(--primary-focus);
+  border-color: var(--primary);
+  color: var(--primary);
+  font-weight: 600;
+}
+
+/* ── Reason textarea ───────────────────────────────────────── */
+.reason-textarea {
+  width: 100%;
+  resize: vertical;
+  min-height: 80px;
+  padding: 0.625rem 0.75rem;
+  border: var(--border);
+  border-radius: var(--bradius);
+  background-color: var(--white);
+  color: var(--black);
+  font-size: 0.875rem;
+  font-family: inherit;
+  line-height: 1.5;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.reason-textarea::placeholder {
+  color: var(--label-color);
+}
+
+.reason-textarea:focus {
+  border-color: var(--primary);
+}
+
+/* ── Modal footer ──────────────────────────────────────────── */
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  margin-top: 0.25rem;
+}
+
+/* ── Responsive ────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .panel {
+    padding: 1rem;
+  }
+
+  .panel-header {
+    flex-direction: column;
+  }
+
+  .search-wrapper {
+    width: 100%;
+  }
+
+  .table th,
+  .table td {
+    padding: 0.625rem 0.75rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .plan-selector {
+    flex-direction: column;
+  }
+
+  .modal-actions {
+    flex-direction: column-reverse;
+  }
+}

@@ -2,7 +2,7 @@ name: Process Rewards
 
 on:
   schedule:
-    - cron: "0 * * * *" # Every hour — adjust cadence as needed
+    - cron: "0 */6 * * *" # Every 6 hours
   workflow_dispatch: # Allow manual runs from the GitHub UI
 
 jobs:
@@ -23,7 +23,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          node-version: "22"
           cache: "pnpm"
 
       - name: Install dependencies

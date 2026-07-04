@@ -60,7 +60,7 @@ class SubscriptionsRepository extends BaseRepository {
             ],
           },
           usage_count: {
-            $cond: [{ $lt: ["$end_date", "$$NOW"] }, "$usage_count"],
+            $cond: [{ $lt: ["$end_date", "$$NOW"] }, 0, "$usage_count"],
           },
         },
       },
@@ -71,11 +71,11 @@ class SubscriptionsRepository extends BaseRepository {
    * Increament the usage count
    * @param {number} subscriptionId
    */
-  async incrementUsageCount(subscriptionId) {
+  async incrementUsageCount(subscriptionId, usage_limit) {
     return await this.update(
       {
         _id: subscriptionId,
-        $expr: { $lt: ["$usage_count", "$usage_limit"] },
+        usage_count: { $lt: usage_limit }, // Ensure usage_count is less than usage_limit before incrementing
       },
       { $inc: { usage_count: 1 } },
       { new: true }

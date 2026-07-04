@@ -36,7 +36,8 @@ async function getLogoController(req, res, next) {
     }
 
     const updatedUsageCount = await subscriptionService.incrementUsageCount(
-      subscriptionData._id
+      subscriptionData._id,
+      subscriptionData.usage_limit
     );
     if (!updatedUsageCount) {
       return res.status(403).json({

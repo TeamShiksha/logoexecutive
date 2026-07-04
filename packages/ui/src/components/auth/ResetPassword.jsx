@@ -32,6 +32,10 @@ const ResetPassword = () => {
   const hasValidatedToken = useRef(false);
 
   const token = searchParams.get("token");
+
+  useEffect(() => {
+    hasValidatedToken.current = false;
+  }, [token]);
   const {
     makeRequest: validateTokenRequest,
     errorMsg: tokenErrorMsg,
@@ -75,6 +79,7 @@ const ResetPassword = () => {
       }
     };
     validateToken();
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- intentional: re-validate only when `token` changes; tokenErrorMsg would re-fire after async error state
   }, [token]);
 
   useEffect(() => {

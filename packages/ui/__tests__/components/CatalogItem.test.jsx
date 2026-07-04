@@ -1,5 +1,5 @@
 import { expect, describe, it, vi } from "vitest";
-import { render, screen } from "@testing-library/react";
+import { render, screen, fireEvent } from "@testing-library/react";
 import CatalogItem from "../../src/components/catalog/CatalogItem";
 import { COMPANIES } from "../../src/utils/Constants";
 import { formatDate } from "../../src/utils/Helpers";
@@ -47,5 +47,44 @@ describe("CatalogItem Component", () => {
       "class",
       expect.stringContaining("reupload-btn")
     );
+  });
+
+  it("Should render <img> tag when imageUrl is provided", () => {
+    const companyWithUrl = {
+      ...mockCompany,
+      imageUrl: "https://cdn.cloudfront.net/signed/path.png",
+    };
+    render(<CatalogItem company={companyWithUrl} onUpdate={mockOnUpdate} />);
+
+    const img = screen.getByRole("img");
+    expect(img).toBeInTheDocument();
+    expect(img).toHaveAttribute("src", companyWithUrl.imageUrl);
+    expect(img).toHaveAttribute("alt", companyWithUrl.company_name);
+  });
+
+  it("Should show fallback letter when no imageUrl is provided", () => {
+    render(<CatalogItem company={mockCompany} onUpdate={mockOnUpdate} />);
+
+    expect(screen.queryByRole("img")).not.toBeInTheDocument();
+    expect(
+      screen.getByText(mockCompany.company_name.charAt(0).toUpperCase())
+    ).toBeInTheDocument();
+  });
+
+  it("Should switch to fallback when <img> encounters error", () => {
+    const companyWithUrl = {
+      ...mockCompany,
+      imageUrl: "https://anything-doesnt-matter.png",
+    };
+    render(<CatalogItem company={companyWithUrl} onUpdate={mockOnUpdate} />);
+
+    const img = screen.getByRole("img");
+    expect(img).toBeInTheDocument();
+
+    fireEvent.error(img);
+
+    expect(
+      screen.getByText(companyWithUrl.company_name.charAt(0).toUpperCase())
+    ).toBeInTheDocument();
   });
 });

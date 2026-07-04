@@ -23,7 +23,7 @@ function generatePassword(length = 12) {
   const lower = "abcdefghijklmnopqrstuvwxyz";
   const upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
   const digits = "0123456789";
-  const specials = "!@#$%^&*=";
+  const specials = "!@#$%^&*";
 
   const allChars = lower + upper + digits + specials;
 

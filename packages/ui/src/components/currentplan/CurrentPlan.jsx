@@ -13,8 +13,8 @@ function CurrentPlan({ isGuest }) {
       </div>
 
       <Button
-        className={styles["upgrade-button"]}
         variant="primary"
+        className={styles["upgrade-button"]}
         disabled={keepBtnDisabled || isGuest}
         style={{ cursor: isGuest ? "default" : "pointer" }}
       >

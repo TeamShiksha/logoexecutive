@@ -1,8 +1,37 @@
 import { render, screen } from "@testing-library/react";
-import { describe, expect, it, vi, beforeEach } from "vitest";
+import {
+  describe,
+  expect,
+  it,
+  vi,
+  beforeEach,
+  beforeAll,
+  afterAll,
+} from "vitest";
 import Usage from "../../src/components/usage/Usage";
 import { MOCK_USER_DATA } from "../../src/utils/Constants";
 
+const localStorageStore = {};
+const localStorageMock = {
+  getItem: vi.fn((key) => localStorageStore[key] ?? null),
+  setItem: vi.fn((key, value) => {
+    localStorageStore[key] = String(value);
+  }),
+  clear: vi.fn(() => {
+    Object.keys(localStorageStore).forEach((k) => delete localStorageStore[k]);
+  }),
+  removeItem: vi.fn((key) => {
+    delete localStorageStore[key];
+  }),
+};
+
+beforeAll(() => {
+  vi.stubGlobal("localStorage", localStorageMock);
+});
+
+afterAll(() => {
+  vi.unstubAllGlobals();
+});
 const mockToastWarning = vi.fn();
 const mockToastError = vi.fn();
 

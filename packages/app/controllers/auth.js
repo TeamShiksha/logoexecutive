@@ -1,4 +1,4 @@
-const { STATUS_CODES } = require("http");
+const { STATUS_CODES } = require("node:http");
 
 const {
   UserService,
@@ -119,7 +119,7 @@ async function signupController(req, res, next) {
  * This controller validates the sign-in payload, checks if the email exists,
  * verifies the user's email status, and compares the provided password with
  * the stored one.
- * On successful authentication, it creates or reuses an active user session
+ * On successful authentication, it always creates a new per-device session
  * and sets a sessionId cookie to maintain a session-based login.
  *
  * @param {import("express").Request} req
@@ -208,13 +208,10 @@ async function signinController(req, res, next) {
       return res.status(200).json({ statusCode: 200, mfaRequired: true });
     }
 
-    let session = {};
-    session = await userSessionService.userActiveSession(user._id);
-    if (!session) {
-      session = await userSessionService.createSession({
-        userId: user._id,
-      });
-    }
+    const session = await userSessionService.createSession({
+      userId: user._id,
+      userAgent: req.headers["user-agent"] || "",
+    });
 
     const currentDate = new Date();
     const oneDayValidityTimestamp = new Date(
@@ -637,13 +634,10 @@ async function siginWithMFAController(req, res, next) {
 
     const isProduction = getIsProduction();
 
-    let session = {};
-    session = await userSessionService.userActiveSession(user._id);
-    if (!session) {
-      session = await userSessionService.createSession({
-        userId: user._id,
-      });
-    }
+    const session = await userSessionService.createSession({
+      userId: user._id,
+      userAgent: req.headers["user-agent"] || "",
+    });
     const currentDate = new Date();
     const oneWeekValidityTimestamp = new Date(
       currentDate.getTime() + 7 * 24 * 60 * 60 * 1000
@@ -873,6 +867,120 @@ function validateSessionController(req, res) {
   return res.status(200).json({ statusCode: 200, userData: req.userData });
 }
 
+/**
+ * Lists all active sessions for the authenticated user.
+ */
+async function listSessionsController(req, res, next) {
+  try {
+    const userSessionService = new UserSessionService();
+    const { userId } = req.userData;
+    const currentSessionId = req.cookies.sessionId;
+
+    const sessions = await userSessionService.getActiveSessions(userId);
+
+    const formattedSessions = sessions.map((session) => {
+      return {
+        id: session.sessionId,
+        deviceInfo: session.deviceInfo,
+        createdAt: session.createdAt,
+        lastActiveAt: session.lastActiveAt,
+        isCurrent: session.sessionId === currentSessionId,
+      };
+    });
+
+    return res
+      .status(200)
+      .json({ statusCode: 200, sessions: formattedSessions });
+  } catch (error) {
+    next(error);
+  }
+}
+
+/**
+ * Revokes a specific session from another device.
+ */
+async function revokeSessionController(req, res, next) {
+  try {
+    const userSessionService = new UserSessionService();
+    const { userId } = req.userData;
+    const { sessionId } = req.params;
+    const currentSessionId = req.cookies.sessionId;
+
+    if (sessionId === currentSessionId) {
+      return res.status(400).json({
+        error: STATUS_CODES[400],
+        message:
+          Messages.CANNOT_REVOKE_CURRENT_SESSION ||
+          "Cannot revoke current session",
+        statusCode: 400,
+      });
+    }
+
+    const deactivated = await userSessionService.revokeSession(
+      userId,
+      sessionId
+    );
+    if (!deactivated) {
+      return res.status(404).json({
+        error: STATUS_CODES[404],
+        message: Messages.SESSION_NOT_FOUND || "Session not found",
+        statusCode: 404,
+      });
+    }
+
+    return res.status(200).json({ statusCode: 200 });
+  } catch (error) {
+    next(error);
+  }
+}
+
+/**
+ * Revokes all sessions except the current one.
+ */
+async function signoutOthersController(req, res, next) {
+  try {
+    const userSessionService = new UserSessionService();
+    const { userId } = req.userData;
+    const currentSessionId = req.cookies.sessionId;
+
+    const result = await userSessionService.revokeOtherSessions(
+      userId,
+      currentSessionId
+    );
+
+    return res.status(200).json({
+      statusCode: 200,
+      revokedCount: result.modifiedCount || 0,
+    });
+  } catch (error) {
+    next(error);
+  }
+}
+
+/**
+ * Revokes all sessions including the current one.
+ */
+async function signoutAllController(req, res, next) {
+  try {
+    const userSessionService = new UserSessionService();
+    const { userId } = req.userData;
+
+    await userSessionService.signoutAll(userId);
+
+    const isProduction = getIsProduction();
+    const cookieOptions = {
+      sameSite: "strict",
+      httpOnly: true,
+      domain: isProduction ? ".openlogo.fyi" : "localhost",
+    };
+
+    res.clearCookie("sessionId", cookieOptions);
+    return res.status(205).send();
+  } catch (error) {
+    next(error);
+  }
+}
+
 module.exports = {
   signupController,
   signinController,
@@ -888,4 +996,8 @@ module.exports = {
   cancelMFAController,
   disableMFAController,
   mfaStatusController,
+  listSessionsController,
+  revokeSessionController,
+  signoutOthersController,
+  signoutAllController,
 };

@@ -1,3 +1,9 @@
+.admin-dashboard {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
 .page-header {
   display: flex;
   justify-content: space-between;
@@ -30,13 +36,13 @@
 .header-right {
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
+  align-items: flex-start;
   gap: 1rem;
 }
 
 .dropdown-wrapper {
   position: relative;
-  align-self: flex-end;
+  margin-left: auto;
 }
 
 .dropdown {
@@ -50,7 +56,7 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  transition: all 0.2s;
+  transition: border-color 0.2s;
 }
 
 .dropdown:hover {
@@ -85,6 +91,41 @@
   color: var(--black);
 }
 
+.tabs {
+  background-color: var(--table-background);
+  padding: 0.25rem;
+  border-radius: 12px;
+  display: flex;
+  gap: 0.25rem;
+}
+
+.tab {
+  flex: 1;
+  white-space: nowrap;
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--description);
+  border: none;
+  background: none;
+  cursor: pointer;
+  border-radius: 8px;
+  transition:
+    color 0.2s,
+    background-color 0.2s;
+}
+
+.tab:hover {
+  color: var(--black);
+}
+
+.active-tab {
+  background-color: var(--white);
+  color: var(--primary);
+  font-weight: 600;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
 @media (max-width: 768px) {
   .page-header {
     flex-direction: column;
@@ -94,10 +135,12 @@
   .header-right {
     align-items: flex-start;
     width: 100%;
+    flex-direction: row-reverse;
+    justify-content: space-between;
   }
 
   .dropdown-wrapper {
-    align-self: flex-start;
+    align-self: center;
   }
 
   .dashboard-title {
@@ -106,5 +149,27 @@
 
   .dashboard-subtitle {
     font-size: 0.875rem;
+  }
+
+  .tabs {
+    width: 100%;
+    overflow-x: auto;
+  }
+}
+
+@media (max-width: 564px) {
+  .header-right {
+    flex-direction: column-reverse;
+    align-items: flex-start;
+    gap: 1.25rem;
+  }
+
+  .dropdown-wrapper {
+    align-self: flex-start;
+  }
+
+  .tabs {
+    width: 100%;
+    overflow-x: auto;
   }
 }

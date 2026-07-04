@@ -15,6 +15,7 @@ import "./index.css";
 import ResetPassword from "./components/auth/ResetPassword.jsx";
 import Release from "./page/release/Release.jsx";
 import CreateLogo from "./page/createlogo/CreateLogo.jsx";
+import UserSettings from "./components/usersettings/UserSettings.jsx";
 
 function App() {
   const [authModal, setAuthModal] = useState(false);
@@ -47,6 +48,14 @@ function App() {
             element={
               <ProtectedRoute adminOnly={false}>
                 <Dashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/settings"
+            element={
+              <ProtectedRoute adminOnly={false}>
+                <UserSettings />
               </ProtectedRoute>
             }
           />

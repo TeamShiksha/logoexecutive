@@ -1,8 +1,7 @@
 import { useState, useRef } from "react";
 import { FAQ } from "../../utils/Constants";
 import PropTypes from "prop-types";
-import plusCircle from "../../assets/plusCircle.svg";
-import minusCircle from "../../assets/minusCircle.svg";
+import { ChevronDown } from "lucide-react";
 import styles from "./FAQs.module.css";
 
 const FAQs = () => {
@@ -34,13 +33,12 @@ const CollapsibleFAQ = ({ question, answer, isOpen, toggleFAQ }) => {
   const answerRef = useRef(null);
 
   return (
-    <div className={styles["faq-list"]}>
+    <div className={`${styles["faq-item"]} ${isOpen ? styles.open : ""}`}>
       <button className={styles["qa-container"]} onClick={toggleFAQ}>
         <h3 className={styles.question}>{question}</h3>
-        <img
-          src={isOpen ? minusCircle : plusCircle}
-          alt={isOpen ? "Collapse FAQ" : "Expand FAQ"}
-          className={styles.icon}
+        <ChevronDown
+          className={`${styles.icon} ${isOpen ? styles.rotated : ""}`}
+          size={20}
         />
       </button>
       <div

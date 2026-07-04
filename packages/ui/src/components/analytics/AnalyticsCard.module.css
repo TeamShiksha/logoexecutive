@@ -1,110 +1,77 @@
 .card {
-  border-radius: 16px;
   background: var(--white);
-  border: var(--border);
-  padding: 2rem 1rem;
-  flex: 300px 1;
-  font-family: Inter, sans-serif;
-  font-style: normal;
-  line-height: normal;
+  padding: 1.25rem;
+  border-radius: 0.75rem;
+  border: 1px solid var(--border-color);
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  transition: all 0.2s ease;
 }
 
-.card-group,
-.left-content,
-.right-content {
-  display: flex;
-  align-items: flex-start;
+.card:hover {
+  box-shadow:
+    0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.card-title {
+  color: var(--description);
+  font-size: 0.875rem;
+  font-weight: 500;
+  text-transform: capitalize;
 }
 
 .card-content {
   display: flex;
-  width: 100%;
-  gap: 1.5rem;
+  align-items: flex-end;
   justify-content: space-between;
-  align-items: first baseline;
-}
-
-.card-title,
-.tracking-text {
-  color: #475467;
-  font-weight: 400;
-}
-
-.card-title {
-  font-size: 24px;
-  letter-spacing: 0.48px;
-}
-
-.card-value {
-  color: var(--primary, #4f46e5);
-  font-size: 2rem;
-  font-weight: 600;
-}
-
-.change-value-positive,
-.change-value-negative {
-  font-size: 20px;
-  font-weight: 600;
-}
-
-.change-value-positive {
-  color: #00b69b;
-}
-
-.change-value-negative {
-  color: #f93c65;
-}
-
-.tracking-text {
-  font-size: 16px;
+  width: 100%;
 }
 
 .left-content {
+  display: flex;
   flex-direction: column;
-  gap: 16px;
+}
+
+.card-value {
+  color: var(--black);
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: normal;
 }
 
 .right-content {
+  display: flex;
   flex-direction: column;
-  gap: 8px;
+  align-items: flex-end;
 }
 
-.change-graph {
-  width: 50px;
-  height: 30px;
+.change-value {
+  font-size: 0.75rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 0.125rem;
 }
 
-/* Separate Mobile Styles */
+.change-value-positive {
+  color: #10b981;
+}
+
+.change-value-negative {
+  color: #ef4444;
+}
+
+.tracking-text {
+  display: none;
+  font-size: 0.75rem;
+  color: var(--label-color);
+}
+
 @media (max-width: 768px) {
-  .card-title {
-    font-size: 20px;
-    letter-spacing: 0.4px;
-  }
-
   .card-value {
-    font-size: 36px;
-  }
-
-  .change-value-positive,
-  .change-value-negative {
-    font-size: 16px;
-  }
-
-  .tracking-text {
-    font-size: 14px;
-  }
-
-  .left-content {
-    gap: 4px;
-    width: auto;
-  }
-
-  .right-content {
-    gap: 4px;
-  }
-
-  .change-graph {
-    width: 39.429px;
-    height: 24px;
+    font-size: 1.25rem;
   }
 }

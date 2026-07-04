@@ -22,6 +22,9 @@ const ENDPOINTS = {
   CANCEL_MFA: "/api/auth/mfa/cancel",
   DISABLE_MFA: "/api/auth/mfa/disable",
   SIGNIN_WITH_MFA: "/api/auth/mfa/signin",
+  SESSIONS: "/api/auth/sessions",
+  SIGNOUT_OTHERS: "/api/auth/signout/others",
+  SIGNOUT_ALL: "/api/auth/signout/all",
 };
 
 module.exports = {

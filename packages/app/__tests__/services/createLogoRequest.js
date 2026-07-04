@@ -1,6 +1,9 @@
 const CreateLogoRequestService = require("../../services/createLogoRequest");
 const CreateLogoRequestRepository = require("../../repositories/createLogoRequest");
-const { ImagesRepository } = require("../../repositories/index.js");
+const {
+  ImagesRepository,
+  RewardsRepository,
+} = require("../../repositories/index.js");
 const { StatusTypes } = require("../../utils/constants.js");
 const { MOCK_USERS, MOCK_IMAGES } = require("../../utils/mocks.js");
 const mongoose = require("mongoose");
@@ -18,6 +21,7 @@ describe("CreateLogoRequestService", () => {
   let mockImagesGetById;
   let mockImagesUpdate;
   let mockFetchCloudFrontURL;
+  let mockFindOrCreateByImageId;
 
   beforeEach(() => {
     createLogoRequestService = new CreateLogoRequestService();
@@ -39,6 +43,10 @@ describe("CreateLogoRequestService", () => {
     mockFetchCloudFrontURL = jest.spyOn(
       ImagesRepository.prototype,
       "fetchCloudFrontURL"
+    );
+    mockFindOrCreateByImageId = jest.spyOn(
+      RewardsRepository.prototype,
+      "findOrCreateByImageId"
     );
   });
 
@@ -144,9 +152,15 @@ describe("CreateLogoRequestService", () => {
         _id: createLogoId,
         status: "PENDING",
         images: imageId,
+        user_id: userId,
       });
       mockUpdateLogoStatus.mockResolvedValue({ modifiedCount: 1 });
       mockImagesUpdate.mockResolvedValue({});
+      mockFindOrCreateByImageId.mockResolvedValue({
+        image_id: imageId,
+        user_id: userId,
+        unique_pro_users: [],
+      });
 
       const result = await createLogoRequestService.respondToLogo(
         createLogoId,
@@ -167,6 +181,7 @@ describe("CreateLogoRequestService", () => {
         imageId,
         expect.objectContaining({ is_published: true })
       );
+      expect(mockFindOrCreateByImageId).toHaveBeenCalledWith(imageId, userId);
       expect(result).toEqual({ modifiedCount: 1 });
     });
 
@@ -175,6 +190,7 @@ describe("CreateLogoRequestService", () => {
         _id: createLogoId,
         status: "PENDING",
         images: imageId,
+        user_id: userId,
       });
       mockUpdateLogoStatus.mockResolvedValue({ modifiedCount: 1 });
       mockImagesUpdate.mockResolvedValue({});
@@ -190,6 +206,7 @@ describe("CreateLogoRequestService", () => {
         imageId,
         expect.objectContaining({ is_deleted: true })
       );
+      expect(mockFindOrCreateByImageId).not.toHaveBeenCalled();
       expect(result).toEqual({ modifiedCount: 1 });
     });
 
@@ -209,6 +226,50 @@ describe("CreateLogoRequestService", () => {
           "Approved"
         )
       ).rejects.toThrow("MongoDB operation failed");
+    });
+
+    it("should not create reward if logo has no associated image on RESOLVED", async () => {
+      mockGetById.mockResolvedValue({
+        _id: createLogoId,
+        status: "PENDING",
+        images: null,
+        user_id: userId,
+      });
+      mockUpdateLogoStatus.mockResolvedValue({ modifiedCount: 1 });
+
+      const result = await createLogoRequestService.respondToLogo(
+        createLogoId,
+        userId,
+        StatusTypes.RESOLVED,
+        "Approved"
+      );
+
+      expect(mockImagesUpdate).not.toHaveBeenCalled();
+      expect(mockFindOrCreateByImageId).not.toHaveBeenCalled();
+      expect(result).toEqual({ modifiedCount: 1 });
+    });
+
+    it("should propagate error if reward creation fails on RESOLVED", async () => {
+      mockGetById.mockResolvedValue({
+        _id: createLogoId,
+        status: "PENDING",
+        images: imageId,
+        user_id: userId,
+      });
+      mockUpdateLogoStatus.mockResolvedValue({ modifiedCount: 1 });
+      mockImagesUpdate.mockResolvedValue({});
+      mockFindOrCreateByImageId.mockRejectedValue(
+        new Error("Reward creation failed")
+      );
+
+      await expect(
+        createLogoRequestService.respondToLogo(
+          createLogoId,
+          userId,
+          StatusTypes.RESOLVED,
+          "Approved"
+        )
+      ).rejects.toThrow("Reward creation failed");
     });
   });
 

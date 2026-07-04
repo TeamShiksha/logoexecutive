@@ -3,7 +3,7 @@ import styles from "./UserDropDown.module.css";
 import { AuthContext, UserContext } from "../../contexts/Contexts";
 import { BUTTON_TEXT } from "../../utils/Constants";
 import { Link, useNavigate } from "react-router-dom";
-import { LogOut, LayoutDashboard } from "lucide-react";
+import { LogOut, LayoutDashboard, Settings } from "lucide-react";
 
 export default function UserDropDown() {
   const navigate = useNavigate();
@@ -66,6 +66,17 @@ export default function UserDropDown() {
             >
               <LayoutDashboard size={16} />
               Dashboard
+            </Link>
+          </div>
+
+          <div>
+            <Link
+              className={styles.items}
+              to="/settings"
+              onClick={() => setIsOpen(false)}
+            >
+              <Settings size={16} />
+              Settings
             </Link>
           </div>
 

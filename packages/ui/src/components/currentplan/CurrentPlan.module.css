@@ -1,9 +1,10 @@
-.plan-container {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-  width: 100%;
-  min-height: 0;
+.current-plan {
+  color: rgb(17 24 39);
+  font-size: var(--large-text);
+  line-height: 28px;
+  font-weight: 600;
+  margin: 0px 0px 4px;
+  padding-top: 0;
 }
 
 .plan-content {
@@ -30,9 +31,19 @@
 }
 
 .upgrade-button {
+  max-width: 100%;
+  color: var(--white);
+  background-color: var(--primary);
+  border-radius: var(--bradius);
+  box-shadow: var(--shadow);
+  border: var(--border);
+  cursor: pointer;
+  min-height: 39px;
+  margin-top: 8px;
+  font-size: 16px;
+  font-weight: 500;
   width: 100%;
   padding: 0.75rem;
-  font-weight: 600;
   flex-shrink: 0;
 }
 

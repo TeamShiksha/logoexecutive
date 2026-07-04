@@ -4,22 +4,29 @@ import rapidLogo from "../assets/rapid.svg";
 import searchLogo from "../assets/search.svg";
 import databaseLogo from "../assets/database.svg";
 import dragAndDropBg from "../assets/DragAndDropBg.svg";
-import apple from "../assets/apple.png";
-import amazon from "../assets/amazon.png";
-import united_healthcare from "../assets/united_healthcare.png";
 import microsoft from "../assets/microsoft.png";
-import nvidia from "../assets/nvidia.png";
-import mastercard from "../assets/mastercard.png";
 import target from "../assets/target.png";
 import ford from "../assets/ford.png";
 import adobe from "../assets/adobe.png";
 import ibm from "../assets/ibm.png";
 import alphabet from "../assets/alphabet.png";
-import nike from "../assets/nike.png";
 import tesla from "../assets/tesla.png";
 import walmart from "../assets/walmart.png";
 import salesforce from "../assets/salesforce.png";
+import nvidia from "../assets/nvidia.png";
 import meta from "../assets/meta.png";
+import united_healthcare from "../assets/united_healthcare.png";
+import nike from "../assets/nike.png";
+import mastercard from "../assets/mastercard.png";
+import apple from "../assets/apple.png";
+import amazon from "../assets/amazon.png";
+import airbnb from "../assets/airbnb.png";
+import bmw from "../assets/bmw.png";
+import byd from "../assets/byd.png";
+import google from "../assets/google.png";
+import sap from "../assets/sap.png";
+import slack from "../assets/slack.png";
+import spotify from "../assets/spotify.png";
 import jsLogo from "../assets/js.png";
 import pythonLogo from "../assets/python.png";
 import javaLogo from "../assets/java.png";
@@ -43,15 +50,20 @@ export const SVGS = {
 };
 
 export const DEMO = {
-  heading: "See In Action",
+  heading: "See how fast you can fetch logos",
   summary:
-    "Powerful, self-serve product and growth analytics to help you convert, engage, and retain more.",
+    "Search for any company domain to find the best available brand assets. Get high-quality, transparent logos ready for your projects.",
+  features: [
+    "Standardized logo formats",
+    "Transparent backgrounds",
+    "High-resolution assets",
+  ],
 };
 
 export const FEATURES = {
-  heading: "Features",
+  heading: "Everything you need, nothing you don't.",
   summary:
-    "With Openlogo, integrate fresh, up-to-date company logos effortlessly and leverage smart search insights for professional branding.",
+    "Built for developers and designers who value speed and extreme precision.",
   items: [
     {
       icon: databaseLogo,
@@ -78,7 +90,7 @@ export const HEADER_ITEMS = [
   {
     name: "home",
     title: "Home",
-    url: "/#",
+    url: "/#home",
     type: "section",
   },
   {
@@ -148,32 +160,86 @@ export const LOGGEDIN_MOBILE_ITEMS = [
     url: "/dashboard",
     type: "route",
   },
+  {
+    name: "settings",
+    title: "Settings",
+    url: "/settings",
+    type: "route",
+  },
   LOGGEDIN_ITEMS.find((i) => i.name === "docs"),
+  LOGGEDIN_ITEMS.find((i) => i.name === "explore"),
   LOGGEDIN_ITEMS.find((i) => i.name === "features"),
   LOGGEDIN_ITEMS.find((i) => i.name === "pricing"),
   LOGGEDIN_ITEMS.find((i) => i.name === "about"),
-];
+].filter(Boolean);
 
-export const FOOTER_ITEMS = [
+export const FOOTER_SOCIAL_LOGOS = {
+  github: {
+    type: "lucide",
+    iconName: "github",
+  },
+  twitter: {
+    type: "svg",
+    title: "X",
+    viewBox: "0 0 16 16",
+    path: "M9.332 6.925 14.544 1h-1.235L8.783 6.145 5.17 1H1l5.466 7.78L1 14.993h1.235l4.78-5.433 3.816 5.433H15L9.332 6.925ZM7.64 8.848l-.554-.775L2.68 1.91h1.897l3.556 4.975.554.775 4.622 6.466h-1.897L7.64 8.848Z",
+  },
+};
+
+export const FOOTER_SECTIONS = [
   {
-    name: "about",
-    title: "About",
-    url: "/#about",
+    title: "Resources",
+    items: [
+      { name: "documentation", title: "Documentation", url: "/docs" },
+      { name: "release", title: "Releases", url: "/release" },
+    ],
   },
   {
-    name: "privacy",
-    title: "Privacy",
-    url: "/privacy#privacy",
+    title: "Community",
+    items: [
+      {
+        name: "github",
+        title: "GitHub",
+        url: "https://github.com/TeamShiksha",
+        logo: FOOTER_SOCIAL_LOGOS.github,
+      },
+      {
+        name: "discord",
+        title: "Discord",
+        url: "https://discord.com/invite/WCbxcXqS",
+      },
+      {
+        name: "twitter",
+        title: "Twitter / X",
+        url: "https://twitter.com/TeamShiksha",
+        logo: FOOTER_SOCIAL_LOGOS.twitter,
+      },
+      {
+        name: "join team shiksha",
+        title: "Join Team Shiksha",
+        url: "https://team.shiksha",
+      },
+    ],
   },
   {
-    name: "terms&conditions",
-    title: "Terms",
-    url: "/privacy#terms",
-  },
-  {
-    name: "release",
-    title: "Release",
-    url: "/release",
+    title: "Legal",
+    items: [
+      {
+        name: "privacy_policy",
+        title: "Privacy Policy",
+        url: "/privacy#privacy",
+      },
+      {
+        name: "terms_of_service",
+        title: "Terms of Service",
+        url: "/privacy#terms",
+      },
+      {
+        name: "license",
+        title: "License",
+        url: "https://github.com/TeamShiksha/openlogo/blob/main/LICENSE",
+      },
+    ],
   },
 ];
 
@@ -233,26 +299,26 @@ export const CHANGE_PASSWORD = {
 };
 
 export const ABOUT = {
-  TITLE: "What is Openlogo",
+  TITLE: "What is Openlogo?",
   DESCRIPTION:
     "From startups to enterprises, our platform offers an extensive collection of company logos, enabling smooth integration and consistent branding. Our APIs are designed to make logo retrieval effortless, providing scalable solutions that adapt to your business's evolving branding requirements.",
   INTEGRATIONS: [
-    { id: 1, src: apple, alt: "Apple" },
-    { id: 2, src: amazon, alt: "Amazon" },
-    { id: 3, src: united_healthcare, alt: "United Health Care" },
+    { id: 1, src: airbnb, alt: "Airbnb" },
+    { id: 2, src: bmw, alt: "BMW" },
+    { id: 3, src: byd, alt: "BYD" },
     { id: 4, src: alphabet, alt: "Alphabet" },
     { id: 5, src: adobe, alt: "Adobe" },
-    { id: 6, src: meta, alt: "Meta" },
-    { id: 7, src: ibm, alt: "Ibm" },
-    { id: 8, src: target, alt: "target" },
-    { id: 9, src: nike, alt: "Nike" },
+    { id: 6, src: google, alt: "Google" },
+    { id: 7, src: ibm, alt: "IBM" },
+    { id: 8, src: target, alt: "Target" },
+    { id: 9, src: sap, alt: "SAP" },
     { id: 10, src: salesforce, alt: "Salesforce" },
-    { id: 11, src: mastercard, alt: "Master Card" },
+    { id: 11, src: slack, alt: "Slack" },
     { id: 12, src: ford, alt: "Ford" },
-    { id: 13, src: nvidia, alt: "Google Calendar" },
-    { id: 14, src: microsoft, alt: "microsoft" },
-    { id: 15, src: tesla, alt: "tesla" },
-    { id: 16, src: walmart, alt: "walmart" },
+    { id: 13, src: spotify, alt: "Spotify" },
+    { id: 14, src: microsoft, alt: "Microsoft" },
+    { id: 15, src: tesla, alt: "Tesla" },
+    { id: 16, src: walmart, alt: "Walmart" },
   ],
 };
 
@@ -288,37 +354,52 @@ export const FAQ = {
 };
 
 export const PRICING = {
-  heading: "Compare our plans and find yours",
+  heading: "Simple, transparent pricing.",
   summary:
-    "Simple, transparent pricing that grows with you. Try any plan free for 30 days.",
+    "Start building for free, then upgrade when you need programmatic access and the full expansive library.",
   plans: [
     {
       index: 0,
       name: "HOBBY",
       pricing: 0,
-      tagline: "Try for free for individuals",
+      tagline: "Free forever",
       keypoints: [
-        "Fortune 500 company logo",
+        "Access to standard 200+ logos",
         "500 API calls per month",
         "2 API keys",
         "Basic analytics",
-        "48-72 hour of response time",
+        "48-72 hours of response time",
       ],
     },
     {
       index: 1,
       name: "PRO",
-      pricing: 1500,
-      tagline: "Grow with pro plan.",
+      pricing: 9,
+      tagline: "$9 / month",
       keypoints: [
-        "Hobby plan plus",
-        "10000 API calls per month",
-        "5 API keys",
-        "Advance analytics",
-        "12-36 hours of response time",
+        "Access to full 2,000+ logos library",
+        "Unlimited API calls per month",
+        "10 API keys",
+        "Advanced analytics",
+        "24/7 priority support",
       ],
     },
   ],
+};
+
+export const EXPLORE_BANNER = {
+  title: {
+    main: "Logo Assets for",
+    highlight: "Modern Brands",
+  },
+  subtitle: [
+    "High-fidelity SVG and PNG logo assets delivered via premium API.",
+    "The gold standard for developers and designers at scale.",
+  ],
+  search: {
+    placeholder: "Search logos by name, industry, or color...",
+    shortcut: "⌘K",
+  },
 };
 
 export const SETTING = [
@@ -412,12 +493,57 @@ export const CODEBLOCK = {
 };
 
 export const HERO_SECTION = {
-  tagLine: "Access hundreds of logos with just one line of code",
+  tagLine: "Perfect company logos",
+  tagLineHighlight: "for your next project.",
   summary:
-    "A collection of APIs designed to simplify the process of obtaining company logos. Generate API keys in seconds.",
-  illustractionSrc: "logo-images.png",
-  illustractionSrcAlt: "illustraction",
+    "Access hundreds of high-quality company logos instantly through our simple API. Built for developers, trusted by designers. Stop searching Google Images.",
+  illustractionSrc: "/hero.png",
+  illustractionSrcAlt: "Openlogo Illustration",
+  code: {
+    fileName: "demo.js",
+    lines: [
+      'fetch("https://api.openlogo.fyi/logo?key=apple", {',
+      '  method: "GET",',
+      "  headers: {",
+      '    "Content-Type": "application/json",',
+      '    "x-api-key": "YOUR_API_KEY"',
+      "  },",
+      "} // ← one API call, any logo",
+      "  .then(res => res.json())",
+      "  .then(console.log);",
+    ],
+    response: {
+      status: "200 OK",
+      body: '{ url: "https://cdn.openlogo.fyi/apple.svg", format: "svg" }',
+    },
+  },
 };
+
+export const HERO_LOGOS = [
+  { id: 1, src: nvidia, alt: "Nvidia", col: 2, row: 1, nudge: 0 },
+  { id: 2, src: microsoft, alt: "Microsoft", col: 3, row: 1, nudge: 20 },
+  { id: 3, src: meta, alt: "Meta", col: 4, row: 1, nudge: 40 },
+  {
+    id: 4,
+    src: united_healthcare,
+    alt: "United Healthcare",
+    col: 1,
+    row: 2,
+    nudge: 10,
+  },
+  { id: 5, src: adobe, alt: "Adobe", col: 2, row: 2, nudge: -5 },
+  { id: 6, src: nike, alt: "Nike", col: 3, row: 2, nudge: -15 },
+  { id: 7, src: mastercard, alt: "Mastercard", col: 4, row: 2, nudge: 10 },
+  { id: 8, src: apple, alt: "Apple", col: 1, row: 3, nudge: 0 },
+  { id: 9, src: ibm, alt: "IBM", col: 2, row: 3, nudge: 5 },
+  { id: 10, src: salesforce, alt: "Salesforce", col: 3, row: 3, nudge: -5 },
+  { id: 11, src: alphabet, alt: "Alphabet", col: 4, row: 3, nudge: -20 },
+  { id: 12, src: tesla, alt: "Tesla", col: 1, row: 4, nudge: -10 },
+  { id: 13, src: target, alt: "Target", col: 2, row: 4, nudge: 15 },
+  { id: 14, src: ford, alt: "Ford", col: 3, row: 4, nudge: 5 },
+  { id: 15, src: amazon, alt: "Amazon", col: 4, row: 4, nudge: -15 },
+  { id: 16, src: walmart, alt: "Walmart", col: 2, row: 5, nudge: 5 },
+];
 
 export const PRIVACY_AND_TERMS = [
   {
@@ -532,99 +658,85 @@ export const LOGOUPLOAD = {
   },
 };
 
-const CODE_EXAMPLE_SEARCH = {
-  javascript: `// use fetch to send GET request
-fetch("/api/logo/search?key={prefix}&API_KEY={YOUR_API_KEY}", {
-  method: "GET",
-  headers: {
-    "Content-Type": "application/json",
-  },
-})`,
+export const CODE_EXAMPLE_SEARCH = (baseUrl) => ({
+  curl: `curl --request GET \\
+  --url '${baseUrl}/logo/search?key=goo&API_KEY=YOUR_API_KEY'`,
 
-  python: `# import package
-import requests
-# send GET request
-response = requests.get("api/logo/search",
-  params={
-    "key": "{prefix}",
-    "API_KEY": '{YOUR_API_KEY}'
-  },
-  headers={
-    "Content-Type": "application/json"
+  javascript: `const response = await fetch(
+  "${baseUrl}/logo/search?key=goo&API_KEY=YOUR_API_KEY",
+  {
+    method: "GET",
   }
-)`,
+);
 
-  java: `// create http client instance
-HttpClient client = HttpClient.newHttpClient();
-// build http request
-HttpRequest request = HttpRequest.newBuilder()
-  .uri(URI.create("/api/logo/search?key={prefix}&API_KEY={YOUR_API_KEY}"))
-  .header("Content-Type", "application/json")
-  .GET()
-  .build();
-// send GET request
-HttpResponse<String> response = client.send(request,
-  HttpResponse.BodyHandlers.ofString());`,
-};
+const data = await response.json();`,
 
-const CODE_EXAMPLE = {
-  javascript: `// use fetch to send GET request
-fetch("/api/logo?key={domain}&API_KEY={YOUR_API_KEY}", {
-  method: "GET",
-  headers: {
-    "Content-Type": "application/json",
-  },
-})`,
+  python: `import requests
 
-  python: `# import package
-import requests
-# send GET request
-response = requests.get("api/logo",
-  params={
-    "domain": "{domain}",
-    "API_KEY": "{YOUR_API_KEY}"
-  },
-  headers={
-    "Content-Type": "application/json"
+response = requests.get(
+  "${baseUrl}/logo/search",
+  params={"key": "goo", "API_KEY": "YOUR_API_KEY"},
+)
+
+data = response.json()`,
+});
+
+export const CODE_EXAMPLE = (baseUrl) => ({
+  curl: `curl --request GET \\
+  --url '${baseUrl}/logo?key=google.com&API_KEY=YOUR_API_KEY'`,
+
+  javascript: `const response = await fetch(
+  "${baseUrl}/logo?key=google.com&API_KEY=YOUR_API_KEY",
+  {
+    method: "GET",
   }
-)`,
+);
 
-  java: `// create http client instance
-HttpClient client = HttpClient.newHttpClient();
-// build http request
-HttpRequest request = HttpRequest.newBuilder()
-  .uri(URI.create("/api/logo?key={domain}&API_KEY={YOUR_API_KEY}"))
-  .header("Content-Type", "application/json")
-  .GET()
-  .build();
-// send GET request
-HttpResponse<String> response = client.send(request,
-  HttpResponse.BodyHandlers.ofString());`,
-};
+const data = await response.json();`,
+
+  python: `import requests
+
+response = requests.get(
+  "${baseUrl}/logo",
+  params={"key": "google.com", "API_KEY": "YOUR_API_KEY"},
+)
+
+data = response.json()`,
+});
 
 export const DOCUMENTATION = {
   introduction: {
     heading: "Introduction",
-    text: "The documentation provides a comprehensive guide to our logo retrieval API, detailing endpoints for fetching company logos by domain name and searching logos by domain prefixes. We offer features like exact search, bulk logo retrieval, high-resolution logos, request logo with easy integration. Whether you need a logo for branding or marketing, we're here to help. Contact us anytime!",
+    text: "Welcome to the Openlogo API documentation. Openlogo is a high-performance, real-time logo retrieval service designed to help you integrate brand assets directly into your applications.",
   },
   tableDataHeaders: ["Parameter", "Type", "Description", "Required"],
   apiDocs: [
     {
       heading: "Logo Retrieval",
-      text: "Integrate this API for precise logo searches using a company's domain name. This free API allows up to 500 calls per month and returns logos in PNG format. Support for additional formats will be available in the future.",
-      endPoint: "Endpoint: /logo?key=google&API_KEY=YOUR_API_KEY",
+      text: "Fetch the official logo for any company using their domain name. Our system automatically detects the best quality asset, including high-resolution SVGs and PNGs.",
+      endPoint: "Endpoint: /logo?key={domain}&API_KEY={YOUR_API_KEY}",
       tableDataContent: [
-        ["key", "string", "The domain name of the company.", "Yes"],
+        [
+          "key",
+          "string",
+          "The domain name of the company (e.g., apple.com).",
+          "Yes",
+        ],
         ["API_KEY", "string", "Generated API Key from the dashboard.", "Yes"],
       ],
       codeExample: CODE_EXAMPLE,
     },
     {
-      heading: "Search (Now Available)",
-      text: "The Logo Search API allows users to retrieve a list of logo URLs that begin with specified characters, making it useful for identifying logos based on a domain name's prefix. This service is currently free but will be subject to charges in the future. The API has a monthly usage limit of 5000 requests.",
-      endPoint: "Endpoint: /logo/search?key=go&API_KEY=YOUR_API_KEY",
+      heading: "Search Logos",
+      text: "Find logos by brand keyword or domain fragment. This endpoint returns matching logos for faster discovery workflows.",
+      endPoint: "Endpoint: /logo/search?key={query}&API_KEY={YOUR_API_KEY}",
       tableDataContent: [
-        ["key", "string", "Prefix of the domain name to filter logos.", "Yes"],
+        [
+          "key",
+          "string",
+          "Search query (brand name or domain fragment).",
+          "Yes",
+        ],
         ["API_KEY", "string", "Generated API Key from the dashboard.", "Yes"],
       ],
       codeExample: CODE_EXAMPLE_SEARCH,
@@ -645,9 +757,8 @@ export const API_KEY_TABLE = {
     "Your api keys will be visible here, click on generate key to add new api key",
 };
 
-export const DASHBOARD_CARDS_TITLE = [
-  "Usage",
-  "Generate New API Key",
+export const DASHBOARD_CARDS_TITLE = ["Usage", "Generate New API Key"];
+export const USER_SETTINGS_TITLE = [
   "Plan",
   "User Info",
   "Change Password",
@@ -834,6 +945,266 @@ export const IMAGE_UPLOAD_MODEL = {
   or: "OR",
 };
 
+export const USER_SUBSCRIPTIONS = {
+  title: "User Subscriptions",
+  subtitle: "View and manage subscription plans for all users.",
+  searchPlaceholder: "Search by name or email...",
+  tableHeaders: ["User", "Plan", "Usage", ""],
+  plans: {
+    HOBBY: "Hobby",
+    PRO: "Pro",
+  },
+  modal: {
+    title: "Change Subscription Plan",
+    planLabel: "Select Plan",
+    reasonLabel: "Reason (optional)",
+    reasonPlaceholder: "Provide a reason for the plan change...",
+    confirmButton: "Confirm Change",
+  },
+  emptyState: "No users found matching your search.",
+  toasts: {
+    success: "Subscription plan updated successfully.",
+    error: "Failed to update subscription plan.",
+  },
+};
+
+export const SUBSCRIPTION_LOGS = {
+  title: "Subscription Logs",
+  subtitle: "Audit trail of all subscription plan changes.",
+  tableHeaders: ["Date", "User", "Changed By", "From", "To", "Reason"],
+  plans: {
+    HOBBY: "Hobby",
+    PRO: "Pro",
+  },
+  emptyState: "No subscription changes have been recorded yet.",
+  toasts: {
+    error: "Failed to load subscription logs.",
+  },
+};
+
+export const SUBSCRIPTION_PANEL = {
+  tabs: {
+    subscriptions: "User Subscriptions",
+    logs: "Subscription Logs",
+  },
+};
+
+export const MILESTONE_CONFIG = {
+  title: "Rewards Milestone Configuration",
+  subtitle: "Manage reward milestone thresholds and activate configurations.",
+  createButton: "Create Config",
+  tableHeaders: ["Name", "Thresholds", "Status", ""],
+  status: {
+    active: "Active",
+    inactive: "Inactive",
+  },
+  modal: {
+    createTitle: "Create Milestone Config",
+    editTitle: "Edit Milestone Config",
+    nameLabel: "Configuration Name",
+    namePlaceholder: "e.g. Q3 2026 Campaign",
+    thresholdsLabel: "Reward Thresholds",
+    atLabel: "At (submissions)",
+    pointsLabel: "Points",
+    addThreshold: "Add Threshold",
+    removeThreshold: "Remove",
+    saveButton: "Save",
+    cancelButton: "Cancel",
+  },
+  activate: {
+    heading: "Activate Configuration",
+    description:
+      "Activating this configuration will deactivate the currently active one. The new configuration takes effect on the next worker run.",
+    confirmButton: "Activate",
+  },
+  delete: {
+    heading: "Delete Configuration",
+    description:
+      "Are you sure you want to delete this configuration? This action cannot be undone.",
+    confirmButton: "Delete",
+  },
+  emptyState: "No milestone configurations found. Create one to get started.",
+  toasts: {
+    createSuccess: "Milestone configuration created successfully.",
+    createError: "Failed to create milestone configuration.",
+    updateSuccess: "Milestone configuration updated successfully.",
+    updateError: "Failed to update milestone configuration.",
+    activateSuccess: "Milestone configuration activated successfully.",
+    activateError: "Failed to activate milestone configuration.",
+    deleteSuccess: "Milestone configuration deleted successfully.",
+    deleteError: "Failed to delete milestone configuration.",
+    loadError: "Failed to load milestone configurations.",
+  },
+};
+
+export const IMAGE_REWARD_MODAL = {
+  title: "Image Reward Stats",
+  subtitle: "View reward summary and transaction history for this image.",
+  summary: {
+    proUsers: "Pro Users",
+    totalPoints: "Total Points Awarded",
+    milestones: "Milestones Achieved",
+    nextMilestone: "Next Milestone",
+  },
+  transactions: {
+    title: "Transaction History",
+    headers: ["Type", "Points", "User", "Reason", "Date"],
+    emptyState: "No transactions found for this image.",
+  },
+  bonus: {
+    button: "Award Bonus",
+    pointsLabel: "Points",
+    reasonLabel: "Reason",
+    reasonPlaceholder: "Select a reason...",
+    descriptionLabel: "Description (optional)",
+    descriptionPlaceholder: "Additional details...",
+    confirmButton: "Award Points",
+    cancelButton: "Cancel",
+    submittingText: "Awarding...",
+    success: "Bonus points awarded successfully.",
+    error: "Failed to award bonus points.",
+    validation: {
+      pointsRequired: "Please enter a valid positive number of points.",
+      reasonRequired: "Please select a reason for the bonus.",
+    },
+    reasonOptions: [
+      { value: "PROMOTION", label: "Promotion" },
+      { value: "MANUAL_CORRECTION", label: "Manual Correction" },
+    ],
+  },
+  toasts: {
+    summaryError: "Failed to load reward summary.",
+    transactionsError: "Failed to load transactions.",
+  },
+};
+
+export const REWARD_PANEL = {
+  tabs: {
+    milestones: "Milestones",
+    userRewards: "User Rewards",
+  },
+};
+
+export const ADMIN_USER_REWARDS = {
+  title: "User Rewards",
+  subtitle:
+    "Search users and view their reward summary and transaction history.",
+  searchPlaceholder: "Search by name or email...",
+  tableHeaders: ["User", "Plan", "Points", ""],
+  emptyState: "No users found matching your search.",
+  detail: {
+    title: "Reward Details",
+    awardBonus: "Award Bonus",
+    stats: {
+      totalTransactions: "Total Transactions",
+      totalPoints: "Total Points Awarded",
+    },
+    breakdownTitle: "Transaction Breakdown",
+    breakdownHeaders: ["Type", "Count", "Total Points"],
+    historyTitle: "Transaction History",
+    historyHeaders: ["Type", "Points", "Reason", "Date", ""],
+    emptyHistory: "No transactions found for this user.",
+  },
+  bonusModal: {
+    title: "Award Bonus Points",
+    pointsLabel: "Points",
+    reasonLabel: "Reason",
+    reasonPlaceholder: "e.g. Promotion, referral bonus",
+    descriptionLabel: "Description (optional)",
+    descriptionPlaceholder: "Additional details...",
+    confirmButton: "Award Points",
+    cancelButton: "Cancel",
+    submittingText: "Awarding...",
+    success: "Bonus points awarded successfully.",
+    error: "Failed to award bonus points.",
+    validation: {
+      pointsRequired: "Please enter a valid positive number of points.",
+      reasonRequired: "Please select a reason for the bonus.",
+    },
+    reasonOptions: [
+      { value: "PROMOTION", label: "Promotion" },
+      { value: "MANUAL_CORRECTION", label: "Manual Correction" },
+      { value: "SUSPICIOUS_ACTIVITY", label: "Suspicious Activity" },
+    ],
+  },
+  reverseModal: {
+    title: "Reverse Transaction",
+    description: (points, type) =>
+      `This will reverse the ${type} transaction of ${points} points. The user's points balance will be decreased accordingly.`,
+    reasonLabel: "Reversal Reason",
+    reasonPlaceholder: "Select a reason...",
+    confirmButton: "Reverse Transaction",
+    cancelButton: "Cancel",
+    submittingText: "Reversing...",
+    success: "Transaction reversed successfully.",
+    error: "Failed to reverse transaction.",
+    validation: {
+      reasonRequired: "Please select a reason for the reversal.",
+    },
+    reversalReasonOptions: [
+      { value: "DUPLICATE_REMOVAL", label: "Duplicate Removal" },
+      { value: "SUSPICIOUS_ACTIVITY", label: "Suspicious Activity" },
+      { value: "MANUAL_CORRECTION", label: "Manual Correction" },
+      { value: "SYSTEM_ERROR", label: "System Error" },
+    ],
+  },
+  toasts: {
+    loadError: "Failed to load user rewards.",
+  },
+};
+
+export const USER_REWARDS_DASHBOARD = {
+  title: "My Rewards",
+  subtitle: "Track your reward points, milestones, and transaction history.",
+  stats: {
+    currentPoints: "Current Points",
+    lifetimePoints: "Lifetime Points",
+    totalImages: "Images Contributed",
+    avgPoints: "Avg Points / Image",
+  },
+  images: {
+    title: "My Images",
+    subtitle: "Images you've uploaded and their reward performance.",
+    emptyState: "No images uploaded yet.",
+    points: "Points",
+  },
+  breakdown: {
+    title: "Transaction Breakdown",
+    headers: ["Type", "Count", "Total Points"],
+    emptyState: "No transactions yet.",
+  },
+  history: {
+    title: "Transaction History",
+    headers: ["Type", "Points", "Image", "Reason", "Date"],
+    emptyState: "No transactions yet.",
+  },
+  viewLeaderboard: "View Leaderboard",
+  uploadImage: "Upload Image",
+  toasts: {
+    summaryError: "Failed to load reward summary.",
+    statsError: "Failed to load transaction stats.",
+    historyError: "Failed to load transaction history.",
+    leaderboardError: "Failed to load leaderboard.",
+    rankError: "Failed to load your rank.",
+  },
+};
+
+export const LEADERBOARD_PAGE = {
+  title: "Leaderboard",
+  subtitle: "Top creators ranked by total reward points earned.",
+  yourPosition: "Your Position",
+  notRanked: "You haven't earned any rewards yet.",
+  outOf: "out of",
+  users: "creators",
+  backToRewards: "Back to My Rewards",
+  headers: ["Rank", "User", "Points", "Milestones"],
+  emptyState: "No leaderboard data yet.",
+  toasts: {
+    loadError: "Failed to load leaderboard.",
+    rankError: "Failed to load your rank.",
+  },
+};
+
 export const RELEASE_PAGE = {
   introduction: {
     heading: "About",
@@ -863,12 +1234,134 @@ export const RELEASE_PAGE = {
     ],
   },
 
-  versions: ["0.7.0 version", "0.6.0 version", "Previous version"],
-  latestVersion: "0.7.0 version",
+  versions: [
+    "0.8.0 version",
+    "0.7.0 version",
+    "0.6.0 version",
+    "Previous version",
+  ],
+  latestVersion: "0.8.0 version",
   changelog: {
     title: "Changelog",
     description: "Changelog with often recorded's versions",
     versionsData: [
+      {
+        versionName: "0.8.0 version",
+        releaseDate: "May 2026",
+        imgSrc: version07,
+        releaseNotes: [
+          {
+            releaseNote: "Revamp USER dashboard according to the design.",
+            contributors: [
+              {
+                contributorName: "AryaDharkar",
+                contributorGithubLink: "https://github.com/AryaDharkar",
+              },
+            ],
+          },
+          {
+            releaseNote: "Enhancing the UI of the admin dashboard.",
+            contributors: [
+              {
+                contributorName: "L-Tarun-Aditya",
+                contributorGithubLink: "https://github.com/L-Tarun-Aditya",
+              },
+            ],
+          },
+          {
+            releaseNote: "Add 2FA section in user settings.",
+            contributors: [
+              {
+                contributorName: "L-Tarun-Aditya",
+                contributorGithubLink: "https://github.com/L-Tarun-Aditya",
+              },
+            ],
+          },
+          {
+            releaseNote: "Implementing a dedicated settings page for MFA.",
+            contributors: [
+              {
+                contributorName: "L-Tarun-Aditya",
+                contributorGithubLink: "https://github.com/L-Tarun-Aditya",
+              },
+            ],
+          },
+          {
+            releaseNote: "Multi factor authentication.",
+            contributors: [
+              {
+                contributorName: "MukeshAbhi",
+                contributorGithubLink: "https://github.com/MukeshAbhi",
+              },
+            ],
+          },
+          {
+            releaseNote:
+              "Prevent Users From Reusing Old Password During Password Reset.",
+            contributors: [
+              {
+                contributorName: "rishang14",
+                contributorGithubLink: "https://github.com/rishang14",
+              },
+            ],
+          },
+          {
+            releaseNote:
+              "Fix bugs on createLogo page and allow users to access this page without authentication.",
+            contributors: [
+              {
+                contributorName: "AryaDharkar",
+                contributorGithubLink: "https://github.com/AryaDharkar",
+              },
+            ],
+          },
+          {
+            releaseNote: "Feature for user session management.",
+            contributors: [
+              {
+                contributorName: "kadamsahil2511",
+                contributorGithubLink: "https://github.com/kadamsahil2511",
+              },
+              {
+                contributorName: "DeepAkdotcom",
+                contributorGithubLink: "https://github.com/DeepAkdotcom",
+              },
+            ],
+          },
+          {
+            releaseNote:
+              "Feature to enforce branch & PR naming conventions via husky + GitHub Actions.",
+            contributors: [
+              {
+                contributorName: "Smayur0",
+                contributorGithubLink: "https://github.com/Smayur0",
+              },
+            ],
+          },
+          {
+            releaseNote: "Redesign documentation page.",
+            contributors: [
+              {
+                contributorName: "Dhirenderchoudhary",
+                contributorGithubLink: "https://github.com/Dhirenderchoudhary",
+              },
+            ],
+          },
+          {
+            releaseNote: "Revamp sign in and sign up form",
+            contributors: [
+              {
+                contributorName: "0-mstrmind",
+                contributorGithubLink: "https://github.com/0-mstrmind",
+              },
+              {
+                contributorName: "kunjesh360",
+                contributorGithubLink: "https://github.com/kunjesh360",
+              },
+            ],
+          },
+        ],
+      },
       {
         versionName: "0.7.0 version",
         releaseDate: "Mar 2026",
@@ -1203,3 +1696,55 @@ export const RELEASE_PAGE = {
     ],
   },
 };
+
+export const BRAND_SUGGESTIONS = [
+  { name: "Microsoft", logo: microsoft, verified: true },
+  { name: "Nvidia", logo: nvidia, verified: true },
+  { name: "Nike", logo: nike, verified: false },
+  { name: "Apple", logo: apple, verified: true },
+  { name: "Amazon", logo: amazon, verified: false },
+];
+
+export const TILTED_BRANDS = [
+  {
+    name: "Meta",
+    logo: meta,
+    bgColor: "#0064e0",
+    textColor: "#ffffff",
+    tilt: "-6deg",
+    nudge: "20px",
+  },
+  {
+    name: "Tesla",
+    logo: tesla,
+    bgColor: "#cc0000",
+    textColor: "#ffffff",
+    tilt: "-3deg",
+    nudge: "5px",
+  },
+  {
+    name: "Google",
+    logo: google,
+    bgColor: "#ffffff",
+    textColor: "#1f2937",
+    tilt: "2deg",
+    nudge: "-10px",
+    featured: true,
+  },
+  {
+    name: "Slack",
+    logo: slack,
+    bgColor: "#4a154b",
+    textColor: "#ffffff",
+    tilt: "4deg",
+    nudge: "5px",
+  },
+  {
+    name: "Spotify",
+    logo: spotify,
+    bgColor: "#1db954",
+    textColor: "#ffffff",
+    tilt: "6deg",
+    nudge: "20px",
+  },
+];

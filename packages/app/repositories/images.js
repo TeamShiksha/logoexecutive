@@ -68,8 +68,18 @@ class ImagesRepository extends BaseRepository {
       this.model.find(query).skip(skip).limit(limit).sort({ updated_at: -1 }),
     ]);
 
+    const imagesData = images.map((image) => {
+      const imageData = image.data();
+      const imagePath = `${image.extension}/${image.company_name}.${image.extension}`;
+      const signedUrlResult = cloudFrontSignedURL(`/${imagePath}`);
+      imageData.imageUrl = signedUrlResult.success
+        ? signedUrlResult.data
+        : null;
+      return imageData;
+    });
+
     return {
-      data: images.map((image) => image.data()),
+      data: imagesData,
       total,
       currentPage: Math.floor(skip / limit) + 1,
       totalPages: Math.ceil(total / limit),

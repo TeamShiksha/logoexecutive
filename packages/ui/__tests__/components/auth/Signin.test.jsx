@@ -2,7 +2,7 @@ import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { describe, expect, it, vi, beforeEach } from "vitest";
 import { AuthContext } from "../../../src/contexts/Contexts";
 import SignIn from "../../../src/components/auth/Signin";
-import { BUTTON_TEXT, SIGNIN } from "../../../src/utils/Constants";
+import { BUTTON_TEXT, MESSAGES, SIGNIN } from "../../../src/utils/Constants";
 import { BrowserRouter } from "react-router-dom";
 import { ToastProvider } from "../../../src/contexts/ToastContext.jsx";
 import { ThemeProvider } from "../../../src/contexts/ThemeContext";
@@ -326,6 +326,35 @@ describe("SignInForm UI and Functionality Tests", () => {
       expect(submitButton).toBeDisabled();
     });
   });
+
+  it("does not show duplicate guest sign-in success toasts on rapid clicks", async () => {
+    mockedMakeRequest.mockResolvedValue(true);
+
+    render(
+      <BrowserRouter>
+        <AuthContext.Provider value={authContext}>
+          <ThemeProvider>
+            <ToastProvider>
+              <SignIn toggleForm={vi.fn()} onClose={vi.fn()} />
+            </ToastProvider>
+          </ThemeProvider>
+        </AuthContext.Provider>
+      </BrowserRouter>
+    );
+
+    const guestSignInButton = screen.getByText(SIGNIN.guestAccount);
+
+    fireEvent.click(guestSignInButton);
+    fireEvent.click(guestSignInButton);
+    fireEvent.click(guestSignInButton);
+
+    await waitFor(() => {
+      expect(screen.getAllByText(MESSAGES.GUEST_SIGN_IN_SUCCESS)).toHaveLength(
+        1
+      );
+    });
+  });
+
   it("switches to forgot password mode when forgot password link is clicked", () => {
     const authContext = mockAuthContext(false);
 

@@ -6,7 +6,7 @@ import {
   act,
 } from "@testing-library/react";
 import ContactForm from "../../../src/components/contact/ContactForm";
-import { BUTTON_TEXT, CONTACT } from "../../../src/utils/Constants";
+import { BUTTON_TEXT } from "../../../src/utils/Constants";
 import { expect, it, describe, vi, beforeEach } from "vitest";
 import { ToastProvider } from "../../../src/contexts/ToastContext";
 
@@ -30,10 +30,10 @@ vi.mock("../../../src/hooks/useToast", () => ({
 }));
 
 const fillFormWithValidData = async () => {
-  const nameInput = screen.getByLabelText("Name");
-  const emailInput = screen.getByLabelText("Email");
+  const nameInput = screen.getByLabelText("Full Name");
+  const emailInput = screen.getByLabelText("Email Address");
   const messageInput = screen.getByPlaceholderText(
-    "Type your message here ...."
+    "Tell us about your project goals..."
   );
 
   await act(async () => {
@@ -71,14 +71,14 @@ describe("ContactForm Component", () => {
       </ToastProvider>
     );
 
-    const title = screen.getByText(CONTACT.title);
+    const title = screen.getByText("Let's discuss your integration needs.");
     expect(title).toBeInTheDocument();
-    const nameInput = screen.getByLabelText("Name");
+    const nameInput = screen.getByLabelText("Full Name");
     expect(nameInput).toBeInTheDocument();
-    const emailInput = screen.getByLabelText("Email");
+    const emailInput = screen.getByLabelText("Email Address");
     expect(emailInput).toBeInTheDocument();
     const messageInput = screen.getByPlaceholderText(
-      "Type your message here ...."
+      "Tell us about your project goals..."
     );
     expect(messageInput).toBeInTheDocument();
   });
@@ -91,7 +91,7 @@ describe("ContactForm Component", () => {
         </ToastProvider>
       );
 
-      const nameInput = screen.getByLabelText("Name");
+      const nameInput = screen.getByLabelText("Full Name");
       fireEvent.focus(nameInput);
       await waitFor(() => {
         const nameError = screen.getByText("Name is required");
@@ -114,7 +114,7 @@ describe("ContactForm Component", () => {
         </ToastProvider>
       );
 
-      const emailInput = screen.getByLabelText("Email");
+      const emailInput = screen.getByLabelText("Email Address");
       await act(async () => {
         fireEvent.focus(emailInput);
       });
@@ -134,7 +134,7 @@ describe("ContactForm Component", () => {
         </ToastProvider>
       );
 
-      const emailInput = screen.getByLabelText("Email");
+      const emailInput = screen.getByLabelText("Email Address");
       await act(async () => {
         fireEvent.change(emailInput, { target: { value: "invalid-email" } });
         fireEvent.focus(emailInput);
@@ -168,7 +168,7 @@ describe("ContactForm Component", () => {
       );
 
       const messageInput = screen.getByPlaceholderText(
-        "Type your message here ...."
+        "Tell us about your project goals..."
       );
       await act(async () => {
         fireEvent.focus(messageInput);
@@ -191,7 +191,7 @@ describe("ContactForm Component", () => {
 
       const errorMessage = "Message should be at least 20 characters";
       const messageInput = screen.getByPlaceholderText(
-        "Type your message here ...."
+        "Tell us about your project goals..."
       );
       await act(async () => {
         fireEvent.change(messageInput, { target: { value: "Too short" } });
@@ -238,7 +238,7 @@ describe("ContactForm Component", () => {
       expect(submitButton).not.toBeDisabled();
     });
 
-    const emailInput = screen.getByLabelText("Email");
+    const emailInput = screen.getByLabelText("Email Address");
     await act(async () => {
       fireEvent.change(emailInput, { target: { value: "invalid-email" } });
     });
@@ -364,10 +364,10 @@ describe("ContactForm Component", () => {
       </ToastProvider>
     );
 
-    const nameInput = screen.getByLabelText("Name");
-    const emailInput = screen.getByLabelText("Email");
+    const nameInput = screen.getByLabelText("Full Name");
+    const emailInput = screen.getByLabelText("Email Address");
     const messageInput = screen.getByPlaceholderText(
-      "Type your message here ...."
+      "Tell us about your project goals..."
     );
 
     await act(async () => {

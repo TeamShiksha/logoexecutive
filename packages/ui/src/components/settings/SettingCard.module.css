@@ -34,3 +34,7 @@
     gap: 1rem;
   }
 }
+
+.action-button button[class*="danger"] {
+  color: var(--white);
+}

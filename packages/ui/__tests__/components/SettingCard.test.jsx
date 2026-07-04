@@ -122,8 +122,8 @@ describe("Delete Account Confirmation Flow", () => {
     const emailInput = screen.getByLabelText(/email/i);
     fireEvent.change(emailInput, { value: "wrong@example.com" });
 
-    const modal = screen.getByTestId("delete-account-modal");
-    const confirmButton = within(modal).getByRole("button", {
+    const dialog = screen.getByTestId("dialog");
+    const confirmButton = within(dialog).getByRole("button", {
       name: DELETE_ACCOUNT_MODAL.primaryButtonText,
     });
     expect(confirmButton).toBeDisabled();
@@ -137,8 +137,8 @@ describe("Delete Account Confirmation Flow", () => {
     const emailInput = screen.getByLabelText(/email/i);
     fireEvent.change(emailInput, { target: { value: MOCK_USER_DATA.email } });
 
-    const modal = screen.getByTestId("delete-account-modal");
-    const confirmButton = within(modal).getByRole("button", {
+    const dialog = screen.getByTestId("dialog");
+    const confirmButton = within(dialog).getByRole("button", {
       name: DELETE_ACCOUNT_MODAL.primaryButtonText,
     });
     expect(confirmButton).not.toBeDisabled();
@@ -153,8 +153,8 @@ describe("Delete Account Confirmation Flow", () => {
     const emailInput = screen.getByLabelText(/email/i);
     fireEvent.change(emailInput, { target: { value: MOCK_USER_DATA.email } });
 
-    const modal = screen.getByTestId("delete-account-modal");
-    const confirmButton = within(modal).getByRole("button", {
+    const dialog = screen.getByTestId("dialog");
+    const confirmButton = within(dialog).getByRole("button", {
       name: DELETE_ACCOUNT_MODAL.primaryButtonText,
     });
     fireEvent.click(confirmButton);
@@ -176,8 +176,8 @@ describe("Delete Account Confirmation Flow", () => {
     const emailInput = screen.getByLabelText(/email/i);
     fireEvent.change(emailInput, { target: { value: MOCK_USER_DATA.email } });
 
-    const modal = screen.getByTestId("delete-account-modal");
-    const confirmButton = within(modal).getByRole("button", {
+    const dialog = screen.getByTestId("dialog");
+    const confirmButton = within(dialog).getByRole("button", {
       name: DELETE_ACCOUNT_MODAL.primaryButtonText,
     });
     fireEvent.click(confirmButton);

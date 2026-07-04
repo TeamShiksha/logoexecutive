@@ -96,6 +96,7 @@ function UserInfo({ name, email, isGuest }) {
               className={styles["input"]}
               disabled={field.name === "email"}
               data-testid={`input-${field.name}`}
+              aria-label={field.label}
             />
           </div>
           {field.name === "name" && formErrors.type === "error" && (

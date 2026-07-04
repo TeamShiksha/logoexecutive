@@ -1,18 +1,26 @@
 .dashboard-container {
+  position: relative;
   min-height: 100vh;
-  background-color: var(white);
+  background-color: var(--white);
   padding: 3% 8%;
   margin: 0 auto;
+  max-width: 100%;
+  overflow-x: hidden;
+  box-sizing: border-box;
 }
 
 .spinner-container {
-  position: fixed;
+  position: absolute;
   inset: 0;
-  z-index: 9999;
+  z-index: 50;
   display: flex;
   justify-content: center;
   align-items: center;
-  background: rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.55);
+}
+
+[data-theme="dark"] .spinner-container {
+  background: rgba(17, 24, 39, 0.85);
 }
 
 .page-header {
@@ -26,7 +34,7 @@
 
 .title-section {
   flex: 1;
-  min-width: 250px;
+  min-width: 0;
 }
 
 .dashboard-title {
@@ -153,6 +161,12 @@
   border-radius: 12px;
   padding: 1.5rem;
   box-shadow: var(--shadow);
+  min-width: 0;
+  overflow: hidden;
+}
+
+.rewards-content {
+  width: 100%;
 }
 
 .api-keys-grid {
@@ -264,20 +278,16 @@
 }
 
 .overlay-loader {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(0, 0, 0, 0.5);
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 1rem;
-  z-index: 9999;
+  z-index: 999;
+  padding: 2rem;
 }
 
 .loader-content {
@@ -368,6 +378,7 @@
   .dashboard-container {
     padding: 1rem 1rem;
   }
+
   .header-right {
     flex-direction: column-reverse;
     align-items: flex-start;
@@ -381,5 +392,15 @@
   .tabs {
     width: 100%;
     overflow-x: auto;
+  }
+}
+
+@media (max-width: 420px) {
+  .dashboard-container {
+    padding: 0.75rem;
+  }
+
+  .analytics-card {
+    padding: 1rem;
   }
 }

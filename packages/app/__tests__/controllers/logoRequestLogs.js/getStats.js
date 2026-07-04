@@ -30,7 +30,7 @@ describe("GET LOGO REQUEST STATS", () => {
   });
 
   describe("Weekly Stats", () => {
-    it("200 - should return last 7 days stats for authenticated user", async () => {
+    it("200 - should return current week stats for authenticated user", async () => {
       const mockUserModel = new Users(MOCK_USERS[0]);
       jest
         .spyOn(UserSessionService.prototype, "validateSession")
@@ -53,11 +53,11 @@ describe("GET LOGO REQUEST STATS", () => {
       ).toHaveBeenCalledWith(mockUserModel._id.toString());
     });
 
-    it("200 - should return empty stats when user has no requests in last 7 days", async () => {
+    it("200 - should return empty stats when user has no requests in the current week", async () => {
       const emptyStats = {
         period: "week",
-        startDate: "2025-11-24",
-        endDate: "2025-12-01",
+        startDate: "2025-11-23",
+        endDate: "2025-11-29",
         summary: {
           totalCount: 0,
           totalKB: "0.00",
@@ -83,7 +83,7 @@ describe("GET LOGO REQUEST STATS", () => {
   });
 
   describe("Monthly Stats", () => {
-    it("200 - should return last 30 days stats for authenticated user", async () => {
+    it("200 - should return current month stats for authenticated user", async () => {
       const mockUserModel = new Users(MOCK_USERS[0]);
       jest
         .spyOn(UserSessionService.prototype, "validateSession")
@@ -106,11 +106,11 @@ describe("GET LOGO REQUEST STATS", () => {
       ).toHaveBeenCalledWith(mockUserModel._id.toString());
     });
 
-    it("200 - should return empty stats when user has no requests in last 30 days", async () => {
+    it("200 - should return empty stats when user has no requests in the current month", async () => {
       const emptyStats = {
         period: "month",
         startDate: "2025-11-01",
-        endDate: "2025-12-01",
+        endDate: "2025-11-30",
         summary: {
           totalCount: 0,
           totalKB: "0.00",

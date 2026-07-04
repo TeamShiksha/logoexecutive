@@ -29,7 +29,7 @@ describe("GetInTouch Component", () => {
     );
     const button = screen.getByText("Get in touch");
     fireEvent.click(button);
-    const modal = screen.getByText("Contact Us");
+    const modal = screen.getByText("Let's discuss your integration needs.");
     expect(modal).toBeInTheDocument();
   });
 
@@ -41,10 +41,12 @@ describe("GetInTouch Component", () => {
     );
     const button = screen.getByText("Get in touch");
     fireEvent.click(button);
-    const modal = screen.getByText("Contact Us");
+    const modal = screen.getByText("Let's discuss your integration needs.");
     expect(modal).toBeInTheDocument();
     fireEvent.click(screen.getByRole("button", { name: BUTTON_TEXT.cross }));
-    const modalClosed = screen.queryByText("Contact Us");
+    const modalClosed = screen.queryByText(
+      "Let's discuss your integration needs."
+    );
     expect(modalClosed).not.toBeInTheDocument();
   });
 });

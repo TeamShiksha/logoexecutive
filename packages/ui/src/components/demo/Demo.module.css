@@ -1,150 +1,402 @@
+.demo-wrapper {
+  background: var(--grey);
+  padding: 5rem 0;
+  overflow: hidden;
+}
+
 .demo-container {
-  background: var(--primary);
-  padding: 3rem 4rem;
-  color: var(--white);
-  position: relative;
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10rem;
-  justify-content: space-between;
+  grid-template-columns: 4fr 3fr;
   align-items: center;
-  border-radius: 12px;
+  gap: 2rem;
 }
 
 .content {
-  margin: 2rem 0;
+  max-width: 420px;
 }
 
 .content h1 {
-  font-size: 3rem;
-  margin-bottom: 1.5rem;
+  font-size: 2.5rem;
+  line-height: 1.15;
+  font-weight: 700;
+  color: var(--black);
+  margin-bottom: 1rem;
+  letter-spacing: -0.02em;
 }
 
 .content p {
-  font-size: 1.2rem;
-  line-height: 1.8rem;
+  font-size: 0.95rem;
+  line-height: 1.7;
+  color: var(--description);
+  margin-bottom: 1.5rem;
+}
+
+.features {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.feature {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.95rem;
+  color: var(--description);
   font-weight: 500;
 }
 
-.search-box {
-  background: var(--table-background);
-  border-radius: 12px;
-  padding: 2rem;
+.features-icon {
+  color: var(--success);
+}
+
+.searchBox {
+  background: rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-radius: 24px;
+  padding: 2.5rem;
+  width: 100%;
+  box-shadow:
+    0 12px 40px rgba(0, 0, 0, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  flex-shrink: 0;
+  position: relative;
+}
+
+.searchBox::before {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(
+    circle at 50% 50%,
+    rgba(99, 102, 241, 0.08) 0%,
+    transparent 60%
+  );
+  pointer-events: none;
+  z-index: 0;
+  clip-path: inset(25% round 24px);
+}
+
+.searchContent {
+  width: 100%;
+  position: relative;
+  z-index: 1;
+}
+
+.searchForm {
+  position: relative;
   display: flex;
   align-items: center;
-  position: relative;
-  transition: opacity 0.3s ease-in-out;
-}
-
-.search-content {
   width: 100%;
-  border: var(--border);
-  border-radius: 0.5rem;
-  background-color: var(--white);
-  position: relative;
 }
 
-.search-term {
+.searchIcon {
+  position: absolute;
+  left: 1.5rem;
   color: var(--primary);
+  pointer-events: none;
+  z-index: 2;
+  transition:
+    transform 0.3s ease,
+    color 0.3s ease;
 }
 
-form {
+.searchForm:focus-within .searchIcon {
+  transform: scale(1.1);
+  color: var(--primary-focus);
+}
+
+.searchInput {
+  width: 100%;
+  height: 4.5rem;
+  border-radius: 9999px;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(8px);
+  padding: 0 1.5rem 0 4rem;
+  font-size: 1.15rem;
+  color: var(--black);
+  outline: none;
+  transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+}
+
+.searchInput::placeholder {
+  color: #94a3b8;
+}
+
+.searchInput:focus {
+  border-color: rgba(99, 102, 241, 0.5);
+  background: #ffffff;
+  box-shadow:
+    0 0 0 4px rgba(99, 102, 241, 0.2),
+    0 12px 30px -5px rgba(0, 0, 0, 0.15);
+  transform: translateY(-2px);
+}
+
+.shortcutBadge {
+  position: absolute;
+  right: 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 0.35rem 0.6rem;
+  background: #f1f5f9;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  pointer-events: none;
+}
+
+.shortcutKey {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #64748b;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, monospace;
+}
+
+.suggestionsRow {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  gap: 0.5rem;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+  width: 100%;
+  overflow: hidden;
+}
+
+.suggestionPill {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.4rem 0.75rem;
+  border-radius: 9999px;
+  border: 1px solid #e2e8f0;
+  background: #ffffff;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+}
+
+.suggestionPill:hover {
+  border-color: #cbd5e1;
+  background: #f8fafc;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+.suggestionLogo {
+  width: 14px;
+  height: 14px;
+  object-fit: contain;
+}
+
+.suggestionName {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #334155;
+}
+
+.verifiedBadge {
+  color: #3b82f6;
+  fill: rgba(59, 130, 246, 0.15);
+}
+
+/* Deck Section with Tilted Cards */
+.deckSection {
+  width: 100%;
+  padding: 3rem 0 2.5rem 0;
+  display: flex;
+  justify-content: center;
+  background: radial-gradient(
+    circle at bottom,
+    rgba(238, 242, 255, 0.4) 0%,
+    rgba(253, 244, 245, 0.3) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  border-radius: 18px;
+  overflow: hidden;
+  margin-top: 1rem;
+}
+
+.deckContainer {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 0.75rem;
+  width: 100%;
+  max-width: 520px;
+  padding: 0 1rem;
+}
+
+.deckCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 80px;
+  height: 110px;
+  border-radius: 12px;
+  cursor: pointer;
+  box-shadow:
+    0 6px 10px -3px rgba(0, 0, 0, 0.04),
+    0 2px 4px -2px rgba(0, 0, 0, 0.02);
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   position: relative;
+  user-select: none;
+  border: 1px solid rgba(0, 0, 0, 0.03);
+  padding: 0;
+  outline: none;
+  font-family: inherit;
+}
+
+.featuredCard {
+  width: 90px;
+  height: 122px;
+  z-index: 2;
+  box-shadow:
+    0 12px 18px -5px rgba(0, 0, 0, 0.06),
+    0 6px 6px -5px rgba(0, 0, 0, 0.03);
+}
+
+.cardLogoWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: #ffffff;
+  margin-bottom: 0.75rem;
+  box-shadow:
+    0 4px 6px -1px rgba(0, 0, 0, 0.06),
+    0 2px 4px -1px rgba(0, 0, 0, 0.03);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.featuredCard .cardLogoWrapper {
+  width: 54px;
+  height: 54px;
+  border-radius: 14px;
+  background: #ffffff;
+  box-shadow:
+    0 4px 8px -1px rgba(0, 0, 0, 0.08),
+    0 2px 4px -1px rgba(0, 0, 0, 0.04);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.cardLogo {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+}
+
+.featuredCard .cardLogo {
+  width: 32px;
+  height: 32px;
+}
+
+.cardName {
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.deckCard:hover {
+  transform: translateY(-10px) scale(1.15) rotate(0deg) !important;
+  z-index: 10;
+  box-shadow: 0 18px 30px -10px rgba(0, 0, 0, 0.12);
+}
+
+.resultContainer {
+  margin-top: 1.5rem;
 }
 
 .loading {
   display: flex;
   justify-content: center;
-  align-items: center;
   padding: 2rem;
 }
 
-.search-box-input {
-  border: 0;
-  padding-left: 2.8rem;
-  border-radius: 1rem;
-  box-shadow: none;
-  background-color: var(--white);
-  outline: none;
-  height: 3.5rem;
-  color: var(--description);
-  width: 100%;
-  font-size: 1.2rem;
+.noResult {
+  text-align: center;
+  padding: 2rem;
 }
 
-.search-box-input:-webkit-autofill {
-  box-shadow: 0 0 0 1000px var(--white) inset;
-  -webkit-text-fill-color: var(--input-color);
+.searchTerm {
+  color: var(--primary);
 }
 
-.search-box-input:focus {
-  border: none;
+.noResultButtons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-top: 1rem;
 }
 
-.search-button > img {
-  height: 18px;
-  width: 18px;
-  margin-left: -2px;
-}
-
-.search-button {
-  background: none;
-  border: none;
-  position: absolute;
-  left: 1.2rem;
-  top: 50%;
-  transform: translateY(-50%);
-  cursor: pointer;
-  width: auto;
-  opacity: 0.7;
-}
-
-.search-button:hover {
-  opacity: 1;
-}
-
-.curved-arrow {
-  position: absolute;
-  bottom: -40px;
-  left: 40%;
-  width: 200px;
-  height: 200px;
-}
-
-.result-container {
-  opacity: 0;
-  max-height: 0;
-  overflow: hidden;
-  transition:
-    opacity 0.3s ease-in-out,
-    max-height 0.3s;
-  margin-top: 0.5rem;
-  border-top: 1px solid #eaecf0;
-}
-
-.result-container.show {
-  opacity: 1;
-  max-height: 15rem;
-  overflow-y: auto;
-}
-
-.result-container.no-result-container {
-  max-height: none;
-  overflow: visible;
-}
-
-.result-container::-webkit-scrollbar {
-  width: 4px;
-}
-
-.result-container::-webkit-scrollbar-track {
+.resultCard {
   background: var(--white);
-  border-radius: 4px;
+  border: 1px solid var(--border-color);
+  border-radius: 18px;
+  padding: 1.5rem;
+  margin-bottom: 1rem;
 }
 
-.result-container::-webkit-scrollbar-thumb {
-  background: var(--primary);
-  border-radius: 4px;
+.resultHeader {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.2rem;
+}
+
+.resultHeader img {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  border: 1px solid var(--border-color);
+  padding: 0.4rem;
+  background-color: var(--white-fixed);
+}
+
+.resultHeader h3 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--black);
+}
+
+.formatBox {
+  padding: 1rem;
+  border-radius: 12px;
+  border: 1px solid var(--border-color);
+  background: var(--grey);
+}
+
+.formatBox p {
+  font-size: 0.9rem;
+  color: var(--description);
+  margin-bottom: 0.6rem;
+}
+
+.formatButtons {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.formatButtons button {
+  padding: 0.4rem 0.8rem;
+  border-radius: 8px;
+  border: none;
+  background: var(--border-color);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.formatButtons button:hover {
+  background: var(--primary-focus);
 }
 
 .result-item {
@@ -220,69 +472,305 @@ form {
 
 @media only screen and (max-width: 1024px) {
   .demo-container {
-    grid-template-columns: 350px auto;
-    padding: 1rem 2rem;
     gap: 2rem;
   }
 
-  .search-box {
-    padding: 1rem;
-  }
-
-  .curved-arrow {
-    left: 40%;
-    width: 150px;
-    height: 150px;
-    bottom: -30px;
-  }
-
-  .search-box-input {
-    height: 3rem;
+  .searchBox {
+    max-width: 100%;
   }
 }
 
 @media only screen and (max-width: 780px) {
+  .demo-wrapper {
+    padding: 3rem 0;
+  }
+
   .demo-container {
-    padding: 2rem 0;
     grid-template-columns: 1fr;
-    gap: 0;
+    gap: 2.5rem;
+  }
+
+  .searchBox {
+    max-width: 100%;
+    order: 2;
   }
 
   .content {
     text-align: center;
-    margin: 0 3rem;
+    max-width: 100%;
+    order: 1;
   }
 
-  .curved-arrow {
-    top: 40%;
-    left: 0;
-    transform: rotate(60deg);
-    width: 100px;
-    height: 100px;
-  }
-
-  .search-box {
-    margin: 0 10%;
-    margin-top: 2rem;
+  .features {
+    align-items: flex-start;
+    display: inline-flex;
+    text-align: left;
+    margin-left: auto;
+    margin-right: auto;
   }
 }
 
 @media (max-width: 480px) {
   .content {
-    margin: 0 1rem;
+    text-align: center;
   }
 
-  .search-box {
-    margin: 0 1rem;
-    margin-top: 2rem;
+  .content h1 {
+    font-size: 1.9rem;
   }
 
-  .no-result-buttons {
+  .noResultButtons {
     flex-direction: column;
     gap: 0.75rem;
   }
 
-  .no-result-buttons button {
+  .noResultButtons button {
     width: 100%;
   }
+}
+
+@media only screen and (max-width: 600px) {
+  .searchBox {
+    padding: 1.5rem;
+  }
+
+  .deckSection {
+    padding-top: 1.5rem;
+  }
+
+  .deckContainer {
+    gap: 0;
+    padding: 0;
+  }
+
+  .deckCard {
+    margin-left: -8px;
+  }
+
+  .deckCard:first-child {
+    margin-left: 0;
+  }
+}
+
+@media only screen and (max-width: 480px) {
+  .deckSection {
+    padding-top: 0.5rem;
+  }
+}
+
+@media only screen and (max-width: 480px) {
+  .demo-wrapper {
+    padding: 2rem 0;
+  }
+
+  .demo-container {
+    gap: 1.5rem;
+  }
+
+  .searchBox {
+    padding: 1.25rem 1rem;
+  }
+
+  .searchIcon {
+    left: 1.2rem;
+  }
+
+  .searchInput {
+    padding: 0 1.25rem 0 3rem;
+    font-size: 0.9rem;
+    height: 3.25rem;
+  }
+
+  .suggestionsRow {
+    gap: 0.35rem;
+    margin-top: 0.75rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .suggestionPill {
+    padding: 0.3rem 0.5rem;
+  }
+
+  .suggestionLogo {
+    width: 12px;
+    height: 12px;
+  }
+
+  .suggestionName {
+    font-size: 0.7rem;
+  }
+
+  .deckSection {
+    padding: 1.5rem 0 2.5rem 0;
+  }
+
+  .deckContainer {
+    gap: 0.5rem;
+    padding: 0;
+  }
+
+  .deckCard {
+    width: 65px;
+    height: 90px;
+    margin-left: 0;
+  }
+
+  .deckCard .cardLogoWrapper {
+    width: 38px;
+    height: 38px;
+  }
+
+  .deckCard .cardLogo {
+    width: 22px;
+    height: 22px;
+  }
+
+  .deckCard:nth-child(4) {
+    display: none;
+  }
+
+  .featuredCard {
+    width: 65px;
+    height: 90px;
+    box-shadow:
+      0 6px 10px -3px rgba(0, 0, 0, 0.04),
+      0 2px 4px -2px rgba(0, 0, 0, 0.02);
+  }
+
+  .featuredCard .cardLogoWrapper {
+    width: 38px;
+    height: 38px;
+    border-radius: 12px;
+    box-shadow:
+      0 4px 6px -1px rgba(0, 0, 0, 0.06),
+      0 2px 4px -1px rgba(0, 0, 0, 0.03);
+    border: 1px solid rgba(0, 0, 0, 0.06);
+  }
+
+  .featuredCard .cardLogo {
+    width: 22px;
+    height: 22px;
+  }
+
+  .deckCard:nth-child(1):not(:hover) {
+    transform: rotate(-12deg) translateY(12px) !important;
+  }
+  .deckCard:nth-child(2):not(:hover) {
+    transform: rotate(-4deg) translateY(2px) !important;
+  }
+  .deckCard:nth-child(3):not(:hover) {
+    transform: rotate(4deg) translateY(2px) !important;
+  }
+  .deckCard:nth-child(5):not(:hover) {
+    transform: rotate(12deg) translateY(12px) !important;
+  }
+
+  .resultCard {
+    padding: 1rem;
+    border-radius: 12px;
+  }
+}
+
+/* Very small devices */
+@media only screen and (max-width: 360px) {
+  .searchInput {
+    font-size: 0.85rem;
+    height: 3rem;
+  }
+
+  .suggestionsRow {
+    gap: 0.3rem;
+    margin-bottom: 1rem;
+  }
+
+  .suggestionPill {
+    padding: 0.25rem 0.45rem;
+  }
+
+  .suggestionName {
+    font-size: 0.65rem;
+  }
+
+  .deckContainer {
+    gap: 0;
+    padding: 0;
+  }
+
+  .deckCard {
+    margin-left: -16px;
+  }
+
+  .deckCard:first-child {
+    margin-left: 0;
+  }
+
+  .content h1 {
+    font-size: 1.6rem;
+  }
+}
+
+/* Dark Mode Overrides */
+[data-theme="dark"] .suggestionPill {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="dark"] .suggestionPill:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+[data-theme="dark"] .suggestionName {
+  color: var(--white-fixed);
+}
+
+[data-theme="dark"] .verifiedBadge {
+  color: #60a5fa;
+  fill: rgba(96, 165, 250, 0.2);
+}
+
+[data-theme="dark"] .shortcutBadge {
+  background: var(--grey);
+  border-color: var(--border-color);
+}
+
+[data-theme="dark"] .shortcutKey {
+  color: var(--description);
+}
+
+[data-theme="dark"] .searchBox {
+  background: rgba(17, 24, 39, 0.4);
+  border-color: rgba(255, 255, 255, 0.08);
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+[data-theme="dark"] .searchBox::before {
+  background: radial-gradient(
+    circle at 50% 50%,
+    rgba(99, 102, 241, 0.12) 0%,
+    transparent 60%
+  );
+}
+
+[data-theme="dark"] .searchInput {
+  background: rgba(30, 41, 59, 0.6);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="dark"] .searchInput:focus {
+  background: rgba(30, 41, 59, 0.9);
+  border-color: var(--primary);
+  box-shadow:
+    0 0 0 4px rgba(99, 102, 241, 0.2),
+    0 10px 25px -5px rgba(0, 0, 0, 0.2);
+}
+
+[data-theme="dark"] .demo-wrapper {
+  background: transparent;
+}
+
+[data-theme="dark"] .deckSection {
+  background: transparent;
 }

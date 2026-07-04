@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useCallback, useRef } from "react";
 import { instance } from "../api/api_instance.js";
 
 /**
@@ -10,17 +10,20 @@ import { instance } from "../api/api_instance.js";
  */
 
 export const useApi = (config) => {
+  const configRef = useRef(config);
+  configRef.current = config;
+
   const [data, setData] = useState(null);
   const [errorMsg, setErrorMsg] = useState("");
   const [isSuccess, setIsSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const makeRequest = async (dynamicConfig = {}) => {
+  const makeRequest = useCallback(async (dynamicConfig = {}) => {
     setErrorMsg(null);
     setIsSuccess(false);
     setLoading(true);
 
-    const finalConfig = { ...config, ...dynamicConfig };
+    const finalConfig = { ...configRef.current, ...dynamicConfig };
     let success = false;
     try {
       const response = await instance(finalConfig);
@@ -39,14 +42,14 @@ export const useApi = (config) => {
       setLoading(false);
     }
     return success;
-  };
+  }, []);
 
-  const fetchRequest = async (dynamicConfig = {}) => {
+  const fetchRequest = useCallback(async (dynamicConfig = {}) => {
     setErrorMsg(null);
     setIsSuccess(false);
     setLoading(true);
 
-    const finalConfig = { ...config, ...dynamicConfig };
+    const finalConfig = { ...configRef.current, ...dynamicConfig };
     try {
       const response = await instance(finalConfig);
       setData(response.data);
@@ -67,7 +70,7 @@ export const useApi = (config) => {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
   return {
     data,
     setData,

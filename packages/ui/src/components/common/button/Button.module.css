@@ -9,17 +9,14 @@
   display: inline-flex;
   justify-content: center;
   align-items: center;
+  white-space: nowrap;
+  gap: 5px;
 }
 
 .button:disabled {
-  color: var(--white);
   cursor: not-allowed;
-  opacity: 0.8;
+  opacity: 0.5;
   pointer-events: none;
-}
-
-.button:disabled:hover {
-  background-color: var(--white);
 }
 
 .primary {
@@ -50,4 +47,15 @@
 
 .danger:hover {
   background-color: rgba(220, 53, 53, 1);
+}
+
+@media (max-width: 564px) {
+  .button {
+    padding: 10px 18px;
+    font-size: 0.875rem;
+  }
+
+  .secondary {
+    padding: 8px 16px;
+  }
 }

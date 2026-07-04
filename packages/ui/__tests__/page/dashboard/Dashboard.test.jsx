@@ -301,9 +301,8 @@ describe("Dashboard Modal Interactions", () => {
     const deleteButton = within(table).getAllByRole("button")[0];
     fireEvent.click(deleteButton);
 
-    const modal = await screen.findByTestId("delete-api-key-modal");
-    const buttons = within(modal).getAllByRole("button");
-    const cancelButton = buttons[0];
+    const dialog = await screen.findByTestId("dialog");
+    const cancelButton = within(dialog).getByRole("button", { name: "Cancel" });
 
     fireEvent.click(cancelButton);
 
@@ -322,14 +321,14 @@ describe("Dashboard Modal Interactions", () => {
     const deleteButton = within(table).getAllByRole("button")[0];
 
     fireEvent.click(deleteButton);
-    let modal = await screen.findByTestId("delete-api-key-modal");
+    let dialog = await screen.findByTestId("dialog");
 
-    fireEvent.change(within(modal).getByTestId("api-key-confirm-input"), {
+    fireEvent.change(within(dialog).getByTestId("api-key-confirm-input"), {
       target: { value: "some-text" },
     });
 
-    const buttons = within(modal).getAllByRole("button");
-    fireEvent.click(buttons[0]);
+    const cancelButton = within(dialog).getByRole("button", { name: "Cancel" });
+    fireEvent.click(cancelButton);
 
     await waitFor(() => {
       expect(
@@ -338,9 +337,9 @@ describe("Dashboard Modal Interactions", () => {
     });
 
     fireEvent.click(deleteButton);
-    modal = await screen.findByTestId("delete-api-key-modal");
+    dialog = await screen.findByTestId("dialog");
 
-    expect(within(modal).getByTestId("api-key-confirm-input").value).toBe("");
+    expect(within(dialog).getByTestId("api-key-confirm-input").value).toBe("");
   });
 });
 
@@ -529,14 +528,15 @@ describe("API Key Deletion", () => {
     const deleteButton = within(table).getAllByRole("button")[0];
     fireEvent.click(deleteButton);
 
-    const modal = await screen.findByTestId("delete-api-key-modal");
+    const dialog = await screen.findByTestId("dialog");
 
-    fireEvent.change(within(modal).getByTestId("api-key-confirm-input"), {
+    fireEvent.change(within(dialog).getByTestId("api-key-confirm-input"), {
       target: { value: "Wrong_Key_Name" },
     });
 
-    const buttons = within(modal).getAllByRole("button");
-    const confirmButton = buttons[buttons.length - 1];
+    const confirmButton = within(dialog).getByRole("button", {
+      name: "Delete",
+    });
 
     expect(confirmButton).toBeDisabled();
   });
@@ -549,18 +549,19 @@ describe("API Key Deletion", () => {
     const deleteButton = within(table).getAllByRole("button")[0];
     fireEvent.click(deleteButton);
 
-    const modal = await screen.findByTestId("delete-api-key-modal");
+    const dialog = await screen.findByTestId("dialog");
 
-    const keyName = within(modal)
+    const keyName = within(dialog)
       .getByText((_, el) => el?.tagName === "STRONG")
       .textContent.trim();
 
-    fireEvent.change(within(modal).getByTestId("api-key-confirm-input"), {
+    fireEvent.change(within(dialog).getByTestId("api-key-confirm-input"), {
       target: { value: keyName },
     });
 
-    const buttons = within(modal).getAllByRole("button");
-    const confirmButton = buttons[buttons.length - 1];
+    const confirmButton = within(dialog).getByRole("button", {
+      name: "Delete",
+    });
 
     await waitFor(() => {
       expect(confirmButton).toBeEnabled();

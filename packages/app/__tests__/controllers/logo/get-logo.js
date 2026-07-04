@@ -1,13 +1,11 @@
 const request = require("supertest");
 const app = require("../../../server");
-const { STATUS_CODES } = require("node:http");
 const { Messages } = require("../../../utils/constants");
 const {
   MOCK_KEYS,
   MOCK_SUBSCRIPTION,
   MOCK_IMAGE_URL_RESPONSE,
 } = require("../../../utils/mocks");
-
 
 const {
   ImageService,

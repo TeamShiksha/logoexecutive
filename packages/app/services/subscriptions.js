@@ -43,11 +43,13 @@ class SubscriptionService {
 
   /**
    * Increments the API usage count using subscriptionID.
-   * @param {string} subscriptionId - subscriptionID of subscription 
-   * @returns {Promise<number>} - Returns a old usage count + 1 is success else null 
+   * @param {string} subscriptionId - subscriptionID of subscription
+   * @returns {Promise<number>} - Returns a old usage count + 1 is success else null
    **/
   async incrementUsageCount(subscriptionId) {
-   return  await this.subscriptionRepository.incrementUsageCount(subscriptionId);
+    return await this.subscriptionRepository.incrementUsageCount(
+      subscriptionId
+    );
   }
 
   /**
@@ -59,12 +61,15 @@ class SubscriptionService {
   }
 
   /**
-   * change the end-date to the next month of current date  and start date to the current date and also make the usage count=0 for new month
+   * change the end-date to the next month of current date and start date to
+   * the current date and also make the usage count=0 for new month
    * @param {number} subscriptionId - id of the subscription
-   * 
    */
   async resetLimitAndExpiryDate(subscriptionId) {
     await this.subscriptionRepository.resetLimitAndExpiryDate(subscriptionId);
+  }
+
+  /**
    * Changes a user's subscription plan (admin-only).
    * Preserves the existing usage_count.
    * @param {string} subscriptionId - The subscription document ID.
@@ -104,7 +109,9 @@ class SubscriptionService {
    */
   async createSubscriptionLog(logData, { session } = {}) {
     if (session) {
-      return await this.subscriptionLogRepository.create(logData, { session });
+      return await this.subscriptionLogRepository.create(logData, {
+        session,
+      });
     }
     return await this.subscriptionLogRepository.create(logData);
   }

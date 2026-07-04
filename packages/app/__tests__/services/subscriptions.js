@@ -44,7 +44,6 @@ describe("Subscription Service", () => {
     expect(result.usage_limit).toBe(5000);
     expect(result.start_date.getMonth()).toEqual(now.getMonth());
     expect(result.end_date.getMonth()).toEqual(end.getMonth());
-    expect(spy).toHaveBeenCalledWith(subscription.id);
     expect(spy).toHaveBeenCalledWith(subscription.id, { session: undefined });
   });
 

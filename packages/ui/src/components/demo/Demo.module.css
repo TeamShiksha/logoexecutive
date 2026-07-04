@@ -209,7 +209,7 @@
 /* Deck Section with Tilted Cards */
 .deckSection {
   width: 100%;
-  padding: 3rem 0 1.5rem 0;
+  padding: 3rem 0 2.5rem 0;
   display: flex;
   justify-content: center;
   background: radial-gradient(
@@ -539,62 +539,22 @@
   }
 
   .deckContainer {
-    gap: 0.25rem;
+    gap: 0;
     padding: 0;
-    transform: scale(0.95);
   }
 
   .deckCard {
-    width: 68px;
-    height: 95px;
-    border-radius: 10px;
+    margin-left: -8px;
   }
 
-  .featuredCard {
-    width: 78px;
-    height: 107px;
-  }
-
-  .cardLogoWrapper {
-    width: 40px;
-    height: 40px;
-    border-radius: 10px;
-    margin-bottom: 0.5rem;
-  }
-
-  .featuredCard .cardLogoWrapper {
-    width: 46px;
-    height: 46px;
-  }
-
-  .cardLogo {
-    width: 22px;
-    height: 22px;
-  }
-
-  .featuredCard .cardLogo {
-    width: 26px;
-    height: 26px;
-  }
-
-  .cardName {
-    font-size: 0.65rem;
+  .deckCard:first-child {
+    margin-left: 0;
   }
 }
 
 @media only screen and (max-width: 480px) {
   .deckSection {
     padding-top: 0.5rem;
-  }
-
-  .deckContainer {
-    transform: scale(0.85);
-  }
-}
-
-@media only screen and (max-width: 380px) {
-  .deckContainer {
-    transform: scale(0.75);
   }
 }
 
@@ -641,49 +601,68 @@
   }
 
   .deckSection {
-    padding: 1.5rem 0 1rem 0;
+    padding: 1.5rem 0 2.5rem 0;
   }
 
   .deckContainer {
-    gap: 0.3rem;
-    padding: 0 0.25rem;
+    gap: 0.5rem;
+    padding: 0;
   }
 
   .deckCard {
-    width: 50px;
-    height: 72px;
-    border-radius: 8px;
+    width: 65px;
+    height: 90px;
+    margin-left: 0;
+  }
+
+  .deckCard .cardLogoWrapper {
+    width: 38px;
+    height: 38px;
+  }
+
+  .deckCard .cardLogo {
+    width: 22px;
+    height: 22px;
+  }
+
+  .deckCard:nth-child(4) {
+    display: none;
   }
 
   .featuredCard {
-    width: 58px;
-    height: 82px;
-  }
-
-  .cardLogoWrapper {
-    width: 30px;
-    height: 30px;
-    border-radius: 8px;
-    margin-bottom: 0.35rem;
+    width: 65px;
+    height: 90px;
+    box-shadow:
+      0 6px 10px -3px rgba(0, 0, 0, 0.04),
+      0 2px 4px -2px rgba(0, 0, 0, 0.02);
   }
 
   .featuredCard .cardLogoWrapper {
-    width: 36px;
-    height: 36px;
-  }
-
-  .cardLogo {
-    width: 16px;
-    height: 16px;
+    width: 38px;
+    height: 38px;
+    border-radius: 12px;
+    box-shadow:
+      0 4px 6px -1px rgba(0, 0, 0, 0.06),
+      0 2px 4px -1px rgba(0, 0, 0, 0.03);
+    border: 1px solid rgba(0, 0, 0, 0.06);
   }
 
   .featuredCard .cardLogo {
-    width: 20px;
-    height: 20px;
+    width: 22px;
+    height: 22px;
   }
 
-  .cardName {
-    font-size: 0.58rem;
+  .deckCard:nth-child(1):not(:hover) {
+    transform: rotate(-12deg) translateY(12px) !important;
+  }
+  .deckCard:nth-child(2):not(:hover) {
+    transform: rotate(-4deg) translateY(2px) !important;
+  }
+  .deckCard:nth-child(3):not(:hover) {
+    transform: rotate(4deg) translateY(2px) !important;
+  }
+  .deckCard:nth-child(5):not(:hover) {
+    transform: rotate(12deg) translateY(12px) !important;
   }
 
   .resultCard {
@@ -713,45 +692,16 @@
   }
 
   .deckContainer {
-    gap: 0.2rem;
+    gap: 0;
     padding: 0;
   }
 
   .deckCard {
-    width: 44px;
-    height: 64px;
-    border-radius: 7px;
+    margin-left: -16px;
   }
 
-  .featuredCard {
-    width: 52px;
-    height: 74px;
-  }
-
-  .cardLogoWrapper {
-    width: 26px;
-    height: 26px;
-    border-radius: 7px;
-    margin-bottom: 0.25rem;
-  }
-
-  .featuredCard .cardLogoWrapper {
-    width: 30px;
-    height: 30px;
-  }
-
-  .cardLogo {
-    width: 14px;
-    height: 14px;
-  }
-
-  .featuredCard .cardLogo {
-    width: 16px;
-    height: 16px;
-  }
-
-  .cardName {
-    font-size: 0.5rem;
+  .deckCard:first-child {
+    margin-left: 0;
   }
 
   .content h1 {

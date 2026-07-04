@@ -38,6 +38,7 @@
     "qrcode": "^1.5.4",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.1",
+    "ua-parser-js": "^2.0.9",
     "uuid": "^9.0.1",
     "winston": "^3.16.0"
   },

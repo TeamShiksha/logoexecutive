@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import operatorStyles from "./OperatorDashboard.module.css";
 import Modal from "../common/modal/Modal";
 import OperatorCard from "../operatorcard/OperatorCard";
@@ -117,7 +117,7 @@ const Operator = ({
     if (debouncedSearchTerm.length >= 2) {
       searchMakeRequest();
     }
-  }, [debouncedSearchTerm]);
+  }, [debouncedSearchTerm, searchMakeRequest]);
 
   useEffect(() => {
     if (searchData?.source === "web-search") {
@@ -131,62 +131,71 @@ const Operator = ({
     }
   }, [searchData, debouncedSearchTerm]);
 
-  const fetchMessages = async (page = 1) => {
-    setLoading(true);
-    try {
-      const response = await instance.get("/messages", {
-        params: {
-          page,
-          limit: ITEMS_PER_PAGE,
-          tab: activeTab,
-        },
-      });
-      setMessages(response.data.results);
-      setTotalPages(response.data.totalPages || 1);
-    } catch (err) {
-      console.error("Error fetching messages:", err);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const fetchMessages = useCallback(
+    async (page = 1) => {
+      setLoading(true);
+      try {
+        const response = await instance.get("/messages", {
+          params: {
+            page,
+            limit: ITEMS_PER_PAGE,
+            tab: activeTab,
+          },
+        });
+        setMessages(response.data.results);
+        setTotalPages(response.data.totalPages || 1);
+      } catch (err) {
+        console.error("Error fetching messages:", err);
+      } finally {
+        setLoading(false);
+      }
+    },
+    [activeTab]
+  );
 
-  const fetchRequests = async (page = 1) => {
-    setLoading(true);
-    try {
-      const response = await instance.get("/requests", {
-        params: {
-          page,
-          limit: ITEMS_PER_PAGE,
-          tab: activeTab,
-        },
-      });
-      setRequests(response.data.results);
-      setTotalPages(response.data.totalPages || 1);
-    } catch (err) {
-      console.error("Error fetching requests:", err);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const fetchRequests = useCallback(
+    async (page = 1) => {
+      setLoading(true);
+      try {
+        const response = await instance.get("/requests", {
+          params: {
+            page,
+            limit: ITEMS_PER_PAGE,
+            tab: activeTab,
+          },
+        });
+        setRequests(response.data.results);
+        setTotalPages(response.data.totalPages || 1);
+      } catch (err) {
+        console.error("Error fetching requests:", err);
+      } finally {
+        setLoading(false);
+      }
+    },
+    [activeTab]
+  );
 
-  const fetchLogos = async (page = 1) => {
-    setLoading(true);
-    try {
-      const response = await instance.get("/create-logo-request", {
-        params: {
-          page,
-          limit: ITEMS_PER_PAGE,
-          tab: activeTab,
-        },
-      });
-      setLogos(response.data.results);
-      setTotalPages(response.data.totalPages || 1);
-    } catch (error) {
-      console.error("Error fetching logos:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const fetchLogos = useCallback(
+    async (page = 1) => {
+      setLoading(true);
+      try {
+        const response = await instance.get("/create-logo-request", {
+          params: {
+            page,
+            limit: ITEMS_PER_PAGE,
+            tab: activeTab,
+          },
+        });
+        setLogos(response.data.results);
+        setTotalPages(response.data.totalPages || 1);
+      } catch (error) {
+        console.error("Error fetching logos:", error);
+      } finally {
+        setLoading(false);
+      }
+    },
+    [activeTab]
+  );
 
   const handleResponseSubmit = async () => {
     if (!currentItem) return;
@@ -233,7 +242,14 @@ const Operator = ({
     } else {
       fetchLogos(currentPage);
     }
-  }, [searchType, currentPage, activeTab]);
+  }, [
+    searchType,
+    currentPage,
+    activeTab,
+    fetchMessages,
+    fetchRequests,
+    fetchLogos,
+  ]);
 
   useEffect(() => {
     if (!focusedField) {

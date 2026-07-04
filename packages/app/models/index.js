@@ -7,6 +7,9 @@ const Users = require("./users");
 const Request = require("./request");
 const LogoRequestLogs = require("./logoRequestLogs");
 const CreateLogoRequest = require("./createLogoRequest");
+const Rewards = require("./rewards");
+const RewardTransactions = require("./rewardTransactions");
+const MilestoneConfig = require("./milestoneConfig");
 
 module.exports = {
   ContactUs,
@@ -18,4 +21,7 @@ module.exports = {
   Request,
   LogoRequestLogs,
   CreateLogoRequest,
+  Rewards,
+  RewardTransactions,
+  MilestoneConfig,
 };

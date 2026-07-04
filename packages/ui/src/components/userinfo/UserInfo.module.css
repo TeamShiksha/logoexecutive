@@ -19,10 +19,11 @@
 
 .floating-label {
   position: absolute;
-  top: -8px;
+  top: -10px;
   left: 12px;
+  z-index: 1;
   background: var(--white);
-  padding: 0 4px;
+  padding: 0 0.5rem;
   font-size: 0.75rem;
   color: var(--description);
   font-weight: 500;
@@ -68,4 +69,8 @@
   .user-info-form {
     gap: 0.875rem;
   }
+}
+
+.user-info-input-group button[class*="primary"] {
+  color: var(--white);
 }

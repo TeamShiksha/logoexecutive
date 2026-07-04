@@ -70,11 +70,6 @@
   color: var(--label-color);
 }
 
-[data-theme="dark"] .card {
-  background: #0f172a;
-  border-color: #1e293b;
-}
-
 @media (max-width: 768px) {
   .card-value {
     font-size: 1.25rem;

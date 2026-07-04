@@ -63,6 +63,14 @@ const userSchema = new mongoose.Schema({
     type: Date,
     default: null,
   },
+  reward_points_current: {
+    type: Number,
+    default: 0,
+  },
+  reward_points_lifetime: {
+    type: Number,
+    default: 0,
+  },
   mfaEnabled: {
     type: Boolean,
     default: false,
@@ -119,6 +127,8 @@ userSchema.methods.data = function () {
     created_at: this._id.getTimestamp(),
     is_deleted: this.is_deleted,
     updated_at: this.updated_at,
+    reward_points_current: this.reward_points_current,
+    reward_points_lifetime: this.reward_points_lifetime,
   };
 };
 

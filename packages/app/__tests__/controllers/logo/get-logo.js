@@ -1,13 +1,20 @@
 const request = require("supertest");
 const app = require("../../../server");
+const { STATUS_CODES } = require("node:http");
 const { Messages } = require("../../../utils/constants");
-const { MOCK_KEYS } = require("../../../utils/mocks");
+const {
+  MOCK_KEYS,
+  MOCK_SUBSCRIPTION,
+  MOCK_IMAGE_URL_RESPONSE,
+} = require("../../../utils/mocks");
+
 
 const {
   ImageService,
   KeyService,
   SubscriptionService,
   UserService,
+  RewardTransactionsService,
 } = require("../../../services");
 
 const {
@@ -91,6 +98,7 @@ describeResetSubscriptionMiddleware(
 // ─────────────────────────────────────────────────────────────────────────────
 // CONTROLLER: getLogoController
 // ─────────────────────────────────────────────────────────────────────────────
+jest.mock("../../../services/rewardTransactions");
 
 describe("getLogoController", () => {
   describe("422  Joi schema validation (key field)", () => {
@@ -116,6 +124,15 @@ describe("getLogoController", () => {
 
       expect(res.status).toBe(404);
       expect(res.body.message).toBe(Messages.LOGO_NOT_FOUND);
+    });
+
+    it("should return 422 if query validation fails", async () => {
+      const wrongBaseQuery = {
+        API_KEY: "28482DNDO483ND3",
+        key: "https://google.com",
+      };
+      const response = await request(app).get(API_URL).query(wrongBaseQuery);
+      expect(response.status).toBe(422);
     });
 
     it("accepts key with subdomain (strips www)", async () => {
@@ -275,6 +292,41 @@ describe("getLogoController", () => {
       await request(app).get(API_URL).query(BASE_QUERY);
       expect(incrementSpy).toHaveBeenCalledTimes(1);
     });
+
+    it("returns 200 with image data using a repeated/renewed subscription", async () => {
+      const keyServiceMockResolve = {
+        ...MOCK_KEYS[2],
+        expires_at: new Date("2026-12-31T23:59:59Z"),
+      };
+      jest
+        .spyOn(KeyService.prototype, "getApiKey")
+        .mockResolvedValue({ ...keyServiceMockResolve });
+
+      jest
+        .spyOn(SubscriptionService.prototype, "getSubscription")
+        .mockResolvedValue(MOCK_SUBSCRIPTION[0]);
+
+      jest
+        .spyOn(RewardTransactionsService.prototype, "validateAndLogRequest")
+        .mockResolvedValue({});
+
+      jest
+        .spyOn(ImageService.prototype, "fetchImageByCompanyFree")
+        .mockResolvedValue(MOCK_IMAGE_URL_RESPONSE);
+      jest
+        .spyOn(SubscriptionService.prototype, "incrementUsageCount")
+        .mockResolvedValue([]);
+      jest
+        .spyOn(UserService.prototype, "logLogoRequestEntry")
+        .mockResolvedValue({});
+
+      const response = await request(app).get(API_URL).query(BASE_QUERY);
+      expect(response.status).toBe(200);
+      expect(response.body).toEqual({
+        statusCode: 200,
+        data: MOCK_IMAGE_URL_RESPONSE,
+      });
+    });
   });
 
   describe("atomic incrementUsageCount behavior", () => {
@@ -312,6 +364,7 @@ describe("getLogoController", () => {
 
       expect(logSpy).not.toHaveBeenCalled();
     });
+
     it("proceeds when incrementUsageCount succeeds", async () => {
       mockValidKeyAndSubscription();
 
@@ -332,6 +385,7 @@ describe("getLogoController", () => {
       expect(res.status).toBe(200);
     });
   });
+
   describe("operations order", () => {
     it("image fetched → logEntry → usage incremented (in that order)", async () => {
       const order = [];

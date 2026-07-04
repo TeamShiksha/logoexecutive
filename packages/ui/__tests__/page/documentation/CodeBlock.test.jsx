@@ -1,4 +1,4 @@
-import { describe, it, expect, vi } from "vitest";
+import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import CodeBlock from "../../../src/page/documentation/CodeBlock";
 import { CODEBLOCK } from "../../../src/utils/Constants";
@@ -6,7 +6,7 @@ import { useState } from "react";
 import PropTypes from "prop-types";
 
 const mockCodeExamples = {
-  javascript: "console.log('Hello, JavaScript!');",
+  javascript: "const a = 1;\nconsole.log(a);",
   python: "print('Hello, Python!')",
   java: "System.out.println('Hello, Java!');",
 };
@@ -28,24 +28,35 @@ CodeBlockTestComponent.propTypes = {
 };
 
 describe("CodeBlock component", () => {
+  beforeEach(() => {
+    vi.restoreAllMocks();
+  });
+
   it("Defaults to JavaScript on initial render", () => {
     render(<CodeBlockTestComponent />);
 
-    const javascriptCode = screen.getByText(mockCodeExamples.javascript);
-    expect(javascriptCode).toBeInTheDocument();
+    expect(screen.getByText("const a = 1;")).toBeInTheDocument();
+    expect(screen.getByText("console.log(a);")).toBeInTheDocument();
+    expect(screen.getByText("1")).toBeInTheDocument();
+    expect(screen.getByText("2")).toBeInTheDocument();
   });
 
-  it("Copies code to clipboard on button click, change icon", async () => {
+  it("Copies code to clipboard and shows copied feedback", async () => {
     const clipboardSpy = vi.spyOn(navigator.clipboard, "writeText");
     render(<CodeBlockTestComponent />);
 
-    const copyButton = screen.getByRole("img", { name: /tick-copy-code/i });
-    expect(copyButton.src).toContain(CODEBLOCK.copycodeicon);
+    const copyButton = screen.getByRole("button", { name: /copy/i });
+    const copyIcon = screen.getByRole("img", { name: /tick-copy-code/i });
+
+    expect(copyIcon.src).toContain(CODEBLOCK.copycodeicon);
     fireEvent.click(copyButton);
+
     expect(clipboardSpy).toHaveBeenCalledWith(mockCodeExamples.javascript);
+
     await waitFor(() => {
       const tickIcon = screen.getByRole("img", { name: /tick-copy-code/i });
       expect(tickIcon.src).toContain(CODEBLOCK.tick);
+      expect(screen.getByText("Copied!")).toBeInTheDocument();
     });
   });
 

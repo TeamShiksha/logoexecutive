@@ -1,6 +1,5 @@
 .catalog-wrapper {
   margin-top: 0.5rem;
-  margin-bottom: 4rem;
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
@@ -40,10 +39,10 @@
 
 .catalog-table-header {
   display: flex;
-  background: #f8fafc;
+  background: var(--table-heading-bg);
   padding: 0.75rem 1.5rem;
   border-bottom: 1px solid var(--border-color);
-  color: #64748b;
+  color: var(--description);
   font-size: 0.75rem;
   font-weight: 600;
   text-transform: uppercase;
@@ -222,6 +221,22 @@
   font-size: 0.875rem;
   font-weight: 500;
   color: var(--black);
+}
+
+.catalog-search-modal {
+  background: var(--white);
+  border-radius: 0.75rem;
+  border: 1px solid var(--border-color);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  padding: 1.5rem;
+  margin-top: 1rem;
+}
+
+.catalog-search-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
 }
 
 [data-theme="dark"] .catalog-search,

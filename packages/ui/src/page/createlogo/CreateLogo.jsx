@@ -76,6 +76,8 @@ export default function CreateLogo({ openAuthModal }) {
       window.removeEventListener("keydown", handleKeyDown);
       window.removeEventListener("beforeunload", handleBeforeUnload);
     };
+    // Mount-only: canvas and listeners must not re-init every render; handlers close over initial canvasControls
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const fileOperations = useFileOperations(

@@ -1,9 +1,21 @@
+jest.mock("otplib", () => ({
+  authenticator: {
+    generateSecret: jest.fn().mockReturnValue("MOCK_SECRET"),
+    keyuri: jest
+      .fn()
+      .mockReturnValue(
+        "otpauth://totp/OpenLogo:test@test.com?secret=MOCK_SECRET"
+      ),
+    verify: jest.fn(),
+  },
+}));
+
 const MfaService = require("../../services/mfa");
 const VerificationSessionRepository = require("../../repositories/verificationSession");
 const { UsersRepository } = require("../../repositories");
 const { Users } = require("../../models");
 const { MOCK_USERS } = require("../../utils/mocks");
-const otplib = require("otplib");
+const { authenticator } = require("otplib");
 const { encrypt, decrypt } = require("../../utils/crypto");
 const QRCode = require("qrcode");
 
@@ -118,28 +130,28 @@ describe("MFA Service", () => {
   });
 
   describe("verifyMfa", () => {
-    it("should verify MFA token successfully", async () => {
+    it("should verify MFA token successfully", () => {
       const user = new Users(MOCK_USERS[0]);
       user.mfaTempSecret = "JBSWY3DPEHPK3PXP";
 
-      jest.spyOn(otplib, "verify").mockResolvedValue({ valid: true });
+      authenticator.verify.mockReturnValue(true);
 
-      const result = await mfaService.verifyMfa(user, "123456");
+      const result = mfaService.verifyMfa(user, "123456");
 
       expect(result).toBe(true);
-      expect(otplib.verify).toHaveBeenCalledWith({
+      expect(authenticator.verify).toHaveBeenCalledWith({
         secret: user.mfaTempSecret,
         token: "123456",
       });
     });
 
-    it("should return false if MFA token is invalid", async () => {
+    it("should return false if MFA token is invalid", () => {
       const user = new Users(MOCK_USERS[0]);
       user.mfaTempSecret = "JBSWY3DPEHPK3PXP";
 
-      jest.spyOn(otplib, "verify").mockResolvedValue({ valid: false });
+      authenticator.verify.mockReturnValue(false);
 
-      const result = await mfaService.verifyMfa(user, "123456");
+      const result = mfaService.verifyMfa(user, "123456");
 
       expect(result).toBe(false);
     });
@@ -247,7 +259,7 @@ describe("MFA Service", () => {
   });
 
   describe("mfaLogin", () => {
-    it("should login with MFA successfully", async () => {
+    it("should login with MFA successfully", () => {
       const user = new Users(MOCK_USERS[0]);
       user.mfaSecret = {
         encryptedValue: "encrypted",
@@ -256,19 +268,19 @@ describe("MFA Service", () => {
       };
 
       decrypt.mockReturnValue("JBSWY3DPEHPK3PXP");
-      jest.spyOn(otplib, "verify").mockResolvedValue({ valid: true });
+      authenticator.verify.mockReturnValue(true);
 
-      const result = await mfaService.mfaLogin(user, "123456");
+      const result = mfaService.mfaLogin(user, "123456");
 
       expect(result).toBe(true);
       expect(decrypt).toHaveBeenCalledWith("encrypted", "iv", "tag");
-      expect(otplib.verify).toHaveBeenCalledWith({
+      expect(authenticator.verify).toHaveBeenCalledWith({
         token: "123456",
         secret: "JBSWY3DPEHPK3PXP",
       });
     });
 
-    it("should return false if MFA login token is invalid", async () => {
+    it("should return false if MFA login token is invalid", () => {
       const user = new Users(MOCK_USERS[0]);
       user.mfaSecret = {
         encryptedValue: "encrypted",
@@ -277,9 +289,9 @@ describe("MFA Service", () => {
       };
 
       decrypt.mockReturnValue("JBSWY3DPEHPK3PXP");
-      jest.spyOn(otplib, "verify").mockResolvedValue({ valid: false });
+      authenticator.verify.mockReturnValue(false);
 
-      const result = await mfaService.mfaLogin(user, "123456");
+      const result = mfaService.mfaLogin(user, "123456");
 
       expect(result).toBe(false);
     });

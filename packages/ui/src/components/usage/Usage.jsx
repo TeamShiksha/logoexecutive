@@ -12,11 +12,16 @@ const THRESHOLDS = [
   { p: 80, type: "warning" },
 ];
 
-function Usage({ usageCount, usageLimit }) {
+const DUMMY_USAGE_COUNT = 42;
+const DUMMY_USAGE_LIMIT = 500;
+
+function Usage({ usageCount, usageLimit, isGuest = false }) {
+  const effectiveCount = isGuest ? DUMMY_USAGE_COUNT : usageCount;
+  const effectiveLimit = isGuest ? DUMMY_USAGE_LIMIT : usageLimit;
   const { userData } = useContext(UserContext);
   const percentage = useMemo(
-    () => Math.min((usageCount / usageLimit) * 100, 100),
-    [usageCount, usageLimit]
+    () => Math.min((effectiveCount / effectiveLimit) * 100, 100),
+    [effectiveCount, effectiveLimit]
   );
   const toast = useToast();
 
@@ -27,6 +32,7 @@ function Usage({ usageCount, usageLimit }) {
 
   useEffect(() => {
     if (
+      isGuest ||
       !Number.isFinite(percentage) ||
       usageLimit <= 0 ||
       !toast ||
@@ -51,7 +57,14 @@ function Usage({ usageCount, usageLimit }) {
         localStorage.setItem(storageKey, "true");
       }
     }
-  }, [percentage, usageCount, usageLimit, toast, billingCycleStartDate]);
+  }, [
+    percentage,
+    usageCount,
+    usageLimit,
+    toast,
+    billingCycleStartDate,
+    isGuest,
+  ]);
 
   const radius = 60;
   const circumference = 2 * Math.PI * radius;
@@ -99,11 +112,11 @@ function Usage({ usageCount, usageLimit }) {
         <div className={styles["usage-legend"]}>
           <div className={styles["usage-item"]}>
             <span className={styles["usage-label"]}>{USAGE.callsText}</span>
-            <span className={styles["usage-value"]}>{usageCount}</span>
+            <span className={styles["usage-value"]}>{effectiveCount}</span>
           </div>
           <div className={styles["usage-item"]}>
             <span className={styles["usage-label"]}>{USAGE.limitText}</span>
-            <span className={styles["usage-value"]}>{usageLimit}</span>
+            <span className={styles["usage-value"]}>{effectiveLimit}</span>
           </div>
         </div>
 
@@ -116,6 +129,7 @@ function Usage({ usageCount, usageLimit }) {
 Usage.propTypes = {
   usageCount: PropTypes.number,
   usageLimit: PropTypes.number,
+  isGuest: PropTypes.bool,
 };
 
 export default Usage;

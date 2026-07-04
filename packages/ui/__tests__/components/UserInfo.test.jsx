@@ -1,7 +1,11 @@
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import UserInfo from "../../src/components/userinfo/UserInfo";
-import { MOCK_USER_DATA } from "../../src/utils/Constants";
+import {
+  MOCK_USER_DATA,
+  USER_INFO_FIELDS,
+  MESSAGES,
+} from "../../src/utils/Constants";
 import { ToastContext } from "../../src/contexts/Contexts";
 
 const mockMakeRequest = vi.fn();
@@ -123,6 +127,93 @@ describe("UserInfo Component", () => {
 
     await waitFor(() => {
       expect(mockMakeRequest).toBeCalled();
+    });
+  });
+
+  it("renders all fields from USER_INFO_FIELDS constant", () => {
+    render(
+      <ToastContext.Provider value={mockToastContext}>
+        <UserInfo name={MOCK_USER_DATA.name} email={MOCK_USER_DATA.email} />
+      </ToastContext.Provider>
+    );
+
+    USER_INFO_FIELDS.forEach((field) => {
+      const input = screen.getByLabelText(field.label);
+      expect(input).toBeInTheDocument();
+      expect(input).toHaveAttribute("type", field.type);
+      expect(input).toHaveAttribute("name", field.name);
+    });
+  });
+
+  it("disables Save button for guest users", () => {
+    render(
+      <ToastContext.Provider value={mockToastContext}>
+        <UserInfo
+          name={MOCK_USER_DATA.name}
+          email={MOCK_USER_DATA.email}
+          isGuest={true}
+        />
+      </ToastContext.Provider>
+    );
+
+    const nameInput = screen.getByLabelText(/name/i);
+    fireEvent.change(nameInput, { target: { value: "New Name" } });
+
+    const saveButton = screen.getByText("Save");
+    expect(saveButton).toBeDisabled();
+  });
+
+  it("shows success toast with correct message on successful update", async () => {
+    mockMakeRequest.mockResolvedValueOnce(true);
+
+    render(
+      <ToastContext.Provider value={mockToastContext}>
+        <UserInfo
+          name={MOCK_USER_DATA.name}
+          email={MOCK_USER_DATA.email}
+          isGuest={false}
+        />
+      </ToastContext.Provider>
+    );
+
+    const nameInput = screen.getByLabelText("Username");
+    fireEvent.change(nameInput, { target: { value: "Updated Name" } });
+
+    const saveButton = screen.getByText("Save");
+    fireEvent.click(saveButton);
+
+    await waitFor(() => {
+      expect(mockToastContext.success).toHaveBeenCalledWith(
+        MESSAGES.USERNAME_UPDATE_SUCCESS
+      );
+    });
+  });
+
+  it("shows loading state while updating", async () => {
+    mockMakeRequest.mockImplementation(
+      () => new Promise((resolve) => setTimeout(() => resolve(true), 100))
+    );
+
+    render(
+      <ToastContext.Provider value={mockToastContext}>
+        <UserInfo
+          name={MOCK_USER_DATA.name}
+          email={MOCK_USER_DATA.email}
+          isGuest={false}
+        />
+      </ToastContext.Provider>
+    );
+
+    const nameInput = screen.getByLabelText("Username");
+    fireEvent.change(nameInput, { target: { value: "Updated Name" } });
+
+    const saveButton = screen.getByText("Save");
+    fireEvent.click(saveButton);
+
+    expect(saveButton).toBeDisabled();
+
+    await waitFor(() => {
+      expect(mockMakeRequest).toHaveBeenCalled();
     });
   });
 });

@@ -442,8 +442,8 @@ const MOCK_LOGO_REQUESTS = [
 
 const MOCK_WEEKLY_STATS = {
   period: "week",
-  startDate: "2025-11-24",
-  endDate: "2025-12-01",
+  startDate: "2025-11-23",
+  endDate: "2025-11-29",
   summary: {
     totalCount: 15,
     totalKB: "45.50",
@@ -458,7 +458,7 @@ const MOCK_WEEKLY_STATS = {
 const MOCK_MONTHLY_STATS = {
   period: "month",
   startDate: "2025-11-01",
-  endDate: "2025-12-01",
+  endDate: "2025-11-30",
   summary: {
     totalCount: 50,
     totalKB: "150.75",
@@ -471,6 +471,7 @@ const MOCK_MONTHLY_STATS = {
 };
 
 const MOCK_SESSION_ID = "a".repeat(128);
+const MOCK_SESSION_ID_2 = "b".repeat(128);
 
 const MOCK_USER_SESSIONS = [
   {
@@ -479,13 +480,19 @@ const MOCK_USER_SESSIONS = [
     token: "validToken",
     usedAt: null,
     expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+    deviceInfo: { browser: "Chrome", os: "Windows 10", deviceType: "desktop" },
+
+    lastActiveAt: new Date(Date.now()),
   },
   {
-    sessionId: MOCK_SESSION_ID,
+    sessionId: MOCK_SESSION_ID_2,
     userId: MOCK_USERS[1],
     token: "validToken",
     usedAt: null,
     expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+    deviceInfo: { browser: "Safari", os: "iOS", deviceType: "mobile" },
+
+    lastActiveAt: new Date(Date.now()),
   },
   {
     sessionId: MOCK_SESSION_ID,
@@ -493,6 +500,9 @@ const MOCK_USER_SESSIONS = [
     token: "validToken",
     usedAt: null,
     expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+    deviceInfo: { browser: "Firefox", os: "Mac OS", deviceType: "desktop" },
+
+    lastActiveAt: new Date(Date.now()),
   },
   {
     sessionId: MOCK_SESSION_ID,
@@ -500,6 +510,9 @@ const MOCK_USER_SESSIONS = [
     token: "validToken",
     usedAt: null,
     expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+    deviceInfo: { browser: "Edge", os: "Windows 11", deviceType: "desktop" },
+
+    lastActiveAt: new Date(Date.now()),
   },
 ];
 
@@ -520,6 +533,256 @@ const MOCK_MFA_SESSIONS = [
   },
 ];
 
+const MOCK_SUBSCRIPTION_LOGS = [
+  {
+    _id: new mongoose.Types.ObjectId(),
+    user_id: {
+      _id: MOCK_USERS[1]._id,
+      name: MOCK_USERS[1].name,
+      email: MOCK_USERS[1].email,
+    },
+    subscription_id: MOCK_SUBSCRIPTION[0]._id,
+    changed_by: {
+      _id: MOCK_USERS[2]._id,
+      name: MOCK_USERS[2].name,
+      email: MOCK_USERS[2].email,
+    },
+    from_plan: "HOBBY",
+    to_plan: "PRO",
+    reason: "Upgrade requested by user",
+    createdAt: new Date("2026-05-01T10:00:00Z"),
+    updatedAt: new Date("2026-05-01T10:00:00Z"),
+  },
+  {
+    _id: new mongoose.Types.ObjectId(),
+    user_id: {
+      _id: MOCK_USERS[1]._id,
+      name: MOCK_USERS[1].name,
+      email: MOCK_USERS[1].email,
+    },
+    subscription_id: MOCK_SUBSCRIPTION[1]._id,
+    changed_by: {
+      _id: MOCK_USERS[2]._id,
+      name: MOCK_USERS[2].name,
+      email: MOCK_USERS[2].email,
+    },
+    from_plan: "PRO",
+    to_plan: "HOBBY",
+    reason: null,
+    createdAt: new Date("2026-04-15T08:30:00Z"),
+    updatedAt: new Date("2026-04-15T08:30:00Z"),
+  },
+  {
+    _id: new mongoose.Types.ObjectId(),
+    user_id: {
+      _id: MOCK_USERS[0]._id,
+      name: MOCK_USERS[0].name,
+      email: MOCK_USERS[0].email,
+    },
+    subscription_id: MOCK_SUBSCRIPTION[0]._id,
+    changed_by: {
+      _id: MOCK_USERS[2]._id,
+      name: MOCK_USERS[2].name,
+      email: MOCK_USERS[2].email,
+    },
+    from_plan: "HOBBY",
+    to_plan: "PRO",
+    reason: "Special promotion",
+    createdAt: new Date("2026-03-20T14:00:00Z"),
+    updatedAt: new Date("2026-03-20T14:00:00Z"),
+  },
+];
+
+// ImageService Mock Data
+const MOCK_IMAGE_DETAIL = {
+  _id: new mongoose.Types.ObjectId(),
+  user_id: MOCK_USERS[2]._id,
+  company_name: "GOOGLE.png",
+  company_uri: "https://example.com/google",
+  image_size: 1024,
+  is_published: true,
+  is_deleted: false,
+  extension: "png",
+  updated_at: new Date(),
+};
+
+const MOCK_IMAGE_DETAILS_LIST = [
+  {
+    _id: new mongoose.Types.ObjectId(),
+    user_id: MOCK_USERS[2]._id,
+    company_name: "GOOGLE.png",
+    company_uri: "https://example.com/google",
+    image_size: 1024,
+    is_published: true,
+    is_deleted: false,
+    extension: "png",
+    updated_at: new Date(),
+  },
+  {
+    _id: new mongoose.Types.ObjectId(),
+    user_id: MOCK_USERS[0]._id,
+    company_name: "MICROSOFT.png",
+    company_uri: "https://example.com/microsoft",
+    image_size: 2048,
+    is_published: true,
+    is_deleted: false,
+    extension: "png",
+    updated_at: new Date("2025-05-12T10:00:00Z"),
+  },
+  {
+    _id: new mongoose.Types.ObjectId(),
+    user_id: MOCK_USERS[1]._id,
+    company_name: "AMAZON.png",
+    company_uri: "https://example.com/amazon",
+    image_size: 512,
+    is_published: true,
+    is_deleted: false,
+    extension: "png",
+    updated_at: new Date("2025-04-18T15:30:00Z"),
+  },
+];
+
+const MOCK_CLOUDFRONT_URLS = [
+  "https://cdn.myapp.com/png/GOOGLE.png?v=1755253230000",
+  "https://cdn.myapp.com/png/MICROSOFT.png?v=1755253230001",
+  "https://cdn.myapp.com/png/AMAZON.png?v=1755253230002",
+];
+
+const MOCK_IMAGE_URL_RESPONSE =
+  "https://cdn.myapp.com/png/GOOGLE.png?v=1755253230000";
+
+const MOCK_DATA_LIST_RESPONSE = [
+  {
+    companyName: "GOOGLE",
+    image: "https://cdn.myapp.com/png/GOOGLE.png?v=1755253230000",
+  },
+  {
+    companyName: "MICROSOFT",
+    image: "https://cdn.myapp.com/png/MICROSOFT.png?v=1755253230001",
+  },
+  {
+    companyName: "AMAZON",
+    image: "https://cdn.myapp.com/png/AMAZON.png?v=1755253230002",
+  },
+];
+
+const MOCK_IMAGES_PAGINATED_RESPONSE = {
+  data: MOCK_IMAGE_DETAILS_LIST,
+  total: 3,
+  currentPage: 1,
+  totalPages: 1,
+};
+
+const MOCK_IMAGES_COUNT = 3;
+
+const MOCK_PRESIGNED_URL_RESPONSE = {
+  presignedUrl: "https://openlogo-bucket.s3.amazonaws.com/presigned-url",
+  key: "mockBucketKey/png/GOOGLE.png",
+};
+
+// Reward Transaction Mock Data
+const MOCK_REWARD_TRANSACTION = {
+  _id: new mongoose.Types.ObjectId(),
+  user_id: MOCK_USERS[0]._id,
+  image_id: MOCK_IMAGES[0]._id,
+  creator_id: MOCK_USERS[2]._id,
+  points_earned: 10,
+  points_type: "USAGE_REWARD",
+  is_reversed: false,
+  reversed_at: null,
+  reversal_reason: null,
+  transaction_date: new Date(),
+  createdAt: new Date(),
+  updatedAt: new Date(),
+};
+
+const MOCK_REWARD_TRANSACTIONS_LIST = [
+  {
+    _id: new mongoose.Types.ObjectId(),
+    user_id: MOCK_USERS[0]._id,
+    image_id: MOCK_IMAGES[0]._id,
+    creator_id: MOCK_USERS[2]._id,
+    points_earned: 10,
+    points_type: "USAGE_REWARD",
+    is_reversed: false,
+    transaction_date: new Date(Date.now() - 86400000),
+    createdAt: new Date(Date.now() - 86400000),
+  },
+  {
+    _id: new mongoose.Types.ObjectId(),
+    user_id: MOCK_USERS[1]._id,
+    image_id: MOCK_IMAGES[1]._id,
+    creator_id: MOCK_USERS[0]._id,
+    points_earned: 15,
+    points_type: "MILESTONE_REWARD",
+    is_reversed: false,
+    transaction_date: new Date(Date.now() - 172800000),
+    createdAt: new Date(Date.now() - 172800000),
+  },
+  {
+    _id: new mongoose.Types.ObjectId(),
+    user_id: MOCK_USERS[2]._id,
+    image_id: MOCK_IMAGES[2]._id,
+    creator_id: MOCK_USERS[1]._id,
+    points_earned: 20,
+    points_type: "BONUS_POINTS",
+    is_reversed: false,
+    transaction_date: new Date(Date.now() - 259200000),
+    createdAt: new Date(Date.now() - 259200000),
+  },
+];
+
+const MOCK_LOG_ENTRY_HOBBY = {
+  _id: new mongoose.Types.ObjectId(),
+  user_plan: SubscriptionTypes.HOBBY,
+  response_size_bytes: 0,
+  is_reward_eligible: false,
+  reward_eligibility_reason: "HOBBY_USER",
+  createdAt: new Date(),
+};
+
+const MOCK_LOG_ENTRY_VALID = {
+  _id: new mongoose.Types.ObjectId(),
+  user_plan: SubscriptionTypes.PRO,
+  response_size_bytes: 1024,
+  is_reward_eligible: true,
+  reward_eligibility_reason: "VALID",
+  createdAt: new Date(),
+};
+const MOCK_MILESTONE_CONFIG = {
+  _id: new mongoose.Types.ObjectId(),
+  name: "Q1 2026 Campaign",
+  thresholds: [
+    { at: 5, points: 10 },
+    { at: 10, points: 10 },
+    { at: 15, points: 10 },
+    { at: 20, points: 10 },
+    { at: 25, points: 10 },
+    { at: 50, points: 20 },
+    { at: 100, points: 50 },
+  ],
+  is_active: true,
+  is_deleted: false,
+  created_by: MOCK_USERS[2]._id,
+  createdAt: new Date(),
+  updatedAt: new Date(),
+};
+
+const MOCK_MILESTONE_CONFIG_INACTIVE = {
+  _id: new mongoose.Types.ObjectId(),
+  name: "Q2 2026 Campaign",
+  thresholds: [
+    { at: 10, points: 15 },
+    { at: 25, points: 30 },
+    { at: 50, points: 75 },
+  ],
+  is_active: false,
+  is_deleted: false,
+  created_by: MOCK_USERS[2]._id,
+  createdAt: new Date(),
+  updatedAt: new Date(),
+};
+
 module.exports = {
   MOCK_SUBSCRIPTION,
   MOCK_USERS,
@@ -538,6 +801,22 @@ module.exports = {
   MOCK_WEEKLY_STATS,
   MOCK_MONTHLY_STATS,
   MOCK_SESSION_ID,
+  MOCK_SESSION_ID_2,
   MOCK_USER_SESSIONS,
   MOCK_MFA_SESSIONS,
+  MOCK_SUBSCRIPTION_LOGS,
+  MOCK_IMAGE_DETAIL,
+  MOCK_IMAGE_DETAILS_LIST,
+  MOCK_CLOUDFRONT_URLS,
+  MOCK_IMAGE_URL_RESPONSE,
+  MOCK_DATA_LIST_RESPONSE,
+  MOCK_IMAGES_PAGINATED_RESPONSE,
+  MOCK_IMAGES_COUNT,
+  MOCK_PRESIGNED_URL_RESPONSE,
+  MOCK_REWARD_TRANSACTION,
+  MOCK_REWARD_TRANSACTIONS_LIST,
+  MOCK_LOG_ENTRY_HOBBY,
+  MOCK_LOG_ENTRY_VALID,
+  MOCK_MILESTONE_CONFIG,
+  MOCK_MILESTONE_CONFIG_INACTIVE,
 };

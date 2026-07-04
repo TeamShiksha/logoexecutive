@@ -16,6 +16,10 @@ const {
   cancelMFAController,
   disableMFAController,
   mfaStatusController,
+  listSessionsController,
+  revokeSessionController,
+  signoutOthersController,
+  signoutAllController,
 } = require("../controllers/auth");
 
 router.post("/signup", signupController);
@@ -32,5 +36,14 @@ router.post("/mfa/verify", authMiddleware(), verifyMFAController);
 router.post("/mfa/cancel", authMiddleware(), cancelMFAController);
 router.post("/mfa/disable", authMiddleware(), disableMFAController);
 router.get("/mfa/status", authMiddleware(), mfaStatusController);
+
+router.get("/sessions", authMiddleware(), listSessionsController);
+router.delete(
+  "/sessions/:sessionId",
+  authMiddleware(),
+  revokeSessionController
+);
+router.post("/signout/others", authMiddleware(), signoutOthersController);
+router.post("/signout/all", authMiddleware(), signoutAllController);
 
 module.exports = router;

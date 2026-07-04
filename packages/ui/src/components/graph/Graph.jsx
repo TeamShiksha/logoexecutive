@@ -10,6 +10,7 @@ import {
 } from "chart.js";
 import { Line } from "react-chartjs-2";
 import { useState, useEffect, useMemo, useContext } from "react";
+import PropTypes from "prop-types";
 import styles from "./Graph.module.css";
 import { useApi } from "../../hooks/useApi";
 import { ThemeContext } from "../../contexts/Contexts";
@@ -88,23 +89,50 @@ const getBaseOptions = (isDarkMode) => ({
   },
 });
 
-function parseStatsDataForPeriod(data, period) {
-  if (!Array.isArray(data)) {
+function generateDummyData(period) {
+  const days = period === "week" ? 7 : 30;
+  const today = new Date();
+  const labels = [];
+  const counts = [];
+  const weekSeed = [4, 7, 3, 12, 9, 15, 6];
+  const monthSeed = [
+    2, 5, 3, 8, 6, 11, 9, 4, 7, 13, 10, 8, 15, 12, 6, 9, 11, 7, 14, 10, 5, 8,
+    12, 9, 6, 11, 8, 13, 10, 7,
+  ];
+  const seed = period === "week" ? weekSeed : monthSeed;
+  for (let offset = days - 1; offset >= 0; offset--) {
+    const date = new Date(today);
+    date.setDate(date.getDate() - offset);
+    labels.push(
+      new Intl.DateTimeFormat("en-GB", {
+        day: "2-digit",
+        month: "short",
+      }).format(date)
+    );
+    counts.push(seed[days - 1 - offset] ?? 0);
+  }
+  return [labels, counts];
+}
+
+function parseStatsDataForPeriod(apiData) {
+  const data = apiData?.data;
+  if (!Array.isArray(data) || !apiData.startDate || !apiData.endDate) {
     return [[], []];
   }
 
-  const daysToDisplay = period === "week" ? 7 : 30;
+  const startTime = Date.parse(apiData.startDate);
+  const endTime = Date.parse(apiData.endDate);
 
-  const today = new Date();
+  if (Number.isNaN(startTime) || Number.isNaN(endTime)) {
+    return [[], []];
+  }
 
   const dateRange = [];
-  for (let offset = daysToDisplay - 1; offset >= 0; offset--) {
-    const date = new Date(today);
-    const dayPadding = 3;
-    date.setDate(date.getDate() + dayPadding);
-    date.setDate(date.getDate() - offset);
-    dateRange.push(date);
+  const dayInMs = 24 * 60 * 60 * 1000;
+  for (let time = startTime; time <= endTime; time += dayInMs) {
+    dateRange.push(new Date(time));
   }
+
   const dateToCount = new Map();
   data.forEach((item) => {
     if (item?.date && item.count !== undefined) {
@@ -123,6 +151,7 @@ function parseStatsDataForPeriod(data, period) {
     const label = new Intl.DateTimeFormat("en-GB", {
       day: "2-digit",
       month: "short",
+      timeZone: "UTC",
     }).format(date);
 
     labels.push(label);
@@ -156,7 +185,7 @@ function niceStep(maxValue, targetTicks = 10) {
   return rounded * powerOfTen;
 }
 
-export default function Graph() {
+export default function Graph({ isGuest = false }) {
   const { isDarkMode } = useContext(ThemeContext);
   const [selectedPeriod, setSelectedPeriod] = useState("week");
   const [chartData, setChartData] = useState({
@@ -188,43 +217,42 @@ export default function Graph() {
   });
 
   useEffect(() => {
+    if (isGuest) {
+      const [labels, counts] = generateDummyData(selectedPeriod);
+      setChartData({ labels, dataPoints: counts });
+    }
+  }, [isGuest, selectedPeriod]);
+
+  useEffect(() => {
+    if (isGuest) {
+      return;
+    }
+
     fetchWeekData();
     fetchMonthData();
-  }, []);
+  }, [isGuest, fetchWeekData, fetchMonthData]);
 
   useEffect(() => {
     if (weekLoaded && weekResponse) {
       setCachedWeekData(weekResponse);
     }
+  }, [weekLoaded, weekResponse]);
 
+  useEffect(() => {
     if (monthLoaded && monthResponse) {
       setCachedMonthData(monthResponse);
     }
+  }, [monthLoaded, monthResponse]);
 
-    if (selectedPeriod === "week" && cachedWeekData?.data?.data) {
-      const [labels, counts] = parseStatsDataForPeriod(
-        cachedWeekData.data.data,
-        "week"
-      );
+  useEffect(() => {
+    const currentCache =
+      selectedPeriod === "week" ? cachedWeekData : cachedMonthData;
+
+    if (currentCache?.data?.data) {
+      const [labels, counts] = parseStatsDataForPeriod(currentCache.data);
       setChartData({ labels, dataPoints: counts });
     }
-
-    if (selectedPeriod === "month" && cachedMonthData?.data?.data) {
-      const [labels, counts] = parseStatsDataForPeriod(
-        cachedMonthData.data.data,
-        "month"
-      );
-      setChartData({ labels, dataPoints: counts });
-    }
-  }, [
-    selectedPeriod,
-    weekLoaded,
-    monthLoaded,
-    weekResponse,
-    monthResponse,
-    cachedWeekData,
-    cachedMonthData,
-  ]);
+  }, [selectedPeriod, cachedWeekData, cachedMonthData]);
 
   const { yMax, step } = useMemo(() => {
     const values = chartData.dataPoints;
@@ -312,7 +340,7 @@ export default function Graph() {
     return <div className={styles["error"]}>Error loading chart data</div>;
   }
 
-  const isLoading = !cachedWeekData && !cachedMonthData;
+  const isLoading = !isGuest && !cachedWeekData && !cachedMonthData;
 
   return (
     <div className={styles["graph-container"]}>
@@ -320,9 +348,10 @@ export default function Graph() {
         <h2 className={styles["card-title"]}>Requests</h2>
         <button
           className={styles["refresh-btn"]}
-          onClick={handleRefresh}
-          disabled={isRefreshing}
-          aria-label="Refresh"
+          onClick={isGuest ? undefined : handleRefresh}
+          disabled={isRefreshing || isGuest}
+          aria-label={isGuest ? "Sign up to refresh data" : "Refresh"}
+          title={isGuest ? "Sign up to refresh live data" : undefined}
         >
           <svg
             width="14"
@@ -378,3 +407,7 @@ export default function Graph() {
     </div>
   );
 }
+
+Graph.propTypes = {
+  isGuest: PropTypes.bool,
+};

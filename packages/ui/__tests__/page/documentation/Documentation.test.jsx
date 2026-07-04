@@ -1,4 +1,4 @@
-import { expect, describe, it, vi } from "vitest";
+import { expect, describe, it } from "vitest";
 import { render, screen, fireEvent } from "@testing-library/react";
 import Documentation from "../../../src/page/documentation/Documentation";
 import { DOCUMENTATION } from "../../../src/utils/Constants";
@@ -16,11 +16,13 @@ describe("Documentation Component", () => {
 
     const heading = screen.getByText(DOCUMENTATION.introduction.heading);
     const text = screen.getByText(DOCUMENTATION.introduction.text);
-    const baseUrl = screen.getByText(/Base URL:/);
+    const baseUrl = screen.getByText(DOCUMENTATION.localUrl);
+    const notice = screen.getByText(/We've recently updated our search/);
 
     expect(heading).toBeInTheDocument();
     expect(text).toBeInTheDocument();
     expect(baseUrl).toBeInTheDocument();
+    expect(notice).toBeInTheDocument();
   });
 
   it("returns correct BASE API URL for different environments", () => {
@@ -33,7 +35,7 @@ describe("Documentation Component", () => {
     );
   });
 
-  it("renders all API features with their headings, descriptions, endpoints", () => {
+  it("renders all API features with headings, descriptions, and endpoints", () => {
     render(
       <BrowserRouter>
         <Documentation />
@@ -49,6 +51,9 @@ describe("Documentation Component", () => {
       expect(featureText).toBeInTheDocument();
       expect(endpointText).toBeInTheDocument();
     });
+
+    const responseHeaders = screen.getAllByText("JSON RESPONSE");
+    expect(responseHeaders).toHaveLength(DOCUMENTATION.apiDocs.length);
   });
 
   it("displays and closes the contact form modal when clicking 'contact us'", () => {
@@ -68,24 +73,5 @@ describe("Documentation Component", () => {
     expect(closeModalButton).toBeInTheDocument();
     fireEvent.click(closeModalButton);
     expect(closeModalButton).not.toBeInTheDocument();
-  });
-
-  it("check if copy to clipboard is working or not", () => {
-    const clipboardSpy = vi.spyOn(navigator.clipboard, "writeText");
-    render(
-      <BrowserRouter>
-        <Documentation />
-      </BrowserRouter>
-    );
-
-    const copyButtons = screen.getAllByAltText("tick-copy-code");
-    expect(copyButtons.length).toBeLessThanOrEqual(
-      DOCUMENTATION.apiDocs.length
-    );
-    const firstCopyButton = copyButtons[0];
-    fireEvent.click(firstCopyButton);
-
-    const javascripteCode = DOCUMENTATION.apiDocs[0].codeExample["javascript"];
-    expect(clipboardSpy).toHaveBeenCalledWith(javascripteCode);
   });
 });

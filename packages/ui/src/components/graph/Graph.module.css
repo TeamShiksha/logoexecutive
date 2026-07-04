@@ -1,8 +1,10 @@
 .graph-container {
   width: 100%;
+  max-width: 100%;
   height: 100%;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 }
 
 .card-header {
@@ -46,9 +48,12 @@
 
 .chart-wrapper {
   flex: 1;
+  width: 100%;
+  max-width: 100%;
   min-height: 300px;
   position: relative;
   margin-bottom: 1.5rem;
+  overflow: hidden;
 }
 
 .loading {
@@ -106,7 +111,6 @@
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
-/* Responsive */
 @media (max-width: 768px) {
   .chart-wrapper {
     min-height: 250px;
@@ -114,5 +118,11 @@
 
   .card-title {
     font-size: 1rem;
+  }
+}
+
+@media (max-width: 420px) {
+  .chart-wrapper {
+    min-height: 200px;
   }
 }

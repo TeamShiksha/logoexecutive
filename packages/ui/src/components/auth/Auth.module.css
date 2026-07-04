@@ -7,10 +7,12 @@ dialog {
   max-height: none;
   display: block;
   position: fixed;
+  overflow: visible;
 }
 
 .modal-container {
-  width: 350px;
+  width: 800px;
+  overflow: visible;
   min-height: 500px;
   background-color: var(--white);
   display: flex;
@@ -36,6 +38,7 @@ dialog {
   align-items: center;
   padding: 20px;
   position: absolute;
+  overflow: visible;
   backface-visibility: hidden;
   border-radius: 12px;
   z-index: 2000;

@@ -196,7 +196,7 @@
 /* Mobile */
 @media only screen and (max-width: 480px) {
   .pricing-container {
-    padding: 2.5rem 1rem;
+    padding: 2.5rem 1.5rem;
   }
 
   .heading {

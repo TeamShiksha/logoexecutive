@@ -1,12 +1,7 @@
 import { useContext, useEffect, useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
-import { CircleCheck, Search, BadgeCheck } from "lucide-react";
-import {
-  BUTTON_TEXT,
-  DEMO,
-  BRAND_SUGGESTIONS,
-  TILTED_BRANDS,
-} from "../../utils/Constants.js";
+import { CircleCheck, Search } from "lucide-react";
+import { BUTTON_TEXT, DEMO, TILTED_BRANDS } from "../../utils/Constants.js";
 import styles from "./Demo.module.css";
 import Button from "../common/button/Button.jsx";
 import PropTypes from "prop-types";
@@ -99,33 +94,6 @@ const Demo = ({ openAuthModal }) => {
                     placeholder="Type a brand name or URL to search"
                   />
                 </form>
-
-                {/* Suggestions Bar */}
-                <div className={styles.suggestionsRow}>
-                  {BRAND_SUGGESTIONS.map((brand) => (
-                    <button
-                      key={brand.name}
-                      type="button"
-                      className={styles.suggestionPill}
-                      onClick={() => setSearchTerm(brand.name.toLowerCase())}
-                    >
-                      <img
-                        src={brand.logo}
-                        alt={brand.name}
-                        className={styles.suggestionLogo}
-                      />
-                      <span className={styles.suggestionName}>
-                        {brand.name}
-                      </span>
-                      {brand.verified && (
-                        <BadgeCheck
-                          className={styles.verifiedBadge}
-                          size={15}
-                        />
-                      )}
-                    </button>
-                  ))}
-                </div>
 
                 {/* RESULT CARD OR DECK */}
                 {showResults ? (

@@ -27,7 +27,7 @@ function PricingCard({
 
   return (
     <div className={`${styles.card} ${isPro ? styles.dark : styles.light}`}>
-      {isPro && <div className={styles.ribbon}>Coming Soon</div>}
+      {isPro && <div className={styles.comingSoonBadge}>Coming Soon</div>}
 
       {isPro ? (
         <>

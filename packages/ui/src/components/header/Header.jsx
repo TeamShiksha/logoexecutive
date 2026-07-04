@@ -69,9 +69,14 @@ const Header = ({ openAuthModal }) => {
           onClick={() => navigate("/")}
         >
           <img
-            className={styles["brand-img"]}
+            className={`${styles["brand-img"]} ${styles["light-logo"]}`}
             alt={BRANDING.brandName}
             src={BRANDING.imageSrc}
+          />
+          <img
+            className={`${styles["brand-img"]} ${styles["dark-logo"]}`}
+            alt={BRANDING.brandName}
+            src={BRANDING.imageSrcDark || BRANDING.imageSrc}
           />
           <span className={styles["brand-name"]}>{BRANDING.brandName}</span>
         </button>
@@ -108,9 +113,11 @@ const Header = ({ openAuthModal }) => {
           {isAuthenticated ? (
             <UserDropDown />
           ) : (
-            <Button variant="primary" onClick={openAuthModal}>
-              {BUTTON_TEXT.getStarted}
-            </Button>
+            <div className={styles.headerBtnWrapper}>
+              <Button variant="primary" onClick={openAuthModal}>
+                {BUTTON_TEXT.getStarted}
+              </Button>
+            </div>
           )}
           {isMobile && (
             <button

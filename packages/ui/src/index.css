@@ -10,6 +10,7 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   --white: rgb(255, 255, 255);
+  --white-fixed: #ffffff;
   --grey: rgb(248, 250, 252);
   --primary: #4f46e5;
   --primary-focus: #4f46e51a;

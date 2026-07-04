@@ -88,7 +88,7 @@
 
 @media only screen and (max-width: 780px) {
   .features-container {
-    padding: 2rem 1rem;
+    padding: 2rem 1.5rem;
   }
 
   .head > h2 {
@@ -102,4 +102,9 @@
   .features-list-item {
     max-width: none;
   }
+}
+
+[data-theme="dark"] .icon-wrapper img {
+  filter: invert(45%) sepia(38%) saturate(2978%) hue-rotate(222deg)
+    brightness(97%) contrast(93%);
 }

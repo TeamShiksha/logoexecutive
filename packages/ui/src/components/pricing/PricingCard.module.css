@@ -50,23 +50,20 @@
   color: #fff;
 }
 
-.ribbon {
+.comingSoonBadge {
   position: absolute;
-  top: 22px;
-  right: -38px;
-  width: 160px;
-  background-color: var(--primary);
-  color: #fff;
-  text-align: center;
-  font-size: 0.82rem;
-  font-weight: 800;
+  top: 1.5rem;
+  right: 1.5rem;
+  background-color: rgba(99, 102, 241, 0.15);
+  color: #818cf8;
+  padding: 0.35rem 0.85rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
-  transform: rotate(45deg);
-  padding: 0.45rem 0;
+  letter-spacing: 0.05em;
+  border: 1px solid rgba(99, 102, 241, 0.3);
   z-index: 10;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-  border: 1px solid rgba(255, 255, 255, 0.15);
 }
 
 /* Blur overlay for Pro card content */
@@ -116,7 +113,7 @@
 .price-period {
   font-size: 1rem;
   font-weight: 400;
-  color: #334155;
+  color: var(--description);
 }
 
 .dark .price-period {
@@ -139,7 +136,7 @@
   gap: 0.75rem;
   font-size: 0.975rem;
   font-weight: 400;
-  color: #334155;
+  color: var(--description);
 }
 
 .dark .keypoints li {
@@ -153,6 +150,11 @@
   margin-top: 0.15rem;
   filter: invert(28%) sepia(78%) saturate(2000%) hue-rotate(230deg)
     brightness(95%) contrast(95%);
+}
+
+[data-theme="dark"] .tick-icon {
+  filter: invert(45%) sepia(38%) saturate(2978%) hue-rotate(222deg)
+    brightness(97%) contrast(93%);
 }
 
 .btn-full {

@@ -137,7 +137,7 @@
 
 .primary-button {
   background: var(--primary);
-  color: var(--white);
+  color: var(--white-fixed);
   border: none;
   border-radius: 8px;
   padding: 0.75rem 1.75rem;
@@ -193,8 +193,14 @@
   transform: translateY(-2px);
 }
 
+[data-theme="dark"] .secondary-button {
+  color: var(--white-fixed);
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
 [data-theme="dark"] .secondary-button:hover {
-  background: rgba(255, 255, 255, 0.04);
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.4);
 }
 
 .secondary-button:hover .btn-icon {
@@ -285,11 +291,15 @@
 
 @media only screen and (max-width: 780px) {
   .hero-section {
-    padding: 3rem 0 3.5rem;
+    padding: 3rem 1.5rem 3.5rem;
     min-height: calc(100vh - 68px);
   }
   .text-section h1 {
-    font-size: 2.4rem;
+    font-size: 2.2rem;
+    text-wrap: balance;
+  }
+  .hero-content {
+    gap: 1.5rem;
   }
   .text-section p {
     font-size: 1.05rem;
@@ -309,6 +319,6 @@
 
 @media only screen and (max-width: 480px) {
   .text-section h1 {
-    font-size: 1.95rem;
+    font-size: 1.9rem;
   }
 }

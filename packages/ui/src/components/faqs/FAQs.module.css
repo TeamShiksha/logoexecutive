@@ -76,3 +76,21 @@
   font-weight: 400;
   line-height: 1.6;
 }
+
+@media only screen and (max-width: 768px) {
+  .faq-container {
+    padding: 4rem 1.5rem;
+  }
+  .heading {
+    font-size: 2rem;
+  }
+}
+
+@media only screen and (max-width: 480px) {
+  .faq-container {
+    padding: 3rem 1.5rem;
+  }
+  .heading {
+    font-size: 1.6rem;
+  }
+}

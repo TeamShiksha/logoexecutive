@@ -59,6 +59,18 @@
   object-fit: contain;
 }
 
+.dark-logo {
+  display: none;
+}
+
+[data-theme="dark"] .light-logo {
+  display: none;
+}
+
+[data-theme="dark"] .dark-logo {
+  display: block;
+}
+
 .brand-name {
   font-size: 1.25rem;
   font-weight: 700;
@@ -169,5 +181,11 @@
   .hamburger-img {
     width: 20px;
     height: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .headerBtnWrapper {
+    display: none;
   }
 }

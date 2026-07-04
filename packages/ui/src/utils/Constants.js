@@ -191,9 +191,7 @@ export const FOOTER_SECTIONS = [
     title: "Resources",
     items: [
       { name: "documentation", title: "Documentation", url: "/docs" },
-      { name: "directory", title: "Directory", url: "/#demo" },
-      { name: "api_access", title: "API Access", url: "/docs#logo-retrieval" },
-      { name: "guides", title: "Guides", url: "/docs" },
+      { name: "release", title: "Releases", url: "/release" },
     ],
   },
   {
@@ -205,7 +203,11 @@ export const FOOTER_SECTIONS = [
         url: "https://github.com/TeamShiksha",
         logo: FOOTER_SOCIAL_LOGOS.github,
       },
-      { name: "discord", title: "Discord", url: "https://discord.com" },
+      {
+        name: "discord",
+        title: "Discord",
+        url: "https://discord.com/invite/WCbxcXqS",
+      },
       {
         name: "twitter",
         title: "Twitter / X",

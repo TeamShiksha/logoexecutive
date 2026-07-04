@@ -230,7 +230,7 @@ export default function Graph({ isGuest = false }) {
 
     fetchWeekData();
     fetchMonthData();
-  }, []);
+  }, [isGuest, fetchWeekData, fetchMonthData]);
 
   useEffect(() => {
     if (weekLoaded && weekResponse) {

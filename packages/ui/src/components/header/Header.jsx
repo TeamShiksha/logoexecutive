@@ -20,31 +20,35 @@ import {
 } from "../../utils/Helpers";
 import { AuthContext } from "../../contexts/Contexts";
 import { DarkModeToggle } from "../darkModeToggle/DarkModeToggle.jsx";
-import { useTheme } from "../../hooks/useTheme.js";
 
 const Header = ({ openAuthModal }) => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { isDarkMode } = useTheme();
   const [activeSection, setActiveSection] = useState("");
   const currentPath = location.pathname;
   const [showMenu, setShowMenu] = useState(false);
   const menuIcon = showMenu ? CROSS : HAMBURGER;
   const [isMobile, setIsMobile] = useState(window.innerWidth < 1024);
+  const [isScrolled, setIsScrolled] = useState(false);
   const { isAuthenticated } = useContext(AuthContext);
   const NAVBAR_ITEMS = isAuthenticated ? LOGGEDIN_ITEMS : HEADER_ITEMS;
-
   const sectionIds = extractSectionIds(NAVBAR_ITEMS);
 
   useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth < 1024);
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 20);
     };
+    window.addEventListener("scroll", handleScroll);
+    // Call once initially
+    handleScroll();
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth < 1024);
     handleResize();
     window.addEventListener("resize", handleResize);
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   useEffect(() => {
@@ -52,73 +56,85 @@ const Header = ({ openAuthModal }) => {
     return cleanup;
   }, [sectionIds]);
 
-  const toggleMenu = () => {
-    setShowMenu((prev) => !prev);
-  };
-
   return (
-    <div data-testid="header" className={`container ${styles.block}`}>
-      <header className={styles.header}>
+    <div
+      data-testid="header"
+      className={`${styles.block} ${isScrolled ? styles.scrolled : ""}`}
+    >
+      <header className={`container ${styles.header}`}>
+        {/* Brand */}
         <button
           type="button"
           className={styles.brand}
           onClick={() => navigate("/")}
         >
           <img
-            className={styles["brand-img"]}
-            alt={BRANDING.imageAlt}
-            src={isDarkMode ? BRANDING.imageSrcDark : BRANDING.imageSrc}
+            className={`${styles["brand-img"]} ${styles["light-logo"]}`}
+            alt={BRANDING.brandName}
+            src={BRANDING.imageSrc}
+          />
+          <img
+            className={`${styles["brand-img"]} ${styles["dark-logo"]}`}
+            alt={BRANDING.brandName}
+            src={BRANDING.imageSrcDark || BRANDING.imageSrc}
           />
           <span className={styles["brand-name"]}>{BRANDING.brandName}</span>
         </button>
-        <div className={styles["nav-bar"]}>
-          {NAVBAR_ITEMS.map((item) => {
-            const [itemPath, itemSection] = item.url.split("#");
-            const isActive =
-              item.type === "route"
-                ? currentPath === item.url
-                : currentPath === itemPath && activeSection === itemSection;
 
-            return (
-              <Link
-                key={item.name}
-                className={`${styles.nav} ${isActive ? styles.active : ""}`}
-                to={item.url}
-                onClick={(event) =>
-                  handleNavigation(event, item.url, navigate, setActiveSection)
-                }
-              >
-                {item.title}
-              </Link>
-            );
-          })}
+        {/* Desktop Nav */}
+        {!isMobile && (
+          <nav className={styles["nav-bar"]}>
+            {NAVBAR_ITEMS.map((item) => {
+              const [itemPath, itemSection] = item.url.split("#");
+              const isActive =
+                item.type === "route"
+                  ? currentPath === item.url
+                  : currentPath === itemPath && activeSection === itemSection;
+
+              return (
+                <Link
+                  key={item.name}
+                  className={`${styles.nav} ${isActive ? styles.active : ""}`}
+                  to={item.url}
+                  onClick={(e) =>
+                    handleNavigation(e, item.url, navigate, setActiveSection)
+                  }
+                >
+                  {item.title}
+                </Link>
+              );
+            })}
+          </nav>
+        )}
+
+        {/* Right side */}
+        <div className={styles["right-side"]}>
           <DarkModeToggle />
           {isAuthenticated ? (
             <UserDropDown />
           ) : (
-            <Button
-              variant="primary"
-              className={styles.ml}
-              onClick={openAuthModal}
-            >
-              {BUTTON_TEXT.getStarted}
-            </Button>
+            <div className={styles.headerBtnWrapper}>
+              <Button variant="primary" onClick={openAuthModal}>
+                {BUTTON_TEXT.getStarted}
+              </Button>
+            </div>
           )}
-        </div>
-        {isMobile && (
-          <div className={styles["mobile-header"]}>
-            <DarkModeToggle />
-            <button className={styles.hamburger} onClick={toggleMenu}>
+          {isMobile && (
+            <button
+              className={styles.hamburger}
+              onClick={() => setShowMenu((p) => !p)}
+            >
               <img
                 className={styles["hamburger-img"]}
                 src={menuIcon.src}
                 alt={menuIcon.alt}
               />
             </button>
-          </div>
-        )}
-        <MobileHeaderMenu isOpen={showMenu} closeMenu={setShowMenu} />
+          )}
+        </div>
       </header>
+
+      <MobileHeaderMenu isOpen={showMenu} closeMenu={setShowMenu} />
     </div>
   );
 };

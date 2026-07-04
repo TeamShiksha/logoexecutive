@@ -27,8 +27,8 @@ describe("HeroSection Component", () => {
       </BrowserRouter>
     );
 
-    const documentationButton = screen.getByText(BUTTON_TEXT.documentation);
-    const getStartedButton = screen.getByText(BUTTON_TEXT.getStarted);
+    const documentationButton = screen.getByText("View Documentation");
+    const getStartedButton = screen.getByText("Start Building for Free");
     expect(documentationButton).toBeInTheDocument();
     expect(documentationButton.tagName).toBe("BUTTON");
     expect(getStartedButton).toBeInTheDocument();
@@ -42,7 +42,7 @@ describe("HeroSection Component", () => {
       </BrowserRouter>
     );
     const DocumentationButton = screen.getByRole("button", {
-      name: BUTTON_TEXT.documentation,
+      name: /View Documentation/i,
     });
     fireEvent.click(DocumentationButton);
     expect(window.location.pathname).toBe("/docs");
@@ -69,7 +69,7 @@ describe("HeroSection Component", () => {
 
     const anyDialog = screen.queryByText(BUTTON_TEXT.cross);
     expect(anyDialog).not.toBeInTheDocument();
-    const getStartedButton = screen.getByText(BUTTON_TEXT.getStarted);
+    const getStartedButton = screen.getByText("Start Building for Free");
     fireEvent.click(getStartedButton);
     expect(onPrimaryButtonClick).toHaveBeenCalled();
   });
@@ -85,7 +85,7 @@ describe("HeroSection Component", () => {
     );
 
     const gotoDashboardButton = screen.getByRole("button", {
-      name: BUTTON_TEXT.gotoDashboard,
+      name: /Go to Dashboard/i,
     });
     expect(gotoDashboardButton).toBeInTheDocument();
   });

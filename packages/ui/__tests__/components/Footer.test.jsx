@@ -4,7 +4,7 @@ import { render, screen, within, fireEvent } from "@testing-library/react";
 import Footer from "../../src/components/footer/Footer";
 import Home from "../../src/page/home/Home";
 import PrivacyPolicy from "../../src/page/privacypolicy/PrivacyPolicy";
-import { BRANDING, FOOTER_ITEMS } from "../../src/utils/Constants";
+import { BRANDING, FOOTER_SECTIONS } from "../../src/utils/Constants";
 import {
   AuthContext,
   ToastContext,
@@ -20,6 +20,8 @@ const mockToastContext = {
   clear: vi.fn(),
   clearToast: vi.fn(),
 };
+
+const footerItems = FOOTER_SECTIONS.flatMap((section) => section.items);
 
 describe("Footer Component", () => {
   it("Render footer branding", () => {
@@ -54,7 +56,11 @@ describe("Footer Component", () => {
       </BrowserRouter>
     );
 
-    FOOTER_ITEMS.forEach((item) => {
+    FOOTER_SECTIONS.forEach((section) => {
+      expect(screen.getByText(section.title)).toBeInTheDocument();
+    });
+
+    footerItems.forEach((item) => {
       const footerLink = screen.getByText(item.title);
       expect(footerLink).toBeInTheDocument();
     });
@@ -99,13 +105,15 @@ describe("Footer Component", () => {
     );
 
     const footerElement = screen.getByTestId("footer");
-    for (const item of FOOTER_ITEMS) {
+    for (const item of footerItems.filter((footerItem) =>
+      footerItem.url.startsWith("/")
+    )) {
       const navLink = within(footerElement).getByText(item.title);
       expect(navLink).toBeInTheDocument();
       fireEvent.click(navLink);
       const [path, sectionId] = item.url.split("#");
       expect(window.location.pathname).toBe(path);
-      if (sectionId) {
+      if (sectionId && (path === "/" || path === "/privacy")) {
         const sectionElement = screen.getByTestId(sectionId);
         expect(sectionElement).toBeInTheDocument();
       }

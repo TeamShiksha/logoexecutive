@@ -29,36 +29,55 @@
 
 .close-button {
   position: absolute;
-  top: 0.5rem;
+  top: 1rem;
   right: 1rem;
-  background: none;
-  border: none;
-  font-size: 2rem;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--white);
+  border: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
-  padding: 5px;
   color: var(--description);
-  opacity: 0.4;
-  z-index: 1;
-  transition: all 0.3s ease;
+  opacity: 0.8;
+  z-index: 10;
+  transition: all 0.2s ease-in-out;
+  padding: 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
 .close-button:hover {
-  opacity: 0.8;
-  transition: all 0.3s ease;
+  opacity: 1;
+  background: var(--grey);
+  color: var(--black);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
 }
 
 @media (max-width: 780px) {
   .close-button {
-    top: 0.5rem;
-    right: 1rem;
-    font-size: 2rem;
-    padding: 10px;
+    top: 0.75rem;
+    right: 0.75rem;
   }
 }
 
 @media (max-width: 480px) {
   .close-button {
-    font-size: 1.5rem;
-    padding: 8px;
+    top: 0.5rem;
+    right: 0.5rem;
+    width: 28px;
+    height: 28px;
   }
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
 }

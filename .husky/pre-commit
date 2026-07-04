@@ -2,19 +2,19 @@
 set -e
 
 BRANCH=$(git symbolic-ref --short HEAD)
-PATTERN="^(Feat|Fix|HotFix|Refact|Docs|Test)/issue-[a-zA-Z0-9]+-[a-zA-Z0-9-]+$"
+PATTERN="^(feat|fix|hotfix|refact|docs|test)/issue-[a-z0-9]+-[a-z0-9-]+$"
 
 echo "🔍 Checking branch name: '$BRANCH'"
 
 if ! echo "$BRANCH" | grep -Eq "$PATTERN"; then
   echo ""
   echo "❌ Invalid branch name: '$BRANCH'"
-  echo "✅ Required format: <Type>/issue-<id>-<short-description>"
+  echo "✅ Required format: <type>/issue-<id>-<short-description>"
   echo ""
   echo "   Examples:"
-  echo "     ✅ Fix/issue-931-fix-login-redirect"
-  echo "     ✅ Feat/issue-912-add-oauth"
-  echo "     ❌ fix/issue-931"
+  echo "     ✅ fix/issue-931-fix-login-redirect"
+  echo "     ✅ feat/issue-912-add-oauth"
+  echo "     ❌ Fix/issue-931"
   echo "     ❌ issue-931-fix-something"
   echo ""
   exit 1

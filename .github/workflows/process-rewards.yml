@@ -1,0 +1,43 @@
+name: Process Rewards
+
+on:
+  schedule:
+    - cron: "0 * * * *" # Every hour — adjust cadence as needed
+  workflow_dispatch: # Allow manual runs from the GitHub UI
+
+jobs:
+  run-reward-worker:
+    name: Run Reward Worker
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320 # v4.4.0
+        with:
+          version: latest
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "pnpm"
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Run reward processing script
+        env:
+          MONGO_URL: ${{ secrets.MONGO_URL }}
+          NODE_ENV: production
+        run: node packages/app/scripts/rewards/processRewards.js 2>&1 | tee /tmp/reward-worker.log
+
+      - name: Upload worker logs on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: reward-worker-logs
+          path: /tmp/reward-worker.log

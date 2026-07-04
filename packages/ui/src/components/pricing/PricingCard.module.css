@@ -1,92 +1,186 @@
 .card {
-  width: 380px;
-  margin-top: 50px;
-  background: var(--white);
-  border-radius: 0.8rem;
+  flex: 1 1 340px;
+  max-width: 420px;
+  border-radius: 16px;
+  padding: 2.5rem 2rem;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
+  text-align: left;
   position: relative;
+  overflow: hidden;
 }
 
-.intro {
-  padding: 1rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1rem;
+.light {
+  background: var(--white);
+  border: 1px solid rgba(177, 179, 183, 0.45);
 }
 
-.intro h1 {
-  color: var(--black);
+.dark {
+  background: linear-gradient(135deg, #1e1b4b 0%, #0f172a 100%);
+  box-shadow: 0 20px 40px rgba(79, 70, 229, 0.12);
+  border: 1px solid rgba(99, 102, 241, 0.25);
+}
+
+[data-theme="dark"] .dark {
+  background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(99, 102, 241, 0.35);
+}
+
+.dark .tick-icon {
+  filter: brightness(0) invert(1);
+}
+
+.dark button:disabled {
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .plan-name {
-  font-weight: 600;
-  color: var(--description);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--black);
+  margin-bottom: 1.2rem;
 }
 
-.tag-line {
-  font-size: 1.2rem;
-  font-weight: 500;
-  color: var(--description);
-  text-align: center;
+.dark .plan-name {
+  color: #fff;
 }
 
-.point {
-  color: var(--description);
-  text-align: left;
-  font-size: 1.2rem;
-  line-height: 2.4rem;
-  font-weight: 500;
+.comingSoonBadge {
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+  background-color: rgba(99, 102, 241, 0.15);
+  color: #818cf8;
+  padding: 0.35rem 0.85rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border: 1px solid rgba(99, 102, 241, 0.3);
+  z-index: 10;
 }
 
-.point > li {
+/* Blur overlay for Pro card content */
+.blurOverlay {
+  filter: blur(8px);
+  opacity: 0.45;
+  pointer-events: none;
+  user-select: none;
+  flex: 1;
+}
+
+/* Placeholder bars to mimic text without real content */
+.placeholderBar {
+  display: inline-block;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+  vertical-align: middle;
+}
+
+.placeholderDot {
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  flex-shrink: 0;
+}
+
+.price-row {
   display: flex;
-  align-items: center;
-  gap: 1rem;
+  align-items: baseline;
+  gap: 0.4rem;
+  margin-bottom: 2rem;
 }
 
-.width {
-  width: 90%;
-  margin-bottom: 1rem;
+.price {
+  font-size: 3.5rem;
+  font-weight: 800;
+  line-height: 1;
+  color: var(--black);
+}
+
+.dark .price {
+  color: white;
+}
+
+.price-period {
+  font-size: 1rem;
+  font-weight: 400;
+  color: var(--description);
+}
+
+.dark .price-period {
+  color: #cbd5e1;
+}
+
+.keypoints {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 2.5rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  flex: 1;
+}
+
+.keypoints li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  font-size: 0.975rem;
+  font-weight: 400;
+  color: var(--description);
+}
+
+.dark .keypoints li {
+  color: #f1f5f9;
+}
+
+.tick-icon {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  margin-top: 0.15rem;
+  filter: invert(28%) sepia(78%) saturate(2000%) hue-rotate(230deg)
+    brightness(95%) contrast(95%);
+}
+
+[data-theme="dark"] .tick-icon {
+  filter: invert(45%) sepia(38%) saturate(2978%) hue-rotate(222deg)
+    brightness(97%) contrast(93%);
+}
+
+.btn-full {
+  width: 100%;
 }
 
 @media only screen and (max-width: 1024px) {
   .card {
     width: 100%;
   }
-
-  .width {
-    margin-top: 1rem;
-    width: 60%;
-    min-width: 350px;
-  }
 }
 
-@media (max-width: 780px) {
-  .intro {
-    padding: 12px;
-    gap: 5px;
-  }
-
-  .width {
-    width: 40%;
-    min-width: 300px;
-  }
-
-  .tag-line {
-    margin-bottom: 1rem;
-  }
-
+@media only screen and (max-width: 768px) {
   .card {
-    margin-top: 2rem;
+    width: 100%;
+    padding: 2rem 1.5rem;
+    flex: none;
   }
 }
 
-@media (max-width: 480px) {
-  .width {
-    width: 100%;
-    min-width: unset;
+@media only screen and (max-width: 480px) {
+  .card {
+    padding: 1.5rem 1rem;
+  }
+
+  .price {
+    font-size: 2.8rem;
   }
 }

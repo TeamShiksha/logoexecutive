@@ -159,9 +159,6 @@ describe("SIGNIN API", () => {
 
     jest.spyOn(UserService.prototype, "getUserByEmail").mockResolvedValue(user);
     jest
-      .spyOn(UserSessionService.prototype, "userActiveSession")
-      .mockResolvedValue(null);
-    jest
       .spyOn(UserSessionService.prototype, "createSession")
       .mockResolvedValue(MOCK_USER_SESSIONS[0]);
 
@@ -214,9 +211,6 @@ describe("SIGNIN API", () => {
       .spyOn(MfaService.prototype, "findAndUpdateActiveSession")
       .mockResolvedValue(MOCK_MFA_SESSIONS[0]);
     jest.spyOn(MfaService.prototype, "mfaLogin").mockResolvedValue(true);
-    jest
-      .spyOn(UserSessionService.prototype, "userActiveSession")
-      .mockResolvedValue(null);
     jest
       .spyOn(UserSessionService.prototype, "createSession")
       .mockResolvedValue(MOCK_USER_SESSIONS[0]);

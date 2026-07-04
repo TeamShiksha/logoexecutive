@@ -11,6 +11,8 @@ vi.mock("react-chartjs-2", () => ({
 vi.mock("../../src/hooks/useApi", () => {
   const mockWeekApiResponse = {
     data: {
+      startDate: "2025-11-01",
+      endDate: "2025-11-07",
       data: [
         { date: "2025-11-01T00:00:00Z", count: 2 },
         { date: "2025-11-02T00:00:00Z", count: 3 },
@@ -24,6 +26,8 @@ vi.mock("../../src/hooks/useApi", () => {
   };
   const mockMonthApiResponse = {
     data: {
+      startDate: "2025-11-01",
+      endDate: "2025-11-30",
       data: Array.from({ length: 30 }, (_, dayIndex) => ({
         date: new Date(2025, 10, dayIndex + 1).toISOString(),
         count: Math.floor(Math.random() * 8),

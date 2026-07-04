@@ -4,7 +4,7 @@ const { UsersRepository } = require("../repositories");
 const { TEMPORARY_SESSION_TYPES } = require("../utils/constants");
 const { encrypt, decrypt } = require("../utils/crypto");
 const QRCode = require("qrcode");
-const otplib = require("otplib");
+const { authenticator } = require("otplib");
 
 class MfaService {
   constructor() {
@@ -53,12 +53,8 @@ class MfaService {
    * @returns {Promise<{ qrCode: string } | null>} - QR code data URL or null on failure.
    */
   async enableMfa(user) {
-    const secret = otplib.generateSecret();
-    const otpauthurl = otplib.generateURI({
-      label: user.email,
-      issuer: "OpenLogo",
-      secret,
-    });
+    const secret = authenticator.generateSecret();
+    const otpauthurl = authenticator.keyuri(user.email, "OpenLogo", secret);
 
     const qrCode = await QRCode.toDataURL(otpauthurl);
 
@@ -77,8 +73,8 @@ class MfaService {
    * @param {string} token - The TOTP token provided by the user.
    * @returns {Promise<boolean>} - True if valid, otherwise false.
    */
-  async verifyMfa(user, token) {
-    const { valid: isVerified } = await otplib.verify({
+  verifyMfa(user, token) {
+    const isVerified = authenticator.verify({
       secret: user.mfaTempSecret,
       token,
     });
@@ -137,7 +133,7 @@ class MfaService {
    * @param {string} token - The TOTP token provided by the user.
    * @returns {Promise<boolean>} - True if verification succeeds, otherwise false.
    */
-  async mfaLogin(user, token) {
+  mfaLogin(user, token) {
     try {
       const { encryptedValue, encryptedIv, encryptedTag } = user.mfaSecret;
       const decryptedSecret = decrypt(
@@ -145,7 +141,7 @@ class MfaService {
         encryptedIv,
         encryptedTag
       );
-      const { valid: isVerified } = await otplib.verify({
+      const isVerified = authenticator.verify({
         token,
         secret: decryptedSecret,
       });

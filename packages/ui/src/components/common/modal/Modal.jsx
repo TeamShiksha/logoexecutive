@@ -1,7 +1,9 @@
 import PropTypes from "prop-types";
+import { X } from "lucide-react";
 import { BUTTON_TEXT } from "../../../utils/Constants";
 import styles from "./Modal.module.css";
 import { useEffect } from "react";
+import { createPortal } from "react-dom";
 
 const Modal = ({
   isOpen,
@@ -34,11 +36,26 @@ const Modal = ({
     }
   };
 
-  return (
+  const handleKeyDown = (keyEvent) => {
+    if (
+      keyEvent.target === keyEvent.currentTarget &&
+      (keyEvent.key === "Enter" || keyEvent.key === " ") &&
+      closeOnOverlayClick
+    ) {
+      keyEvent.preventDefault();
+      onClose();
+    }
+  };
+
+  return createPortal(
     <div
       data-testid="modal-overlay"
       className={styles["modal-overlay"]}
       onClick={handleOverlayClick}
+      onKeyDown={handleKeyDown}
+      role="button"
+      tabIndex={0}
+      aria-label="Close modal overlay"
     >
       <div
         data-testid="dialog"
@@ -49,13 +66,19 @@ const Modal = ({
         }}
       >
         {showCloseButton && (
-          <button className={styles["close-button"]} onClick={onClose}>
-            {BUTTON_TEXT.cross}
+          <button
+            className={styles["close-button"]}
+            onClick={onClose}
+            aria-label={BUTTON_TEXT.cross}
+          >
+            <X size={18} />
+            <span className={styles["sr-only"]}>{BUTTON_TEXT.cross}</span>
           </button>
         )}
         {children}
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };
 

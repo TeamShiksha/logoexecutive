@@ -1,15 +1,22 @@
 const request = require("supertest");
-const { STATUS_CODES } = require("http");
+const { STATUS_CODES } = require("node:http");
 const app = require("../../../server");
 const { Messages } = require("../../../utils/constants");
-const { MOCK_KEYS, MOCK_SUBSCRIPTION } = require("../../../utils/mocks");
+const {
+  MOCK_KEYS,
+  MOCK_SUBSCRIPTION,
+  MOCK_IMAGE_URL_RESPONSE,
+} = require("../../../utils/mocks");
 
 const {
   ImageService,
   KeyService,
   SubscriptionService,
   UserService,
+  RewardTransactionsService,
 } = require("../../../services");
+
+jest.mock("../../../services/rewardTransactions");
 
 describe("getLogoController", () => {
   beforeAll(() => {
@@ -35,11 +42,9 @@ describe("getLogoController", () => {
     key: "https://google.com",
   };
 
-  const imageUrl = "https://cdn.myapp.com/png/GOOGLE.png?v=1755253230000";
-
   const mockSubscription = [MOCK_SUBSCRIPTION[0], MOCK_SUBSCRIPTION[1]];
 
-  function mockRepetedService(mockSubscription) {
+  function mockRepeatedService(mockSubscription) {
     const keyServiceMockResolve = {
       ...MOCK_KEYS[2],
       expires_at: new Date("2026-12-31T23:59:59Z"),
@@ -51,6 +56,10 @@ describe("getLogoController", () => {
     jest
       .spyOn(SubscriptionService.prototype, "getSubscription")
       .mockResolvedValue(mockSubscription);
+
+    jest
+      .spyOn(RewardTransactionsService.prototype, "validateAndLogRequest")
+      .mockResolvedValue({});
   }
 
   it("should return 422 if query validation fails", async () => {
@@ -109,7 +118,7 @@ describe("getLogoController", () => {
   });
 
   it("if limit reached it should return 403", async () => {
-    mockRepetedService(mockSubscription[1]);
+    mockRepeatedService(mockSubscription[1]);
 
     const response = await request(app).get(apiUrl).query(baseQuery);
     expect(response.status).toBe(403);
@@ -121,7 +130,7 @@ describe("getLogoController", () => {
   });
 
   it("if image not found it should return 404", async () => {
-    mockRepetedService(mockSubscription[0]);
+    mockRepeatedService(mockSubscription[0]);
 
     jest
       .spyOn(ImageService.prototype, "fetchImageByCompanyFree")
@@ -141,11 +150,11 @@ describe("getLogoController", () => {
   });
 
   it("200-images returned", async () => {
-    mockRepetedService(mockSubscription[0]);
+    mockRepeatedService(mockSubscription[0]);
 
     jest
       .spyOn(ImageService.prototype, "fetchImageByCompanyFree")
-      .mockResolvedValue(imageUrl);
+      .mockResolvedValue(MOCK_IMAGE_URL_RESPONSE);
     jest
       .spyOn(SubscriptionService.prototype, "incrementUsageCount")
       .mockResolvedValue([]);
@@ -156,7 +165,7 @@ describe("getLogoController", () => {
     expect(response.status).toBe(200);
     expect(response.body).toEqual({
       statusCode: 200,
-      data: imageUrl,
+      data: MOCK_IMAGE_URL_RESPONSE,
     });
   });
 });
@@ -182,7 +191,6 @@ describe("getLogoController - Operations Order Test", () => {
 
   it("should ensure image is fetched before usage count is incremented - operations order test", async () => {
     const operationsOrder = [];
-    const imageUrl = "https://cdn.myapp.com/png/GOOGLE.png?v=1755253230000";
 
     const mockKeyRef = {
       subscription_id: "test_subscription_id",
@@ -206,11 +214,13 @@ describe("getLogoController - Operations Order Test", () => {
       .spyOn(ImageService.prototype, "fetchImageByCompanyFree")
       .mockImplementation(() => {
         operationsOrder.push("image_fetched");
-        return imageUrl;
+        return MOCK_IMAGE_URL_RESPONSE;
       });
+
     jest
       .spyOn(UserService.prototype, "logLogoRequestEntry")
       .mockResolvedValue({});
+
     jest
       .spyOn(SubscriptionService.prototype, "incrementUsageCount")
       .mockImplementation(() => {
@@ -228,7 +238,7 @@ describe("getLogoController - Operations Order Test", () => {
     expect(response.status).toBe(200);
     expect(response.body).toEqual({
       statusCode: 200,
-      data: imageUrl,
+      data: MOCK_IMAGE_URL_RESPONSE,
     });
 
     expect(operationsOrder).toEqual([

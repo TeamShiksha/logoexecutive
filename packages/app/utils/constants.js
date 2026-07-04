@@ -128,6 +128,32 @@ const Messages = {
 
 const MAX_SESSIONS_PER_USER = 5;
 
+const RewardMessages = {
+  IMAGE_NOT_FOUND: "No reward data found for this image",
+  TRANSACTION_NOT_FOUND: "Transaction not found",
+  MISSING_BONUS_FIELDS: "Missing required fields: imageId, userId, points",
+  POINTS_MUST_BE_POSITIVE: "Points must be greater than 0",
+  BONUS_AWARDED: "Bonus points awarded successfully",
+  REVERSAL_REASON_REQUIRED: "Reversal reason is required",
+  TRANSACTION_REVERSED: "Transaction reversed successfully",
+  MISSING_REQUEST_FIELDS:
+    "Missing required fields: imageId, userId, creatorId, keyId, subscription",
+  REQUEST_LOGGED: "Request logged for reward eligibility",
+  MILESTONE_NOT_FOUND: "MilestoneConfig not found",
+  MILESTONE_CREATED: "MilestoneConfig created successfully",
+  MILESTONE_UPDATED: "MilestoneConfig updated successfully",
+  MILESTONE_DELETED: "MilestoneConfig deleted successfully",
+  MILESTONE_ACTIVATED:
+    "MilestoneConfig activated — takes effect on the next worker run",
+  NAME_REQUIRED: "name is required",
+  THRESHOLDS_REQUIRED: "thresholds must be a non-empty array",
+  THRESHOLD_INVALID:
+    'Each threshold must have positive numeric "at" and "points" values',
+  NAME_OR_THRESHOLDS_REQUIRED:
+    "At least one of name or thresholds must be provided",
+  CONFIG_ALREADY_ACTIVE: "Config is already active",
+};
+
 const ExtractCompanyNameFromUrlRegex = /:\/\/(?:www\.)?([^./]+)\./i;
 
 const CLOUD_FRONT_REGION = "us-east-1";
@@ -163,4 +189,5 @@ module.exports = {
   SESSION_ID_REGEX,
   TEMPORARY_SESSION_TYPES,
   MAX_SESSIONS_PER_USER,
+  RewardMessages,
 };

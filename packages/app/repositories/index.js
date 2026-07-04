@@ -8,6 +8,9 @@ const UsersRepository = require("./users");
 const RequestRepository = require("./request");
 const LogoRequestLogsRepository = require("./logoRequestLogs");
 const CreateLogoRequestRepository = require("./createLogoRequest");
+const RewardsRepository = require("./rewards");
+const RewardTransactionsRepository = require("./rewardTransactions");
+const MilestoneConfigRepository = require("./milestoneConfig");
 
 module.exports = {
   ContactUsRepository,
@@ -20,4 +23,7 @@ module.exports = {
   RequestRepository,
   LogoRequestLogsRepository,
   CreateLogoRequestRepository,
+  RewardsRepository,
+  RewardTransactionsRepository,
+  MilestoneConfigRepository,
 };

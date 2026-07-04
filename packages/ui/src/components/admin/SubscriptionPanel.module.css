@@ -1,9 +1,8 @@
 /* ── Shared panel card ──────────────────────────────────────── */
 .panel {
   background-color: var(--white);
-  border: var(--border);
-  border-radius: var(--bradius);
-  box-shadow: var(--shadow);
+  border: 1px solid var(--border-color);
+  border-radius: 0.75rem;
   padding: 1.5rem;
   display: flex;
   flex-direction: column;

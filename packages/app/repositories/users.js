@@ -59,22 +59,29 @@ class UsersRepository extends BaseRepository {
    * @param {number} options.page - 1-based page number.
    * @param {number} options.limit - Number of results per page.
    * @param {boolean} options.includeDeleted - Whether to include soft-deleted users.
+   * @param {boolean} options.hasRewardPoints - Filter to only CUSTOMER users with reward points.
    * @returns {Promise<{ users: Array, total: number }>}
    */
-  async findUsersWithSubscription({ search, page, limit, includeDeleted }) {
-    const matchStage = {
-      role: "CUSTOMER",
-    };
+  async findUsersWithSubscription({
+    search,
+    page,
+    limit,
+    includeDeleted,
+    hasRewardPoints,
+  }) {
+    const matchStage = {};
+
+    if (hasRewardPoints) {
+      matchStage.role = "CUSTOMER";
+      matchStage.reward_points_current = { $gt: 0 };
+    }
 
     if (!includeDeleted) {
       matchStage.is_deleted = false;
     }
 
     if (search) {
-      const escapedSearch = search.replaceAll(
-        /[.*+?^${}()|[\\\]\\]/g,
-        String.raw`\$&`
-      );
+      const escapedSearch = search.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
       const regex = new RegExp(escapedSearch, "i");
       matchStage.$or = [{ name: regex }, { email: regex }];
     }
@@ -104,6 +111,8 @@ class UsersRepository extends BaseRepository {
           email: 1,
           is_verified: 1,
           is_deleted: 1,
+          reward_points_current: 1,
+          reward_points_lifetime: 1,
           created_at: { $toDate: "$_id" },
           subscription: {
             type: "$subscription.type",

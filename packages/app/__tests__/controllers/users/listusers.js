@@ -90,6 +90,7 @@ describe("GET /api/admin/users", () => {
       page: 2,
       limit: 5,
       includeDeleted: false,
+      hasRewardPoints: false,
     });
   });
 

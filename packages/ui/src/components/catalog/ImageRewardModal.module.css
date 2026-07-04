@@ -1,0 +1,343 @@
+.modal-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 0.25rem 0;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.modal-header-left {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.modal-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--black);
+  margin: 0;
+}
+
+.modal-subtitle {
+  font-size: 0.875rem;
+  color: var(--description);
+  margin: 0;
+}
+
+.summary-section {
+  background-color: var(--table-background);
+  border-radius: var(--bradius);
+  padding: 1.25rem;
+}
+
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+}
+
+.stat-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.75rem;
+  background-color: var(--white);
+  border-radius: var(--bradius);
+  border: 1px solid var(--border-color);
+}
+
+.stat-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.stat-label {
+  font-size: 0.75rem;
+  color: var(--description);
+  text-align: center;
+  font-weight: 500;
+}
+
+.transactions-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.section-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--black);
+  margin: 0;
+}
+
+.table-wrapper {
+  overflow-x: auto;
+  border: 1px solid var(--border-color);
+  border-radius: var(--bradius);
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+}
+
+.table th {
+  background-color: var(--table-heading-bg);
+  color: var(--description);
+  font-weight: 600;
+  padding: 0.75rem 1rem;
+  text-align: left;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+}
+
+.table td {
+  padding: 0.75rem 1rem;
+  color: var(--black);
+  border-bottom: 1px solid var(--border-color);
+  vertical-align: middle;
+}
+
+.table tr:last-child td {
+  border-bottom: none;
+}
+
+.table tr:hover td {
+  background-color: var(--table-background);
+}
+
+.type-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.5rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  background-color: var(--primary-focus);
+  color: var(--primary);
+}
+
+.points-cell {
+  font-weight: 600;
+  color: var(--success);
+}
+
+.empty-state {
+  text-align: center;
+  padding: 2rem 1rem;
+  color: var(--description);
+  font-size: 0.875rem;
+  margin: 0;
+}
+
+.loading-container {
+  display: flex;
+  justify-content: center;
+  padding: 2rem 0;
+}
+
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding-top: 0.5rem;
+}
+
+.page-btn {
+  background: var(--white);
+  border: var(--border);
+  padding: 0.375rem 0.75rem;
+  border-radius: var(--bradius);
+  color: var(--description);
+  cursor: pointer;
+  font-size: 0.875rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition:
+    background-color 0.2s,
+    color 0.2s;
+}
+
+.page-btn:hover:not(:disabled) {
+  background-color: var(--table-background);
+  color: var(--black);
+}
+
+.page-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.page-indicator {
+  font-size: 0.875rem;
+  color: var(--description);
+}
+
+.bonus-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  background-color: var(--primary);
+  color: var(--white);
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: var(--bradius);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: opacity 0.15s;
+}
+
+.bonus-btn:hover {
+  opacity: 0.9;
+}
+
+.bonus-section {
+  background-color: var(--table-background);
+  border-radius: var(--bradius);
+  padding: 1.25rem;
+}
+
+.bonus-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.bonus-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+}
+
+.bonus-label {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--black);
+}
+
+.bonus-input {
+  padding: 0.5rem 0.75rem;
+  border: var(--border);
+  border-radius: var(--bradius);
+  font-size: 0.875rem;
+  color: var(--black);
+  background: var(--white);
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.bonus-input:focus {
+  border-color: var(--primary);
+}
+
+.bonus-select {
+  padding: 0.5rem 0.75rem;
+  border: var(--border);
+  border-radius: var(--bradius);
+  font-size: 0.875rem;
+  color: var(--black);
+  background: var(--white);
+  outline: none;
+  transition: border-color 0.15s;
+  cursor: pointer;
+}
+
+.bonus-select:focus {
+  border-color: var(--primary);
+}
+
+.bonus-textarea {
+  padding: 0.5rem 0.75rem;
+  border: var(--border);
+  border-radius: var(--bradius);
+  font-size: 0.875rem;
+  color: var(--black);
+  background: var(--white);
+  outline: none;
+  resize: vertical;
+  font-family: inherit;
+  transition: border-color 0.15s;
+}
+
+.bonus-textarea:focus {
+  border-color: var(--primary);
+}
+
+.bonus-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  margin-top: 0.25rem;
+}
+
+.bonus-cancel-btn {
+  padding: 0.5rem 1rem;
+  border: var(--border);
+  border-radius: var(--bradius);
+  background: var(--white);
+  color: var(--description);
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.15s;
+}
+
+.bonus-cancel-btn:hover:not(:disabled) {
+  background-color: var(--table-background);
+}
+
+.bonus-cancel-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.bonus-confirm-btn {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: var(--bradius);
+  background-color: var(--primary);
+  color: var(--white);
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+
+.bonus-confirm-btn:hover:not(:disabled) {
+  opacity: 0.9;
+}
+
+.bonus-confirm-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+@media (max-width: 640px) {
+  .summary-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .table th,
+  .table td {
+    padding: 0.5rem 0.75rem;
+  }
+}

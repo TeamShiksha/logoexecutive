@@ -9,6 +9,9 @@ const requestRouter = require("./request");
 const logoRequestLogsRouter = require("./logoRequestLogs");
 const { logoLimiter, baseLimiter } = require("../middlewares/rateLimiter");
 const createLogoRequestRouter = require("./createLogoRequest");
+const rewardsRouter = require("./rewards");
+const adminRewardsRouter = require("./admin/rewards");
+const adminMilestonesRouter = require("./admin/milestoneConfig");
 const adminUsersRouter = require("./admin");
 
 const privateRouteCORS = {
@@ -46,6 +49,13 @@ router.use(
   cors(privateRouteCORS),
   createLogoRequestRouter
 );
+router.use("/rewards", baseLimiter, cors(privateRouteCORS), rewardsRouter);
+router.use(
+  "/admin/rewards",
+  baseLimiter,
+  cors(privateRouteCORS),
+  adminRewardsRouter
+);
 router.use(
   "/admin/users",
   baseLimiter,
@@ -53,4 +63,10 @@ router.use(
   adminUsersRouter
 );
 
+router.use(
+  "/admin/milestones",
+  baseLimiter,
+  cors(privateRouteCORS),
+  adminMilestonesRouter
+);
 module.exports = router;

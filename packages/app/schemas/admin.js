@@ -35,6 +35,7 @@ const listUsersQuerySchema = Joi.object({
   page: Joi.number().integer().min(1).default(1),
   limit: Joi.number().integer().min(1).max(100).default(20),
   includeDeleted: Joi.boolean().default(false),
+  hasRewardPoints: Joi.boolean().default(false),
 });
 
 const listSubscriptionLogsQuerySchema = Joi.object({

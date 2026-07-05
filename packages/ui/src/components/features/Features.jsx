@@ -15,7 +15,9 @@ function Features() {
       <div className={styles["features-list"]}>
         {FEATURES.items.map((FEATURE_ITEM, index) => (
           <div className={styles["features-list-item"]} key={index}>
-            <img src={FEATURE_ITEM.icon} alt="logo" />
+            <div className={styles["icon-wrapper"]}>
+              <img src={FEATURE_ITEM.icon} alt="logo" />
+            </div>
             <h3>{FEATURE_ITEM.title}</h3>
             <p>{FEATURE_ITEM.content}</p>
           </div>

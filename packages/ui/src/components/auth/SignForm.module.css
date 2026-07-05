@@ -124,7 +124,7 @@
 
 .disclaimer-label {
   font-size: 0.8rem;
-  color: #555;
+  color: var(--description);
   line-height: 1.5;
   text-align: center;
 }

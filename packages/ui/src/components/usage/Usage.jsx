@@ -57,7 +57,14 @@ function Usage({ usageCount, usageLimit, isGuest = false }) {
         localStorage.setItem(storageKey, "true");
       }
     }
-  }, [percentage, usageCount, usageLimit, toast, billingCycleStartDate]);
+  }, [
+    percentage,
+    usageCount,
+    usageLimit,
+    toast,
+    billingCycleStartDate,
+    isGuest,
+  ]);
 
   const radius = 60;
   const circumference = 2 * Math.PI * radius;

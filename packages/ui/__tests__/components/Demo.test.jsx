@@ -9,7 +9,7 @@ import {
 import { MemoryRouter } from "react-router-dom";
 import Demo from "../../src/components/demo/Demo.jsx";
 import { ToastContext, AuthContext } from "../../src/contexts/Contexts.jsx";
-import { BUTTON_TEXT } from "../../src/utils/Constants.js";
+import { BUTTON_TEXT, DEMO } from "../../src/utils/Constants.js";
 
 const mockUseApi = vi.fn();
 
@@ -33,6 +33,7 @@ const mockToastContext = {
 
 describe("Demo Component", () => {
   const mockOpenAuthModal = vi.fn();
+  const searchPlaceholder = /type a brand name/i;
 
   beforeEach(() => {
     vi.clearAllMocks();
@@ -55,8 +56,14 @@ describe("Demo Component", () => {
         </AuthContext.Provider>
       </MemoryRouter>
     );
-    expect(screen.getByText("See In Action")).toBeInTheDocument();
-    expect(screen.getByPlaceholderText("Search")).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", {
+        name: /try it yourself\.\s*instant logo retrieval\./i,
+      })
+    ).toBeInTheDocument();
+    expect(screen.getByText(DEMO.summary)).toBeInTheDocument();
+    expect(screen.getByPlaceholderText(searchPlaceholder)).toBeInTheDocument();
+    expect(screen.getByText("Google")).toBeInTheDocument();
   });
 
   it("displays up to 3 search results after fetching", async () => {
@@ -85,10 +92,9 @@ describe("Demo Component", () => {
       </MemoryRouter>
     );
 
-    fireEvent.change(screen.getByPlaceholderText("Search"), {
+    fireEvent.change(screen.getByPlaceholderText(searchPlaceholder), {
       target: { value: "aa" },
     });
-    fireEvent.submit(screen.getByAltText("Search"));
 
     await waitFor(() => {
       expect(screen.getByText("Aalto")).toBeInTheDocument();
@@ -116,10 +122,9 @@ describe("Demo Component", () => {
       </MemoryRouter>
     );
 
-    fireEvent.change(screen.getByPlaceholderText("Search"), {
+    fireEvent.change(screen.getByPlaceholderText(searchPlaceholder), {
       target: { value: "nope" },
     });
-    fireEvent.submit(screen.getByAltText("Search"));
 
     await waitFor(() => {
       const loadingSpinner = screen.getByTestId("spinner");
@@ -139,18 +144,16 @@ describe("Demo Component", () => {
       </MemoryRouter>
     );
 
-    fireEvent.change(screen.getByPlaceholderText("Search"), {
+    fireEvent.change(screen.getByPlaceholderText(searchPlaceholder), {
       target: { value: "nope" },
     });
-    fireEvent.submit(screen.getByAltText("Search"));
 
     await waitFor(() => {
       expect(screen.getByText(/did not match any logo/i)).toBeInTheDocument();
       const resultContainer = screen
         .getByText(/did not match any logo/i)
-        .closest('[class*="result-container"]');
+        .closest('[class*="resultContainer"]');
       expect(resultContainer).toBeInTheDocument();
-      expect(resultContainer.className).toContain("no-result-container");
       expect(screen.getByText("Request Logo")).toBeInTheDocument();
     });
   });
@@ -167,10 +170,9 @@ describe("Demo Component", () => {
       </MemoryRouter>
     );
     await act(async () => {
-      fireEvent.change(screen.getByPlaceholderText("Search"), {
+      fireEvent.change(screen.getByPlaceholderText(searchPlaceholder), {
         target: { value: "nothing" },
       });
-      fireEvent.submit(screen.getByAltText("Search"));
       fireEvent.click(
         screen.getByRole("button", { name: BUTTON_TEXT.requestLogo })
       );
@@ -193,10 +195,9 @@ describe("Demo Component", () => {
       </MemoryRouter>
     );
     await act(async () => {
-      fireEvent.change(screen.getByPlaceholderText("Search"), {
+      fireEvent.change(screen.getByPlaceholderText(searchPlaceholder), {
         target: { value: "nothing" },
       });
-      fireEvent.submit(screen.getByAltText("Search"));
       fireEvent.click(
         screen.getByRole("button", { name: BUTTON_TEXT.requestLogo })
       );
@@ -218,10 +219,9 @@ describe("Demo Component", () => {
       </MemoryRouter>
     );
     await act(async () => {
-      fireEvent.change(screen.getByPlaceholderText("Search"), {
+      fireEvent.change(screen.getByPlaceholderText(searchPlaceholder), {
         target: { value: "nothing" },
       });
-      fireEvent.submit(screen.getByAltText("Search"));
       fireEvent.click(
         screen.getByRole("button", { name: BUTTON_TEXT.requestLogo })
       );

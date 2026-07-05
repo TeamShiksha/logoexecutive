@@ -13,6 +13,13 @@ import alphabet from "../assets/alphabet.png";
 import tesla from "../assets/tesla.png";
 import walmart from "../assets/walmart.png";
 import salesforce from "../assets/salesforce.png";
+import nvidia from "../assets/nvidia.png";
+import meta from "../assets/meta.png";
+import united_healthcare from "../assets/united_healthcare.png";
+import nike from "../assets/nike.png";
+import mastercard from "../assets/mastercard.png";
+import apple from "../assets/apple.png";
+import amazon from "../assets/amazon.png";
 import airbnb from "../assets/airbnb.png";
 import bmw from "../assets/bmw.png";
 import byd from "../assets/byd.png";
@@ -43,15 +50,20 @@ export const SVGS = {
 };
 
 export const DEMO = {
-  heading: "See In Action",
+  heading: "See how fast you can fetch logos",
   summary:
-    "Powerful, self-serve product and growth analytics to help you convert, engage, and retain more.",
+    "Search for any company domain to find the best available brand assets. Get high-quality, transparent logos ready for your projects.",
+  features: [
+    "Standardized logo formats",
+    "Transparent backgrounds",
+    "High-resolution assets",
+  ],
 };
 
 export const FEATURES = {
-  heading: "Features",
+  heading: "Everything you need, nothing you don't.",
   summary:
-    "With Openlogo, integrate fresh, up-to-date company logos effortlessly and leverage smart search insights for professional branding.",
+    "Built for developers and designers who value speed and extreme precision.",
   items: [
     {
       icon: databaseLogo,
@@ -78,7 +90,7 @@ export const HEADER_ITEMS = [
   {
     name: "home",
     title: "Home",
-    url: "/#",
+    url: "/#home",
     type: "section",
   },
   {
@@ -155,31 +167,79 @@ export const LOGGEDIN_MOBILE_ITEMS = [
     type: "route",
   },
   LOGGEDIN_ITEMS.find((i) => i.name === "docs"),
+  LOGGEDIN_ITEMS.find((i) => i.name === "explore"),
   LOGGEDIN_ITEMS.find((i) => i.name === "features"),
   LOGGEDIN_ITEMS.find((i) => i.name === "pricing"),
   LOGGEDIN_ITEMS.find((i) => i.name === "about"),
-];
+].filter(Boolean);
 
-export const FOOTER_ITEMS = [
+export const FOOTER_SOCIAL_LOGOS = {
+  github: {
+    type: "lucide",
+    iconName: "github",
+  },
+  twitter: {
+    type: "svg",
+    title: "X",
+    viewBox: "0 0 16 16",
+    path: "M9.332 6.925 14.544 1h-1.235L8.783 6.145 5.17 1H1l5.466 7.78L1 14.993h1.235l4.78-5.433 3.816 5.433H15L9.332 6.925ZM7.64 8.848l-.554-.775L2.68 1.91h1.897l3.556 4.975.554.775 4.622 6.466h-1.897L7.64 8.848Z",
+  },
+};
+
+export const FOOTER_SECTIONS = [
   {
-    name: "about",
-    title: "About",
-    url: "/#about",
+    title: "Resources",
+    items: [
+      { name: "documentation", title: "Documentation", url: "/docs" },
+      { name: "release", title: "Releases", url: "/release" },
+    ],
   },
   {
-    name: "privacy",
-    title: "Privacy",
-    url: "/privacy#privacy",
+    title: "Community",
+    items: [
+      {
+        name: "github",
+        title: "GitHub",
+        url: "https://github.com/TeamShiksha",
+        logo: FOOTER_SOCIAL_LOGOS.github,
+      },
+      {
+        name: "discord",
+        title: "Discord",
+        url: "https://discord.com/invite/WCbxcXqS",
+      },
+      {
+        name: "twitter",
+        title: "Twitter / X",
+        url: "https://twitter.com/TeamShiksha",
+        logo: FOOTER_SOCIAL_LOGOS.twitter,
+      },
+      {
+        name: "join team shiksha",
+        title: "Join Team Shiksha",
+        url: "https://team.shiksha",
+      },
+    ],
   },
   {
-    name: "terms&conditions",
-    title: "Terms",
-    url: "/privacy#terms",
-  },
-  {
-    name: "release",
-    title: "Release",
-    url: "/release",
+    title: "Legal",
+    items: [
+      {
+        name: "privacy_policy",
+        title: "Privacy Policy",
+        url: "/privacy#privacy",
+      },
+      {
+        name: "terms_of_service",
+        title: "Terms of Service",
+        url: "/privacy#terms",
+      },
+      {
+        name: "license",
+        title: "License",
+        url: "https://github.com/TeamShiksha/openlogo/blob/main/LICENSE",
+      },
+    ],
   },
 ];
 
@@ -239,7 +299,7 @@ export const CHANGE_PASSWORD = {
 };
 
 export const ABOUT = {
-  TITLE: "What is Openlogo",
+  TITLE: "What is Openlogo?",
   DESCRIPTION:
     "From startups to enterprises, our platform offers an extensive collection of company logos, enabling smooth integration and consistent branding. Our APIs are designed to make logo retrieval effortless, providing scalable solutions that adapt to your business's evolving branding requirements.",
   INTEGRATIONS: [
@@ -294,37 +354,52 @@ export const FAQ = {
 };
 
 export const PRICING = {
-  heading: "Compare our plans and find yours",
+  heading: "Simple, transparent pricing.",
   summary:
-    "Simple, transparent pricing that grows with you. Try any plan free for 30 days.",
+    "Start building for free, then upgrade when you need programmatic access and the full expansive library.",
   plans: [
     {
       index: 0,
       name: "HOBBY",
       pricing: 0,
-      tagline: "Try for free for individuals",
+      tagline: "Free forever",
       keypoints: [
-        "Fortune 500 company logo",
+        "Access to standard 200+ logos",
         "500 API calls per month",
         "2 API keys",
         "Basic analytics",
-        "48-72 hour of response time",
+        "48-72 hours of response time",
       ],
     },
     {
       index: 1,
       name: "PRO",
-      pricing: 1500,
-      tagline: "Grow with pro plan.",
+      pricing: 9,
+      tagline: "$9 / month",
       keypoints: [
-        "Hobby plan plus",
-        "10000 API calls per month",
-        "5 API keys",
-        "Advance analytics",
-        "12-36 hours of response time",
+        "Access to full 2,000+ logos library",
+        "Unlimited API calls per month",
+        "10 API keys",
+        "Advanced analytics",
+        "24/7 priority support",
       ],
     },
   ],
+};
+
+export const EXPLORE_BANNER = {
+  title: {
+    main: "Logo Assets for",
+    highlight: "Modern Brands",
+  },
+  subtitle: [
+    "High-fidelity SVG and PNG logo assets delivered via premium API.",
+    "The gold standard for developers and designers at scale.",
+  ],
+  search: {
+    placeholder: "Search logos by name, industry, or color...",
+    shortcut: "⌘K",
+  },
 };
 
 export const SETTING = [
@@ -418,12 +493,57 @@ export const CODEBLOCK = {
 };
 
 export const HERO_SECTION = {
-  tagLine: "Access hundreds of logos with just one line of code",
+  tagLine: "Perfect company logos",
+  tagLineHighlight: "for your next project.",
   summary:
-    "A collection of APIs designed to simplify the process of obtaining company logos. Generate API keys in seconds.",
-  illustractionSrc: "logo-images.png",
-  illustractionSrcAlt: "illustraction",
+    "Access hundreds of high-quality company logos instantly through our simple API. Built for developers, trusted by designers. Stop searching Google Images.",
+  illustractionSrc: "/hero.png",
+  illustractionSrcAlt: "Openlogo Illustration",
+  code: {
+    fileName: "demo.js",
+    lines: [
+      'fetch("https://api.openlogo.fyi/logo?key=apple", {',
+      '  method: "GET",',
+      "  headers: {",
+      '    "Content-Type": "application/json",',
+      '    "x-api-key": "YOUR_API_KEY"',
+      "  },",
+      "} // ← one API call, any logo",
+      "  .then(res => res.json())",
+      "  .then(console.log);",
+    ],
+    response: {
+      status: "200 OK",
+      body: '{ url: "https://cdn.openlogo.fyi/apple.svg", format: "svg" }',
+    },
+  },
 };
+
+export const HERO_LOGOS = [
+  { id: 1, src: nvidia, alt: "Nvidia", col: 2, row: 1, nudge: 0 },
+  { id: 2, src: microsoft, alt: "Microsoft", col: 3, row: 1, nudge: 20 },
+  { id: 3, src: meta, alt: "Meta", col: 4, row: 1, nudge: 40 },
+  {
+    id: 4,
+    src: united_healthcare,
+    alt: "United Healthcare",
+    col: 1,
+    row: 2,
+    nudge: 10,
+  },
+  { id: 5, src: adobe, alt: "Adobe", col: 2, row: 2, nudge: -5 },
+  { id: 6, src: nike, alt: "Nike", col: 3, row: 2, nudge: -15 },
+  { id: 7, src: mastercard, alt: "Mastercard", col: 4, row: 2, nudge: 10 },
+  { id: 8, src: apple, alt: "Apple", col: 1, row: 3, nudge: 0 },
+  { id: 9, src: ibm, alt: "IBM", col: 2, row: 3, nudge: 5 },
+  { id: 10, src: salesforce, alt: "Salesforce", col: 3, row: 3, nudge: -5 },
+  { id: 11, src: alphabet, alt: "Alphabet", col: 4, row: 3, nudge: -20 },
+  { id: 12, src: tesla, alt: "Tesla", col: 1, row: 4, nudge: -10 },
+  { id: 13, src: target, alt: "Target", col: 2, row: 4, nudge: 15 },
+  { id: 14, src: ford, alt: "Ford", col: 3, row: 4, nudge: 5 },
+  { id: 15, src: amazon, alt: "Amazon", col: 4, row: 4, nudge: -15 },
+  { id: 16, src: walmart, alt: "Walmart", col: 2, row: 5, nudge: 5 },
+];
 
 export const PRIVACY_AND_TERMS = [
   {
@@ -1576,3 +1696,55 @@ export const RELEASE_PAGE = {
     ],
   },
 };
+
+export const BRAND_SUGGESTIONS = [
+  { name: "Microsoft", logo: microsoft, verified: true },
+  { name: "Nvidia", logo: nvidia, verified: true },
+  { name: "Nike", logo: nike, verified: false },
+  { name: "Apple", logo: apple, verified: true },
+  { name: "Amazon", logo: amazon, verified: false },
+];
+
+export const TILTED_BRANDS = [
+  {
+    name: "Meta",
+    logo: meta,
+    bgColor: "#0064e0",
+    textColor: "#ffffff",
+    tilt: "-6deg",
+    nudge: "20px",
+  },
+  {
+    name: "Tesla",
+    logo: tesla,
+    bgColor: "#cc0000",
+    textColor: "#ffffff",
+    tilt: "-3deg",
+    nudge: "5px",
+  },
+  {
+    name: "Google",
+    logo: google,
+    bgColor: "#ffffff",
+    textColor: "#1f2937",
+    tilt: "2deg",
+    nudge: "-10px",
+    featured: true,
+  },
+  {
+    name: "Slack",
+    logo: slack,
+    bgColor: "#4a154b",
+    textColor: "#ffffff",
+    tilt: "4deg",
+    nudge: "5px",
+  },
+  {
+    name: "Spotify",
+    logo: spotify,
+    bgColor: "#1db954",
+    textColor: "#ffffff",
+    tilt: "6deg",
+    nudge: "20px",
+  },
+];

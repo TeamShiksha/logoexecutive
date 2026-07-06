@@ -271,6 +271,13 @@ To use the Postman collection:
       <tr><td>updated_at</td><td>date</td><td>Last update timestamp</td></tr>
       <tr><td>forgot_password_attempts</td><td>number</td><td>Number of password reset attempts made by the user</td></tr>
       <tr><td>forgot_password_last_reset_at</td><td>date</td><td>Timestamp of the last successful password reset (null if never reset)</td></tr>
+      <tr><td>reward_points_current</td><td>number (default: 0)</td><td>Current redeemable reward points earned by the user</td></tr>
+      <tr><td>reward_points_lifetime</td><td>number (default: 0)</td><td>All-time reward points ever earned by the user (never decreases)</td></tr>
+      <tr><td>deleted_at</td><td>date (nullable)</td><td>Timestamp when the user was soft-deleted</td></tr>
+      <tr><td>mfaEnabled</td><td>boolean (default: false)</td><td>Whether multi-factor authentication is enabled</td></tr>
+      <tr><td>mfaSecret</td><td>object (encrypted)</td><td>Encrypted MFA secret <code>{ encryptedValue, encryptedIv, encryptedTag }</code></td></tr>
+      <tr><td>mfaTempSecret</td><td>string (nullable)</td><td>Temporary MFA secret during enrollment</td></tr>
+      <tr><td>mfaTempSecretExpiresAt</td><td>date (nullable)</td><td>Expiration time of the temporary MFA secret</td></tr>
     </tbody>
   </table>
 </details>
@@ -304,6 +311,90 @@ To use the Postman collection:
       <tr><td>response_size_bytes</td><td>number</td><td>Size of the response in bytes (default: 0)</td></tr>
       <tr><td>createdAt</td><td>date</td><td>Timestamp when request was made (auto-generated)</td></tr>
       <tr><td>updatedAt</td><td>date</td><td>Last updated timestamp (auto-generated)</td></tr>
+    </tbody>
+  </table>
+</details>
+
+<details>
+  <summary><strong>REWARDS</strong> – Tracks reward progress per logo including milestones and points</summary>
+  <table>
+    <thead>
+      <tr><th>Field</th><th>Type</th><th>Description</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>image_id</td><td>ObjectId (ref: images, unique)</td><td>Logo/image this reward record belongs to (required)</td></tr>
+      <tr><td>user_id</td><td>ObjectId (ref: users)</td><td>Creator who uploaded the image (required)</td></tr>
+      <tr><td>unique_pro_users</td><td>Array of ObjectId (ref: users)</td><td>Unique Pro users who accessed this image via API</td></tr>
+      <tr><td>unique_pro_users_count</td><td>number (default: 0)</td><td>Running count of unique Pro users</td></tr>
+      <tr><td>milestones_achieved</td><td>array</td><td>List of milestones: <code>[{ milestone, achieved_at, points_awarded }]</code></td></tr>
+      <tr><td>total_points_awarded</td><td>number (default: 0)</td><td>Cumulative points awarded for this image</td></tr>
+      <tr><td>createdAt</td><td>date</td><td>Auto-generated timestamp</td></tr>
+      <tr><td>updatedAt</td><td>date</td><td>Last updated timestamp</td></tr>
+    </tbody>
+  </table>
+</details>
+
+<details>
+  <summary><strong>REWARD_TRANSACTIONS</strong> – Immutable audit log for all reward changes</summary>
+  <table>
+    <thead>
+      <tr><th>Field</th><th>Type</th><th>Description</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>image_id</td><td>ObjectId (ref: images, nullable)</td><td>Logo/image associated with this transaction</td></tr>
+      <tr><td>user_id</td><td>ObjectId (ref: users)</td><td>Creator who received/reversed the reward (required)</td></tr>
+      <tr><td>transaction_type</td><td>string (enum)</td><td>Type: <code>MILESTONE_REWARD</code>, <code>MANUAL_ADJUSTMENT</code>, <code>REVERSAL</code>, or <code>BONUS</code> (required)</td></tr>
+      <tr><td>milestone</td><td>number (nullable)</td><td>Milestone threshold that triggered this transaction</td></tr>
+      <tr><td>points_awarded</td><td>number</td><td>Points awarded in this transaction (required)</td></tr>
+      <tr><td>points_reversed</td><td>number (default: 0)</td><td>Points reversed (for REVERSAL transactions)</td></tr>
+      <tr><td>description</td><td>string (nullable)</td><td>Human-readable description of the transaction</td></tr>
+      <tr><td>reason</td><td>string (enum, nullable)</td><td>Reason: <code>NORMAL_MILESTONE</code>, <code>DUPLICATE_REMOVAL</code>, <code>SUSPICIOUS_ACTIVITY</code>, <code>MANUAL_CORRECTION</code>, <code>PROMOTION</code>, or <code>SYSTEM_ERROR</code></td></tr>
+      <tr><td>previous_total</td><td>number</td><td>User's total points before this transaction (required)</td></tr>
+      <tr><td>new_total</td><td>number</td><td>User's total points after this transaction (required)</td></tr>
+      <tr><td>is_reversed</td><td>boolean (default: false)</td><td>Whether this transaction has been reversed</td></tr>
+      <tr><td>reversed_at</td><td>date (nullable)</td><td>Timestamp when the transaction was reversed</td></tr>
+      <tr><td>reversed_by</td><td>ObjectId (ref: users, nullable)</td><td>Admin who reversed the transaction</td></tr>
+      <tr><td>reversal_reason</td><td>string (nullable)</td><td>Reason provided for the reversal</td></tr>
+      <tr><td>metadata</td><td>object (Mixed)</td><td>Flexible metadata (e.g., <code>{ unique_pro_users_count, processed_at }</code>)</td></tr>
+      <tr><td>createdAt</td><td>date</td><td>Auto-generated timestamp</td></tr>
+      <tr><td>updatedAt</td><td>date</td><td>Last updated timestamp</td></tr>
+    </tbody>
+  </table>
+</details>
+
+<details>
+  <summary><strong>MILESTONE_CONFIGS</strong> – Admin-managed milestone thresholds and point values</summary>
+  <table>
+    <thead>
+      <tr><th>Field</th><th>Type</th><th>Description</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>name</td><td>string</td><td>Human-readable label for this config (required)</td></tr>
+      <tr><td>thresholds</td><td>array</td><td>Milestone definitions: <code>[{ at: number, points: number }]</code> — each entry defines the unique Pro user count and points awarded when crossed (required, non-empty)</td></tr>
+      <tr><td>is_active</td><td>boolean (default: false)</td><td>Whether this config is currently active (only one may be active at a time)</td></tr>
+      <tr><td>is_deleted</td><td>boolean (default: false)</td><td>Soft-delete flag</td></tr>
+      <tr><td>created_by</td><td>ObjectId (ref: users)</td><td>Admin who created this config (required)</td></tr>
+      <tr><td>createdAt</td><td>date</td><td>Auto-generated timestamp</td></tr>
+      <tr><td>updatedAt</td><td>date</td><td>Last updated timestamp</td></tr>
+    </tbody>
+  </table>
+</details>
+
+<details>
+  <summary><strong>SUBSCRIPTION_LOGS</strong> – Audit trail for subscription plan changes</summary>
+  <table>
+    <thead>
+      <tr><th>Field</th><th>Type</th><th>Description</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>user_id</td><td>ObjectId (ref: users)</td><td>User whose subscription was changed (required)</td></tr>
+      <tr><td>subscription_id</td><td>ObjectId (ref: subscriptions)</td><td>Subscription document affected (required)</td></tr>
+      <tr><td>changed_by</td><td>ObjectId (ref: users)</td><td>Admin who performed the change (required)</td></tr>
+      <tr><td>from_plan</td><td>string (enum)</td><td>Previous plan: <code>HOBBY</code>, <code>PRO</code>, or <code>TEAMS</code> (required)</td></tr>
+      <tr><td>to_plan</td><td>string (enum)</td><td>New plan: <code>HOBBY</code>, <code>PRO</code>, or <code>TEAMS</code> (required)</td></tr>
+      <tr><td>reason</td><td>string (optional)</td><td>Optional note explaining the change</td></tr>
+      <tr><td>createdAt</td><td>date</td><td>Auto-generated timestamp</td></tr>
+      <tr><td>updatedAt</td><td>date</td><td>Last updated timestamp</td></tr>
     </tbody>
   </table>
 </details>
@@ -1399,6 +1490,485 @@ class Auth401,Input400,User403,Server500 error
 </details>
 
 <details>
+<summary>REWARDS</summary>
+
+| URL                                              | Method | Auth Required | Description                                           |
+| ------------------------------------------------ | ------ | ------------- | ----------------------------------------------------- |
+| `/rewards/summary/user`                          | GET    | True          | Reward summary for the authenticated user             |
+| `/rewards/summary/image/:imageId`                | GET    | False         | Reward summary for a specific image                   |
+| `/rewards/leaderboard`                           | GET    | False         | Top creators leaderboard (query: <code>?limit=</code>)|
+| `/rewards/leaderboard/rank`                      | GET    | True          | Authenticated user's rank in the leaderboard          |
+| `/rewards/transactions/image/:imageId`           | GET    | False         | Paginated transaction history for an image            |
+| `/rewards/transactions/user`                     | GET    | True          | Paginated transaction history for authenticated user  |
+| `/rewards/transactions/stats/user`               | GET    | True          | Aggregated transaction statistics for authenticated user|
+| `/rewards/transactions/:transactionId`           | GET    | False         | Get a specific transaction by ID                      |
+| `/rewards/audit-trail/:imageId`                  | GET    | True          | Audit trail for an image (creator only)               |
+
+> **Description**: The Rewards API allows creators to track reward points earned from their logos and view leaderboard rankings.
+
+---
+
+| URL                                              | `/rewards/summary/user` |
+| ------------------------------------------------ | ----------------------- |
+| Method                                           | GET                     |
+| Auth Required                                    | Yes                     |
+| Description                                      | Retrieves reward summary for the authenticated user, including total points, per-image breakdown, and reward statistics |
+
+> <details>
+> <summary>Response body</summary>
+>
+> ```json
+> {
+>   "statusCode": 200,
+>   "data": {
+>     "userId": "6826d68a0fbea0d79998ef45",
+>     "userName": "John Doe",
+>     "email": "john@example.com",
+>     "currentPoints": 150,
+>     "lifetimePoints": 500,
+>     "totalImages": 3,
+>     "totalPointsAwarded": 150,
+>     "averagePointsPerImage": 50,
+>     "rewards": [
+>       {
+>         "imageId": "6826d68a0fbea0d79998ef46",
+>         "imageName": "Acme Corp",
+>         "imageUrl": "https://...",
+>         "uniqueProUsersCount": 25,
+>         "totalPointsAwarded": 75,
+>         "milestonesAchieved": 1
+>       }
+>     ]
+>   }
+> }
+> ```
+>
+> **Response:** `200 OK` - Reward summary retrieved successfully</br>
+> **Response:** `401 Unauthorized` - Not authenticated</br>
+> **Response:** `404 Not Found` - User not found
+> </details>
+> <details>
+> <summary>Api Flow diagram</summary>
+>
+> ```mermaid
+> flowchart TD
+> %% API Flow: GET /rewards/summary/user
+> Start[GET /rewards/summary/user] --> Auth{Authorized?}
+> Auth -->|No| Auth401[Return 401 Unauthorized]
+> Auth -->|Yes| ExtractUserId[Extract userId from token]
+> ExtractUserId --> GetUser[Fetch User Data]
+> GetUser --> UserExists{User exists?}
+> UserExists -->|No| User404[Return 404 Not Found]
+> UserExists -->|Yes| FetchRewards[Fetch Reward Records]
+> FetchRewards --> ComputeSummary[Compute Total Points & Per-Image Summary]
+> ComputeSummary --> BuildResponse[Build Reward Summary Response]
+> BuildResponse --> Success200[Return 200 OK with Summary]
+>
+> classDef startEnd fill:#81C8FF,stroke:#4682B4,stroke-width:2px,color:#000;
+> classDef decision fill:#FFD54F,stroke:#FFB300,stroke-width:2px,color:#000;
+> classDef success fill:#A5D6A7,stroke:#388E3C,stroke-width:2px,color:#000;
+> classDef error fill:#EF9A9A,stroke:#D32F2F,stroke-width:2px,color:#000;
+> classDef process fill:#B3E5FC,stroke:#0288D1,stroke-width:2px,color:#000;
+> class Start,Success200 startEnd
+> class Auth,UserExists decision
+> class Success200 success
+> class Auth401,User404 error
+> class ExtractUserId,GetUser,FetchRewards,ComputeSummary,BuildResponse process
+> ```
+> </details>
+
+---
+
+| URL                                              | `/rewards/summary/image/:imageId` |
+| ------------------------------------------------ | --------------------------------- |
+| Method                                           | GET                               |
+| Auth Required                                    | No                                |
+| Description                                      | Retrieves reward summary for a specific image, including unique Pro user count, milestones achieved, and total points awarded |
+
+> <details>
+> <summary>Response body</summary>
+>
+> ```json
+> {
+>   "statusCode": 200,
+>   "data": {
+>     "imageId": "6826d68a0fbea0d79998ef46",
+>     "imageName": "Acme Corp",
+>     "creator": {
+>       "id": "6826d68a0fbea0d79998ef45",
+>       "name": "John Doe",
+>       "email": "john@example.com"
+>     },
+>     "uniqueProUsersCount": 25,
+>     "uniqueProUsers": ["..."],
+>     "totalPointsAwarded": 75,
+>     "milestonesAchieved": [
+>       { "milestone": 10, "achieved_at": "2025-06-01T00:00:00.000Z", "points_awarded": 25 },
+>       { "milestone": 25, "achieved_at": "2025-07-15T00:00:00.000Z", "points_awarded": 50 }
+>     ],
+>     "nextMilestone": 50
+>   }
+> }
+> ```
+>
+> **Response:** `200 OK` - Reward summary retrieved successfully</br>
+> **Response:** `404 Not Found` - No reward data found for this image
+> </details>
+> <details>
+> <summary>Api Flow diagram</summary>
+>
+> ```mermaid
+> flowchart TD
+> %% API Flow: GET /rewards/summary/image/:imageId
+> Start[GET /rewards/summary/image/:imageId] --> ValidateId{Valid imageId?}
+> ValidateId -->|No| BadRequest400[Return 400 Bad Request]
+> ValidateId -->|Yes| FindReward[Find Reward Record by imageId]
+> FindReward --> RewardExists{Reward exists?}
+> RewardExists -->|No| Image404[Return 404 Not Found]
+> RewardExists -->|Yes| FetchImage[Fetch Image Details]
+> FetchImage --> FetchCreator[Fetch Creator Info]
+> FetchCreator --> FetchConfig[Fetch Active Milestone Config]
+> FetchConfig --> ComputeNext[Determine Next Milestone]
+> ComputeNext --> BuildResponse[Build Summary Response]
+> BuildResponse --> Success200[Return 200 OK]
+>
+> classDef startEnd fill:#81C8FF,stroke:#4682B4,stroke-width:2px,color:#000;
+> classDef decision fill:#FFD54F,stroke:#FFB300,stroke-width:2px,color:#000;
+> classDef success fill:#A5D6A7,stroke:#388E3C,stroke-width:2px,color:#000;
+> classDef error fill:#EF9A9A,stroke:#D32F2F,stroke-width:2px,color:#000;
+> classDef process fill:#B3E5FC,stroke:#0288D1,stroke-width:2px,color:#000;
+> class Start,Success200 startEnd
+> class ValidateId,RewardExists decision
+> class Success200 success
+> class BadRequest400,Image404 error
+> class FindReward,FetchImage,FetchCreator,FetchConfig,ComputeNext,BuildResponse process
+> ```
+> </details>
+
+---
+
+| URL                                              | `/rewards/leaderboard` |
+| ------------------------------------------------ | ---------------------- |
+| Method                                           | GET                    |
+| Auth Required                                    | No                     |
+| Description                                      | Retrieves the top creators ranked by total reward points. Supports an optional <code>?limit=</code> query parameter (default: 10) |
+
+> <details>
+> <summary>Query parameters</summary>
+>
+> - `limit`: Number of top creators to return (default: 10)
+> </details>
+> <details>
+> <summary>Response body</summary>
+>
+> ```json
+> {
+>   "statusCode": 200,
+>   "data": [
+>     {
+>       "rank": 1,
+>       "userId": "6826d68a0fbea0d79998ef45",
+>       "name": "John Doe",
+>       "email": "john@example.com",
+>       "totalPointsAwarded": 500,
+>       "milestonesAchieved": 5
+>     }
+>   ]
+> }
+> ```
+>
+> **Response:** `200 OK` - Leaderboard retrieved successfully
+> </details>
+> <details>
+> <summary>Api Flow diagram</summary>
+>
+> ```mermaid
+> flowchart TD
+> %% API Flow: GET /rewards/leaderboard
+> Start[GET /rewards/leaderboard<br/>Query: ?limit=] --> ParseLimit[Parse limit parameter]
+> ParseLimit --> ValidateLimit{Valid limit?}
+> ValidateLimit -->|No| UseDefault[Use default limit: 10]
+> ValidateLimit -->|Yes| CapLimit[Cap limit to max]
+> UseDefault --> AggregateTop[Aggregate Top Creators]
+> CapLimit --> AggregateTop
+> AggregateTop --> FormatRanked[Format Ranked Results]
+> FormatRanked --> Success200[Return 200 OK]
+>
+> classDef startEnd fill:#81C8FF,stroke:#4682B4,stroke-width:2px,color:#000;
+> classDef decision fill:#FFD54F,stroke:#FFB300,stroke-width:2px,color:#000;
+> classDef success fill:#A5D6A7,stroke:#388E3C,stroke-width:2px,color:#000;
+> classDef process fill:#B3E5FC,stroke:#0288D1,stroke-width:2px,color:#000;
+> class Start,Success200 startEnd
+> class ValidateLimit decision
+> class Success200 success
+> class UseDefault process
+> class ParseLimit,AggregateTop,FormatRanked,CapLimit process
+> ```
+> </details>
+
+---
+
+| URL                                              | `/rewards/leaderboard/rank` |
+| ------------------------------------------------ | --------------------------- |
+| Method                                           | GET                         |
+| Auth Required                                    | Yes                         |
+| Description                                      | Retrieves the authenticated user's rank in the leaderboard, including total points and total number of users |
+
+> <details>
+> <summary>Response body</summary>
+>
+> ```json
+> {
+>   "statusCode": 200,
+>   "data": {
+>     "rank": 5,
+>     "totalPoints": 150,
+>     "totalUsers": 120
+>   }
+> }
+> ```
+>
+> **Response:** `200 OK` - User rank retrieved successfully</br>
+> **Response:** `401 Unauthorized` - Not authenticated
+> </details>
+> <details>
+> <summary>Api Flow diagram</summary>
+>
+> ```mermaid
+> flowchart TD
+> %% API Flow: GET /rewards/leaderboard/rank
+> Start[GET /rewards/leaderboard/rank] --> Auth{Authorized?}
+> Auth -->|No| Auth401[Return 401 Unauthorized]
+> Auth -->|Yes| ExtractUserId[Extract userId from token]
+> ExtractUserId --> AggregateRank[Aggregate User Rank]
+> AggregateRank --> BuildResponse[Build Rank Response]
+> BuildResponse --> Success200[Return 200 OK]
+>
+> classDef startEnd fill:#81C8FF,stroke:#4682B4,stroke-width:2px,color:#000;
+> classDef decision fill:#FFD54F,stroke:#FFB300,stroke-width:2px,color:#000;
+> classDef success fill:#A5D6A7,stroke:#388E3C,stroke-width:2px,color:#000;
+> classDef error fill:#EF9A9A,stroke:#D32F2F,stroke-width:2px,color:#000;
+> classDef process fill:#B3E5FC,stroke:#0288D1,stroke-width:2px,color:#000;
+> class Start,Success200 startEnd
+> class Auth decision
+> class Success200 success
+> class Auth401 error
+> class ExtractUserId,AggregateRank,BuildResponse process
+> ```
+> </details>
+
+---
+
+| URL                                              | `/rewards/transactions/image/:imageId` |
+| ------------------------------------------------ | -------------------------------------- |
+| Method                                           | GET                                    |
+| Auth Required                                    | No                                     |
+| Description                                      | Retrieves paginated transaction history for a specific image |
+
+> <details>
+> <summary>Query parameters</summary>
+>
+> - `page`: Page number (default: 1)
+> - `limit`: Results per page (default: 20)
+> </details>
+> <details>
+> <summary>Response body</summary>
+>
+> ```json
+> {
+>   "statusCode": 200,
+>   "data": {
+>     "transactions": [...],
+>     "total": 10,
+>     "page": 1,
+>     "totalPages": 1
+>   }
+> }
+> ```
+>
+> **Response:** `200 OK` - Transactions retrieved successfully
+> </details>
+
+---
+
+| URL                                              | `/rewards/transactions/user` |
+| ------------------------------------------------ | ---------------------------- |
+| Method                                           | GET                          |
+| Auth Required                                    | Yes                          |
+| Description                                      | Retrieves paginated transaction history for the authenticated user |
+
+> <details>
+> <summary>Query parameters</summary>
+>
+> - `page`: Page number (default: 1)
+> - `limit`: Results per page (default: 20)
+> </details>
+> <details>
+> <summary>Response body</summary>
+>
+> ```json
+> {
+>   "statusCode": 200,
+>   "data": {
+>     "transactions": [...],
+>     "total": 10,
+>     "page": 1,
+>     "totalPages": 1
+>   }
+> }
+> ```
+>
+> **Response:** `200 OK` - Transactions retrieved successfully</br>
+> **Response:** `401 Unauthorized` - Not authenticated
+> </details>
+> <details>
+> <summary>Api Flow diagram</summary>
+>
+> ```mermaid
+> flowchart TD
+> %% API Flow: GET /rewards/transactions/user
+> Start[GET /rewards/transactions/user<br/>Query: ?page=&limit=] --> Auth{Authorized?}
+> Auth -->|No| Auth401[Return 401 Unauthorized]
+> Auth -->|Yes| ExtractUserId[Extract userId from token]
+> ExtractUserId --> ParsePagination[Parse page & limit]
+> ParsePagination --> FetchTransactions[Fetch Paginated Transactions]
+> FetchTransactions --> BuildResponse[Build Response]
+> BuildResponse --> Success200[Return 200 OK]
+>
+> classDef startEnd fill:#81C8FF,stroke:#4682B4,stroke-width:2px,color:#000;
+> classDef decision fill:#FFD54F,stroke:#FFB300,stroke-width:2px,color:#000;
+> classDef success fill:#A5D6A7,stroke:#388E3C,stroke-width:2px,color:#000;
+> classDef error fill:#EF9A9A,stroke:#D32F2F,stroke-width:2px,color:#000;
+> classDef process fill:#B3E5FC,stroke:#0288D1,stroke-width:2px,color:#000;
+> class Start,Success200 startEnd
+> class Auth decision
+> class Success200 success
+> class Auth401 error
+> class ExtractUserId,PaginateTransactions,BuildResponse,FetchTransactions,PaginateTransaction process
+> ```
+> </details>
+
+---
+
+| URL                                              | `/rewards/transactions/stats/user` |
+| ------------------------------------------------ | ---------------------------------- |
+| Method                                           | GET                                |
+| Auth Required                                    | Yes                                |
+| Description                                      | Retrieves aggregated transaction statistics for the authenticated user, such as total points, transaction counts, etc. |
+
+> <details>
+> <summary>Response body</summary>
+>
+> ```json
+> {
+>   "statusCode": 200,
+>   "data": {
+>     "totalTransactions": 8,
+>     "totalPointsAwarded": 150,
+>     "totalPointsReversed": 0,
+>     "bonusCount": 2,
+>     "milestoneCount": 6
+>   }
+> }
+> ```
+>
+> **Response:** `200 OK` - Stats retrieved successfully</br>
+> **Response:** `401 Unauthorized` - Not authenticated
+> </details>
+
+---
+
+| URL                                              | `/rewards/transactions/:transactionId` |
+| ------------------------------------------------ | -------------------------------------- |
+| Method                                           | GET                                    |
+| Auth Required                                    | No                                     |
+| Description                                      | Retrieves details of a specific reward transaction by ID |
+
+> <details>
+> <summary>Response body</summary>
+>
+> ```json
+> {
+>   "statusCode": 200,
+>   "data": {
+>     "_id": "6826d68a0fbea0d79998ef50",
+>     "image_id": "6826d68a0fbea0d79998ef46",
+>     "user_id": "6826d68a0fbea0d79998ef45",
+>     "transaction_type": "MILESTONE_REWARD",
+>     "milestone": 25,
+>     "points_awarded": 50,
+>     "description": "Milestone 25 reached - 25 unique Pro users",
+>     "reason": "NORMAL_MILESTONE",
+>     "previous_total": 25,
+>     "new_total": 75,
+>     "is_reversed": false,
+>     "metadata": {
+>       "unique_pro_users_count": 25,
+>       "processed_at": "2025-07-15T00:00:00.000Z"
+>     }
+>   }
+> }
+> ```
+>
+> **Response:** `200 OK` - Transaction retrieved successfully</br>
+> **Response:** `404 Not Found` - Transaction not found
+> </details>
+
+---
+
+| URL                                              | `/rewards/audit-trail/:imageId` |
+| ------------------------------------------------ | ------------------------------- |
+| Method                                           | GET                             |
+| Auth Required                                    | Yes (creator only)              |
+| Description                                      | Retrieves the reward audit trail for a specific image, showing all reward-related changes and history |
+
+> <details>
+> <summary>Response body</summary>
+>
+> ```json
+> {
+>   "statusCode": 200,
+>   "data": [...]
+> }
+> ```
+>
+> **Response:** `200 OK` - Audit trail retrieved successfully</br>
+> **Response:** `401 Unauthorized` - Not authenticated</br>
+> **Response:** `403 Forbidden` - Not the creator of this image
+> </details>
+> <details>
+> <summary>Api Flow diagram</summary>
+>
+> ```mermaid
+> flowchart TD
+> %% API Flow: GET /rewards/audit-trail/:imageId
+> Start[GET /rewards/audit-trail/:imageId] --> Auth{Authorized?}
+> Auth -->|No| Auth401[Return 401 Unauthorized]
+> Auth -->|Yes| ExtractUserId[Extract userId from token]
+> ExtractUserId --> ValidateImage{Valid imageId?}
+> ValidateImage -->|No| BadRequest400[Return 400 Bad Request]
+> ValidateImage -->|Yes| VerifyOwnership{User is creator<br/>of this image?}
+> VerifyOwnership -->|No| Forbidden403[Return 403 Forbidden]
+> VerifyOwnership -->|Yes| FetchAuditTrail[Fetch Audit Trail]
+> FetchAuditTrail --> BuildResponse[Build Response]
+> BuildResponse --> Success200[Return 200 OK]
+>
+> classDef startEnd fill:#81C8FF,stroke:#4682B4,stroke-width:2px,color:#000;
+> classDef decision fill:#FFD54F,stroke:#FFB300,stroke-width:2px,color:#000;
+> classDef success fill:#A5D6A7,stroke:#388E3C,stroke-width:2px,color:#000;
+> classDef error fill:#EF9A9A,stroke:#D32F2F,stroke-width:2px,color:#000;
+> classDef process fill:#B3E5FC,stroke:#0288D1,stroke-width:2px,color:#000;
+> class Start,Success200 startEnd
+> class Auth,ValidateImage,VerifyOwnership decision
+> class Success200 success
+> class Auth401,BadRequest400,Forbidden403 error
+> class ExtractUserId,FetchAuditTrail,BuildResponse process
+> ```
+> </details>
+
+</details>
+
+<details>
 <summary>ADMIN</summary>
 
 | URL              | Method | Auth Required | Description             |
@@ -1810,6 +2380,732 @@ class Auth401,BadRequest400,WebError500 error
 class QueryDB,FormatDB,WebSearch,FormatWeb process
 ```
 </details>
+
+---
+
+| URL                                                      | Method | Auth Required | Description                                                       |
+| -------------------------------------------------------- | ------ | ------------- | ----------------------------------------------------------------- |
+| `/admin/users/:userId/subscription`                      | PATCH  | Admin         | Change a user's subscription plan                                 |
+| `/admin/users/subscription/logs`                         | GET    | Admin         | Paginated list of subscription change audit logs                  |
+| `/admin/rewards/transactions/search`                     | GET    | Admin         | Search transactions with multiple filter options                  |
+| `/admin/rewards/bonus`                                   | POST   | Admin         | Award bonus reward points to a user                               |
+| `/admin/rewards/transactions/:transactionId/reverse`     | POST   | Admin         | Reverse/undo a reward transaction                                 |
+| `/admin/milestones`                                      | GET    | Admin         | List all non-deleted milestone configs (active first)             |
+| `/admin/milestones/:id`                                  | GET    | Admin         | Get a single milestone config by ID                               |
+| `/admin/milestones`                                      | POST   | Admin         | Create a new milestone config (inactive by default)               |
+| `/admin/milestones/:id/activate`                         | PATCH  | Admin         | Activate a milestone config; deactivates all others               |
+| `/admin/milestones/:id`                                  | PATCH  | Admin         | Update an inactive milestone config                               |
+| `/admin/milestones/:id`                                  | DELETE | Admin         | Soft-delete an inactive milestone config                          |
+
+---
+
+| URL                                              | `/admin/users/:userId/subscription` |
+| ------------------------------------------------ | ----------------------------------- |
+| Method                                           | PATCH                               |
+| Auth Required                                    | Admin                               |
+| Description                                      | Upgrades or downgrades a user's subscription plan. Preserves the existing usage count |
+
+> <details>
+> <summary>Request body</summary>
+>
+> ```json
+> {
+>   "plan": "PRO",
+>   "reason": "User requested upgrade"
+> }
+> ```
+>
+> | Field    | Type            | Description                                         |
+> | -------- | --------------- | --------------------------------------------------- |
+> | `plan`   | string (enum)   | Target plan: <code>HOBBY</code> or <code>PRO</code> (required) |
+> | `reason` | string (optional)| Reason for the plan change (max 200 chars)         |
+> </details>
+> <details>
+> <summary>Response body</summary>
+>
+> ```json
+> {
+>   "statusCode": 200,
+>   "message": "Subscription plan updated successfully.",
+>   "data": {
+>     "_id": "6826d68a0fbea0d79998ef43",
+>     "type": "PRO",
+>     "key_limit": 5,
+>     "usage_limit": 15000,
+>     "usage_count": 42,
+>     "is_active": true,
+>     "updated_at": "2025-07-15T12:00:00.000Z"
+>   }
+> }
+> ```
+>
+> **Response:** `200 OK` - Plan changed successfully</br>
+> **Response:** `400 Bad Request` - Invalid userId or user already on this plan</br>
+> **Response:** `401 Unauthorized` - Not authenticated</br>
+> **Response:** `403 Forbidden` - Not authorized (non-admin)</br>
+> **Response:** `404 Not Found` - User or subscription not found</br>
+> **Response:** `422 Unprocessable Entity` - Invalid plan value
+> </details>
+> <details>
+> <summary>Api Flow diagram</summary>
+>
+> ```mermaid
+> flowchart TD
+> %% API Flow: PATCH /admin/users/:userId/subscription
+> Start[PATCH /admin/users/:userId/subscription] --> Auth{Authorized?}
+> Auth -->|No| Auth401[Return 401 Unauthorized]
+> Auth -->|Yes| CheckPerms{Is Admin?}
+> CheckPerms -->|No| Forbidden403[Return 403 Forbidden]
+> CheckPerms -->|Yes| ValidateBody[Validate Request Body]
+> ValidateBody --> BodyValid{Valid plan?}
+> BodyValid -->|No| Unprocessable422[Return 422 Unprocessable Entity]
+> BodyValid -->|Yes| ValidateUserId{Valid userId?}
+> ValidateUserId -->|No| BadRequest400[Return 400 Invalid userId]
+> ValidateUserId -->|Yes| BeginTransaction[Start MongoDB Transaction]
+> BeginTransaction --> FindUser[Find User]
+> FindUser --> UserExists{User exists?}
+> UserExists -->|No| NotFound404[Return 404 Not Found]
+> UserExists -->|Yes| FindSubscription[Find Subscription]
+> FindSubscription --> SubExists{Subscription exists?}
+> SubExists -->|No| NotFound404Sub[Return 404 Not Found]
+> SubExists -->|Yes| SamePlan{Already on<br/>this plan?}
+> SamePlan -->|Yes| Conflict400[Return 400 Already Active]
+> SamePlan -->|No| UpdatePlan[Update Subscription Plan]
+> UpdatePlan --> CreateLog[Create Audit Log Entry]
+> CreateLog --> CommitTransaction[Commit Transaction]
+> CommitTransaction --> Success200[Return 200 OK]
+>
+> classDef startEnd fill:#81C8FF,stroke:#4682B4,stroke-width:2px,color:#000;
+> classDef decision fill:#FFD54F,stroke:#FFB300,stroke-width:2px,color:#000;
+> classDef success fill:#A5D6A7,stroke:#388E3C,stroke-width:2px,color:#000;
+> classDef error fill:#EF9A9A,stroke:#D32F2F,stroke-width:2px,color:#000;
+> classDef process fill:#E1BEE7,stroke:#7B1FA2,stroke-width:2px,color:#000;
+>
+> class Start,Success200 startEnd
+> class Auth,CheckPerms,BodyValid,ValidateUserId,UserExists,SubExists,SamePlan decision
+> class Success200 success
+> class Auth401,Forbidden403,Unprocessable422,BadRequest400,NotFound404,NotFound404Sub,Conflict400 error
+> class ValidateBody,FindUser,FindSubscription,UpdatePlan,CreateLog,BeginTransaction,CommitTransaction process
+> ```
+> </details>
+
+---
+
+| URL                                              | `/admin/users/subscription/logs` |
+| ------------------------------------------------ | -------------------------------- |
+| Method                                           | GET                              |
+| Auth Required                                    | Admin                            |
+| Description                                      | Returns a paginated list of all subscription plan-change audit logs |
+
+> <details>
+> <summary>Query parameters</summary>
+>
+> - `page`: Page number (default: 1)
+> - `limit`: Results per page, max 100 (default: 10)
+> </details>
+> <details>
+> <summary>Response body</summary>
+>
+> ```json
+> {
+>   "statusCode": 200,
+>   "data": [
+>     {
+>       "_id": "6826d68a0fbea0d79998ef50",
+>       "user_id": "6826d68a0fbea0d79998ef45",
+>       "subscription_id": "6826d68a0fbea0d79998ef43",
+>       "changed_by": "6826d68a0fbea0d79998ef99",
+>       "from_plan": "HOBBY",
+>       "to_plan": "PRO",
+>       "reason": "User requested upgrade",
+>       "createdAt": "2025-07-15T12:00:00.000Z"
+>     }
+>   ],
+>   "total": 1,
+>   "currentPage": 1,
+>   "totalPages": 1
+> }
+> ```
+>
+> **Response:** `200 OK` - Logs retrieved successfully</br>
+> **Response:** `401 Unauthorized` - Not authenticated</br>
+> **Response:** `403 Forbidden` - Not authorized (non-admin)
+> </details>
+> <details>
+> <summary>Api Flow diagram</summary>
+>
+> ```mermaid
+> flowchart TD
+> %% API Flow: GET /admin/users/subscription/logs
+> Start[GET /admin/users/subscription/logs<br/>Query: ?page=&limit=] --> Auth{Authorized?}
+> Auth -->|No| Auth401[Return 401 Unauthorized]
+> Auth -->|Yes| CheckPerms{Is Admin?}
+> CheckPerms -->|No| Forbidden403[Return 403 Forbidden]
+> CheckPerms -->|Yes| ValidateQuery[Validate Query Params]
+> ValidateQuery --> ParsePagination[Parse page & limit]
+> ParsePagination --> FetchLogs[Fetch Paginated Subscription Logs]
+> FetchLogs --> BuildResponse[Build Response]
+> BuildResponse --> Success200[Return 200 OK]
+>
+> classDef startEnd fill:#81C8FF,stroke:#4682B4,stroke-width:2px,color:#000;
+> classDef decision fill:#FFD54F,stroke:#FFB300,stroke-width:2px,color:#000;
+> classDef success fill:#A5D6A7,stroke:#388E3C,stroke-width:2px,color:#000;
+> classDef error fill:#EF9A9A,stroke:#D32F2F,stroke-width:2px,color:#000;
+> classDef process fill:#E1BEE7,stroke:#7B1FA2,stroke-width:2px,color:#000;
+> class Start,Success200 startEnd
+> class Auth,CheckPerms decision
+> class Success200 success
+> class Auth401,Forbidden403 error
+> class ValidateQuery,Pagination,FetchLogs,BuildResponse,ParsePagination process
+> ```
+> </details>
+
+---
+
+| URL                                              | `/admin/rewards/transactions/search` |
+| ------------------------------------------------ | ------------------------------------ |
+| Method                                           | GET                                  |
+| Auth Required                                    | Admin                                |
+| Description                                      | Searches reward transactions with multiple optional filter criteria |
+
+> <details>
+> <summary>Query parameters</summary>
+>
+> - `userId`: Filter by creator user ID
+> - `imageId`: Filter by image ID
+> - `type`: Filter by transaction type (<code>MILESTONE_REWARD</code>, <code>BONUS</code>, <code>REVERSAL</code>, <code>MANUAL_ADJUSTMENT</code>)
+> - `isReversed`: Filter by reversal status (<code>true</code> or <code>false</code>)
+> - `reason`: Filter by reason enum value
+> - `startDate`: Filter transactions after this date (ISO 8601)
+> - `endDate`: Filter transactions before this date (ISO 8601)
+> - `page`: Page number (default: 1)
+> - `limit`: Results per page (default: 20)
+> </details>
+> <details>
+> <summary>Response body</summary>
+>
+> ```json
+> {
+>   "statusCode": 200,
+>   "data": {
+>     "transactions": [...],
+>     "total": 5,
+>     "page": 1,
+>     "totalPages": 1
+>   }
+> }
+> ```
+>
+> **Response:** `200 OK` - Search results retrieved successfully</br>
+> **Response:** `401 Unauthorized` - Not authenticated</br>
+> **Response:** `403 Forbidden` - Not authorized (non-admin)
+> </details>
+> <details>
+> <summary>Api Flow diagram</summary>
+>
+> ```mermaid
+> flowchart TD
+> %% API Flow: GET /admin/rewards/transactions/search
+> Start[GET /admin/rewards/transactions/search<br/>Query: filters] --> Auth{Authorized?}
+> Auth -->|No| Auth401[Return 401 Unauthorized]
+> Auth -->|Yes| CheckPerms{Is Admin?}
+> CheckPerms -->|No| Forbidden403[Return 403 Forbidden]
+> CheckPerms -->|Yes| ParseFilters[Parse Query Filters]
+> ParseFilters --> BuildQuery[Build MongoDB Query]
+> BuildQuery --> ApplyPagination[Apply Pagination]
+> ApplyPagination --> ExecuteSearch[Execute Search]
+> ExecuteSearch --> BuildResponse[Build Response]
+> BuildResponse --> Success200[Return 200 OK]
+>
+> classDef startEnd fill:#81C8FF,stroke:#4682B4,stroke-width:2px,color:#000;
+> classDef decision fill:#FFD54F,stroke:#FFB300,stroke-width:2px,color:#000;
+> classDef success fill:#A5D6A7,stroke:#388E3C,stroke-width:2px,color:#000;
+> classDef error fill:#EF9A9A,stroke:#D32F2F,stroke-width:2px,color:#000;
+> classDef process fill:#E1BEE7,stroke:#7B1FA2,stroke-width:2px,color:#000;
+> class Start,Success200 startEnd
+> class Auth,CheckPerms decision
+> class Success200 success
+> class Auth401,Forbidden403 error
+> class ParseFilters,BuildQuery,ApplyPagination,ExecuteSearch,BuildResponse process
+> ```
+> </details>
+
+---
+
+| URL                                              | `/admin/rewards/bonus` |
+| ------------------------------------------------ | ---------------------- |
+| Method                                           | POST                   |
+| Auth Required                                    | Admin                  |
+| Description                                      | Manually awards bonus reward points to a user for a specific image |
+
+> <details>
+> <summary>Request body</summary>
+>
+> ```json
+> {
+>   "imageId": "6826d68a0fbea0d79998ef46",
+>   "userId": "6826d68a0fbea0d79998ef45",
+>   "points": 100,
+>   "reason": "PROMOTION",
+>   "description": "Special promotion bonus"
+> }
+> ```
+>
+> | Field         | Type            | Description                    |
+> | ------------- | --------------- | ------------------------------ |
+> | `imageId`     | string          | Image ID to associate bonus with (required) |
+> | `userId`      | string          | Creator user ID (required)     |
+> | `points`      | number          | Points to award (&gt; 0) (required) |
+> | `reason`      | string (optional)| Reason enum (default: PROMOTION) |
+> | `description` | string (optional)| Human-readable description    |
+> </details>
+> <details>
+> <summary>Response body</summary>
+>
+> ```json
+> {
+>   "statusCode": 201,
+>   "message": "Bonus points awarded successfully",
+>   "data": {
+>     "image_id": "6826d68a0fbea0d79998ef46",
+>     "user_id": "6826d68a0fbea0d79998ef45",
+>     "transaction_type": "BONUS",
+>     "points_awarded": 100,
+>     "description": "Special promotion bonus",
+>     "reason": "PROMOTION",
+>     "previous_total": 150,
+>     "new_total": 250,
+>     "is_reversed": false,
+>     "metadata": { "awarded_at": "2025-07-15T12:00:00.000Z" }
+>   }
+> }
+> ```
+>
+> **Response:** `201 Created` - Bonus awarded successfully</br>
+> **Response:** `400 Bad Request` - Missing required fields or points must be positive</br>
+> **Response:** `401 Unauthorized` - Not authenticated</br>
+> **Response:** `403 Forbidden` - Not authorized (non-admin)
+> </details>
+> <details>
+> <summary>Api Flow diagram</summary>
+>
+> ```mermaid
+> flowchart TD
+> %% API Flow: POST /admin/rewards/bonus
+> Start[POST /admin/rewards/bonus] --> Auth{Authorized?}
+> Auth -->|No| Auth401[Return 401 Unauthorized]
+> Auth -->|Yes| CheckPerms{Is Admin?}
+> CheckPerms -->|No| Forbidden403[Return 403 Forbidden]
+> CheckPerms -->|Yes| ValidateBody[Validate Request Body]
+> ValidateBody --> HasFields{Has imageId,<br/>userId, points?}
+> HasFields -->|No| BadRequest400[Return 400 Missing Fields]
+> HasFields -->|Yes| CheckPoints{Points &gt; 0?}
+> CheckPoints -->|No| BadRequestPoints[Return 400 Points Must Be Positive]
+> CheckPoints -->|Yes| FindImage[Find Image]
+> FindImage --> ImageExists{Image exists?}
+> ImageExists -->|No| Image404[Return 404 Image Not Found]
+> ImageExists -->|Yes| FindUser[Find User]
+> FindUser --> UserExists{User exists?}
+> UserExists -->|No| User404[Return 404 User Not Found]
+> UserExists -->|Yes| FindOrCreateReward[Find or Create Reward Record]
+> FindOrCreateReward --> ApplyBonus[Award Points to User]
+> ApplyBonus --> CreateTransaction[Create BONUS Transaction]
+> CreateTransaction --> Success201[Return 201 Created]
+>
+> classDef startEnd fill:#81C8FF,stroke:#4682B4,stroke-width:2px,color:#000;
+> classDef decision fill:#FFD54F,stroke:#FFB300,stroke-width:2px,color:#000;
+> classDef success fill:#A5D6A7,stroke:#388E3C,stroke-width:2px,color:#000;
+> classDef error fill:#EF9A9A,stroke:#D32F2F,stroke-width:2px,color:#000;
+> classDef process fill:#E1BEE7,stroke:#7B1FA2,stroke-width:2px,color:#000;
+> class Start,Success201 startEnd
+> class Auth,CheckPerms,HasFields,CheckPoints,ImageExists,UserExists decision
+> class Success201 success
+> class Auth401,Forbidden403,BadRequest400,BadRequestPoints,Image404,User404 error
+> class ValidateBody,FindImage,FindUser,ApplyBonus,CreateTransaction,FindOrCreateReward process
+> ```
+> </details>
+
+---
+
+| URL                                              | `/admin/rewards/transactions/:transactionId/reverse` |
+| ------------------------------------------------ | ---------------------------------------------------- |
+| Method                                           | POST                                                 |
+| Auth Required                                    | Admin                                                |
+| Description                                      | Reverses/undoes a specific reward transaction. Creates a reversal audit record |
+
+> <details>
+> <summary>Request body</summary>
+>
+> ```json
+> {
+>   "reason": "DUPLICATE_REMOVAL"
+> }
+> ```
+>
+> | Field    | Type   | Description                           |
+> | -------- | ------ | ------------------------------------- |
+> | `reason` | string | Reason for the reversal (required)    |
+> </details>
+> <details>
+> <summary>Response body</summary>
+>
+> ```json
+> {
+>   "statusCode": 200,
+>   "message": "Transaction reversed successfully",
+>   "data": {
+>     "_id": "6826d68a0fbea0d79998ef50",
+>     "is_reversed": true,
+>     "reversed_at": "2025-07-15T12:00:00.000Z",
+>     "reversed_by": "6826d68a0fbea0d79998ef99",
+>     "reversal_reason": "DUPLICATE_REMOVAL"
+>   }
+> }
+> ```
+>
+> **Response:** `200 OK` - Transaction reversed successfully</br>
+> **Response:** `400 Bad Request` - Reversal reason is required</br>
+> **Response:** `401 Unauthorized` - Not authenticated</br>
+> **Response:** `403 Forbidden` - Not authorized (non-admin)</br>
+> **Response:** `404 Not Found` - Transaction not found
+> </details>
+> <details>
+> <summary>Api Flow diagram</summary>
+>
+> ```mermaid
+> flowchart TD
+> %% API Flow: POST /admin/rewards/transactions/:transactionId/reverse
+> Start[POST /admin/rewards/transactions/:transactionId/reverse] --> Auth{Authorized?}
+> Auth -->|No| Auth401[Return 401 Unauthorized]
+> Auth -->|Yes| CheckPerms{Is Admin?}
+> CheckPerms -->|No| Forbidden403[Return 403 Forbidden]
+> CheckPerms -->|Yes| ValidateReason{Has reason?}
+> ValidateReason -->|No| BadRequest400[Return 400 Reason Required]
+> ValidateReason -->|Yes| FindTransaction[Find Transaction]
+> FindTransaction --> TxExists{Transaction exists?}
+> TxExists -->|No| NotFound404[Return 404 Not Found]
+> TxExists -->|Yes| AlreadyReversed{Already reversed?}
+> AlreadyReversed -->|Yes| Conflict400[Return 400 Already Reversed]
+> AlreadyReversed -->|No| UpdateUserPoints[Deduct Points from User]
+> UpdateUserPoints --> UpdateTx[Mark Transaction as Reversed]
+> UpdateTx --> CreateReversalTx[Create REVERSAL Transaction Record]
+> CreateReversalTx --> Success200[Return 200 OK]
+>
+> classDef startEnd fill:#81C8FF,stroke:#4682B4,stroke-width:2px,color:#000;
+> classDef decision fill:#FFD54F,stroke:#FFB300,stroke-width:2px,color:#000;
+> classDef success fill:#A5D6A7,stroke:#388E3C,stroke-width:2px,color:#000;
+> classDef error fill:#EF9A9A,stroke:#D32F2F,stroke-width:2px,color:#000;
+> classDef process fill:#E1BEE7,stroke:#7B1FA2,stroke-width:2px,color:#000;
+> class Start,Success200 startEnd
+> class Auth,CheckPerms,ValidateReason,TxExists,AlreadyReversed decision
+> class Success200 success
+> class Auth401,Forbidden403,BadRequest400,NotFound404,Conflict400 error
+> class FindTransaction,UpdateUserPoints,UpdateTx,CreateReversalTx process
+> ```
+> </details>
+
+---
+
+| URL                                              | `/admin/milestones` |
+| ------------------------------------------------ | ------------------- |
+| Method                                           | GET                 |
+| Auth Required                                    | Admin               |
+| Description                                      | Lists all non-deleted milestone configs, with the active config first |
+
+> <details>
+> <summary>Response body</summary>
+>
+> ```json
+> {
+>   "statusCode": 200,
+>   "data": [
+>     {
+>       "_id": "6826d68a0fbea0d79998ef60",
+>       "name": "v2 Milestones",
+>       "thresholds": [
+>         { "at": 10, "points": 25 },
+>         { "at": 25, "points": 50 },
+>         { "at": 50, "points": 100 }
+>       ],
+>       "is_active": true,
+>       "is_deleted": false,
+>       "created_by": "6826d68a0fbea0d79998ef99",
+>       "createdAt": "2025-06-01T00:00:00.000Z",
+>       "updatedAt": "2025-06-01T00:00:00.000Z"
+>     }
+>   ],
+>   "count": 1
+> }
+> ```
+>
+> **Response:** `200 OK` - Configs retrieved successfully</br>
+> **Response:** `401 Unauthorized` - Not authenticated</br>
+> **Response:** `403 Forbidden` - Not authorized (non-admin)
+> </details>
+
+---
+
+| URL                                              | `/admin/milestones/:id` |
+| ------------------------------------------------ | ----------------------- |
+| Method                                           | GET                     |
+| Auth Required                                    | Admin                   |
+| Description                                      | Retrieves a single milestone config by its ID |
+
+> <details>
+> <summary>Response body</summary>
+>
+> ```json
+> {
+>   "statusCode": 200,
+>   "data": {
+>     "_id": "6826d68a0fbea0d79998ef60",
+>     "name": "v2 Milestones",
+>     "thresholds": [
+>       { "at": 10, "points": 25 },
+>       { "at": 25, "points": 50 }
+>     ],
+>     "is_active": true,
+>     "is_deleted": false,
+>     "created_by": "6826d68a0fbea0d79998ef99"
+>   }
+> }
+> ```
+>
+> **Response:** `200 OK` - Config retrieved successfully</br>
+> **Response:** `404 Not Found` - Config not found</br>
+> **Response:** `401 Unauthorized` - Not authenticated</br>
+> **Response:** `403 Forbidden` - Not authorized (non-admin)
+> </details>
+
+---
+
+| URL                                              | `/admin/milestones` |
+| ------------------------------------------------ | ------------------- |
+| Method                                           | POST                |
+| Auth Required                                    | Admin               |
+| Description                                      | Creates a new milestone config. The new config is created as inactive by default |
+
+> <details>
+> <summary>Request body</summary>
+>
+> ```json
+> {
+>   "name": "v3 Milestones",
+>   "thresholds": [
+>     { "at": 10, "points": 30 },
+>     { "at": 50, "points": 100 },
+>     { "at": 100, "points": 250 }
+>   ]
+> }
+> ```
+>
+> | Field        | Type            | Description                                        |
+> | ------------ | --------------- | -------------------------------------------------- |
+> | `name`       | string          | Human-readable label for this config (required)    |
+> | `thresholds` | array           | Non-empty array of <code>{ at: number, points: number }</code> (required). Each <code>at</code> must be &ge; 1, each <code>points</code> must be &ge; 1 |
+> </details>
+> <details>
+> <summary>Response body</summary>
+>
+> ```json
+> {
+>   "statusCode": 201,
+>   "message": "MilestoneConfig created successfully",
+>   "data": {
+>     "name": "v3 Milestones",
+>     "thresholds": [
+>       { "at": 10, "points": 30 },
+>       { "at": 50, "points": 100 },
+>       { "at": 100, "points": 250 }
+>     ],
+>     "is_active": false,
+>     "is_deleted": false,
+>     "created_by": "6826d68a0fbea0d79998ef99",
+>     "_id": "6826d68a0fbea0d79998ef61"
+>   }
+> }
+> ```
+>
+> **Response:** `201 Created` - Config created successfully</br>
+> **Response:** `422 Unprocessable Entity` - Missing name, invalid thresholds, or empty thresholds array</br>
+> **Response:** `401 Unauthorized` - Not authenticated</br>
+> **Response:** `403 Forbidden` - Not authorized (non-admin)
+> </details>
+> <details>
+> <summary>Api Flow diagram</summary>
+>
+> ```mermaid
+> flowchart TD
+> %% API Flow: POST /admin/milestones
+> Start[POST /admin/milestones] --> Auth{Authorized?}
+> Auth -->|No| Auth401[Return 401 Unauthorized]
+> Auth -->|Yes| CheckPerms{Is Admin?}
+> CheckPerms -->|No| Forbidden403[Return 403 Forbidden]
+> CheckPerms -->|Yes| ValidateBody[Validate Request Body]
+> ValidateBody --> HasName{Has name?}
+> HasName -->|No| UnprocessableName[Return 422 Name Required]
+> HasName -->|Yes| HasThresholds{Has non-empty<br/>thresholds array?}
+> HasThresholds -->|No| UnprocessableThresholds[Return 422 Thresholds Required]
+> HasThresholds -->|Yes| ValidateThresholds{All thresholds<br/>valid?}
+> ValidateThresholds -->|No| UnprocessableInvalid[Return 422 Invalid Threshold]
+> ValidateThresholds -->|Yes| CreateConfig[Create Config (inactive)]
+> CreateConfig --> Success201[Return 201 Created]
+>
+> classDef startEnd fill:#81C8FF,stroke:#4682B4,stroke-width:2px,color:#000;
+> classDef decision fill:#FFD54F,stroke:#FFB300,stroke-width:2px,color:#000;
+> classDef success fill:#A5D6A7,stroke:#388E3C,stroke-width:2px,color:#000;
+> classDef error fill:#EF9A9A,stroke:#D32F2F,stroke-width:2px,color:#000;
+> classDef process fill:#E1BEE7,stroke:#7B1FA2,stroke-width:2px,color:#000;
+> class Start,Success201 startEnd
+> class Auth,CheckPerms,HasName,HasThresholds,ValidateThresholds decision
+> class Success201 success
+> class Auth401,Forbidden403,UnprocessableName,UnprocessableThresholds,UnprocessableInvalid error
+> class ValidateBody,CreateConfig process
+> ```
+> </details>
+
+---
+
+| URL                                              | `/admin/milestones/:id/activate` |
+| ------------------------------------------------ | -------------------------------- |
+| Method                                           | PATCH                            |
+| Auth Required                                    | Admin                            |
+| Description                                      | Activates a milestone config and deactivates all others. Takes effect on the next reward worker run |
+
+> <details>
+> <summary>Response body</summary>
+>
+> ```json
+> {
+>   "statusCode": 200,
+>   "message": "MilestoneConfig activated — takes effect on the next worker run",
+>   "data": {
+>     "_id": "6826d68a0fbea0d79998ef60",
+>     "name": "v3 Milestones",
+>     "is_active": true
+>   }
+> }
+> ```
+>
+> **Response:** `200 OK` - Config activated successfully</br>
+> **Response:** `404 Not Found` - Config not found</br>
+> **Response:** `409 Conflict` - Config is already active</br>
+> **Response:** `401 Unauthorized` - Not authenticated</br>
+> **Response:** `403 Forbidden` - Not authorized (non-admin)
+> </details>
+
+---
+
+| URL                                              | `/admin/milestones/:id` |
+| ------------------------------------------------ | ----------------------- |
+| Method                                           | PATCH                   |
+| Auth Required                                    | Admin                   |
+| Description                                      | Updates an inactive milestone config. Active configs are read-only. Only the provided fields are updated |
+
+> <details>
+> <summary>Request body</summary>
+>
+> ```json
+> {
+>   "name": "v3 Milestones (Updated)",
+>   "thresholds": [
+>     { "at": 10, "points": 35 },
+>     { "at": 50, "points": 125 },
+>     { "at": 100, "points": 300 }
+>   ]
+> }
+> ```
+>
+> | Field        | Type            | Description                                        |
+> | ------------ | --------------- | -------------------------------------------------- |
+> | `name`       | string (optional) | New human-readable label                        |
+> | `thresholds` | array (optional)  | New thresholds array (same validation as create) |
+> </details>
+> <details>
+> <summary>Response body</summary>
+>
+> ```json
+> {
+>   "statusCode": 200,
+>   "message": "MilestoneConfig updated successfully",
+>   "data": {
+>     "_id": "6826d68a0fbea0d79998ef60",
+>     "name": "v3 Milestones (Updated)",
+>     "thresholds": [...],
+>     "is_active": false
+>   }
+> }
+> ```
+>
+> **Response:** `200 OK` - Config updated successfully</br>
+> **Response:** `404 Not Found` - Config not found</br>
+> **Response:** `409 Conflict` - Cannot edit an active config</br>
+> **Response:** `422 Unprocessable Entity` - At least one of name or thresholds must be provided; invalid thresholds</br>
+> **Response:** `401 Unauthorized` - Not authenticated</br>
+> **Response:** `403 Forbidden` - Not authorized (non-admin)
+> </details>
+> <details>
+> <summary>Api Flow diagram</summary>
+>
+> ```mermaid
+> flowchart TD
+> %% API Flow: PATCH /admin/milestones/:id
+> Start[PATCH /admin/milestones/:id] --> Auth{Authorized?}
+> Auth -->|No| Auth401[Return 401 Unauthorized]
+> Auth -->|Yes| CheckPerms{Is Admin?}
+> CheckPerms -->|No| Forbidden403[Return 403 Forbidden]
+> CheckPerms -->|Yes| ValidateBody[Validate Request Body]
+> ValidateBody --> HasFields{Has name or<br/>thresholds?}
+> HasFields -->|No| Unprocessable422[Return 422 At least one field required]
+> HasFields -->|Yes| CheckActive{Config is<br/>active?}
+> CheckActive -->|Yes| Conflict409[Return 409 Cannot Edit Active]
+> CheckActive -->|No| ValidateThresholds{Thresholds<br/>valid?}
+> ValidateThresholds -->|No| UnprocessableInvalid[Return 422 Invalid Thresholds]
+> ValidateThresholds -->|Yes| UpdateConfig[Update Config]
+> UpdateConfig --> Success200[Return 200 OK]
+>
+> classDef startEnd fill:#81C8FF,stroke:#4682B4,stroke-width:2px,color:#000;
+> classDef decision fill:#FFD54F,stroke:#FFB300,stroke-width:2px,color:#000;
+> classDef success fill:#A5D6A7,stroke:#388E3C,stroke-width:2px,color:#000;
+> classDef error fill:#EF9A9A,stroke:#D32F2F,stroke-width:2px,color:#000;
+> classDef process fill:#E1BEE7,stroke:#7B1FA2,stroke-width:2px,color:#000;
+> class Start,Success200 startEnd
+> class Auth,CheckPerms,HasFields,CheckActive,ValidateThresholds decision
+> class Success200 success
+> class Auth401,Forbidden403,Unprocessable422,Conflict409,UnprocessableInvalid error
+> class ValidateBody,UpdateConfig process
+> ```
+> </details>
+
+---
+
+| URL                                              | `/admin/milestones/:id` |
+| ------------------------------------------------ | ----------------------- |
+| Method                                           | DELETE                  |
+| Auth Required                                    | Admin                   |
+| Description                                      | Soft-deletes an inactive milestone config. Active configs cannot be deleted |
+
+> <details>
+> <summary>Response body</summary>
+>
+> ```json
+> {
+>   "statusCode": 200,
+>   "message": "MilestoneConfig deleted successfully",
+>   "data": {
+>     "_id": "6826d68a0fbea0d79998ef60",
+>     "is_deleted": true
+>   }
+> }
+> ```
+>
+> **Response:** `200 OK` - Config deleted successfully</br>
+> **Response:** `404 Not Found` - Config not found</br>
+> **Response:** `409 Conflict` - Cannot delete an active config</br>
+> **Response:** `401 Unauthorized` - Not authenticated</br>
+> **Response:** `403 Forbidden` - Not authorized (non-admin)
+> </details>
+
 </details>
 
 

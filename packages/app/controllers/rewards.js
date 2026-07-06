@@ -1,4 +1,5 @@
 const { STATUS_CODES } = require("node:http");
+const mongoose = require("mongoose");
 const { RewardsService } = require("../services");
 const { Messages, RewardMessages } = require("../utils/constants");
 
@@ -10,7 +11,20 @@ async function getRewardSummaryForImageController(req, res, next) {
   try {
     const rewardsService = new RewardsService();
     const { imageId } = req.params;
-
+    if (!imageId || imageId.length === 0) {
+      return res.status(400).send({
+        statusCode: 400,
+        message: RewardMessages.IMAGE_ID_REQUIRED,
+        error: STATUS_CODES[400],
+      });
+    }
+    if (!mongoose.Types.ObjectId.isValid(imageId)) {
+      return res.status(400).json({
+        statusCode: 400,
+        error: STATUS_CODES[400],
+        message: Messages.INVALID_ID,
+      });
+    }
     const summary = await rewardsService.getRewardSummaryForImage(imageId);
     if (!summary) {
       return res.status(404).json({
@@ -106,6 +120,20 @@ async function getImageTransactionsController(req, res, next) {
   try {
     const rewardsService = new RewardsService();
     const { imageId } = req.params;
+    if (!imageId || imageId.length === 0) {
+      return res.status(400).send({
+        statusCode: 400,
+        message: RewardMessages.IMAGE_ID_REQUIRED,
+        error: STATUS_CODES[400],
+      });
+    }
+    if (!mongoose.Types.ObjectId.isValid(imageId)) {
+      return res.status(400).json({
+        statusCode: 400,
+        error: STATUS_CODES[400],
+        message: Messages.INVALID_ID,
+      });
+    }
     const page = Number.parseInt(req.query.page) || 1;
     const limit = Number.parseInt(req.query.limit) || 20;
 
@@ -209,6 +237,21 @@ async function getAuditTrailController(req, res, next) {
     const rewardsService = new RewardsService();
     const { imageId } = req.params;
     const userId = req.userData.userId;
+
+    if (!imageId || imageId.length === 0) {
+      return res.status(400).send({
+        statusCode: 400,
+        message: RewardMessages.IMAGE_ID_REQUIRED,
+        error: STATUS_CODES[400],
+      });
+    }
+    if (!mongoose.Types.ObjectId.isValid(imageId)) {
+      return res.status(400).json({
+        statusCode: 400,
+        error: STATUS_CODES[400],
+        message: Messages.INVALID_ID,
+      });
+    }
 
     const auditTrail = await rewardsService.getAuditTrail(imageId, userId);
 

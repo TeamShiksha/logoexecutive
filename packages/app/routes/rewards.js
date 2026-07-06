@@ -29,7 +29,11 @@ router.get(
  * Retrieves reward summary for a specific image
  * - Returns reward details associated with the image
  */
-router.get("/summary/image/:imageId", getRewardSummaryForImageController);
+router.get(
+  "/summary/image/:imageId",
+  authMiddleware(),
+  getRewardSummaryForImageController
+);
 
 /**
  * GET /api/rewards/leaderboard/rank

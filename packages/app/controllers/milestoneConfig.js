@@ -97,6 +97,27 @@ async function createMilestoneConfigController(req, res, next) {
       data: config,
     });
   } catch (error) {
+    if (error.message === "MilestoneConfig not found") {
+      return res.status(404).json({
+        statusCode: 404,
+        message: error.message,
+        error: STATUS_CODES[404],
+      });
+    }
+
+    if (
+      error.message === "Config is already active" ||
+      error.message ===
+        'Threshold "at" values must be in strictly ascending order' ||
+      error.message === 'Threshold "points" values must be in ascending order'
+    ) {
+      return res.status(422).json({
+        statusCode: 422,
+        message: error.message,
+        error: STATUS_CODES[422],
+      });
+    }
+
     next(error);
   }
 }

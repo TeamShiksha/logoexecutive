@@ -124,11 +124,13 @@ const Messages = {
   CANNOT_REVOKE_CURRENT_SESSION:
     "Cannot revoke current session. Use signout instead.",
   SESSION_LIMIT_EXCEEDED: "Maximum number of active sessions exceeded.",
+  INVALID_ID: "Invalid ID format.",
 };
 
 const MAX_SESSIONS_PER_USER = 5;
 
 const RewardMessages = {
+  IMAGE_ID_REQUIRED: "Image ID is required",
   IMAGE_NOT_FOUND: "No reward data found for this image",
   TRANSACTION_NOT_FOUND: "Transaction not found",
   MISSING_BONUS_FIELDS: "Missing required fields: imageId, userId, points",

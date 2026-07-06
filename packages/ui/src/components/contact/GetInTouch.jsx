@@ -11,17 +11,16 @@ function GetInTouch() {
   return (
     <div className={styles["git-container"]}>
       <div className={styles.card}>
-        <div className={styles.circles}>
-          <div className={`${styles.circle} ${styles["circle-l"]}`} />
-          <div className={`${styles.circle} ${styles["circle-c"]}`} />
-          <div className={`${styles.circle} ${styles["circle-r"]}`} />
-        </div>
         <h2 className={styles.title}>Still have questions?</h2>
         <p className={styles.description}>
           Can&apos;t find the answer you&apos;re looking for? Please chat to our
           friendly team.
         </p>
-        <Button onClick={openModal} variant="primary">
+        <Button
+          onClick={openModal}
+          className={styles["cta-button"]}
+          variant="primary"
+        >
           Get in touch
         </Button>
       </div>

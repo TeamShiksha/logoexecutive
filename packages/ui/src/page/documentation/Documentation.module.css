@@ -8,13 +8,22 @@
   font-family: Inter, system-ui, sans-serif;
 }
 
-.docsLayout {
-  background: transparent;
+.link {
+  text-decoration: none;
+  color: var(--primary-hover);
+  background: none;
+  border: none;
+  font-size: inherit;
+  font-family: inherit;
+  font-weight: inherit;
+  cursor: pointer;
+  display: inline;
+  padding: 0;
 }
 
 .contentColumn {
   max-width: 860px;
-  margin: 0 auto;
+  margin: 1.5rem auto;
   padding-left: 2.1rem;
   display: grid;
   gap: 2.8rem;

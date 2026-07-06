@@ -141,10 +141,12 @@ export const observeActiveSectionOnScroll = (sectionIds, setActiveSection) => {
     for (let id of sectionIds) {
       const section = document.getElementById(id);
       if (section) {
-        const { offsetTop, offsetHeight } = section;
+        const rect = section.getBoundingClientRect();
+        const elementTop = rect.top + window.scrollY;
+        const elementHeight = rect.height;
         if (
-          scrollPosition >= offsetTop &&
-          scrollPosition < offsetTop + offsetHeight
+          scrollPosition >= elementTop &&
+          scrollPosition < elementTop + elementHeight
         ) {
           setActiveSection(id);
           found = true;

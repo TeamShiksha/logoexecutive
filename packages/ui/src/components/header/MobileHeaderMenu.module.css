@@ -1,77 +1,154 @@
-.mobile-header {
-  padding: 2rem 0;
-  position: absolute;
+/* Backdrop */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.4);
+  z-index: 200;
+  animation: fadeIn 0.25s ease forwards;
+}
+
+.overlay.closing {
+  animation: fadeOut 0.25s ease forwards;
+}
+
+/* Slide-in drawer */
+.drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  height: 100vh;
+  height: 100dvh;
+  width: 75vw;
+  max-width: 320px;
   background-color: var(--white);
-  left: 0;
-  top: 70px;
-  width: 100%;
-  border-bottom: var(--border);
-  box-shadow: var(--dark-shadow-menu);
-  z-index: 50;
-  animation: slideInFromBottom 0.3s ease-in-out;
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem 1.25rem;
+  box-shadow: -4px 0 24px rgba(0, 0, 0, 0.1);
+  animation: slideIn 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  overflow-y: auto;
+  overflow-x: hidden;
+  box-sizing: border-box;
 }
 
-.mobile-header-exit {
-  animation: slideOutToBottom 0.3s ease-in-out;
+.drawer.closing {
+  animation: slideOut 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
 
+/* Close button */
+.close-btn {
+  align-self: flex-end;
+  background: none;
+  border: none;
+  font-size: 1.25rem;
+  cursor: pointer;
+  color: var(--description);
+  padding: 0.25rem 0.5rem;
+  border-radius: 6px;
+  line-height: 1;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease;
+}
+
+.close-btn:hover {
+  background-color: var(--light-gray, #f3f4f6);
+  color: var(--black);
+}
+
+/* Nav links */
 .navbar {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
-  align-items: center;
+  gap: 0.25rem;
+  margin-top: 1.5rem;
+  flex: 1;
 }
 
 .nav {
+  font-size: 1rem;
+  font-weight: 500;
   text-decoration: none;
   color: var(--description);
-  font-weight: 600;
-  font-size: 1.4rem;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease;
 }
 
 .nav:hover {
-  color: var(--primary);
-  transition: all 0.3s ease-in-out;
+  background-color: var(--light-gray, #f3f4f6);
+  color: var(--black);
 }
 
 .active {
   color: var(--primary);
-  text-decoration: underline;
-  text-decoration-color: var(--primary);
-  text-decoration-thickness: 2px;
-  text-underline-offset: 6px;
+  background-color: rgba(79, 70, 229, 0.08);
+}
+
+/* Sign Out pinned to bottom */
+.footer {
+  padding-top: 1rem;
+  border-top: 1px solid var(--border-color, #e5e7eb);
+  margin-top: auto;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .logout-btn {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  border: 1px solid #fca5a5;
   background: none;
-  border: none;
+  color: #dc2626;
+  font-size: 1rem;
+  font-weight: 500;
   cursor: pointer;
-  color: var(--description);
-  padding: 0;
-  font: inherit;
   text-align: left;
-  font-weight: 600;
-  font-size: 1.4rem;
+  transition: background 0.2s ease;
 }
 
-@keyframes slideInFromBottom {
-  0% {
-    transform: translateY(100%);
+.logout-btn:hover {
+  background-color: #fef2f2;
+}
+
+/* Animations */
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideOut {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes fadeIn {
+  from {
     opacity: 0;
   }
-
-  100% {
-    transform: translateX(0);
+  to {
     opacity: 1;
   }
 }
 
-@media only screen and (max-width: 564px) {
-  .mobile-header {
-    top: 64px;
+@keyframes fadeOut {
+  from {
+    opacity: 1;
   }
-
-  .nav {
-    font-size: 1.2rem;
+  to {
+    opacity: 0;
   }
 }

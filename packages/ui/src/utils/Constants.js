@@ -472,7 +472,7 @@ export const BUTTON_TEXT = {
   sendRequest: "Send Request",
   upload: "Upload",
   selectAnImage: "Select an image",
-  uploadLogo: "Upload Logo",
+  uploadLogo: "Create New Logo",
 };
 
 export const BRANDING = {
@@ -652,7 +652,7 @@ export const LOGOREQUEST = {
 };
 
 export const LOGOUPLOAD = {
-  title: "Upload Logo",
+  title: "Create New Logo",
   initialValues: {
     companyUrl: "",
   },

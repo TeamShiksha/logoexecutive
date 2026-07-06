@@ -257,7 +257,20 @@
     padding: 1.5rem;
   }
 
+  .sidebar-title {
+    font-size: 1.35rem;
+  }
+
+  .sidebar-content {
+    align-items: center;
+    text-align: center;
+  }
+
   .form-section {
-    padding: 1.5rem;
+    padding: 1.5rem 1.5rem 2rem 1.5rem;
+  }
+
+  .submit-btn {
+    margin-bottom: 0.5rem;
   }
 }

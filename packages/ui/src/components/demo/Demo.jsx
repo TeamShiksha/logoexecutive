@@ -1,6 +1,7 @@
 import { useContext, useEffect, useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
-import { SVGS, BUTTON_TEXT, DEMO } from "../../utils/Constants.js";
+import { CircleCheck, Search } from "lucide-react";
+import { BUTTON_TEXT, DEMO, TILTED_BRANDS } from "../../utils/Constants.js";
 import styles from "./Demo.module.css";
 import Button from "../common/button/Button.jsx";
 import PropTypes from "prop-types";
@@ -25,9 +26,18 @@ const Demo = ({ openAuthModal }) => {
     if (errorMsg || !data?.data || !showResults) {
       return [];
     }
+    const cleanSearchTerm = searchTerm
+      .replace(/^(https?:\/\/)?(www\.)?/, "")
+      .split(".")[0]
+      .toLowerCase();
+
+    if (!cleanSearchTerm) {
+      return [];
+    }
+
     return data.data
       .filter(({ companyName }) =>
-        companyName.toLowerCase().includes(searchTerm.toLowerCase())
+        companyName.toLowerCase().includes(cleanSearchTerm)
       )
       .slice(0, 3);
   }, [errorMsg, data, showResults, searchTerm]);
@@ -35,7 +45,7 @@ const Demo = ({ openAuthModal }) => {
 
   useEffect(() => {
     const debounceTimer = setTimeout(() => {
-      if (!loading && searchTerm.length > 1) {
+      if (searchTerm.length > 1) {
         makeRequest();
       }
     }, 500);
@@ -63,85 +73,131 @@ const Demo = ({ openAuthModal }) => {
 
   return (
     <>
-      <div data-testid="demo" id="demo" className={styles["demo-container"]}>
-        <div className={styles.content}>
-          <h1>{DEMO.heading}</h1>
-          <p>{DEMO.summary}</p>
-        </div>
-        <div className={`${styles["search-box"]}`}>
-          <div className={styles["search-content"]}>
-            <form onSubmit={(e) => e.preventDefault()}>
-              <input
-                name="search"
-                type="text"
-                value={searchTerm}
-                onChange={handleInputChange}
-                className={styles["search-box-input"]}
-                placeholder="Search"
-              />
-              <button type="submit" className={styles["search-button"]}>
-                <img src={SVGS.searchIcon} alt="Search" />
-              </button>
-            </form>
+      <div data-testid="demo" id="demo" className={styles["demo-wrapper"]}>
+        <div className="container">
+          <div className={styles["demo-container"]}>
+            {/* Search Area Box */}
+            <div className={styles.searchBox}>
+              <div className={styles.searchContent}>
+                {/* Redesigned Search Form */}
+                <form
+                  onSubmit={(e) => e.preventDefault()}
+                  className={styles.searchForm}
+                >
+                  <Search className={styles.searchIcon} size={20} />
+                  <input
+                    name="search"
+                    type="text"
+                    value={searchTerm}
+                    onChange={handleInputChange}
+                    className={styles.searchInput}
+                    placeholder="Type a brand name or URL to search"
+                  />
+                </form>
 
-            {showResults && (
-              <div
-                className={`${styles["result-container"]} ${
-                  styles["show"]
-                } ${!loading && apiResults.length === 0 ? styles["no-result-container"] : ""}`}
-              >
-                {loading && (
-                  <div className={styles.loading}>
-                    <LoadingSpinner color="blue" />
-                  </div>
-                )}
-                {!loading && apiResults.length === 0 ? (
-                  <div className={styles["no-result"]}>
-                    <p>
-                      {"Your search “"}
-                      <b className={styles["search-term"]}>{searchTerm}</b>
-                      {"” did not match any logo."}
-                    </p>
-                    <div className={styles["no-result-buttons"]}>
-                      <Button onClick={handleRequestClick} variant={"primary"}>
-                        {BUTTON_TEXT.requestLogo}
-                      </Button>
-                      <Button
-                        onClick={() => navigate("/createlogo")}
-                        variant="primary"
-                      >
-                        {BUTTON_TEXT.createLogo}
-                      </Button>
-                    </div>
+                {/* RESULT CARD OR DECK */}
+                {showResults ? (
+                  <div className={styles.resultContainer}>
+                    {loading && (
+                      <div className={styles.loading}>
+                        <LoadingSpinner color="blue" />
+                      </div>
+                    )}
+
+                    {!loading && apiResults.length === 0 ? (
+                      <div className={styles.noResult}>
+                        <p>
+                          {"Your search “"}
+                          <b className={styles.searchTerm}>{searchTerm}</b>
+                          {"” did not match any logo."}
+                        </p>
+
+                        <div className={styles.noResultButtons}>
+                          <Button
+                            onClick={handleRequestClick}
+                            variant="primary"
+                          >
+                            {BUTTON_TEXT.requestLogo}
+                          </Button>
+                          <Button
+                            onClick={() => navigate("/createlogo")}
+                            variant="primary"
+                          >
+                            {BUTTON_TEXT.createLogo}
+                          </Button>
+                        </div>
+                      </div>
+                    ) : (
+                      <>
+                        {apiResults.map((company) => (
+                          <div
+                            key={company.companyName}
+                            className={styles.resultCard}
+                          >
+                            <div className={styles.resultHeader}>
+                              <img src={company.image} alt="logo" />
+                              <h3>
+                                {firstLetterCapitalString(company.companyName)}
+                              </h3>
+                            </div>
+                          </div>
+                        ))}
+                      </>
+                    )}
                   </div>
                 ) : (
-                  <>
-                    {apiResults.map((company, index) => (
-                      <div
-                        key={company.companyName}
-                        className={`${styles["result-item"]} ${styles["show"]}`}
-                        style={{ transitionDelay: `${index * 0.1}s` }}
-                      >
-                        <img
-                          src={company.image}
-                          alt={`${company.companyName} Logo`}
-                        />
-                        <span>
-                          {firstLetterCapitalString(company.companyName)}
-                        </span>
-                      </div>
-                    ))}
-                  </>
+                  /* Redesigned Tilted Cards Deck shown when empty */
+                  <div className={styles.deckSection}>
+                    <div className={styles.deckContainer}>
+                      {TILTED_BRANDS.map((brand) => (
+                        <button
+                          key={brand.name}
+                          type="button"
+                          className={`${styles.deckCard} ${brand.featured ? styles.featuredCard : ""}`}
+                          style={{
+                            backgroundColor: brand.bgColor,
+                            color: brand.textColor,
+                            transform: `rotate(${brand.tilt}) translateY(${brand.nudge})`,
+                          }}
+                          onClick={() =>
+                            setSearchTerm(brand.name.toLowerCase())
+                          }
+                        >
+                          <div className={styles.cardLogoWrapper}>
+                            <img
+                              src={brand.logo}
+                              alt={brand.name}
+                              className={styles.cardLogo}
+                            />
+                          </div>
+                          <span className={styles.cardName}>{brand.name}</span>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
                 )}
               </div>
-            )}
+            </div>
+
+            {/* Content */}
+            <div className={styles.content}>
+              <h1>
+                Try it yourself.
+                <br />
+                Instant logo retrieval.
+              </h1>
+              <p>{DEMO.summary}</p>
+
+              <ul className={styles.features}>
+                {DEMO.features.map((item) => (
+                  <li key={item} className={styles.feature}>
+                    <CircleCheck className={styles["features-icon"]} /> {item}
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
         </div>
-        <img
-          src={SVGS.curvedArrow}
-          alt="curved-arrow"
-          className={styles["curved-arrow"]}
-        />
       </div>
       {isRequestModalOpen && <LogoRequestForm closeModal={closeModal} />}
     </>

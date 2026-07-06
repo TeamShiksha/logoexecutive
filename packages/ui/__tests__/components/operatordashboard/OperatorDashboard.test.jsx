@@ -94,7 +94,9 @@ describe("Operator Page", () => {
       expect(screen.getByText("Operator Dashboard")).toBeInTheDocument();
     });
 
-    expect(screen.getByText("Monitor operations and manage system resources.")).toBeInTheDocument();
+    expect(
+      screen.getByText("Monitor operations and manage system resources.")
+    ).toBeInTheDocument();
     expect(screen.getByText("Active")).toBeInTheDocument();
     expect(screen.getByText("Archived")).toBeInTheDocument();
   });

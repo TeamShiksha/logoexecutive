@@ -683,7 +683,9 @@ const Operator = ({
               className={operatorStyles["dropdown"]}
               onClick={() => setIsDropdownOpen(!isDropdownOpen)}
             >
-              <span className={operatorStyles["dropdown-text"]}>{selectedDashboard.toUpperCase()}</span>
+              <span className={operatorStyles["dropdown-text"]}>
+                {selectedDashboard.toUpperCase()}
+              </span>
               <ChevronDown size={16} />
             </button>
 

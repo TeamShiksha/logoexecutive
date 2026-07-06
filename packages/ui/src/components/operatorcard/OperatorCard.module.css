@@ -3,13 +3,15 @@
   border: 1px solid var(--border-color);
   border-radius: 8px;
   overflow: hidden;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.02);
-  transition: box-shadow 0.2s ease, border-color 0.2s ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+  transition:
+    box-shadow 0.2s ease,
+    border-color 0.2s ease;
 }
 
 .card:hover {
   border-color: var(--label-color);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
 
 .content {
@@ -130,7 +132,8 @@
   margin: 0;
 }
 
-.message, .company-url {
+.message,
+.company-url {
   font-size: 14px;
   color: var(--black);
   margin: 0;
@@ -176,7 +179,8 @@
   margin-top: 8px;
 }
 
-.respond-button, .reject-button {
+.respond-button,
+.reject-button {
   min-width: 100px;
   height: 36px;
   font-size: 14px;

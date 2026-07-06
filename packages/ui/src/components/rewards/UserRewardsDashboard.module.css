@@ -438,8 +438,50 @@
     padding: 1rem;
   }
 
+  .table-wrapper {
+    margin: 0 -0.75rem;
+    border-radius: 0;
+  }
+
   .table th,
   .table td {
-    padding: 0.5rem 0.75rem;
+    padding: 0.5rem 0.6rem;
+    font-size: 0.75rem;
+    white-space: nowrap;
+  }
+
+  .section-subtitle {
+    display: none;
+  }
+
+  .images-header-actions {
+    display: none;
+  }
+
+  .tx-modal-content {
+    padding: 0.5rem 0;
+  }
+}
+
+.tx-modal-dialog {
+  max-width: calc(100vw - 2rem);
+}
+
+@media (max-width: 640px) {
+  .tx-modal-dialog {
+    width: calc(100vw - 2rem) !important;
+    padding: 1.25rem;
+  }
+
+  .pagination {
+    gap: 0.5rem;
+  }
+
+  .page-btn {
+    padding: 0.25rem 0.5rem;
+  }
+
+  .page-indicator {
+    font-size: 0.75rem;
   }
 }

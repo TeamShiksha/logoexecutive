@@ -279,6 +279,8 @@
   flex-direction: column;
   gap: 1.25rem;
   padding: 0.25rem 0;
+  max-height: 70vh;
+  overflow-y: auto;
 }
 
 .modal-title {
@@ -398,10 +400,17 @@
 @media (max-width: 768px) {
   .panel {
     padding: 1rem;
+    gap: 2rem;
   }
 
   .panel-header {
     flex-direction: column;
+    gap: 0.75rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .create-btn {
+    align-self: flex-start;
   }
 
   .table th,
@@ -411,6 +420,11 @@
 
   .threshold-row {
     flex-wrap: wrap;
+  }
+
+  .thresholds-list {
+    max-height: 300px;
+    overflow-y: auto;
   }
 
   .remove-btn {

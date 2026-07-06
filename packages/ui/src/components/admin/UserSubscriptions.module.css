@@ -343,7 +343,16 @@
 
   .table th,
   .table td {
-    padding: 0.625rem 0.75rem;
+    padding: 0.5rem 0.5rem;
+  }
+
+  .menu-cell {
+    width: 3rem;
+    padding: 0.375rem 0.25rem !important;
+  }
+
+  .menu-btn {
+    padding: 0.25rem;
   }
 }
 

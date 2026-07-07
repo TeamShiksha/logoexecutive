@@ -41,11 +41,11 @@ describe("LogoUploadForm", () => {
       </ToastProvider>
     );
     expect(
-      screen.getByRole("heading", { name: "Upload Logo" })
+      screen.getByRole("heading", { name: "Create New Logo" })
     ).toBeInTheDocument();
     expect(screen.getByLabelText("Company Url")).toBeInTheDocument();
     expect(
-      screen.getByRole("button", { name: "Upload Logo" })
+      screen.getByRole("button", { name: "Create New Logo" })
     ).toBeInTheDocument();
   });
 
@@ -59,7 +59,7 @@ describe("LogoUploadForm", () => {
       </ToastProvider>
     );
     const input = screen.getByLabelText("Company Url");
-    const button = screen.getByRole("button", { name: "Upload Logo" });
+    const button = screen.getByRole("button", { name: "Create New Logo" });
 
     expect(button).toBeDisabled();
 
@@ -130,11 +130,11 @@ describe("LogoUploadForm", () => {
 
     await waitFor(() => {
       expect(
-        screen.getByRole("button", { name: "Upload Logo" })
+        screen.getByRole("button", { name: "Create New Logo" })
       ).not.toBeDisabled();
     });
 
-    fireEvent.click(screen.getByRole("button", { name: "Upload Logo" }));
+    fireEvent.click(screen.getByRole("button", { name: "Create New Logo" }));
 
     await waitFor(() => {
       expect(fetchRequest).toHaveBeenCalled();

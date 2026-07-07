@@ -335,6 +335,8 @@ describe("UserSubscriptions", () => {
     instance.mockRejectedValueOnce({
       response: { data: { message: "Server error" } },
     });
+    // Refetch triggered after failure
+    instance.mockResolvedValueOnce(makeListResponse([user]));
 
     render(<UserSubscriptions />, { wrapper });
     await waitFor(() =>

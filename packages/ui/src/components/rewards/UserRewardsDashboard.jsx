@@ -81,18 +81,15 @@ function UserRewardsDashboard() {
         toast.error(USER_REWARDS_DASHBOARD.toasts.summaryError);
       }
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
     fetchTransactions().then(({ success, error }) => {
       if (!success && error) {
         toast.error(USER_REWARDS_DASHBOARD.toasts.historyError);
       }
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  useEffect(() => {
-    if (txPage > 1) {
-      fetchTransactions();
-    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [txPage]);
 
@@ -266,6 +263,7 @@ function UserRewardsDashboard() {
             isOpen={showTxModal}
             onClose={() => setShowTxModal(false)}
             customWidth="700px"
+            customClass={styles["tx-modal-dialog"]}
           >
             <div className={styles["tx-modal-content"]}>
               <h3 className={styles["tx-modal-title"]}>

@@ -11,7 +11,10 @@
     "test": "jest --watchAll=false",
     "coverage": "jest --coverage --watchAll=false",
     "format": "prettier --write .",
-    "check": "prettier --check ."
+    "check": "prettier --check .",
+    "migrate:up": "migrate-mongo up",
+    "migrate:down": "migrate-mongo down",
+    "migrate:status": "migrate-mongo status"
   },
   "dependencies": {
     "@aws-sdk/client-cloudfront": "^3.693.0",
@@ -31,6 +34,7 @@
     "image-size": "^2.0.2",
     "joi": "^17.12.3",
     "jsonwebtoken": "^9.0.2",
+    "migrate-mongo": "^14.0.7",
     "mongoose": "^8.5.1",
     "multer": "^1.4.5-lts.1",
     "otplib": "^12.0.1",

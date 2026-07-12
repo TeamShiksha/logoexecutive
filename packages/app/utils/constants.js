@@ -133,6 +133,7 @@ const RewardMessages = {
   IMAGE_ID_REQUIRED: "Image ID is required",
   IMAGE_NOT_FOUND: "No reward data found for this image",
   TRANSACTION_NOT_FOUND: "Transaction not found",
+  TRANSACTION_ID_REQUIRED: "Transaction ID is required",
   MISSING_BONUS_FIELDS: "Missing required fields: imageId, userId, points",
   POINTS_MUST_BE_POSITIVE: "Points must be greater than 0",
   BONUS_AWARDED: "Bonus points awarded successfully",

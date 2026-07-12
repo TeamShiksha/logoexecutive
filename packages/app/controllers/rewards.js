@@ -52,6 +52,13 @@ async function getRewardSummaryForUserController(req, res, next) {
   try {
     const rewardsService = new RewardsService();
     const userId = req.userData.userId;
+    if (!userId || !mongoose.Types.ObjectId.isValid(userId)) {
+      return res.status(400).json({
+        statusCode: 400,
+        error: STATUS_CODES[400],
+        message: Messages.INVALID_USER_ID,
+      });
+    }
 
     const summary = await rewardsService.getUserRewardData(userId);
     if (!summary) {
@@ -100,8 +107,22 @@ async function getUserLeaderboardRankController(req, res, next) {
   try {
     const rewardsService = new RewardsService();
     const userId = req.userData.userId;
+    if (!userId || !mongoose.Types.ObjectId.isValid(userId)) {
+      return res.status(400).json({
+        statusCode: 400,
+        error: STATUS_CODES[400],
+        message: Messages.INVALID_USER_ID,
+      });
+    }
 
     const rankData = await rewardsService.getUserLeaderboardRank(userId);
+    if (!rankData) {
+      return res.status(404).json({
+        statusCode: 404,
+        message: Messages.USER_NOT_FOUND,
+        error: STATUS_CODES[404],
+      });
+    }
 
     return res.status(200).json({
       statusCode: 200,
@@ -161,6 +182,14 @@ async function getUserTransactionsController(req, res, next) {
   try {
     const rewardsService = new RewardsService();
     const userId = req.userData.userId;
+    if (!userId || !mongoose.Types.ObjectId.isValid(userId)) {
+      return res.status(400).json({
+        statusCode: 400,
+        error: STATUS_CODES[400],
+        message: Messages.INVALID_USER_ID,
+      });
+    }
+
     const page = Number.parseInt(req.query.page) || 1;
     const limit = Number.parseInt(req.query.limit) || 20;
 
@@ -169,6 +198,13 @@ async function getUserTransactionsController(req, res, next) {
       page,
       limit
     );
+    if (!transactions) {
+      return res.status(404).json({
+        statusCode: 404,
+        message: RewardMessages.TRANSACTION_NOT_FOUND,
+        error: STATUS_CODES[404],
+      });
+    }
 
     return res.status(200).json({
       statusCode: 200,
@@ -186,6 +222,20 @@ async function getTransactionController(req, res, next) {
   try {
     const rewardsService = new RewardsService();
     const { transactionId } = req.params;
+    if (!transactionId || transactionId.length === 0) {
+      return res.status(400).json({
+        statusCode: 400,
+        message: RewardMessages.TRANSACTION_ID_REQUIRED,
+        error: STATUS_CODES[400],
+      });
+    }
+    if (!mongoose.Types.ObjectId.isValid(transactionId)) {
+      return res.status(400).json({
+        statusCode: 400,
+        error: STATUS_CODES[400],
+        message: Messages.INVALID_ID,
+      });
+    }
 
     const transaction = await rewardsService.getTransaction(transactionId);
 
@@ -215,6 +265,13 @@ async function getUserTransactionStatsController(req, res, next) {
   try {
     const rewardsService = new RewardsService();
     const userId = req.userData.userId;
+    if (!userId || !mongoose.Types.ObjectId.isValid(userId)) {
+      return res.status(400).json({
+        statusCode: 400,
+        error: STATUS_CODES[400],
+        message: Messages.INVALID_USER_ID,
+      });
+    }
 
     const stats = await rewardsService.getUserTransactionStats(userId);
 
@@ -237,6 +294,13 @@ async function getAuditTrailController(req, res, next) {
     const rewardsService = new RewardsService();
     const { imageId } = req.params;
     const userId = req.userData.userId;
+    if (!userId || !mongoose.Types.ObjectId.isValid(userId)) {
+      return res.status(400).json({
+        statusCode: 400,
+        error: STATUS_CODES[400],
+        message: Messages.INVALID_USER_ID,
+      });
+    }
 
     if (!imageId || imageId.length === 0) {
       return res.status(400).send({
@@ -272,9 +336,28 @@ async function getAuditTrailController(req, res, next) {
 async function searchTransactionsController(req, res, next) {
   try {
     const rewardsService = new RewardsService();
+    const userId = req.query.userId || null;
+    const imageId = req.query.imageId || null;
+
+    if (userId && !mongoose.Types.ObjectId.isValid(userId)) {
+      return res.status(400).json({
+        statusCode: 400,
+        error: STATUS_CODES[400],
+        message: Messages.INVALID_USER_ID,
+      });
+    }
+
+    if (imageId && !mongoose.Types.ObjectId.isValid(imageId)) {
+      return res.status(400).json({
+        statusCode: 400,
+        error: STATUS_CODES[400],
+        message: Messages.INVALID_ID,
+      });
+    }
+
     const filters = {
-      userId: req.query.userId || null,
-      imageId: req.query.imageId || null,
+      userId,
+      imageId,
       transactionType: req.query.type || null,
       isReversed: req.query.isReversed
         ? req.query.isReversed === "true"
@@ -324,6 +407,22 @@ async function awardBonusPointsController(req, res, next) {
       });
     }
 
+    if (!mongoose.Types.ObjectId.isValid(imageId)) {
+      return res.status(400).json({
+        statusCode: 400,
+        error: STATUS_CODES[400],
+        message: Messages.INVALID_ID,
+      });
+    }
+
+    if (!mongoose.Types.ObjectId.isValid(userId)) {
+      return res.status(400).json({
+        statusCode: 400,
+        error: STATUS_CODES[400],
+        message: Messages.INVALID_USER_ID,
+      });
+    }
+
     if (points <= 0) {
       return res.status(400).json({
         message: RewardMessages.POINTS_MUST_BE_POSITIVE,
@@ -339,6 +438,13 @@ async function awardBonusPointsController(req, res, next) {
       reason,
       description
     );
+    if (!transaction) {
+      return res.status(500).json({
+        statusCode: 500,
+        message: Messages.INTERNAL_SERVER_ERROR,
+        error: STATUS_CODES[500],
+      });
+    }
 
     return res.status(201).json({
       statusCode: 201,
@@ -362,6 +468,29 @@ async function reverseTransactionController(req, res, next) {
     const { reason } = req.body;
     const reversedBy = req.userData.userId;
 
+    if (!transactionId || transactionId.length === 0) {
+      return res.status(400).json({
+        statusCode: 400,
+        message: RewardMessages.TRANSACTION_ID_REQUIRED,
+        error: STATUS_CODES[400],
+      });
+    }
+    if (!mongoose.Types.ObjectId.isValid(transactionId)) {
+      return res.status(400).json({
+        statusCode: 400,
+        error: STATUS_CODES[400],
+        message: Messages.INVALID_ID,
+      });
+    }
+
+    if (!reversedBy || !mongoose.Types.ObjectId.isValid(reversedBy)) {
+      return res.status(400).json({
+        statusCode: 400,
+        error: STATUS_CODES[400],
+        message: Messages.INVALID_USER_ID,
+      });
+    }
+
     if (!reason) {
       return res.status(400).json({
         message: RewardMessages.REVERSAL_REASON_REQUIRED,
@@ -375,6 +504,13 @@ async function reverseTransactionController(req, res, next) {
       reversedBy,
       reason
     );
+    if (!reversedTransaction) {
+      return res.status(404).json({
+        statusCode: 404,
+        message: RewardMessages.TRANSACTION_NOT_FOUND,
+        error: STATUS_CODES[404],
+      });
+    }
 
     return res.status(200).json({
       statusCode: 200,

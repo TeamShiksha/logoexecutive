@@ -427,13 +427,6 @@ export const HERO_SECTION = {
 
 export const PRIVACY_AND_TERMS = [
   {
-    HEADLINE: "Privacy and Terms",
-    DATA_ID: "#",
-    TEXTS: [
-      "Thank you for choosing Openlogo! Before using our services, please review our Terms of Service carefully. This agreement is a crucial contract between us and our users. We've provided a concise summary followed by the complete legal terms.",
-    ],
-  },
-  {
     HEADLINE: "Privacy Policy",
     DATA_ID: "privacy",
     TEXTS: [

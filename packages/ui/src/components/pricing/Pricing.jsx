@@ -19,6 +19,7 @@ function Pricing({ openAuthModal, activePlan }) {
             name={plan.name}
             tagline={plan.tagline}
             index={plan.index}
+            pricing={plan.pricing}
             keypoints={plan.keypoints}
             openAuthModal={openAuthModal}
             activePlan={activePlan}

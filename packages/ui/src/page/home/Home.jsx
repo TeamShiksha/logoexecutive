@@ -10,6 +10,8 @@ import Pricing from "../../components/pricing/Pricing";
 import GetInTouch from "../../components/contact/GetInTouch";
 import { AuthContext, UserContext } from "../../contexts/Contexts";
 
+import ScrollReveal from "../../components/common/scroll/ScrollReveal";
+
 const Home = ({ openAuthModal }) => {
   const navigate = useNavigate();
   const { userData } = useContext(UserContext);
@@ -19,21 +21,35 @@ const Home = ({ openAuthModal }) => {
     isAuthenticated ? navigate("/dashboard") : openAuthModal();
 
   return (
-    <div className="container">
-      <HeroSection
-        onPrimaryButtonClick={onHeroSectionButtonClick}
-        isAuthenticated={isAuthenticated}
-      />
-      <Demo openAuthModal={openAuthModal} />
-      <Features />
-      <Pricing
-        openAuthModal={openAuthModal}
-        activePlan={userData?.subscription?.type}
-      />
-      <About />
-      <FAQs />
-      <GetInTouch />
-    </div>
+    <>
+      <ScrollReveal>
+        <HeroSection
+          onPrimaryButtonClick={onHeroSectionButtonClick}
+          isAuthenticated={isAuthenticated}
+        />
+      </ScrollReveal>
+      <ScrollReveal>
+        <Demo openAuthModal={openAuthModal} />
+      </ScrollReveal>
+      <ScrollReveal>
+        <Features />
+      </ScrollReveal>
+      <ScrollReveal>
+        <Pricing
+          openAuthModal={openAuthModal}
+          activePlan={userData?.subscription?.type}
+        />
+      </ScrollReveal>
+      <ScrollReveal>
+        <About />
+      </ScrollReveal>
+      <ScrollReveal>
+        <FAQs />
+      </ScrollReveal>
+      <ScrollReveal>
+        <GetInTouch />
+      </ScrollReveal>
+    </>
   );
 };
 

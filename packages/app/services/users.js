@@ -4,25 +4,26 @@ const SubscriptionService = require("../services/subscriptions");
 const { UsersRepository, RequestRepository } = require("../repositories");
 const { UserType } = require("../utils/constants");
 const ImageService = require("../services/images");
-const LogoRequestLogsService = require("../services/logoRequestlogs");
+const RewardTransactionsService = require("../services/rewardTransactions");
 
 class UserService {
   constructor() {
     this.userRepository = new UsersRepository();
     this.keyService = new KeyService();
     this.imageService = new ImageService();
-    this.logoRequestLogsService = new LogoRequestLogsService();
     this.subscriptionService = new SubscriptionService();
     this.requestRepository = new RequestRepository();
+    this.rewardTransactionsService = new RewardTransactionsService();
   }
 
   /**
    * Gets User by Id.
    * @param {string} userId - The userId of the user.
+   * @param {Object} session - mongoose session
    * @returns {Promise<Object>} - User Object.
    */
-  async getUser(userId) {
-    return await this.userRepository.getById(userId);
+  async getUser(userId, { session } = {}) {
+    return await this.userRepository.getById(userId, { session });
   }
 
   /**
@@ -337,7 +338,27 @@ class UserService {
   }
 
   /**
-   * Logs an API request entry for a logo fetch operation.
+   * Lists CUSTOMER users with their subscription details.
+   * Supports search by name/email, pagination, and optionally includes deleted users.
+   * @param {Object} options
+   * @param {string} [options.search]
+   * @param {number} options.page
+   * @param {number} options.limit
+   * @param {boolean} options.includeDeleted
+   * @returns {Promise<{ users: Array, total: number }>}
+   */
+  async listUsers({ search, page, limit, includeDeleted, hasRewardPoints }) {
+    return await this.userRepository.findUsersWithSubscription({
+      search,
+      page,
+      limit,
+      includeDeleted,
+      hasRewardPoints,
+    });
+  }
+
+  /**
+   * Logs an API request entry for a logo fetch operation and validates for reward eligibility.
    * This is a non-fatal operation - failures are logged but do not interrupt the flow.
    * @param {string} company - The company name.
    * @param {Object} userSubscription - The user's subscription object.
@@ -350,13 +371,25 @@ class UserService {
         this.imageService.getImageByCompanyName(company),
         this.getUserBySubscriptionId(userSubscription._id),
       ]);
-      const requestPayload = {
-        user_id: userRef._id,
-        key_id: keyRef._id,
-        image_id: imageDoc && imageDoc._id,
-        response_size_bytes: (imageDoc && imageDoc.image_size) || 0,
-      };
-      await this.logoRequestLogsService.createEntry(requestPayload);
+      // Reward tracking: validate and log request for reward eligibility
+      if (imageDoc) {
+        this.rewardTransactionsService
+          .validateAndLogRequest({
+            imageId: imageDoc._id,
+            userId: userRef._id,
+            creatorId: imageDoc.user_id,
+            keyId: keyRef._id,
+            subscriptionId: keyRef.subscription_id,
+            subscription: userSubscription,
+            response_size_bytes: imageDoc?.image_size,
+          })
+          .catch((err) => {
+            console.error(
+              "Failed to validate and log reward request:",
+              err.message
+            );
+          });
+      }
     } catch (err) {
       console.error("Failed to create API request entry:", err.message);
     }

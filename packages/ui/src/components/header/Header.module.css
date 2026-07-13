@@ -1,38 +1,56 @@
 .block {
-  display: flex;
-  justify-content: center;
+  padding-top: 0.5rem;
   background-color: var(--white);
-  border-bottom: var(--border);
-  position: -webkit-sticky;
   position: sticky;
   top: 0;
   z-index: 100;
+  transition:
+    padding-top 0.3s ease,
+    background-color 0.3s ease,
+    box-shadow 0.3s ease,
+    border-bottom 0.3s ease;
+}
+
+.block.scrolled {
+  padding-top: 0;
+  background-color: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  border-bottom: 1px solid rgba(177, 179, 183, 0.15);
+}
+
+[data-theme="dark"] .block.scrolled {
+  background-color: rgba(17, 24, 39, 0.8);
+  border-bottom: 1px solid rgba(75, 85, 99, 0.2);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
 }
 
 .header {
-  width: 100%;
+  margin: 0 auto;
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  min-height: 5.25rem;
-  padding: 0.9rem 0;
+  justify-content: space-between;
+  position: relative;
+  padding-top: 2rem;
+  padding-bottom: 1rem;
+  transition:
+    padding-top 0.3s ease,
+    padding-bottom 0.3s ease;
 }
 
-.mobile-header {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.35rem;
+.block.scrolled .header {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
 }
 
 .brand {
   display: flex;
-  flex-direction: row;
-  gap: 0.55rem;
   align-items: center;
+  gap: 0.5rem;
   cursor: pointer;
   border: none;
-  background-color: var(--white);
+  background: none;
 }
 
 .brand-img {
@@ -41,111 +59,133 @@
   object-fit: contain;
 }
 
+.dark-logo {
+  display: none;
+}
+
+[data-theme="dark"] .light-logo {
+  display: none;
+}
+
+[data-theme="dark"] .dark-logo {
+  display: block;
+}
+
 .brand-name {
-  font-size: 2rem;
+  font-size: 1.25rem;
   font-weight: 700;
-  letter-spacing: -0.02em;
   color: var(--black);
 }
 
 .nav-bar {
   display: flex;
-  gap: 1.5rem;
   align-items: center;
-}
-
-.ml {
-  margin-left: 0.4rem;
+  gap: 2.5rem;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 .nav {
-  font-size: 1.2rem;
+  font-size: 0.9rem;
+  font-weight: 500;
   text-decoration: none;
-  font-weight: 600;
   color: var(--description);
+  position: relative;
 }
 
 .nav:hover {
-  color: var(--primary);
-  transition: all 0.3s ease-in-out;
-  text-decoration: underline;
-  text-decoration-color: var(--primary);
-  text-decoration-thickness: 2px;
-  text-underline-offset: 6px;
+  color: var(--primary-hover);
+}
+
+.nav::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  width: 0;
+  height: 2px;
+  background-color: var(--primary);
+  transition: width 0.3s ease;
+}
+
+.nav:hover::after {
+  width: 100%;
 }
 
 .active {
   color: var(--primary);
-  text-decoration: underline;
-  text-decoration-color: var(--primary);
-  text-decoration-thickness: 2px;
-  text-underline-offset: 6px;
+  position: relative;
 }
 
-/* This media query handles responsive styling like font-size, gaps, etc. down to 1024px */
-@media only screen and (max-width: 1024px) {
+.active::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  width: 100%;
+  height: 2px;
+  background-color: var(--primary);
+}
+
+.right-side {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.hamburger {
+  display: flex;
+  align-items: center;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+.hamburger-img {
+  width: 24px;
+  height: 24px;
+}
+
+@media (max-width: 1024px) {
+  .header {
+    padding-top: 1.5rem;
+    padding-bottom: 0.75rem;
+  }
+
   .brand-img {
     width: 32px;
     height: 32px;
   }
 
   .brand-name {
-    font-size: 1.8rem;
-  }
-
-  .nav-bar {
-    gap: 1rem;
-  }
-
-  .nav {
-    font-size: 1.05rem;
-  }
-
-  .ml {
-    margin-left: 0.25rem;
+    font-size: 1.1rem;
   }
 }
 
-@media only screen and (width < 1024px) {
-  .nav-bar {
-    display: none;
-  }
-
-  .mobile-header {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-  }
-
-  .hamburger {
-    display: flex;
-    align-items: center;
-    background: none;
-    border: none;
-    padding: 0;
-    cursor: pointer;
-    justify-content: flex-end;
-  }
-
-  .hamburger-img {
-    width: 24px;
-    height: 24px;
-  }
-}
-
-@media only screen and (max-width: 564px) {
+@media (max-width: 564px) {
   .brand-img {
     width: 28px;
     height: 28px;
   }
 
   .brand-name {
-    font-size: 1.6rem;
-    font-weight: 700;
+    font-size: 1rem;
+  }
+
+  .right-side {
+    gap: 0.5rem;
   }
 
   .hamburger-img {
     width: 20px;
     height: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .headerBtnWrapper {
+    display: none;
   }
 }

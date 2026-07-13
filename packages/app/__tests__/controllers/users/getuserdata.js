@@ -121,6 +121,8 @@ describe("GETUSERDATA", () => {
       is_verified: mockUserModel.is_verified,
       created_at: mockUserModel._id.getTimestamp().toISOString(),
       updated_at: mockUserModel.updated_at.toISOString(),
+      reward_points_current: mockUserModel.reward_points_current,
+      reward_points_lifetime: mockUserModel.reward_points_lifetime,
       subscription: {
         _id: mockSubscriptionModel._id.toString(),
         is_active: mockSubscriptionModel.is_active,
@@ -133,8 +135,6 @@ describe("GETUSERDATA", () => {
       keys: [
         {
           _id: mockKeyModel._id.toString(),
-          key_description: mockKeyModel.key_description,
-          subscription_id: mockKeyModel.subscription_id,
           created_at: mockKeyModel._id.getTimestamp().toISOString(),
           updated_at: mockKeyModel.updated_at.toISOString(),
           expires_at: mockKeyModel.expires_at.toISOString(),

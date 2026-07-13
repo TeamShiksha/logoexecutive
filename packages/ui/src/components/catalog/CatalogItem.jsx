@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import styles from "./CatalogItem.module.css";
 import Button from "../common/button/Button";
 import { formatDate } from "../../utils/Helpers";
-function CatalogItem({ company, onUpdate }) {
+function CatalogItem({ company, onUpdate, onViewRewards }) {
   const [imageError, setImageError] = useState(false);
 
   useEffect(() => {
@@ -41,13 +41,24 @@ function CatalogItem({ company, onUpdate }) {
         <div>{formatDate(company.updated_at)}</div>
       </div>
       <div className={styles["catalog-item-column-last"]}>
-        <Button
-          onClick={() => onUpdate(company._id, company.company_uri)}
-          variant="primary"
-          className={styles["reupload-btn"]}
-        >
-          Reupload
-        </Button>
+        <div className={styles["action-buttons"]}>
+          <Button
+            onClick={() =>
+              onViewRewards(company._id, company.company_name, company.user_id)
+            }
+            variant="secondary"
+            className={styles["rewards-btn"]}
+          >
+            Rewards
+          </Button>
+          <Button
+            onClick={() => onUpdate(company._id, company.company_uri)}
+            variant="primary"
+            className={styles["reupload-btn"]}
+          >
+            Reupload
+          </Button>
+        </div>
       </div>
     </div>
   );
@@ -62,8 +73,10 @@ CatalogItem.propTypes = {
     created_at: PropTypes.string.isRequired,
     updated_at: PropTypes.string.isRequired,
     imageUrl: PropTypes.string,
+    user_id: PropTypes.string,
   }).isRequired,
   onUpdate: PropTypes.func.isRequired,
+  onViewRewards: PropTypes.func.isRequired,
 };
 
 export default CatalogItem;

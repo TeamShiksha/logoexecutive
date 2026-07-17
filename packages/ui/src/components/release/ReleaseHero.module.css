@@ -1,0 +1,239 @@
+/* Hero Header Section */
+.hero-section {
+  background: var(--white);
+  min-height: calc(100vh - 5.25rem);
+  display: block;
+  padding: 0;
+  color: var(--black);
+  border-bottom: var(--border);
+  box-sizing: border-box;
+  transition: background-color 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Background halftone pattern */
+.hero-section::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(
+    circle,
+    var(--label-color) 1.5px,
+    transparent 1.5px
+  );
+  background-size: 20px 20px;
+  mask-image: radial-gradient(
+    ellipse 90% 100% at 50% 30%,
+    black 15%,
+    transparent 70%
+  );
+  -webkit-mask-image: radial-gradient(
+    ellipse 90% 100% at 50% 30%,
+    black 15%,
+    transparent 70%
+  );
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.25;
+}
+
+/* Dark mode override */
+[data-theme="dark"] .hero-section {
+  border-bottom: 1px solid rgba(99, 102, 241, 0.12);
+}
+
+[data-theme="dark"] .contributors-text strong {
+  color: var(--white);
+}
+
+.hero-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  width: 100%;
+  position: relative;
+  z-index: 1;
+}
+
+.hero-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  max-width: 720px;
+  min-height: calc(100vh - 3.5rem);
+}
+
+.hero-badge {
+  color: var(--primary);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  margin-bottom: 1rem;
+  background-color: var(--primary-focus);
+  padding: 0.3rem 0.75rem;
+  border-radius: 9999px;
+  border: 1px solid rgba(99, 102, 241, 0.25);
+}
+
+.hero-title {
+  font-size: 4rem;
+  line-height: 4.5rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--black);
+  margin-bottom: 1.25rem;
+}
+
+.gradient-text {
+  background: linear-gradient(135deg, var(--primary) 0%, #818cf8 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-weight: 700;
+}
+
+.hero-subtitle {
+  font-size: 1.22rem;
+  font-weight: 400;
+  color: var(--description);
+  line-height: 1.75;
+  max-width: 560px;
+}
+
+/* CTA Button Row */
+.hero-cta {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 1.75rem;
+  align-items: center;
+  justify-content: center;
+}
+
+.cta-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--white-fixed);
+  background-color: var(--primary);
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.cta-primary:hover {
+  background-color: var(--primary-hover);
+  transform: translateY(-1px);
+}
+
+@keyframes bounceDown {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(4px);
+  }
+}
+
+.cta-primary svg {
+  animation: bounceDown 2s infinite ease-in-out;
+}
+
+/* Contributors Section */
+.contributors-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 3rem;
+}
+
+.contributors-text {
+  font-size: 0.85rem;
+  color: var(--description);
+}
+
+.contributors-text strong {
+  color: var(--black);
+  font-weight: 600;
+}
+
+[data-theme="dark"] .contributors-text strong {
+  color: #ffffff;
+}
+
+.highlight {
+  color: var(--primary);
+  font-weight: 600;
+}
+
+.hero-visual {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  perspective: 1000px;
+  padding-top: 3rem;
+  padding-bottom: 4rem;
+}
+
+.mockup-wrapper {
+  box-shadow: var(--shadow-bottom);
+  width: 100%;
+  max-width: 720px;
+  transform-style: preserve-3d;
+  will-change: transform, box-shadow;
+  transition:
+    transform 0.1s ease,
+    box-shadow 0.1s ease;
+  overflow: hidden;
+  border-radius: 0.75rem;
+}
+
+.mockup-image {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 0.5rem;
+}
+
+/* Responsive Breakpoints */
+@media (max-width: 1024px) {
+  .hero-title {
+    font-size: 3.5rem;
+    line-height: 4rem;
+  }
+
+  .mockup-wrapper {
+    max-width: 580px;
+  }
+}
+
+@media (max-width: 768px) {
+  .hero-title {
+    font-size: 3rem;
+    line-height: 3.2rem;
+  }
+
+  .mockup-wrapper {
+    max-width: 100%;
+  }
+
+  .hero-cta {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .cta-primary {
+    width: 100%;
+    justify-content: center;
+  }
+}

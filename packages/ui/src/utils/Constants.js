@@ -1743,3 +1743,186 @@ export const TILTED_BRANDS = [
     nudge: "20px",
   },
 ];
+
+export const RELEASE_DATA = [
+  {
+    version: "v0.8.0",
+    releaseDate: "May 2026",
+    heroImage: "version07",
+    author: {
+      username: "anujarora0502",
+      avatarUrl: "https://github.com/anujarora0502.png",
+      profileUrl: "https://github.com/anujarora0502",
+    },
+    entries: [
+      {
+        category: "Feature",
+        prNumber: 1042,
+        title: "Revamp User dashboard",
+        description:
+          "Full redesign of the user interface according to the latest design specifications for improved usability.",
+        contributor: {
+          username: "AryaDharkar",
+          avatarUrl: "https://github.com/AryaDharkar.png",
+          profileUrl: "https://github.com/AryaDharkar",
+        },
+      },
+      {
+        category: "UI Update",
+        prNumber: 1043,
+        title: "Enhancing UI of Admin Dashboard",
+        description:
+          "Polishing the administrative interface with better spacing and contrast for power users.",
+        contributor: {
+          username: "L-Tarun-Aditya",
+          avatarUrl: "https://github.com/L-Tarun-Aditya.png",
+          profileUrl: "https://github.com/L-Tarun-Aditya",
+        },
+      },
+      {
+        category: "Security",
+        prNumber: 1044,
+        title: "Two-Factor Authentication",
+        description:
+          "Added a new 2FA section in user settings to enhance account security across the platform.",
+        contributor: {
+          username: "MukeshAbhi",
+          avatarUrl: "https://github.com/MukeshAbhi.png",
+          profileUrl: "https://github.com/MukeshAbhi",
+        },
+      },
+      {
+        category: "Security",
+        prNumber: 1045,
+        title: "Dedicated settings page for MFA",
+        description:
+          "Implementing a dedicated settings page for MFA and multi factor authentication management.",
+        contributor: {
+          username: "L-Tarun-Aditya",
+          avatarUrl: "https://github.com/L-Tarun-Aditya.png",
+          profileUrl: "https://github.com/L-Tarun-Aditya",
+        },
+      },
+      {
+        category: "Bug Fix",
+        prNumber: 1047,
+        title: "Prevent Password Reuse",
+        description:
+          "Prevent Users From Reusing Old Password During Password Reset flow to improve account security.",
+        contributor: {
+          username: "rishang14",
+          avatarUrl: "https://github.com/rishang14.png",
+          profileUrl: "https://github.com/rishang14",
+        },
+      },
+      {
+        category: "Bug Fix",
+        prNumber: 1048,
+        title: "Fix createLogo page authentication bypass",
+        description:
+          "Fix bugs on createLogo page and allow users to access this page without authentication.",
+        contributor: {
+          username: "AryaDharkar",
+          avatarUrl: "https://github.com/AryaDharkar.png",
+          profileUrl: "https://github.com/AryaDharkar",
+        },
+      },
+      {
+        category: "CI/CD",
+        prNumber: 1050,
+        title: "Branch & PR conventions checks",
+        description:
+          "Feature to enforce branch & PR naming conventions via husky + GitHub Actions.",
+        contributor: {
+          username: "Smayur0",
+          avatarUrl: "https://github.com/Smayur0.png",
+          profileUrl: "https://github.com/Smayur0",
+        },
+      },
+      {
+        category: "UI Update",
+        prNumber: 1051,
+        title: "Redesign documentation page",
+        description:
+          "Complete overhaul of the documentation layout, code snippets, and navigation.",
+        contributor: {
+          username: "Dhirenderchoudhary",
+          avatarUrl: "https://github.com/Dhirenderchoudhary.png",
+          profileUrl: "https://github.com/Dhirenderchoudhary",
+        },
+      },
+    ],
+  },
+  {
+    version: "v0.7.0",
+    releaseDate: "Mar 2026",
+    heroImage: "version07",
+    author: {
+      username: "anujarora0502",
+      avatarUrl: "https://github.com/anujarora0502.png",
+      profileUrl: "https://github.com/anujarora0502",
+    },
+    entries: [
+      {
+        category: "Feature",
+        prNumber: 1034,
+        title: "Custom Logo Creation",
+        description:
+          "You can now create and use your own custom logo image directly within the platform.",
+        contributor: {
+          username: "biplab-sutradhar",
+          avatarUrl: "https://github.com/biplab-sutradhar.png",
+          profileUrl: "https://github.com/biplab-sutradhar",
+        },
+      },
+      {
+        category: "Security",
+        prNumber: 1035,
+        title: "Secure API keys visibility",
+        description:
+          "API keys are now securely hidden to prevent accidental exposure and enhance account security.",
+        contributor: {
+          username: "L-Tarun-Aditya",
+          avatarUrl: "https://github.com/L-Tarun-Aditya.png",
+          profileUrl: "https://github.com/L-Tarun-Aditya",
+        },
+      },
+    ],
+  },
+  {
+    version: "v0.6.0",
+    releaseDate: "Dec 2025",
+    heroImage: "version06",
+    author: {
+      username: "printgourav",
+      avatarUrl: "https://github.com/printgourav.png",
+      profileUrl: "https://github.com/printgourav",
+    },
+    entries: [
+      {
+        category: "Feature",
+        prNumber: 1021,
+        title: "Usage Analytics Graph",
+        description:
+          "You can now view a simple graph on your dashboard that helps you understand how much you’re using the API.",
+        contributor: {
+          username: "sachinkmrsin",
+          avatarUrl: "https://github.com/sachinkmrsin.png",
+          profileUrl: "https://github.com/sachinkmrsin",
+        },
+      },
+      {
+        category: "Security",
+        prNumber: 1022,
+        title: "Automatic API Key Expiry",
+        description:
+          "API keys now expire automatically to keep accounts more secure. Users can set custom expiry date.",
+        contributor: {
+          username: "biplab-sutradhar",
+          avatarUrl: "https://github.com/biplab-sutradhar.png",
+          profileUrl: "https://github.com/biplab-sutradhar",
+        },
+      },
+    ],
+  },
+];

@@ -1,72 +1,65 @@
-import styles from "./Release.module.css";
+import PropTypes from "prop-types";
+import styles from "./VersionCard.module.css";
+import AvatarStack from "./AvatarStack";
 
-function VersionCard(versionData) {
-  const { versionName, releaseDate, imgSrc, releaseNotes } = versionData;
+function VersionCard({ entry }) {
+  const { category, prNumber, title, description } = entry;
+
+  // Normalize single contributor and array of contributors for rendering
+  const contributors = entry.contributors
+    ? entry.contributors
+    : entry.contributor
+      ? [entry.contributor]
+      : [];
+
+  // Determine category badge class dynamically
+  const getCategoryClass = (catName) => {
+    const formatted = catName.toLowerCase().replace(/\s+/g, "-");
+    return styles[`badge-${formatted}`] || styles["badge-default"];
+  };
+
   return (
-    <div className={styles["version-card-container"]}>
-      <div className={styles["date-left"]}>{releaseDate}</div>
-
-      <div className={styles["timeline-dot"]}>
-        <div className={styles["mobile-dot"]}></div>
+    <div className={styles["entry-card"]}>
+      <div className={styles["card-badges"]}>
+        <span
+          className={`${styles["badge-category"]} ${getCategoryClass(category)}`}
+        >
+          {category.toUpperCase()}
+        </span>
+        {prNumber && <span className={styles["badge-pr"]}>#{prNumber}</span>}
       </div>
 
-      <div className={styles["timeline-connector"]}></div>
+      <h3 className={styles["entry-title"]}>{title}</h3>
+      <p className={styles["entry-description"]}>{description}</p>
 
-      <div className={styles["content-area"]}>
-        <div className={styles["mobile-header"]}>
-          <div className={styles["mobile-dot"]}></div>
-          <div className={styles["mobile-meta"]}>
-            <h3>{versionName}</h3>
-            <p className={styles["release-date"]}>{releaseDate}</p>
-          </div>
+      {contributors.length > 0 && (
+        <div className={styles["contributors-wrapper"]}>
+          <AvatarStack users={contributors} size="small" />
         </div>
-
-        <div className={styles["desktop-header"]}>
-          <h3>{versionName}</h3>
-        </div>
-
-        <div className={styles["screenshot-wrap"]}>
-          <div className={styles["screenshot-inner"]}>
-            <img src={imgSrc} alt={`Version ${versionName} screenshot`} />
-          </div>
-        </div>
-
-        {releaseNotes && releaseNotes.length > 0 && (
-          <div className={styles["release-notes"]}>
-            <h3>Release Notes</h3>
-            <ul className={styles["notes-list"]}>
-              {releaseNotes?.map(({ releaseNote, contributors }, index) => (
-                <li key={releaseNote + index} className={styles["note-item"]}>
-                  <span className={styles["dot"]}></span>
-                  <span className={styles["list-description"]}>
-                    {releaseNote}{" "}
-                    <span className={styles["note-link"]}>
-                      (By{" "}
-                      {contributors.map(
-                        ({ contributorName, contributorGithubLink }, idx) => (
-                          <span key={contributorName + idx}>
-                            <a
-                              href={contributorGithubLink}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                            >
-                              {contributorName}
-                            </a>
-                            {idx !== contributors.length - 1 ? ", " : ""}
-                          </span>
-                        )
-                      )}
-                      )
-                    </span>
-                  </span>
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
-      </div>
+      )}
     </div>
   );
 }
+
+VersionCard.propTypes = {
+  entry: PropTypes.shape({
+    category: PropTypes.string.isRequired,
+    prNumber: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    title: PropTypes.string.isRequired,
+    description: PropTypes.string.isRequired,
+    contributor: PropTypes.shape({
+      username: PropTypes.string.isRequired,
+      avatarUrl: PropTypes.string.isRequired,
+      profileUrl: PropTypes.string.isRequired,
+    }),
+    contributors: PropTypes.arrayOf(
+      PropTypes.shape({
+        username: PropTypes.string.isRequired,
+        avatarUrl: PropTypes.string.isRequired,
+        profileUrl: PropTypes.string.isRequired,
+      })
+    ),
+  }).isRequired,
+};
 
 export default VersionCard;

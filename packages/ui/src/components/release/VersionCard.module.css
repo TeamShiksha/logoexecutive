@@ -1,0 +1,91 @@
+.entry-card {
+  background-color: var(--white);
+  border: var(--border);
+  border-radius: 0.75rem;
+  padding: 1.1rem;
+  box-shadow: var(--shadow);
+  transition:
+    transform 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.entry-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-bottom);
+  border-color: rgba(99, 102, 241, 0.4);
+}
+
+.card-badges {
+  display: flex;
+  gap: 0.45rem;
+  margin-bottom: 0.75rem;
+  align-items: center;
+}
+
+.badge-category {
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 0.2rem 0.55rem;
+  border-radius: 0.25rem;
+}
+
+.badge-pr {
+  font-size: 0.65rem;
+  font-weight: 600;
+  padding: 0.2rem 0.55rem;
+  border-radius: 0.25rem;
+  background-color: rgba(156, 163, 175, 0.12);
+  color: var(--label-color);
+}
+
+/* Dynamic Category Colors */
+.badge-feature {
+  background-color: rgba(79, 70, 229, 0.08);
+  color: var(--primary);
+}
+
+.badge-ui-update {
+  background-color: rgba(14, 165, 233, 0.08);
+  color: #0284c7;
+}
+
+.badge-security {
+  background-color: rgba(244, 63, 94, 0.08);
+  color: #e11d48;
+}
+
+.badge-bug-fix {
+  background-color: rgba(16, 185, 129, 0.08);
+  color: #059669;
+}
+
+.badge-infrastructure {
+  background-color: rgba(217, 119, 6, 0.08);
+  color: #d97706;
+}
+
+.badge-default {
+  background-color: rgba(156, 163, 175, 0.08);
+  color: var(--description);
+}
+
+.entry-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--black);
+  margin-bottom: 0.5rem;
+}
+
+.entry-description {
+  font-size: 0.9rem;
+  color: var(--description);
+  line-height: 1.6;
+  margin-bottom: 1.25rem;
+}
+
+/* Overlapping Avatar Styling */
+.contributors-wrapper {
+  display: flex;
+  align-items: center;
+}

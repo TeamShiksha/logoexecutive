@@ -3,14 +3,14 @@ import { render, screen } from "@testing-library/react";
 import Release from "../../src/page/release/Release";
 
 describe("Release page", () => {
-  it("renders About and Changelog sections", () => {
+  it("renders Hero and Changelog sections", () => {
     render(<Release />);
 
-    const aboutHeading = screen.getByRole("heading", {
-      level: 2,
-      name: "About",
+    const heroHeading = screen.getByRole("heading", {
+      level: 1,
+      name: /What's new at Openlogo/i,
     });
-    expect(aboutHeading).toBeInTheDocument();
+    expect(heroHeading).toBeInTheDocument();
 
     const changelogHeading = screen.getByRole("heading", {
       level: 2,

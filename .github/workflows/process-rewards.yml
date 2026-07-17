@@ -31,7 +31,7 @@ jobs:
 
       - name: Run reward processing script
         env:
-          MONGO_URL: ${{ secrets.MONGO_URL }}
+          MONGO_URL: ${{ secrets.PROD_MONGO_URL }}
           NODE_ENV: production
         run: node packages/app/scripts/rewards/processRewards.js 2>&1 | tee /tmp/reward-worker.log
 

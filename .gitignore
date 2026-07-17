@@ -13,7 +13,7 @@ node_modules
 dist
 dist-ssr
 *.local
-
+pnpm-lock.yaml
 .env
 
 # Editor directories and files

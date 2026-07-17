@@ -1,6 +1,7 @@
 const { STATUS_CODES } = require("node:http");
+const mongoose = require("mongoose");
 const MilestoneConfigService = require("../services/milestoneConfig");
-const { RewardMessages } = require("../utils/constants");
+const { Messages, RewardMessages } = require("../utils/constants");
 
 /**
  * GET /api/admin/milestones
@@ -10,6 +11,14 @@ async function listMilestoneConfigsController(req, res, next) {
   try {
     const service = new MilestoneConfigService();
     const configs = await service.getAllConfigs();
+
+    if (!configs) {
+      return res.status(404).json({
+        statusCode: 404,
+        message: RewardMessages.MILESTONE_NOT_FOUND,
+        error: STATUS_CODES[404],
+      });
+    }
 
     return res.status(200).json({
       statusCode: 200,
@@ -28,6 +37,20 @@ async function listMilestoneConfigsController(req, res, next) {
 async function getMilestoneConfigController(req, res, next) {
   try {
     const service = new MilestoneConfigService();
+    if (!req.params.id || req.params.id.length === 0) {
+      return res.status(400).json({
+        statusCode: 400,
+        message: RewardMessages.MILESTONE_NOT_FOUND,
+        error: STATUS_CODES[400],
+      });
+    }
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+      return res.status(400).json({
+        statusCode: 400,
+        error: STATUS_CODES[400],
+        message: Messages.INVALID_ID,
+      });
+    }
     const config = await service.getConfigById(req.params.id);
 
     if (!config) {
@@ -56,6 +79,13 @@ async function createMilestoneConfigController(req, res, next) {
   try {
     const { name, thresholds } = req.body;
     const adminId = req.userData?.userId;
+    if (!adminId || !mongoose.Types.ObjectId.isValid(adminId)) {
+      return res.status(400).json({
+        statusCode: 400,
+        error: STATUS_CODES[400],
+        message: Messages.INVALID_USER_ID,
+      });
+    }
 
     if (!name) {
       return res.status(422).json({
@@ -90,6 +120,13 @@ async function createMilestoneConfigController(req, res, next) {
 
     const service = new MilestoneConfigService();
     const config = await service.createConfig({ name, thresholds }, adminId);
+    if (!config) {
+      return res.status(500).json({
+        statusCode: 500,
+        message: Messages.INTERNAL_SERVER_ERROR,
+        error: STATUS_CODES[500],
+      });
+    }
 
     return res.status(201).json({
       statusCode: 201,
@@ -97,6 +134,27 @@ async function createMilestoneConfigController(req, res, next) {
       data: config,
     });
   } catch (error) {
+    if (error.message === "MilestoneConfig not found") {
+      return res.status(404).json({
+        statusCode: 404,
+        message: error.message,
+        error: STATUS_CODES[404],
+      });
+    }
+
+    if (
+      error.message === "Config is already active" ||
+      error.message ===
+        'Threshold "at" values must be in strictly ascending order' ||
+      error.message === 'Threshold "points" values must be in ascending order'
+    ) {
+      return res.status(422).json({
+        statusCode: 422,
+        message: error.message,
+        error: STATUS_CODES[422],
+      });
+    }
+
     next(error);
   }
 }
@@ -108,7 +166,28 @@ async function createMilestoneConfigController(req, res, next) {
 async function activateMilestoneConfigController(req, res, next) {
   try {
     const service = new MilestoneConfigService();
+    if (!req.params.id || req.params.id.length === 0) {
+      return res.status(400).json({
+        statusCode: 400,
+        message: RewardMessages.MILESTONE_NOT_FOUND,
+        error: STATUS_CODES[400],
+      });
+    }
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+      return res.status(400).json({
+        statusCode: 400,
+        error: STATUS_CODES[400],
+        message: Messages.INVALID_ID,
+      });
+    }
     const config = await service.activateConfig(req.params.id);
+    if (!config) {
+      return res.status(404).json({
+        statusCode: 404,
+        message: RewardMessages.MILESTONE_NOT_FOUND,
+        error: STATUS_CODES[404],
+      });
+    }
 
     return res.status(200).json({
       statusCode: 200,
@@ -178,11 +257,33 @@ async function updateMilestoneConfigController(req, res, next) {
       }
     }
 
+    if (!req.params.id || req.params.id.length === 0) {
+      return res.status(400).json({
+        statusCode: 400,
+        message: RewardMessages.MILESTONE_NOT_FOUND,
+        error: STATUS_CODES[400],
+      });
+    }
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+      return res.status(400).json({
+        statusCode: 400,
+        error: STATUS_CODES[400],
+        message: Messages.INVALID_ID,
+      });
+    }
+
     const service = new MilestoneConfigService();
     const config = await service.updateConfig(req.params.id, {
       name,
       thresholds,
     });
+    if (!config) {
+      return res.status(404).json({
+        statusCode: 404,
+        message: RewardMessages.MILESTONE_NOT_FOUND,
+        error: STATUS_CODES[404],
+      });
+    }
 
     return res.status(200).json({
       statusCode: 200,
@@ -217,7 +318,28 @@ async function updateMilestoneConfigController(req, res, next) {
 async function deleteMilestoneConfigController(req, res, next) {
   try {
     const service = new MilestoneConfigService();
+    if (!req.params.id || req.params.id.length === 0) {
+      return res.status(400).json({
+        statusCode: 400,
+        message: RewardMessages.MILESTONE_NOT_FOUND,
+        error: STATUS_CODES[400],
+      });
+    }
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+      return res.status(400).json({
+        statusCode: 400,
+        error: STATUS_CODES[400],
+        message: Messages.INVALID_ID,
+      });
+    }
     const config = await service.deleteConfig(req.params.id);
+    if (!config) {
+      return res.status(404).json({
+        statusCode: 404,
+        message: RewardMessages.MILESTONE_NOT_FOUND,
+        error: STATUS_CODES[404],
+      });
+    }
 
     return res.status(200).json({
       statusCode: 200,

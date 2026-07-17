@@ -35,12 +35,34 @@ describe("Rewards Controller - Summaries", () => {
     const imageId = MOCK_IMAGES[0]._id.toString();
     const endpoint = `/api/rewards/summary/image/${imageId}`;
 
+    const auth = () => {
+      jest
+        .spyOn(UserSessionService.prototype, "validateSession")
+        .mockResolvedValue(MOCK_USER_SESSIONS[0]);
+    };
+
+    it(`400 - Invalid image ID format`, async () => {
+      jest
+        .spyOn(UserSessionService.prototype, "validateSession")
+        .mockResolvedValue(MOCK_USER_SESSIONS[0]);
+
+      const response = await request(app)
+        .get("/api/rewards/summary/image/invalid-id")
+        .set("Cookie", `sessionId=${MOCK_SESSION_ID}`);
+
+      expect(response.status).toBe(400);
+      expect(response.body.message).toBe("Invalid ID format.");
+    });
+
     it("404 - No reward data found for this image", async () => {
+      auth();
       jest
         .spyOn(RewardsService.prototype, "getRewardSummaryForImage")
         .mockResolvedValue(null);
 
-      const response = await request(app).get(endpoint);
+      const response = await request(app)
+        .get(endpoint)
+        .set("Cookie", `sessionId=${MOCK_SESSION_ID}`);
 
       expect(response.status).toBe(404);
       expect(response.body).toEqual({
@@ -51,6 +73,7 @@ describe("Rewards Controller - Summaries", () => {
     });
 
     it("200 - Returns reward summary for image", async () => {
+      auth();
       const mockSummary = {
         imageId,
         imageName: "Test Logo",
@@ -73,7 +96,9 @@ describe("Rewards Controller - Summaries", () => {
         .spyOn(RewardsService.prototype, "getRewardSummaryForImage")
         .mockResolvedValue(mockSummary);
 
-      const response = await request(app).get(endpoint);
+      const response = await request(app)
+        .get(endpoint)
+        .set("Cookie", `sessionId=${MOCK_SESSION_ID}`);
 
       expect(response.status).toBe(200);
       expect(response.body.statusCode).toBe(200);
@@ -85,11 +110,14 @@ describe("Rewards Controller - Summaries", () => {
     });
 
     it("500 - Service throws an error", async () => {
+      auth();
       jest
         .spyOn(RewardsService.prototype, "getRewardSummaryForImage")
         .mockRejectedValue(new Error("Database error"));
 
-      const response = await request(app).get(endpoint);
+      const response = await request(app)
+        .get(endpoint)
+        .set("Cookie", `sessionId=${MOCK_SESSION_ID}`);
 
       expect(response.status).toBe(500);
     });

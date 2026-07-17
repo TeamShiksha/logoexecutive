@@ -3,17 +3,24 @@ import styles from "./VersionCard.module.css";
 import AvatarStack from "./AvatarStack";
 
 function VersionCard({ entry }) {
-  const { category, prNumber, title, description } = entry;
+  if (!entry) return null;
+
+  const category = entry.category || "Update";
+  const { prNumber, title, description } = entry;
 
   // Normalize single contributor and array of contributors for rendering
-  const contributors = entry.contributors
+  const rawContributors = entry.contributors
     ? entry.contributors
     : entry.contributor
       ? [entry.contributor]
       : [];
 
+  // Filter out contributors with incomplete data
+  const contributors = rawContributors.filter((c) => c && c.username);
+
   // Determine category badge class dynamically
   const getCategoryClass = (catName) => {
+    if (!catName) return styles["badge-default"];
     const formatted = catName.toLowerCase().replace(/\s+/g, "-");
     return styles[`badge-${formatted}`] || styles["badge-default"];
   };
@@ -29,8 +36,10 @@ function VersionCard({ entry }) {
         {prNumber && <span className={styles["badge-pr"]}>#{prNumber}</span>}
       </div>
 
-      <h3 className={styles["entry-title"]}>{title}</h3>
-      <p className={styles["entry-description"]}>{description}</p>
+      {title && <h3 className={styles["entry-title"]}>{title}</h3>}
+      {description && (
+        <p className={styles["entry-description"]}>{description}</p>
+      )}
 
       {contributors.length > 0 && (
         <div className={styles["contributors-wrapper"]}>
@@ -43,23 +52,23 @@ function VersionCard({ entry }) {
 
 VersionCard.propTypes = {
   entry: PropTypes.shape({
-    category: PropTypes.string.isRequired,
+    category: PropTypes.string,
     prNumber: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-    title: PropTypes.string.isRequired,
-    description: PropTypes.string.isRequired,
+    title: PropTypes.string,
+    description: PropTypes.string,
     contributor: PropTypes.shape({
-      username: PropTypes.string.isRequired,
-      avatarUrl: PropTypes.string.isRequired,
-      profileUrl: PropTypes.string.isRequired,
+      username: PropTypes.string,
+      avatarUrl: PropTypes.string,
+      profileUrl: PropTypes.string,
     }),
     contributors: PropTypes.arrayOf(
       PropTypes.shape({
-        username: PropTypes.string.isRequired,
-        avatarUrl: PropTypes.string.isRequired,
-        profileUrl: PropTypes.string.isRequired,
+        username: PropTypes.string,
+        avatarUrl: PropTypes.string,
+        profileUrl: PropTypes.string,
       })
     ),
-  }).isRequired,
+  }),
 };
 
 export default VersionCard;

@@ -13,22 +13,21 @@ function Release() {
   const uniqueContributors = [];
   const usernames = new Set();
 
-  if (selectedRelease) {
-    if (selectedRelease.entries) {
-      selectedRelease.entries.forEach((entry) => {
-        const contribs =
-          entry.contributors || (entry.contributor ? [entry.contributor] : []);
-        contribs.forEach((c) => {
-          if (
-            !usernames.has(c.username) &&
-            c.username !== selectedRelease.author?.username
-          ) {
-            usernames.add(c.username);
-            uniqueContributors.push(c);
-          }
-        });
+  if (selectedRelease?.entries) {
+    selectedRelease.entries.forEach((entry) => {
+      const contribs =
+        entry.contributors || (entry.contributor ? [entry.contributor] : []);
+      contribs.forEach((c) => {
+        if (
+          c?.username &&
+          !usernames.has(c.username) &&
+          c.username !== selectedRelease.author?.username
+        ) {
+          usernames.add(c.username);
+          uniqueContributors.push(c);
+        }
       });
-    }
+    });
   }
 
   return (

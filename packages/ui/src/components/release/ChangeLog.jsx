@@ -21,18 +21,19 @@ function ChangeLog({
   const ALLOWED_CATEGORIES = ["Feature", "UI Update", "Security", "Bug Fix"];
 
   // Extract unique allowed categories for filter pills from the selected release's entries
+  const entries = selectedRelease?.entries || [];
   const availableCategories = selectedRelease
     ? [
         "All",
         ...ALLOWED_CATEGORIES.filter((cat) =>
-          selectedRelease.entries.some((e) => e.category === cat)
+          entries.some((e) => e.category === cat)
         ),
       ]
     : ["All"];
 
   // Filter entries based on the active category pill
   const filteredEntries = selectedRelease
-    ? selectedRelease.entries.filter(
+    ? entries.filter(
         (entry) => activeCategory === "All" || entry.category === activeCategory
       )
     : [];
@@ -115,7 +116,10 @@ function ChangeLog({
           <div className={styles["cards-list-box"]}>
             {filteredEntries.length > 0 ? (
               filteredEntries.map((entry, index) => (
-                <VersionCard key={`${entry.prNumber}-${index}`} entry={entry} />
+                <VersionCard
+                  key={`${entry.prNumber || entry.title || "entry"}-${index}`}
+                  entry={entry}
+                />
               ))
             ) : (
               <div className={styles["no-entries"]}>
@@ -132,19 +136,19 @@ function ChangeLog({
 ChangeLog.propTypes = {
   releaseData: PropTypes.arrayOf(
     PropTypes.shape({
-      version: PropTypes.string.isRequired,
-      releaseDate: PropTypes.string.isRequired,
+      version: PropTypes.string,
+      releaseDate: PropTypes.string,
       heroImage: PropTypes.string,
-      entries: PropTypes.array.isRequired,
+      entries: PropTypes.array,
     })
   ).isRequired,
   selectedVersion: PropTypes.string.isRequired,
   setSelectedVersion: PropTypes.func.isRequired,
   selectedRelease: PropTypes.shape({
-    version: PropTypes.string.isRequired,
-    releaseDate: PropTypes.string.isRequired,
+    version: PropTypes.string,
+    releaseDate: PropTypes.string,
     heroImage: PropTypes.string,
-    entries: PropTypes.array.isRequired,
+    entries: PropTypes.array,
   }),
 };
 

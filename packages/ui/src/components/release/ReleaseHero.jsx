@@ -139,9 +139,9 @@ ReleaseHero.propTypes = {
   }),
   contributors: PropTypes.arrayOf(
     PropTypes.shape({
-      username: PropTypes.string.isRequired,
-      avatarUrl: PropTypes.string.isRequired,
-      profileUrl: PropTypes.string.isRequired,
+      username: PropTypes.string,
+      avatarUrl: PropTypes.string,
+      profileUrl: PropTypes.string,
     })
   ),
 };

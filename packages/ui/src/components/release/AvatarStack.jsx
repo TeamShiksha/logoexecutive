@@ -4,11 +4,22 @@ import styles from "./AvatarStack.module.css";
 function AvatarStack({ users = [], size = "large", maxCount = 5 }) {
   if (!users || users.length === 0) return null;
 
-  const isSingle = users.length === 1;
-  const visibleUsers = users.slice(0, maxCount);
-  const excessCount = users.length - maxCount;
+  // Filter out entries with no username and generate fallback URLs
+  const validUsers = users
+    .filter((u) => u && u.username)
+    .map((u) => ({
+      ...u,
+      avatarUrl: u.avatarUrl || `https://unavatar.io/github/${u.username}`,
+      profileUrl: u.profileUrl || `https://github.com/${u.username}`,
+    }));
 
-  const containerClass = `${styles["avatar-group"]} ${isSingle ? styles["single"] : ""} ${styles[size]}`;
+  if (validUsers.length === 0) return null;
+
+  const isSingle = validUsers.length === 1;
+  const visibleUsers = validUsers.slice(0, maxCount);
+  const excessCount = validUsers.length - maxCount;
+
+  const containerClass = `${styles["avatar-group"]} ${isSingle ? styles["single"] : ""} ${styles[size] || ""}`;
 
   return (
     <div className={containerClass}>
@@ -16,7 +27,7 @@ function AvatarStack({ users = [], size = "large", maxCount = 5 }) {
         <div
           key={`${user.username}-${idx}`}
           className={`${styles["avatar-wrapper"]} ${user.isAuthor ? styles["author-wrapper"] : ""}`}
-          style={{ zIndex: users.length - idx }}
+          style={{ zIndex: validUsers.length - idx }}
           data-tooltip={user.isAuthor ? `${user.username}` : `${user.username}`}
         >
           <a
@@ -52,9 +63,9 @@ function AvatarStack({ users = [], size = "large", maxCount = 5 }) {
 AvatarStack.propTypes = {
   users: PropTypes.arrayOf(
     PropTypes.shape({
-      username: PropTypes.string.isRequired,
-      avatarUrl: PropTypes.string.isRequired,
-      profileUrl: PropTypes.string.isRequired,
+      username: PropTypes.string,
+      avatarUrl: PropTypes.string,
+      profileUrl: PropTypes.string,
     })
   ),
   size: PropTypes.oneOf(["small", "large"]),

@@ -18,11 +18,7 @@ function Release() {
       const contribs =
         entry.contributors || (entry.contributor ? [entry.contributor] : []);
       contribs.forEach((c) => {
-        if (
-          c?.username &&
-          !usernames.has(c.username) &&
-          c.username !== selectedRelease.author?.username
-        ) {
+        if (c?.username && !usernames.has(c.username)) {
           usernames.add(c.username);
           uniqueContributors.push(c);
         }

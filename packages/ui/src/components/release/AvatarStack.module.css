@@ -150,22 +150,3 @@
   background-color: #f1f5f9;
   color: #0f1120;
 }
-
-/* Author Styling */
-.author-image {
-  border-color: #fbbf24;
-}
-
-[data-theme="dark"] .author-image {
-  border-color: #f59e0b;
-}
-
-.author-wrapper::after {
-  background-color: #fbbf24;
-  color: #000;
-}
-
-[data-theme="dark"] .author-wrapper::after {
-  background-color: #f59e0b;
-  color: #000;
-}

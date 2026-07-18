@@ -26,9 +26,9 @@ function AvatarStack({ users = [], size = "large", maxCount = 5 }) {
       {visibleUsers.map((user, idx) => (
         <div
           key={`${user.username}-${idx}`}
-          className={`${styles["avatar-wrapper"]} ${user.isAuthor ? styles["author-wrapper"] : ""}`}
+          className={styles["avatar-wrapper"]}
           style={{ zIndex: validUsers.length - idx }}
-          data-tooltip={user.isAuthor ? `${user.username}` : `${user.username}`}
+          data-tooltip={user.username}
         >
           <a
             href={user.profileUrl}
@@ -39,7 +39,7 @@ function AvatarStack({ users = [], size = "large", maxCount = 5 }) {
             <img
               src={user.avatarUrl}
               alt={user.username}
-              className={`${styles["avatar-image"]} ${user.isAuthor ? styles["author-image"] : ""}`}
+              className={styles["avatar-image"]}
               onError={(e) => {
                 e.target.src = `https://unavatar.io/github/${user.username}`;
               }}

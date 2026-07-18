@@ -40,6 +40,10 @@
     gap: 1.5rem;
   }
 
+   .privacy-page-container.privacy-page-container {
+    margin: 1rem 0; 
+  }
+
   .section {
     padding: 1.5rem;
   }

@@ -2,13 +2,17 @@
   display: grid;
   gap: 2.5rem;
   max-width: 1280px;
-  margin: 3rem 3rem ;
-  padding: 2.5rem 1.5rem 5rem;
+  margin: 0 auto;
+  padding: 4.5rem 1.5rem 5rem;
   font-family: Inter, sans-serif;
 }
 
+.privacy-page-container.privacy-page-container {
+  margin: 2rem 4rem;
+}
+
 .section {
-   padding: 2rem 3rem 3rem;
+  padding: 2.5rem 4.5rem;
   border: 1px solid var(--border-color);
   border-radius: 16px;
   background: var(--white);
@@ -16,7 +20,7 @@
 
 .heading {
   font-weight: 700;
-  font-size: clamp(2.8rem, 5vw, 3.5rem);
+  font-size: 51px;
   line-height: 1.1;
   margin-bottom: 1.5rem;
 }
@@ -32,7 +36,7 @@
 
 @media screen and (max-width: 768px) {
   .privacy-page-container {
-    padding: 2rem 1.5rem 3.5rem;
+    padding: 3rem 1.5rem 3.5rem;
     gap: 1.5rem;
   }
 
@@ -42,7 +46,7 @@
 
   .heading {
     font-size: 2.25rem;
-    line-height: 1.2;
+    line-height: 1.2
   }
 
   .text {

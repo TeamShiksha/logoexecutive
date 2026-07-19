@@ -40,8 +40,8 @@
     gap: 1.5rem;
   }
 
-   .privacy-page-container.privacy-page-container {
-    margin: 1rem 0; 
+  .privacy-page-container.privacy-page-container {
+    margin: 1rem 0;
   }
 
   .section {
@@ -50,7 +50,7 @@
 
   .heading {
     font-size: 2.25rem;
-    line-height: 1.2
+    line-height: 1.2;
   }
 
   .text {

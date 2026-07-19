@@ -1,10 +1,9 @@
 import { useRef, useState } from "react";
 import PropTypes from "prop-types";
 import { ArrowDown } from "lucide-react";
-import version07 from "../../assets/version07.png";
-import version06 from "../../assets/version06.png";
 import styles from "./ReleaseHero.module.css";
 import AvatarStack from "./AvatarStack";
+import { HERO_IMAGE_MAP, LATEST_HERO_IMAGE } from "../../utils/Constants";
 
 function ReleaseHero({ selectedRelease, contributors = [] }) {
   const cardRef = useRef(null);
@@ -21,14 +20,13 @@ function ReleaseHero({ selectedRelease, contributors = [] }) {
 
   const [tiltStyle, setTiltStyle] = useState(defaultStyle);
 
-  const getHeroImage = (imageKey) => {
-    if (imageKey === "version06") return version06;
-    return version07;
-  };
-
-  const imageSrc = selectedRelease
-    ? getHeroImage(selectedRelease.heroImage)
-    : version07;
+  // Resolve the hero image for the selected release:
+  //  - If the release has a heroImage key that exists in the map → use it
+  //    (ensures old releases show the landing page that was live at that time)
+  //  - Otherwise (null / unknown key / no selectedRelease) → fall back to the
+  //    latest image, which is always the most up-to-date landing page screenshot
+  const imageSrc =
+    HERO_IMAGE_MAP[selectedRelease?.heroImage] ?? LATEST_HERO_IMAGE;
 
   // Handle 3D Tilt Effect on Mouse Move
   const handleMouseMove = (e) => {

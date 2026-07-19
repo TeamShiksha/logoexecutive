@@ -1749,11 +1749,6 @@ export const RELEASE_DATA = [
     version: "v0.8.0",
     releaseDate: "May 2026",
     heroImage: "version07",
-    author: {
-      username: "anujarora0502",
-      avatarUrl: "https://github.com/anujarora0502.png",
-      profileUrl: "https://github.com/anujarora0502",
-    },
     entries: [
       {
         category: "Feature",
@@ -1828,9 +1823,27 @@ export const RELEASE_DATA = [
         },
       },
       {
+        category: "Feature",
+        prNumber: 1049,
+        title: "User Session Management",
+        description: "Feature for user session management.",
+        contributors: [
+          {
+            username: "kadamsahil2511",
+            avatarUrl: "https://github.com/kadamsahil2511.png",
+            profileUrl: "https://github.com/kadamsahil2511",
+          },
+          {
+            username: "DeepAkdotcom",
+            avatarUrl: "https://github.com/DeepAkdotcom.png",
+            profileUrl: "https://github.com/DeepAkdotcom",
+          },
+        ],
+      },
+      {
         category: "CI/CD",
         prNumber: 1050,
-        title: "Branch & PR conventions checks",
+        title: "Branch & PR Conventions Checks",
         description:
           "Feature to enforce branch & PR naming conventions via husky + GitHub Actions.",
         contributor: {
@@ -1842,14 +1855,31 @@ export const RELEASE_DATA = [
       {
         category: "UI Update",
         prNumber: 1051,
-        title: "Redesign documentation page",
-        description:
-          "Complete overhaul of the documentation layout, code snippets, and navigation.",
+        title: "Redesign Documentation Page",
+        description: "Redesign documentation page.",
         contributor: {
           username: "Dhirenderchoudhary",
           avatarUrl: "https://github.com/Dhirenderchoudhary.png",
           profileUrl: "https://github.com/Dhirenderchoudhary",
         },
+      },
+      {
+        category: "UI Update",
+        prNumber: 1052,
+        title: "Revamp Sign In and Sign Up Form",
+        description: "Revamp sign in and sign up form.",
+        contributors: [
+          {
+            username: "0-mstrmind",
+            avatarUrl: "https://github.com/0-mstrmind.png",
+            profileUrl: "https://github.com/0-mstrmind",
+          },
+          {
+            username: "kunjesh360",
+            avatarUrl: "https://github.com/kunjesh360.png",
+            profileUrl: "https://github.com/kunjesh360",
+          },
+        ],
       },
     ],
   },
@@ -1857,28 +1887,85 @@ export const RELEASE_DATA = [
     version: "v0.7.0",
     releaseDate: "Mar 2026",
     heroImage: "version07",
-    author: {
-      username: "anujarora0502",
-      avatarUrl: "https://github.com/anujarora0502.png",
-      profileUrl: "https://github.com/anujarora0502",
-    },
     entries: [
+      {
+        category: "Security",
+        prNumber: 1030,
+        title: "Session-Based Authentication",
+        description:
+          "Authentication has been migrated from JWT to a secure session-based system, improving overall security and simplifying token management.",
+        contributors: [
+          {
+            username: "Mantu01",
+            avatarUrl: "https://github.com/Mantu01.png",
+            profileUrl: "https://github.com/Mantu01",
+          },
+          {
+            username: "Smayur0",
+            avatarUrl: "https://github.com/Smayur0.png",
+            profileUrl: "https://github.com/Smayur0",
+          },
+          {
+            username: "printgourav",
+            avatarUrl: "https://github.com/printgourav.png",
+            profileUrl: "https://github.com/printgourav",
+          },
+        ],
+      },
+      {
+        category: "Feature",
+        prNumber: 1031,
+        title: "Light & Dark Theme",
+        description:
+          "You can now switch between Light and Dark themes to personalize your experience.",
+        contributor: {
+          username: "sachinkmrsin",
+          avatarUrl: "https://github.com/sachinkmrsin.png",
+          profileUrl: "https://github.com/sachinkmrsin",
+        },
+      },
+      {
+        category: "Feature",
+        prNumber: 1032,
+        title: "In-App Notifications",
+        description:
+          "Notifications are now available for important events such as API expiry and usage limit being reached.",
+        contributors: [
+          {
+            username: "YashDevani-source",
+            avatarUrl: "https://github.com/YashDevani-source.png",
+            profileUrl: "https://github.com/YashDevani-source",
+          },
+          {
+            username: "L-Tarun-Aditya",
+            avatarUrl: "https://github.com/L-Tarun-Aditya.png",
+            profileUrl: "https://github.com/L-Tarun-Aditya",
+          },
+        ],
+      },
       {
         category: "Feature",
         prNumber: 1034,
         title: "Custom Logo Creation",
         description:
           "You can now create and use your own custom logo image directly within the platform.",
-        contributor: {
-          username: "biplab-sutradhar",
-          avatarUrl: "https://github.com/biplab-sutradhar.png",
-          profileUrl: "https://github.com/biplab-sutradhar",
-        },
+        contributors: [
+          {
+            username: "biplab-sutradhar",
+            avatarUrl: "https://github.com/biplab-sutradhar.png",
+            profileUrl: "https://github.com/biplab-sutradhar",
+          },
+          {
+            username: "mridul-giri",
+            avatarUrl: "https://github.com/mridul-giri.png",
+            profileUrl: "https://github.com/mridul-giri",
+          },
+        ],
       },
       {
         category: "Security",
         prNumber: 1035,
-        title: "Secure API keys visibility",
+        title: "Secure API Keys Visibility",
         description:
           "API keys are now securely hidden to prevent accidental exposure and enhance account security.",
         contributor: {
@@ -1893,36 +1980,322 @@ export const RELEASE_DATA = [
     version: "v0.6.0",
     releaseDate: "Dec 2025",
     heroImage: "version06",
-    author: {
-      username: "printgourav",
-      avatarUrl: "https://github.com/printgourav.png",
-      profileUrl: "https://github.com/printgourav",
-    },
     entries: [
       {
         category: "Feature",
         prNumber: 1021,
         title: "Usage Analytics Graph",
         description:
-          "You can now view a simple graph on your dashboard that helps you understand how much you’re using the API.",
-        contributor: {
-          username: "sachinkmrsin",
-          avatarUrl: "https://github.com/sachinkmrsin.png",
-          profileUrl: "https://github.com/sachinkmrsin",
-        },
+          "You can now view a simple graph on your dashboard that helps you understand how much you're using the API, including how many requests you've made and how much data you've used.",
+        contributors: [
+          {
+            username: "L-Tarun-Aditya",
+            avatarUrl: "https://github.com/L-Tarun-Aditya.png",
+            profileUrl: "https://github.com/L-Tarun-Aditya",
+          },
+          {
+            username: "sachinkmrsin",
+            avatarUrl: "https://github.com/sachinkmrsin.png",
+            profileUrl: "https://github.com/sachinkmrsin",
+          },
+          {
+            username: "YashDevani-source",
+            avatarUrl: "https://github.com/YashDevani-source.png",
+            profileUrl: "https://github.com/YashDevani-source",
+          },
+        ],
       },
       {
         category: "Security",
         prNumber: 1022,
         title: "Automatic API Key Expiry",
         description:
-          "API keys now expire automatically to keep accounts more secure. Users can set custom expiry date.",
+          "API keys now expire automatically to keep accounts more secure. Users can set a custom expiry date, and existing API keys will expire after one year by default.",
+        contributors: [
+          {
+            username: "biplab-sutradhar",
+            avatarUrl: "https://github.com/biplab-sutradhar.png",
+            profileUrl: "https://github.com/biplab-sutradhar",
+          },
+          {
+            username: "printgourav",
+            avatarUrl: "https://github.com/printgourav.png",
+            profileUrl: "https://github.com/printgourav",
+          },
+        ],
+      },
+      {
+        category: "Feature",
+        prNumber: 1023,
+        title: "Automatic Catalog Creation",
+        description:
+          "Catalogs are now created automatically, so you don't need to set them up manually anymore.",
+        contributors: [
+          {
+            username: "BansalAbhinav",
+            avatarUrl: "https://github.com/BansalAbhinav.png",
+            profileUrl: "https://github.com/BansalAbhinav",
+          },
+          {
+            username: "Saurabhupadhyay8170",
+            avatarUrl: "https://github.com/Saurabhupadhyay8170.png",
+            profileUrl: "https://github.com/Saurabhupadhyay8170",
+          },
+        ],
+      },
+      {
+        category: "Feature",
+        prNumber: 1024,
+        title: "Release Page",
+        description:
+          "A new Release Page is now available, where you can easily see what's new in each version and who helped build it.",
         contributor: {
-          username: "biplab-sutradhar",
-          avatarUrl: "https://github.com/biplab-sutradhar.png",
-          profileUrl: "https://github.com/biplab-sutradhar",
+          username: "abhishek-2k23",
+          avatarUrl: "https://github.com/abhishek-2k23.png",
+          profileUrl: "https://github.com/abhishek-2k23",
+        },
+      },
+      {
+        category: "Feature",
+        prNumber: 1025,
+        title: "Resend Verification Email",
+        description:
+          "If you don't receive your verification email, you can now resend it easily and continue without getting stuck.",
+        contributor: {
+          username: "MukeshAbhi",
+          avatarUrl: "https://github.com/MukeshAbhi.png",
+          profileUrl: "https://github.com/MukeshAbhi",
+        },
+      },
+    ],
+  },
+  {
+    version: "Previous Versions",
+    releaseDate: "Oct 2024",
+    heroImage: "version06",
+    entries: [
+      {
+        category: "Bug Fix",
+        title: "Consistent Date Formatting",
+        description:
+          "Dates are now displayed in a consistent and clear format across the entire platform.",
+        contributor: {
+          username: "Sumitgitup",
+          avatarUrl: "https://github.com/Sumitgitup.png",
+          profileUrl: "https://github.com/Sumitgitup",
+        },
+      },
+      {
+        category: "Feature",
+        title: "Data Export",
+        description:
+          "You can now easily download a copy of your data from the platform whenever you need it.",
+        contributor: {
+          username: "Sumitgitup",
+          avatarUrl: "https://github.com/Sumitgitup.png",
+          profileUrl: "https://github.com/Sumitgitup",
+        },
+      },
+      {
+        category: "UI Update",
+        title: "Profile Menu Consolidation",
+        description:
+          "Navigation has been simplified by grouping Dashboard and Sign Out options under a single profile menu.",
+        contributors: [
+          {
+            username: "abhishek-2k23",
+            avatarUrl: "https://github.com/abhishek-2k23.png",
+            profileUrl: "https://github.com/abhishek-2k23",
+          },
+          {
+            username: "nazibul7",
+            avatarUrl: "https://github.com/nazibul7.png",
+            profileUrl: "https://github.com/nazibul7",
+          },
+        ],
+      },
+      {
+        category: "Bug Fix",
+        title: "Real-Time Admin Content Updates",
+        description:
+          "Updates made by admins now show up instantly, so users always see the latest content without delays.",
+        contributor: {
+          username: "MukeshAbhi",
+          avatarUrl: "https://github.com/MukeshAbhi.png",
+          profileUrl: "https://github.com/MukeshAbhi",
+        },
+      },
+      {
+        category: "Enhancement",
+        title: "Faster Image Uploads",
+        description:
+          "Image uploads are now faster and more stable, especially when uploading large files.",
+        contributors: [
+          {
+            username: "printgourav",
+            avatarUrl: "https://github.com/printgourav.png",
+            profileUrl: "https://github.com/printgourav",
+          },
+          {
+            username: "YashDevani-source",
+            avatarUrl: "https://github.com/YashDevani-source.png",
+            profileUrl: "https://github.com/YashDevani-source",
+          },
+        ],
+      },
+      {
+        category: "Feature",
+        title: "Resend Verification Email",
+        description:
+          "If you miss the verification email, you can now resend it directly without any hassle.",
+        contributor: {
+          username: "MukeshAbhi",
+          avatarUrl: "https://github.com/MukeshAbhi.png",
+          profileUrl: "https://github.com/MukeshAbhi",
+        },
+      },
+      {
+        category: "Feature",
+        title: "Admin Image Count Dashboard",
+        description:
+          "Admins can now quickly see how many images are stored in the system from the dashboard.",
+        contributor: {
+          username: "printgourav",
+          avatarUrl: "https://github.com/printgourav.png",
+          profileUrl: "https://github.com/printgourav",
+        },
+      },
+      {
+        category: "Enhancement",
+        title: "MongoDB Migration",
+        description:
+          "The platform moved from Firebase to MongoDB to better support growth and handle data more efficiently.",
+        contributor: {
+          username: "amankumarsingh77",
+          avatarUrl: "https://github.com/amankumarsingh77.png",
+          profileUrl: "https://github.com/amankumarsingh77",
+        },
+      },
+      {
+        category: "Enhancement",
+        title: "Improved Testing Setup",
+        description:
+          "Testing was improved by switching to a faster and more reliable testing setup.",
+        contributor: {
+          username: "Ayushsanjdev",
+          avatarUrl: "https://github.com/Ayushsanjdev.png",
+          profileUrl: "https://github.com/Ayushsanjdev",
+        },
+      },
+      {
+        category: "Feature",
+        title: "Operator Dashboard",
+        description:
+          "A new Operator dashboard was added to make it easier to manage and respond to customer queries.",
+        contributor: {
+          username: "asharma991",
+          avatarUrl: "https://github.com/asharma991.png",
+          profileUrl: "https://github.com/asharma991",
+        },
+      },
+      {
+        category: "Feature",
+        title: "Admin Image Re-Upload with Validation",
+        description:
+          "Admins gained the ability to re-upload images with checks to ensure correct file names and formats.",
+        contributor: {
+          username: "Soumava-221B",
+          avatarUrl: "https://github.com/Soumava-221B.png",
+          profileUrl: "https://github.com/Soumava-221B",
+        },
+      },
+      {
+        category: "Enhancement",
+        title: "Automatic Monthly Usage Reset",
+        description:
+          "Subscription usage limits are now reset automatically every month, removing the need for manual updates.",
+        contributor: {
+          username: "DeltaDynamo",
+          avatarUrl: "https://github.com/DeltaDynamo.png",
+          profileUrl: "https://github.com/DeltaDynamo",
+        },
+      },
+      {
+        category: "UI Update",
+        title: "Footer, About & Sign-In Polish",
+        description:
+          "Several visual and usability improvements were made across the footer, About page, and sign-in experience.",
+        contributor: {
+          username: "AryaDharkar",
+          avatarUrl: "https://github.com/AryaDharkar.png",
+          profileUrl: "https://github.com/AryaDharkar",
+        },
+      },
+      {
+        category: "Feature",
+        title: "Logo Search",
+        description:
+          "A new logo search feature was added, making it easier to find and retrieve logos securely.",
+        contributor: {
+          username: "DeltaDynamo",
+          avatarUrl: "https://github.com/DeltaDynamo.png",
+          profileUrl: "https://github.com/DeltaDynamo",
+        },
+      },
+      {
+        category: "Bug Fix",
+        title: "Scroll-to-Top on Navigation",
+        description:
+          "Navigation behavior was improved so pages smoothly return to the top when links are clicked.",
+        contributor: {
+          username: "Asin-Junior-Honore",
+          avatarUrl: "https://github.com/Asin-Junior-Honore.png",
+          profileUrl: "https://github.com/Asin-Junior-Honore",
+        },
+      },
+      {
+        category: "Security",
+        title: "API Key Deletion Confirmation",
+        description:
+          "An extra confirmation step was added before deleting API keys to help prevent accidental deletions.",
+        contributor: {
+          username: "anandbaraik",
+          avatarUrl: "https://github.com/anandbaraik.png",
+          profileUrl: "https://github.com/anandbaraik",
+        },
+      },
+      {
+        category: "Security",
+        title: "One-Time API Key Visibility",
+        description:
+          "API keys can now be viewed or copied only once, improving overall account security.",
+        contributor: {
+          username: "Sharathxct",
+          avatarUrl: "https://github.com/Sharathxct.png",
+          profileUrl: "https://github.com/Sharathxct",
         },
       },
     ],
   },
 ];
+
+/**
+ * Maps heroImage keys (set in RELEASE_DATA[n].heroImage) to their imported
+ * landing page screenshot asset.
+ *
+ * Add a new entry here ONLY when a release ships a new landing page screenshot.
+ * Key convention: must match the string value used in RELEASE_DATA.heroImage.
+ */
+export const HERO_IMAGE_MAP = {
+  version06,
+  version07,
+};
+
+/**
+ * The imported asset for the most recently shipped landing page screenshot.
+ * Used as the fallback when a release has no heroImage key (i.e. the landing
+ * page didn't change for that release).
+ *
+ * Update this to the newest image whenever a new entry is added to HERO_IMAGE_MAP.
+ */
+export const LATEST_HERO_IMAGE = version07;

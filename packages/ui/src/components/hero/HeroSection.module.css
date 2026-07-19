@@ -299,10 +299,10 @@
 
 @media only screen and (max-width: 780px) {
   .hero-section {
-    padding: 4rem 1.5rem 3.5rem;
-    min-height: 0;
+    padding: 2rem 1.5rem 1.5rem;
+    min-height: calc(100dvh - 68px);
     height: auto;
-    display: block;
+    display: flex;
   }
   .text-section h1 {
     font-size: 2.2rem;
@@ -310,6 +310,10 @@
   }
   .hero-content {
     gap: 1.5rem;
+    margin-top: 1rem;
+  }
+  .hero-image {
+    max-height: 38dvh;
   }
   .text-section p {
     font-size: 1.05rem;

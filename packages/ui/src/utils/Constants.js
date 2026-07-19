@@ -1200,498 +1200,6 @@ export const LEADERBOARD_PAGE = {
   },
 };
 
-export const RELEASE_PAGE = {
-  introduction: {
-    heading: "About",
-    description:
-      "Openlogo is an open-source platform offering fast, reliable access to an extensive library of company logos—from global enterprises to emerging startups. With seamless API integration and a constantly updated database, Openlogo makes retrieving logos effortless and scalable.",
-    features: [
-      {
-        heading: "Comprehensive Brand Database",
-        desc: "Instant access to a vast, constantly updated library of high-quality company logos, ranging from Fortune 500 enterprises to emerging startups.",
-      },
-      {
-        heading: "High-Performance API Integration",
-        desc: "A developer-first API optimized for speed and reliability, featuring intelligent caching to ensure millisecond response times for effortless logo retrieval.",
-      },
-      {
-        heading: "Quick Search & Insights",
-        desc: "Advanced search algorithms that not only locate logos with precision.",
-      },
-      {
-        heading: "Community-Driven Requests",
-        desc: "A streamlined workflow allowing users to request missing logos directly from the dashboard, ensuring the database evolves based on real-world user needs.",
-      },
-      {
-        heading: "Transparent Release Timeline",
-        desc: "A detailed, visual changelog that keeps users informed of every update, performance improvement, and contributor credit in real-time.",
-      },
-    ],
-  },
-
-  versions: [
-    "0.8.0 version",
-    "0.7.0 version",
-    "0.6.0 version",
-    "Previous version",
-  ],
-  latestVersion: "0.8.0 version",
-  changelog: {
-    title: "Changelog",
-    description: "Changelog with often recorded's versions",
-    versionsData: [
-      {
-        versionName: "0.8.0 version",
-        releaseDate: "May 2026",
-        imgSrc: version07,
-        releaseNotes: [
-          {
-            releaseNote: "Revamp USER dashboard according to the design.",
-            contributors: [
-              {
-                contributorName: "AryaDharkar",
-                contributorGithubLink: "https://github.com/AryaDharkar",
-              },
-            ],
-          },
-          {
-            releaseNote: "Enhancing the UI of the admin dashboard.",
-            contributors: [
-              {
-                contributorName: "L-Tarun-Aditya",
-                contributorGithubLink: "https://github.com/L-Tarun-Aditya",
-              },
-            ],
-          },
-          {
-            releaseNote: "Add 2FA section in user settings.",
-            contributors: [
-              {
-                contributorName: "L-Tarun-Aditya",
-                contributorGithubLink: "https://github.com/L-Tarun-Aditya",
-              },
-            ],
-          },
-          {
-            releaseNote: "Implementing a dedicated settings page for MFA.",
-            contributors: [
-              {
-                contributorName: "L-Tarun-Aditya",
-                contributorGithubLink: "https://github.com/L-Tarun-Aditya",
-              },
-            ],
-          },
-          {
-            releaseNote: "Multi factor authentication.",
-            contributors: [
-              {
-                contributorName: "MukeshAbhi",
-                contributorGithubLink: "https://github.com/MukeshAbhi",
-              },
-            ],
-          },
-          {
-            releaseNote:
-              "Prevent Users From Reusing Old Password During Password Reset.",
-            contributors: [
-              {
-                contributorName: "rishang14",
-                contributorGithubLink: "https://github.com/rishang14",
-              },
-            ],
-          },
-          {
-            releaseNote:
-              "Fix bugs on createLogo page and allow users to access this page without authentication.",
-            contributors: [
-              {
-                contributorName: "AryaDharkar",
-                contributorGithubLink: "https://github.com/AryaDharkar",
-              },
-            ],
-          },
-          {
-            releaseNote: "Feature for user session management.",
-            contributors: [
-              {
-                contributorName: "kadamsahil2511",
-                contributorGithubLink: "https://github.com/kadamsahil2511",
-              },
-              {
-                contributorName: "DeepAkdotcom",
-                contributorGithubLink: "https://github.com/DeepAkdotcom",
-              },
-            ],
-          },
-          {
-            releaseNote:
-              "Feature to enforce branch & PR naming conventions via husky + GitHub Actions.",
-            contributors: [
-              {
-                contributorName: "Smayur0",
-                contributorGithubLink: "https://github.com/Smayur0",
-              },
-            ],
-          },
-          {
-            releaseNote: "Redesign documentation page.",
-            contributors: [
-              {
-                contributorName: "Dhirenderchoudhary",
-                contributorGithubLink: "https://github.com/Dhirenderchoudhary",
-              },
-            ],
-          },
-          {
-            releaseNote: "Revamp sign in and sign up form",
-            contributors: [
-              {
-                contributorName: "0-mstrmind",
-                contributorGithubLink: "https://github.com/0-mstrmind",
-              },
-              {
-                contributorName: "kunjesh360",
-                contributorGithubLink: "https://github.com/kunjesh360",
-              },
-            ],
-          },
-        ],
-      },
-      {
-        versionName: "0.7.0 version",
-        releaseDate: "Mar 2026",
-        imgSrc: version07,
-        releaseNotes: [
-          {
-            releaseNote:
-              "Authentication has been migrated from JWT to a secure session-based system, improving overall security and simplifying token management.",
-            contributors: [
-              {
-                contributorName: "Mantu01",
-                contributorGithubLink: "https://github.com/Mantu01",
-              },
-              {
-                contributorName: "Smayur0",
-                contributorGithubLink: "https://github.com/Smayur0",
-              },
-              {
-                contributorName: "printgourav",
-                contributorGithubLink: "https://github.com/printgourav",
-              },
-            ],
-          },
-          {
-            releaseNote:
-              "You can now switch between Light and Dark themes to personalize your experience.",
-            contributors: [
-              {
-                contributorName: "sachinkmrsin",
-                contributorGithubLink: "https://github.com/sachinkmrsin",
-              },
-            ],
-          },
-          {
-            releaseNote:
-              "Notifications are now available for important events such as API expiry and usage limit being reached, so you never miss critical updates.",
-            contributors: [
-              {
-                contributorName: "YashDevani-source",
-                contributorGithubLink: "https://github.com/YashDevani-source",
-              },
-              {
-                contributorName: "L-Tarun-Aditya",
-                contributorGithubLink: "https://github.com/L-Tarun-Aditya",
-              },
-            ],
-          },
-          {
-            releaseNote:
-              "You can now create and use your own custom logo image directly within the platform.",
-            contributors: [
-              {
-                contributorName: "biplab-sutradhar",
-                contributorGithubLink: "https://github.com/biplab-sutradhar",
-              },
-              {
-                contributorName: "mridul-giri",
-                contributorGithubLink: "https://github.com/mridul-giri",
-              },
-            ],
-          },
-          {
-            releaseNote:
-              "API keys are now securely hidden to prevent accidental exposure and enhance account security.",
-            contributors: [
-              {
-                contributorName: "L-Tarun-Aditya",
-                contributorGithubLink: "https://github.com/L-Tarun-Aditya",
-              },
-            ],
-          },
-        ],
-      },
-      {
-        versionName: "0.6.0 version",
-        releaseDate: "Dec 2025",
-        imgSrc: version06,
-        releaseNotes: [
-          {
-            releaseNote:
-              "You can now view a simple graph on your dashboard that helps you understand how much you’re using the API, including how many requests you’ve made and how much data you’ve used.",
-            contributors: [
-              {
-                contributorName: "L-Tarun-Aditya",
-                contributorGithubLink: "https://github.com/L-Tarun-Aditya",
-              },
-              {
-                contributorName: "sachinkmrsin",
-                contributorGithubLink: "https://github.com/sachinkmrsin",
-              },
-              {
-                contributorName: "YashDevani-source",
-                contributorGithubLink: "https://github.com/YashDevani-source",
-              },
-            ],
-          },
-          {
-            releaseNote:
-              "API keys now expire automatically to keep accounts more secure. Users can set a custom expiry date, and existing API keys will expire after one year by default.",
-            contributors: [
-              {
-                contributorName: "biplab-sutradhar",
-                contributorGithubLink: "https://github.com/biplab-sutradhar",
-              },
-              {
-                contributorName: "printgourav",
-                contributorGithubLink: "https://github.com/printgourav",
-              },
-            ],
-          },
-          {
-            releaseNote:
-              "Catalogs are now created automatically, so you don’t need to set them up manually anymore.",
-            contributors: [
-              {
-                contributorName: "BansalAbhinav",
-                contributorGithubLink: "https://github.com/BansalAbhinav",
-              },
-              {
-                contributorName: "Saurabhupadhyay8170",
-                contributorGithubLink: "https://github.com/Saurabhupadhyay8170",
-              },
-            ],
-          },
-          {
-            releaseNote:
-              "A new Release Page is now available, where you can easily see what’s new in each version and who helped build it.",
-            contributors: [
-              {
-                contributorName: "abhishek-2k23",
-                contributorGithubLink: "https://github.com/abhishek-2k23",
-              },
-            ],
-          },
-          {
-            releaseNote:
-              "If you don’t receive your verification email, you can now resend it easily and continue without getting stuck.",
-            contributors: [
-              {
-                contributorName: "MukeshAbhi",
-                contributorGithubLink: "https://github.com/MukeshAbhi",
-              },
-            ],
-          },
-        ],
-      },
-      {
-        versionName: "Previous version",
-        releaseDate: "Oct 2024",
-        imgSrc: version06,
-        releaseNotes: [
-          {
-            releaseNote:
-              "Dates are now displayed in a consistent and clear format across the entire platform.",
-            contributors: [
-              {
-                contributorName: "Sumitgitup",
-                contributorGithubLink: "https://github.com/Sumitgitup",
-              },
-            ],
-          },
-          {
-            releaseNote:
-              "You can now easily download a copy of your data from the platform whenever you need it.",
-            contributors: [
-              {
-                contributorName: "Sumitgitup",
-                contributorGithubLink: "https://github.com/Sumitgitup",
-              },
-            ],
-          },
-          {
-            releaseNote:
-              "Navigation has been simplified by grouping Dashboard and Sign Out options under a single profile menu.",
-            contributors: [
-              {
-                contributorName: "abhishek-2k23",
-                contributorGithubLink: "https://github.com/abhishek-2k23",
-              },
-              {
-                contributorName: "nazibul7",
-                contributorGithubLink: "https://github.com/nazibul7",
-              },
-            ],
-          },
-          {
-            releaseNote:
-              "Updates made by admins now show up instantly, so users always see the latest content without delays.",
-            contributors: [
-              {
-                contributorName: "MukeshAbhi",
-                contributorGithubLink: "https://github.com/MukeshAbhi",
-              },
-            ],
-          },
-          {
-            releaseNote:
-              "Image uploads are now faster and more stable, especially when uploading large files.",
-            contributors: [
-              {
-                contributorName: "printgourav",
-                contributorGithubLink: "https://github.com/printgourav",
-              },
-              {
-                contributorName: "YashDevani-source",
-                contributorGithubLink: "https://github.com/YashDevani-source",
-              },
-            ],
-          },
-          {
-            releaseNote:
-              "If you miss the verification email, you can now resend it directly without any hassle.",
-            contributors: [
-              {
-                contributorName: "MukeshAbhi",
-                contributorGithubLink: "https://github.com/MukeshAbhi",
-              },
-            ],
-          },
-          {
-            releaseNote:
-              "Admins can now quickly see how many images are stored in the system from the dashboard.",
-            contributors: [
-              {
-                contributorName: "printgourav",
-                contributorGithubLink: "https://github.com/printgourav",
-              },
-            ],
-          },
-          {
-            releaseNote:
-              "The platform moved from Firebase to MongoDB to better support growth and handle data more efficiently.",
-            contributors: [
-              {
-                contributorName: "amankumarsingh77",
-                contributorGithubLink: "https://github.com/amankumarsingh77",
-              },
-            ],
-          },
-          {
-            releaseNote:
-              "Testing was improved by switching to a faster and more reliable testing setup.",
-            contributors: [
-              {
-                contributorName: "Ayushsanjdev",
-                contributorGithubLink: "https://github.com/Ayushsanjdev",
-              },
-            ],
-          },
-          {
-            releaseNote:
-              "A new Operator dashboard was added to make it easier to manage and respond to customer queries.",
-            contributors: [
-              {
-                contributorName: "asharma991",
-                contributorGithubLink: "https://github.com/asharma991",
-              },
-            ],
-          },
-          {
-            releaseNote:
-              "Admins gained the ability to re-upload images with checks to ensure correct file names and formats.",
-            contributors: [
-              {
-                contributorName: "Soumava-221B",
-                contributorGithubLink: "https://github.com/Soumava-221B",
-              },
-            ],
-          },
-          {
-            releaseNote:
-              "Subscription usage limits are now reset automatically every month, removing the need for manual updates.",
-            contributors: [
-              {
-                contributorName: "DeltaDynamo",
-                contributorGithubLink: "https://github.com/DeltaDynamo",
-              },
-            ],
-          },
-          {
-            releaseNote:
-              "Several visual and usability improvements were made across the footer, About page, and sign-in experience.",
-            contributors: [
-              {
-                contributorName: "AryaDharkar",
-                contributorGithubLink: "https://github.com/AryaDharkar",
-              },
-            ],
-          },
-          {
-            releaseNote:
-              "A new logo search feature was added, making it easier to find and retrieve logos securely.",
-            contributors: [
-              {
-                contributorName: "DeltaDynamo",
-                contributorGithubLink: "https://github.com/DeltaDynamo",
-              },
-            ],
-          },
-          {
-            releaseNote:
-              "Navigation behavior was improved so pages smoothly return to the top when links are clicked.",
-            contributors: [
-              {
-                contributorName: "Asin-Junior-Honore",
-                contributorGithubLink: "https://github.com/Asin-Junior-Honore",
-              },
-            ],
-          },
-          {
-            releaseNote:
-              "An extra confirmation step was added before deleting API keys to help prevent accidental deletions.",
-            contributors: [
-              {
-                contributorName: "anandbaraik",
-                contributorGithubLink: "https://github.com/anandbaraik",
-              },
-            ],
-          },
-          {
-            releaseNote:
-              "API keys can now be viewed or copied only once, improving overall account security.",
-            contributors: [
-              {
-                contributorName: "Sharathxct",
-                contributorGithubLink: "https://github.com/Sharathxct",
-              },
-            ],
-          },
-        ],
-      },
-    ],
-  },
-};
-
 export const BRAND_SUGGESTIONS = [
   { name: "Microsoft", logo: microsoft, verified: true },
   { name: "Nvidia", logo: nvidia, verified: true },
@@ -1752,7 +1260,7 @@ export const RELEASE_DATA = [
     entries: [
       {
         category: "Feature",
-        prNumber: 1042,
+        prNumber: null,
         title: "Revamp User dashboard",
         description:
           "Full redesign of the user interface according to the latest design specifications for improved usability.",
@@ -1764,7 +1272,7 @@ export const RELEASE_DATA = [
       },
       {
         category: "UI Update",
-        prNumber: 1043,
+        prNumber: null,
         title: "Enhancing UI of Admin Dashboard",
         description:
           "Polishing the administrative interface with better spacing and contrast for power users.",
@@ -1776,7 +1284,7 @@ export const RELEASE_DATA = [
       },
       {
         category: "Security",
-        prNumber: 1044,
+        prNumber: null,
         title: "Two-Factor Authentication",
         description:
           "Added a new 2FA section in user settings to enhance account security across the platform.",
@@ -1788,7 +1296,7 @@ export const RELEASE_DATA = [
       },
       {
         category: "Security",
-        prNumber: 1045,
+        prNumber: null,
         title: "Dedicated settings page for MFA",
         description:
           "Implementing a dedicated settings page for MFA and multi factor authentication management.",
@@ -1800,7 +1308,7 @@ export const RELEASE_DATA = [
       },
       {
         category: "Bug Fix",
-        prNumber: 1047,
+        prNumber: null,
         title: "Prevent Password Reuse",
         description:
           "Prevent Users From Reusing Old Password During Password Reset flow to improve account security.",
@@ -1812,7 +1320,7 @@ export const RELEASE_DATA = [
       },
       {
         category: "Bug Fix",
-        prNumber: 1048,
+        prNumber: null,
         title: "Fix createLogo page authentication bypass",
         description:
           "Fix bugs on createLogo page and allow users to access this page without authentication.",
@@ -1824,7 +1332,7 @@ export const RELEASE_DATA = [
       },
       {
         category: "Feature",
-        prNumber: 1049,
+        prNumber: null,
         title: "User Session Management",
         description: "Feature for user session management.",
         contributors: [
@@ -1842,7 +1350,7 @@ export const RELEASE_DATA = [
       },
       {
         category: "CI/CD",
-        prNumber: 1050,
+        prNumber: null,
         title: "Branch & PR Conventions Checks",
         description:
           "Feature to enforce branch & PR naming conventions via husky + GitHub Actions.",
@@ -1854,7 +1362,7 @@ export const RELEASE_DATA = [
       },
       {
         category: "UI Update",
-        prNumber: 1051,
+        prNumber: null,
         title: "Redesign Documentation Page",
         description: "Redesign documentation page.",
         contributor: {
@@ -1865,7 +1373,7 @@ export const RELEASE_DATA = [
       },
       {
         category: "UI Update",
-        prNumber: 1052,
+        prNumber: null,
         title: "Revamp Sign In and Sign Up Form",
         description: "Revamp sign in and sign up form.",
         contributors: [
@@ -1890,7 +1398,7 @@ export const RELEASE_DATA = [
     entries: [
       {
         category: "Security",
-        prNumber: 1030,
+        prNumber: null,
         title: "Session-Based Authentication",
         description:
           "Authentication has been migrated from JWT to a secure session-based system, improving overall security and simplifying token management.",
@@ -1914,7 +1422,7 @@ export const RELEASE_DATA = [
       },
       {
         category: "Feature",
-        prNumber: 1031,
+        prNumber: null,
         title: "Light & Dark Theme",
         description:
           "You can now switch between Light and Dark themes to personalize your experience.",
@@ -1926,7 +1434,7 @@ export const RELEASE_DATA = [
       },
       {
         category: "Feature",
-        prNumber: 1032,
+        prNumber: null,
         title: "In-App Notifications",
         description:
           "Notifications are now available for important events such as API expiry and usage limit being reached.",
@@ -1945,7 +1453,7 @@ export const RELEASE_DATA = [
       },
       {
         category: "Feature",
-        prNumber: 1034,
+        prNumber: null,
         title: "Custom Logo Creation",
         description:
           "You can now create and use your own custom logo image directly within the platform.",
@@ -1964,7 +1472,7 @@ export const RELEASE_DATA = [
       },
       {
         category: "Security",
-        prNumber: 1035,
+        prNumber: null,
         title: "Secure API Keys Visibility",
         description:
           "API keys are now securely hidden to prevent accidental exposure and enhance account security.",
@@ -1983,7 +1491,7 @@ export const RELEASE_DATA = [
     entries: [
       {
         category: "Feature",
-        prNumber: 1021,
+        prNumber: null,
         title: "Usage Analytics Graph",
         description:
           "You can now view a simple graph on your dashboard that helps you understand how much you're using the API, including how many requests you've made and how much data you've used.",
@@ -2007,7 +1515,7 @@ export const RELEASE_DATA = [
       },
       {
         category: "Security",
-        prNumber: 1022,
+        prNumber: null,
         title: "Automatic API Key Expiry",
         description:
           "API keys now expire automatically to keep accounts more secure. Users can set a custom expiry date, and existing API keys will expire after one year by default.",
@@ -2026,7 +1534,7 @@ export const RELEASE_DATA = [
       },
       {
         category: "Feature",
-        prNumber: 1023,
+        prNumber: null,
         title: "Automatic Catalog Creation",
         description:
           "Catalogs are now created automatically, so you don't need to set them up manually anymore.",
@@ -2045,7 +1553,7 @@ export const RELEASE_DATA = [
       },
       {
         category: "Feature",
-        prNumber: 1024,
+        prNumber: null,
         title: "Release Page",
         description:
           "A new Release Page is now available, where you can easily see what's new in each version and who helped build it.",
@@ -2057,7 +1565,7 @@ export const RELEASE_DATA = [
       },
       {
         category: "Feature",
-        prNumber: 1025,
+        prNumber: null,
         title: "Resend Verification Email",
         description:
           "If you don't receive your verification email, you can now resend it easily and continue without getting stuck.",

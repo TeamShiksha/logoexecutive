@@ -1,9 +1,10 @@
 .hero-section {
-  padding: 3.5rem 0 4rem;
+  padding: 3.5rem 0 2rem;
   position: relative;
   overflow: hidden;
   background: var(--white);
   min-height: calc(100vh - 92px);
+  min-height: calc(100dvh - 92px);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -42,6 +43,7 @@
   position: relative;
   z-index: 1;
   width: 100%;
+  margin-top: 3rem;
 }
 
 .hero-content {
@@ -260,7 +262,13 @@
 
 @media only screen and (max-width: 1024px) {
   .hero-section {
-    min-height: calc(100vh - 68px);
+    min-height: auto;
+    height: auto;
+    display: block;
+    padding: 5rem 1.5rem 4rem;
+  }
+  .hero-inner {
+    margin-top: 0;
   }
   .hero-content {
     flex-direction: column;
@@ -291,18 +299,24 @@
 
 @media only screen and (max-width: 780px) {
   .hero-section {
-    padding: 3rem 1.5rem 3.5rem;
-    min-height: calc(100vh - 68px);
+    padding: 2rem 1.5rem 1.5rem;
+    min-height: auto;
+    height: auto;
+    display: block;
   }
   .text-section h1 {
-    font-size: 2.2rem;
+    font-size: 2.8rem;
     text-wrap: balance;
   }
   .hero-content {
     gap: 1.5rem;
+    margin-top: 1rem;
+  }
+  .hero-image {
+    max-height: 38dvh;
   }
   .text-section p {
-    font-size: 1.05rem;
+    display: none;
   }
   .button-section {
     flex-direction: column;
@@ -319,6 +333,6 @@
 
 @media only screen and (max-width: 480px) {
   .text-section h1 {
-    font-size: 1.9rem;
+    font-size: 2.5rem;
   }
 }

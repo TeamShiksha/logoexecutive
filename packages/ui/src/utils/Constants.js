@@ -2,6 +2,7 @@ import searchIcon from "../assets/searchIcon.svg";
 import curvedArrow from "../assets/curvedArrow.svg";
 import rapidLogo from "../assets/rapid.svg";
 import searchLogo from "../assets/search.svg";
+
 import databaseLogo from "../assets/database.svg";
 import dragAndDropBg from "../assets/DragAndDropBg.svg";
 import microsoft from "../assets/microsoft.png";
@@ -71,17 +72,18 @@ export const FEATURES = {
       content:
         "Tap into a vast logo library with thousands of brands, continuously refreshed and expanding.",
     },
-    {
-      icon: searchLogo,
-      title: "Customizable Search Insights",
-      content:
-        "Gain insights on search patterns to spot missing logos and keep collections comprehensive.",
-    },
+
     {
       icon: rapidLogo,
       title: "Fast & Reliable API Access",
       content:
         "Access logos instantly with fast, dependable APIs built to minimize downtime and maximize efficiency.",
+    },
+    {
+      icon: searchLogo,
+      title: "Request & Create Logos",
+      content:
+        "Can't find a specific brand? Easily submit a request or use our built-in tools to create the logo yourself.",
     },
   ],
 };

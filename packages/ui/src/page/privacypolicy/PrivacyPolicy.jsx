@@ -5,12 +5,12 @@ const PrivacyPolicy = () => {
   return (
     <div className={`container ${styles["privacy-page-container"]}`}>
       {PRIVACY_AND_TERMS.map((section) => (
-        <section key={section.DATA_ID} className={styles.section}>
-          <h2
-            className={styles.heading}
-            data-testid={section.DATA_ID}
-            id={section.DATA_ID}
-          >
+        <section
+          key={section.DATA_ID}
+          className={styles.section}
+          id={section.DATA_ID}
+        >
+          <h2 className={styles.heading} data-testid={section.DATA_ID}>
             {section.HEADLINE}
           </h2>
 

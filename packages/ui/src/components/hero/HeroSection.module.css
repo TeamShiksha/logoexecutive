@@ -262,9 +262,8 @@
 
 @media only screen and (max-width: 1024px) {
   .hero-section {
-    min-height: auto;
-    height: auto;
-    display: block;
+    display: flex;
+    flex-direction: column;
     padding: 6rem 2rem 5rem;
   }
   .hero-inner {

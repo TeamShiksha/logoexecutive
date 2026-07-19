@@ -1,5 +1,5 @@
 .hero-section {
-  padding: 3.5rem 0 2rem;
+  padding: clamp(1.5rem, 4vh, 3.5rem) 0 clamp(1rem, 3vh, 2rem);
   position: relative;
   overflow: hidden;
   background: var(--white);
@@ -43,7 +43,7 @@
   position: relative;
   z-index: 1;
   width: 100%;
-  margin-top: 3rem;
+  margin-top: clamp(1rem, 3vh, 3rem);
 }
 
 .hero-content {
@@ -52,7 +52,7 @@
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  gap: 4rem;
+  gap: clamp(2rem, 5vh, 4rem);
   z-index: 2;
 }
 
@@ -106,7 +106,7 @@
 }
 
 .text-section h1 {
-  font-size: 3.8rem;
+  font-size: clamp(2.5rem, 5vh + 1vw, 3.8rem);
   font-weight: 700;
   line-height: 1.1;
   letter-spacing: -0.02em;
@@ -123,11 +123,11 @@
 }
 
 .text-section p {
-  font-size: 1.22rem;
+  font-size: clamp(1.05rem, 2vh + 0.5vw, 1.22rem);
   color: var(--description);
   font-weight: 400;
   line-height: 1.75;
-  margin: 0.5rem 0;
+  margin: clamp(0.5rem, 1vh, 1rem) 0;
 }
 
 .button-section {
@@ -237,7 +237,7 @@
 .hero-image {
   width: 100%;
   height: auto;
-  max-height: 600px;
+  max-height: min(600px, 55vh);
   object-fit: contain;
   filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.12));
   z-index: 2;

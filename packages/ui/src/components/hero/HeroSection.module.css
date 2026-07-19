@@ -1,8 +1,9 @@
 .hero-section {
-  padding: 3.5rem 0 4rem;
+  padding: 3.5rem 0 2rem;
   position: relative;
   overflow: hidden;
   background: var(--white);
+  min-height: calc(100vh - 92px);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -41,6 +42,7 @@
   position: relative;
   z-index: 1;
   width: 100%;
+  margin-top: 3rem;
 }
 
 .hero-content {
@@ -258,6 +260,13 @@
 }
 
 @media only screen and (max-width: 1024px) {
+  .hero-section {
+    min-height: auto;
+    padding: 5rem 1.5rem 4rem;
+  }
+  .hero-inner {
+    margin-top: 0;
+  }
   .hero-content {
     flex-direction: column;
     text-align: center;
@@ -287,7 +296,8 @@
 
 @media only screen and (max-width: 780px) {
   .hero-section {
-    padding: 3rem 1.5rem 3.5rem;
+    padding: 4rem 1.5rem 3.5rem;
+    min-height: auto;
   }
   .text-section h1 {
     font-size: 2.2rem;

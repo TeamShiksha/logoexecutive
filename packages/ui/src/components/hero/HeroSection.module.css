@@ -265,7 +265,7 @@
     min-height: auto;
     height: auto;
     display: block;
-    padding: 5rem 1.5rem 4rem;
+    padding: 6rem 2rem 5rem;
   }
   .hero-inner {
     margin-top: 0;
@@ -273,13 +273,13 @@
   .hero-content {
     flex-direction: column;
     text-align: center;
-    gap: 3rem;
+    gap: 4rem;
   }
   .text-section {
     align-items: center;
     text-align: center;
     margin: 0 auto;
-    max-width: 100%;
+    max-width: 800px;
   }
   .text-section p {
     margin: 0 auto;
@@ -289,38 +289,35 @@
     justify-content: center;
   }
   .image-section {
-    max-width: 580px;
+    max-width: 650px;
     margin: 0 auto;
   }
   .text-section h1 {
-    font-size: 3rem;
+    font-size: 3.5rem;
   }
 }
 
 @media only screen and (max-width: 780px) {
   .hero-section {
-    padding: 2rem 1.5rem 1.5rem;
-    min-height: auto;
-    height: auto;
-    display: block;
+    padding: 4rem 1.5rem;
   }
   .text-section h1 {
     font-size: 2.8rem;
     text-wrap: balance;
   }
+  .text-section p {
+    font-size: 1.1rem;
+    display: block;
+  }
   .hero-content {
-    gap: 1.5rem;
-    margin-top: 1rem;
+    gap: 3rem;
   }
   .hero-image {
-    max-height: 38dvh;
-  }
-  .text-section p {
-    display: none;
+    max-height: 400px;
   }
   .button-section {
     flex-direction: column;
-    gap: 0.75rem;
+    gap: 1rem;
     width: 100%;
     align-items: stretch;
   }
@@ -328,11 +325,18 @@
   .secondary-button {
     width: 100%;
     justify-content: center;
+    padding: 0.85rem;
   }
 }
 
 @media only screen and (max-width: 480px) {
+  .hero-section {
+    padding: 3rem 1.25rem;
+  }
   .text-section h1 {
-    font-size: 2.5rem;
+    font-size: 2.4rem;
+  }
+  .hero-content {
+    gap: 2.5rem;
   }
 }

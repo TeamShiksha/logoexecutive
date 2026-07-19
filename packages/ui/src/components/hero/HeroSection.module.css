@@ -312,8 +312,8 @@
   .hero-content {
     gap: 3rem;
   }
-  .hero-image {
-    max-height: 400px;
+  .image-section {
+    display: none;
   }
   .button-section {
     flex-direction: column;

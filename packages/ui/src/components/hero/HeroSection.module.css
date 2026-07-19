@@ -311,8 +311,11 @@
   .hero-content {
     gap: 3rem;
   }
+  .hero-image {
+    max-height: min(350px, 40vh);
+  }
   .image-section {
-    display: none;
+    display: flex;
   }
   .button-section {
     flex-direction: column;
@@ -337,5 +340,12 @@
   }
   .hero-content {
     gap: 2.5rem;
+  }
+}
+
+/* Hide image on phones ONLY if the screen is very short to save space */
+@media only screen and (max-width: 780px) and (max-height: 720px) {
+  .image-section {
+    display: none;
   }
 }

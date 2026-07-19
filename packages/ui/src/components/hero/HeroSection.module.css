@@ -261,7 +261,9 @@
 
 @media only screen and (max-width: 1024px) {
   .hero-section {
-    min-height: auto;
+    min-height: 0;
+    height: auto;
+    display: block;
     padding: 5rem 1.5rem 4rem;
   }
   .hero-inner {
@@ -297,7 +299,9 @@
 @media only screen and (max-width: 780px) {
   .hero-section {
     padding: 4rem 1.5rem 3.5rem;
-    min-height: auto;
+    min-height: 0;
+    height: auto;
+    display: block;
   }
   .text-section h1 {
     font-size: 2.2rem;

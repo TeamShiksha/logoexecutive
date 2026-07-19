@@ -19,6 +19,12 @@ export function ThemeProvider({ children }) {
 
   useEffect(() => {
     localStorage.setItem("darkMode", JSON.stringify(isDarkMode));
+
+    const favicon = document.querySelector("link[rel~='icon']");
+    if (favicon) {
+      favicon.href = isDarkMode ? "/openlogo-white.svg" : "/openlogo.svg";
+    }
+
     if (isDarkMode) {
       document.documentElement.dataset.theme = "dark";
       document.documentElement.style.colorScheme = "dark";

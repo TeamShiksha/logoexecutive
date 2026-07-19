@@ -318,7 +318,7 @@
     max-height: 38dvh;
   }
   .text-section p {
-    font-size: 1.05rem;
+    display: none;
   }
   .button-section {
     flex-direction: column;

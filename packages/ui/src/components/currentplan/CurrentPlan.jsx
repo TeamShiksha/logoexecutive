@@ -1,15 +1,21 @@
-import { BUTTON_TEXT, CURRENT_PLAN } from "../../utils/Constants";
+import { BUTTON_TEXT, PLAN_DETAILS, DEFAULT_PLAN } from "../../utils/Constants";
 import styles from "./CurrentPlan.module.css";
 import PropTypes from "prop-types";
 import Button from "../common/button/Button";
 
-function CurrentPlan({ isGuest }) {
+function CurrentPlan({ isGuest, subscription }) {
   const keepBtnDisabled = true;
+  const planType = subscription?.type;
+  const { plan, tagline } = PLAN_DETAILS[planType] ?? DEFAULT_PLAN;
   return (
     <div className={styles["plan-container"]}>
       <div className={styles["plan-content"]}>
-        <h3 className={styles["plan-name"]}>{CURRENT_PLAN.plan}</h3>
-        <p className={styles["plan-tagline"]}>{CURRENT_PLAN.tagline}</p>
+        <h3
+          className={`${styles["plan-name"]} ${planType === "PRO" ? styles["plan-name-pro"] : ""}`}
+        >
+          {plan}
+        </h3>
+        <p className={styles["plan-tagline"]}>{tagline}</p>
       </div>
 
       <Button
@@ -26,6 +32,7 @@ function CurrentPlan({ isGuest }) {
 
 CurrentPlan.propTypes = {
   isGuest: PropTypes.bool.isRequired,
+  subscription: PropTypes.shape({ type: PropTypes.string }),
 };
 
 export default CurrentPlan;

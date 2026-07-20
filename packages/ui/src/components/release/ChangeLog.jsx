@@ -63,6 +63,7 @@ function ChangeLog({
               {releaseData.map((release) => (
                 <button
                   key={release.version}
+                  type="button"
                   className={`${styles["dropdown-item"]} ${
                     release.version === selectedVersion ? styles["active"] : ""
                   }`}
@@ -100,6 +101,7 @@ function ChangeLog({
             {availableCategories.map((category) => (
               <button
                 key={category}
+                type="button"
                 className={`${styles["filter-pill"]} ${
                   activeCategory === category
                     ? styles["filter-pill-active"]

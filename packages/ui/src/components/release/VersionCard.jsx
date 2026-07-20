@@ -9,14 +9,15 @@ function VersionCard({ entry }) {
   const { prNumber, title, description } = entry;
 
   // Normalize single contributor and array of contributors for rendering
-  const rawContributors = entry.contributors
-    ? entry.contributors
-    : entry.contributor
-      ? [entry.contributor]
-      : [];
+  let rawContributors = [];
+  if (entry.contributors) {
+    rawContributors = entry.contributors;
+  } else if (entry.contributor) {
+    rawContributors = [entry.contributor];
+  }
 
   // Filter out contributors with incomplete data
-  const contributors = rawContributors.filter((c) => c && c.username);
+  const contributors = rawContributors.filter((c) => c?.username);
 
   // Determine category badge class dynamically
   const getCategoryClass = (catName) => {

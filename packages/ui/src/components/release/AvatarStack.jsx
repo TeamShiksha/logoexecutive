@@ -6,7 +6,7 @@ function AvatarStack({ users = [], size = "large", maxCount = 5 }) {
 
   // Filter out entries with no username and generate fallback URLs
   const validUsers = users
-    .filter((u) => u && u.username)
+    .filter((u) => u?.username)
     .map((u) => ({
       ...u,
       avatarUrl: u.avatarUrl || `https://unavatar.io/github/${u.username}`,

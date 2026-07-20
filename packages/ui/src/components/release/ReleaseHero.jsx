@@ -79,6 +79,7 @@ function ReleaseHero({ selectedRelease, contributors = [] }) {
           <span className={styles["hero-badge"]}>RELEASE NOTES</span>
           <h1 className={styles["hero-title"]}>
             <span className={styles["gradient-text"]}>What&apos;s new</span> at
+            <br />
             Openlogo
           </h1>
           <p className={styles["hero-subtitle"]}>
@@ -93,6 +94,7 @@ function ReleaseHero({ selectedRelease, contributors = [] }) {
           </p>
           <div className={styles["hero-cta"]}>
             <button
+              type="button"
               className={styles["cta-primary"]}
               onClick={handleExploreChangelog}
             >

@@ -90,7 +90,7 @@
   margin-left: -0.5rem;
 }
 
-/* Tooltip Base */
+/* Tooltip Base & Default/Large Positioning (Above Avatar) */
 .avatar-wrapper::after,
 .avatar-excess::after {
   content: attr(data-tooltip);
@@ -110,11 +110,6 @@
   transition:
     opacity 0.2s ease,
     transform 0.2s ease;
-}
-
-/* Default/Large Positioning (Above Avatar) */
-.avatar-wrapper::after,
-.avatar-excess::after {
   bottom: 100%;
   left: 50%;
   transform: translateX(-50%) translateY(-4px);

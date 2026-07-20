@@ -121,33 +121,24 @@ describe("ReleaseHero component", () => {
 
   // ─── Image key resolution ─────────────────────────────────────────────────────
 
-  it("loads the version07 image for heroImage key 'version07'", () => {
+  it.each([
+    {
+      heroImage: "version07",
+      description: "loads the version07 image for heroImage key 'version07'",
+    },
+    {
+      heroImage: "version06",
+      description: "loads the version06 image for heroImage key 'version06'",
+    },
+    {
+      heroImage: "unknown-key",
+      description:
+        "falls back to version07 image when heroImage key is unrecognised",
+    },
+  ])("$description", ({ heroImage }) => {
     render(
       <ReleaseHero
-        selectedRelease={{ ...mockRelease, heroImage: "version07" }}
-        contributors={[]}
-      />
-    );
-
-    // The mockup image must be present (src is a module resolved by vite mock)
-    expect(screen.getByAltText("Openlogo UI Mockup")).toBeInTheDocument();
-  });
-
-  it("loads the version06 image for heroImage key 'version06'", () => {
-    render(
-      <ReleaseHero
-        selectedRelease={{ ...mockRelease, heroImage: "version06" }}
-        contributors={[]}
-      />
-    );
-
-    expect(screen.getByAltText("Openlogo UI Mockup")).toBeInTheDocument();
-  });
-
-  it("falls back to version07 image when heroImage key is unrecognised", () => {
-    render(
-      <ReleaseHero
-        selectedRelease={{ ...mockRelease, heroImage: "unknown-key" }}
+        selectedRelease={{ ...mockRelease, heroImage }}
         contributors={[]}
       />
     );

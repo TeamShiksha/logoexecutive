@@ -1266,8 +1266,6 @@ export const RELEASE_DATA = [
           "Full redesign of the user interface according to the latest design specifications for improved usability.",
         contributor: {
           username: "AryaDharkar",
-          avatarUrl: "https://github.com/AryaDharkar.png",
-          profileUrl: "https://github.com/AryaDharkar",
         },
       },
       {
@@ -1278,8 +1276,6 @@ export const RELEASE_DATA = [
           "Polishing the administrative interface with better spacing and contrast for power users.",
         contributor: {
           username: "L-Tarun-Aditya",
-          avatarUrl: "https://github.com/L-Tarun-Aditya.png",
-          profileUrl: "https://github.com/L-Tarun-Aditya",
         },
       },
       {
@@ -1290,8 +1286,6 @@ export const RELEASE_DATA = [
           "Added a new 2FA section in user settings to enhance account security across the platform.",
         contributor: {
           username: "MukeshAbhi",
-          avatarUrl: "https://github.com/MukeshAbhi.png",
-          profileUrl: "https://github.com/MukeshAbhi",
         },
       },
       {
@@ -1302,8 +1296,6 @@ export const RELEASE_DATA = [
           "Implementing a dedicated settings page for MFA and multi factor authentication management.",
         contributor: {
           username: "L-Tarun-Aditya",
-          avatarUrl: "https://github.com/L-Tarun-Aditya.png",
-          profileUrl: "https://github.com/L-Tarun-Aditya",
         },
       },
       {
@@ -1314,8 +1306,6 @@ export const RELEASE_DATA = [
           "Prevent Users From Reusing Old Password During Password Reset flow to improve account security.",
         contributor: {
           username: "rishang14",
-          avatarUrl: "https://github.com/rishang14.png",
-          profileUrl: "https://github.com/rishang14",
         },
       },
       {
@@ -1326,8 +1316,6 @@ export const RELEASE_DATA = [
           "Fix bugs on createLogo page and allow users to access this page without authentication.",
         contributor: {
           username: "AryaDharkar",
-          avatarUrl: "https://github.com/AryaDharkar.png",
-          profileUrl: "https://github.com/AryaDharkar",
         },
       },
       {
@@ -1338,13 +1326,9 @@ export const RELEASE_DATA = [
         contributors: [
           {
             username: "kadamsahil2511",
-            avatarUrl: "https://github.com/kadamsahil2511.png",
-            profileUrl: "https://github.com/kadamsahil2511",
           },
           {
             username: "DeepAkdotcom",
-            avatarUrl: "https://github.com/DeepAkdotcom.png",
-            profileUrl: "https://github.com/DeepAkdotcom",
           },
         ],
       },
@@ -1356,8 +1340,6 @@ export const RELEASE_DATA = [
           "Feature to enforce branch & PR naming conventions via husky + GitHub Actions.",
         contributor: {
           username: "Smayur0",
-          avatarUrl: "https://github.com/Smayur0.png",
-          profileUrl: "https://github.com/Smayur0",
         },
       },
       {
@@ -1367,8 +1349,6 @@ export const RELEASE_DATA = [
         description: "Redesign documentation page.",
         contributor: {
           username: "Dhirenderchoudhary",
-          avatarUrl: "https://github.com/Dhirenderchoudhary.png",
-          profileUrl: "https://github.com/Dhirenderchoudhary",
         },
       },
       {
@@ -1379,13 +1359,9 @@ export const RELEASE_DATA = [
         contributors: [
           {
             username: "0-mstrmind",
-            avatarUrl: "https://github.com/0-mstrmind.png",
-            profileUrl: "https://github.com/0-mstrmind",
           },
           {
             username: "kunjesh360",
-            avatarUrl: "https://github.com/kunjesh360.png",
-            profileUrl: "https://github.com/kunjesh360",
           },
         ],
       },
@@ -1405,18 +1381,12 @@ export const RELEASE_DATA = [
         contributors: [
           {
             username: "Mantu01",
-            avatarUrl: "https://github.com/Mantu01.png",
-            profileUrl: "https://github.com/Mantu01",
           },
           {
             username: "Smayur0",
-            avatarUrl: "https://github.com/Smayur0.png",
-            profileUrl: "https://github.com/Smayur0",
           },
           {
             username: "printgourav",
-            avatarUrl: "https://github.com/printgourav.png",
-            profileUrl: "https://github.com/printgourav",
           },
         ],
       },
@@ -1428,8 +1398,6 @@ export const RELEASE_DATA = [
           "You can now switch between Light and Dark themes to personalize your experience.",
         contributor: {
           username: "sachinkmrsin",
-          avatarUrl: "https://github.com/sachinkmrsin.png",
-          profileUrl: "https://github.com/sachinkmrsin",
         },
       },
       {
@@ -1441,13 +1409,9 @@ export const RELEASE_DATA = [
         contributors: [
           {
             username: "YashDevani-source",
-            avatarUrl: "https://github.com/YashDevani-source.png",
-            profileUrl: "https://github.com/YashDevani-source",
           },
           {
             username: "L-Tarun-Aditya",
-            avatarUrl: "https://github.com/L-Tarun-Aditya.png",
-            profileUrl: "https://github.com/L-Tarun-Aditya",
           },
         ],
       },
@@ -1460,13 +1424,9 @@ export const RELEASE_DATA = [
         contributors: [
           {
             username: "biplab-sutradhar",
-            avatarUrl: "https://github.com/biplab-sutradhar.png",
-            profileUrl: "https://github.com/biplab-sutradhar",
           },
           {
             username: "mridul-giri",
-            avatarUrl: "https://github.com/mridul-giri.png",
-            profileUrl: "https://github.com/mridul-giri",
           },
         ],
       },
@@ -1478,8 +1438,6 @@ export const RELEASE_DATA = [
           "API keys are now securely hidden to prevent accidental exposure and enhance account security.",
         contributor: {
           username: "L-Tarun-Aditya",
-          avatarUrl: "https://github.com/L-Tarun-Aditya.png",
-          profileUrl: "https://github.com/L-Tarun-Aditya",
         },
       },
     ],
@@ -1498,18 +1456,12 @@ export const RELEASE_DATA = [
         contributors: [
           {
             username: "L-Tarun-Aditya",
-            avatarUrl: "https://github.com/L-Tarun-Aditya.png",
-            profileUrl: "https://github.com/L-Tarun-Aditya",
           },
           {
             username: "sachinkmrsin",
-            avatarUrl: "https://github.com/sachinkmrsin.png",
-            profileUrl: "https://github.com/sachinkmrsin",
           },
           {
             username: "YashDevani-source",
-            avatarUrl: "https://github.com/YashDevani-source.png",
-            profileUrl: "https://github.com/YashDevani-source",
           },
         ],
       },
@@ -1522,13 +1474,9 @@ export const RELEASE_DATA = [
         contributors: [
           {
             username: "biplab-sutradhar",
-            avatarUrl: "https://github.com/biplab-sutradhar.png",
-            profileUrl: "https://github.com/biplab-sutradhar",
           },
           {
             username: "printgourav",
-            avatarUrl: "https://github.com/printgourav.png",
-            profileUrl: "https://github.com/printgourav",
           },
         ],
       },
@@ -1541,13 +1489,9 @@ export const RELEASE_DATA = [
         contributors: [
           {
             username: "BansalAbhinav",
-            avatarUrl: "https://github.com/BansalAbhinav.png",
-            profileUrl: "https://github.com/BansalAbhinav",
           },
           {
             username: "Saurabhupadhyay8170",
-            avatarUrl: "https://github.com/Saurabhupadhyay8170.png",
-            profileUrl: "https://github.com/Saurabhupadhyay8170",
           },
         ],
       },
@@ -1559,8 +1503,6 @@ export const RELEASE_DATA = [
           "A new Release Page is now available, where you can easily see what's new in each version and who helped build it.",
         contributor: {
           username: "abhishek-2k23",
-          avatarUrl: "https://github.com/abhishek-2k23.png",
-          profileUrl: "https://github.com/abhishek-2k23",
         },
       },
       {
@@ -1571,8 +1513,6 @@ export const RELEASE_DATA = [
           "If you don't receive your verification email, you can now resend it easily and continue without getting stuck.",
         contributor: {
           username: "MukeshAbhi",
-          avatarUrl: "https://github.com/MukeshAbhi.png",
-          profileUrl: "https://github.com/MukeshAbhi",
         },
       },
     ],
@@ -1589,8 +1529,6 @@ export const RELEASE_DATA = [
           "Dates are now displayed in a consistent and clear format across the entire platform.",
         contributor: {
           username: "Sumitgitup",
-          avatarUrl: "https://github.com/Sumitgitup.png",
-          profileUrl: "https://github.com/Sumitgitup",
         },
       },
       {
@@ -1600,8 +1538,6 @@ export const RELEASE_DATA = [
           "You can now easily download a copy of your data from the platform whenever you need it.",
         contributor: {
           username: "Sumitgitup",
-          avatarUrl: "https://github.com/Sumitgitup.png",
-          profileUrl: "https://github.com/Sumitgitup",
         },
       },
       {
@@ -1612,13 +1548,9 @@ export const RELEASE_DATA = [
         contributors: [
           {
             username: "abhishek-2k23",
-            avatarUrl: "https://github.com/abhishek-2k23.png",
-            profileUrl: "https://github.com/abhishek-2k23",
           },
           {
             username: "nazibul7",
-            avatarUrl: "https://github.com/nazibul7.png",
-            profileUrl: "https://github.com/nazibul7",
           },
         ],
       },
@@ -1629,8 +1561,6 @@ export const RELEASE_DATA = [
           "Updates made by admins now show up instantly, so users always see the latest content without delays.",
         contributor: {
           username: "MukeshAbhi",
-          avatarUrl: "https://github.com/MukeshAbhi.png",
-          profileUrl: "https://github.com/MukeshAbhi",
         },
       },
       {
@@ -1641,13 +1571,9 @@ export const RELEASE_DATA = [
         contributors: [
           {
             username: "printgourav",
-            avatarUrl: "https://github.com/printgourav.png",
-            profileUrl: "https://github.com/printgourav",
           },
           {
             username: "YashDevani-source",
-            avatarUrl: "https://github.com/YashDevani-source.png",
-            profileUrl: "https://github.com/YashDevani-source",
           },
         ],
       },
@@ -1658,8 +1584,6 @@ export const RELEASE_DATA = [
           "If you miss the verification email, you can now resend it directly without any hassle.",
         contributor: {
           username: "MukeshAbhi",
-          avatarUrl: "https://github.com/MukeshAbhi.png",
-          profileUrl: "https://github.com/MukeshAbhi",
         },
       },
       {
@@ -1669,8 +1593,6 @@ export const RELEASE_DATA = [
           "Admins can now quickly see how many images are stored in the system from the dashboard.",
         contributor: {
           username: "printgourav",
-          avatarUrl: "https://github.com/printgourav.png",
-          profileUrl: "https://github.com/printgourav",
         },
       },
       {
@@ -1680,8 +1602,6 @@ export const RELEASE_DATA = [
           "The platform moved from Firebase to MongoDB to better support growth and handle data more efficiently.",
         contributor: {
           username: "amankumarsingh77",
-          avatarUrl: "https://github.com/amankumarsingh77.png",
-          profileUrl: "https://github.com/amankumarsingh77",
         },
       },
       {
@@ -1691,8 +1611,6 @@ export const RELEASE_DATA = [
           "Testing was improved by switching to a faster and more reliable testing setup.",
         contributor: {
           username: "Ayushsanjdev",
-          avatarUrl: "https://github.com/Ayushsanjdev.png",
-          profileUrl: "https://github.com/Ayushsanjdev",
         },
       },
       {
@@ -1702,8 +1620,6 @@ export const RELEASE_DATA = [
           "A new Operator dashboard was added to make it easier to manage and respond to customer queries.",
         contributor: {
           username: "asharma991",
-          avatarUrl: "https://github.com/asharma991.png",
-          profileUrl: "https://github.com/asharma991",
         },
       },
       {
@@ -1713,8 +1629,6 @@ export const RELEASE_DATA = [
           "Admins gained the ability to re-upload images with checks to ensure correct file names and formats.",
         contributor: {
           username: "Soumava-221B",
-          avatarUrl: "https://github.com/Soumava-221B.png",
-          profileUrl: "https://github.com/Soumava-221B",
         },
       },
       {
@@ -1724,8 +1638,6 @@ export const RELEASE_DATA = [
           "Subscription usage limits are now reset automatically every month, removing the need for manual updates.",
         contributor: {
           username: "DeltaDynamo",
-          avatarUrl: "https://github.com/DeltaDynamo.png",
-          profileUrl: "https://github.com/DeltaDynamo",
         },
       },
       {
@@ -1735,8 +1647,6 @@ export const RELEASE_DATA = [
           "Several visual and usability improvements were made across the footer, About page, and sign-in experience.",
         contributor: {
           username: "AryaDharkar",
-          avatarUrl: "https://github.com/AryaDharkar.png",
-          profileUrl: "https://github.com/AryaDharkar",
         },
       },
       {
@@ -1746,8 +1656,6 @@ export const RELEASE_DATA = [
           "A new logo search feature was added, making it easier to find and retrieve logos securely.",
         contributor: {
           username: "DeltaDynamo",
-          avatarUrl: "https://github.com/DeltaDynamo.png",
-          profileUrl: "https://github.com/DeltaDynamo",
         },
       },
       {
@@ -1757,8 +1665,6 @@ export const RELEASE_DATA = [
           "Navigation behavior was improved so pages smoothly return to the top when links are clicked.",
         contributor: {
           username: "Asin-Junior-Honore",
-          avatarUrl: "https://github.com/Asin-Junior-Honore.png",
-          profileUrl: "https://github.com/Asin-Junior-Honore",
         },
       },
       {
@@ -1768,8 +1674,6 @@ export const RELEASE_DATA = [
           "An extra confirmation step was added before deleting API keys to help prevent accidental deletions.",
         contributor: {
           username: "anandbaraik",
-          avatarUrl: "https://github.com/anandbaraik.png",
-          profileUrl: "https://github.com/anandbaraik",
         },
       },
       {
@@ -1779,8 +1683,6 @@ export const RELEASE_DATA = [
           "API keys can now be viewed or copied only once, improving overall account security.",
         contributor: {
           username: "Sharathxct",
-          avatarUrl: "https://github.com/Sharathxct.png",
-          profileUrl: "https://github.com/Sharathxct",
         },
       },
     ],

@@ -114,6 +114,7 @@ function UserSubscriptions({ embedded = false }) {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [initialized, setInitialized] = useState(false);
+  const [refetchTrigger, setRefetchTrigger] = useState(0);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
@@ -152,7 +153,7 @@ function UserSubscriptions({ embedded = false }) {
     };
     load();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [page, debouncedSearch]);
+  }, [page, debouncedSearch, refetchTrigger]);
 
   const handleOpenModal = (user) => {
     setSelectedUser(user);
@@ -217,6 +218,7 @@ function UserSubscriptions({ embedded = false }) {
         USER_SUBSCRIPTIONS.toasts.error;
       toast.error(msg);
     }
+    setRefetchTrigger((t) => t + 1);
   };
 
   const isCurrentPlan = selectedUser?.subscription?.type === newPlan;

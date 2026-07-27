@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { handleNavigation } from "../../utils/Helpers";
 import { Github } from "lucide-react";
 import PropTypes from "prop-types";
+import { useTheme } from "../../hooks/useTheme";
 
 const LUCIDE_LOGOS = {
   github: Github,
@@ -46,6 +47,7 @@ FooterLogo.propTypes = {
 
 function Footer() {
   const navigate = useNavigate();
+  const { isDarkMode } = useTheme();
   const socialLinks =
     FOOTER_SECTIONS.find(
       (section) => section.title === "Community"
@@ -63,7 +65,7 @@ function Footer() {
             >
               <img
                 alt={BRANDING.imageAlt}
-                src={BRANDING.imageSrc}
+                src={isDarkMode ? "/openlogo-white.svg" : BRANDING.imageSrc}
                 width={30}
                 height={30}
               />

@@ -305,6 +305,11 @@
   gap: 0.75rem;
 }
 
+.history-section .table-wrapper {
+  max-height: 400px;
+  overflow-y: auto;
+}
+
 .history-title {
   font-size: 0.9375rem;
   font-weight: 600;

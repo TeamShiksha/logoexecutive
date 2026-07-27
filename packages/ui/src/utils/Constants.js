@@ -2,6 +2,7 @@ import searchIcon from "../assets/searchIcon.svg";
 import curvedArrow from "../assets/curvedArrow.svg";
 import rapidLogo from "../assets/rapid.svg";
 import searchLogo from "../assets/search.svg";
+
 import databaseLogo from "../assets/database.svg";
 import dragAndDropBg from "../assets/DragAndDropBg.svg";
 import microsoft from "../assets/microsoft.png";
@@ -71,17 +72,18 @@ export const FEATURES = {
       content:
         "Tap into a vast logo library with thousands of brands, continuously refreshed and expanding.",
     },
-    {
-      icon: searchLogo,
-      title: "Customizable Search Insights",
-      content:
-        "Gain insights on search patterns to spot missing logos and keep collections comprehensive.",
-    },
+
     {
       icon: rapidLogo,
       title: "Fast & Reliable API Access",
       content:
         "Access logos instantly with fast, dependable APIs built to minimize downtime and maximize efficiency.",
+    },
+    {
+      icon: searchLogo,
+      title: "Request & Create Logos",
+      content:
+        "Can't find a specific brand? Easily submit a request or use our built-in tools to create the logo yourself.",
     },
   ],
 };
@@ -472,7 +474,7 @@ export const BUTTON_TEXT = {
   sendRequest: "Send Request",
   upload: "Upload",
   selectAnImage: "Select an image",
-  uploadLogo: "Upload Logo",
+  uploadLogo: "Create New Logo",
 };
 
 export const BRANDING = {
@@ -546,13 +548,6 @@ export const HERO_LOGOS = [
 ];
 
 export const PRIVACY_AND_TERMS = [
-  {
-    HEADLINE: "Privacy and Terms",
-    DATA_ID: "#",
-    TEXTS: [
-      "Thank you for choosing Openlogo! Before using our services, please review our Terms of Service carefully. This agreement is a crucial contract between us and our users. We've provided a concise summary followed by the complete legal terms.",
-    ],
-  },
   {
     HEADLINE: "Privacy Policy",
     DATA_ID: "privacy",
@@ -652,7 +647,7 @@ export const LOGOREQUEST = {
 };
 
 export const LOGOUPLOAD = {
-  title: "Upload Logo",
+  title: "Create New Logo",
   initialValues: {
     companyUrl: "",
   },

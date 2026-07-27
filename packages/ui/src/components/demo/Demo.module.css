@@ -1,5 +1,5 @@
 .demo-wrapper {
-  background: var(--grey);
+  background: var(--white);
   padding: 5rem 0;
   overflow: hidden;
 }
@@ -539,12 +539,12 @@
   }
 
   .deckContainer {
-    gap: 0;
+    gap: 0.5rem;
     padding: 0;
   }
 
   .deckCard {
-    margin-left: -8px;
+    margin-left: 0;
   }
 
   .deckCard:first-child {
@@ -692,12 +692,12 @@
   }
 
   .deckContainer {
-    gap: 0;
+    gap: 0.5rem;
     padding: 0;
   }
 
   .deckCard {
-    margin-left: -16px;
+    margin-left: 0;
   }
 
   .deckCard:first-child {

@@ -758,8 +758,8 @@ const Operator = ({
         <div className={operatorStyles["filter-right"]}>
           <Dropdown
             options={OperatorDashboardDropdownOptions}
-            selectedOption={searchType.toUpperCase()}
-            setSelectedOption={(val) => setSearchType(val.toLowerCase())}
+            selectedOption={searchType}
+            setSelectedOption={setSearchType}
             className={operatorStyles["type-selector"]}
           />
         </div>

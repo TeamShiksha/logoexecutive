@@ -18,6 +18,7 @@ import { AuthContext } from "../../contexts/Contexts";
 import { useToast } from "../../hooks/useToast.js";
 import Pin from "../pin/Pin";
 import { useTheme } from "../../hooks/useTheme.js";
+import OAuthIcons from "./OAuthIcons";
 
 const SignIn = ({
   toggleForm,
@@ -360,9 +361,17 @@ const SignIn = ({
                 disabled={!!oauthLoading || isLoading}
                 aria-label={`Continue with ${provider.label}`}
               >
-                {oauthLoading === provider.id
-                  ? "Connecting..."
-                  : provider.label}
+                {oauthLoading === provider.id ? (
+                  "Connecting..."
+                ) : (
+                  <>
+                    {OAuthIcons[provider.id] && (() => {
+                      const Icon = OAuthIcons[provider.id];
+                      return <Icon />;
+                    })()}
+                    {provider.label}
+                  </>
+                )}
               </button>
             ))}
           </div>

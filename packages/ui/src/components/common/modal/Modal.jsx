@@ -16,16 +16,22 @@ const Modal = ({
   closeOnOverlayClick = true,
 }) => {
   useEffect(() => {
-    const handleEscapeKey = (event) => {
-      if (event.key === "Escape" && isOpen) {
-        onClose();
-      }
-    };
+    if (isOpen) {
+      const originalOverflow = document.body.style.overflow;
+      document.body.style.overflow = "hidden";
 
-    document.addEventListener("keydown", handleEscapeKey);
-    return () => {
-      document.removeEventListener("keydown", handleEscapeKey);
-    };
+      const handleEscapeKey = (event) => {
+        if (event.key === "Escape") {
+          onClose();
+        }
+      };
+
+      document.addEventListener("keydown", handleEscapeKey);
+      return () => {
+        document.removeEventListener("keydown", handleEscapeKey);
+        document.body.style.overflow = originalOverflow;
+      };
+    }
   }, [isOpen, onClose]);
 
   if (!isOpen) return null;

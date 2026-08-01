@@ -34,6 +34,18 @@ const EnvSchema = Joi.object()
         "Crypto key must be exactly 64 hex characters (32 bytes)",
       "string.hex": "Crypto key must be a valid hex string",
     }),
+    DISCORD_CLIENT_ID: Joi.string().optional(),
+    DISCORD_CLIENT_SECRET: Joi.string().optional(),
+    DISCORD_REDIRECT_URI: Joi.string().uri().optional(),
+    GOOGLE_CLIENT_ID: Joi.string().optional(),
+    GOOGLE_CLIENT_SECRET: Joi.string().optional(),
+    GOOGLE_REDIRECT_URI: Joi.string().uri().optional(),
+    LINKEDIN_CLIENT_ID: Joi.string().optional(),
+    LINKEDIN_CLIENT_SECRET: Joi.string().optional(),
+    LINKEDIN_REDIRECT_URI: Joi.string().uri().optional(),
+    GITHUB_CLIENT_ID: Joi.string().optional(),
+    GITHUB_CLIENT_SECRET: Joi.string().optional(),
+    GITHUB_REDIRECT_URI: Joi.string().uri().optional(),
   })
   .unknown(true);
 

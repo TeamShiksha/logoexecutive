@@ -5,7 +5,12 @@ import SignUp from "./Signup";
 import SignIn from "./Signin";
 import styles from "./Auth.module.css";
 
-const AuthModal = ({ isOpen, onClose, redirectAfterLogin }) => {
+const AuthModal = ({
+  isOpen,
+  onClose,
+  redirectAfterLogin,
+  initialMfaRequired = false,
+}) => {
   const [isFlipped, setIsFlipped] = useState(false);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [showSignUp, setShowSignUp] = useState(false);
@@ -36,6 +41,7 @@ const AuthModal = ({ isOpen, onClose, redirectAfterLogin }) => {
             toggleForm={toggleForm}
             onClose={onClose}
             redirectAfterLogin={redirectAfterLogin}
+            initialMfaRequired={initialMfaRequired}
           />
         )}
         {showSignUp && <SignUp toggleForm={toggleForm} onClose={onClose} />}
@@ -48,6 +54,7 @@ AuthModal.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
   redirectAfterLogin: PropTypes.string,
+  initialMfaRequired: PropTypes.bool,
 };
 
 export default AuthModal;

@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const { UserType } = require("../utils/constants");
+const { UserType, AuthProvider } = require("../utils/constants");
 
 /**
  * Users Model: Represents user accounts in the application.
@@ -28,6 +28,31 @@ const userSchema = new mongoose.Schema({
     required: true,
     enum: Object.values(UserType),
     default: UserType.CUSTOMER,
+  },
+  authProvider: {
+    type: String,
+    enum: Object.values(AuthProvider),
+    default: AuthProvider.LOCAL,
+  },
+  discordId: {
+    type: String,
+    sparse: true,
+    unique: true,
+  },
+  googleId: {
+    type: String,
+    sparse: true,
+    unique: true,
+  },
+  linkedinId: {
+    type: String,
+    sparse: true,
+    unique: true,
+  },
+  githubId: {
+    type: String,
+    sparse: true,
+    unique: true,
   },
   is_verified: {
     type: Boolean,

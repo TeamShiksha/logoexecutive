@@ -20,6 +20,8 @@ const {
   revokeSessionController,
   signoutOthersController,
   signoutAllController,
+  oauthAuthController,
+  oauthCallbackController,
 } = require("../controllers/auth");
 
 router.post("/signup", signupController);
@@ -45,5 +47,9 @@ router.delete(
 );
 router.post("/signout/others", authMiddleware(), signoutOthersController);
 router.post("/signout/all", authMiddleware(), signoutAllController);
+
+// Parameterised OAuth routes — must stay after specific /auth paths above
+router.get("/:provider", oauthAuthController);
+router.get("/:provider/callback", oauthCallbackController);
 
 module.exports = router;

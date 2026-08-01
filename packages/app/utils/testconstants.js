@@ -25,6 +25,9 @@ const ENDPOINTS = {
   SESSIONS: "/api/auth/sessions",
   SIGNOUT_OTHERS: "/api/auth/signout/others",
   SIGNOUT_ALL: "/api/auth/signout/all",
+  OAUTH_GOOGLE: "/api/auth/google",
+  OAUTH_GOOGLE_CALLBACK: "/api/auth/google/callback",
+  OAUTH_DISCORD_CALLBACK: "/api/auth/discord/callback",
 };
 
 module.exports = {

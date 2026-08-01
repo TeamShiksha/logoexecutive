@@ -1,8 +1,13 @@
 const bcrypt = require("bcryptjs");
+const { v4: uuidv4 } = require("uuid");
 const KeyService = require("../services/keys");
 const SubscriptionService = require("../services/subscriptions");
 const { UsersRepository, RequestRepository } = require("../repositories");
-const { UserType } = require("../utils/constants");
+const {
+  UserType,
+  AuthProvider,
+  OAuthProviderIdFields,
+} = require("../utils/constants");
 const ImageService = require("../services/images");
 const RewardTransactionsService = require("../services/rewardTransactions");
 
@@ -218,6 +223,70 @@ class UserService {
       role: userRole,
       subscription_id: userDetails.subscription_id,
       is_deleted: false,
+      authProvider: AuthProvider.LOCAL,
+    });
+  }
+
+  /**
+   * Finds a user by OAuth provider-scoped ID.
+   * @param {string} provider - OAuth provider key.
+   * @param {string} providerId - Provider-scoped user ID.
+   * @returns {Promise<Object|null>}
+   */
+  async getUserByProviderId(provider, providerId) {
+    const field = OAuthProviderIdFields[provider];
+    if (!field) {
+      return null;
+    }
+    return await this.userRepository.findUserByProviderId(field, providerId);
+  }
+
+  /**
+   * Links an OAuth provider ID to an existing user account.
+   * Does not change authProvider (keeps original registration method).
+   * @param {string} userId
+   * @param {string} provider
+   * @param {string} providerId
+   * @returns {Promise<Object|null>}
+   */
+  async linkOAuthProvider(userId, provider, providerId) {
+    const field = OAuthProviderIdFields[provider];
+    if (!field) {
+      return null;
+    }
+    return await this.userRepository.update(userId, {
+      [field]: providerId,
+      updated_at: Date.now(),
+    });
+  }
+
+  /**
+   * Creates a verified user from an OAuth profile.
+   * Assigns a random UUID password to satisfy the required password constraint.
+   * @param {Object} details
+   * @param {string} details.email
+   * @param {string} details.name
+   * @param {string} details.provider
+   * @param {string} details.providerId
+   * @param {string} details.subscription_id
+   * @returns {Promise<Object>}
+   */
+  async createOAuthUser(details) {
+    const field = OAuthProviderIdFields[details.provider];
+    const userRole = this.getRole(details.email);
+    const randomPassword = uuidv4();
+
+    return await this.userRepository.create({
+      name: details.name,
+      password: await bcrypt.hash(randomPassword, 10),
+      email: details.email,
+      is_verified: true,
+      role: userRole,
+      subscription_id: details.subscription_id,
+      is_deleted: false,
+      authProvider: details.provider,
+      [field]: details.providerId,
+      mfaEnabled: false,
     });
   }
 

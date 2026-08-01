@@ -624,6 +624,23 @@ export const SIGNIN = {
   footerText: "Don't have an account ?",
   signupToggleButtonText: "Create an account",
   initialValues: { email: "", password: "" },
+  oauthDivider: "or continue with",
+};
+
+export const OAUTH_PROVIDERS = [
+  { id: "google", label: "Google" },
+  { id: "github", label: "GitHub" },
+  { id: "discord", label: "Discord" },
+  { id: "linkedin", label: "LinkedIn" },
+];
+
+export const OAUTH_ERROR_MESSAGES = {
+  no_email_provided:
+    "Email access is required. Please grant email permission and try again.",
+  account_deleted: "This account has been deleted.",
+  invalid_state: "OAuth session expired. Please try again.",
+  unsupported_provider: "Unsupported OAuth provider.",
+  oauth_failed: "OAuth authentication failed. Please try again.",
 };
 
 export const CONTACT = {

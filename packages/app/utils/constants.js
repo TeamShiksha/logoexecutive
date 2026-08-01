@@ -55,6 +55,36 @@ const ProSubscriptionPlan = {
   is_active: true,
 };
 
+const AuthProvider = {
+  LOCAL: "local",
+  DISCORD: "discord",
+  GOOGLE: "google",
+  LINKEDIN: "linkedin",
+  GITHUB: "github",
+};
+
+const OAuthProviders = [
+  AuthProvider.DISCORD,
+  AuthProvider.GOOGLE,
+  AuthProvider.LINKEDIN,
+  AuthProvider.GITHUB,
+];
+
+const OAuthProviderIdFields = {
+  [AuthProvider.DISCORD]: "discordId",
+  [AuthProvider.GOOGLE]: "googleId",
+  [AuthProvider.LINKEDIN]: "linkedinId",
+  [AuthProvider.GITHUB]: "githubId",
+};
+
+const OAuthErrorCodes = {
+  NO_EMAIL_PROVIDED: "no_email_provided",
+  ACCOUNT_DELETED: "account_deleted",
+  INVALID_STATE: "invalid_state",
+  UNSUPPORTED_PROVIDER: "unsupported_provider",
+  OAUTH_FAILED: "oauth_failed",
+};
+
 const Messages = {
   INVALID_USER_ID: "Invalid user id.",
   EMAIL_EXISTS: "Email already exists.",
@@ -125,6 +155,13 @@ const Messages = {
     "Cannot revoke current session. Use signout instead.",
   SESSION_LIMIT_EXCEEDED: "Maximum number of active sessions exceeded.",
   INVALID_ID: "Invalid ID format.",
+  UNSUPPORTED_OAUTH_PROVIDER: "Unsupported OAuth provider.",
+  OAUTH_NOT_CONFIGURED: "OAuth provider is not configured.",
+  NO_EMAIL_PROVIDED:
+    "Email access is required. Please grant email permission and try again.",
+  ACCOUNT_DELETED: "This account has been deleted.",
+  INVALID_OAUTH_STATE: "Invalid OAuth state. Please try again.",
+  OAUTH_FAILED: "OAuth authentication failed. Please try again.",
 };
 
 const MAX_SESSIONS_PER_USER = 5;
@@ -180,6 +217,10 @@ module.exports = {
   UserTokenTypes,
   TokenExpiry,
   UserType,
+  AuthProvider,
+  OAuthProviders,
+  OAuthProviderIdFields,
+  OAuthErrorCodes,
   SubscriptionTypes,
   StatusTypes,
   DefaultSubscriptionPlan,

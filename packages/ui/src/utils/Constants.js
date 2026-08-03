@@ -475,6 +475,8 @@ export const BUTTON_TEXT = {
   upload: "Upload",
   selectAnImage: "Select an image",
   uploadLogo: "Create New Logo",
+  copyLink: "Copy Link",
+  copied: "Copied!",
 };
 
 export const BRANDING = {

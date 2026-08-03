@@ -219,12 +219,15 @@ function normalizeGitHubProfile(data, email = null) {
  * @returns {Promise<string|null>}
  */
 async function fetchGitHubPrimaryEmail(accessToken) {
-  const { data } = await axios.get(PROVIDER_CONFIG[AuthProvider.GITHUB].emailsUrl, {
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-      Accept: "application/vnd.github+json",
-    },
-  });
+  const { data } = await axios.get(
+    PROVIDER_CONFIG[AuthProvider.GITHUB].emailsUrl,
+    {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        Accept: "application/vnd.github+json",
+      },
+    }
+  );
 
   if (!Array.isArray(data)) {
     return null;

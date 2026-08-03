@@ -1074,7 +1074,9 @@ async function oauthCallbackController(req, res, next) {
     clearStateCookie();
 
     if (!code) {
-      return res.redirect(`${clientUrl}/?error=${OAuthErrorCodes.OAUTH_FAILED}`);
+      return res.redirect(
+        `${clientUrl}/?error=${OAuthErrorCodes.OAUTH_FAILED}`
+      );
     }
 
     const authService = new AuthService();

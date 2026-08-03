@@ -365,10 +365,11 @@ const SignIn = ({
                   "Connecting..."
                 ) : (
                   <>
-                    {OAuthIcons[provider.id] && (() => {
-                      const Icon = OAuthIcons[provider.id];
-                      return <Icon />;
-                    })()}
+                    {OAuthIcons[provider.id] &&
+                      (() => {
+                        const Icon = OAuthIcons[provider.id];
+                        return <Icon />;
+                      })()}
                     {provider.label}
                   </>
                 )}

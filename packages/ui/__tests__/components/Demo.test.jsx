@@ -104,6 +104,53 @@ describe("Demo Component", () => {
     });
   });
 
+  it("copies the logo URL with a placeholder API key when Copy Link is clicked", async () => {
+    const authContext = mockAuthContext(true);
+    const writeText = vi.fn().mockResolvedValue(undefined);
+    Object.defineProperty(navigator, "clipboard", {
+      value: { writeText },
+      configurable: true,
+    });
+
+    mockUseApi.mockReturnValue({
+      makeRequest: vi.fn(),
+      data: {
+        data: [
+          {
+            companyName: "google",
+            image:
+              "https://d123.cloudfront.net/png/google.com.png?Expires=1785766385&Signature=abc",
+          },
+        ],
+      },
+      loading: false,
+      errorMsg: null,
+    });
+
+    render(
+      <MemoryRouter>
+        <AuthContext.Provider value={authContext}>
+          <ToastContext.Provider value={mockToastContext}>
+            <Demo openAuthModal={mockOpenAuthModal} />
+          </ToastContext.Provider>
+        </AuthContext.Provider>
+      </MemoryRouter>
+    );
+
+    fireEvent.change(screen.getByPlaceholderText(searchPlaceholder), {
+      target: { value: "google" },
+    });
+
+    fireEvent.click(await screen.findByText(BUTTON_TEXT.copyLink));
+
+    await waitFor(() => {
+      expect(writeText).toHaveBeenCalledWith(
+        "http://localhost:5000/api/logo?key=google.com&API_KEY=YOUR_API_KEY"
+      );
+    });
+    expect(await screen.findByText(BUTTON_TEXT.copied)).toBeInTheDocument();
+  });
+
   it("shows Loading spinner when loading is true", async () => {
     const authContext = mockAuthContext(true);
     mockUseApi.mockReturnValue({

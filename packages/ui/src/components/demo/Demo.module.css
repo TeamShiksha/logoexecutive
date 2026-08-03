@@ -348,13 +348,15 @@
 .resultHeader {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 1rem;
-  margin-bottom: 1.2rem;
 }
 
 .resultHeader img {
   width: 48px;
   height: 48px;
+  flex-shrink: 0;
+  object-fit: contain;
   border-radius: 12px;
   border: 1px solid var(--border-color);
   padding: 0.4rem;
@@ -362,6 +364,7 @@
 }
 
 .resultHeader h3 {
+  flex: 1;
   font-size: 1.2rem;
   font-weight: 600;
   color: var(--black);

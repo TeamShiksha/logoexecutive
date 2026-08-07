@@ -370,6 +370,43 @@
   color: var(--black);
 }
 
+.copyBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-shrink: 0;
+  padding: 0.55rem 1rem;
+  border-radius: 9999px;
+  border: 1px solid var(--primary-focus);
+  background: var(--primary-focus);
+  color: var(--primary);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.copyBtn:hover {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: var(--white);
+  box-shadow: 0 6px 14px -4px rgba(79, 70, 229, 0.4);
+  transform: translateY(-1px);
+}
+
+.copyBtn:active {
+  transform: translateY(0);
+}
+
+.copyBtnCopied,
+.copyBtnCopied:hover {
+  background: rgba(61, 160, 61, 0.12);
+  border-color: rgba(61, 160, 61, 0.3);
+  color: var(--success);
+  box-shadow: none;
+  transform: none;
+}
+
 .formatBox {
   padding: 1rem;
   border-radius: 12px;

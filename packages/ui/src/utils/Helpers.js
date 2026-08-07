@@ -332,7 +332,8 @@ export const getBaseApiUrl = (domain) => {
  * one, otherwise the given company name.
  */
 export const getLogoDomain = (imageUrl, companyName) => {
-  const fileName = (imageUrl || "").split("?")[0].split("/").pop() || "";
+  if (!imageUrl) return companyName;
+  const fileName = imageUrl.split("?")[0].split("/").pop() || "";
   const domain = fileName.replace(/\.[^.]+$/, "");
   return domain.includes(".") ? domain : companyName;
 };

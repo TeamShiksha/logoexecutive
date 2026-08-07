@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
-import { CircleCheck, Search } from "lucide-react";
+import { CircleCheck, Copy, Check, Search } from "lucide-react";
 import { BUTTON_TEXT, DEMO, TILTED_BRANDS } from "../../utils/Constants.js";
 import styles from "./Demo.module.css";
 import Button from "../common/button/Button.jsx";
@@ -161,14 +161,27 @@ const Demo = ({ openAuthModal }) => {
                               <h3>
                                 {firstLetterCapitalString(company.companyName)}
                               </h3>
-                              <Button
-                                variant="primary"
+                              <button
+                                type="button"
                                 onClick={() => handleCopyLink(company)}
+                                className={`${styles.copyBtn} ${
+                                  copiedCompany === company.companyName
+                                    ? styles.copyBtnCopied
+                                    : ""
+                                }`}
                               >
-                                {copiedCompany === company.companyName
-                                  ? BUTTON_TEXT.copied
-                                  : BUTTON_TEXT.copyLink}
-                              </Button>
+                                {copiedCompany === company.companyName ? (
+                                  <>
+                                    <Check size={16} />
+                                    {BUTTON_TEXT.copied}
+                                  </>
+                                ) : (
+                                  <>
+                                    <Copy size={16} />
+                                    {BUTTON_TEXT.copyLink}
+                                  </>
+                                )}
+                              </button>
                             </div>
                           </div>
                         ))}

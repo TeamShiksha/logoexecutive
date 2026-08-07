@@ -5,9 +5,9 @@ WORKDIR /app
 COPY package.json ./
 
 RUN corepack enable && \
-    corepack prepare pnpm@latest --activate && \
+    corepack prepare pnpm@10 --activate && \
     pnpm install --prod && \
-    rm -rf ~/.pnpm-store /root/.cache /root/.local
+    rm -rf ~/.pnpm-store /root/.local
 
 COPY . .
 

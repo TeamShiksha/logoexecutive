@@ -1,11 +1,15 @@
 import { useContext, useEffect, useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
-import { CircleCheck, Search } from "lucide-react";
+import { CircleCheck, Copy, Check, Search } from "lucide-react";
 import { BUTTON_TEXT, DEMO, TILTED_BRANDS } from "../../utils/Constants.js";
 import styles from "./Demo.module.css";
 import Button from "../common/button/Button.jsx";
 import PropTypes from "prop-types";
-import { firstLetterCapitalString } from "../../utils/Helpers.js";
+import {
+  firstLetterCapitalString,
+  getBaseApiUrl,
+  getLogoDomain,
+} from "../../utils/Helpers.js";
 import { useApi } from "../../hooks/useApi.js";
 import LogoRequestForm from "./LogoRequestForm.jsx";
 import { AuthContext } from "../../contexts/Contexts.jsx";
@@ -14,6 +18,7 @@ import LoadingSpinner from "../common/loadingspinner/LoadingSpinner.jsx";
 const Demo = ({ openAuthModal }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [isRequestModalOpen, setIsRequestModalOpen] = useState(false);
+  const [copiedCompany, setCopiedCompany] = useState(null);
   const { makeRequest, data, loading, errorMsg } = useApi({
     method: "GET",
     url: "/logo/demo-search",
@@ -42,6 +47,23 @@ const Demo = ({ openAuthModal }) => {
       .slice(0, 3);
   }, [errorMsg, data, showResults, searchTerm]);
   const { isAuthenticated } = useContext(AuthContext);
+  const baseApiUrl = useMemo(
+    () =>
+      getBaseApiUrl(
+        typeof window !== "undefined" ? window.location.origin : ""
+      ).replace("Base URL: ", ""),
+    []
+  );
+
+  const buildLogoUrl = ({ image, companyName }) =>
+    `${baseApiUrl}/logo?key=${getLogoDomain(image, companyName)}&API_KEY=YOUR_API_KEY`;
+
+  const handleCopyLink = (company) => {
+    navigator.clipboard.writeText(buildLogoUrl(company)).then(() => {
+      setCopiedCompany(company.companyName);
+      setTimeout(() => setCopiedCompany(null), 2000);
+    });
+  };
 
   useEffect(() => {
     const debounceTimer = setTimeout(() => {
@@ -139,6 +161,27 @@ const Demo = ({ openAuthModal }) => {
                               <h3>
                                 {firstLetterCapitalString(company.companyName)}
                               </h3>
+                              <button
+                                type="button"
+                                onClick={() => handleCopyLink(company)}
+                                className={`${styles.copyBtn} ${
+                                  copiedCompany === company.companyName
+                                    ? styles.copyBtnCopied
+                                    : ""
+                                }`}
+                              >
+                                {copiedCompany === company.companyName ? (
+                                  <>
+                                    <Check size={16} />
+                                    {BUTTON_TEXT.copied}
+                                  </>
+                                ) : (
+                                  <>
+                                    <Copy size={16} />
+                                    {BUTTON_TEXT.copyLink}
+                                  </>
+                                )}
+                              </button>
                             </div>
                           </div>
                         ))}

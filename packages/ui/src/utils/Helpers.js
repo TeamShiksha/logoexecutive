@@ -323,6 +323,21 @@ export const getBaseApiUrl = (domain) => {
   }
 };
 
+/**
+ * Extracts the full company domain from a logo asset URL.
+ *
+ * @param {string} imageUrl - Logo asset URL, e.g. "https://.../png/google.com.png".
+ * @param {string} companyName - Company name without the TLD, used as a fallback.
+ * @returns {string} - The domain (e.g. "google.com") when the asset name holds
+ * one, otherwise the given company name.
+ */
+export const getLogoDomain = (imageUrl, companyName) => {
+  if (!imageUrl) return companyName;
+  const fileName = imageUrl.split("?")[0].split("/").pop() || "";
+  const domain = fileName.replace(/\.[^.]+$/, "");
+  return domain.includes(".") ? domain : companyName;
+};
+
 export const firstLetterCapitalString = (string) => {
   string = string.toLowerCase();
   return string.charAt(0).toUpperCase() + string.slice(1);

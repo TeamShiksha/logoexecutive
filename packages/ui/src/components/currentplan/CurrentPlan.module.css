@@ -28,12 +28,17 @@
   letter-spacing: 0.05em;
   text-transform: uppercase;
   color: var(--primary);
-  background: #eef2ff;
-  border: 1px solid #e0e7ff;
+  background: rgba(99, 102, 241, 0.12);
+  border: 1px solid rgba(99, 102, 241, 0.25);
   padding: 0.4rem 0.9rem;
   border-radius: 999px;
   margin: 0;
   width: fit-content;
+}
+
+[data-theme="dark"] .plan-name {
+  background: rgba(99, 102, 241, 0.15);
+  border-color: rgba(99, 102, 241, 0.3);
 }
 
 .plan-name::before {
@@ -47,12 +52,22 @@
 /* Gold/amber variant for the PRO badge */
 .plan-name-pro {
   color: #92400e;
-  background: #fef3c7;
-  border-color: #fde68a;
+  background: rgba(217, 119, 6, 0.15);
+  border-color: rgba(217, 119, 6, 0.3);
+}
+
+[data-theme="dark"] .plan-name-pro {
+  color: #fbbf24;
+  background: rgba(217, 119, 6, 0.18);
+  border-color: rgba(217, 119, 6, 0.35);
 }
 
 .plan-name-pro::before {
   background: #d97706;
+}
+
+[data-theme="dark"] .plan-name-pro::before {
+  background: #fbbf24;
 }
 
 .plan-tagline {

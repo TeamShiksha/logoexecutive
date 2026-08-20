@@ -1,236 +1,331 @@
-/* ====================== SIDEBAR ====================== */
-.sidebar {
-  height: 92%;
-  width: 88px;
-  background: var(--white);
-  border-right: 1px solid var(--border-color);
-  padding: 10px 6px;
+.sidebarWrapper {
   position: absolute;
-  overflow-y: auto;
-  overflow-x: hidden;
+  top: 50%;
+  left: 16px;
+  transform: translateY(-50%);
   display: flex;
-  flex-direction: column;
-  gap: 14px;
-  box-shadow: var(--shadow);
-  z-index: 5;
-
-  /* Firefox */
-  scrollbar-width: none;
-
-  /* IE / Edge legacy */
-  -ms-overflow-style: none;
-}
-
-/* Chrome, Safari, Edge (Chromium) */
-.sidebar::-webkit-scrollbar {
-  width: 0;
-  height: 0;
-}
-
-/* ====================== DETAILS ====================== */
-.sidebarSection {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-.sidebarSection .select {
-  margin-top: 6px;
-}
-
-/* ====================== SUMMARY ====================== */
-.sidebarHeading {
-  list-style: none;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 6px 6px;
-  cursor: pointer;
-  border-radius: 8px;
-  font-size: 10px;
-  font-weight: 700;
-  color: var(--description);
-  text-transform: uppercase;
-  letter-spacing: 0.6px;
-  transition: background 0.2s ease;
-}
-
-.sidebarHeading:hover {
-  background: var(--primary-focus);
-}
-
-.sidebarHeading::-webkit-details-marker {
-  display: none;
-}
-
-/* ====================== CHEVRON ====================== */
-.chevronIcon {
-  width: 12px;
-  height: 12px;
-  color: var(--description);
-  transition: transform 0.25s ease;
-}
-
-.sidebarSection[open] .chevronIcon {
-  transform: rotate(180deg);
-}
-
-/* ====================== BUTTONS ====================== */
-.sidebar button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 36px;
-  width: 100%;
-  background: var(--table-background);
-  border: 1px solid var(--border-color);
-  border-radius: 10px;
-
-  color: var(--black);
-  font-size: 16px;
-  cursor: pointer;
-
-  transition: all 0.2s ease;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
-}
-
-.sidebar button:hover {
-  background: var(--primary-focus);
-  border-color: var(--primary);
-  transform: translateY(-1px);
-  box-shadow: var(--shadow);
-}
-
-.sidebar button:active {
-  transform: translateY(0);
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
-}
-
-button.active {
-  background: var(--primary);
-  color: var(--white);
-  border-color: var(--primary);
-}
-
-button.active:hover {
-  background: var(--primary-hover);
-  border-color: var(--primary-hover);
-}
-
-/* ====================== PRIMARY BUTTON ====================== */
-.sidebarSection .primaryBtn {
-  height: 40px;
-  width: 100%;
-  background: var(--primary);
-  color: var(--white);
-
-  border: none;
-  font-size: 16px;
-}
-
-.sidebarSection .primaryBtn:hover {
-  background: var(--primary-hover);
-}
-
-/* ====================== SHAPES ====================== */
-.shapeGrid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 10px;
-}
-
-.shapeGrid button {
-  font-size: 18px;
-  border: 1px solid var(--border-color);
-}
-
-/* ====================== SELECT ====================== */
-.select {
-  width: 100%;
-  padding: 10px 6px;
-  border: 1px solid var(--border-color);
-  border-radius: 8px;
-  background: var(--table-background);
-  text-align: center;
-  font-size: 11px;
-  color: var(--black);
-}
-
-.btnGroup {
-  display: flex;
-  gap: 6px;
-}
-
-.btnGroup button {
-  margin-top: 6px;
-  border: 1px solid var(--border-color);
-}
-
-.sectionContent {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.sectionContent .btnGroup {
-  flex-direction: column;
-}
-
-.drawControls {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.sliderWrapper {
-  width: 100%;
-}
-
-/* Sidebar collapse */
-.sidebar {
+  flex-direction: row;
+  z-index: 15;
   transition:
-    width 0.3s ease,
-    padding 0.3s ease,
-    border 0.3s ease;
+    opacity 0.25s ease,
+    transform 0.25s ease;
+}
+
+.sidebarWrapper.open {
+  opacity: 1;
+  pointer-events: all;
+  transform: translateY(-50%) translateX(0);
+}
+
+.sidebarWrapper.closed {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-50%) translateX(-20px);
+}
+
+.rail {
+  width: 56px;
+  background: var(--white);
+  border: 1px solid var(--border-color);
+  border-radius: 99px;
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 16px 0;
+  gap: 6px;
   flex-shrink: 0;
 }
 
-.sidebar.open {
-  width: 88px;
-  padding: 10px 6px;
-  border-right: 1px solid var(--border-color);
-  box-shadow: var(--shadow);
-  opacity: 1;
+.railGroup {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  width: 100%;
+  padding: 0 6px;
 }
 
-.sidebar.closed {
-  width: 0;
-  padding: 0;
-  border-right: none;
-  box-shadow: none;
-  opacity: 0;
+.railDivider {
+  width: 28px;
+  height: 1px;
+  background: var(--border-color);
+  margin: 6px 0;
+  flex-shrink: 0;
 }
 
-@media (max-width: 840px) {
-  .sidebar {
-    height: 86.5%;
+.railBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 9px;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--description);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  flex-shrink: 0;
+}
+
+.railBtn:hover {
+  background: var(--primary-focus);
+  border-color: var(--border-color);
+  color: var(--primary);
+  transform: translateX(1px);
+}
+
+.railBtn:active {
+  transform: scale(0.95);
+}
+
+.railBtnActive {
+  background: var(--primary-focus);
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+.railBtnActive:hover {
+  background: var(--primary-focus);
+  color: var(--primary);
+}
+
+.subPanelContainer {
+  position: absolute;
+  left: 64px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 20;
+  display: flex;
+  align-items: flex-start;
+  pointer-events: none;
+}
+
+/* ====================== SUB-PANEL ====================== */
+.subPanel {
+  pointer-events: all;
+  width: 200px;
+  background: var(--white);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  animation: panelSlideIn 0.18s ease;
+  margin-left: 8px;
+}
+
+@keyframes panelSlideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-8px);
   }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.panelHeader {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--description);
+  text-transform: uppercase;
+  letter-spacing: 0.7px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.panelGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.panelLabel {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--description);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.select {
+  width: 100%;
+  padding: 7px 8px;
+  border: 1px solid var(--border-color);
+  border-radius: 7px;
+  background: var(--table-background);
+  font-size: 12px;
+  color: var(--black);
+  cursor: pointer;
+  outline: none;
+  transition: border-color 0.15s ease;
+}
+
+.select:hover,
+.select:focus {
+  border-color: var(--primary);
+}
+
+.styleRow {
+  display: flex;
+  gap: 4px;
+}
+
+.styleBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 28px;
+  border: 1px solid var(--border-color);
+  border-radius: 7px;
+  background: var(--table-background);
+  color: var(--description);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  font-size: 13px;
+}
+
+.styleBtn:hover {
+  background: var(--primary-focus);
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+.styleBtn.active {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: #fff;
+}
+
+.panelAction {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 100%;
+  height: 32px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  background: var(--table-background);
+  color: var(--black);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.panelAction:hover {
+  background: var(--primary-focus);
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+.panelAction.active {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: #fff;
+}
+
+.panelAction.active:hover {
+  background: var(--primary-hover);
+}
+
+.fillRow {
+  display: flex;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.fillBtn {
+  flex: 1;
+  height: 28px;
+  border: none;
+  background: var(--table-background);
+  color: var(--description);
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.fillBtn:first-child {
+  border-right: 1px solid var(--border-color);
+}
+
+.fillBtn:hover {
+  background: var(--primary-focus);
+  color: var(--primary);
+}
+
+.fillBtn.active {
+  background: var(--primary);
+  color: #fff;
+}
+
+.shapeGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 5px;
+}
+
+.shapeBtn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  height: 46px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  background: var(--table-background);
+  color: var(--description);
+  font-size: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.shapeBtn:hover {
+  background: var(--primary-focus);
+  border-color: var(--primary);
+  color: var(--primary);
+  transform: translateY(-1px);
+}
+
+.shapeBtn:active {
+  transform: translateY(0);
+}
+
+.sliderHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.sliderValue {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--primary);
+  background: var(--primary-focus);
+  padding: 1px 6px;
+  border-radius: 4px;
+}
+
+.slider {
+  width: 100%;
+  accent-color: var(--primary);
+  cursor: pointer;
 }
 
 @media (max-width: 640px) {
-  .sidebar {
-    height: 86vh;
-  }
-}
-
-@media (max-width: 420px) {
-  .sidebar {
-    height: 80vh;
-  }
-}
-
-@media (max-width: 318px) {
-  .sidebar {
-    height: 74vh;
+  .subPanel {
+    width: 180px;
   }
 }

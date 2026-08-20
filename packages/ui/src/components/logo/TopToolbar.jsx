@@ -1,4 +1,3 @@
-import Button from "../../components/common/button/Button";
 import {
   AArrowDown,
   AArrowUp,
@@ -11,7 +10,6 @@ import {
 } from "lucide-react";
 import styles from "./TopToolbar.module.css";
 import PropTypes from "prop-types";
-import { useMemo } from "react";
 
 const toolbarButtons = [
   {
@@ -92,78 +90,79 @@ export default function TopToolbar({
     actions[action]?.();
   };
 
-  const updatedToolbarButtons = useMemo(() => {
-    return toolbarButtons.map((btn) =>
-      btn.action === "toggle"
-        ? {
-            ...btn,
-            icon: sidebarOpen ? <ChevronLeft size={18} /> : <Menu size={18} />,
-          }
-        : btn
-    );
-  }, [sidebarOpen]);
-
   return (
     <div className={styles.topToolbar}>
-      <div className={styles.toolbarSection}>
-        <div className={styles.toolbarMidSection}>
-          {updatedToolbarButtons.map((btn, index) => (
-            <Button
-              key={index}
-              onClick={() => handleButtonClick(btn.action)}
-              title={btn.title}
-              variant={btn.variant}
-            >
-              {btn.icon}
-            </Button>
-          ))}
+      <div className={styles.toolbarLeft}>
+        <button
+          onClick={() => handleButtonClick("toggle")}
+          className={styles.iconBtn}
+          title="Toggle sidebar"
+        >
+          {sidebarOpen ? <ChevronLeft size={18} /> : <Menu size={18} />}
+        </button>
+      </div>
 
-          <Button
-            onClick={resetCanvas}
-            title="Reset Canvas"
-            variant="secondary"
+      <div className={styles.toolbarCenter}>
+        {toolbarButtons.slice(1).map((btn, index) => (
+          <button
+            key={index}
+            onClick={() => handleButtonClick(btn.action)}
+            title={btn.title}
+            className={styles.iconBtn}
           >
-            <span style={{ fontSize: "12px", fontWeight: "bold" }}>RESET</span>
-          </Button>
+            {btn.icon}
+          </button>
+        ))}
 
-          <input
-            type="color"
-            value={currentColor}
-            onChange={handleChangeColor}
-            className={styles.colorPicker}
-            title="Color"
-          />
+        <div className={styles.divider} />
 
-          <Button
-            onClick={handleUploadClick}
-            title="Upload"
-            className={styles.primaryBtn}
-            disabled={isGuest}
-            variant="primary"
-          >
-            Upload
-          </Button>
+        <button
+          onClick={resetCanvas}
+          title="Reset Canvas"
+          className={styles.iconBtn}
+        >
+          <span style={{ fontSize: "12px", fontWeight: "bold" }}>RESET</span>
+        </button>
+      </div>
 
-          <Button
-            onClick={handleExport}
-            title="Export"
-            className={styles.primaryBtn}
-            disabled={isGuest}
-            variant="primary"
-          >
-            EXPORT
-          </Button>
+      <div className={styles.toolbarRight}>
+        <input
+          type="color"
+          value={currentColor}
+          onChange={handleChangeColor}
+          className={styles.colorPicker}
+          title="Color"
+        />
 
-          <select
-            className={styles.exportSelect}
-            value={exportType}
-            onChange={(e) => setExportType(e.target.value)}
-          >
-            <option value="png">PNG</option>
-            <option value="svg">SVG</option>
-            <option value="json">JSON</option>
-          </select>
-        </div>
+        <div className={styles.divider} />
+
+        <button
+          onClick={handleUploadClick}
+          title="Upload"
+          className={styles.exportBtn}
+          disabled={isGuest}
+        >
+          Upload
+        </button>
+
+        <button
+          onClick={handleExport}
+          title="Export"
+          className={styles.exportBtn}
+          disabled={isGuest}
+        >
+          EXPORT
+        </button>
+
+        <select
+          className={styles.exportSelect}
+          value={exportType}
+          onChange={(e) => setExportType(e.target.value)}
+        >
+          <option value="png">PNG</option>
+          <option value="svg">SVG</option>
+          <option value="json">JSON</option>
+        </select>
       </div>
     </div>
   );

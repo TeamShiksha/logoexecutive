@@ -915,10 +915,18 @@ export const USAGE = {
   resetText: "Resets every month.",
 };
 
-export const CURRENT_PLAN = {
-  plan: "Hobby",
-  tagline: "Empower your projects with essential tools, at no cost.",
+export const PLAN_DETAILS = {
+  HOBBY: {
+    plan: "Hobby",
+    tagline: "Empower your projects with essential tools, at no cost.",
+  },
+  PRO: {
+    plan: "Pro",
+    tagline: "Unlock advanced tools and higher limits for growing projects.",
+  },
 };
+
+export const DEFAULT_PLAN = PLAN_DETAILS.HOBBY;
 
 export const CHANGE_PASSWORD_FIELDS = [
   { type: "password", name: "currPassword", label: "Current Password" },

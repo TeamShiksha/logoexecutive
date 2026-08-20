@@ -1,31 +1,81 @@
-.current-plan {
-  color: rgb(17 24 39);
-  font-size: var(--large-text);
-  line-height: 28px;
-  font-weight: 600;
-  margin: 0px 0px 4px;
-  padding-top: 0;
+.plan-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1.5rem;
+  padding: 2rem;
+  border-radius: 1.25rem;
+  background: var(--white);
+  border: 1px solid var(--border-color);
+  min-height: 220px;
 }
 
 .plan-content {
   flex: 1;
   min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
 }
 
 .plan-name {
-  font-size: 1rem;
-  font-weight: 600;
-  margin: 0 0 0.5rem 0;
-  color: var(--black);
-  word-wrap: break-word;
-  overflow-wrap: break-word;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--primary);
+  background: rgba(99, 102, 241, 0.12);
+  border: 1px solid rgba(99, 102, 241, 0.25);
+  padding: 0.4rem 0.9rem;
+  border-radius: 999px;
+  margin: 0;
+  width: fit-content;
+}
+
+[data-theme="dark"] .plan-name {
+  background: rgba(99, 102, 241, 0.15);
+  border-color: rgba(99, 102, 241, 0.3);
+}
+
+.plan-name::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--primary);
+}
+
+/* Gold/amber variant for the PRO badge */
+.plan-name-pro {
+  color: #92400e;
+  background: rgba(217, 119, 6, 0.15);
+  border-color: rgba(217, 119, 6, 0.3);
+}
+
+[data-theme="dark"] .plan-name-pro {
+  color: #fbbf24;
+  background: rgba(217, 119, 6, 0.18);
+  border-color: rgba(217, 119, 6, 0.35);
+}
+
+.plan-name-pro::before {
+  background: #d97706;
+}
+
+[data-theme="dark"] .plan-name-pro::before {
+  background: #fbbf24;
 }
 
 .plan-tagline {
   color: var(--description);
-  font-size: 0.875rem;
-  line-height: 1.5;
+  font-size: 0.95rem;
+  line-height: 1.65;
   margin: 0;
+  max-width: 40ch;
   word-wrap: break-word;
   overflow-wrap: break-word;
 }
@@ -35,29 +85,40 @@
   color: var(--white);
   background-color: var(--primary);
   border-radius: var(--bradius);
-  box-shadow: var(--shadow);
-  border: var(--border);
+  box-shadow: none;
+  border: none;
   cursor: pointer;
-  min-height: 39px;
-  margin-top: 8px;
+  min-height: 46px;
+  margin-top: 0.5rem;
   font-size: 16px;
-  font-weight: 500;
+  font-weight: 600;
   width: 100%;
-  padding: 0.75rem;
-  flex-shrink: 0;
+  padding: 0.9rem;
+  transition: filter 0.15s ease;
+}
+
+.upgrade-button:hover:not(:disabled) {
+  filter: brightness(1.05);
+}
+
+.upgrade-button:disabled {
+  cursor: default;
+  opacity: 0.6;
 }
 
 /* Responsive */
 @media (max-width: 768px) {
   .plan-container {
+    padding: 1.5rem;
     gap: 1rem;
+    min-height: auto;
   }
 
   .plan-name {
-    font-size: 0.9375rem;
+    font-size: 0.75rem;
   }
 
   .plan-tagline {
-    font-size: 0.8125rem;
+    font-size: 0.85rem;
   }
 }

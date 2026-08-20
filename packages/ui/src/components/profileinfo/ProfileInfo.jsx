@@ -33,7 +33,10 @@ export default function ProfileInfo() {
 
         <div className={styles.card}>
           <h2 className={styles.heading}>Plan</h2>
-          <CurrentPlan isGuest={isGuest} />
+          <CurrentPlan
+            isGuest={isGuest}
+            subscription={userData?.subscription}
+          />
         </div>
 
         <div className={styles.card}>

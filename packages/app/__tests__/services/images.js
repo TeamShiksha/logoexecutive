@@ -90,14 +90,28 @@ describe("Image Service", () => {
       .mockResolvedValue("signed-url");
 
     const mockCompanies = [
-      { company_name: MOCK_IMAGES[0].company_name },
-      { company_name: MOCK_IMAGES[1].company_name },
+      {
+        company_name: MOCK_IMAGES[0].company_name,
+        extension: MOCK_IMAGES[0].extension,
+      },
+      {
+        company_name: MOCK_IMAGES[1].company_name,
+        extension: MOCK_IMAGES[1].extension,
+      },
     ];
     const result = await imageService.getDataList(mockCompanies);
 
     expect(result).toEqual([
-      { companyName: "GOOGLE", image: "signed-url" },
-      { companyName: "MICROSOFT", image: "signed-url" },
+      {
+        companyName: "GOOGLE",
+        image: "signed-url",
+        extension: MOCK_IMAGES[0].extension,
+      },
+      {
+        companyName: "MICROSOFT",
+        image: "signed-url",
+        extension: MOCK_IMAGES[1].extension,
+      },
     ]);
   });
 

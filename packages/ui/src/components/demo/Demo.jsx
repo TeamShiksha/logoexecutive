@@ -158,9 +158,18 @@ const Demo = ({ openAuthModal }) => {
                           >
                             <div className={styles.resultHeader}>
                               <img src={company.image} alt="logo" />
-                              <h3>
-                                {firstLetterCapitalString(company.companyName)}
-                              </h3>
+                              <div className={styles.brandInfo}>
+                                <h3>
+                                  {firstLetterCapitalString(
+                                    company.companyName
+                                  )}
+                                </h3>
+                                {company.extension && (
+                                  <span className={styles.formatBadge}>
+                                    {company.extension.toUpperCase()}
+                                  </span>
+                                )}
+                              </div>
                               <button
                                 type="button"
                                 onClick={() => handleCopyLink(company)}

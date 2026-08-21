@@ -72,10 +72,10 @@ describe("Demo Component", () => {
       makeRequest: vi.fn(),
       data: {
         data: [
-          { companyName: "Aalto", image: "aalto-logo.svg" },
-          { companyName: "Aareon", image: "aareon-logo.svg" },
-          { companyName: "Aavid", image: "aavid-logo.svg" },
-          { companyName: "Aastra", image: "aastra-logo.svg" },
+          { companyName: "Aalto", image: "aalto-logo.svg", extension: "svg" },
+          { companyName: "Aareon", image: "aareon-logo.svg", extension: "png" },
+          { companyName: "Aavid", image: "aavid-logo.svg", extension: "svg" },
+          { companyName: "Aastra", image: "aastra-logo.svg", extension: "svg" },
         ],
       },
       loading: false,
@@ -98,7 +98,9 @@ describe("Demo Component", () => {
 
     await waitFor(() => {
       expect(screen.getByText("Aalto")).toBeInTheDocument();
+      expect(screen.getAllByText("SVG")).toHaveLength(2);
       expect(screen.getByText("Aareon")).toBeInTheDocument();
+      expect(screen.getByText("PNG")).toBeInTheDocument();
       expect(screen.getByText("Aavid")).toBeInTheDocument();
       expect(screen.queryByText("Aastra")).not.toBeInTheDocument();
     });

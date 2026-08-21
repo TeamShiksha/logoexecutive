@@ -1,85 +1,129 @@
-/* ====================== TOP TOOLBAR ====================== */
 .topToolbar {
   display: flex;
   align-items: center;
-  position: relative;
+  position: absolute;
+  top: 16px;
+  left: 50%;
+  transform: translateX(-50%);
   background: var(--white);
-  padding: 12px 24px;
-  border-bottom: 1px solid var(--border-color);
+  padding: 8px 16px;
+  border-radius: 99px;
+  border: 1px solid var(--border-color);
   box-shadow: var(--shadow);
-  z-index: 10;
+  z-index: 20;
+  gap: 16px;
+  width: max-content;
+  max-width: 95%;
 }
 
-.toolbarSection {
-  width: 100%;
+/* Layout sections */
+.toolbarLeft {
   display: flex;
   align-items: center;
+  gap: 8px;
+  flex: 1;
+  justify-content: flex-start;
 }
 
-.toolbarMidSection {
-  margin: 0 auto;
-  width: 100%;
+.toolbarCenter {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 10px;
-  flex-wrap: wrap;
+  gap: 8px;
+  flex-wrap: nowrap;
 }
 
-.toolbarSection .primaryBtn {
-  background: var(--primary);
-  color: var(--white);
-  border: none;
+.toolbarRight {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  justify-content: flex-end;
 }
 
-.toolbarSection .primaryBtn:hover {
-  background: var(--primary-hover);
-}
-
-.sectionLabel {
-  font-size: 11px;
+.editorTitle {
+  font-size: 13px;
   font-weight: 700;
-  color: var(--description);
-  letter-spacing: 0.5px;
-  text-transform: uppercase;
+  color: var(--black);
+  letter-spacing: 0.2px;
+  display: none; /* Hide on detached toolbar for a sleeker look */
 }
 
-.topToolbar button,
-.topToolbar .exportSelect {
-  padding: 8px 14px;
-  border: none;
-  background: var(--table-background);
-  color: var(--black);
+.btnGroup {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.divider {
+  width: 1px;
+  height: 20px;
+  background: var(--border-color);
+  flex-shrink: 0;
+  margin: 0 4px;
+}
+
+/* Buttons */
+.iconBtn {
+  padding: 6px 10px;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--description);
   font-weight: 600;
   font-size: 13px;
-  border-radius: 8px;
+  border-radius: 99px;
   cursor: pointer;
   transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
 }
 
-.toolbarMidSection .exportSelect {
-  border: 1px solid var(--border-color);
-}
-.topToolbar button {
-  border: 1px solid var(--border-color);
-}
-
-.topToolbar button:hover,
-.topToolbar .exportSelect:hover {
-  background: var(--primary-focus);
+.iconBtn:hover {
+  background: var(--table-background);
+  color: var(--black);
   transform: translateY(-1px);
 }
 
-.topToolbar button:active {
+.iconBtn:active {
   transform: translateY(0);
 }
 
+.iconBtn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.danger:hover {
+  background: rgba(240, 58, 58, 0.1);
+  color: var(--error);
+}
+
+.resetBtn {
+  color: var(--description);
+}
+
+.btnLabel {
+  font-size: 13px;
+  font-weight: 600;
+  display: none; /* Hide text labels for a cleaner pill shape */
+}
+
+/* Color picker */
+.colorWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
 .colorPicker {
-  width: 38px;
-  height: 38px;
+  width: 28px;
+  height: 28px;
   border: 2px solid var(--border-color);
-  border-radius: 10px;
-  padding: 3px;
+  border-radius: 50%;
+  padding: 2px;
   cursor: pointer;
   transition: all 0.2s ease;
 }
@@ -89,31 +133,79 @@
   transform: scale(1.05);
 }
 
-.exportSelect {
-  padding: 8px 14px;
-  border: none;
-  background: var(--table-background);
-  color: var(--black);
-  font-weight: 600;
-  font-size: 13px;
-  border-radius: 8px;
+.colorSwatch {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 2px solid var(--border-color);
+  display: block;
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
-@media (max-width: 640px) {
-  .topToolbar {
-    flex-direction: column;
-    justify-content: start;
-    gap: 12px;
-    padding: 12px 16px;
-    flex-wrap: wrap;
-  }
+.colorWrapper:hover .colorSwatch {
+  border-color: var(--primary);
+  transform: scale(1.05);
+}
 
-  .toolbarSection {
-    width: 100%;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 8px;
+/* Upload button */
+.uploadBtn {
+  background: transparent;
+}
+
+/* Export group */
+.exportGroup {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.exportBtn {
+  padding: 6px 14px;
+  border: none;
+  background: var(--primary);
+  color: var(--white);
+  font-weight: 600;
+  font-size: 13px;
+  border-radius: 99px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.exportBtn:hover {
+  background: var(--primary-hover);
+  transform: translateY(-1px);
+}
+
+.exportBtn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.exportSelect {
+  padding: 6px 12px;
+  border: 1px solid var(--border-color);
+  background: var(--table-background);
+  color: var(--black);
+  font-weight: 600;
+  font-size: 12px;
+  border-radius: 99px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.exportSelect:hover {
+  background: var(--primary-focus);
+}
+
+@media (max-width: 860px) {
+  .topToolbar {
+    width: 90%;
+    overflow-x: auto;
+    justify-content: flex-start;
+    padding: 8px 12px;
+    border-radius: 16px;
+    scrollbar-width: none;
   }
 }

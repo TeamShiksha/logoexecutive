@@ -1,8 +1,6 @@
 import {
-  ChevronDown,
   Type,
   Pencil,
-  ArrowUpFromLine,
   Minus,
   ArrowRight,
   Bold,
@@ -11,25 +9,19 @@ import {
   Square as SquareIcon,
   Circle as CircleIcon,
   Triangle as TriangleIcon,
+  Shapes,
+  Image,
 } from "lucide-react";
-import Button from "../../components/common/button/Button";
 import styles from "./ToolbarSection.module.css";
 import PropTypes from "prop-types";
+import { useState, useRef, useEffect } from "react";
 
-const TextSection = ({ config, handlers, activeTool }) => (
-  <details open className={styles.sidebarSection}>
-    <summary className={styles.sidebarHeading}>
-      <span>Text</span>
-      <ChevronDown className={styles.chevronIcon} />
-    </summary>
-    <div className={styles.sectionContent}>
-      <Button
-        onClick={handlers.addText}
-        title="Add Text"
-        className={activeTool === "text" ? styles.active : ""}
-      >
-        <Type size={20} />
-      </Button>
+const TextPanel = ({ config, handlers, activeTool }) => (
+  <div className={styles.subPanel}>
+    <div className={styles.panelHeader}>Text</div>
+
+    <div className={styles.panelGroup}>
+      <label className={styles.panelLabel}>Font</label>
       <select
         className={styles.select}
         value={config.font}
@@ -48,6 +40,10 @@ const TextSection = ({ config, handlers, activeTool }) => (
           </option>
         ))}
       </select>
+    </div>
+
+    <div className={styles.panelGroup}>
+      <label className={styles.panelLabel}>Size</label>
       <select
         className={styles.select}
         value={config.fontSize}
@@ -55,38 +51,50 @@ const TextSection = ({ config, handlers, activeTool }) => (
       >
         {[8, 12, 16, 24, 32, 40, 48, 64].map((size) => (
           <option key={size} value={size}>
-            {size}
+            {size}px
           </option>
         ))}
       </select>
-      <div className={styles.btnGroup}>
-        <Button
-          className={config.bold ? styles.active : ""}
+    </div>
+
+    <div className={styles.panelGroup}>
+      <label className={styles.panelLabel}>Style</label>
+      <div className={styles.styleRow}>
+        <button
+          className={`${styles.styleBtn} ${config.bold ? styles.active : ""}`}
           onClick={() => handlers.toggleStyle("bold")}
           title="Bold"
         >
-          <Bold size={16} />
-        </Button>
-        <Button
-          className={config.italic ? styles.active : ""}
+          <Bold size={14} />
+        </button>
+        <button
+          className={`${styles.styleBtn} ${config.italic ? styles.active : ""}`}
           onClick={() => handlers.toggleStyle("italic")}
           title="Italic"
         >
-          <Italic size={16} />
-        </Button>
-        <Button
-          className={config.underline ? styles.active : ""}
+          <Italic size={14} />
+        </button>
+        <button
+          className={`${styles.styleBtn} ${config.underline ? styles.active : ""}`}
           onClick={() => handlers.toggleStyle("underline")}
           title="Underline"
         >
-          <Underline size={16} />
-        </Button>
+          <Underline size={14} />
+        </button>
       </div>
     </div>
-  </details>
+
+    <button
+      className={`${styles.panelAction} ${activeTool === "text" ? styles.active : ""}`}
+      onClick={handlers.addText}
+    >
+      <Type size={14} />
+      Add Text
+    </button>
+  </div>
 );
 
-TextSection.propTypes = {
+TextPanel.propTypes = {
   config: PropTypes.shape({
     font: PropTypes.string.isRequired,
     fontSize: PropTypes.number.isRequired,
@@ -103,59 +111,54 @@ TextSection.propTypes = {
   activeTool: PropTypes.string,
 };
 
-const ShapeSection = ({ config, handlers }) => (
-  <details open className={styles.sidebarSection}>
-    <summary className={styles.sidebarHeading}>
-      <span>Shapes</span>
-      <ChevronDown className={styles.chevronIcon} />
-    </summary>
-    <div className={styles.sectionContent}>
-      <div className={styles.btnGroup} style={{ marginBottom: "10px" }}>
-        <Button
-          className={config.isFilled ? styles.active : ""}
+const ShapesPanel = ({ config, handlers }) => (
+  <div className={styles.subPanel}>
+    <div className={styles.panelHeader}>Shapes</div>
+
+    <div className={styles.panelGroup}>
+      <label className={styles.panelLabel}>Style</label>
+      <div className={styles.fillRow}>
+        <button
+          className={`${styles.fillBtn} ${config.isFilled ? styles.active : ""}`}
           onClick={() => handlers.setFilled(true)}
-          title="Fill"
         >
           Fill
-        </Button>
-        <Button
-          className={!config.isFilled ? styles.active : ""}
+        </button>
+        <button
+          className={`${styles.fillBtn} ${!config.isFilled ? styles.active : ""}`}
           onClick={() => handlers.setFilled(false)}
-          title="Outline"
         >
           Outline
-        </Button>
+        </button>
       </div>
+    </div>
+
+    <div className={styles.panelGroup}>
+      <label className={styles.panelLabel}>Add Shape</label>
       <div className={styles.shapeGrid}>
         {[
-          {
-            type: "rectangle",
-            icon: <SquareIcon size={18} />,
-            title: "Rectangle",
-          },
-          { type: "circle", icon: <CircleIcon size={18} />, title: "Circle" },
-          {
-            type: "triangle",
-            icon: <TriangleIcon size={18} />,
-            title: "Triangle",
-          },
-          { type: "line", icon: <Minus size={18} />, title: "Line" },
-          { type: "arrow", icon: <ArrowRight size={18} />, title: "Arrow" },
+          { type: "rectangle", icon: <SquareIcon size={16} />, label: "Rect" },
+          { type: "circle", icon: <CircleIcon size={16} />, label: "Circle" },
+          { type: "triangle", icon: <TriangleIcon size={16} />, label: "Tri" },
+          { type: "line", icon: <Minus size={16} />, label: "Line" },
+          { type: "arrow", icon: <ArrowRight size={16} />, label: "Arrow" },
         ].map((shape) => (
-          <Button
+          <button
             key={shape.type}
+            className={styles.shapeBtn}
             onClick={() => handlers.addShape(shape.type)}
-            title={shape.title}
+            title={shape.label}
           >
             {shape.icon}
-          </Button>
+            <span>{shape.label}</span>
+          </button>
         ))}
       </div>
     </div>
-  </details>
+  </div>
 );
 
-ShapeSection.propTypes = {
+ShapesPanel.propTypes = {
   config: PropTypes.shape({
     isFilled: PropTypes.bool.isRequired,
   }).isRequired,
@@ -165,47 +168,38 @@ ShapeSection.propTypes = {
   }).isRequired,
 };
 
-const DrawSection = ({ config, handlers }) => (
-  <details open className={styles.sidebarSection}>
-    <summary className={styles.sidebarHeading}>
-      <span>Draw</span>
-      <ChevronDown className={styles.chevronIcon} />
-    </summary>
-    <div className={styles.sectionContent}>
-      <Button
-        className={config.isDrawing ? styles.active : ""}
+const DrawPanel = ({ config, handlers }) => (
+  <div className={styles.subPanel}>
+    <div className={styles.panelHeader}>Draw</div>
+
+    <div className={styles.panelGroup}>
+      <button
+        className={`${styles.panelAction} ${config.isDrawing ? styles.active : ""}`}
         onClick={handlers.toggleDrawing}
-        title="Pen Tool"
       >
-        <Pencil size={20} />
-      </Button>
-      <div className={styles.sliderWrapper} style={{ marginTop: "15px" }}>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            marginBottom: "5px",
-          }}
-        >
-          <label style={{ fontSize: "12px", color: "#666" }}>Brush Size</label>
-          <span style={{ fontSize: "12px", fontWeight: "bold" }}>
-            {config.brushSize}
-          </span>
-        </div>
-        <input
-          type="range"
-          min="1"
-          max="50"
-          value={config.brushSize}
-          onChange={(e) => handlers.setBrushSize(parseInt(e.target.value, 10))}
-          style={{ width: "100%", cursor: "pointer" }}
-        />
-      </div>
+        <Pencil size={14} />
+        {config.isDrawing ? "Drawing…" : "Enable Pen"}
+      </button>
     </div>
-  </details>
+
+    <div className={styles.panelGroup}>
+      <div className={styles.sliderHeader}>
+        <label className={styles.panelLabel}>Brush Size</label>
+        <span className={styles.sliderValue}>{config.brushSize}</span>
+      </div>
+      <input
+        type="range"
+        min="1"
+        max="50"
+        value={config.brushSize}
+        onChange={(e) => handlers.setBrushSize(parseInt(e.target.value, 10))}
+        className={styles.slider}
+      />
+    </div>
+  </div>
 );
 
-DrawSection.propTypes = {
+DrawPanel.propTypes = {
   config: PropTypes.shape({
     isDrawing: PropTypes.bool.isRequired,
     brushSize: PropTypes.number.isRequired,
@@ -214,41 +208,114 @@ DrawSection.propTypes = {
     toggleDrawing: PropTypes.func.isRequired,
     setBrushSize: PropTypes.func.isRequired,
   }).isRequired,
-  activeTool: PropTypes.string,
 };
 
-// Update main component to accept activeTool prop
+const RailBtn = ({ icon, label, active, onClick }) => (
+  <button
+    className={`${styles.railBtn} ${active ? styles.railBtnActive : ""}`}
+    onClick={onClick}
+    title={label}
+  >
+    {icon}
+  </button>
+);
+
+RailBtn.propTypes = {
+  icon: PropTypes.node.isRequired,
+  label: PropTypes.string.isRequired,
+  active: PropTypes.bool,
+  onClick: PropTypes.func.isRequired,
+};
+
 export default function ToolbarSection({
   sidebarOpen,
   config,
   handlers,
   activeTool,
 }) {
+  const [openPanel, setOpenPanel] = useState(null);
+  const sidebarRef = useRef(null);
+
+  const toggle = (panel) =>
+    setOpenPanel((prev) => (prev === panel ? null : panel));
+
+  useEffect(() => {
+    const handleClick = (e) => {
+      if (sidebarRef.current && !sidebarRef.current.contains(e.target)) {
+        setOpenPanel(null);
+      }
+    };
+    document.addEventListener("mousedown", handleClick);
+    return () => document.removeEventListener("mousedown", handleClick);
+  }, []);
+
   return (
-    <aside
-      className={`${styles.sidebar} ${sidebarOpen ? styles.open : styles.closed}`}
+    <div
+      ref={sidebarRef}
+      className={`${styles.sidebarWrapper} ${sidebarOpen ? styles.open : styles.closed}`}
     >
-      <TextSection
-        config={config.text}
-        handlers={handlers.text}
-        activeTool={activeTool}
-      />
-      <ShapeSection config={config.shapes} handlers={handlers.shapes} />
-      <DrawSection
-        config={config.drawing}
-        handlers={handlers.drawing}
-        activeTool={activeTool}
-      />
-      <div className={styles.sidebarSection}>
-        <Button
-          className={styles.primaryBtn}
-          onClick={handlers.triggerImageUpload}
-          title="Import Image"
-        >
-          <ArrowUpFromLine size={20} />
-        </Button>
-      </div>
-    </aside>
+      <aside className={styles.rail}>
+        <div className={styles.railGroup}>
+          <RailBtn
+            icon={<Type size={17} />}
+            label="Text"
+            active={openPanel === "text"}
+            onClick={() => toggle("text")}
+          />
+        </div>
+
+        <div className={styles.railDivider} />
+
+        <div className={styles.railGroup}>
+          <RailBtn
+            icon={<Shapes size={17} />}
+            label="Shapes"
+            active={openPanel === "shapes"}
+            onClick={() => toggle("shapes")}
+          />
+        </div>
+
+        <div className={styles.railDivider} />
+
+        <div className={styles.railGroup}>
+          <RailBtn
+            icon={<Pencil size={17} />}
+            label="Draw"
+            active={openPanel === "draw" || config.drawing.isDrawing}
+            onClick={() => toggle("draw")}
+          />
+        </div>
+
+        <div className={styles.railDivider} />
+
+        <div className={styles.railGroup}>
+          <RailBtn
+            icon={<Image size={17} />}
+            label="Import Image"
+            active={false}
+            onClick={handlers.triggerImageUpload}
+          />
+        </div>
+      </aside>
+
+      {openPanel && (
+        <div className={styles.subPanelContainer}>
+          {openPanel === "text" && (
+            <TextPanel
+              config={config.text}
+              handlers={handlers.text}
+              activeTool={activeTool}
+            />
+          )}
+          {openPanel === "shapes" && (
+            <ShapesPanel config={config.shapes} handlers={handlers.shapes} />
+          )}
+          {openPanel === "draw" && (
+            <DrawPanel config={config.drawing} handlers={handlers.drawing} />
+          )}
+        </div>
+      )}
+    </div>
   );
 }
 

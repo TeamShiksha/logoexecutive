@@ -172,8 +172,13 @@ describe("CreateLogo", () => {
   it("renders text controls", () => {
     renderCreateLogo();
 
-    expect(screen.getByText("Text")).toBeInTheDocument();
-    expect(screen.getByTitle("Add Text")).toBeInTheDocument();
+    const textRailBtn = screen.getByTitle("Text");
+    expect(textRailBtn).toBeInTheDocument();
+
+    // Open panel
+    fireEvent.click(textRailBtn);
+
+    expect(screen.getByText(/Add Text/i)).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Bold" })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Italic" })).toBeInTheDocument();
     expect(
@@ -183,6 +188,7 @@ describe("CreateLogo", () => {
 
   it("changes font family", async () => {
     renderCreateLogo();
+    fireEvent.click(screen.getByTitle("Text"));
 
     const fontSelect = screen.getByDisplayValue("Arial");
     fireEvent.change(fontSelect, { target: { value: "Georgia" } });
@@ -194,8 +200,9 @@ describe("CreateLogo", () => {
 
   it("changes font size", async () => {
     renderCreateLogo();
+    fireEvent.click(screen.getByTitle("Text"));
 
-    const sizeSelect = screen.getByDisplayValue("32");
+    const sizeSelect = screen.getByDisplayValue("32px");
     fireEvent.change(sizeSelect, { target: { value: "48" } });
 
     await waitFor(() => {
@@ -205,6 +212,7 @@ describe("CreateLogo", () => {
 
   it("toggles bold, italic, underline buttons", () => {
     renderCreateLogo();
+    fireEvent.click(screen.getByTitle("Text"));
 
     const bold = screen.getByRole("button", { name: "Bold" });
     const italic = screen.getByRole("button", { name: "Italic" });
@@ -222,15 +230,17 @@ describe("CreateLogo", () => {
 
   it("renders shape buttons", () => {
     renderCreateLogo();
+    fireEvent.click(screen.getByTitle("Shapes"));
 
-    expect(screen.getByTitle("Rectangle")).toBeInTheDocument();
+    expect(screen.getByTitle("Rect")).toBeInTheDocument();
     expect(screen.getByTitle("Circle")).toBeInTheDocument();
-    expect(screen.getByTitle("Triangle")).toBeInTheDocument();
+    expect(screen.getByTitle("Tri")).toBeInTheDocument();
     expect(screen.getByTitle("Line")).toBeInTheDocument();
   });
 
   it("toggles fill and outline", () => {
     renderCreateLogo();
+    fireEvent.click(screen.getByTitle("Shapes"));
 
     const fillBtn = screen.getByRole("button", { name: "Fill" });
     const outlineBtn = screen.getByRole("button", { name: "Outline" });
@@ -242,8 +252,9 @@ describe("CreateLogo", () => {
 
   it("enables drawing mode and updates brush size", () => {
     renderCreateLogo();
+    fireEvent.click(screen.getByTitle("Draw"));
 
-    const penTool = screen.getByTitle("Pen Tool");
+    const penTool = screen.getByText(/Enable Pen/i);
     fireEvent.click(penTool);
 
     expect(penTool.className).not.toBe("");

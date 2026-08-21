@@ -17,10 +17,17 @@ export const useCanvasControls = () => {
   const isProcessingRef = useRef(false);
   const [history, setHistory] = useState([]);
   const [redoStack, setRedoStack] = useState([]);
-  const [isInitialized, setIsInitialized] = useState(false);
+  const isInitializedRef = useRef(false);
 
   const initializeCanvas = () => {
-    if (!canvasRef.current || isInitialized) return;
+    // Fabric v7's dispose() completely removes the canvas container from the DOM.
+    // Using useState for the initialization guard is too slow (async) for React 18 Strict Mode,
+    // causing a race condition where the canvas is disposed and not properly recreated.
+    // We MUST use a synchronous useRef to guard initialization.
+    if (!canvasRef.current) return;
+    if (isInitializedRef.current) return fabricCanvasRef.current;
+
+    isInitializedRef.current = true;
 
     const canvas = new Canvas(canvasRef.current, {
       width: Math.min(window.innerWidth - 40, 900),
@@ -32,7 +39,6 @@ export const useCanvasControls = () => {
 
     const initialJson = JSON.stringify(canvas.toJSON());
     setHistory([initialJson]);
-    setIsInitialized(true);
     canvas.on("object:added", saveHistory);
     canvas.on("object:modified", saveHistory);
     canvas.on("object:removed", saveHistory);
@@ -45,7 +51,7 @@ export const useCanvasControls = () => {
     if (fabricCanvasRef.current) {
       fabricCanvasRef.current.dispose();
       fabricCanvasRef.current = null;
-      setIsInitialized(false);
+      isInitializedRef.current = false;
     }
   };
 
@@ -67,8 +73,8 @@ export const useCanvasControls = () => {
     const canvas = fabricCanvasRef.current;
     return canvas
       ? {
-          x: canvas.getWidth() / 2,
-          y: canvas.getHeight() / 2,
+          x: canvas.width / 2,
+          y: canvas.height / 2,
         }
       : { x: 150, y: 150 };
   };
@@ -341,7 +347,7 @@ export const useCanvasControls = () => {
     if (!canvas) return false;
 
     canvas.clear();
-    canvas.backgroundColor = "#ffffff";
+    canvas.backgroundColor = null; // Let the CSS background color show through
 
     const initialJson = JSON.stringify(canvas.toJSON());
     setHistory([initialJson]);
@@ -357,7 +363,7 @@ export const useCanvasControls = () => {
     isProcessingRef,
     history,
     redoStack,
-    isInitialized,
+    isInitialized: isInitializedRef.current,
     initializeCanvas,
     disposeCanvas,
     saveHistory,

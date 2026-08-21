@@ -58,7 +58,7 @@ async function signupController(req, res, next) {
       const tenureDays = 30;
       const expiry = dayjs(user.deleted_at).add(tenureDays, "day");
       if (expiry.isAfter(dayjs())) {
-        const daysLeft = expiry.diff(dayjs(), "day") + 1;
+        const daysLeft = Math.ceil(expiry.diff(dayjs(), "day", true));
         return res.status(400).json({
           message: `Account exists. You may re-register after ${daysLeft} days.`,
           error: STATUS_CODES[400],

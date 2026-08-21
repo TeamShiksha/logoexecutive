@@ -81,6 +81,7 @@ const Messages = {
   UPLOAD_SUCCESS: "Image updated successfully.",
   INVALID_KEY: "Invalid API key.",
   LIMIT_REACHED: "Limit reached. Consider upgrading your plan.",
+  SUBSCRIPTION_EXPIRED: "Please Renew your subscription",
   LOGO_NOT_FOUND: "Logo not found.",
   FETCH_ALL_MESSAGE: "Fetched all contact us messages.",
   MESSAGE_NOT_FOUND: "Message not found.",

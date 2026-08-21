@@ -30,19 +30,26 @@ class SubscriptionService {
    * @returns {Promise<Object>} - Subscription Object.
    */
   async createSubscription() {
-    return await this.subscriptionRepository.create(DefaultSubscriptionPlan);
+    const now = new Date();
+    const end = new Date(now);
+    end.setMonth(now.getMonth() + 1);
+    const subscription = {
+      start_date: now,
+      end_date: end,
+      ...DefaultSubscriptionPlan,
+    };
+    return await this.subscriptionRepository.create(subscription);
   }
 
   /**
    * Increments the API usage count using subscriptionID.
    * @param {string} subscriptionId - subscriptionID of subscription
-   *  @returns {Promise<Object>} - The subscription details.
+   * @returns {Promise<number>} - Returns a old usage count + 1 is success else null
    **/
-  async incrementUsageCount(subscription) {
-    const data = {
-      usage_count: subscription.usage_count + 1,
-    };
-    return await this.subscriptionRepository.update(subscription._id, data);
+  async incrementUsageCount(subscriptionId) {
+    return await this.subscriptionRepository.incrementUsageCount(
+      subscriptionId
+    );
   }
 
   /**
@@ -51,6 +58,15 @@ class SubscriptionService {
    */
   async getSubscriptionUsageCount() {
     return await this.subscriptionRepository.getSubscriptionUsageCount();
+  }
+
+  /**
+   * change the end-date to the next month of current date and start date to
+   * the current date and also make the usage count=0 for new month
+   * @param {number} subscriptionId - id of the subscription
+   */
+  async resetLimitAndExpiryDate(subscriptionId) {
+    await this.subscriptionRepository.resetLimitAndExpiryDate(subscriptionId);
   }
 
   /**
@@ -93,7 +109,9 @@ class SubscriptionService {
    */
   async createSubscriptionLog(logData, { session } = {}) {
     if (session) {
-      return await this.subscriptionLogRepository.create(logData, { session });
+      return await this.subscriptionLogRepository.create(logData, {
+        session,
+      });
     }
     return await this.subscriptionLogRepository.create(logData);
   }

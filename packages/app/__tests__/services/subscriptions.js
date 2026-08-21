@@ -31,6 +31,9 @@ describe("Subscription Service", () => {
 
   it("get a subscription", async () => {
     const subscription = new Subscriptions(MOCK_SUBSCRIPTION[0]);
+    const now = new Date();
+    const end = new Date(now);
+    end.setMonth(end.getMonth() + 1);
     const spy = jest
       .spyOn(SubscriptionsRepository.prototype, "getById")
       .mockResolvedValue(subscription);
@@ -39,6 +42,8 @@ describe("Subscription Service", () => {
     expect(result).toBeDefined();
     expect(result.key_limit).toBe(2);
     expect(result.usage_limit).toBe(5000);
+    expect(result.start_date.getMonth()).toEqual(now.getMonth());
+    expect(result.end_date.getMonth()).toEqual(end.getMonth());
     expect(spy).toHaveBeenCalledWith(subscription.id, { session: undefined });
   });
 
@@ -70,20 +75,16 @@ describe("Subscription Service", () => {
     expect(spy).toHaveBeenCalledTimes(1);
   });
 
-  it("increment usage count for a subscription", async () => {
-    const subscription = new Subscriptions(MOCK_SUBSCRIPTION[0]);
-    const updatedSubscription = {
-      ...subscription.toObject(),
-      usage_count: subscription.usage_count + 1,
-    };
-    jest
-      .spyOn(SubscriptionsRepository.prototype, "update")
-      .mockResolvedValue(updatedSubscription);
+  it("increment usage count for a subscription (Hardened Version)", async () => {
+    const mockUpdated = { _id: "1", usage_count: 6 };
 
-    const result = await subscriptionService.incrementUsageCount(subscription);
+    const spy = jest
+      .spyOn(subscriptionService.subscriptionRepository, "incrementUsageCount")
+      .mockResolvedValue(mockUpdated);
 
-    expect(result).toBeDefined();
-    expect(result.usage_count).toBe(1);
+    const result = await subscriptionService.incrementUsageCount("1");
+    expect(spy).toHaveBeenCalledWith("1");
+    expect(result).toEqual(mockUpdated);
   });
 
   it("should change subscription plan to PRO", async () => {

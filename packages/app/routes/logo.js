@@ -4,9 +4,18 @@ const {
   searchLogoController,
   demoSearchLogoController,
 } = require("../controllers/logo");
+const resetSubscription = require("../middlewares/resetSubscription");
 
-router.get("/", getLogoController);
-router.get("/search", searchLogoController);
+router.get(
+  "/",
+  (req, res, next) => resetSubscription(req, res, next),
+  getLogoController
+);
+router.get(
+  "/search",
+  (req, res, next) => resetSubscription(req, res, next),
+  searchLogoController
+);
 router.get("/demo-search", demoSearchLogoController);
 
 module.exports = router;

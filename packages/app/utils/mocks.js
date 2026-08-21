@@ -2,6 +2,16 @@ const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
 const { SubscriptionTypes, UserType, UserTokenTypes } = require("./constants");
 
+const subscriptionDates = () => {
+  const now = new Date();
+  const end = new Date(now);
+  end.setMonth(end.getMonth() + 1);
+  return {
+    start_date: now,
+    end_date: end,
+  };
+};
+
 const MOCK_SUBSCRIPTION = [
   {
     _id: new mongoose.Types.ObjectId(),
@@ -11,6 +21,7 @@ const MOCK_SUBSCRIPTION = [
     usage_limit: 5000,
     usage_count: 0,
     updatedAt: new Date(),
+    ...subscriptionDates(),
   },
   {
     _id: new mongoose.Types.ObjectId(),
@@ -20,6 +31,7 @@ const MOCK_SUBSCRIPTION = [
     usage_limit: 15000,
     usage_count: 15000,
     updatedAt: new Date(),
+    ...subscriptionDates(),
   },
   {
     _id: new mongoose.Types.ObjectId(),
@@ -29,6 +41,7 @@ const MOCK_SUBSCRIPTION = [
     usage_limit: 50000,
     usage_count: 0,
     updatedAt: new Date(),
+    ...subscriptionDates(),
   },
 ];
 

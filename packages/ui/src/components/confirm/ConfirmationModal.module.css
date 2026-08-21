@@ -1,22 +1,21 @@
 .confirm-modal-heading {
-  text-align: center;
-  font-size: 1.8rem;
+  font-size: 1.25rem;
+  font-weight: 600;
   color: var(--black);
-  margin-bottom: 1rem;
+  margin: 0 0 8px 0;
+  line-height: 1.4;
+  letter-spacing: -0.01em;
 }
 
 .confirm-modal-description {
-  font-size: 1rem;
+  font-size: 0.95rem;
   color: var(--description);
-  font-weight: 500;
-  text-align: center;
-  margin: 10px 0;
+  margin-bottom: 24px;
+  line-height: 1.5;
 }
 
 .confirm-modal-button-wrapper {
   display: flex;
-  align-items: center;
-  justify-content: center;
   gap: 0.75rem;
   margin-top: 1rem;
 }

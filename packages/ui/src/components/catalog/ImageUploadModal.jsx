@@ -117,8 +117,16 @@ const ImageUploadModal = ({
       isOpen={isOpen}
       onClose={onCloseModal}
       size="custom"
-      customWidth="500px"
+      customWidth="520px"
+      customClass={styles.uploadModal}
     >
+      <div className={styles.modalHeader}>
+        <h2>{isUpdate ? "Update catalog image" : "Add catalog image"}</h2>
+        <p>
+          Upload a clean PNG logo and keep the company URI aligned with the
+          catalog record.
+        </p>
+      </div>
       {selectedImage ? (
         <form className={styles.previewContainer} onSubmit={handleUpload}>
           <img
@@ -139,6 +147,8 @@ const ImageUploadModal = ({
           )}
           <Button
             className={styles.uploadButton}
+            variant="primary"
+            type="submit"
             isLoading={isLoading}
             onClick={handleUpload}
           >
@@ -173,6 +183,8 @@ const ImageUploadModal = ({
             />
             <Button
               className={styles.selectButton}
+              variant="primary"
+              type="button"
               onClick={(e) => {
                 e.stopPropagation();
                 inputRef.current?.click();

@@ -1,10 +1,10 @@
 .dashboard-container {
   position: relative;
   min-height: 100vh;
-  background-color: var(--white);
-  padding: 3% 8%;
+  background-color: transparent;
+  padding: 40px 24px;
   margin: 0 auto;
-  max-width: 100%;
+  max-width: 1200px;
   overflow-x: hidden;
   box-sizing: border-box;
 }
@@ -16,7 +16,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background: rgba(255, 255, 255, 0.55);
+  background: var(--table-background);
 }
 
 [data-theme="dark"] .spinner-container {
@@ -27,9 +27,9 @@
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
-  margin-bottom: 2rem;
+  margin-bottom: 32px;
   flex-wrap: wrap;
-  gap: 1.5rem;
+  gap: 24px;
 }
 
 .title-section {
@@ -38,16 +38,16 @@
 }
 
 .dashboard-title {
-  font-size: 1.875rem;
+  font-size: 30px;
   font-weight: 700;
   color: var(--black);
-  margin: 0 0 0.5rem 0;
+  margin: 0 0 8px 0;
   line-height: 1.2;
 }
 
 .dashboard-subtitle {
   color: var(--description);
-  font-size: 1rem;
+  font-size: 16px;
   margin: 0;
   line-height: 1.5;
 }
@@ -56,7 +56,7 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 1rem;
+  gap: 16px;
 }
 
 .dropdown-wrapper {
@@ -65,64 +65,64 @@
 }
 
 .dropdown {
-  background: var(--white);
-  border: var(--border);
-  padding: 0.5rem 1rem;
+  background: var(--strength-card-bg);
+  border: 1px solid var(--border-color);
+  padding: 8px 16px;
   border-radius: 8px;
-  font-size: 0.875rem;
-  color: var(--description);
+  font-size: 14px;
+  color: var(--black);
   cursor: pointer;
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 8px;
   transition: border-color 0.2s;
 }
 
 .dropdown:hover {
-  border-color: var(--border-color);
+  border-color: var(--label-color);
 }
 
 .dropdown-menu {
   position: absolute;
   top: 100%;
   right: 0;
-  margin-top: 0.5rem;
-  background: var(--white);
-  border: var(--border);
+  margin-top: 8px;
+  background: var(--strength-card-bg);
+  border: 1px solid var(--border-color);
   border-radius: 8px;
   box-shadow: var(--shadow);
   min-width: 120px;
   z-index: 50;
-  padding: 0.25rem;
+  padding: 4px;
 }
 
 .dropdown-item {
-  padding: 0.5rem 0.75rem;
-  font-size: 0.875rem;
-  color: var(--description);
+  padding: 8px 12px;
+  font-size: 14px;
+  color: var(--black);
   cursor: pointer;
   border-radius: 4px;
   transition: background-color 0.2s;
 }
 
 .dropdown-item:hover {
-  background-color: var(--table-background);
+  background-color: var(--table-heading-bg);
   color: var(--black);
 }
 
 .tabs {
-  background-color: var(--table-background);
-  padding: 0.25rem;
+  background-color: var(--table-heading-bg);
+  padding: 4px;
   border-radius: 12px;
   display: flex;
-  gap: 0.25rem;
+  gap: 4px;
 }
 
 .tab {
   flex: 1;
   white-space: nowrap;
-  padding: 0.5rem 1rem;
-  font-size: 0.875rem;
+  padding: 8px 16px;
+  font-size: 14px;
   font-weight: 500;
   color: var(--description);
   border: none;
@@ -139,7 +139,7 @@
 }
 
 .active-tab {
-  background-color: var(--white);
+  background-color: var(--strength-card-bg);
   color: var(--primary);
   font-weight: 600;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
@@ -152,15 +152,15 @@
 .analytics-grid {
   display: grid;
   grid-template-columns: 1fr minmax(0, 350px);
-  gap: 1.5rem;
+  gap: 24px;
 }
 
 .analytics-card {
-  background: var(--white);
-  border: var(--border);
+  background: var(--strength-card-bg);
+  border: 1px solid var(--border-color);
   border-radius: 12px;
-  padding: 1.5rem;
-  box-shadow: var(--shadow);
+  padding: 24px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
   min-width: 0;
   overflow: hidden;
 }
@@ -172,20 +172,20 @@
 .api-keys-grid {
   display: grid;
   grid-template-columns: 350px 1fr;
-  gap: 1.5rem;
+  gap: 24px;
   align-items: start;
 }
 
 .left-column {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 24px;
 }
 
 .security-tip {
   margin-top: 1.5rem;
-  background: #eef2ff;
-  border: 1px solid #e0e7ff;
+  background: var(--primary-focus);
+  border: 1px solid var(--border-color);
   border-radius: 12px;
   padding: 1rem;
 }
@@ -222,11 +222,11 @@
 }
 
 .card {
-  background: var(--white);
-  border: var(--border);
+  background: var(--strength-card-bg);
+  border: 1px solid var(--border-color);
   border-radius: 12px;
-  padding: 1.5rem;
-  box-shadow: var(--shadow);
+  padding: 24px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
   display: flex;
   flex-direction: column;
   min-width: 0;
@@ -234,7 +234,7 @@
 }
 
 .card-title {
-  font-size: 1.125rem;
+  font-size: 18px;
   font-weight: 600;
   color: var(--black);
   margin: 0;
@@ -247,9 +247,9 @@
 }
 
 .badge {
-  background: var(--table-background);
-  color: var(--description);
-  font-size: 0.6875rem;
+  background: var(--table-heading-bg);
+  color: var(--black);
+  font-size: 11px;
   font-weight: 600;
   padding: 0.25rem 0.5rem;
   border-radius: 9999px;
@@ -257,9 +257,9 @@
 }
 
 .subtext {
-  color: var(--label-color);
-  font-size: 0.8125rem;
-  margin: 0 0 1.5rem 0;
+  color: var(--description);
+  font-size: 13px;
+  margin: 0 0 24px 0;
 }
 
 .table-wrapper {
@@ -307,11 +307,11 @@
 }
 
 .expiry-warning-row {
-  background-color: #fee2e2;
+  background-color: var(--primary-focus);
 }
 
 .expiry-warning-row td {
-  color: #dc2626;
+  color: var(--error);
   font-weight: 500;
 }
 

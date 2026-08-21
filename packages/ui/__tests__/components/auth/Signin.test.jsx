@@ -44,6 +44,8 @@ describe("SignInForm UI and Functionality Tests", () => {
     localStorageMock.setItem.mockClear();
     localStorageMock.removeItem.mockClear();
     localStorageMock.clear.mockClear();
+    mockedFetchRequest.mockReset();
+    mockedMakeRequest.mockReset();
   });
   it("renders all form elements correctly", () => {
     const authContext = mockAuthContext(false);

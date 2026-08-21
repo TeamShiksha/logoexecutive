@@ -1,67 +1,161 @@
+.uploadModal {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.modalHeader {
+  padding-right: 36px;
+}
+
+.modalHeader h2 {
+  margin: 0 0 8px;
+  color: var(--black);
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+.modalHeader p {
+  margin: 0;
+  color: var(--description);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
 .dropzone {
-  border: 2px dashed var(--table-heading-bg);
+  border: 1px dashed var(--label-color);
   border-radius: 8px;
-  padding: 2rem;
+  padding: 32px 24px;
   text-align: center;
   cursor: pointer;
-  transition: all 0.3s ease;
+  background: var(--table-background);
+  transition: all 0.2s ease;
+}
+
+.dropzone:hover {
+  border-color: var(--description);
+  background: var(--table-heading-bg);
 }
 
 .dragActive {
-  border-color: var(--primary);
+  border-color: var(--black);
+  background: var(--table-heading-bg);
 }
 
 .dropzoneContent {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1rem;
+  gap: 16px;
 }
 
 .imageIcon {
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 8px;
+  background: var(--strength-card-bg);
+  border: 1px solid var(--border-color);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.imageIcon img {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+  opacity: 0.8;
+}
+
+.dropzoneContent p {
+  margin: 0;
   color: var(--description);
+  font-size: 14px;
+}
+
+.dropzoneContent p:first-of-type {
+  color: var(--black);
+  font-size: 15px;
+  font-weight: 600;
 }
 
 .selectButton {
-  background-color: var(--primary);
-  color: var(--white);
-  padding: 0.75rem 1.5rem;
-  border: none;
-  border-radius: 4px;
+  width: 100%;
+  min-height: 40px;
+  padding: 10px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  background-color: var(--strength-card-bg);
+  color: var(--black);
+  border: 1px solid var(--label-color);
+  border-radius: 6px;
   cursor: pointer;
-  font-size: 1rem;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.selectButton:hover {
+  background-color: var(--table-background);
+  border-color: var(--description);
 }
 
 .previewContainer {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: stretch;
   width: 100%;
-  padding: 1rem;
+  gap: 16px;
+  margin: 0;
 }
 
 .imagePreview {
-  max-width: 100%;
-  max-height: 250px;
+  width: 100%;
+  height: 200px;
   object-fit: contain;
-  margin-bottom: 1.5rem;
   border-radius: 8px;
   border: 1px solid var(--border-color);
+  background: var(--table-background);
+  padding: 16px;
+}
+
+.previewContainer > p {
+  margin: 0;
+  color: var(--black);
+  font-size: 14px;
+  font-weight: 500;
+  text-align: center;
+  word-break: break-all;
 }
 
 .uploadButton {
-  background-color: var(--primary);
-  color: var(--white);
-  padding: 0.75rem 1.5rem;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 1rem;
-  margin-top: 1.5rem;
   width: 100%;
+  min-height: 40px;
+  padding: 10px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  background-color: var(--primary);
+  color: var(--white-fixed);
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.uploadButton:hover {
+  background-color: var(--primary-hover);
 }
 
 .companyUriInput {
   width: 100%;
-  margin-top: 1rem;
+}
+
+@media (max-width: 480px) {
+  .uploadModal {
+    gap: 16px;
+  }
+  .modalHeader h2 {
+    font-size: 18px;
+  }
+  .dropzone {
+    padding: 24px 16px;
+  }
 }

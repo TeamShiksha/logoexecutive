@@ -13,28 +13,24 @@ const OperatorCard = ({ item, onRespondClick, searchType }) => {
     switch (item.status) {
       case "RESOLVED":
         return {
-          ballClass: styles["ball-resolved"],
           textClass: styles["text-resolved"],
         };
       case "REJECTED":
         return {
-          ballClass: styles["ball-rejected"],
           textClass: styles["text-rejected"],
         };
       case "PENDING":
         return {
-          ballClass: styles["ball-pending"],
           textClass: styles["text-pending"],
         };
       default:
         return {
-          ballClass: "",
           textClass: "",
         };
     }
   };
 
-  const { ballClass, textClass } = statusClassName();
+  const { textClass } = statusClassName();
 
   return (
     <div className={styles.card}>
@@ -44,7 +40,6 @@ const OperatorCard = ({ item, onRespondClick, searchType }) => {
             <span className={styles["request-id"]}>
               Ticket #{item._id.slice(-8)}
             </span>
-            <div className={`${styles["status-ball"]} ${ballClass}`}></div>
             <span className={`${styles.status} ${textClass}`}>
               {item.status}
             </span>

@@ -229,7 +229,6 @@ function Dashboard() {
             isDropdownOpen={isDropdownOpen}
             setIsDropdownOpen={setIsDropdownOpen}
             handleRoleSelect={handleRoleSelect}
-            headerStyles={styles}
           />
         </div>
       ) : (

@@ -24,6 +24,10 @@ function Analytics() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  if (!loading && stats.length === 0) {
+    return null;
+  }
+
   return (
     <div className={styles.analytics} data-testid="analytics">
       {loading && (

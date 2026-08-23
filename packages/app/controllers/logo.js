@@ -86,10 +86,7 @@ async function getLogoController(req, res, next) {
     subscriptionService.incrementUsageCount(userSubscription).catch((err) => {
       console.error("Failed to increment usage count:", err.message);
     });
-    return res.status(200).json({
-      statusCode: 200,
-      data: imageUrl,
-    });
+    return res.redirect(302, imageUrl);
   } catch (err) {
     next(err);
   }

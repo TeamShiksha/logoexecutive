@@ -149,7 +149,7 @@ describe("getLogoController", () => {
     });
   });
 
-  it("200-images returned", async () => {
+  it("302 redirect returned", async () => {
     mockRepeatedService(mockSubscription[0]);
 
     jest
@@ -162,11 +162,8 @@ describe("getLogoController", () => {
       .spyOn(UserService.prototype, "logLogoRequestEntry")
       .mockResolvedValue({});
     const response = await request(app).get(apiUrl).query(baseQuery);
-    expect(response.status).toBe(200);
-    expect(response.body).toEqual({
-      statusCode: 200,
-      data: MOCK_IMAGE_URL_RESPONSE,
-    });
+    expect(response.status).toBe(302);
+    expect(response.headers.location).toBe(MOCK_IMAGE_URL_RESPONSE);
   });
 });
 
@@ -235,11 +232,8 @@ describe("getLogoController - Operations Order Test", () => {
 
     const response = await request(app).get(apiUrl).query(baseQuery);
 
-    expect(response.status).toBe(200);
-    expect(response.body).toEqual({
-      statusCode: 200,
-      data: MOCK_IMAGE_URL_RESPONSE,
-    });
+    expect(response.status).toBe(302);
+    expect(response.headers.location).toBe(MOCK_IMAGE_URL_RESPONSE);
 
     expect(operationsOrder).toEqual([
       "image_fetched",

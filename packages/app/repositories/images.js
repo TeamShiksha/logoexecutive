@@ -5,6 +5,7 @@ const {
   cloudFrontSignedURL,
   cloudFrontInvalidate,
 } = require("../utils/cloudFront");
+const { escapeRegExp } = require("../utils/escapeRegExp");
 
 /**
  * The ImageRepository extends BaseRepository to manage ContactUs model operations, inheriting CRUD methods like getById, getAll, create, update, and delete..
@@ -25,7 +26,7 @@ class ImagesRepository extends BaseRepository {
   async fetchImage(company) {
     const image = await Image.findOne({
       company_name: {
-        $regex: `^${company}(\\.|$)`,
+        $regex: `^${escapeRegExp(company)}(\\.|$)`,
         $options: "i",
       },
       $or: [{ is_published: true }, { is_published: { $exists: false } }],
@@ -60,7 +61,7 @@ class ImagesRepository extends BaseRepository {
     const query = {};
 
     if (search) {
-      query.company_name = { $regex: search, $options: "i" };
+      query.company_name = { $regex: escapeRegExp(search), $options: "i" };
     }
 
     const [total, images] = await Promise.all([

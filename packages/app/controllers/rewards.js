@@ -1,7 +1,7 @@
 const { STATUS_CODES } = require("node:http");
 const mongoose = require("mongoose");
 const { RewardsService } = require("../services");
-const { Messages, RewardMessages } = require("../utils/constants");
+const { Messages, RewardMessages, UserType } = require("../utils/constants");
 
 /**
  * Retrieves reward summary for a specific image
@@ -244,6 +244,18 @@ async function getTransactionController(req, res, next) {
         message: RewardMessages.TRANSACTION_NOT_FOUND,
         statusCode: 404,
         error: STATUS_CODES[404],
+      });
+    }
+
+    const { userId, role } = req.userData;
+    const isParticipant = [transaction.user_id, transaction.creator_id].some(
+      (id) => id && id.toString() === userId
+    );
+    if (role !== UserType.ADMIN && !isParticipant) {
+      return res.status(403).json({
+        statusCode: 403,
+        error: STATUS_CODES[403],
+        message: "Unauthorized",
       });
     }
 

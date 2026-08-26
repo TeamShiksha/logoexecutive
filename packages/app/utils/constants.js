@@ -164,6 +164,25 @@ const CLOUD_FRONT_REGION = "us-east-1";
 const getIsProduction = () =>
   process.env.NODE_ENV?.trim().toLowerCase() === "prod";
 
+/**
+ * Base options for every authentication related cookie.
+ * `secure` restricts the cookie to HTTPS whenever the app is not running locally.
+ * @param {import("express").CookieOptions} [overrides]
+ * @returns {import("express").CookieOptions}
+ **/
+const getAuthCookieOptions = (overrides = {}) => {
+  const isProduction = getIsProduction();
+  return {
+    httpOnly: true,
+    sameSite: "strict",
+    secure: isProduction,
+    domain: isProduction ? ".openlogo.fyi" : "localhost",
+    ...overrides,
+  };
+};
+
+const ALLOWED_IMAGE_EXTENSIONS = ["png", "jpg", "jpeg", "webp", "svg"];
+
 const USER_SAFE_FIELDS =
   "name email role is_verified subscription_id created_at is_deleted updated_at ";
 
@@ -188,6 +207,8 @@ module.exports = {
   TAB_OPTIONS,
   CLOUD_FRONT_REGION,
   getIsProduction,
+  getAuthCookieOptions,
+  ALLOWED_IMAGE_EXTENSIONS,
   USER_SAFE_FIELDS,
   SESSION_ID_REGEX,
   TEMPORARY_SESSION_TYPES,

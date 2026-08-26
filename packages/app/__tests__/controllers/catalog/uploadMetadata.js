@@ -38,7 +38,7 @@ describe("POST /api/catalog/logo", () => {
         companyName: "GOOGLE",
         companyUri: "https://google.com/",
         imageSize: 1024,
-        Extension: "png",
+        extension: "png",
       });
     expect(res.statusCode).toEqual(400);
     expect(res.body).toEqual({
@@ -93,7 +93,7 @@ describe("POST /api/catalog/logo", () => {
         companyName: "GOOGLE",
         companyUri: "https://google.com/",
         imageSize: 1024,
-        Extension: "png",
+        extension: "png",
       });
     expect(res.statusCode).toEqual(200);
     expect(res.body).toEqual({
@@ -120,7 +120,7 @@ describe("POST /api/catalog/logo", () => {
         companyName: "GOOGLE",
         companyUri: "https://google.com/",
         imageSize: 1024,
-        Extension: "png",
+        extension: "png",
       });
     expect(res.statusCode).toEqual(500);
     expect(res.body).toEqual({
@@ -144,7 +144,7 @@ describe("POST /api/catalog/logo", () => {
         companyName: "GOOGLE",
         companyUri: "https://google.com/",
         imageSize: 1024,
-        Extension: "png",
+        extension: "png",
       });
     expect(res.statusCode).toEqual(200);
     expect(res.body).toEqual({

@@ -8,7 +8,10 @@ const {
   ContactUsService,
 } = require("../services");
 const { addAdminSchema, imageReuploadSchema } = require("../schemas/admin");
-const { companyUrlSchema } = require("../schemas/catalog");
+const {
+  companyUrlSchema,
+  imageExtensionSchema,
+} = require("../schemas/catalog");
 const {
   Messages,
   ExtractCompanyNameFromUrlRegex,
@@ -138,6 +141,17 @@ async function getPreSignedController(req, res, next) {
       });
     }
 
+    const { error: extensionError, value: safeExtension } =
+      imageExtensionSchema.validate(extension);
+
+    if (extensionError) {
+      return res.status(400).json({
+        error: STATUS_CODES[400],
+        statusCode: 400,
+        message: extensionError.message,
+      });
+    }
+
     const match = companyUri
       .toUpperCase()
       .match(ExtractCompanyNameFromUrlRegex);
@@ -164,7 +178,7 @@ async function getPreSignedController(req, res, next) {
 
     const { key, presignedUrl } = await imageService.getPreSignedUrl(
       companyName,
-      extension
+      safeExtension
     );
 
     if (!key || !presignedUrl) {
@@ -297,11 +311,21 @@ async function updateCatalogController(req, res, next) {
       });
     }
 
+    const { error: extensionError, value: safeExtension } =
+      imageExtensionSchema.validate(extension);
+    if (extensionError) {
+      return res.status(422).json({
+        statusCode: 422,
+        message: extensionError.message,
+        error: STATUS_CODES[422],
+      });
+    }
+
     const match = companyUri
       .toUpperCase()
       .match(ExtractCompanyNameFromUrlRegex);
     const companyName = match[1];
-    const Extension = extension.toLowerCase();
+    const Extension = safeExtension;
 
     const imageData = await imageServices.updateImageById(id, {
       uploadedBy: userId,
@@ -350,12 +374,20 @@ async function addCatalogController(req, res, next) {
       });
     }
 
+    const { error: extensionError, value: Extension } =
+      imageExtensionSchema.validate(req.body.extension);
+    if (extensionError) {
+      return res.status(422).json({
+        error: STATUS_CODES[422],
+        statusCode: 422,
+        message: extensionError.message,
+      });
+    }
+
     const match = companyUri
       .toUpperCase()
       .match(ExtractCompanyNameFromUrlRegex);
     const companyName = match[1];
-
-    const Extension = req.body.extension;
 
     const imageExist = await imageServices.getImageByCompanyName(companyName);
     if (imageExist) {

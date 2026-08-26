@@ -8,7 +8,10 @@ const {
   Messages,
   ExtractCompanyNameFromUrlRegex,
 } = require("../utils/constants");
-const { companyUrlSchema } = require("../schemas/catalog");
+const {
+  companyUrlSchema,
+  imageExtensionSchema,
+} = require("../schemas/catalog");
 const {
   updateRequestSchema,
   requestQuerySchema,
@@ -34,6 +37,16 @@ async function newLogoRequestController(req, res, next) {
         error: STATUS_CODES[500],
         statusCode: 500,
         message: error.message,
+      });
+    }
+
+    const { error: extensionError, value: safeExtension } =
+      imageExtensionSchema.validate(extension);
+    if (extensionError) {
+      return res.status(422).json({
+        error: STATUS_CODES[422],
+        statusCode: 422,
+        message: extensionError.message,
       });
     }
 
@@ -76,7 +89,7 @@ async function newLogoRequestController(req, res, next) {
       imageSize,
       companyName,
       companyUrl,
-      extension,
+      safeExtension,
       false
     );
     if (!imageData) {

@@ -12,6 +12,7 @@ const {
   MOCK_REWARD_TRANSACTION,
   MOCK_REWARD_TRANSACTIONS_LIST,
   MOCK_SESSION_ID,
+  MOCK_SESSION_ID_2,
   MOCK_USER_SESSIONS,
   MOCK_IMAGES,
 } = require("../../../utils/mocks");
@@ -36,6 +37,12 @@ describe("Rewards Controller - Transactions", () => {
     const imageId = MOCK_IMAGES[0]._id.toString();
     const endpoint = `/api/rewards/transactions/image/${imageId}`;
 
+    it("401 - User not authenticated", async () => {
+      const response = await request(app).get(endpoint);
+
+      expect(response.status).toBe(401);
+    });
+
     it("200 - Returns image transactions with default pagination", async () => {
       const mockTransactions = {
         data: MOCK_REWARD_TRANSACTIONS_LIST.slice(0, 2),
@@ -48,8 +55,13 @@ describe("Rewards Controller - Transactions", () => {
       jest
         .spyOn(RewardsService.prototype, "getImageTransactions")
         .mockResolvedValue(mockTransactions);
+      jest
+        .spyOn(UserSessionService.prototype, "validateSession")
+        .mockResolvedValue(MOCK_USER_SESSIONS[0]);
 
-      const response = await request(app).get(endpoint);
+      const response = await request(app)
+        .get(endpoint)
+        .set("Cookie", `sessionId=${MOCK_SESSION_ID}`);
 
       expect(response.status).toBe(200);
       expect(response.body.statusCode).toBe(200);
@@ -73,8 +85,13 @@ describe("Rewards Controller - Transactions", () => {
       jest
         .spyOn(RewardsService.prototype, "getImageTransactions")
         .mockResolvedValue(mockTransactions);
+      jest
+        .spyOn(UserSessionService.prototype, "validateSession")
+        .mockResolvedValue(MOCK_USER_SESSIONS[0]);
 
-      const response = await request(app).get(`${endpoint}?page=2&limit=10`);
+      const response = await request(app)
+        .get(`${endpoint}?page=2&limit=10`)
+        .set("Cookie", `sessionId=${MOCK_SESSION_ID}`);
 
       expect(response.status).toBe(200);
       expect(response.body.statusCode).toBe(200);
@@ -87,8 +104,13 @@ describe("Rewards Controller - Transactions", () => {
       jest
         .spyOn(RewardsService.prototype, "getImageTransactions")
         .mockRejectedValue(new Error("Database error"));
+      jest
+        .spyOn(UserSessionService.prototype, "validateSession")
+        .mockResolvedValue(MOCK_USER_SESSIONS[0]);
 
-      const response = await request(app).get(endpoint);
+      const response = await request(app)
+        .get(endpoint)
+        .set("Cookie", `sessionId=${MOCK_SESSION_ID}`);
 
       expect(response.status).toBe(500);
     });
@@ -173,12 +195,23 @@ describe("Rewards Controller - Transactions", () => {
     const transactionId = MOCK_REWARD_TRANSACTION._id.toString();
     const endpoint = `/api/rewards/transactions/${transactionId}`;
 
+    it("401 - User not authenticated", async () => {
+      const response = await request(app).get(endpoint);
+
+      expect(response.status).toBe(401);
+    });
+
     it("404 - Transaction not found", async () => {
       jest
         .spyOn(RewardsService.prototype, "getTransaction")
         .mockResolvedValue(null);
+      jest
+        .spyOn(UserSessionService.prototype, "validateSession")
+        .mockResolvedValue(MOCK_USER_SESSIONS[0]);
 
-      const response = await request(app).get(endpoint);
+      const response = await request(app)
+        .get(endpoint)
+        .set("Cookie", `sessionId=${MOCK_SESSION_ID}`);
 
       expect(response.status).toBe(404);
       expect(response.body).toEqual({
@@ -188,12 +221,17 @@ describe("Rewards Controller - Transactions", () => {
       });
     });
 
-    it("200 - Returns transaction details", async () => {
+    it("200 - Returns transaction details to the transaction owner", async () => {
       jest
         .spyOn(RewardsService.prototype, "getTransaction")
         .mockResolvedValue(MOCK_REWARD_TRANSACTION);
+      jest
+        .spyOn(UserSessionService.prototype, "validateSession")
+        .mockResolvedValue(MOCK_USER_SESSIONS[0]);
 
-      const response = await request(app).get(endpoint);
+      const response = await request(app)
+        .get(endpoint)
+        .set("Cookie", `sessionId=${MOCK_SESSION_ID}`);
 
       expect(response.status).toBe(200);
       expect(response.body.statusCode).toBe(200);
@@ -202,12 +240,32 @@ describe("Rewards Controller - Transactions", () => {
       expect(response.body.data.points_type).toBe("USAGE_REWARD");
     });
 
+    it("403 - Unrelated user cannot read someone else's transaction", async () => {
+      jest
+        .spyOn(RewardsService.prototype, "getTransaction")
+        .mockResolvedValue(MOCK_REWARD_TRANSACTION);
+      jest
+        .spyOn(UserSessionService.prototype, "validateSession")
+        .mockResolvedValue(MOCK_USER_SESSIONS[1]);
+
+      const response = await request(app)
+        .get(endpoint)
+        .set("Cookie", `sessionId=${MOCK_SESSION_ID_2}`);
+
+      expect(response.status).toBe(403);
+    });
+
     it("500 - Service throws an error", async () => {
       jest
         .spyOn(RewardsService.prototype, "getTransaction")
         .mockRejectedValue(new Error("Database error"));
+      jest
+        .spyOn(UserSessionService.prototype, "validateSession")
+        .mockResolvedValue(MOCK_USER_SESSIONS[0]);
 
-      const response = await request(app).get(endpoint);
+      const response = await request(app)
+        .get(endpoint)
+        .set("Cookie", `sessionId=${MOCK_SESSION_ID}`);
 
       expect(response.status).toBe(500);
     });

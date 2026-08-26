@@ -11,6 +11,7 @@ const {
   getDemoSearchQuerySchema,
 } = require("../schemas/catalog");
 const { Messages } = require("../utils/constants");
+const { escapeRegExp } = require("../utils/escapeRegExp");
 
 /**
  * Handles requests for fetching a company's logo based on a domain and API key.
@@ -157,7 +158,10 @@ async function searchLogoController(req, res, next) {
       });
     }
 
-    const regexPattern = new RegExp(`^${companyNameBeginsWith}`, "i");
+    const regexPattern = new RegExp(
+      `^${escapeRegExp(companyNameBeginsWith)}`,
+      "i"
+    );
     const companyList = await imageServices.fetchCompanyList(regexPattern);
     if (companyList.length === 0) {
       return res.status(404).json({
@@ -198,7 +202,10 @@ async function demoSearchLogoController(req, res, next) {
     }
     const { companyNameBeginsWith } = value;
 
-    const regexPattern = new RegExp(`^${companyNameBeginsWith}`, "i");
+    const regexPattern = new RegExp(
+      `^${escapeRegExp(companyNameBeginsWith)}`,
+      "i"
+    );
     const companyList = await imageServices.fetchCompanyList(regexPattern);
     if (companyList.length === 0) {
       return res.status(404).json({

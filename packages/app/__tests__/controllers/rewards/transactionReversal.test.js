@@ -22,6 +22,9 @@ describe("Rewards Controller - Transaction Reversal", () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
+    jest
+      .spyOn(UserSessionService.prototype, "touchSession")
+      .mockResolvedValue(null);
   });
 
   afterAll(() => {

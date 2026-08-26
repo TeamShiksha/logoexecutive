@@ -3,7 +3,7 @@ const UserSessionService = require("../services/userSession");
 const {
   UserType,
   SESSION_ID_REGEX,
-  getIsProduction,
+  getAuthCookieOptions,
 } = require("../utils/constants");
 
 /**
@@ -22,11 +22,7 @@ module.exports = (options = {}) => {
        * precisely when a session is found to be revoked, invalid, or expired.
        */
       const clearSessionCookie = () =>
-        res.clearCookie("sessionId", {
-          sameSite: "strict",
-          httpOnly: true,
-          domain: getIsProduction() ? ".openlogo.fyi" : "localhost",
-        });
+        res.clearCookie("sessionId", getAuthCookieOptions());
 
       if (
         !sessionId ||

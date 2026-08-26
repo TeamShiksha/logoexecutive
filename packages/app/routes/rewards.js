@@ -58,8 +58,13 @@ router.get("/leaderboard", getRewardsLeaderboardController);
  * GET /api/rewards/transactions/image/:imageId
  * Retrieves transaction history for a specific image
  * - Query params: page (default: 1), limit (default: 20)
+ * - Requires: authentication
  */
-router.get("/transactions/image/:imageId", getImageTransactionsController);
+router.get(
+  "/transactions/image/:imageId",
+  authMiddleware(),
+  getImageTransactionsController
+);
 
 /**
  * GET /api/rewards/transactions/user
@@ -86,9 +91,14 @@ router.get(
 
 /**
  * GET /api/rewards/transactions/:transactionId
- * Get a specific transaction
+ * Get a specific transaction (owner, crediting creator or admin only)
+ * Requires: authentication
  */
-router.get("/transactions/:transactionId", getTransactionController);
+router.get(
+  "/transactions/:transactionId",
+  authMiddleware(),
+  getTransactionController
+);
 
 /**
  * GET /api/rewards/audit-trail/:imageId

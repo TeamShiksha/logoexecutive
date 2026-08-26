@@ -18,7 +18,7 @@ const {
 const sendEmail = require("../utils/sendEmail");
 const {
   Messages,
-  getIsProduction,
+  getAuthCookieOptions,
   SESSION_ID_REGEX,
 } = require("../utils/constants");
 const dayjs = require("dayjs");
@@ -196,14 +196,11 @@ async function signinController(req, res, next) {
       const mfaSession = await mfaSessionService.createSession({
         userId: user._id,
       });
-      const isProduction = getIsProduction();
-
-      res.cookie("mfaSessionId", mfaSession.sessionId, {
-        httpOnly: true,
-        sameSite: "strict",
-        expires: mfaSession.expiresAt,
-        domain: isProduction ? ".openlogo.fyi" : "localhost",
-      });
+      res.cookie(
+        "mfaSessionId",
+        mfaSession.sessionId,
+        getAuthCookieOptions({ expires: mfaSession.expiresAt })
+      );
 
       return res.status(200).json({ statusCode: 200, mfaRequired: true });
     }
@@ -218,16 +215,10 @@ async function signinController(req, res, next) {
       currentDate.getTime() + 7 * 24 * 60 * 60 * 1000
     );
 
-    const isProduction = getIsProduction();
-
     /** @type {import("express").CookieOptions}  */
-
-    const sessionCookieOptions = {
+    const sessionCookieOptions = getAuthCookieOptions({
       expires: oneDayValidityTimestamp,
-      sameSite: "strict",
-      httpOnly: true,
-      domain: isProduction ? ".openlogo.fyi" : "localhost",
-    };
+    });
 
     res.cookie("sessionId", session.sessionId, sessionCookieOptions);
 
@@ -266,14 +257,8 @@ async function signoutController(req, res, next) {
 
     await userSessionService.signout(sessionId);
 
-    const isProduction = getIsProduction();
-
     /** @type {import("express").CookieOptions}  */
-    const cookieOptions = {
-      sameSite: "strict",
-      httpOnly: true,
-      domain: isProduction ? ".openlogo.fyi" : "localhost",
-    };
+    const cookieOptions = getAuthCookieOptions();
 
     res.clearCookie("sessionId", cookieOptions);
 
@@ -484,14 +469,11 @@ async function resetPasswordSessionController(req, res, next) {
       userId: userToken.user_id,
       resetToken: userToken.token,
     });
-    const isProduction = getIsProduction();
-
-    res.cookie("resetPasswordSessionId", resetSession.sessionId, {
-      httpOnly: true,
-      sameSite: "strict",
-      expires: resetSession.expiresAt,
-      domain: isProduction ? ".openlogo.fyi" : "localhost",
-    });
+    res.cookie(
+      "resetPasswordSessionId",
+      resetSession.sessionId,
+      getAuthCookieOptions({ expires: resetSession.expiresAt })
+    );
 
     return res.status(200).json({ statusCode: 200 });
   } catch (err) {
@@ -576,13 +558,7 @@ async function resetPasswordController(req, res, next) {
     }
     await userTokenService.deleteUserToken(userToken);
 
-    const isProduction = getIsProduction();
-
-    res.clearCookie("resetPasswordSessionId", {
-      httpOnly: true,
-      sameSite: "strict",
-      domain: isProduction ? ".openlogo.fyi" : "localhost",
-    });
+    res.clearCookie("resetPasswordSessionId", getAuthCookieOptions());
 
     return res.status(200).json({ statusCode: 200 });
   } catch (error) {
@@ -632,8 +608,6 @@ async function siginWithMFAController(req, res, next) {
       });
     }
 
-    const isProduction = getIsProduction();
-
     const session = await userSessionService.createSession({
       userId: user._id,
       userAgent: req.headers["user-agent"] || "",
@@ -643,18 +617,11 @@ async function siginWithMFAController(req, res, next) {
       currentDate.getTime() + 7 * 24 * 60 * 60 * 1000
     );
 
-    const sessionCookieOptions = {
+    const sessionCookieOptions = getAuthCookieOptions({
       expires: oneWeekValidityTimestamp,
-      sameSite: "strict",
-      httpOnly: true,
-      domain: isProduction ? ".openlogo.fyi" : "localhost",
-    };
-
-    res.clearCookie("mfaSessionId", {
-      httpOnly: true,
-      sameSite: "strict",
-      domain: isProduction ? ".openlogo.fyi" : "localhost",
     });
+
+    res.clearCookie("mfaSessionId", getAuthCookieOptions());
     res.cookie("sessionId", session.sessionId, sessionCookieOptions);
 
     return res.status(200).json({ statusCode: 200 });
@@ -967,14 +934,7 @@ async function signoutAllController(req, res, next) {
 
     await userSessionService.signoutAll(userId);
 
-    const isProduction = getIsProduction();
-    const cookieOptions = {
-      sameSite: "strict",
-      httpOnly: true,
-      domain: isProduction ? ".openlogo.fyi" : "localhost",
-    };
-
-    res.clearCookie("sessionId", cookieOptions);
+    res.clearCookie("sessionId", getAuthCookieOptions());
     return res.status(205).send();
   } catch (error) {
     next(error);

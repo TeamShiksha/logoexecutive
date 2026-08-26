@@ -1,4 +1,5 @@
 const Joi = require("joi");
+const { ALLOWED_IMAGE_EXTENSIONS } = require("../utils/constants");
 
 const getLogoQuerySchema = Joi.object({
   key: Joi.string()
@@ -66,6 +67,15 @@ const getDemoSearchQuerySchema = Joi.object({
   return { ...value, companyNameBeginsWith };
 });
 
+const imageExtensionSchema = Joi.string()
+  .required()
+  .lowercase()
+  .valid(...ALLOWED_IMAGE_EXTENSIONS)
+  .messages({
+    "any.required": "extension is required",
+    "any.only": `extension must be one of ${ALLOWED_IMAGE_EXTENSIONS.join(", ")}`,
+  });
+
 const companyUrlSchema = Joi.string()
   .required()
   .regex(/:\/\/[0-9a-z-.]+\.[a-z]+\//i)
@@ -82,4 +92,5 @@ module.exports = {
   getSearchQuerySchema,
   companyUrlSchema,
   getDemoSearchQuerySchema,
+  imageExtensionSchema,
 };

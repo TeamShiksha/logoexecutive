@@ -2,6 +2,7 @@ const dotenv = require("dotenv");
 const express = require("express");
 const mongoose = require("mongoose");
 const cookieParser = require("cookie-parser");
+const Tokens = require("csrf");
 const swaggerUi = require("swagger-ui-express");
 const swaggerSpec = require("./utils/swagger");
 const { validateEnv } = require("./utils/envSchema");
@@ -30,6 +31,19 @@ const app = express();
 app.use(cookieParser());
 app.disable("x-powered-by");
 app.use(express.json());
+
+const tokens = new Tokens();
+app.use((req, res, next) => {
+  if (process.env.NODE_ENV === "test") return next();
+  if (["GET", "HEAD", "OPTIONS"].includes(req.method)) return next();
+  const secret = req.cookies["_csrfs"] || tokens.secretSync();
+  const clientToken = req.headers["x-csrf-token"];
+  if (!clientToken || !tokens.verify(secret, clientToken)) {
+    return res.status(403).json({ statusCode: 403, message: "Invalid CSRF token" });
+  }
+  next();
+});
+
 app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use("/api/", routes);
 

@@ -32,6 +32,9 @@ describe("Rewards Controller - Bonus Points", () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
+    jest
+      .spyOn(UserSessionService.prototype, "touchSession")
+      .mockResolvedValue(null);
   });
 
   afterAll(() => {

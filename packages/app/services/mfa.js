@@ -86,27 +86,23 @@ class MfaService {
    * Encrypts the temporary secret, persists it as the active secret,
    * enables MFA, and clears temporary setup fields.
    * @param {Object} user - The user entity.
-   * @returns {Promise<boolean>} - True on success, otherwise false.
+   * @returns {Promise<boolean>} - True when the user was updated, otherwise false.
+   * @throws {Error} If encryption or persistence fails.
    */
   async updateMfaUser(user) {
-    try {
-      const { encrypted, iv, tag } = encrypt(user.mfaTempSecret);
+    const { encrypted, iv, tag } = encrypt(user.mfaTempSecret);
 
-      const updatedUser = await this.userRepository.update(user._id, {
-        mfaEnabled: true,
-        mfaSecret: {
-          encryptedValue: encrypted,
-          encryptedIv: iv,
-          encryptedTag: tag,
-        },
-        mfaTempSecret: null,
-        mfaTempSecretExpiresAt: null,
-      });
-      return !!updatedUser;
-    } catch (error) {
-      console.log("Error in updateMfaUser:", error);
-      return false;
-    }
+    const updatedUser = await this.userRepository.update(user._id, {
+      mfaEnabled: true,
+      mfaSecret: {
+        encryptedValue: encrypted,
+        encryptedIv: iv,
+        encryptedTag: tag,
+      },
+      mfaTempSecret: null,
+      mfaTempSecretExpiresAt: null,
+    });
+    return !!updatedUser;
   }
 
   /**
@@ -131,23 +127,22 @@ class MfaService {
    * Decrypts the stored MFA secret and validates the provided token.
    * @param {Object} user - The user entity containing the encrypted MFA secret.
    * @param {string} token - The TOTP token provided by the user.
-   * @returns {Promise<boolean>} - True if verification succeeds, otherwise false.
+   * @returns {boolean} - True if the token matches the stored secret.
+   * @throws {Error} If the stored secret is missing or cannot be decrypted.
    */
   mfaLogin(user, token) {
+    const { encryptedValue, encryptedIv, encryptedTag } = user.mfaSecret ?? {};
+    if (!encryptedValue || !encryptedIv || !encryptedTag) {
+      throw new Error("MFA secret is missing for user");
+    }
+
+    const decryptedSecret = decrypt(encryptedValue, encryptedIv, encryptedTag);
+
     try {
-      const { encryptedValue, encryptedIv, encryptedTag } = user.mfaSecret;
-      const decryptedSecret = decrypt(
-        encryptedValue,
-        encryptedIv,
-        encryptedTag
-      );
-      const isVerified = authenticator.verify({
-        token,
-        secret: decryptedSecret,
-      });
-      return isVerified;
+      return authenticator.verify({ token, secret: decryptedSecret });
     } catch (error) {
-      console.log("Error in mfaLogin:", error);
+      // A malformed token is a client error, not a server failure.
+      console.warn("MFA token verification failed:", error.message);
       return false;
     }
   }

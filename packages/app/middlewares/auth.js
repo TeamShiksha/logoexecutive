@@ -59,7 +59,11 @@ module.exports = (options = {}) => {
         : 0;
 
       if (Date.now() - lastActiveTime > FIVE_MINUTES) {
-        userSessionService.touchSession(sessionId).catch(console.error);
+        try {
+          await userSessionService.touchSession(sessionId);
+        } catch (err) {
+          console.error("Failed to touch session:", err.message);
+        }
       }
 
       const user = validateSession?.userId;

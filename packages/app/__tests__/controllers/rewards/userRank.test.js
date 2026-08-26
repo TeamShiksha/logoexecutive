@@ -18,6 +18,9 @@ describe("Rewards Controller - Leaderboard Rank", () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
+    jest
+      .spyOn(UserSessionService.prototype, "touchSession")
+      .mockResolvedValue(undefined);
   });
 
   afterAll(() => {

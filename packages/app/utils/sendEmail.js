@@ -17,25 +17,30 @@ const { getIsProduction } = require("./constants");
 async function sendEmail({ id, subject, recipient, body, cc = [], bcc = [] }) {
   const payload = { id, subject, recipient, body, cc, bcc };
 
+  const isProduction = getIsProduction();
+  if (!isProduction) {
+    console.warn(`Development Mode\n${JSON.stringify(payload, null, 2)}`);
+    return;
+  }
+
   try {
-    const isProduction = getIsProduction();
-    if (isProduction) {
-      const response = await axios.post(
-        `${process.env.EMAIL_SERVICE_URL}`,
-        payload,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: process.env.EMAIL_SERVICE_AUTH_TOKEN,
-          },
-        }
-      );
-      console.info("Email sent successfully:", response.data);
-    } else {
-      console.warn(`Development Mode\n${JSON.stringify(payload, null, 2)}`);
-    }
+    const response = await axios.post(
+      `${process.env.EMAIL_SERVICE_URL}`,
+      payload,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: process.env.EMAIL_SERVICE_AUTH_TOKEN,
+        },
+      }
+    );
+    console.info("Email sent successfully:", response.data);
   } catch (error) {
     console.error("Email sending failed:", error.message);
+    const emailError = new Error("Failed to send email");
+    emailError.cause = error;
+    emailError.statusCode = 502;
+    throw emailError;
   }
 }
 

@@ -3,6 +3,7 @@ import { useState, useMemo, useCallback } from "react";
 import { instance } from "../api/api_instance";
 import { UserContext } from "./Contexts";
 import { useToast } from "../hooks/useToast";
+import { getErrorMessage } from "../utils/Helpers";
 
 export function UserProvider({ children }) {
   const toast = useToast();
@@ -17,8 +18,9 @@ export function UserProvider({ children }) {
       const data = res.data.data;
       setUserData(data);
     } catch (err) {
+      console.error("Failed to fetch user data:", err);
       setError(err);
-      toast.error(err);
+      toast.error(getErrorMessage(err, "Failed to load your profile"));
     } finally {
       setLoading(false);
     }

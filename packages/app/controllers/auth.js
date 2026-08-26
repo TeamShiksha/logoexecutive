@@ -97,14 +97,28 @@ async function signupController(req, res, next) {
       });
     }
 
-    await sendEmail({
-      id: 2,
-      subject: "Openlogo: Email Verification",
-      recipient: email,
-      body: {
-        url: verificationToken.tokenURL(),
-      },
-    });
+    try {
+      await sendEmail({
+        id: 2,
+        subject: "Openlogo: Email Verification",
+        recipient: email,
+        body: {
+          url: verificationToken.tokenURL(),
+        },
+      });
+    } catch (emailErr) {
+      // The account exists at this point, so surface the delivery failure
+      // instead of reporting an unqualified success.
+      console.error(
+        "Failed to send verification email:",
+        emailErr?.cause?.message || emailErr.message
+      );
+      return res.status(201).json({
+        message: Messages.VERIFICATION_EMAIL_FAILED,
+        statusCode: 201,
+        emailSent: false,
+      });
+    }
 
     return res.status(201).json({
       message: Messages.USER_CREATED,

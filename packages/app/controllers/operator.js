@@ -100,15 +100,29 @@ async function respondMessagesController(req, res, next) {
       });
     }
 
-    await sendEmail({
-      id: 3,
-      subject: "Response to Your Query",
-      recipient: formExists.email,
-      body: {
-        query: formExists.message,
-        response: reply,
-      },
-    });
+    try {
+      await sendEmail({
+        id: 3,
+        subject: "Response to Your Query",
+        recipient: formExists.email,
+        body: {
+          query: formExists.message,
+          response: reply,
+        },
+      });
+    } catch (emailErr) {
+      // The reply is already persisted, so report the delivery failure
+      // separately instead of claiming the response was delivered.
+      console.error(
+        "Failed to send operator response email:",
+        emailErr?.cause?.message || emailErr.message
+      );
+      return res.status(502).json({
+        statusCode: 502,
+        error: STATUS_CODES[502],
+        message: Messages.EMAIL_SEND_FAILED,
+      });
+    }
 
     const updatedDetails = {
       reply,

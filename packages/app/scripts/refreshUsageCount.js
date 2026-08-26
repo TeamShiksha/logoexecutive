@@ -43,7 +43,8 @@ if (require.main === module) {
     .then(() => {
       process.exit(0);
     })
-    .catch(() => {
+    .catch((error) => {
+      console.error("Failed to refresh usage count:", error);
       process.exit(1);
     });
 }

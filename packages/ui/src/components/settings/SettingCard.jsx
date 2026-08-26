@@ -95,7 +95,7 @@ function SettingCard({ isGuest }) {
       }
     } catch (err) {
       toast.error("An unexpected error occured during download");
-      console.log("Download error:", err);
+      console.error("Download error:", err);
     } finally {
       setIsDownloading(false);
     }

@@ -48,7 +48,7 @@ async function grabCompanyLogos(companyName, limit = 5) {
     };
   } catch (error) {
     console.warn("Failed to grab company logos:", error.message);
-    return { success: false, count: 0, logos: [] };
+    return { success: false, count: 0, logos: [], error: error.message };
   }
 }
 
@@ -58,7 +58,7 @@ function getCompanyDomain(companyName) {
   const encodedCompanyName = encodeURIComponent(companyName.trim());
   const requestUrl = `https://autocomplete.clearbit.com/v1/companies/suggest?query=${encodedCompanyName}`;
 
-  return new Promise((resolve) => {
+  return new Promise((resolve, reject) => {
     https
       .get(requestUrl, (response) => {
         let responseBody = "";
@@ -72,13 +72,19 @@ function getCompanyDomain(companyName) {
             const companies = JSON.parse(responseBody);
             const domain = companies?.[0]?.domain;
             resolve(domain ? `https://${domain}/` : null);
-          } catch {
-            console.warn("Clearbit response parse failed");
-            resolve(null);
+          } catch (error) {
+            reject(
+              new Error(
+                `Company lookup response parse failed: ${error.message}`
+              )
+            );
           }
         });
+        response.on("error", reject);
       })
-      .on("error", () => resolve(null));
+      .on("error", (error) =>
+        reject(new Error(`Company lookup request failed: ${error.message}`))
+      );
   });
 }
 function resolveUrl(baseDomain, imageSrc) {
@@ -133,9 +139,6 @@ async function scrapeHeaderImageUrls(siteUrl) {
     });
 
     return imageUrls;
-  } catch (error) {
-    console.error("Scraper Error:", error.message);
-    return [];
   } finally {
     if (browser) {
       await browser.close();

@@ -225,6 +225,9 @@ async function getCatalogController(req, res, next) {
     if (search && imageData?.data?.length === 0) {
       try {
         const webSearchResult = await grabCompanyLogos(search);
+        if (webSearchResult?.error) {
+          throw new Error(webSearchResult.error);
+        }
         if (webSearchResult?.logos?.length > 0) {
           const logoOptions = webSearchResult?.logos?.map((logo) => ({
             companyName: logo.companyName,

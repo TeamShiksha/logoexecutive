@@ -13,6 +13,16 @@ const PASSWORD_RULES = {
   specialCharRegex: /[!@#$%^&*(),.?":{}|<>]/,
 };
 
+/**
+ * Extracts a human readable message from an API or runtime error.
+ * Toasts render their message directly, so an error object must never be
+ * passed through as-is.
+ */
+export const getErrorMessage = (error, fallback = "Something went wrong") => {
+  if (typeof error === "string") return error || fallback;
+  return error?.response?.data?.message || error?.message || String(fallback);
+};
+
 export const isValidPassword = (password) => {
   const errors = {};
 
@@ -378,6 +388,8 @@ export const processWebImage = async (
           }
         } catch (e) {
           console.error("SVG parsing failed", e);
+          renderWidth = 500;
+          renderHeight = 500;
         }
       }
       canvas.width = renderWidth;

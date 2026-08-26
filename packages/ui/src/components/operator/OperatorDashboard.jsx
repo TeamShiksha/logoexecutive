@@ -4,7 +4,11 @@ import Modal from "../common/modal/Modal";
 import OperatorCard from "../operatorcard/OperatorCard";
 import LoadingSpinner from "../common/loadingspinner/LoadingSpinner";
 import { instance } from "../../api/api_instance";
-import { validate, processWebImage } from "../../utils/Helpers";
+import {
+  validate,
+  processWebImage,
+  getErrorMessage,
+} from "../../utils/Helpers";
 import Button from "../common/button/Button";
 import { useToast } from "../../hooks/useToast";
 import { BUTTON_TEXT, MESSAGES, MODAL_MESSAGES } from "../../utils/Constants";
@@ -146,11 +150,12 @@ const Operator = ({
         setTotalPages(response.data.totalPages || 1);
       } catch (err) {
         console.error("Error fetching messages:", err);
+        toast.error(getErrorMessage(err, "Failed to load messages"));
       } finally {
         setLoading(false);
       }
     },
-    [activeTab]
+    [activeTab, toast]
   );
 
   const fetchRequests = useCallback(
@@ -168,11 +173,12 @@ const Operator = ({
         setTotalPages(response.data.totalPages || 1);
       } catch (err) {
         console.error("Error fetching requests:", err);
+        toast.error(getErrorMessage(err, "Failed to load requests"));
       } finally {
         setLoading(false);
       }
     },
-    [activeTab]
+    [activeTab, toast]
   );
 
   const fetchLogos = useCallback(
@@ -190,11 +196,12 @@ const Operator = ({
         setTotalPages(response.data.totalPages || 1);
       } catch (error) {
         console.error("Error fetching logos:", error);
+        toast.error(getErrorMessage(error, "Failed to load logo requests"));
       } finally {
         setLoading(false);
       }
     },
-    [activeTab]
+    [activeTab, toast]
   );
 
   const handleResponseSubmit = async () => {

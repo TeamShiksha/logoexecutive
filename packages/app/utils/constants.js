@@ -125,6 +125,10 @@ const Messages = {
     "Cannot revoke current session. Use signout instead.",
   SESSION_LIMIT_EXCEEDED: "Maximum number of active sessions exceeded.",
   INVALID_ID: "Invalid ID format.",
+  VERIFICATION_EMAIL_FAILED:
+    "Account created, but the verification email could not be sent. Please request a new verification email.",
+  EMAIL_SEND_FAILED:
+    "The response was saved, but the notification email could not be sent.",
 };
 
 const MAX_SESSIONS_PER_USER = 5;

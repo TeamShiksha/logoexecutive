@@ -397,8 +397,8 @@ async function downloadUserData(req, res, next) {
     res.setHeader("Content-Disposition", `attachment; filename="${fileName}"`);
     res.status(200).send(jsonContent);
   } catch (err) {
+    console.error("Error building user data export:", err);
     next(err);
-    console.log("Error building user data export:", err);
   }
 }
 

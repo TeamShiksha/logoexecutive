@@ -30,6 +30,9 @@ describe("Rewards Controller - Search Transactions", () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
+    jest
+      .spyOn(UserSessionService.prototype, "touchSession")
+      .mockResolvedValue(undefined);
   });
 
   afterAll(() => {

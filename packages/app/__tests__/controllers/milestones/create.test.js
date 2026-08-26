@@ -33,6 +33,9 @@ describe("MilestoneConfig Controller – Create", () => {
   beforeEach(() => {
     jest.clearAllMocks();
     jest
+      .spyOn(UserSessionService.prototype, "touchSession")
+      .mockResolvedValue(undefined);
+    jest
       .spyOn(UserSessionService.prototype, "validateSession")
       .mockResolvedValue(adminSession);
   });

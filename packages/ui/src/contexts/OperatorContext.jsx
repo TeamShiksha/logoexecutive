@@ -3,6 +3,7 @@ import { useState, useMemo, useCallback } from "react";
 import { instance } from "../api/api_instance";
 import { OperatorContext } from "./Contexts";
 import { useToast } from "../hooks/useToast";
+import { getErrorMessage } from "../utils/Helpers";
 
 export function OperatorProvider({ children }) {
   const toast = useToast();
@@ -25,8 +26,9 @@ export function OperatorProvider({ children }) {
         const data = res.data;
         setQueries(data);
       } catch (err) {
+        console.error("Failed to fetch queries:", err);
         setError(err);
-        toast.error(err);
+        toast.error(getErrorMessage(err, "Failed to load queries"));
       } finally {
         setLoading(false);
       }

@@ -22,6 +22,16 @@ class UsersRepository extends BaseRepository {
   }
 
   /**
+   * Finds a user by an OAuth provider-scoped ID field.
+   * @param {string} providerIdField - Schema field name (e.g. googleId).
+   * @param {string} providerId - Provider-scoped user ID.
+   * @returns {Promise<Object|null>}
+   */
+  async findUserByProviderId(providerIdField, providerId) {
+    return await this.model.findOne({ [providerIdField]: providerId });
+  }
+
+  /**
    *
    * @returns {Promise<number>} - Total number of users.
    */

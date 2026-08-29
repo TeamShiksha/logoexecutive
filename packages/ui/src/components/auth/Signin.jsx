@@ -4,7 +4,13 @@ import { useNavigate } from "react-router-dom";
 import { Eye, EyeClosed, User } from "lucide-react";
 import CustomInput from "../common/input/CustomInput";
 import Button from "../common/button/Button";
-import { BRANDING, BUTTON_TEXT, MESSAGES, SIGNIN } from "../../utils/Constants";
+import {
+  BRANDING,
+  BUTTON_TEXT,
+  MESSAGES,
+  SIGNIN,
+  OAUTH_PROVIDERS,
+} from "../../utils/Constants";
 import styles from "./SignForm.module.css";
 import { validate } from "../../utils/Helpers";
 import { useApi } from "../../hooks/useApi";
@@ -12,8 +18,14 @@ import { AuthContext } from "../../contexts/Contexts";
 import { useToast } from "../../hooks/useToast.js";
 import Pin from "../pin/Pin";
 import { useTheme } from "../../hooks/useTheme.js";
+import OAuthIcons from "./OAuthIcons";
 
-const SignIn = ({ toggleForm, onClose, redirectAfterLogin = "/dashboard" }) => {
+const SignIn = ({
+  toggleForm,
+  onClose,
+  redirectAfterLogin = "/dashboard",
+  initialMfaRequired = false,
+}) => {
   const toast = useToast();
   const navigate = useNavigate();
   const [formData, setFormData] = useState(SIGNIN.initialValues);
@@ -24,11 +36,12 @@ const SignIn = ({ toggleForm, onClose, redirectAfterLogin = "/dashboard" }) => {
   const [isForgotPassword, setIsForgotPassword] = useState(false);
   const { setIsAuthenticated } = useContext(AuthContext);
   const [isLoading, setIsLoading] = useState(false);
+  const [oauthLoading, setOauthLoading] = useState(null);
   const isGuestLock = useRef(false);
   const [timer, setTimer] = useState(0);
   const [showPassword, setShowPassword] = useState(false);
   const { isDarkMode } = useTheme();
-  const [isMFAEnabled, setIsMFAEnabled] = useState(false);
+  const [isMFAEnabled, setIsMFAEnabled] = useState(initialMfaRequired);
 
   const { fetchRequest, errorMsg } = useApi({
     method: "post",
@@ -39,6 +52,11 @@ const SignIn = ({ toggleForm, onClose, redirectAfterLogin = "/dashboard" }) => {
   const { makeRequest: makeGuestRequest, errorMsg: guestErrorMsg } = useApi({
     method: "post",
     url: `/auth/signin?type=guest`,
+  });
+
+  const { fetchRequest: fetchOAuthUrl } = useApi({
+    method: "get",
+    url: "/auth/google",
   });
 
   useEffect(() => {
@@ -109,6 +127,24 @@ const SignIn = ({ toggleForm, onClose, redirectAfterLogin = "/dashboard" }) => {
 
     return () => clearInterval(interval);
   }, [timer]);
+
+  const handleOAuthClick = async (provider) => {
+    setOauthLoading(provider);
+    try {
+      const { data, success } = await fetchOAuthUrl({
+        url: `/auth/${provider}`,
+      });
+      if (success && data?.url) {
+        window.location.href = data.url;
+        return;
+      }
+      toast.error(data?.message || "Failed to start OAuth login");
+    } catch {
+      toast.error("Failed to start OAuth login");
+    } finally {
+      setOauthLoading(null);
+    }
+  };
 
   const handleSubmit = async (submitEvent) => {
     submitEvent.preventDefault();
@@ -312,6 +348,37 @@ const SignIn = ({ toggleForm, onClose, redirectAfterLogin = "/dashboard" }) => {
         )}
       </form>
 
+      {!isMFAEnabled && !isForgotPassword && (
+        <div className={styles["oauth-section"]}>
+          <div className={styles["oauth-divider"]}>{SIGNIN.oauthDivider}</div>
+          <div className={styles["oauth-buttons"]}>
+            {OAUTH_PROVIDERS.map((provider) => (
+              <button
+                key={provider.id}
+                type="button"
+                className={styles["oauth-button"]}
+                onClick={() => handleOAuthClick(provider.id)}
+                disabled={!!oauthLoading || isLoading}
+                aria-label={`Continue with ${provider.label}`}
+              >
+                {oauthLoading === provider.id ? (
+                  "Connecting..."
+                ) : (
+                  <>
+                    {OAuthIcons[provider.id] &&
+                      (() => {
+                        const Icon = OAuthIcons[provider.id];
+                        return <Icon />;
+                      })()}
+                    {provider.label}
+                  </>
+                )}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+
       <hr className={styles.separator} />
       <div className={styles["footer-wrapper"]}>
         <p onClick={handleGuestSignIn} className={styles["guest-sign-in"]}>
@@ -332,6 +399,7 @@ SignIn.propTypes = {
   toggleForm: PropTypes.func.isRequired,
   onClose: PropTypes.func,
   redirectAfterLogin: PropTypes.string,
+  initialMfaRequired: PropTypes.bool,
 };
 
 export default SignIn;

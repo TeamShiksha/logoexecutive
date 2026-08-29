@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Route, Routes } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Route, Routes, useSearchParams } from "react-router-dom";
 import Header from "./components/header/Header";
 import Home from "./page/home/Home";
 import Dashboard from "./page/dashboard/Dashboard";
@@ -16,14 +16,49 @@ import ResetPassword from "./components/auth/ResetPassword.jsx";
 import Release from "./page/release/Release.jsx";
 import CreateLogo from "./page/createlogo/CreateLogo.jsx";
 import UserSettings from "./components/usersettings/UserSettings.jsx";
+import { OAUTH_ERROR_MESSAGES } from "./utils/Constants";
+import { useToast } from "./hooks/useToast.js";
 
 function App() {
   const [authModal, setAuthModal] = useState(false);
   const [redirectAfterLogin, setRedirectAfterLogin] = useState("/dashboard");
+  const [initialMfaRequired, setInitialMfaRequired] = useState(false);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const toast = useToast();
+
   const openCloseAuthModal = (redirectPath = "/dashboard") => {
     setRedirectAfterLogin(redirectPath);
-    setAuthModal(!authModal);
+    setAuthModal((prev) => !prev);
+    if (authModal) {
+      setInitialMfaRequired(false);
+    }
   };
+
+  useEffect(() => {
+    const error = searchParams.get("error");
+    const mfaRequired = searchParams.get("mfaRequired");
+
+    if (error) {
+      toast.error(
+        OAUTH_ERROR_MESSAGES[error] || OAUTH_ERROR_MESSAGES.oauth_failed
+      );
+      setAuthModal(true);
+      const nextParams = new URLSearchParams(searchParams);
+      nextParams.delete("error");
+      setSearchParams(nextParams, { replace: true });
+      return;
+    }
+
+    if (mfaRequired === "true") {
+      setInitialMfaRequired(true);
+      setAuthModal(true);
+      const nextParams = new URLSearchParams(searchParams);
+      nextParams.delete("mfaRequired");
+      nextParams.delete("from");
+      setSearchParams(nextParams, { replace: true });
+    }
+  }, [searchParams, setSearchParams, toast]);
+
   return (
     <div className="app-container">
       <ScrollManager />
@@ -67,6 +102,7 @@ function App() {
         isOpen={authModal}
         onClose={openCloseAuthModal}
         redirectAfterLogin={redirectAfterLogin}
+        initialMfaRequired={initialMfaRequired}
       />{" "}
     </div>
   );

@@ -8,6 +8,7 @@ const {
   UserSessionService,
   PasswordResetService,
   MfaService,
+  AuthService,
 } = require("../services");
 const {
   signupPayloadSchema,
@@ -20,7 +21,9 @@ const {
   Messages,
   getIsProduction,
   SESSION_ID_REGEX,
+  OAuthErrorCodes,
 } = require("../utils/constants");
+const { generateAuthUrl, isSupportedProvider } = require("../utils/oauth");
 const dayjs = require("dayjs");
 /**
  * This controller validates the signup payload, checks if the email already exists,
@@ -981,6 +984,145 @@ async function signoutAllController(req, res, next) {
   }
 }
 
+/**
+ * Maps an OAuth error to a frontend-safe query parameter code.
+ * @param {Error} err
+ * @returns {string}
+ */
+function getOAuthRedirectError(err) {
+  if (err?.code && Object.values(OAuthErrorCodes).includes(err.code)) {
+    return err.code;
+  }
+  return OAuthErrorCodes.OAUTH_FAILED;
+}
+
+/**
+ * Initiates OAuth login for a supported provider.
+ * Validates the provider, generates the authorization URL, stores CSRF state
+ * in a short-lived cookie, and returns the URL for the frontend to redirect to.
+ */
+async function oauthAuthController(req, res, next) {
+  try {
+    const { provider } = req.params;
+
+    if (!isSupportedProvider(provider)) {
+      return res.status(400).json({
+        error: STATUS_CODES[400],
+        message: Messages.UNSUPPORTED_OAUTH_PROVIDER,
+        statusCode: 400,
+      });
+    }
+
+    const { url, state } = generateAuthUrl(provider);
+    const isProduction = getIsProduction();
+
+    res.cookie("oauth_state", state, {
+      httpOnly: true,
+      sameSite: "lax",
+      maxAge: 10 * 60 * 1000,
+      domain: isProduction ? ".openlogo.fyi" : "localhost",
+    });
+
+    return res.status(200).json({ statusCode: 200, url });
+  } catch (err) {
+    if (err.code === OAuthErrorCodes.OAUTH_FAILED) {
+      return res.status(500).json({
+        error: STATUS_CODES[500],
+        message: err.message,
+        statusCode: 500,
+      });
+    }
+    next(err);
+  }
+}
+
+/**
+ * Handles OAuth provider callbacks.
+ * Verifies CSRF state, exchanges the code via AuthService, checks MFA,
+ * creates a session (or MFA session), and redirects to the frontend.
+ */
+async function oauthCallbackController(req, res, next) {
+  const clientUrl = process.env.CLIENT_URL;
+  const isProduction = getIsProduction();
+  const clearStateCookie = () => {
+    res.clearCookie("oauth_state", {
+      httpOnly: true,
+      sameSite: "lax",
+      domain: isProduction ? ".openlogo.fyi" : "localhost",
+    });
+  };
+
+  try {
+    const { provider } = req.params;
+    const { code, state } = req.query;
+
+    if (!isSupportedProvider(provider)) {
+      clearStateCookie();
+      return res.redirect(
+        `${clientUrl}/?error=${OAuthErrorCodes.UNSUPPORTED_PROVIDER}`
+      );
+    }
+
+    const storedState = req.cookies.oauth_state;
+    if (!storedState || !state || storedState !== state) {
+      clearStateCookie();
+      return res.redirect(
+        `${clientUrl}/?error=${OAuthErrorCodes.INVALID_STATE}`
+      );
+    }
+
+    clearStateCookie();
+
+    if (!code) {
+      return res.redirect(
+        `${clientUrl}/?error=${OAuthErrorCodes.OAUTH_FAILED}`
+      );
+    }
+
+    const authService = new AuthService();
+    const user = await authService.processOAuthCallback(provider, code);
+
+    if (user.mfaEnabled) {
+      const mfaSessionService = new MfaService();
+      const mfaSession = await mfaSessionService.createSession({
+        userId: user._id,
+      });
+
+      res.cookie("mfaSessionId", mfaSession.sessionId, {
+        httpOnly: true,
+        sameSite: "strict",
+        expires: mfaSession.expiresAt,
+        domain: isProduction ? ".openlogo.fyi" : "localhost",
+      });
+
+      return res.redirect(`${clientUrl}/?mfaRequired=true&from=oauth`);
+    }
+
+    const userSessionService = new UserSessionService();
+    const session = await userSessionService.createSession({
+      userId: user._id,
+      userAgent: req.headers["user-agent"] || "",
+    });
+
+    const oneWeekValidityTimestamp = new Date(
+      Date.now() + 7 * 24 * 60 * 60 * 1000
+    );
+
+    res.cookie("sessionId", session.sessionId, {
+      expires: oneWeekValidityTimestamp,
+      sameSite: "strict",
+      httpOnly: true,
+      domain: isProduction ? ".openlogo.fyi" : "localhost",
+    });
+
+    return res.redirect(`${clientUrl}/dashboard`);
+  } catch (err) {
+    clearStateCookie();
+    const errorCode = getOAuthRedirectError(err);
+    return res.redirect(`${clientUrl}/?error=${errorCode}`);
+  }
+}
+
 module.exports = {
   signupController,
   signinController,
@@ -1000,4 +1142,6 @@ module.exports = {
   revokeSessionController,
   signoutOthersController,
   signoutAllController,
+  oauthAuthController,
+  oauthCallbackController,
 };

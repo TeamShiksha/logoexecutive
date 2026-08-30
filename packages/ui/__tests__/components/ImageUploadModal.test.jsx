@@ -115,7 +115,7 @@ describe("ImageUploadModal", () => {
       expect(screen.getByAltText("Preview")).toBeInTheDocument();
     });
 
-    const uploadButton = screen.getByRole("button", { name: /upload/i });
+    const uploadButton = screen.getByRole("button", { name: /replace logo/i });
     fireEvent.click(uploadButton);
 
     expect(onUpload).toHaveBeenCalledWith(

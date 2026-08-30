@@ -42,7 +42,7 @@ describe("CatalogItem Component", () => {
   it("Should pass correct props to Button component", () => {
     render(<CatalogItem company={mockCompany} onUpdate={mockOnUpdate} />);
 
-    const button = screen.getByText("Reupload");
+    const button = screen.getByText("Replace logo");
     expect(button).toHaveAttribute(
       "class",
       expect.stringContaining("reupload-btn")

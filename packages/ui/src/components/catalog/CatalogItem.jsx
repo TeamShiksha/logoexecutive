@@ -56,7 +56,7 @@ function CatalogItem({ company, onUpdate, onViewRewards }) {
             variant="primary"
             className={styles["reupload-btn"]}
           >
-            Reupload
+            Replace logo
           </Button>
         </div>
       </div>

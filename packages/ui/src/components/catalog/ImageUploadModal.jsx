@@ -119,6 +119,14 @@ const ImageUploadModal = ({
       size="custom"
       customWidth="500px"
     >
+      <div className={styles.modalHeader}>
+        <h2>{isUpdate ? "Replace logo" : "Add logo"}</h2>
+        <p>
+          {isUpdate
+            ? "Select a new image to replace the existing catalog logo."
+            : "Upload a logo to add it to the catalog."}
+        </p>
+      </div>
       {selectedImage ? (
         <form className={styles.previewContainer} onSubmit={handleUpload}>
           <img
@@ -142,7 +150,7 @@ const ImageUploadModal = ({
             isLoading={isLoading}
             onClick={handleUpload}
           >
-            {BUTTON_TEXT.upload}
+            {isUpdate ? "Replace logo" : BUTTON_TEXT.upload}
           </Button>
         </form>
       ) : (
@@ -163,7 +171,11 @@ const ImageUploadModal = ({
               <img src={SVGS.dragAndDropBg} alt="Upload icon" />
             </div>
             <p>{IMAGE_UPLOAD_MODEL.dragAndDropImage}</p>
-            <p>{IMAGE_UPLOAD_MODEL.or}</p>
+            <p className={styles.uploadHint}>
+              {isUpdate
+                ? "The existing logo will be replaced."
+                : IMAGE_UPLOAD_MODEL.or}
+            </p>
             <input
               ref={inputRef}
               type="file"

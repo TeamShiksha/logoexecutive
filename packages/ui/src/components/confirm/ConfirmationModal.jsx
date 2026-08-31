@@ -3,6 +3,7 @@ import Button from "../common/button/Button.jsx";
 import styles from "./ConfirmationModal.module.css";
 import PropTypes from "prop-types";
 import { CONFIRMATION_MODAL } from "../../utils/Constants.js";
+import { AlertTriangle } from "lucide-react";
 
 function ConfirmationModal({
   isOpen,
@@ -15,36 +16,83 @@ function ConfirmationModal({
   customHeading,
   customDescription,
   customWidth,
+  variant = "default",
 }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     onConfirm();
   };
 
+  const isApiKeyVariant = variant === "api-key";
+
   return (
-    <Modal onClose={onClose} isOpen={isOpen} customWidth={customWidth}>
-      <form onSubmit={handleSubmit}>
-        <h2 className={styles["confirm-modal-heading"]}>
-          {customHeading || CONFIRMATION_MODAL.heading}
-        </h2>
-        <div className={styles["confirm-modal-description"]}>
-          {customDescription || CONFIRMATION_MODAL.description}
+    <Modal
+      onClose={onClose}
+      isOpen={isOpen}
+      customWidth={customWidth}
+      customClass={isApiKeyVariant ? styles["confirm-modal"] : undefined}
+    >
+      {isApiKeyVariant ? (
+        <div
+          className={styles["confirm-wrapper"]}
+          data-testid="api-key-confirmation-layout"
+        >
+          <div className={styles.sidebar}>
+            <div className={styles["sidebar-content"]}>
+              <AlertTriangle
+                className={styles["sidebar-icon"]}
+                aria-hidden="true"
+              />
+              <h2 className={styles["confirm-modal-heading"]}>
+                {customHeading || CONFIRMATION_MODAL.heading}
+              </h2>
+            </div>
+          </div>
+
+          <form onSubmit={handleSubmit} className={styles["form-section"]}>
+            <div className={styles["confirm-modal-description"]}>
+              {customDescription || CONFIRMATION_MODAL.description}
+            </div>
+            {children}
+            <div className={styles["confirm-modal-button-wrapper"]}>
+              <Button type="button" variant="secondary" onClick={onClose}>
+                {CONFIRMATION_MODAL.secondaryButtonText}
+              </Button>
+              <Button
+                variant="danger"
+                type="submit"
+                disabled={isConfirmDisabled}
+                isLoading={isConfirmLoading}
+              >
+                {confirmButtonContent || CONFIRMATION_MODAL.primaryButtonText}
+              </Button>
+            </div>
+          </form>
         </div>
-        {children}
-        <div className={styles["confirm-modal-button-wrapper"]}>
-          <Button type="button" variant="secondary" onClick={onClose}>
-            {CONFIRMATION_MODAL.secondaryButtonText}
-          </Button>
-          <Button
-            variant="danger"
-            type="submit"
-            disabled={isConfirmDisabled}
-            isLoading={isConfirmLoading}
-          >
-            {confirmButtonContent || CONFIRMATION_MODAL.primaryButtonText}
-          </Button>
-        </div>
-      </form>
+      ) : (
+        <form onSubmit={handleSubmit}>
+          <h2 className={styles["confirm-modal-heading"]}>
+            {customHeading || CONFIRMATION_MODAL.heading}
+          </h2>
+          <div className={styles["confirm-modal-description"]}>
+            {customDescription || CONFIRMATION_MODAL.description}
+          </div>
+          {children}
+          <div className={styles["confirm-modal-button-wrapper"]}>
+            <Button type="button" variant="secondary" onClick={onClose}>
+              {CONFIRMATION_MODAL.secondaryButtonText}
+            </Button>
+            <Button
+              variant="danger"
+              type="submit"
+              disabled={isConfirmDisabled}
+              isLoading={isConfirmLoading}
+            >
+              {confirmButtonContent || CONFIRMATION_MODAL.primaryButtonText}
+            </Button>
+          </div>
+        </form>
+      )}
     </Modal>
   );
 }
@@ -60,6 +108,7 @@ ConfirmationModal.propTypes = {
   customHeading: PropTypes.node,
   customDescription: PropTypes.node,
   customWidth: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  variant: PropTypes.oneOf(["default", "api-key"]),
 };
 
 export default ConfirmationModal;

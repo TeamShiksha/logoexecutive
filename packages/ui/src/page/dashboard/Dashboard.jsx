@@ -379,6 +379,7 @@ function Dashboard() {
             isOpen={showModal}
             onClose={handleModalClose}
             onConfirm={handleDeleteKey}
+            variant="api-key"
             isConfirmDisabled={confirmKeyName !== selectedKey?.key_description}
             isConfirmLoading={isDeleting}
             confirmButtonContent={BUTTON_TEXT.delete}

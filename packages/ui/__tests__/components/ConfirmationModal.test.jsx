@@ -16,6 +16,14 @@ const defaultProps = {
 };
 
 describe("ConfirmationModal Component", () => {
+  it("renders the API-key layout only when the API-key variant is selected", () => {
+    render(<ConfirmationModal {...defaultProps} variant="api-key" />);
+
+    expect(
+      screen.getByTestId("api-key-confirmation-layout")
+    ).toBeInTheDocument();
+  });
+
   it("renders heading, description and buttons", () => {
     render(<ConfirmationModal {...defaultProps} />);
 

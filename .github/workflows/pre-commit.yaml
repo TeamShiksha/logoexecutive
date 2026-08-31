@@ -22,10 +22,10 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@v3 
+        uses: pnpm/action-setup@v3
         with:
-            version: 10
-      
+          version: 10
+
       - name: Check for folder changes
         id: filter
         uses: dorny/paths-filter@v2
@@ -35,7 +35,7 @@ jobs:
               - 'packages/ui/**'
             app:
               - 'packages/app/**'
-      
+
       - name: Install run dependencies if packages have changes
         if: steps.filter.outputs.ui == 'true' || steps.filter.outputs.app == 'true'
         run: pnpm install
@@ -53,7 +53,7 @@ jobs:
         run: |
           pnpm --filter ui coverage
           pnpm build
-      
+
       - name: backend coverage report
         if: always() && steps.filter.outputs.app == 'true'
         run: pnpm --filter app coverage
@@ -64,7 +64,7 @@ jobs:
         uses: nearform-actions/github-action-check-linked-issues@v1
         with:
           exclude-branches: "release/**, dependabot/**"
-      
+
       - name: Transfer Labels from Linked Issues
         if: always() && steps.linked-issues.outcome == 'success'
         uses: actions/github-script@v6

@@ -4478,112 +4478,92 @@
         }
       ],
       "description": "The `/me` endpoints let you manage information about the authenticated user."
-      },
-		{
-			"name": "Logo Request Logs",
-			"item": [
-				{
-					"name": "Logo Request Stats",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{openlogo_base_url}}/logo-requests/stats?period=week",
-							"host": [
-								"{{openlogo_base_url}}"
-							],
-							"path": [
-								"logo-requests",
-								"stats"
-							],
-							"query": [
-								{
-									"key": "period",
-									"value": "week"
-								}
-							]
-						}
-					},
-					"response": [
-						{
-							"name": "Successful Week Response",
-							"originalRequest": {
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "{{openlogo_base_url}}/logo-requests/stats?period=week",
-									"host": [
-										"{{openlogo_base_url}}"
-									],
-									"path": [
-										"logo-requests",
-										"stats"
-									],
-									"query": [
-										{
-											"key": "period",
-											"value": "week"
-										}
-									]
-								}
-							},
-							"_postman_previewlanguage": "Text",
-							"header": [],
-							"cookie": [],
-							"body": "{\n    \"statusCode\": 200,\n    \"data\": {\n        \"period\": \"week\",\n        \"startDate\": \"2025-12-13\",\n        \"endDate\": \"2025-12-20\",\n        \"summary\": {\n            \"totalCount\": 40,\n            \"totalKB\": \"25202.83\"\n        },\n        \"data\": [\n            {\n                \"count\": 1,\n                \"date\": \"2025-12-12\",\n                \"totalKB\": 667.84\n            },\n            {\n                \"count\": 1,\n                \"date\": \"2025-12-13\",\n                \"totalKB\": 626.64\n            },\n            {\n                \"count\": 10,\n                \"date\": \"2025-12-14\",\n                \"totalKB\": 5947.34\n            },\n            {\n                \"count\": 5,\n                \"date\": \"2025-12-15\",\n                \"totalKB\": 3454.75\n            },\n            {\n                \"count\": 4,\n                \"date\": \"2025-12-16\",\n                \"totalKB\": 2289.47\n            },\n            {\n                \"count\": 4,\n                \"date\": \"2025-12-17\",\n                \"totalKB\": 2593.2\n            },\n            {\n                \"count\": 5,\n                \"date\": \"2025-12-18\",\n                \"totalKB\": 3108.34\n            },\n            {\n                \"count\": 6,\n                \"date\": \"2025-12-19\",\n                \"totalKB\": 4048.73\n            },\n            {\n                \"count\": 4,\n                \"date\": \"2025-12-20\",\n                \"totalKB\": 2466.52\n            }\n        ]\n    }\n}"
-						},
-						{
-							"name": "Successful Month Response",
-							"originalRequest": {
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "{{openlogo_base_url}}/logo-requests/stats?period=month",
-									"host": [
-										"{{openlogo_base_url}}"
-									],
-									"path": [
-										"logo-requests",
-										"stats"
-									],
-									"query": [
-										{
-											"key": "period",
-											"value": "month"
-										}
-									]
-								}
-							},
-							"_postman_previewlanguage": "Text",
-							"header": [],
-							"cookie": [],
-							"body": "{\n    \"statusCode\": 200,\n    \"data\": {\n        \"period\": \"month\",\n        \"startDate\": \"2025-11-20\",\n        \"endDate\": \"2025-12-20\",\n        \"summary\": {\n            \"totalCount\": 189,\n            \"totalKB\": \"117547.47\"\n        },\n        \"data\": [\n            {\n                \"count\": 2,\n                \"date\": \"2025-11-19\",\n                \"totalKB\": 1385.65\n            },\n            {\n                \"count\": 9,\n                \"date\": \"2025-11-20\",\n                \"totalKB\": 5646\n            },\n            {\n                \"count\": 7,\n                \"date\": \"2025-11-21\",\n                \"totalKB\": 4721.44\n            },\n            {\n                \"count\": 9,\n                \"date\": \"2025-11-22\",\n                \"totalKB\": 5373.73\n            },\n            {\n                \"count\": 7,\n                \"date\": \"2025-11-23\",\n                \"totalKB\": 4497.53\n            },\n            {\n                \"count\": 9,\n                \"date\": \"2025-11-24\",\n                \"totalKB\": 5281.45\n            },\n            {\n                \"count\": 3,\n                \"date\": \"2025-11-25\",\n                \"totalKB\": 1804.77\n            },\n            {\n                \"count\": 7,\n                \"date\": \"2025-11-26\",\n                \"totalKB\": 4176.37\n            },\n            {\n                \"count\": 2,\n                \"date\": \"2025-11-27\",\n                \"totalKB\": 1398.36\n            },\n            {\n                \"count\": 5,\n                \"date\": \"2025-11-28\",\n                \"totalKB\": 3236.02\n            },\n            {\n                \"count\": 6,\n                \"date\": \"2025-11-29\",\n                \"totalKB\": 3391.46\n            },\n            {\n                \"count\": 6,\n                \"date\": \"2025-11-30\",\n                \"totalKB\": 3423.64\n            },\n            {\n                \"count\": 6,\n                \"date\": \"2025-12-01\",\n                \"totalKB\": 3530.04\n            },\n            {\n                \"count\": 4,\n                \"date\": \"2025-12-02\",\n                \"totalKB\": 2267\n            },\n            {\n                \"count\": 5,\n                \"date\": \"2025-12-03\",\n                \"totalKB\": 3051.57\n            },\n            {\n                \"count\": 8,\n                \"date\": \"2025-12-04\",\n                \"totalKB\": 5428.27\n            },\n            {\n                \"count\": 8,\n                \"date\": \"2025-12-05\",\n                \"totalKB\": 4698.04\n            },\n            {\n                \"count\": 7,\n                \"date\": \"2025-12-06\",\n                \"totalKB\": 4117.11\n            },\n            {\n                \"count\": 8,\n                \"date\": \"2025-12-07\",\n                \"totalKB\": 5124.04\n            },\n            {\n                \"count\": 5,\n                \"date\": \"2025-12-08\",\n                \"totalKB\": 3398.48\n            },\n            {\n                \"count\": 8,\n                \"date\": \"2025-12-09\",\n                \"totalKB\": 4923.91\n            },\n            {\n                \"count\": 5,\n                \"date\": \"2025-12-10\",\n                \"totalKB\": 2772.56\n            },\n            {\n                \"count\": 10,\n                \"date\": \"2025-12-11\",\n                \"totalKB\": 6483.59\n            },\n            {\n                \"count\": 4,\n                \"date\": \"2025-12-12\",\n                \"totalKB\": 2881.45\n            },\n            {\n                \"count\": 1,\n                \"date\": \"2025-12-13\",\n                \"totalKB\": 626.64\n            },\n            {\n                \"count\": 10,\n                \"date\": \"2025-12-14\",\n                \"totalKB\": 5947.34\n            },\n            {\n                \"count\": 5,\n                \"date\": \"2025-12-15\",\n                \"totalKB\": 3454.75\n            },\n            {\n                \"count\": 4,\n                \"date\": \"2025-12-16\",\n                \"totalKB\": 2289.47\n            },\n            {\n                \"count\": 4,\n                \"date\": \"2025-12-17\",\n                \"totalKB\": 2593.2\n            },\n            {\n                \"count\": 5,\n                \"date\": \"2025-12-18\",\n                \"totalKB\": 3108.34\n            },\n            {\n                \"count\": 6,\n                \"date\": \"2025-12-19\",\n                \"totalKB\": 4048.73\n            },\n            {\n                \"count\": 4,\n                \"date\": \"2025-12-20\",\n                \"totalKB\": 2466.52\n            }\n        ]\n    }\n}"
-						},
-						{
-							"name": "Missing Query Response",
-							"originalRequest": {
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "{{openlogo_base_url}}/logo-requests/stats",
-									"host": [
-										"{{openlogo_base_url}}"
-									],
-									"path": [
-										"logo-requests",
-										"stats"
-									]
-								}
-							},
-							"_postman_previewlanguage": "Text",
-							"header": [],
-							"cookie": [],
-							"body": "{\n    \"statusCode\": 422,\n    \"message\": \"Period is required\",\n    \"error\": \"Unprocessable Entity\"\n}"
-						}
-					]
-				}
-			],
-			"description": "The `/me` endpoints let you manage information about the authenticated user."
+    },
+    {
+      "name": "Logo Request Logs",
+      "item": [
+        {
+          "name": "Logo Request Stats",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{openlogo_base_url}}/logo-requests/stats?period=week",
+              "host": ["{{openlogo_base_url}}"],
+              "path": ["logo-requests", "stats"],
+              "query": [
+                {
+                  "key": "period",
+                  "value": "week"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "Successful Week Response",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{openlogo_base_url}}/logo-requests/stats?period=week",
+                  "host": ["{{openlogo_base_url}}"],
+                  "path": ["logo-requests", "stats"],
+                  "query": [
+                    {
+                      "key": "period",
+                      "value": "week"
+                    }
+                  ]
+                }
+              },
+              "_postman_previewlanguage": "Text",
+              "header": [],
+              "cookie": [],
+              "body": "{\n    \"statusCode\": 200,\n    \"data\": {\n        \"period\": \"week\",\n        \"startDate\": \"2025-12-13\",\n        \"endDate\": \"2025-12-20\",\n        \"summary\": {\n            \"totalCount\": 40,\n            \"totalKB\": \"25202.83\"\n        },\n        \"data\": [\n            {\n                \"count\": 1,\n                \"date\": \"2025-12-12\",\n                \"totalKB\": 667.84\n            },\n            {\n                \"count\": 1,\n                \"date\": \"2025-12-13\",\n                \"totalKB\": 626.64\n            },\n            {\n                \"count\": 10,\n                \"date\": \"2025-12-14\",\n                \"totalKB\": 5947.34\n            },\n            {\n                \"count\": 5,\n                \"date\": \"2025-12-15\",\n                \"totalKB\": 3454.75\n            },\n            {\n                \"count\": 4,\n                \"date\": \"2025-12-16\",\n                \"totalKB\": 2289.47\n            },\n            {\n                \"count\": 4,\n                \"date\": \"2025-12-17\",\n                \"totalKB\": 2593.2\n            },\n            {\n                \"count\": 5,\n                \"date\": \"2025-12-18\",\n                \"totalKB\": 3108.34\n            },\n            {\n                \"count\": 6,\n                \"date\": \"2025-12-19\",\n                \"totalKB\": 4048.73\n            },\n            {\n                \"count\": 4,\n                \"date\": \"2025-12-20\",\n                \"totalKB\": 2466.52\n            }\n        ]\n    }\n}"
+            },
+            {
+              "name": "Successful Month Response",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{openlogo_base_url}}/logo-requests/stats?period=month",
+                  "host": ["{{openlogo_base_url}}"],
+                  "path": ["logo-requests", "stats"],
+                  "query": [
+                    {
+                      "key": "period",
+                      "value": "month"
+                    }
+                  ]
+                }
+              },
+              "_postman_previewlanguage": "Text",
+              "header": [],
+              "cookie": [],
+              "body": "{\n    \"statusCode\": 200,\n    \"data\": {\n        \"period\": \"month\",\n        \"startDate\": \"2025-11-20\",\n        \"endDate\": \"2025-12-20\",\n        \"summary\": {\n            \"totalCount\": 189,\n            \"totalKB\": \"117547.47\"\n        },\n        \"data\": [\n            {\n                \"count\": 2,\n                \"date\": \"2025-11-19\",\n                \"totalKB\": 1385.65\n            },\n            {\n                \"count\": 9,\n                \"date\": \"2025-11-20\",\n                \"totalKB\": 5646\n            },\n            {\n                \"count\": 7,\n                \"date\": \"2025-11-21\",\n                \"totalKB\": 4721.44\n            },\n            {\n                \"count\": 9,\n                \"date\": \"2025-11-22\",\n                \"totalKB\": 5373.73\n            },\n            {\n                \"count\": 7,\n                \"date\": \"2025-11-23\",\n                \"totalKB\": 4497.53\n            },\n            {\n                \"count\": 9,\n                \"date\": \"2025-11-24\",\n                \"totalKB\": 5281.45\n            },\n            {\n                \"count\": 3,\n                \"date\": \"2025-11-25\",\n                \"totalKB\": 1804.77\n            },\n            {\n                \"count\": 7,\n                \"date\": \"2025-11-26\",\n                \"totalKB\": 4176.37\n            },\n            {\n                \"count\": 2,\n                \"date\": \"2025-11-27\",\n                \"totalKB\": 1398.36\n            },\n            {\n                \"count\": 5,\n                \"date\": \"2025-11-28\",\n                \"totalKB\": 3236.02\n            },\n            {\n                \"count\": 6,\n                \"date\": \"2025-11-29\",\n                \"totalKB\": 3391.46\n            },\n            {\n                \"count\": 6,\n                \"date\": \"2025-11-30\",\n                \"totalKB\": 3423.64\n            },\n            {\n                \"count\": 6,\n                \"date\": \"2025-12-01\",\n                \"totalKB\": 3530.04\n            },\n            {\n                \"count\": 4,\n                \"date\": \"2025-12-02\",\n                \"totalKB\": 2267\n            },\n            {\n                \"count\": 5,\n                \"date\": \"2025-12-03\",\n                \"totalKB\": 3051.57\n            },\n            {\n                \"count\": 8,\n                \"date\": \"2025-12-04\",\n                \"totalKB\": 5428.27\n            },\n            {\n                \"count\": 8,\n                \"date\": \"2025-12-05\",\n                \"totalKB\": 4698.04\n            },\n            {\n                \"count\": 7,\n                \"date\": \"2025-12-06\",\n                \"totalKB\": 4117.11\n            },\n            {\n                \"count\": 8,\n                \"date\": \"2025-12-07\",\n                \"totalKB\": 5124.04\n            },\n            {\n                \"count\": 5,\n                \"date\": \"2025-12-08\",\n                \"totalKB\": 3398.48\n            },\n            {\n                \"count\": 8,\n                \"date\": \"2025-12-09\",\n                \"totalKB\": 4923.91\n            },\n            {\n                \"count\": 5,\n                \"date\": \"2025-12-10\",\n                \"totalKB\": 2772.56\n            },\n            {\n                \"count\": 10,\n                \"date\": \"2025-12-11\",\n                \"totalKB\": 6483.59\n            },\n            {\n                \"count\": 4,\n                \"date\": \"2025-12-12\",\n                \"totalKB\": 2881.45\n            },\n            {\n                \"count\": 1,\n                \"date\": \"2025-12-13\",\n                \"totalKB\": 626.64\n            },\n            {\n                \"count\": 10,\n                \"date\": \"2025-12-14\",\n                \"totalKB\": 5947.34\n            },\n            {\n                \"count\": 5,\n                \"date\": \"2025-12-15\",\n                \"totalKB\": 3454.75\n            },\n            {\n                \"count\": 4,\n                \"date\": \"2025-12-16\",\n                \"totalKB\": 2289.47\n            },\n            {\n                \"count\": 4,\n                \"date\": \"2025-12-17\",\n                \"totalKB\": 2593.2\n            },\n            {\n                \"count\": 5,\n                \"date\": \"2025-12-18\",\n                \"totalKB\": 3108.34\n            },\n            {\n                \"count\": 6,\n                \"date\": \"2025-12-19\",\n                \"totalKB\": 4048.73\n            },\n            {\n                \"count\": 4,\n                \"date\": \"2025-12-20\",\n                \"totalKB\": 2466.52\n            }\n        ]\n    }\n}"
+            },
+            {
+              "name": "Missing Query Response",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{openlogo_base_url}}/logo-requests/stats",
+                  "host": ["{{openlogo_base_url}}"],
+                  "path": ["logo-requests", "stats"]
+                }
+              },
+              "_postman_previewlanguage": "Text",
+              "header": [],
+              "cookie": [],
+              "body": "{\n    \"statusCode\": 422,\n    \"message\": \"Period is required\",\n    \"error\": \"Unprocessable Entity\"\n}"
+            }
+          ]
+        }
+      ],
+      "description": "The `/me` endpoints let you manage information about the authenticated user."
     }
   ],
   "auth": {

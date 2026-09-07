@@ -17,12 +17,12 @@ function CustomInput({
   const isFocused = false;
 
   return (
-    <div className={styles.group}>
+    <div className={`${styles.group} ${className}`}>
       <input
         type={type}
         id={label}
         name={name}
-        className={`${styles["group-input"]} ${className}`}
+        className={styles["group-input"]}
         disabled={disabled}
         value={value}
         onFocus={onFocus}

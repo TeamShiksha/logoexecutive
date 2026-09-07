@@ -1,3 +1,20 @@
+.modalHeader {
+  padding: 0.5rem 1rem 1rem;
+}
+
+.modalHeader h2 {
+  margin: 0;
+  color: var(--black);
+  font-size: 1.25rem;
+}
+
+.modalHeader p {
+  margin: 0.35rem 0 0;
+  color: var(--description);
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
 .dropzone {
   border: 2px dashed var(--table-heading-bg);
   border-radius: 8px;
@@ -30,6 +47,11 @@
   border-radius: 4px;
   cursor: pointer;
   font-size: 1rem;
+}
+
+.uploadHint {
+  color: var(--description);
+  font-size: 0.875rem;
 }
 
 .previewContainer {

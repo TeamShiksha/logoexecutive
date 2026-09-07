@@ -144,9 +144,7 @@ describe("Operator Page", () => {
 
     renderOperator();
 
-    fireEvent.change(screen.getByRole("combobox"), {
-      target: { value: "requests" },
-    });
+    fireEvent.click(screen.getByRole("button", { name: "requests" }));
 
     await waitFor(() => {
       expect(screen.getByText("https://example.com")).toBeInTheDocument();
@@ -224,10 +222,10 @@ describe("Operator Page", () => {
     });
   });
 
-  it("renders Add image button and opens upload modal", async () => {
+  it("renders Add logo button and opens upload modal", async () => {
     renderOperator();
 
-    fireEvent.click(screen.getByText("Add image"));
+    fireEvent.click(screen.getByRole("button", { name: /add logo/i }));
 
     await waitFor(() => {
       expect(screen.getByTestId("image-upload-modal")).toBeInTheDocument();
@@ -237,7 +235,7 @@ describe("Operator Page", () => {
   it("closes image upload modal", async () => {
     renderOperator();
 
-    fireEvent.click(screen.getByText("Add image"));
+    fireEvent.click(screen.getByRole("button", { name: /add logo/i }));
 
     const modal = await screen.findByTestId("image-upload-modal");
 

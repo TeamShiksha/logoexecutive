@@ -214,6 +214,7 @@ describe("UserInfo Component", () => {
 
     await waitFor(() => {
       expect(mockMakeRequest).toHaveBeenCalled();
+      expect(saveButton).not.toBeDisabled();
     });
   });
 });

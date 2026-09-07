@@ -355,7 +355,9 @@ describe("Catalog Component", () => {
       </ToastContext.Provider>
     );
 
-    const reuploadButtons = screen.getAllByText("Reupload");
+    const reuploadButtons = screen.getAllByRole("button", {
+      name: /replace logo/i,
+    });
     expect(reuploadButtons.length).toBeGreaterThan(0);
 
     fireEvent.click(reuploadButtons[0]);

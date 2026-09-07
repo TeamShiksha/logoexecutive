@@ -81,6 +81,7 @@ const OperatorCard = ({ item, onRespondClick, searchType }) => {
                   <a
                     href={`${displayMessage}`}
                     target="_blank"
+                    rel="noreferrer"
                     className={styles["company-url"]}
                   >
                     {displayMessage}
@@ -93,26 +94,24 @@ const OperatorCard = ({ item, onRespondClick, searchType }) => {
                   <p className={styles.summary}>{item.comment}</p>
                 </div>
               )}
-              <div className={styles["button-container"]}>
-                {!isArchived && (
-                  <div className={styles["button-container"]}>
-                    <Button
-                      onClick={() => onRespondClick(item, "respond")}
-                      variant="primary"
-                      className={styles["respond-button"]}
-                    >
-                      {BUTTON_TEXT.respond}
-                    </Button>
-                    <Button
-                      onClick={() => onRespondClick(item, "reject")}
-                      variant="danger"
-                      className={styles["reject-button"]}
-                    >
-                      {BUTTON_TEXT.reject}
-                    </Button>
-                  </div>
-                )}
-              </div>
+              {!isArchived && (
+                <div className={styles["button-container"]}>
+                  <Button
+                    onClick={() => onRespondClick(item, "reject")}
+                    variant="danger"
+                    className={styles["reject-button"]}
+                  >
+                    {BUTTON_TEXT.reject}
+                  </Button>
+                  <Button
+                    onClick={() => onRespondClick(item, "respond")}
+                    variant="primary"
+                    className={styles["respond-button"]}
+                  >
+                    {BUTTON_TEXT.respond}
+                  </Button>
+                </div>
+              )}
             </div>
             {item.previewUrl && (
               <div className={styles["card-body-right"]}>

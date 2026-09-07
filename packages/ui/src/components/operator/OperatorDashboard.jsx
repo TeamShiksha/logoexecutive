@@ -8,7 +8,6 @@ import { validate, processWebImage } from "../../utils/Helpers";
 import Button from "../common/button/Button";
 import { useToast } from "../../hooks/useToast";
 import { BUTTON_TEXT, MESSAGES, MODAL_MESSAGES } from "../../utils/Constants";
-import Dropdown from "../common/dropdown/Dropdown";
 import ImageUploadModal from "../catalog/ImageUploadModal";
 import CustomInput from "../common/input/CustomInput";
 import { useApi } from "../../hooks/useApi";
@@ -86,6 +85,7 @@ const Operator = ({
   const [updatedImageCompanyUri, setUpdatedImageCompanyUri] = useState(null);
 
   const ITEMS_PER_PAGE = 6;
+  const hasCatalogSearch = searchTerm.trim().length >= 2;
 
   useEffect(() => {
     if (searchTerm.length < 2) {
@@ -108,10 +108,14 @@ const Operator = ({
     data: searchData,
     makeRequest: searchMakeRequest,
     loading: searchLoading,
+    errorMsg: searchErrorMsg,
   } = useApi({
     method: "GET",
     url: `/catalog/logos?skip=0&limit=10&search=${debouncedSearchTerm}`,
   });
+
+  const catalogSearchNotFound =
+    hasCatalogSearch && !searchLoading && searchErrorMsg === "Logo not found.";
 
   useEffect(() => {
     if (debouncedSearchTerm.length >= 2) {
@@ -120,6 +124,13 @@ const Operator = ({
   }, [debouncedSearchTerm, searchMakeRequest]);
 
   useEffect(() => {
+    if (debouncedSearchTerm.length < 2) {
+      setShowWebCatalog(false);
+      setShowWebResults(false);
+      setShowDbResults(false);
+      return;
+    }
+
     if (searchData?.source === "web-search") {
       setShowWebCatalog(true);
       setShowWebResults(false);
@@ -303,6 +314,11 @@ const Operator = ({
     setCurrentPage(1);
   };
 
+  const handleSearchTypeChange = (type) => {
+    setSearchType(type);
+    setCurrentPage(1);
+  };
+
   const goToPreviousPage = () => {
     setCurrentPage((prev) => Math.max(1, prev - 1));
   };
@@ -324,7 +340,7 @@ const Operator = ({
   };
 
   const { makeRequest: uploadMakeRequest, errorMsg: uploadErrorMsg } = useApi({
-    method: "POST",
+    method: updateImageId ? "PUT" : "POST",
     url: `/catalog/logo`,
     headers: { "Content-Type": "application/json" },
   });
@@ -580,41 +596,53 @@ const Operator = ({
       </div>
 
       <div className={operatorStyles["operator-container"]}>
-        <div className={operatorStyles["catalog-search"]}>
-          <CustomInput
-            name="search"
-            type="search"
-            label="Search"
-            value={searchTerm}
-            onChange={handleSearchTermChange}
-          />
-          <Button
-            onClick={() => {
-              setPreSelectedFile(null);
-              setPreFilledUri("");
-              setIsUploadModalOpen(true);
-            }}
-            variant="primary"
-            className={operatorStyles["catalog-add-image-btn"]}
-          >
-            Add image
-          </Button>
-          <ImageUploadModal
-            isOpen={isUploadModalOpen}
-            onClose={() => {
-              setIsUploadModalOpen(false);
-              setPreSelectedFile(null);
-              setPreFilledUri("");
-              setUpdateImageId(null);
-              setUpdatedImageCompanyUri(null);
-            }}
-            onUpload={updateImageId ? handleUpdateImage : handleImageUpload}
-            isUpdate={!!updateImageId}
-            isLoading={uploadLoading}
-            initialFile={preSelectedFile}
-            initialCompanyUri={preFilledUri}
-          />
-        </div>
+        <section
+          className={operatorStyles["catalog-section"]}
+          aria-labelledby="catalog-heading"
+        >
+          <div className={operatorStyles["catalog-section-header"]}>
+            <div>
+              <h2 id="catalog-heading">Catalog</h2>
+              <p>Search the catalog or add a logo for the operator queue.</p>
+            </div>
+            <Button
+              onClick={() => {
+                setPreSelectedFile(null);
+                setPreFilledUri("");
+                setIsUploadModalOpen(true);
+              }}
+              variant="primary"
+              className={operatorStyles["catalog-add-image-btn"]}
+            >
+              + Add logo
+            </Button>
+          </div>
+
+          <div className={operatorStyles["catalog-search"]}>
+            <CustomInput
+              name="search"
+              type="search"
+              label="Search by company name or URI"
+              value={searchTerm}
+              onChange={handleSearchTermChange}
+            />
+          </div>
+        </section>
+        <ImageUploadModal
+          isOpen={isUploadModalOpen}
+          onClose={() => {
+            setIsUploadModalOpen(false);
+            setPreSelectedFile(null);
+            setPreFilledUri("");
+            setUpdateImageId(null);
+            setUpdatedImageCompanyUri(null);
+          }}
+          onUpload={updateImageId ? handleUpdateImage : handleImageUpload}
+          isUpdate={!!updateImageId}
+          isLoading={uploadLoading}
+          initialFile={preSelectedFile}
+          initialCompanyUri={preFilledUri}
+        />
         {searchLoading && (
           <div
             className={operatorStyles["loading-container"]}
@@ -623,41 +651,46 @@ const Operator = ({
             <LoadingSpinner size={20} color="rgba(45, 8, 193, 1)" />
           </div>
         )}
-        {showWebCatalog && searchData?.source === "web-search" && (
-          <div className={operatorStyles["catalog-search-modal"]}>
-            <div className={operatorStyles["catalog-search-modal-header"]}>
-              <div className={operatorStyles["catalog-search-modal-title"]}>
-                Image Not Found in DB
-              </div>
-              <div
-                className={operatorStyles["catalog-search-modal-cross"]}
-                onClick={() => setShowWebCatalog(false)}
-              >
-                ✕
-              </div>
-            </div>
-            <div className={operatorStyles["web-search-catalog-body"]}>
-              <p>We could not find this image in our catalog database.</p>
-              <div className={operatorStyles["web-search-actions"]}>
-                <Button
-                  variant="primary"
-                  onClick={() => {
-                    setPreSelectedFile(null);
-                    setPreFilledUri("");
-                    setIsUploadModalOpen(true);
-                  }}
+        {hasCatalogSearch &&
+          showWebCatalog &&
+          searchData?.source === "web-search" && (
+            <div className={operatorStyles["catalog-search-modal"]}>
+              <div className={operatorStyles["catalog-search-modal-header"]}>
+                <div className={operatorStyles["catalog-search-modal-title"]}>
+                  Image Not Found in DB
+                </div>
+                <button
+                  type="button"
+                  className={operatorStyles["catalog-search-modal-cross"]}
+                  onClick={() => setShowWebCatalog(false)}
+                  aria-label="Close catalog search result"
                 >
-                  ADD IMAGE
-                </Button>
-                <Button variant="secondary" onClick={handleSearchOnWeb}>
-                  Search on Web
-                </Button>
+                  ✕
+                </button>
+              </div>
+              <div className={operatorStyles["web-search-catalog-body"]}>
+                <p>We could not find this image in our catalog database.</p>
+                <div className={operatorStyles["web-search-actions"]}>
+                  <Button
+                    variant="primary"
+                    onClick={() => {
+                      setPreSelectedFile(null);
+                      setPreFilledUri("");
+                      setIsUploadModalOpen(true);
+                    }}
+                  >
+                    ADD IMAGE
+                  </Button>
+                  <Button variant="secondary" onClick={handleSearchOnWeb}>
+                    Search on Web
+                  </Button>
+                </div>
               </div>
             </div>
-          </div>
-        )}
+          )}
 
-        {showWebResults &&
+        {hasCatalogSearch &&
+          showWebResults &&
           searchData?.source === "web-search" &&
           searchData?.data?.length > 0 && (
             <div className={operatorStyles["catalog-table-wrapper"]}>
@@ -699,7 +732,8 @@ const Operator = ({
             </div>
           )}
 
-        {showDbResults &&
+        {hasCatalogSearch &&
+          showDbResults &&
           searchData?.source === "db-search" &&
           searchData?.data?.data?.length > 0 && (
             <div className={operatorStyles["catalog-table-wrapper"]}>
@@ -744,7 +778,7 @@ const Operator = ({
                         variant="primary"
                         className={operatorStyles["reupload-btn"]}
                       >
-                        Reupload
+                        Replace logo
                       </Button>
                     </div>
                   </div>
@@ -753,27 +787,65 @@ const Operator = ({
             </div>
           )}
 
-        <div className={operatorStyles.header}>
+        {catalogSearchNotFound && (
+          <div className={operatorStyles["catalog-empty-state"]} role="status">
+            No matching logo found for “{searchTerm.trim()}”. You can add it to
+            the catalog using the button above.
+          </div>
+        )}
+
+        <div className={operatorStyles["workspace-tabs"]}>
+          {OperatorDashboardDropdownOptions.map((option) => (
+            <button
+              key={option}
+              type="button"
+              className={`${operatorStyles["workspace-tab"]} ${
+                searchType === option
+                  ? operatorStyles["workspace-tab-active"]
+                  : ""
+              }`}
+              onClick={() => handleSearchTypeChange(option)}
+              aria-pressed={searchType === option}
+            >
+              {option}
+            </button>
+          ))}
+        </div>
+
+        <div className={operatorStyles["queue-header"]}>
+          <div className={operatorStyles["queue-title"]}>
+            <h2>
+              {searchType === "messages"
+                ? "Message"
+                : searchType.charAt(0).toUpperCase() +
+                  searchType.slice(1, -1)}{" "}
+              queue
+            </h2>
+            {!loading && (
+              <span>
+                {filteredData.length}{" "}
+                {activeTab === "active" ? "pending" : "archived"}
+              </span>
+            )}
+          </div>
           <div className={operatorStyles["tabs-container"]}>
             <button
+              type="button"
               className={`${operatorStyles["tab-button"]} ${activeTab === "active" ? operatorStyles["active-tab"] : ""}`}
               onClick={() => handleTabChange("active")}
+              aria-pressed={activeTab === "active"}
             >
               Active
             </button>
             <button
+              type="button"
               className={`${operatorStyles["tab-button"]} ${activeTab === "archived" ? operatorStyles["active-tab"] : ""}`}
               onClick={() => handleTabChange("archived")}
+              aria-pressed={activeTab === "archived"}
             >
               Archived
             </button>
           </div>
-          <Dropdown
-            options={OperatorDashboardDropdownOptions}
-            selectedOption={searchType}
-            setSelectedOption={setSearchType}
-            className={operatorStyles["type-selector"]}
-          />
         </div>
 
         {contentToRender}

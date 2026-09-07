@@ -35,7 +35,7 @@ describe("CatalogItem Component", () => {
   it("Should render reupload button", () => {
     render(<CatalogItem company={mockCompany} onUpdate={mockOnUpdate} />);
 
-    const reuploadButton = screen.getByText("Reupload");
+    const reuploadButton = screen.getByText("Replace logo");
     expect(reuploadButton).toBeInTheDocument();
   });
 

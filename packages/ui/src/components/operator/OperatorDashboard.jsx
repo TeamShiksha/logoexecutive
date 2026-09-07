@@ -815,7 +815,10 @@ const Operator = ({
         <div className={operatorStyles["queue-header"]}>
           <div className={operatorStyles["queue-title"]}>
             <h2>
-              {searchType === "messages" ? "Message" : searchType.slice(0, -1)}{" "}
+              {searchType === "messages"
+                ? "Message"
+                : searchType.charAt(0).toUpperCase() +
+                  searchType.slice(1, -1)}{" "}
               queue
             </h2>
             {!loading && (

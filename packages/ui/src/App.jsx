@@ -16,12 +16,15 @@ import ResetPassword from "./components/auth/ResetPassword.jsx";
 import Release from "./page/release/Release.jsx";
 import CreateLogo from "./page/createlogo/CreateLogo.jsx";
 import UserSettings from "./components/usersettings/UserSettings.jsx";
+import OAuthCallbackHandler from "./components/auth/OAuthCallbackHandler.jsx";
 
 function App() {
   const [authModal, setAuthModal] = useState(false);
   const [redirectAfterLogin, setRedirectAfterLogin] = useState("/dashboard");
   const openCloseAuthModal = (redirectPath = "/dashboard") => {
-    setRedirectAfterLogin(redirectPath);
+    setRedirectAfterLogin(
+      typeof redirectPath === "string" ? redirectPath : "/dashboard"
+    );
     setAuthModal(!authModal);
   };
   return (
@@ -42,6 +45,14 @@ function App() {
           <Route
             path="/createlogo"
             element={<CreateLogo openAuthModal={openCloseAuthModal} />}
+          />
+          <Route
+            path="/api/auth/:provider/callback"
+            element={<OAuthCallbackHandler />}
+          />
+          <Route
+            path="/auth/:provider/callback"
+            element={<OAuthCallbackHandler />}
           />
           <Route
             path="/dashboard"

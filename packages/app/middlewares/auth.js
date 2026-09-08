@@ -23,9 +23,10 @@ module.exports = (options = {}) => {
        */
       const clearSessionCookie = () =>
         res.clearCookie("sessionId", {
-          sameSite: "strict",
+          sameSite: "lax",
           httpOnly: true,
-          domain: getIsProduction() ? ".openlogo.fyi" : "localhost",
+          path: "/",
+          ...(getIsProduction() ? { domain: ".openlogo.fyi" } : {}),
         });
 
       if (

@@ -16,14 +16,20 @@ const adminUsersRouter = require("./admin");
 
 const privateRouteCORS = {
   origin: (origin, callback) => {
-    if (origin === process.env.CLIENT_URL || !origin) {
+    const allowedOrigins = [
+      process.env.CLIENT_URL,
+      process.env.CLIENT_PROXY_URL,
+      "http://localhost:5173",
+      "http://127.0.0.1:5173",
+      "http://localhost:8080",
+      "http://127.0.0.1:8080",
+    ].filter(Boolean);
+
+    if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
       console.error(
-        `origin=${origin} and CLIENT_URL=${process.env.CLIENT_URL} do not match..`
-      );
-      console.error(
-        "What is cors ? Learn here: https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS"
+        `origin=${origin} and allowedOrigins=${allowedOrigins.join(", ")} do not match..`
       );
       callback(new Error("Not allowed by CORS"));
     }

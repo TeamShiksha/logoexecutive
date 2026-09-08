@@ -136,6 +136,72 @@ class UsersRepository extends BaseRepository {
     const total = result?.totalCount?.[0]?.count || 0;
     return { users, total };
   }
+
+  /**
+   * Finds a user by OAuth provider and provider ID.
+   * @param {string} provider - Provider name (e.g. 'google')
+   * @param {string} providerId - Provider user ID
+   * @returns {Promise<Object|null>}
+   */
+  async findUserByProvider(provider, providerId) {
+    return await this.model.findOne({
+      providers: {
+        $elemMatch: {
+          provider: provider.toLowerCase(),
+          providerId: String(providerId),
+        },
+      },
+    });
+  }
+
+  /**
+   * Links an OAuth provider to an existing user account.
+   * @param {string} userId
+   * @param {string} provider
+   * @param {string} providerId
+   * @returns {Promise<Object|null>}
+   */
+  async linkProvider(userId, provider, providerId) {
+    return await this.model.findByIdAndUpdate(
+      userId,
+      {
+        $addToSet: {
+          providers: {
+            provider: provider.toLowerCase(),
+            providerId: String(providerId),
+          },
+        },
+        $set: {
+          is_verified: true,
+          updated_at: new Date(),
+        },
+      },
+      { new: true }
+    );
+  }
+
+  /**
+   * Creates a new user authenticated via OAuth.
+   * @param {Object} userData
+   * @returns {Promise<Object>}
+   */
+  async createOAuthUser(userData) {
+    return await this.create({
+      name: userData.name,
+      email: userData.email,
+      role: userData.role,
+      is_verified: true,
+      subscription_id: userData.subscription_id,
+      is_deleted: false,
+      providers: [
+        {
+          provider: userData.provider.toLowerCase(),
+          providerId: String(userData.providerId),
+        },
+      ],
+      updated_at: new Date(),
+    });
+  }
 }
 
 module.exports = UsersRepository;

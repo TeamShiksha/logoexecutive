@@ -11,10 +11,16 @@ export default defineConfig(({ mode }) => {
       host: true,
       port: 8080,
       allowedHosts: [".openlogo.fyi"],
+      proxy: {
+        "/api": {
+          target: "http://127.0.0.1:5000",
+          changeOrigin: true,
+          secure: false,
+        },
+      },
     },
     define: {
-      "process.env.API_BASE_URL":
-        JSON.stringify(env.API_BASE_URL) || process.env.API_BASE_URL,
+      "process.env.API_BASE_URL": JSON.stringify(env.API_BASE_URL || ""),
     },
   };
 });

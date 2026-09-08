@@ -224,9 +224,10 @@ async function signinController(req, res, next) {
 
     const sessionCookieOptions = {
       expires: oneDayValidityTimestamp,
-      sameSite: "strict",
+      sameSite: "lax",
       httpOnly: true,
-      domain: isProduction ? ".openlogo.fyi" : "localhost",
+      path: "/",
+      ...(isProduction ? { domain: ".openlogo.fyi" } : {}),
     };
 
     res.cookie("sessionId", session.sessionId, sessionCookieOptions);
@@ -295,7 +296,7 @@ async function verifyEmailController(req, res, next) {
     const sendEmailService = new SendEmailService();
     const { token } = req.params;
 
-    if (!token) {
+    if (!token || !token.trim()) {
       return res.status(422).json({
         error: STATUS_CODES[422],
         message: Messages.INVALID_TOKEN,
@@ -969,9 +970,10 @@ async function signoutAllController(req, res, next) {
 
     const isProduction = getIsProduction();
     const cookieOptions = {
-      sameSite: "strict",
+      sameSite: "lax",
       httpOnly: true,
-      domain: isProduction ? ".openlogo.fyi" : "localhost",
+      path: "/",
+      ...(isProduction ? { domain: ".openlogo.fyi" } : {}),
     };
 
     res.clearCookie("sessionId", cookieOptions);
@@ -1000,4 +1002,250 @@ module.exports = {
   revokeSessionController,
   signoutOthersController,
   signoutAllController,
+  oauthInitiateController,
+  oauthCallbackController,
 };
+
+/**
+ * Controller to initiate OAuth login flow for a given provider (e.g. google).
+ * Generates authorization URL and CSRF state token cookie.
+ */
+function oauthInitiateController(req, res, next) {
+  try {
+    const { provider } = req.params;
+    const oauthUtility = require("../utils/oauth");
+
+    if (!oauthUtility.isProviderSupported(provider)) {
+      return res.status(400).json({
+        error: STATUS_CODES[400],
+        message: `Unsupported auth provider: ${provider}`,
+        statusCode: 400,
+      });
+    }
+
+    const state = oauthUtility.generateState();
+    const isProduction = getIsProduction();
+    const cookieDomainOptions = isProduction ? { domain: ".openlogo.fyi" } : {};
+
+    const clientUrl =
+      req.query.client_url ||
+      req.headers.origin ||
+      (req.headers.referer ? new URL(req.headers.referer).origin : null) ||
+      process.env.CLIENT_URL ||
+      process.env.CLIENT_PROXY_URL ||
+      "http://localhost:5173";
+
+    res.cookie("oauth_state", state, {
+      httpOnly: true,
+      sameSite: "lax",
+      path: "/",
+      maxAge: 10 * 60 * 1000,
+      ...cookieDomainOptions,
+    });
+
+    res.cookie("oauth_client_url", clientUrl, {
+      httpOnly: true,
+      sameSite: "lax",
+      path: "/",
+      maxAge: 10 * 60 * 1000,
+      ...cookieDomainOptions,
+    });
+
+    const url = oauthUtility.getAuthUrl(provider, state);
+
+    if (req.headers.accept?.includes("text/html")) {
+      return res.redirect(url);
+    }
+
+    return res.status(200).json({
+      statusCode: 200,
+      url,
+    });
+  } catch (err) {
+    next(err);
+  }
+}
+
+/**
+ * Controller to handle OAuth callback from provider.
+ * Validates CSRF state, exchanges code for user profile, manages MFA / session cookie creation,
+ * and redirects user back to frontend.
+ */
+async function oauthCallbackController(req, res) {
+  const isProduction = getIsProduction();
+  const cookieDomainOptions = isProduction ? { domain: ".openlogo.fyi" } : {};
+
+  const clientUrl =
+    req.cookies?.oauth_client_url ||
+    process.env.CLIENT_URL ||
+    process.env.CLIENT_PROXY_URL ||
+    "http://localhost:5173";
+
+  const isJsonRequest =
+    req.headers.accept?.includes("application/json") ||
+    req.headers["x-requested-with"] === "XMLHttpRequest";
+
+  const renderScriptRedirect = (targetUrl) => {
+    if (isJsonRequest) {
+      const urlObj = new URL(targetUrl, "http://localhost");
+      const errParam = urlObj.searchParams.get("error");
+      if (errParam) {
+        return res.status(400).json({
+          statusCode: 400,
+          error: "OAuth Error",
+          message: errParam,
+        });
+      }
+      return res.status(200).json({
+        statusCode: 200,
+        success: true,
+        redirectUrl: targetUrl,
+      });
+    }
+
+    return res.status(200).send(`
+      <!DOCTYPE html>
+      <html lang="en">
+      <head>
+        <meta charset="UTF-8">
+        <title>Authenticating...</title>
+        <style>
+          body {
+            font-family: system-ui, -apple-system, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #0f172a;
+            color: #f8fafc;
+          }
+          .card {
+            text-align: center;
+            padding: 2rem;
+            border-radius: 12px;
+            background-color: #1e293b;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+          }
+          .spinner {
+            border: 3px solid rgba(255,255,255,0.1);
+            border-top: 3px solid #6366f1;
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto 1rem;
+          }
+          @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        </style>
+      </head>
+      <body>
+        <div class="card">
+          <div class="spinner"></div>
+          <h2>Authentication Successful</h2>
+          <p>Redirecting to application...</p>
+        </div>
+        <script>
+          setTimeout(function() {
+            window.location.href = ${JSON.stringify(targetUrl)};
+          }, 50);
+        </script>
+      </body>
+      </html>
+    `);
+  };
+
+  try {
+    const { provider } = req.params;
+    const { code, state, error: providerError } = req.query;
+    const savedState = req.cookies?.oauth_state;
+
+    res.clearCookie("oauth_state", { path: "/", ...cookieDomainOptions });
+    res.clearCookie("oauth_client_url", { path: "/", ...cookieDomainOptions });
+
+    if (providerError) {
+      return renderScriptRedirect(
+        `${clientUrl}/?error=${encodeURIComponent(providerError)}`
+      );
+    }
+
+    if (!code) {
+      return renderScriptRedirect(`${clientUrl}/?error=no_code_provided`);
+    }
+
+    // Validate state token if savedState was set
+    if (savedState && state !== savedState) {
+      return renderScriptRedirect(`${clientUrl}/?error=invalid_state`);
+    }
+
+    const AuthService = require("../services/auth");
+    const UserSessionService = require("../services/userSession");
+    const MfaService = require("../services/mfa");
+
+    const authService = new AuthService();
+    const userSessionService = new UserSessionService();
+    const mfaSessionService = new MfaService();
+
+    const user = await authService.processOAuthCallback(provider, code);
+
+    if (user.mfaEnabled) {
+      const mfaSession = await mfaSessionService.createSession({
+        userId: user._id,
+      });
+      res.cookie("mfaSessionId", mfaSession.sessionId, {
+        httpOnly: true,
+        sameSite: "lax",
+        path: "/",
+        expires: mfaSession.expiresAt,
+        ...cookieDomainOptions,
+      });
+      return renderScriptRedirect(`${clientUrl}/?mfa=true&oauth=true`);
+    }
+
+    const session = await userSessionService.createSession({
+      userId: user._id,
+      userAgent: req.headers["user-agent"] || "",
+    });
+
+    const currentDate = new Date();
+    const oneDayValidityTimestamp = new Date(
+      currentDate.getTime() + 7 * 24 * 60 * 60 * 1000
+    );
+
+    const sessionCookieOptions = {
+      expires: oneDayValidityTimestamp,
+      sameSite: "lax",
+      httpOnly: true,
+      path: "/",
+      ...cookieDomainOptions,
+    };
+
+    res.cookie("sessionId", session.sessionId, sessionCookieOptions);
+
+    if (isJsonRequest) {
+      return res.status(200).json({
+        statusCode: 200,
+        success: true,
+        message: "OAuth login successful",
+        data: {
+          user: user.data(),
+        },
+      });
+    }
+
+    return renderScriptRedirect(`${clientUrl}/dashboard`);
+  } catch (err) {
+    console.error("OAuth callback processing error:", err);
+    const errorCode =
+      err.code ||
+      (err.message === "Account has been deleted."
+        ? "account_deleted"
+        : err.response?.data?.error_description ||
+          err.response?.data?.error ||
+          err.message ||
+          "oauth_failed");
+    return renderScriptRedirect(
+      `${clientUrl}/?error=${encodeURIComponent(errorCode)}`
+    );
+  }
+}

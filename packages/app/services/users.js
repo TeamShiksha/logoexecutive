@@ -394,6 +394,45 @@ class UserService {
       console.error("Failed to create API request entry:", err.message);
     }
   }
+
+  /**
+   * Gets user by OAuth provider and provider ID.
+   * @param {string} provider - Provider name (e.g. 'google')
+   * @param {string} providerId - Provider user ID
+   * @returns {Promise<Object|null>}
+   */
+  async getUserByProviderId(provider, providerId) {
+    return await this.userRepository.findUserByProvider(provider, providerId);
+  }
+
+  /**
+   * Links an OAuth provider to an existing user account.
+   * @param {string} userId - The user's ID
+   * @param {string} provider - Provider name
+   * @param {string} providerId - Provider user ID
+   * @returns {Promise<Object|null>}
+   */
+  async linkProviderId(userId, provider, providerId) {
+    return await this.userRepository.linkProvider(userId, provider, providerId);
+  }
+
+  /**
+   * Creates a new user authenticated via OAuth.
+   * @param {Object} userDetails - User information
+   * @returns {Promise<Object>}
+   */
+  async createOAuthUser(userDetails) {
+    const userRole = this.getRole(userDetails.email);
+
+    return await this.userRepository.createOAuthUser({
+      name: userDetails.name,
+      email: userDetails.email,
+      role: userRole,
+      subscription_id: userDetails.subscription_id,
+      provider: userDetails.provider,
+      providerId: userDetails.providerId,
+    });
+  }
 }
 
 module.exports = UserService;

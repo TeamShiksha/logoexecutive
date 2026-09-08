@@ -1,7 +1,11 @@
 import axios from "axios";
 
+const apiBase = process.env.API_BASE_URL
+  ? `${process.env.API_BASE_URL}/api`
+  : "/api";
+
 export const instance = axios.create({
-  baseURL: `${process.env.API_BASE_URL}/api`,
+  baseURL: apiBase,
   headers: {
     "Content-Type": "application/json",
   },
@@ -17,12 +21,6 @@ export const instance = axios.create({
 instance.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response?.status === 401) {
-      if (globalThis.location.pathname !== "/") {
-        localStorage.clear();
-        globalThis.location.href = "/";
-      }
-    }
     return Promise.reject(error);
   }
 );

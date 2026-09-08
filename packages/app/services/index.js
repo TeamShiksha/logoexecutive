@@ -14,6 +14,7 @@ const RewardsService = require("./rewards");
 const MilestoneConfigService = require("./milestoneConfig");
 const RewardTransactionsService = require("./rewardTransactions");
 const MfaService = require("./mfa");
+const AuthService = require("./auth");
 
 module.exports = {
   ContactUsService,
@@ -32,4 +33,5 @@ module.exports = {
   RewardTransactionsService,
   MilestoneConfigService,
   MfaService,
+  AuthService,
 };

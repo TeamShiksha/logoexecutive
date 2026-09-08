@@ -21,8 +21,16 @@ const userSchema = new mongoose.Schema({
   },
   password: {
     type: String,
-    required: true,
+    required: function () {
+      return !this.providers || this.providers.length === 0;
+    },
   },
+  providers: [
+    {
+      provider: { type: String, required: true },
+      providerId: { type: String, required: true },
+    },
+  ],
   role: {
     type: String,
     required: true,
@@ -91,6 +99,7 @@ const userSchema = new mongoose.Schema({
 });
 
 userSchema.methods.matchPassword = async function (password) {
+  if (!this.password) return false;
   return await bcrypt.compare(password, this.password);
 };
 
@@ -122,7 +131,9 @@ userSchema.methods.data = function () {
     email: this.email,
     role: this.role,
     is_verified: this.is_verified,
-    subscription_id: this.subscription_id.toString(),
+    subscription_id: this.subscription_id
+      ? this.subscription_id.toString()
+      : null,
     userId: this._id.toString(),
     created_at: this._id.getTimestamp(),
     is_deleted: this.is_deleted,

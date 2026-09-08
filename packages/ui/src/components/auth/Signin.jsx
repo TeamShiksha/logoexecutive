@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { Eye, EyeClosed, User } from "lucide-react";
 import CustomInput from "../common/input/CustomInput";
 import Button from "../common/button/Button";
+import GoogleAuthButton from "./GoogleAuthButton";
 import { BRANDING, BUTTON_TEXT, MESSAGES, SIGNIN } from "../../utils/Constants";
 import styles from "./SignForm.module.css";
 import { validate } from "../../utils/Helpers";
@@ -290,20 +291,30 @@ const SignIn = ({ toggleForm, onClose, redirectAfterLogin = "/dashboard" }) => {
         )}
 
         {!isMFAEnabled && (
-          <Button
-            type="submit"
-            variant="primary"
-            className={styles["submit-button"]}
-            isLoading={isLoading}
-            disabled={
-              !isFormValid ||
-              isSubmit ||
-              isLoading ||
-              (isForgotPassword && timer > 0)
-            }
-          >
-            {isForgotPassword ? BUTTON_TEXT.submit : BUTTON_TEXT.signIn}
-          </Button>
+          <>
+            <Button
+              type="submit"
+              variant="primary"
+              className={styles["submit-button"]}
+              isLoading={isLoading}
+              disabled={
+                !isFormValid ||
+                isSubmit ||
+                isLoading ||
+                (isForgotPassword && timer > 0)
+              }
+            >
+              {isForgotPassword ? BUTTON_TEXT.submit : BUTTON_TEXT.signIn}
+            </Button>
+            {!isForgotPassword && (
+              <div className={styles["form-width"]}>
+                <div className={styles["oauth-divider"]}>
+                  <span>OR</span>
+                </div>
+                <GoogleAuthButton label="Continue with Google" />
+              </div>
+            )}
+          </>
         )}
         {isForgotPassword && timer > 0 && (
           <p className={styles["timer"]}>

@@ -20,6 +20,8 @@ const {
   revokeSessionController,
   signoutOthersController,
   signoutAllController,
+  oauthInitiateController,
+  oauthCallbackController,
 } = require("../controllers/auth");
 
 router.post("/signup", signupController);
@@ -45,5 +47,8 @@ router.delete(
 );
 router.post("/signout/others", authMiddleware(), signoutOthersController);
 router.post("/signout/all", authMiddleware(), signoutAllController);
+
+router.get("/:provider", oauthInitiateController);
+router.get("/:provider/callback", oauthCallbackController);
 
 module.exports = router;

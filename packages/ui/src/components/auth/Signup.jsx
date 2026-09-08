@@ -2,6 +2,7 @@ import { useState, useEffect, useMemo } from "react";
 import { Eye, EyeClosed } from "lucide-react";
 import CustomInput from "../common/input/CustomInput";
 import Button from "../common/button/Button";
+import GoogleAuthButton from "./GoogleAuthButton";
 import PropTypes from "prop-types";
 import { SIGNUP, BUTTON_TEXT, MESSAGES, BRANDING } from "../../utils/Constants";
 import styles from "./SignForm.module.css";
@@ -283,6 +284,13 @@ function SignUp({ toggleForm, onClose }) {
         >
           {BUTTON_TEXT.signUp}
         </Button>
+
+        <div className={styles["form-width"]}>
+          <div className={styles["oauth-divider"]}>
+            <span>OR</span>
+          </div>
+          <GoogleAuthButton label="Continue with Google" />
+        </div>
       </form>
 
       {/* Terms & Privacy */}

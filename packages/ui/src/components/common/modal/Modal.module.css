@@ -20,11 +20,26 @@
   border-radius: 12px;
   position: relative;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-  padding: 3rem;
+  padding: 2.25rem 2rem;
   z-index: 1100;
-  overflow: visible;
   margin: 1rem;
   width: 350px;
+  max-height: 85vh;
+  overflow-y: auto;
+  box-sizing: border-box;
+}
+
+.modal::-webkit-scrollbar {
+  width: 6px;
+}
+
+.modal::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.modal::-webkit-scrollbar-thumb {
+  background: rgba(156, 163, 175, 0.35);
+  border-radius: 9999px;
 }
 
 .close-button {

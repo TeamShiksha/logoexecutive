@@ -754,6 +754,19 @@ export const API_KEY_TABLE = {
     "Your api keys will be visible here, click on generate key to add new api key",
 };
 
+export const PUBLISHABLE_KEY_TABLE = {
+  headers: [
+    "Description",
+    "Status",
+    "Allowed Origins",
+    "Created",
+    "Expires",
+    "Action",
+  ],
+  emptyMessage:
+    "Your publishable keys will be visible here, click on generate key to add new publishable key",
+};
+
 export const DASHBOARD_CARDS_TITLE = ["Usage", "Generate New API Key"];
 export const USER_SETTINGS_TITLE = [
   "Plan",
@@ -834,6 +847,45 @@ export const API_KEY = {
     modal: {
       title: "Delete API Key",
       description: "Are you sure you want to delete the API key",
+      warning: "This action cannot be undone.",
+    },
+  },
+};
+
+export const PUBLISHABLE_KEY = {
+  generation: {
+    success: "Publishable key generated successfully",
+    error: "Failed to generate publishable key",
+    descriptionRequired: "Please enter a description for the publishable key",
+    originRequired: "At least one allowed origin is required",
+    invalidOrigin:
+      "Origin must be in the format http://localhost:8080 or https://example.com",
+    duplicateOrigin: "Duplicate origins are not allowed",
+    modal: {
+      title: "Your Publishable Key",
+      warning:
+        "Please copy your publishable key. Publishable keys are safe for public client-side applications.",
+      expiryLabel: "This key will expire on:",
+    },
+  },
+  edit: {
+    success: "Publishable key updated successfully",
+    error: "Failed to update publishable key",
+    modal: {
+      title: "Edit Publishable Key",
+      subtitle: "Update status, origin restrictions, and allowed origins.",
+    },
+  },
+  copy: {
+    success: "Publishable key copied to clipboard",
+  },
+  delete: {
+    success: "Publishable key deleted successfully",
+    error: "Failed to delete publishable key",
+    invalidKey: "Invalid publishable key selected",
+    modal: {
+      title: "Delete Publishable Key",
+      description: "Are you sure you want to delete the publishable key",
       warning: "This action cannot be undone.",
     },
   },

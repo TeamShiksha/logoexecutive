@@ -17,6 +17,12 @@ import Dropdown from "../../../src/components/common/dropdown/Dropdown";
 
 /* ---------------- mocks ---------------- */
 
+vi.mock("../../../src/api/api_instance", () => ({
+  instance: {
+    patch: vi.fn().mockResolvedValue({ data: {} }),
+  },
+}));
+
 vi.mock("../../src/hooks/useApi.js", () => ({
   useApi: vi.fn(() => ({
     makeRequest: vi.fn(),
@@ -565,6 +571,110 @@ describe("API Key Deletion", () => {
 
     await waitFor(() => {
       expect(confirmButton).toBeEnabled();
+    });
+  });
+});
+
+describe("Publishable Keys Sub-Tab", () => {
+  it("renders key type sub-tabs and switches to Publishable Keys", async () => {
+    const userContext = mockUserContext(MOCK_USER_DATA, false);
+    renderDashboard({ userContextValue: userContext });
+
+    expect(
+      screen.getByRole("button", { name: /API Keys/i })
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: /Publishable Keys/i })
+    ).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole("button", { name: /Publishable Keys/i }));
+
+    await waitFor(() => {
+      expect(screen.getByText("Active Publishable Keys")).toBeInTheDocument();
+      expect(
+        screen.getByRole("heading", { name: "Generate Publishable Key" })
+      ).toBeInTheDocument();
+    });
+  });
+
+  it("filters keys by type when switching sub-tabs", async () => {
+    const mixedKeys = [
+      {
+        _id: "1",
+        key_description: "Secret Key 1",
+        key_type: "SECRET",
+        updated_at: new Date().toISOString(),
+        expires_at: new Date(Date.now() + 30 * 86400000).toISOString(),
+      },
+      {
+        _id: "2",
+        key_description: "Publishable Key 1",
+        key_type: "PUBLISHABLE",
+        updated_at: new Date().toISOString(),
+        expires_at: new Date(Date.now() + 30 * 86400000).toISOString(),
+      },
+    ];
+
+    const userContext = mockUserContext(
+      { ...MOCK_USER_DATA, keys: mixedKeys },
+      false
+    );
+    renderDashboard({ userContextValue: userContext });
+
+    expect(screen.getByText("Secret Key 1")).toBeInTheDocument();
+    expect(screen.queryByText("Publishable Key 1")).not.toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole("button", { name: /Publishable Keys/i }));
+
+    await waitFor(() => {
+      expect(screen.getByText("Publishable Key 1")).toBeInTheDocument();
+      expect(screen.queryByText("Secret Key 1")).not.toBeInTheDocument();
+    });
+  });
+
+  it("opens edit modal and allows updating publishable key origin restrictions", async () => {
+    const pubKey = {
+      _id: "pk1",
+      key_description: "App Key",
+      key_type: "PUBLISHABLE",
+      is_origin_restricted: true,
+      is_active: true,
+      allowed_origins: ["https://initial.com"],
+      updated_at: new Date().toISOString(),
+      expires_at: new Date(Date.now() + 30 * 86400000).toISOString(),
+    };
+
+    const userContext = mockUserContext(
+      { ...MOCK_USER_DATA, keys: [pubKey] },
+      false
+    );
+    renderDashboard({ userContextValue: userContext });
+
+    fireEvent.click(screen.getByRole("button", { name: /Publishable Keys/i }));
+
+    const editBtn = await screen.findByRole("button", { name: "Edit key" });
+    fireEvent.click(editBtn);
+
+    const dialog = screen.getByTestId("dialog");
+    expect(
+      within(dialog).getByText(/Edit (Allowed Origins|Publishable Key)/i)
+    ).toBeInTheDocument();
+
+    const originInput = within(dialog).getByPlaceholderText("Add origin...");
+    fireEvent.change(originInput, {
+      target: { value: "http://localhost:3000" },
+    });
+    fireEvent.keyDown(originInput, { key: "Enter", code: "Enter" });
+
+    const saveBtn = within(dialog).getByRole("button", {
+      name: "Save Changes",
+    });
+    fireEvent.click(saveBtn);
+
+    await waitFor(() => {
+      expect(
+        screen.getByText("https://initial.com, http://localhost:3000")
+      ).toBeInTheDocument();
     });
   });
 });

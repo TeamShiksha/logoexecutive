@@ -42,6 +42,12 @@
   font-weight: 500;
 }
 
+.action-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
 .action-btn {
   background: none;
   border: none;
@@ -63,12 +69,17 @@
   cursor: not-allowed;
 }
 
+.edit-icon,
 .delete-icon {
   transition: color 0.2s;
 }
 
 .action-btn:hover:not(:disabled) .delete-icon {
   color: #ef4444;
+}
+
+.action-btn:hover:not(:disabled) .edit-icon {
+  color: var(--primary);
 }
 
 .no-data {
